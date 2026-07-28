@@ -34,6 +34,7 @@
 
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
+html, body{max-width:100%; overflow-x:hidden;}
 body{
   margin:0;
   font-family:var(--font-body);
@@ -41,6 +42,8 @@ body{
   color:var(--seal);
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;
+  word-break:break-word;
 }
 
 /* decorative background texture */
@@ -56,7 +59,26 @@ body::before{
   z-index:0;
 }
 
-.wrap{position:relative; z-index:1; max-width:920px; margin:0 auto; padding:0 20px 80px;}
+.wrap{position:relative; z-index:1; max-width:920px; margin:0 auto; padding:0 20px 80px; width:100%;}
+
+/* ---------- STUDENT ID CARD ---------- */
+.student-id-card{
+  background:#fff; border-radius:var(--radius-md); padding:16px 20px; margin:-30px auto 24px;
+  box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:6px; position:relative; z-index:3;
+  border-left:6px solid var(--gamboge);
+}
+.student-id-card label{font-weight:700; font-size:.88rem; color:var(--seal);}
+.student-id-card input{
+  border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:10px 14px; font-family:var(--font-body);
+  font-size:.95rem; width:100%; color:var(--seal);
+}
+.student-id-card input:focus{outline:none; border-color:var(--amaranth);}
+.student-id-card .hint{font-size:.76rem; color:var(--seal-soft); opacity:.75;}
+
+/* ---------- REPORT ACTIONS ---------- */
+.report-actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:18px;}
+.btn-ghost.light{background:transparent; color:var(--antique); border:2px solid rgba(255,255,255,0.35);}
+.btn-ghost.light:hover{border-color:var(--gamboge); color:var(--gamboge);}
 
 /* ---------- HERO / HEADER ---------- */
 .hero{
@@ -83,7 +105,7 @@ body::before{
 .brand-row{
   display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
   font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
-  opacity:.85; margin-bottom:26px;
+  opacity:.85; margin-bottom:26px; min-width:0;
 }
 .brand-row .mark{
   display:inline-flex; align-items:center; gap:8px; font-family:var(--font-display);
@@ -113,7 +135,7 @@ h1.title{
 /* ---------- STEPPER ---------- */
 .stepper{
   display:grid; grid-template-columns:repeat(5,1fr); gap:8px;
-  margin:-34px auto 34px; max-width:920px; padding:0 20px; position:relative; z-index:3;
+  margin:0 auto 34px; max-width:920px; padding:0 20px; position:relative; z-index:3;
 }
 .step{
   background:var(--white); border-radius:16px; padding:12px 8px; text-align:center;
@@ -136,7 +158,8 @@ section.card{
   border-top:8px solid var(--accent, var(--amaranth));
   position:relative;
 }
-.card-head{display:flex; align-items:center; gap:12px; margin-bottom:6px; flex-wrap:wrap;}
+.card-head{display:flex; align-items:center; gap:12px; margin-bottom:6px; flex-wrap:wrap; min-width:0;}
+.card-head > div{min-width:0; flex:1 1 auto;}
 .icon-badge{
   width:44px; height:44px; border-radius:14px; background:var(--accent, var(--amaranth));
   display:flex; align-items:center; justify-content:center; flex:none;
@@ -163,7 +186,7 @@ section.card{
 }
 
 .gap-input{
-  width:64px; border:none; border-bottom:2px solid var(--accent,var(--amaranth));
+  width:64px; max-width:40vw; border:none; border-bottom:2px solid var(--accent,var(--amaranth));
   background:transparent; font-family:var(--font-body); font-weight:700; font-size:1rem;
   padding:2px 4px; text-align:center; color:var(--seal); margin:0 2px;
 }
@@ -182,13 +205,13 @@ section.card{
 .mcq-option.correct{border-color:var(--ok); background:#eaf7ee;}
 .mcq-option.wrong{border-color:var(--bad); background:#fbeceb;}
 
-.dialogue-line{display:flex; gap:10px; margin-bottom:10px; align-items:flex-start;}
+.dialogue-line{display:flex; gap:10px; margin-bottom:10px; align-items:flex-start; min-width:0;}
 .dialogue-speaker{
   flex:none; width:30px; height:30px; border-radius:50%; background:var(--seal-soft);
   color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:.85rem;
 }
 .dialogue-speaker.b{background:var(--orangered);}
-.dialogue-text{background:var(--antique-soft); border-radius:14px; padding:9px 14px; font-size:.95rem;}
+.dialogue-text{background:var(--antique-soft); border-radius:14px; padding:9px 14px; font-size:.95rem; min-width:0; flex:1 1 auto;}
 
 .btn{
   font-family:var(--font-body); font-weight:700; font-size:.88rem; letter-spacing:.01em;
@@ -288,11 +311,22 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 .top-link{display:inline-flex; align-items:center; gap:6px; color:var(--antique); text-decoration:none; font-weight:700; font-size:.82rem;}
 
 @media (max-width:640px){
-  .stepper{grid-template-columns:repeat(5,1fr); gap:6px; margin-top:-26px;}
+  .stepper{grid-template-columns:repeat(5,1fr); gap:6px; margin-top:14px;}
   .step{padding:8px 4px; font-size:.62rem;}
   .step .label{display:none;}
   section.card{padding:24px 16px;}
   h1.title{font-size:2.1rem;}
+  .student-id-card{margin-top:-24px;}
+  .report-actions{flex-direction:column;}
+  .report-actions .btn{width:100%; justify-content:center;}
+  .gap-input{width:56px;}
+}
+
+@media (max-width:380px){
+  .wrap{padding:0 14px 60px;}
+  .hero{padding:32px 14px 56px;}
+  .card-eyebrow{font-size:.66rem;}
+  .card-title{font-size:1.4rem;}
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -306,6 +340,13 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 <script>
 
 /* ================= DYSE · TOEFL Activity Engine ================= */
+
+/* ---------- CONFIGURAÇÃO DO RELATÓRIO (edite aqui) ---------- */
+const TEACHER_EMAIL = "professora@doyouspeakenglish.com.br"; // <-- troque pelo e-mail da professora
+const FORMSPREE_ENDPOINT = ""; // opcional: cole aqui o endpoint do Formspree (ex: "https://formspree.io/f/xxxxxxx") para envio automático sem abrir o app de e-mail
+const ACTIVITY_LABEL = "1 — Rotina Diária";
+const CURRENT_IDX = 1;
+
 const STORAGE_KEY = "dyse_toefl_activity1progress";
 let progress = {reading:false, listening:false, writing:false, speaking:false, grammar:false};
 try{
@@ -330,7 +371,28 @@ function updateStepper(){
   const scoreBig = document.getElementById('scoreBig');
   if(scoreBig) scoreBig.textContent = doneCount + ' / 5';
 }
-document.addEventListener('DOMContentLoaded', updateStepper);
+
+/* ---------- Nome do aluno (usado no relatório) ---------- */
+function loadStudentName(){
+  const input = document.getElementById('studentName');
+  if(!input) return;
+  try{
+    const saved = localStorage.getItem('dyse_student_name');
+    if(saved) input.value = saved;
+  }catch(e){}
+  input.addEventListener('input', function(){
+    try{ localStorage.setItem('dyse_student_name', input.value); }catch(e){}
+  });
+}
+function getStudentName(){
+  const input = document.getElementById('studentName');
+  return (input && input.value.trim()) ? input.value.trim() : '';
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  updateStepper();
+  loadStudentName();
+});
 
 /* ---------- Text-to-speech (Listening & Speaking) ---------- */
 function speak(text, onend){
@@ -554,6 +616,204 @@ function checkGrammar(prefix, total, correctAnswers){
   markDone('grammar');
 }
 
+/* ================= RELATÓRIO PARA A PROFESSORA ================= */
+function textOf(el){ return el ? el.textContent.trim() : ''; }
+
+function reportReading(){
+  const lines = [];
+  const gapBox = document.querySelector('.passage-box[data-answers]');
+  if(gapBox){
+    const answers = JSON.parse(gapBox.dataset.answers);
+    const inputs = gapBox.querySelectorAll('.gap-input');
+    let correct = 0; const wrong = [];
+    inputs.forEach((inp,i)=>{
+      const ok = norm(inp.value) === norm(answers[i]);
+      if(ok) correct++;
+      else wrong.push('   - lacuna ' + (i+1) + ': aluno escreveu "' + (inp.value || '(em branco)') + '" | correto: "' + answers[i] + '"');
+    });
+    lines.push('READING (Complete the Words): ' + correct + '/' + inputs.length + ' corretas');
+    lines.push(...wrong);
+    return lines;
+  }
+  const opts = document.getElementById('rd_' + CURRENT_IDX + '_options');
+  if(opts){
+    const question = textOf(opts.previousElementSibling);
+    const selected = opts.querySelector('input:checked');
+    const correctIdx = parseInt(opts.dataset.correct, 10);
+    const spans = opts.querySelectorAll('.mcq-option span');
+    const chosenText = selected ? textOf(spans[parseInt(selected.value,10)]) : '(não respondeu)';
+    const correctText = textOf(spans[correctIdx]);
+    const ok = selected && parseInt(selected.value,10) === correctIdx;
+    lines.push('READING: ' + question);
+    lines.push('   Resposta do aluno: ' + chosenText + (selected ? (ok ? '  [correta]' : '  [incorreta — correta: ' + correctText + ']') : ''));
+  }
+  return lines;
+}
+
+function reportListening(){
+  const lines = [];
+  const opts = document.getElementById('ls_' + CURRENT_IDX + '_options');
+  if(opts){
+    const question = textOf(opts.previousElementSibling);
+    const selected = opts.querySelector('input:checked');
+    const correctIdx = parseInt(opts.dataset.correct, 10);
+    const spans = opts.querySelectorAll('.mcq-option span');
+    const chosenText = selected ? textOf(spans[parseInt(selected.value,10)]) : '(não respondeu)';
+    const correctText = textOf(spans[correctIdx]);
+    const ok = selected && parseInt(selected.value,10) === correctIdx;
+    lines.push('LISTENING: ' + question);
+    lines.push('   Resposta do aluno: ' + chosenText + (selected ? (ok ? '  [correta]' : '  [incorreta — correta: ' + correctText + ']') : ''));
+  }
+  return lines;
+}
+
+function reportWriting(){
+  const lines = [];
+  const strip = document.getElementById('strip_' + CURRENT_IDX);
+  if(strip){
+    const target = strip.dataset.target || '';
+    const built = Array.from(strip.querySelectorAll('.placed')).map(p=>p.textContent).join(' ');
+    const ok = norm(built) === norm(target);
+    lines.push('WRITING (Build a Sentence):');
+    lines.push('   Frase do aluno: "' + (built || '(vazio)') + '"' + (built ? (ok ? '  [correta]' : '  [incorreta — esperado: "' + target + '"]') : ''));
+    return lines;
+  }
+  const area = document.getElementById('wr_area_' + CURRENT_IDX);
+  if(area){
+    const words = area.value.trim().split(/\s+/).filter(Boolean).length;
+    lines.push('WRITING: (' + words + ' palavras)');
+    lines.push(area.value.trim() ? '    + area.value.trim() + ' : '   (o aluno não escreveu nada)');
+  }
+  return lines;
+}
+
+function reportSpeaking(){
+  const lines = [];
+  const blocks = document.querySelectorAll('.repeat-block[data-target], .interview-block[data-target]');
+  blocks.forEach((b, i)=>{
+    const target = b.dataset.target;
+    const transcriptEl = b.querySelector('.transcript-box');
+    const transcript = transcriptEl ? transcriptEl.textContent.trim() : '';
+    lines.push('SPEAKING ' + (i+1) + ': "' + target + '"');
+    lines.push(transcript ? '   Transcrição captada: "' + transcript + '"' : '   (sem gravação registrada — pratique a pronúncia oralmente com o aluno)');
+  });
+  return lines;
+}
+
+function reportGrammar(){
+  const lines = [];
+  const groups = document.querySelectorAll('[id^="gr_' + CURRENT_IDX + '_q"][id$="_opts"]');
+  let correct = 0;
+  const details = [];
+  groups.forEach((opts)=>{
+    const qEl = opts.previousElementSibling;
+    const question = textOf(qEl);
+    const selected = opts.querySelector('input:checked');
+    const correctIdx = parseInt(opts.dataset.correct, 10);
+    const spans = opts.querySelectorAll('.mcq-option span');
+    const ok = selected && parseInt(selected.value,10) === correctIdx;
+    if(ok) correct++;
+    if(!ok){
+      const chosenText = selected ? textOf(spans[parseInt(selected.value,10)]) : '(não respondeu)';
+      details.push('   - ' + question + ' | aluno: "' + chosenText + '" | correto: "' + textOf(spans[correctIdx]) + '"');
+    }
+  });
+  lines.push('GRAMMAR: ' + correct + '/' + groups.length + ' corretas');
+  lines.push(...details);
+  return lines;
+}
+
+function buildReportText(){
+  const name = getStudentName() || '(nome não informado)';
+  const date = new Date().toLocaleString('pt-BR');
+  const parts = [];
+  parts.push('RELATÓRIO DE ATIVIDADE — DYSE · Do You Speak English?');
+  parts.push('Atividade: ' + ACTIVITY_LABEL);
+  parts.push('Aluno(a): ' + name);
+  parts.push('Data: ' + date);
+  parts.push('');
+  parts.push(reportReading().join('\n'));
+  parts.push('');
+  parts.push(reportListening().join('\n'));
+  parts.push('');
+  parts.push(reportWriting().join('\n'));
+  parts.push('');
+  parts.push(reportSpeaking().join('\n'));
+  parts.push('');
+  parts.push(reportGrammar().join('\n'));
+  parts.push('');
+  parts.push('— Gerado automaticamente pela atividade DYSE.');
+  return parts.join('\n');
+}
+
+function showReportStatus(msg, ok){
+  const el = document.getElementById('reportStatus');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  el.classList.remove('ok','bad');
+  el.classList.add(ok ? 'ok' : 'bad');
+}
+
+async function sendReport(){
+  const name = getStudentName();
+  if(!name){
+    showReportStatus('Por favor, escreva o nome do aluno(a) no campo no topo da página antes de enviar.', false);
+    document.getElementById('studentName').focus();
+    return;
+  }
+  const text = buildReportText();
+
+  if(FORMSPREE_ENDPOINT){
+    try{
+      const resp = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {'Accept':'application/json', 'Content-Type':'application/json'},
+        body: JSON.stringify({
+          email: TEACHER_EMAIL,
+          subject: 'Relatório DYSE — ' + ACTIVITY_LABEL + ' — ' + name,
+          message: text,
+          aluno: name,
+          atividade: ACTIVITY_LABEL
+        })
+      });
+      if(resp.ok){
+        showReportStatus('✓ Relatório enviado automaticamente para a professora!', true);
+        return;
+      }
+    }catch(e){ /* falls through to mailto */ }
+  }
+
+  const subject = encodeURIComponent('Relatório DYSE — ' + ACTIVITY_LABEL + ' — ' + name);
+  const body = encodeURIComponent(text);
+  window.location.href = 'mailto:' + TEACHER_EMAIL + '?subject=' + subject + '&body=' + body;
+  showReportStatus('✓ Abrindo seu aplicativo de e-mail com o relatório preenchido. Basta clicar em enviar.', true);
+}
+
+function copyReport(){
+  const text = buildReportText();
+  navigator.clipboard.writeText(text).then(()=>{
+    showReportStatus('✓ Relatório copiado! Cole (Ctrl/Cmd+V) onde quiser enviar.', true);
+  }).catch(()=>{
+    showReportStatus('Não foi possível copiar automaticamente. Tente novamente.', false);
+  });
+}
+
+function downloadReport(){
+  const name = getStudentName() || 'aluno';
+  const text = buildReportText();
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'relatorio-' + ACTIVITY_LABEL.replace(/[^a-zA-Z0-9]+/g,'-') + '-' + name.replace(/[^a-zA-Z0-9]+/g,'-') + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showReportStatus('✓ Relatório baixado em .txt', true);
+}
+
 </script>
 
 <div class="hero">
@@ -570,6 +830,14 @@ function checkGrammar(prefix, total, correctAnswers){
       <span class="pill">🎯 A2 · Iniciante</span>
       <span class="pill">⏱️ ~25–35 min</span>
     </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="student-id-card">
+    <label for="studentName">👤 Nome do aluno(a)</label>
+    <input type="text" id="studentName" placeholder="Digite seu nome completo..." autocomplete="name">
+    <span class="hint">Usado para identificar o relatório enviado à professora ao final da atividade.</span>
   </div>
 </div>
 
@@ -595,7 +863,7 @@ function checkGrammar(prefix, total, correctAnswers){
   </div>
   <div class="card-instructions">Fill in the missing letters in the paragraph.</div>
   
-  <div class="passage-box" id="readingPassage_1">Most people fol<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_0" autocomplete="off" spellcheck="false"> a daily rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_1" autocomplete="off" spellcheck="false"> that inclu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_2" autocomplete="off" spellcheck="false"> waking up, eat<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_3" autocomplete="off" spellcheck="false"> breakfast, and go<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_4" autocomplete="off" spellcheck="false"> to work or scho<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_5" autocomplete="off" spellcheck="false">. A good rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_6" autocomplete="off" spellcheck="false"> can hel<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_7" autocomplete="off" spellcheck="false"> you sta<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_8" autocomplete="off" spellcheck="false"> organi<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_9" autocomplete="off" spellcheck="false"> and redu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_10" autocomplete="off" spellcheck="false"> stress. Many peo<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_11" autocomplete="off" spellcheck="false"> also ma<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_12" autocomplete="off" spellcheck="false"> time for exerc<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_13" autocomplete="off" spellcheck="false"> or a hob<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_14" autocomplete="off" spellcheck="false"> before the d<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_15" autocomplete="off" spellcheck="false"> ends.</div>
+  <div class="passage-box" id="readingPassage_1" data-answers="[&quot;low&quot;, &quot;ine&quot;, &quot;des&quot;, &quot;ing&quot;, &quot;ing&quot;, &quot;ol&quot;, &quot;ine&quot;, &quot;p&quot;, &quot;y&quot;, &quot;zed&quot;, &quot;ce&quot;, &quot;ple&quot;, &quot;ke&quot;, &quot;ise&quot;, &quot;by&quot;, &quot;ay&quot;]">Most people fol<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_0" autocomplete="off" spellcheck="false"> a daily rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_1" autocomplete="off" spellcheck="false"> that inclu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_2" autocomplete="off" spellcheck="false"> waking up, eat<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_3" autocomplete="off" spellcheck="false"> breakfast, and go<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_4" autocomplete="off" spellcheck="false"> to work or scho<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_5" autocomplete="off" spellcheck="false">. A good rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_6" autocomplete="off" spellcheck="false"> can hel<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_7" autocomplete="off" spellcheck="false"> you sta<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_8" autocomplete="off" spellcheck="false"> organi<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_9" autocomplete="off" spellcheck="false"> and redu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_10" autocomplete="off" spellcheck="false"> stress. Many peo<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_11" autocomplete="off" spellcheck="false"> also ma<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_12" autocomplete="off" spellcheck="false"> time for exerc<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_13" autocomplete="off" spellcheck="false"> or a hob<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_14" autocomplete="off" spellcheck="false"> before the d<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_15" autocomplete="off" spellcheck="false"> ends.</div>
   <div class="btn-row">
     <button class="btn btn-primary" onclick="checkGapsWrapper_1()">Verificar respostas</button>
   </div>
@@ -624,8 +892,8 @@ function checkGrammar(prefix, total, correctAnswers){
   <div class="btn-row" style="margin-bottom:18px;">
     <button class="btn btn-audio" onclick="speak(&quot;What time do you usually wake up on weekdays?&quot;)">&#128266; Play audio</button>
   </div>
-  <p style="font-weight:700; margin-bottom:10px;">Choose the best response.</p>
-  <div class="mcq-options" id="ls_1_options"><label class="mcq-option">
+  <p style="font-weight:700; margin-bottom:10px;">Audio: &ldquo;What time do you usually wake up on weekdays?&rdquo; — Choose the best response.</p>
+  <div class="mcq-options" id="ls_1_options" data-correct="0"><label class="mcq-option">
                   <input type="radio" name="ls_1" value="0">
                   <span>Around seven in the morning.</span>
                 </label><label class="mcq-option">
@@ -659,7 +927,7 @@ function checkGrammar(prefix, total, correctAnswers){
   <div class="card-instructions">Make an appropriate sentence.</div>
   
   <div class="passage-box" style="font-weight:700;">I always feel tired in the morning.</div>
-  <div class="answer-strip" id="strip_1"><span class="empty-hint">Clique nas palavras abaixo para montar a frase...</span></div>
+  <div class="answer-strip" id="strip_1" data-target="What time do you usually go to bed?"><span class="empty-hint">Clique nas palavras abaixo para montar a frase...</span></div>
   <div class="chips-bank" id="bank_1"><button type="button" class="chip" id="chip_1_0" data-value="time" onclick="chipClick(this, 'strip_1', 'bank_1')">time</button><button type="button" class="chip" id="chip_1_1" data-value="do" onclick="chipClick(this, 'strip_1', 'bank_1')">do</button><button type="button" class="chip" id="chip_1_2" data-value="you" onclick="chipClick(this, 'strip_1', 'bank_1')">you</button><button type="button" class="chip" id="chip_1_3" data-value="usually" onclick="chipClick(this, 'strip_1', 'bank_1')">usually</button><button type="button" class="chip" id="chip_1_4" data-value="go to bed" onclick="chipClick(this, 'strip_1', 'bank_1')">go to bed</button><button type="button" class="chip" id="chip_1_5" data-value="What" onclick="chipClick(this, 'strip_1', 'bank_1')">What</button><button type="button" class="chip" id="chip_1_6" data-value="the room" onclick="chipClick(this, 'strip_1', 'bank_1')">the room</button></div>
   <div class="btn-row">
     <button class="btn btn-primary" onclick="checkSentence('strip_1', &quot;What time do you usually go to bed?&quot;, 'wr_feedback_1', 'writing')">Verificar frase</button>
@@ -682,7 +950,7 @@ function checkGrammar(prefix, total, correctAnswers){
   </div>
   <div class="card-instructions">Listen and repeat each sentence only once. You are training a new front-desk assistant at a school.</div>
   
-  <div class="repeat-block">
+  <div class="repeat-block" data-target="Good morning! Welcome to our school.">
     <p><span class="q-number">1</span><strong>Good morning! Welcome to our school.</strong></p>
     <div class="btn-row">
       <button class="btn btn-audio" onclick="speak(&quot;Good morning! Welcome to our school.&quot;)">&#128266; Play</button>
@@ -693,7 +961,7 @@ function checkGrammar(prefix, total, correctAnswers){
     <div class="match-bar" id="sp_bar_1_0"><span></span></div>
   </div>
 
-  <div class="repeat-block">
+  <div class="repeat-block" data-target="Could you please tell me your full name?">
     <p><span class="q-number">2</span><strong>Could you please tell me your full name?</strong></p>
     <div class="btn-row">
       <button class="btn btn-audio" onclick="speak(&quot;Could you please tell me your full name?&quot;)">&#128266; Play</button>
@@ -704,7 +972,7 @@ function checkGrammar(prefix, total, correctAnswers){
     <div class="match-bar" id="sp_bar_1_1"><span></span></div>
   </div>
 
-  <div class="repeat-block">
+  <div class="repeat-block" data-target="Your class starts at nine o&#x27;clock in room twelve.">
     <p><span class="q-number">3</span><strong>Your class starts at nine o&#x27;clock in room twelve.</strong></p>
     <div class="btn-row">
       <button class="btn btn-audio" onclick="speak(&quot;Your class starts at nine o&#x27;clock in room twelve.&quot;)">&#128266; Play</button>
@@ -734,7 +1002,7 @@ function checkGrammar(prefix, total, correctAnswers){
   
   <div class="grammar-q">
     <p class="qtext">1. She ___ to the gym every Monday and Thursday.</p>
-    <div class="mcq-options" id="gr_1_q0_opts"><label class="mcq-option">
+    <div class="mcq-options" id="gr_1_q0_opts" data-correct="1"><label class="mcq-option">
                   <input type="radio" name="gr_1_q0" value="0">
                   <span>go</span>
                 </label><label class="mcq-option">
@@ -752,7 +1020,7 @@ function checkGrammar(prefix, total, correctAnswers){
 
   <div class="grammar-q">
     <p class="qtext">2. Look! It ___ outside. Take an umbrella.</p>
-    <div class="mcq-options" id="gr_1_q1_opts"><label class="mcq-option">
+    <div class="mcq-options" id="gr_1_q1_opts" data-correct="2"><label class="mcq-option">
                   <input type="radio" name="gr_1_q1" value="0">
                   <span>rains</span>
                 </label><label class="mcq-option">
@@ -770,7 +1038,7 @@ function checkGrammar(prefix, total, correctAnswers){
 
   <div class="grammar-q">
     <p class="qtext">3. I ___ coffee in the morning, but today I ___ tea.</p>
-    <div class="mcq-options" id="gr_1_q2_opts"><label class="mcq-option">
+    <div class="mcq-options" id="gr_1_q2_opts" data-correct="0"><label class="mcq-option">
                   <input type="radio" name="gr_1_q2" value="0">
                   <span>usually drink / am drinking</span>
                 </label><label class="mcq-option">
@@ -788,7 +1056,7 @@ function checkGrammar(prefix, total, correctAnswers){
 
   <div class="grammar-q">
     <p class="qtext">4. My brother ___ English at the university this semester.</p>
-    <div class="mcq-options" id="gr_1_q3_opts"><label class="mcq-option">
+    <div class="mcq-options" id="gr_1_q3_opts" data-correct="2"><label class="mcq-option">
                   <input type="radio" name="gr_1_q3" value="0">
                   <span>studies</span>
                 </label><label class="mcq-option">
@@ -816,6 +1084,12 @@ function checkGrammar(prefix, total, correctAnswers){
     <h2>Progresso da atividade</h2>
     <p>Complete os 5 blocos acima para finalizar a atividade 01.</p>
     <div id="scoreBig">0 / 5</div>
+    <div class="report-actions">
+      <button class="btn btn-secondary" onclick="sendReport()">📧 Enviar relatório para a professora</button>
+      <button class="btn btn-ghost light" onclick="copyReport()">📋 Copiar relatório</button>
+      <button class="btn btn-ghost light" onclick="downloadReport()">⬇️ Baixar .txt</button>
+    </div>
+    <div class="feedback" id="reportStatus" style="text-align:left; margin-top:16px;"></div>
   </section>
 </div>
 
