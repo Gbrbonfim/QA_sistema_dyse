@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DYSE · Atividade 01 — Rotina Diária</title>
-<meta name="description" content="Atividade TOEFL iBT 01 — Rotina Diária — Reading, Listening, Writing, Speaking e Grammar. Do You Speak English (DYSE).">
+<title>DYSE · Atividade 03 — Alimentação e Saúde</title>
+<meta name="description" content="Atividade TOEFL iBT 03 — Alimentação e Saúde — Reading, Listening, Writing, Speaking e Grammar. Do You Speak English (DYSE).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
@@ -444,10 +444,10 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 /* ---------- CONFIGURAÇÃO DO RELATÓRIO (edite aqui) ---------- */
 const TEACHER_EMAIL = "professora@doyouspeakenglish.com.br"; // <-- troque pelo e-mail da professora
 const FORMSPREE_ENDPOINT = ""; // opcional: cole aqui o endpoint do Formspree (ex: "https://formspree.io/f/xxxxxxx") para envio automático sem abrir o app de e-mail
-const ACTIVITY_LABEL = "1 — Rotina Diária";
-const CURRENT_IDX = 1;
+const ACTIVITY_LABEL = "3 — Alimentação e Saúde";
+const CURRENT_IDX = 3;
 
-const STORAGE_KEY = "dyse_toefl_activity1progress";
+const STORAGE_KEY = "dyse_toefl_activity3progress";
 let progress = {reading:false, listening:false, writing:false, speaking:false, grammar:false};
 try{
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
@@ -986,12 +986,12 @@ function downloadReport(){
       <span class="mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 2.7 5.9 1 10c1.7 4.1 6 7 11 7s9.3-2.9 11-7c-1.7-4.1-6-7-11-7zm0 11.5A4.5 4.5 0 1 1 16.5 10 4.5 4.5 0 0 1 12 14.5z"/></svg> dyse</span>
       <span>Do You Speak English? · Prep TOEFL iBT</span>
     </div>
-    <span class="eyebrow-badge">Atividade 01 de 16</span>
-    <h1 class="title">Rotina Diária</h1>
+    <span class="eyebrow-badge">Atividade 03 de 16</span>
+    <h1 class="title">Alimentação e Saúde</h1>
     <p class="subtitle">Pratique as cinco habilidades do novo formato do TOEFL iBT&reg; — Reading, Listening, Writing, Speaking e Grammar — em uma única atividade temática.</p>
     <div class="hero-meta">
-      <span class="pill">📘 Daily Routines</span>
-      <span class="pill">🎯 A2 · Iniciante</span>
+      <span class="pill">📘 Food &amp; Health</span>
+      <span class="pill">🎯 B1 · Pré-intermediário</span>
       <span class="pill">⏱️ ~25–35 min</span>
     </div>
     <div class="dyse-auth-bar" id="authBar"></div>
@@ -1016,22 +1016,34 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-7a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h8z"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Reading &middot; Complete the Words</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Reading &middot; Read an Academic Passage</div>
+      <h2 class="card-title">Alimentação e Saúde</h2>
     </div>
   </div>
-  <div class="card-instructions">Fill in the missing letters in the paragraph.</div>
+  <div class="card-instructions">Read the passage.</div>
   
-  <div class="passage-box" id="readingPassage_1" data-answers="[&quot;low&quot;, &quot;ine&quot;, &quot;des&quot;, &quot;ing&quot;, &quot;ing&quot;, &quot;ol&quot;, &quot;ine&quot;, &quot;p&quot;, &quot;y&quot;, &quot;zed&quot;, &quot;ce&quot;, &quot;ple&quot;, &quot;ke&quot;, &quot;ise&quot;, &quot;by&quot;, &quot;ay&quot;]">Most people fol<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_0" autocomplete="off" spellcheck="false"> a daily rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_1" autocomplete="off" spellcheck="false"> that inclu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_2" autocomplete="off" spellcheck="false"> waking up, eat<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_3" autocomplete="off" spellcheck="false"> breakfast, and go<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_4" autocomplete="off" spellcheck="false"> to work or scho<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_5" autocomplete="off" spellcheck="false">. A good rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_6" autocomplete="off" spellcheck="false"> can hel<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_7" autocomplete="off" spellcheck="false"> you sta<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_8" autocomplete="off" spellcheck="false"> organi<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_9" autocomplete="off" spellcheck="false"> and redu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_10" autocomplete="off" spellcheck="false"> stress. Many peo<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_11" autocomplete="off" spellcheck="false"> also ma<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_12" autocomplete="off" spellcheck="false"> time for exerc<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_13" autocomplete="off" spellcheck="false"> or a hob<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_14" autocomplete="off" spellcheck="false"> before the d<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_15" autocomplete="off" spellcheck="false"> ends.</div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkGapsWrapper_1()">Verificar respostas</button>
+  <div class="passage-box">
+    <div class="passage-title">The Benefits of Eating Breakfast</div>
+    Skipping breakfast has become common among busy students, but research suggests that eating a morning meal offers several benefits. A balanced breakfast provides the energy needed to concentrate during morning classes and can improve short-term memory. Foods high in protein and fiber, such as eggs or oatmeal, help maintain steady blood sugar levels throughout the morning, preventing the sudden hunger that often leads to unhealthy snacking. In addition, students who eat breakfast regularly tend to report better moods and fewer instances of fatigue by midday. While breakfast alone cannot guarantee academic success, nutrition experts agree that it plays a meaningful role in a student&#x27;s overall performance and well-being.
   </div>
-  <div class="feedback" id="rd_feedback_1"></div>
-  <script>
-    function checkGapsWrapper_1(){
-      checkGaps('readingPassage_1', ["low", "ine", "des", "ing", "ing", "ol", "ine", "p", "y", "zed", "ce", "ple", "ke", "ise", "by", "ay"], 'rd_feedback_1', 'reading');
-    }
-  </script>
+  <p style="font-weight:700; margin-bottom:10px;">According to the passage, why might skipping breakfast lead to unhealthy snacking?</p>
+  <div class="mcq-options" id="rd_3_options" data-correct="1"><label class="mcq-option">
+                  <input type="radio" name="rd_3" value="0">
+                  <span>Because students prefer sweet foods in general</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_3" value="1">
+                  <span>Because blood sugar levels drop and cause sudden hunger</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_3" value="2">
+                  <span>Because breakfast foods are too expensive</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_3" value="3">
+                  <span>Because cafeterias close early</span>
+                </label></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="checkMCQ('rd_3', 1, 'rd_feedback_3', 'reading')">Verificar resposta</button>
+  </div>
+  <div class="feedback" id="rd_feedback_3"></div>
 
 </section>
 
@@ -1042,33 +1054,37 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Listening &middot; Listen and Choose a Response</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Listening &middot; Listen to an Announcement</div>
+      <h2 class="card-title">Alimentação e Saúde</h2>
     </div>
   </div>
-  <div class="card-instructions">Listen to the question and choose the best response.</div>
+  <div class="card-instructions">Listen to the announcement.</div>
   
-  <div class="btn-row" style="margin-bottom:18px;">
-    <button class="btn btn-audio" onclick="speak(&quot;What time do you usually wake up on weekdays?&quot;)">&#128266; Play audio</button>
+  <div class="btn-row" style="margin-bottom:16px;">
+    <button class="btn btn-audio" onclick="speak(&quot;Attention students, starting next Monday the campus cafeteria will introduce a new weekly menu with more vegetarian options. The change is part of a health initiative created after student feedback last semester. A printed copy of the new menu will be posted near the entrance, and it will also be available on the student portal.&quot;)">&#128266; Play audio</button>
   </div>
-  <p style="font-weight:700; margin-bottom:10px;">Audio: &ldquo;What time do you usually wake up on weekdays?&rdquo; — Choose the best response.</p>
-  <div class="mcq-options" id="ls_1_options" data-correct="0"><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="0">
-                  <span>Around seven in the morning.</span>
+  <details style="margin-bottom:18px;">
+    <summary style="cursor:pointer; font-weight:700; color:var(--seal-soft); font-size:.85rem;">Mostrar transcrição (opcional)</summary>
+    <div class="passage-box" style="margin-top:10px;">Attention students, starting next Monday the campus cafeteria will introduce a new weekly menu with more vegetarian options. The change is part of a health initiative created after student feedback last semester. A printed copy of the new menu will be posted near the entrance, and it will also be available on the student portal.</div>
+  </details>
+  <p style="font-weight:700; margin-bottom:10px;">Why did the cafeteria change its menu?</p>
+  <div class="mcq-options" id="ls_3_options" data-correct="1"><label class="mcq-option">
+                  <input type="radio" name="ls_3" value="0">
+                  <span>Because of a new government law</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="1">
-                  <span>It&#x27;s on the kitchen table.</span>
+                  <input type="radio" name="ls_3" value="1">
+                  <span>Because of student feedback from last semester</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="2">
-                  <span>I like coffee better.</span>
+                  <input type="radio" name="ls_3" value="2">
+                  <span>Because the old menu was too expensive</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="3">
-                  <span>Yes, I have a car.</span>
+                  <input type="radio" name="ls_3" value="3">
+                  <span>Because the cafeteria is closing</span>
                 </label></div>
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkMCQ('ls_1', 0, 'ls_feedback_1', 'listening')">Verificar resposta</button>
+    <button class="btn btn-primary" onclick="checkMCQ('ls_3', 1, 'ls_feedback_3', 'listening')">Verificar resposta</button>
   </div>
-  <div class="feedback" id="ls_feedback_1"></div>
+  <div class="feedback" id="ls_feedback_3"></div>
 
 </section>
 
@@ -1079,20 +1095,32 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--seal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Writing &middot; Build a Sentence</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Writing &middot; Write an Email</div>
+      <h2 class="card-title">Alimentação e Saúde</h2>
     </div>
   </div>
-  <div class="card-instructions">Make an appropriate sentence.</div>
+  <div class="card-instructions">Write an email.</div>
   
-  <div class="passage-box" style="font-weight:700;">I always feel tired in the morning.</div>
-  <div class="answer-strip" id="strip_1" data-target="What time do you usually go to bed?"><span class="empty-hint">Clique nas palavras abaixo para montar a frase...</span></div>
-  <div class="chips-bank" id="bank_1"><button type="button" class="chip" id="chip_1_0" data-value="time" onclick="chipClick(this, 'strip_1', 'bank_1')">time</button><button type="button" class="chip" id="chip_1_1" data-value="do" onclick="chipClick(this, 'strip_1', 'bank_1')">do</button><button type="button" class="chip" id="chip_1_2" data-value="you" onclick="chipClick(this, 'strip_1', 'bank_1')">you</button><button type="button" class="chip" id="chip_1_3" data-value="usually" onclick="chipClick(this, 'strip_1', 'bank_1')">usually</button><button type="button" class="chip" id="chip_1_4" data-value="go to bed" onclick="chipClick(this, 'strip_1', 'bank_1')">go to bed</button><button type="button" class="chip" id="chip_1_5" data-value="What" onclick="chipClick(this, 'strip_1', 'bank_1')">What</button><button type="button" class="chip" id="chip_1_6" data-value="the room" onclick="chipClick(this, 'strip_1', 'bank_1')">the room</button></div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkSentence('strip_1', &quot;What time do you usually go to bed?&quot;, 'wr_feedback_1', 'writing')">Verificar frase</button>
-    <button class="btn btn-ghost" onclick="resetStrip('strip_1', 'bank_1')">Recomeçar</button>
+  <div class="passage-box">You have noticed that the vending machines in your school only sell sugary snacks and soft drinks. You want the school to add healthier options.</div>
+  <div class="passage-box" style="font-weight:700; background:var(--cherry); color:var(--seal);">
+    To: School Administration<br>Subject: Healthier Vending Machine Options
   </div>
-  <div class="feedback" id="wr_feedback_1"></div>
+  <p style="font-weight:700; margin:14px 0 6px;">Sua resposta deve:</p>
+  <ul style="margin-top:0;"><li>Explain the current situation with the vending machines.</li><li>Explain why healthier options would benefit students.</li><li>Suggest at least two specific items the school could add.</li></ul>
+  <textarea class="write-area" id="wr_area_3" placeholder="Write your email here..."></textarea>
+  <div class="word-count" id="wr_count_3"></div>
+  <p style="font-weight:700; margin:16px 0 4px;">Autoavaliação:</p>
+  <div class="checklist"><label><input type="checkbox"><span>Explain the current situation with the vending machines.</span></label><label><input type="checkbox"><span>Explain why healthier options would benefit students.</span></label><label><input type="checkbox"><span>Suggest at least two specific items the school could add.</span></label></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" id="wr_modelbtn_3" onclick="toggleModel(this, 'wr_model_3', 'writing')">Ver resposta modelo</button>
+  </div>
+  <div class="model-answer" id="wr_model_3">Dear Administration,
+
+I am writing to suggest a change to the vending machines in our building. Currently, they only offer chips, candy, and soft drinks, which makes it difficult for students who want healthier choices during the day. Adding options like granola bars, bottled water, and fresh fruit would help students stay energized for afternoon classes. I believe this small change could make a big difference for our health. Thank you for considering this request.
+
+Best regards,
+A concerned student</div>
+  <script>countWords('wr_area_3', 'wr_count_3', 60);</script>
 
 </section>
 
@@ -1104,42 +1132,42 @@ function downloadReport(){
     </div>
     <div>
       <div class="card-eyebrow">Speaking &middot; Listen and Repeat</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <h2 class="card-title">Alimentação e Saúde</h2>
     </div>
   </div>
-  <div class="card-instructions">Listen and repeat each sentence only once. You are training a new front-desk assistant at a school.</div>
+  <div class="card-instructions">Listen and repeat each sentence only once. You are helping a nutrition workshop for new students.</div>
   
-  <div class="repeat-block" data-target="Good morning! Welcome to our school.">
-    <p><span class="q-number">1</span><strong>Good morning! Welcome to our school.</strong></p>
+  <div class="repeat-block" data-target="Breakfast gives you energy for the whole morning.">
+    <p><span class="q-number">1</span><strong>Breakfast gives you energy for the whole morning.</strong></p>
     <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Good morning! Welcome to our school.&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Good morning! Welcome to our school.&quot;, 'sp_status_1_0', 'sp_trans_1_0', 'sp_bar_1_0', 'speaking')">&#127908; Gravar minha voz</button>
+      <button class="btn btn-audio" onclick="speak(&quot;Breakfast gives you energy for the whole morning.&quot;)">&#128266; Play</button>
+      <button class="btn btn-primary" onclick="startRecognition(&quot;Breakfast gives you energy for the whole morning.&quot;, 'sp_status_3_0', 'sp_trans_3_0', 'sp_bar_3_0', 'speaking')">&#127908; Gravar minha voz</button>
     </div>
-    <div class="mic-status" id="sp_status_1_0"></div>
-    <div class="transcript-box" id="sp_trans_1_0"></div>
-    <div class="match-bar" id="sp_bar_1_0"><span></span></div>
+    <div class="mic-status" id="sp_status_3_0"></div>
+    <div class="transcript-box" id="sp_trans_3_0"></div>
+    <div class="match-bar" id="sp_bar_3_0"><span></span></div>
   </div>
 
-  <div class="repeat-block" data-target="Could you please tell me your full name?">
-    <p><span class="q-number">2</span><strong>Could you please tell me your full name?</strong></p>
+  <div class="repeat-block" data-target="Try to include protein, like eggs or yogurt, in your first meal.">
+    <p><span class="q-number">2</span><strong>Try to include protein, like eggs or yogurt, in your first meal.</strong></p>
     <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Could you please tell me your full name?&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Could you please tell me your full name?&quot;, 'sp_status_1_1', 'sp_trans_1_1', 'sp_bar_1_1', 'speaking')">&#127908; Gravar minha voz</button>
+      <button class="btn btn-audio" onclick="speak(&quot;Try to include protein, like eggs or yogurt, in your first meal.&quot;)">&#128266; Play</button>
+      <button class="btn btn-primary" onclick="startRecognition(&quot;Try to include protein, like eggs or yogurt, in your first meal.&quot;, 'sp_status_3_1', 'sp_trans_3_1', 'sp_bar_3_1', 'speaking')">&#127908; Gravar minha voz</button>
     </div>
-    <div class="mic-status" id="sp_status_1_1"></div>
-    <div class="transcript-box" id="sp_trans_1_1"></div>
-    <div class="match-bar" id="sp_bar_1_1"><span></span></div>
+    <div class="mic-status" id="sp_status_3_1"></div>
+    <div class="transcript-box" id="sp_trans_3_1"></div>
+    <div class="match-bar" id="sp_bar_3_1"><span></span></div>
   </div>
 
-  <div class="repeat-block" data-target="Your class starts at nine o&#x27;clock in room twelve.">
-    <p><span class="q-number">3</span><strong>Your class starts at nine o&#x27;clock in room twelve.</strong></p>
+  <div class="repeat-block" data-target="Drinking enough water is just as important as eating well.">
+    <p><span class="q-number">3</span><strong>Drinking enough water is just as important as eating well.</strong></p>
     <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Your class starts at nine o&#x27;clock in room twelve.&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Your class starts at nine o&#x27;clock in room twelve.&quot;, 'sp_status_1_2', 'sp_trans_1_2', 'sp_bar_1_2', 'speaking')">&#127908; Gravar minha voz</button>
+      <button class="btn btn-audio" onclick="speak(&quot;Drinking enough water is just as important as eating well.&quot;)">&#128266; Play</button>
+      <button class="btn btn-primary" onclick="startRecognition(&quot;Drinking enough water is just as important as eating well.&quot;, 'sp_status_3_2', 'sp_trans_3_2', 'sp_bar_3_2', 'speaking')">&#127908; Gravar minha voz</button>
     </div>
-    <div class="mic-status" id="sp_status_1_2"></div>
-    <div class="transcript-box" id="sp_trans_1_2"></div>
-    <div class="match-bar" id="sp_bar_1_2"><span></span></div>
+    <div class="mic-status" id="sp_status_3_2"></div>
+    <div class="transcript-box" id="sp_trans_3_2"></div>
+    <div class="match-bar" id="sp_bar_3_2"><span></span></div>
   </div>
 
 </section>
@@ -1151,90 +1179,90 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--seal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Grammar &middot; Simple Present vs. Present Continuous</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Grammar &middot; Simple Past</div>
+      <h2 class="card-title">Alimentação e Saúde</h2>
     </div>
   </div>
   <div class="card-instructions">Choose the correct option for each sentence.</div>
   
-  <p style="font-weight:700; margin-bottom:4px;">Tema: Simple Present vs. Present Continuous</p>
+  <p style="font-weight:700; margin-bottom:4px;">Tema: Simple Past</p>
   
   <div class="grammar-q">
-    <p class="qtext">1. She ___ to the gym every Monday and Thursday.</p>
-    <div class="mcq-options" id="gr_1_q0_opts" data-correct="1"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="0">
-                  <span>go</span>
+    <p class="qtext">1. Yesterday, she ___ a salad instead of fried food.</p>
+    <div class="mcq-options" id="gr_3_q0_opts" data-correct="2"><label class="mcq-option">
+                  <input type="radio" name="gr_3_q0" value="0">
+                  <span>eat</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="1">
-                  <span>goes</span>
+                  <input type="radio" name="gr_3_q0" value="1">
+                  <span>eats</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="2">
-                  <span>is going</span>
+                  <input type="radio" name="gr_3_q0" value="2">
+                  <span>ate</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="3">
-                  <span>gone</span>
+                  <input type="radio" name="gr_3_q0" value="3">
+                  <span>eating</span>
                 </label></div>
-    <div class="explain" id="gr_1_q0_explain">💡 Hábitos e rotinas usam o Simple Present com -s na 3ª pessoa.</div>
+    <div class="explain" id="gr_3_q0_explain">💡 &quot;Yesterday&quot; pede Simple Past; o passado irregular de &quot;eat&quot; é &quot;ate&quot;.</div>
   </div>
 
   <div class="grammar-q">
-    <p class="qtext">2. Look! It ___ outside. Take an umbrella.</p>
-    <div class="mcq-options" id="gr_1_q1_opts" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="0">
-                  <span>rains</span>
+    <p class="qtext">2. They ___ their meals at the same time every day last month.</p>
+    <div class="mcq-options" id="gr_3_q1_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_3_q1" value="0">
+                  <span>planned</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="1">
-                  <span>rain</span>
+                  <input type="radio" name="gr_3_q1" value="1">
+                  <span>plan</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="2">
-                  <span>is raining</span>
+                  <input type="radio" name="gr_3_q1" value="2">
+                  <span>plans</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="3">
-                  <span>rained</span>
+                  <input type="radio" name="gr_3_q1" value="3">
+                  <span>planning</span>
                 </label></div>
-    <div class="explain" id="gr_1_q1_explain">💡 Ações acontecendo agora usam o Present Continuous (is/are + -ing).</div>
+    <div class="explain" id="gr_3_q1_explain">💡 &quot;Plan&quot; é regular no passado: plan + ned.</div>
   </div>
 
   <div class="grammar-q">
-    <p class="qtext">3. I ___ coffee in the morning, but today I ___ tea.</p>
-    <div class="mcq-options" id="gr_1_q2_opts" data-correct="0"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="0">
-                  <span>usually drink / am drinking</span>
+    <p class="qtext">3. Did the cafeteria ___ the new menu last week?</p>
+    <div class="mcq-options" id="gr_3_q2_opts" data-correct="2"><label class="mcq-option">
+                  <input type="radio" name="gr_3_q2" value="0">
+                  <span>introduced</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="1">
-                  <span>am usually drinking / drink</span>
+                  <input type="radio" name="gr_3_q2" value="1">
+                  <span>introduces</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="2">
-                  <span>drink / drinking</span>
+                  <input type="radio" name="gr_3_q2" value="2">
+                  <span>introduce</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="3">
-                  <span>drinks / drink</span>
+                  <input type="radio" name="gr_3_q2" value="3">
+                  <span>introducing</span>
                 </label></div>
-    <div class="explain" id="gr_1_q2_explain">💡 Hábito geral (Simple Present) x exceção no momento (Present Continuous).</div>
+    <div class="explain" id="gr_3_q2_explain">💡 Depois de &quot;did&quot;, o verbo principal fica na forma base.</div>
   </div>
 
   <div class="grammar-q">
-    <p class="qtext">4. My brother ___ English at the university this semester.</p>
-    <div class="mcq-options" id="gr_1_q3_opts" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="0">
-                  <span>studies</span>
+    <p class="qtext">4. He ___ not drink coffee before the exam because it made him nervous.</p>
+    <div class="mcq-options" id="gr_3_q3_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_3_q3" value="0">
+                  <span>did</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="1">
-                  <span>study</span>
+                  <input type="radio" name="gr_3_q3" value="1">
+                  <span>does</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="2">
-                  <span>is studying</span>
+                  <input type="radio" name="gr_3_q3" value="2">
+                  <span>was</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="3">
-                  <span>studied</span>
+                  <input type="radio" name="gr_3_q3" value="3">
+                  <span>do</span>
                 </label></div>
-    <div class="explain" id="gr_1_q3_explain">💡 Ação temporária em curso no período atual usa Present Continuous.</div>
+    <div class="explain" id="gr_3_q3_explain">💡 Negativa no passado simples: did + not + verbo base.</div>
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkGrammar('gr_1', 4, [1, 2, 0, 2])">Verificar respostas</button>
+    <button class="btn btn-primary" onclick="checkGrammar('gr_3', 4, [2, 0, 2, 0])">Verificar respostas</button>
   </div>
-  <div class="feedback" id="gr_1_feedback"></div>
+  <div class="feedback" id="gr_3_feedback"></div>
 
 </section>
 
@@ -1254,7 +1282,7 @@ function downloadReport(){
 
 <footer class="site-footer">
   <div class="fmark">dyse</div>
-  <p>Do You Speak English? &middot; Material de apoio TOEFL iBT &middot; Atividade 01/16</p>
+  <p>Do You Speak English? &middot; Material de apoio TOEFL iBT &middot; Atividade 03/16</p>
 </footer>
 
 </body>

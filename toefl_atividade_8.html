@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DYSE · Atividade 01 — Rotina Diária</title>
-<meta name="description" content="Atividade TOEFL iBT 01 — Rotina Diária — Reading, Listening, Writing, Speaking e Grammar. Do You Speak English (DYSE).">
+<title>DYSE · Atividade 08 — Trabalho e Carreira</title>
+<meta name="description" content="Atividade TOEFL iBT 08 — Trabalho e Carreira — Reading, Listening, Writing, Speaking e Grammar. Do You Speak English (DYSE).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
@@ -444,10 +444,10 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 /* ---------- CONFIGURAÇÃO DO RELATÓRIO (edite aqui) ---------- */
 const TEACHER_EMAIL = "professora@doyouspeakenglish.com.br"; // <-- troque pelo e-mail da professora
 const FORMSPREE_ENDPOINT = ""; // opcional: cole aqui o endpoint do Formspree (ex: "https://formspree.io/f/xxxxxxx") para envio automático sem abrir o app de e-mail
-const ACTIVITY_LABEL = "1 — Rotina Diária";
-const CURRENT_IDX = 1;
+const ACTIVITY_LABEL = "8 — Trabalho e Carreira";
+const CURRENT_IDX = 8;
 
-const STORAGE_KEY = "dyse_toefl_activity1progress";
+const STORAGE_KEY = "dyse_toefl_activity8progress";
 let progress = {reading:false, listening:false, writing:false, speaking:false, grammar:false};
 try{
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
@@ -986,12 +986,12 @@ function downloadReport(){
       <span class="mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 2.7 5.9 1 10c1.7 4.1 6 7 11 7s9.3-2.9 11-7c-1.7-4.1-6-7-11-7zm0 11.5A4.5 4.5 0 1 1 16.5 10 4.5 4.5 0 0 1 12 14.5z"/></svg> dyse</span>
       <span>Do You Speak English? · Prep TOEFL iBT</span>
     </div>
-    <span class="eyebrow-badge">Atividade 01 de 16</span>
-    <h1 class="title">Rotina Diária</h1>
+    <span class="eyebrow-badge">Atividade 08 de 16</span>
+    <h1 class="title">Trabalho e Carreira</h1>
     <p class="subtitle">Pratique as cinco habilidades do novo formato do TOEFL iBT&reg; — Reading, Listening, Writing, Speaking e Grammar — em uma única atividade temática.</p>
     <div class="hero-meta">
-      <span class="pill">📘 Daily Routines</span>
-      <span class="pill">🎯 A2 · Iniciante</span>
+      <span class="pill">📘 Work &amp; Careers</span>
+      <span class="pill">🎯 B2 · Intermediário</span>
       <span class="pill">⏱️ ~25–35 min</span>
     </div>
     <div class="dyse-auth-bar" id="authBar"></div>
@@ -1016,22 +1016,41 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-7a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h8z"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Reading &middot; Complete the Words</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Reading &middot; Read in Daily Life</div>
+      <h2 class="card-title">Trabalho e Carreira</h2>
     </div>
   </div>
-  <div class="card-instructions">Fill in the missing letters in the paragraph.</div>
+  <div class="card-instructions">Read the email.</div>
   
-  <div class="passage-box" id="readingPassage_1" data-answers="[&quot;low&quot;, &quot;ine&quot;, &quot;des&quot;, &quot;ing&quot;, &quot;ing&quot;, &quot;ol&quot;, &quot;ine&quot;, &quot;p&quot;, &quot;y&quot;, &quot;zed&quot;, &quot;ce&quot;, &quot;ple&quot;, &quot;ke&quot;, &quot;ise&quot;, &quot;by&quot;, &quot;ay&quot;]">Most people fol<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_0" autocomplete="off" spellcheck="false"> a daily rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_1" autocomplete="off" spellcheck="false"> that inclu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_2" autocomplete="off" spellcheck="false"> waking up, eat<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_3" autocomplete="off" spellcheck="false"> breakfast, and go<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_4" autocomplete="off" spellcheck="false"> to work or scho<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_5" autocomplete="off" spellcheck="false">. A good rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_6" autocomplete="off" spellcheck="false"> can hel<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_7" autocomplete="off" spellcheck="false"> you sta<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_8" autocomplete="off" spellcheck="false"> organi<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_9" autocomplete="off" spellcheck="false"> and redu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_10" autocomplete="off" spellcheck="false"> stress. Many peo<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_11" autocomplete="off" spellcheck="false"> also ma<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_12" autocomplete="off" spellcheck="false"> time for exerc<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_13" autocomplete="off" spellcheck="false"> or a hob<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_14" autocomplete="off" spellcheck="false"> before the d<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_15" autocomplete="off" spellcheck="false"> ends.</div>
+  <span class="format-tag">Email</span>
+  <div class="passage-box">To: interns@brightpath.com
+From: hr@brightpath.com
+Subject: Internship Orientation Schedule
+
+Dear Interns,
+
+Welcome to Brightpath! Your orientation session will take place this Thursday at 9:30 AM in Conference Room B. Please bring a valid ID and a signed copy of your internship agreement. Light refreshments will be provided. If you cannot attend, contact HR before Wednesday to arrange an alternative session.
+
+Best regards,
+Human Resources</div>
+  <p style="font-weight:700; margin-bottom:10px;">What must interns bring to the orientation session?</p>
+  <div class="mcq-options" id="rd_8_options" data-correct="1"><label class="mcq-option">
+                  <input type="radio" name="rd_8" value="0">
+                  <span>A laptop and a resume</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_8" value="1">
+                  <span>A valid ID and a signed internship agreement</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_8" value="2">
+                  <span>A letter of recommendation</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_8" value="3">
+                  <span>Their own refreshments</span>
+                </label></div>
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkGapsWrapper_1()">Verificar respostas</button>
+    <button class="btn btn-primary" onclick="checkMCQ('rd_8', 1, 'rd_feedback_8', 'reading')">Verificar resposta</button>
   </div>
-  <div class="feedback" id="rd_feedback_1"></div>
-  <script>
-    function checkGapsWrapper_1(){
-      checkGaps('readingPassage_1', ["low", "ine", "des", "ing", "ing", "ol", "ine", "p", "y", "zed", "ce", "ple", "ke", "ise", "by", "ay"], 'rd_feedback_1', 'reading');
-    }
-  </script>
+  <div class="feedback" id="rd_feedback_8"></div>
 
 </section>
 
@@ -1042,33 +1061,37 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Listening &middot; Listen and Choose a Response</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Listening &middot; Listen to an Academic Talk</div>
+      <h2 class="card-title">Trabalho e Carreira</h2>
     </div>
   </div>
-  <div class="card-instructions">Listen to the question and choose the best response.</div>
+  <div class="card-instructions">Listen to part of a talk in a career-development seminar.</div>
   
-  <div class="btn-row" style="margin-bottom:18px;">
-    <button class="btn btn-audio" onclick="speak(&quot;What time do you usually wake up on weekdays?&quot;)">&#128266; Play audio</button>
+  <div class="btn-row" style="margin-bottom:16px;">
+    <button class="btn btn-audio" onclick="speak(&quot;Let&#x27;s talk about the importance of soft skills in today&#x27;s job market. While technical knowledge is important, employers increasingly value abilities like communication, teamwork, and adaptability. A recent survey of hiring managers found that many candidates with strong technical backgrounds were passed over because they struggled to collaborate effectively with colleagues. Building soft skills often happens through practice, such as working on group projects or taking on leadership roles in student organizations, rather than through traditional classroom study.&quot;)">&#128266; Play audio</button>
   </div>
-  <p style="font-weight:700; margin-bottom:10px;">Audio: &ldquo;What time do you usually wake up on weekdays?&rdquo; — Choose the best response.</p>
-  <div class="mcq-options" id="ls_1_options" data-correct="0"><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="0">
-                  <span>Around seven in the morning.</span>
+  <details style="margin-bottom:18px;">
+    <summary style="cursor:pointer; font-weight:700; color:var(--seal-soft); font-size:.85rem;">Mostrar transcrição (opcional)</summary>
+    <div class="passage-box" style="margin-top:10px;">Let&#x27;s talk about the importance of soft skills in today&#x27;s job market. While technical knowledge is important, employers increasingly value abilities like communication, teamwork, and adaptability. A recent survey of hiring managers found that many candidates with strong technical backgrounds were passed over because they struggled to collaborate effectively with colleagues. Building soft skills often happens through practice, such as working on group projects or taking on leadership roles in student organizations, rather than through traditional classroom study.</div>
+  </details>
+  <p style="font-weight:700; margin-bottom:10px;">According to the talk, why were some technically strong candidates passed over?</p>
+  <div class="mcq-options" id="ls_8_options" data-correct="1"><label class="mcq-option">
+                  <input type="radio" name="ls_8" value="0">
+                  <span>They asked for a very high salary</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="1">
-                  <span>It&#x27;s on the kitchen table.</span>
+                  <input type="radio" name="ls_8" value="1">
+                  <span>They struggled to collaborate effectively with colleagues</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="2">
-                  <span>I like coffee better.</span>
+                  <input type="radio" name="ls_8" value="2">
+                  <span>They lacked technical certifications</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="3">
-                  <span>Yes, I have a car.</span>
+                  <input type="radio" name="ls_8" value="3">
+                  <span>They applied to too many positions</span>
                 </label></div>
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkMCQ('ls_1', 0, 'ls_feedback_1', 'listening')">Verificar resposta</button>
+    <button class="btn btn-primary" onclick="checkMCQ('ls_8', 1, 'ls_feedback_8', 'listening')">Verificar resposta</button>
   </div>
-  <div class="feedback" id="ls_feedback_1"></div>
+  <div class="feedback" id="ls_feedback_8"></div>
 
 </section>
 
@@ -1080,19 +1103,19 @@ function downloadReport(){
     </div>
     <div>
       <div class="card-eyebrow">Writing &middot; Build a Sentence</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <h2 class="card-title">Trabalho e Carreira</h2>
     </div>
   </div>
   <div class="card-instructions">Make an appropriate sentence.</div>
   
-  <div class="passage-box" style="font-weight:700;">I always feel tired in the morning.</div>
-  <div class="answer-strip" id="strip_1" data-target="What time do you usually go to bed?"><span class="empty-hint">Clique nas palavras abaixo para montar a frase...</span></div>
-  <div class="chips-bank" id="bank_1"><button type="button" class="chip" id="chip_1_0" data-value="time" onclick="chipClick(this, 'strip_1', 'bank_1')">time</button><button type="button" class="chip" id="chip_1_1" data-value="do" onclick="chipClick(this, 'strip_1', 'bank_1')">do</button><button type="button" class="chip" id="chip_1_2" data-value="you" onclick="chipClick(this, 'strip_1', 'bank_1')">you</button><button type="button" class="chip" id="chip_1_3" data-value="usually" onclick="chipClick(this, 'strip_1', 'bank_1')">usually</button><button type="button" class="chip" id="chip_1_4" data-value="go to bed" onclick="chipClick(this, 'strip_1', 'bank_1')">go to bed</button><button type="button" class="chip" id="chip_1_5" data-value="What" onclick="chipClick(this, 'strip_1', 'bank_1')">What</button><button type="button" class="chip" id="chip_1_6" data-value="the room" onclick="chipClick(this, 'strip_1', 'bank_1')">the room</button></div>
+  <div class="passage-box" style="font-weight:700;">I&#x27;m nervous about my job interview tomorrow.</div>
+  <div class="answer-strip" id="strip_8" data-target="You should prepare a few questions to ask them."><span class="empty-hint">Clique nas palavras abaixo para montar a frase...</span></div>
+  <div class="chips-bank" id="bank_8"><button type="button" class="chip" id="chip_8_0" data-value="should" onclick="chipClick(this, 'strip_8', 'bank_8')">should</button><button type="button" class="chip" id="chip_8_1" data-value="prepare" onclick="chipClick(this, 'strip_8', 'bank_8')">prepare</button><button type="button" class="chip" id="chip_8_2" data-value="a few questions" onclick="chipClick(this, 'strip_8', 'bank_8')">a few questions</button><button type="button" class="chip" id="chip_8_3" data-value="You" onclick="chipClick(this, 'strip_8', 'bank_8')">You</button><button type="button" class="chip" id="chip_8_4" data-value="to ask them" onclick="chipClick(this, 'strip_8', 'bank_8')">to ask them</button><button type="button" class="chip" id="chip_8_5" data-value="for the weekend" onclick="chipClick(this, 'strip_8', 'bank_8')">for the weekend</button></div>
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkSentence('strip_1', &quot;What time do you usually go to bed?&quot;, 'wr_feedback_1', 'writing')">Verificar frase</button>
-    <button class="btn btn-ghost" onclick="resetStrip('strip_1', 'bank_1')">Recomeçar</button>
+    <button class="btn btn-primary" onclick="checkSentence('strip_8', &quot;You should prepare a few questions to ask them.&quot;, 'wr_feedback_8', 'writing')">Verificar frase</button>
+    <button class="btn btn-ghost" onclick="resetStrip('strip_8', 'bank_8')">Recomeçar</button>
   </div>
-  <div class="feedback" id="wr_feedback_1"></div>
+  <div class="feedback" id="wr_feedback_8"></div>
 
 </section>
 
@@ -1103,43 +1126,43 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Speaking &middot; Listen and Repeat</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Speaking &middot; Take an Interview</div>
+      <h2 class="card-title">Trabalho e Carreira</h2>
     </div>
   </div>
-  <div class="card-instructions">Listen and repeat each sentence only once. You are training a new front-desk assistant at a school.</div>
-  
-  <div class="repeat-block" data-target="Good morning! Welcome to our school.">
-    <p><span class="q-number">1</span><strong>Good morning! Welcome to our school.</strong></p>
+  <div class="card-instructions">Please answer the interviewer&#x27;s questions about work and careers.</div>
+  <div class="passage-box">You are participating in a mock job interview for practice.</div>
+  <div class="interview-block" data-target="What kind of career are you interested in pursuing?">
+    <p><span class="q-number">1</span><strong>What kind of career are you interested in pursuing?</strong></p>
     <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Good morning! Welcome to our school.&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Good morning! Welcome to our school.&quot;, 'sp_status_1_0', 'sp_trans_1_0', 'sp_bar_1_0', 'speaking')">&#127908; Gravar minha voz</button>
+      <button class="btn btn-audio" onclick="speak(&quot;What kind of career are you interested in pursuing?&quot;)">&#128266; Play question</button>
+      <button class="btn btn-primary" onclick="startRecognition('', 'sp_status_8_0', 'sp_trans_8_0', 'sp_bar_8_0', 'speaking')">&#127908; Gravar minha resposta (45s)</button>
     </div>
-    <div class="mic-status" id="sp_status_1_0"></div>
-    <div class="transcript-box" id="sp_trans_1_0"></div>
-    <div class="match-bar" id="sp_bar_1_0"><span></span></div>
-  </div>
-
-  <div class="repeat-block" data-target="Could you please tell me your full name?">
-    <p><span class="q-number">2</span><strong>Could you please tell me your full name?</strong></p>
-    <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Could you please tell me your full name?&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Could you please tell me your full name?&quot;, 'sp_status_1_1', 'sp_trans_1_1', 'sp_bar_1_1', 'speaking')">&#127908; Gravar minha voz</button>
-    </div>
-    <div class="mic-status" id="sp_status_1_1"></div>
-    <div class="transcript-box" id="sp_trans_1_1"></div>
-    <div class="match-bar" id="sp_bar_1_1"><span></span></div>
+    <div class="mic-status" id="sp_status_8_0"></div>
+    <div class="transcript-box" id="sp_trans_8_0" style="display:none;"></div>
+    <div class="match-bar" id="sp_bar_8_0" style="display:none;"><span></span></div>
   </div>
 
-  <div class="repeat-block" data-target="Your class starts at nine o&#x27;clock in room twelve.">
-    <p><span class="q-number">3</span><strong>Your class starts at nine o&#x27;clock in room twelve.</strong></p>
+  <div class="interview-block" data-target="Describe a skill you have improved recently and how you did it.">
+    <p><span class="q-number">2</span><strong>Describe a skill you have improved recently and how you did it.</strong></p>
     <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Your class starts at nine o&#x27;clock in room twelve.&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Your class starts at nine o&#x27;clock in room twelve.&quot;, 'sp_status_1_2', 'sp_trans_1_2', 'sp_bar_1_2', 'speaking')">&#127908; Gravar minha voz</button>
+      <button class="btn btn-audio" onclick="speak(&quot;Describe a skill you have improved recently and how you did it.&quot;)">&#128266; Play question</button>
+      <button class="btn btn-primary" onclick="startRecognition('', 'sp_status_8_1', 'sp_trans_8_1', 'sp_bar_8_1', 'speaking')">&#127908; Gravar minha resposta (45s)</button>
     </div>
-    <div class="mic-status" id="sp_status_1_2"></div>
-    <div class="transcript-box" id="sp_trans_1_2"></div>
-    <div class="match-bar" id="sp_bar_1_2"><span></span></div>
+    <div class="mic-status" id="sp_status_8_1"></div>
+    <div class="transcript-box" id="sp_trans_8_1" style="display:none;"></div>
+    <div class="match-bar" id="sp_bar_8_1" style="display:none;"><span></span></div>
+  </div>
+
+  <div class="interview-block" data-target="What do you think makes someone a good team member at work?">
+    <p><span class="q-number">3</span><strong>What do you think makes someone a good team member at work?</strong></p>
+    <div class="btn-row">
+      <button class="btn btn-audio" onclick="speak(&quot;What do you think makes someone a good team member at work?&quot;)">&#128266; Play question</button>
+      <button class="btn btn-primary" onclick="startRecognition('', 'sp_status_8_2', 'sp_trans_8_2', 'sp_bar_8_2', 'speaking')">&#127908; Gravar minha resposta (45s)</button>
+    </div>
+    <div class="mic-status" id="sp_status_8_2"></div>
+    <div class="transcript-box" id="sp_trans_8_2" style="display:none;"></div>
+    <div class="match-bar" id="sp_bar_8_2" style="display:none;"><span></span></div>
   </div>
 
 </section>
@@ -1151,90 +1174,90 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--seal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Grammar &middot; Simple Present vs. Present Continuous</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Grammar &middot; Modal Verbs (can / could / must / should)</div>
+      <h2 class="card-title">Trabalho e Carreira</h2>
     </div>
   </div>
   <div class="card-instructions">Choose the correct option for each sentence.</div>
   
-  <p style="font-weight:700; margin-bottom:4px;">Tema: Simple Present vs. Present Continuous</p>
+  <p style="font-weight:700; margin-bottom:4px;">Tema: Modal Verbs (can / could / must / should)</p>
   
   <div class="grammar-q">
-    <p class="qtext">1. She ___ to the gym every Monday and Thursday.</p>
-    <div class="mcq-options" id="gr_1_q0_opts" data-correct="1"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="0">
-                  <span>go</span>
+    <p class="qtext">1. You ___ arrive at least ten minutes early for the interview.</p>
+    <div class="mcq-options" id="gr_8_q0_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_8_q0" value="0">
+                  <span>should</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="1">
-                  <span>goes</span>
+                  <input type="radio" name="gr_8_q0" value="1">
+                  <span>can</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="2">
-                  <span>is going</span>
+                  <input type="radio" name="gr_8_q0" value="2">
+                  <span>may</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="3">
-                  <span>gone</span>
+                  <input type="radio" name="gr_8_q0" value="3">
+                  <span>would</span>
                 </label></div>
-    <div class="explain" id="gr_1_q0_explain">💡 Hábitos e rotinas usam o Simple Present com -s na 3ª pessoa.</div>
+    <div class="explain" id="gr_8_q0_explain">💡 &quot;Should&quot; expressa recomendação/conselho.</div>
   </div>
 
   <div class="grammar-q">
-    <p class="qtext">2. Look! It ___ outside. Take an umbrella.</p>
-    <div class="mcq-options" id="gr_1_q1_opts" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="0">
-                  <span>rains</span>
+    <p class="qtext">2. Candidates ___ submit their resumes before the deadline; it&#x27;s mandatory.</p>
+    <div class="mcq-options" id="gr_8_q1_opts" data-correct="2"><label class="mcq-option">
+                  <input type="radio" name="gr_8_q1" value="0">
+                  <span>might</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="1">
-                  <span>rain</span>
+                  <input type="radio" name="gr_8_q1" value="1">
+                  <span>could</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="2">
-                  <span>is raining</span>
+                  <input type="radio" name="gr_8_q1" value="2">
+                  <span>must</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="3">
-                  <span>rained</span>
+                  <input type="radio" name="gr_8_q1" value="3">
+                  <span>may</span>
                 </label></div>
-    <div class="explain" id="gr_1_q1_explain">💡 Ações acontecendo agora usam o Present Continuous (is/are + -ing).</div>
+    <div class="explain" id="gr_8_q1_explain">💡 &quot;Must&quot; expressa obrigação forte/necessidade.</div>
   </div>
 
   <div class="grammar-q">
-    <p class="qtext">3. I ___ coffee in the morning, but today I ___ tea.</p>
-    <div class="mcq-options" id="gr_1_q2_opts" data-correct="0"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="0">
-                  <span>usually drink / am drinking</span>
+    <p class="qtext">3. When she was younger, she ___ speak three languages fluently.</p>
+    <div class="mcq-options" id="gr_8_q2_opts" data-correct="1"><label class="mcq-option">
+                  <input type="radio" name="gr_8_q2" value="0">
+                  <span>can</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="1">
-                  <span>am usually drinking / drink</span>
+                  <input type="radio" name="gr_8_q2" value="1">
+                  <span>could</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="2">
-                  <span>drink / drinking</span>
+                  <input type="radio" name="gr_8_q2" value="2">
+                  <span>must</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="3">
-                  <span>drinks / drink</span>
+                  <input type="radio" name="gr_8_q2" value="3">
+                  <span>should</span>
                 </label></div>
-    <div class="explain" id="gr_1_q2_explain">💡 Hábito geral (Simple Present) x exceção no momento (Present Continuous).</div>
+    <div class="explain" id="gr_8_q2_explain">💡 &quot;Could&quot; é usado para habilidade no passado.</div>
   </div>
 
   <div class="grammar-q">
-    <p class="qtext">4. My brother ___ English at the university this semester.</p>
-    <div class="mcq-options" id="gr_1_q3_opts" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="0">
-                  <span>studies</span>
+    <p class="qtext">4. ___ I ask you a question about the job description?</p>
+    <div class="mcq-options" id="gr_8_q3_opts" data-correct="2"><label class="mcq-option">
+                  <input type="radio" name="gr_8_q3" value="0">
+                  <span>Must</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="1">
-                  <span>study</span>
+                  <input type="radio" name="gr_8_q3" value="1">
+                  <span>Should</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="2">
-                  <span>is studying</span>
+                  <input type="radio" name="gr_8_q3" value="2">
+                  <span>Could</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="3">
-                  <span>studied</span>
+                  <input type="radio" name="gr_8_q3" value="3">
+                  <span>Have to</span>
                 </label></div>
-    <div class="explain" id="gr_1_q3_explain">💡 Ação temporária em curso no período atual usa Present Continuous.</div>
+    <div class="explain" id="gr_8_q3_explain">💡 &quot;Could&quot; é uma forma educada de pedir permissão.</div>
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkGrammar('gr_1', 4, [1, 2, 0, 2])">Verificar respostas</button>
+    <button class="btn btn-primary" onclick="checkGrammar('gr_8', 4, [0, 2, 1, 2])">Verificar respostas</button>
   </div>
-  <div class="feedback" id="gr_1_feedback"></div>
+  <div class="feedback" id="gr_8_feedback"></div>
 
 </section>
 
@@ -1254,7 +1277,7 @@ function downloadReport(){
 
 <footer class="site-footer">
   <div class="fmark">dyse</div>
-  <p>Do You Speak English? &middot; Material de apoio TOEFL iBT &middot; Atividade 01/16</p>
+  <p>Do You Speak English? &middot; Material de apoio TOEFL iBT &middot; Atividade 08/16</p>
 </footer>
 
 </body>

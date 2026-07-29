@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DYSE · Atividade 01 — Rotina Diária</title>
-<meta name="description" content="Atividade TOEFL iBT 01 — Rotina Diária — Reading, Listening, Writing, Speaking e Grammar. Do You Speak English (DYSE).">
+<title>DYSE · Atividade 11 — História</title>
+<meta name="description" content="Atividade TOEFL iBT 11 — História — Reading, Listening, Writing, Speaking e Grammar. Do You Speak English (DYSE).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
@@ -444,10 +444,10 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 /* ---------- CONFIGURAÇÃO DO RELATÓRIO (edite aqui) ---------- */
 const TEACHER_EMAIL = "professora@doyouspeakenglish.com.br"; // <-- troque pelo e-mail da professora
 const FORMSPREE_ENDPOINT = ""; // opcional: cole aqui o endpoint do Formspree (ex: "https://formspree.io/f/xxxxxxx") para envio automático sem abrir o app de e-mail
-const ACTIVITY_LABEL = "1 — Rotina Diária";
-const CURRENT_IDX = 1;
+const ACTIVITY_LABEL = "11 — História";
+const CURRENT_IDX = 11;
 
-const STORAGE_KEY = "dyse_toefl_activity1progress";
+const STORAGE_KEY = "dyse_toefl_activity11progress";
 let progress = {reading:false, listening:false, writing:false, speaking:false, grammar:false};
 try{
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
@@ -986,12 +986,12 @@ function downloadReport(){
       <span class="mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 2.7 5.9 1 10c1.7 4.1 6 7 11 7s9.3-2.9 11-7c-1.7-4.1-6-7-11-7zm0 11.5A4.5 4.5 0 1 1 16.5 10 4.5 4.5 0 0 1 12 14.5z"/></svg> dyse</span>
       <span>Do You Speak English? · Prep TOEFL iBT</span>
     </div>
-    <span class="eyebrow-badge">Atividade 01 de 16</span>
-    <h1 class="title">Rotina Diária</h1>
+    <span class="eyebrow-badge">Atividade 11 de 16</span>
+    <h1 class="title">História</h1>
     <p class="subtitle">Pratique as cinco habilidades do novo formato do TOEFL iBT&reg; — Reading, Listening, Writing, Speaking e Grammar — em uma única atividade temática.</p>
     <div class="hero-meta">
-      <span class="pill">📘 Daily Routines</span>
-      <span class="pill">🎯 A2 · Iniciante</span>
+      <span class="pill">📘 History</span>
+      <span class="pill">🎯 C1 · Avançado</span>
       <span class="pill">⏱️ ~25–35 min</span>
     </div>
     <div class="dyse-auth-bar" id="authBar"></div>
@@ -1016,22 +1016,34 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-7a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h8z"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Reading &middot; Complete the Words</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Reading &middot; Read an Academic Passage</div>
+      <h2 class="card-title">História</h2>
     </div>
   </div>
-  <div class="card-instructions">Fill in the missing letters in the paragraph.</div>
+  <div class="card-instructions">Read the passage.</div>
   
-  <div class="passage-box" id="readingPassage_1" data-answers="[&quot;low&quot;, &quot;ine&quot;, &quot;des&quot;, &quot;ing&quot;, &quot;ing&quot;, &quot;ol&quot;, &quot;ine&quot;, &quot;p&quot;, &quot;y&quot;, &quot;zed&quot;, &quot;ce&quot;, &quot;ple&quot;, &quot;ke&quot;, &quot;ise&quot;, &quot;by&quot;, &quot;ay&quot;]">Most people fol<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_0" autocomplete="off" spellcheck="false"> a daily rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_1" autocomplete="off" spellcheck="false"> that inclu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_2" autocomplete="off" spellcheck="false"> waking up, eat<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_3" autocomplete="off" spellcheck="false"> breakfast, and go<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_4" autocomplete="off" spellcheck="false"> to work or scho<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_5" autocomplete="off" spellcheck="false">. A good rout<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_6" autocomplete="off" spellcheck="false"> can hel<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_7" autocomplete="off" spellcheck="false"> you sta<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_8" autocomplete="off" spellcheck="false"> organi<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_9" autocomplete="off" spellcheck="false"> and redu<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_10" autocomplete="off" spellcheck="false"> stress. Many peo<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_11" autocomplete="off" spellcheck="false"> also ma<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_12" autocomplete="off" spellcheck="false"> time for exerc<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_13" autocomplete="off" spellcheck="false"> or a hob<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_14" autocomplete="off" spellcheck="false"> before the d<input type="text" class="gap-input" style="width:47px" id="rd_gap_1_15" autocomplete="off" spellcheck="false"> ends.</div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkGapsWrapper_1()">Verificar respostas</button>
+  <div class="passage-box">
+    <div class="passage-title">The Silk Road as a Network of Exchange</div>
+    Although often described as a single trade route, the Silk Road was actually a vast network of interconnected paths linking East Asia to the Mediterranean. Along these routes, merchants exchanged not only silk and spices but also technologies, religious ideas, and artistic styles. Buddhism, for instance, spread from India into Central Asia and China largely through contact along these trade paths. Historians note that the Silk Road&#x27;s influence extended well beyond commerce, functioning as a conduit for cultural transformation across diverse civilizations. Its decline in the fifteenth century is often attributed to the rise of maritime trade routes, which offered faster and less politically complicated alternatives for transporting goods between regions.
   </div>
-  <div class="feedback" id="rd_feedback_1"></div>
-  <script>
-    function checkGapsWrapper_1(){
-      checkGaps('readingPassage_1', ["low", "ine", "des", "ing", "ing", "ol", "ine", "p", "y", "zed", "ce", "ple", "ke", "ise", "by", "ay"], 'rd_feedback_1', 'reading');
-    }
-  </script>
+  <p style="font-weight:700; margin-bottom:10px;">According to the passage, what ultimately contributed to the decline of the Silk Road?</p>
+  <div class="mcq-options" id="rd_11_options" data-correct="2"><label class="mcq-option">
+                  <input type="radio" name="rd_11" value="0">
+                  <span>A sudden decrease in demand for silk</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_11" value="1">
+                  <span>The spread of Buddhism into China</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_11" value="2">
+                  <span>The rise of faster maritime trade routes</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_11" value="3">
+                  <span>Political unity across Central Asia</span>
+                </label></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="checkMCQ('rd_11', 2, 'rd_feedback_11', 'reading')">Verificar resposta</button>
+  </div>
+  <div class="feedback" id="rd_feedback_11"></div>
 
 </section>
 
@@ -1042,33 +1054,37 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Listening &middot; Listen and Choose a Response</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Listening &middot; Listen to an Academic Talk</div>
+      <h2 class="card-title">História</h2>
     </div>
   </div>
-  <div class="card-instructions">Listen to the question and choose the best response.</div>
+  <div class="card-instructions">Listen to part of a talk in a world history class.</div>
   
-  <div class="btn-row" style="margin-bottom:18px;">
-    <button class="btn btn-audio" onclick="speak(&quot;What time do you usually wake up on weekdays?&quot;)">&#128266; Play audio</button>
+  <div class="btn-row" style="margin-bottom:16px;">
+    <button class="btn btn-audio" onclick="speak(&quot;One common misconception about the Silk Road is that it was a single, continuous road traveled from end to end by the same merchants. In reality, it functioned more like a relay system. Goods typically passed through many hands, with different traders controlling different sections of the route based on local knowledge and political relationships. This structure meant that an item made in China might change ownership a dozen times before reaching a market in the Mediterranean. It also explains why cultural exchange was so powerful along these routes: each transaction was also an opportunity for ideas, language, and customs to travel alongside physical goods.&quot;)">&#128266; Play audio</button>
   </div>
-  <p style="font-weight:700; margin-bottom:10px;">Audio: &ldquo;What time do you usually wake up on weekdays?&rdquo; — Choose the best response.</p>
-  <div class="mcq-options" id="ls_1_options" data-correct="0"><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="0">
-                  <span>Around seven in the morning.</span>
+  <details style="margin-bottom:18px;">
+    <summary style="cursor:pointer; font-weight:700; color:var(--seal-soft); font-size:.85rem;">Mostrar transcrição (opcional)</summary>
+    <div class="passage-box" style="margin-top:10px;">One common misconception about the Silk Road is that it was a single, continuous road traveled from end to end by the same merchants. In reality, it functioned more like a relay system. Goods typically passed through many hands, with different traders controlling different sections of the route based on local knowledge and political relationships. This structure meant that an item made in China might change ownership a dozen times before reaching a market in the Mediterranean. It also explains why cultural exchange was so powerful along these routes: each transaction was also an opportunity for ideas, language, and customs to travel alongside physical goods.</div>
+  </details>
+  <p style="font-weight:700; margin-bottom:10px;">What point does the speaker make about how goods traveled on the Silk Road?</p>
+  <div class="mcq-options" id="ls_11_options" data-correct="1"><label class="mcq-option">
+                  <input type="radio" name="ls_11" value="0">
+                  <span>The same merchants carried goods the entire distance</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="1">
-                  <span>It&#x27;s on the kitchen table.</span>
+                  <input type="radio" name="ls_11" value="1">
+                  <span>Goods usually changed hands many times along different sections of the route</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="2">
-                  <span>I like coffee better.</span>
+                  <input type="radio" name="ls_11" value="2">
+                  <span>Goods were transported mainly by sea</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="ls_1" value="3">
-                  <span>Yes, I have a car.</span>
+                  <input type="radio" name="ls_11" value="3">
+                  <span>Cultural exchange rarely happened during trade</span>
                 </label></div>
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkMCQ('ls_1', 0, 'ls_feedback_1', 'listening')">Verificar resposta</button>
+    <button class="btn btn-primary" onclick="checkMCQ('ls_11', 1, 'ls_feedback_11', 'listening')">Verificar resposta</button>
   </div>
-  <div class="feedback" id="ls_feedback_1"></div>
+  <div class="feedback" id="ls_feedback_11"></div>
 
 </section>
 
@@ -1079,20 +1095,35 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--seal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Writing &middot; Build a Sentence</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Writing &middot; Write for an Academic Discussion</div>
+      <h2 class="card-title">História</h2>
     </div>
   </div>
-  <div class="card-instructions">Make an appropriate sentence.</div>
+  <div class="card-instructions">Write for an academic discussion.</div>
   
-  <div class="passage-box" style="font-weight:700;">I always feel tired in the morning.</div>
-  <div class="answer-strip" id="strip_1" data-target="What time do you usually go to bed?"><span class="empty-hint">Clique nas palavras abaixo para montar a frase...</span></div>
-  <div class="chips-bank" id="bank_1"><button type="button" class="chip" id="chip_1_0" data-value="time" onclick="chipClick(this, 'strip_1', 'bank_1')">time</button><button type="button" class="chip" id="chip_1_1" data-value="do" onclick="chipClick(this, 'strip_1', 'bank_1')">do</button><button type="button" class="chip" id="chip_1_2" data-value="you" onclick="chipClick(this, 'strip_1', 'bank_1')">you</button><button type="button" class="chip" id="chip_1_3" data-value="usually" onclick="chipClick(this, 'strip_1', 'bank_1')">usually</button><button type="button" class="chip" id="chip_1_4" data-value="go to bed" onclick="chipClick(this, 'strip_1', 'bank_1')">go to bed</button><button type="button" class="chip" id="chip_1_5" data-value="What" onclick="chipClick(this, 'strip_1', 'bank_1')">What</button><button type="button" class="chip" id="chip_1_6" data-value="the room" onclick="chipClick(this, 'strip_1', 'bank_1')">the room</button></div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkSentence('strip_1', &quot;What time do you usually go to bed?&quot;, 'wr_feedback_1', 'writing')">Verificar frase</button>
-    <button class="btn btn-ghost" onclick="resetStrip('strip_1', 'bank_1')">Recomeçar</button>
+  <div class="passage-box">
+    <div class="passage-title">Dr. Whitfield</div>
+    Historians often debate whether trade or conquest had a greater impact on cultural exchange throughout history. In your view, which force — peaceful trade or military expansion — has done more to spread ideas and technologies between civilizations?
   </div>
-  <div class="feedback" id="wr_feedback_1"></div>
+  <div class="passage-box" style="background:var(--cherry);">
+    <div class="passage-title">Hana</div>
+    I lean toward trade, since merchants had strong incentives to maintain long-term relationships, which allowed ideas to spread gradually and peacefully over generations.
+  </div>
+  <div class="passage-box" style="background:var(--cherry);">
+    <div class="passage-title">Tomas</div>
+    I&#x27;d argue conquest often forced rapid cultural blending, since conquerors and conquered peoples had no choice but to live and interact closely together.
+  </div>
+  <p style="font-weight:700; margin:14px 0 6px;">Sua resposta deve:</p>
+  <ul style="margin-top:0;"><li>Express and support your own opinion.</li><li>Respond to at least one point made by Hana or Tomas.</li><li>Use at least 100 words.</li></ul>
+  <textarea class="write-area" id="wr_area_11" placeholder="Write your discussion post here..."></textarea>
+  <div class="word-count" id="wr_count_11"></div>
+  <p style="font-weight:700; margin:16px 0 4px;">Autoavaliação:</p>
+  <div class="checklist"><label><input type="checkbox"><span>Express and support your own opinion.</span></label><label><input type="checkbox"><span>Respond to at least one point made by Hana or Tomas.</span></label><label><input type="checkbox"><span>Use at least 100 words.</span></label></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" id="wr_modelbtn_11" onclick="toggleModel(this, 'wr_model_11', 'writing')">Ver resposta modelo</button>
+  </div>
+  <div class="model-answer" id="wr_model_11">I find Hana&#x27;s argument more convincing overall, though I think Tomas raises an important point about the speed of change. Trade networks like the Silk Road demonstrate how sustained, voluntary contact allowed technologies, religions, and artistic styles to spread across enormous distances over centuries. This kind of exchange tends to be more durable because it isn&#x27;t dependent on the outcome of a single conflict. That said, Tomas is right that conquest can accelerate blending in the short term, as seen in empires that absorbed diverse populations quickly. Still, I would argue that trade&#x27;s gradual, repeated contact created deeper and more lasting cultural transformations than most single military campaigns.</div>
+  <script>countWords('wr_area_11', 'wr_count_11', 100);</script>
 
 </section>
 
@@ -1103,43 +1134,43 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Speaking &middot; Listen and Repeat</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Speaking &middot; Take an Interview</div>
+      <h2 class="card-title">História</h2>
     </div>
   </div>
-  <div class="card-instructions">Listen and repeat each sentence only once. You are training a new front-desk assistant at a school.</div>
-  
-  <div class="repeat-block" data-target="Good morning! Welcome to our school.">
-    <p><span class="q-number">1</span><strong>Good morning! Welcome to our school.</strong></p>
+  <div class="card-instructions">Please answer the interviewer&#x27;s questions about history.</div>
+  <div class="passage-box">You are being interviewed for a university podcast about the value of studying history.</div>
+  <div class="interview-block" data-target="Why do you think it&#x27;s important to study history?">
+    <p><span class="q-number">1</span><strong>Why do you think it&#x27;s important to study history?</strong></p>
     <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Good morning! Welcome to our school.&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Good morning! Welcome to our school.&quot;, 'sp_status_1_0', 'sp_trans_1_0', 'sp_bar_1_0', 'speaking')">&#127908; Gravar minha voz</button>
+      <button class="btn btn-audio" onclick="speak(&quot;Why do you think it&#x27;s important to study history?&quot;)">&#128266; Play question</button>
+      <button class="btn btn-primary" onclick="startRecognition('', 'sp_status_11_0', 'sp_trans_11_0', 'sp_bar_11_0', 'speaking')">&#127908; Gravar minha resposta (45s)</button>
     </div>
-    <div class="mic-status" id="sp_status_1_0"></div>
-    <div class="transcript-box" id="sp_trans_1_0"></div>
-    <div class="match-bar" id="sp_bar_1_0"><span></span></div>
-  </div>
-
-  <div class="repeat-block" data-target="Could you please tell me your full name?">
-    <p><span class="q-number">2</span><strong>Could you please tell me your full name?</strong></p>
-    <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Could you please tell me your full name?&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Could you please tell me your full name?&quot;, 'sp_status_1_1', 'sp_trans_1_1', 'sp_bar_1_1', 'speaking')">&#127908; Gravar minha voz</button>
-    </div>
-    <div class="mic-status" id="sp_status_1_1"></div>
-    <div class="transcript-box" id="sp_trans_1_1"></div>
-    <div class="match-bar" id="sp_bar_1_1"><span></span></div>
+    <div class="mic-status" id="sp_status_11_0"></div>
+    <div class="transcript-box" id="sp_trans_11_0" style="display:none;"></div>
+    <div class="match-bar" id="sp_bar_11_0" style="display:none;"><span></span></div>
   </div>
 
-  <div class="repeat-block" data-target="Your class starts at nine o&#x27;clock in room twelve.">
-    <p><span class="q-number">3</span><strong>Your class starts at nine o&#x27;clock in room twelve.</strong></p>
+  <div class="interview-block" data-target="Describe a historical event that you find particularly interesting.">
+    <p><span class="q-number">2</span><strong>Describe a historical event that you find particularly interesting.</strong></p>
     <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Your class starts at nine o&#x27;clock in room twelve.&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Your class starts at nine o&#x27;clock in room twelve.&quot;, 'sp_status_1_2', 'sp_trans_1_2', 'sp_bar_1_2', 'speaking')">&#127908; Gravar minha voz</button>
+      <button class="btn btn-audio" onclick="speak(&quot;Describe a historical event that you find particularly interesting.&quot;)">&#128266; Play question</button>
+      <button class="btn btn-primary" onclick="startRecognition('', 'sp_status_11_1', 'sp_trans_11_1', 'sp_bar_11_1', 'speaking')">&#127908; Gravar minha resposta (45s)</button>
     </div>
-    <div class="mic-status" id="sp_status_1_2"></div>
-    <div class="transcript-box" id="sp_trans_1_2"></div>
-    <div class="match-bar" id="sp_bar_1_2"><span></span></div>
+    <div class="mic-status" id="sp_status_11_1"></div>
+    <div class="transcript-box" id="sp_trans_11_1" style="display:none;"></div>
+    <div class="match-bar" id="sp_bar_11_1" style="display:none;"><span></span></div>
+  </div>
+
+  <div class="interview-block" data-target="Do you think modern trade has the same cultural impact as ancient trade routes? Explain.">
+    <p><span class="q-number">3</span><strong>Do you think modern trade has the same cultural impact as ancient trade routes? Explain.</strong></p>
+    <div class="btn-row">
+      <button class="btn btn-audio" onclick="speak(&quot;Do you think modern trade has the same cultural impact as ancient trade routes? Explain.&quot;)">&#128266; Play question</button>
+      <button class="btn btn-primary" onclick="startRecognition('', 'sp_status_11_2', 'sp_trans_11_2', 'sp_bar_11_2', 'speaking')">&#127908; Gravar minha resposta (45s)</button>
+    </div>
+    <div class="mic-status" id="sp_status_11_2"></div>
+    <div class="transcript-box" id="sp_trans_11_2" style="display:none;"></div>
+    <div class="match-bar" id="sp_bar_11_2" style="display:none;"><span></span></div>
   </div>
 
 </section>
@@ -1151,90 +1182,90 @@ function downloadReport(){
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--seal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
     </div>
     <div>
-      <div class="card-eyebrow">Grammar &middot; Simple Present vs. Present Continuous</div>
-      <h2 class="card-title">Rotina Diária</h2>
+      <div class="card-eyebrow">Grammar &middot; Conditionals (Zero and First)</div>
+      <h2 class="card-title">História</h2>
     </div>
   </div>
   <div class="card-instructions">Choose the correct option for each sentence.</div>
   
-  <p style="font-weight:700; margin-bottom:4px;">Tema: Simple Present vs. Present Continuous</p>
+  <p style="font-weight:700; margin-bottom:4px;">Tema: Conditionals (Zero and First)</p>
   
   <div class="grammar-q">
-    <p class="qtext">1. She ___ to the gym every Monday and Thursday.</p>
-    <div class="mcq-options" id="gr_1_q0_opts" data-correct="1"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="0">
-                  <span>go</span>
+    <p class="qtext">1. If trade routes ___ safe, merchants generally use them more often.</p>
+    <div class="mcq-options" id="gr_11_q0_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_11_q0" value="0">
+                  <span>are</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="1">
-                  <span>goes</span>
+                  <input type="radio" name="gr_11_q0" value="1">
+                  <span>were</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="2">
-                  <span>is going</span>
+                  <input type="radio" name="gr_11_q0" value="2">
+                  <span>will be</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q0" value="3">
-                  <span>gone</span>
+                  <input type="radio" name="gr_11_q0" value="3">
+                  <span>had been</span>
                 </label></div>
-    <div class="explain" id="gr_1_q0_explain">💡 Hábitos e rotinas usam o Simple Present com -s na 3ª pessoa.</div>
+    <div class="explain" id="gr_11_q0_explain">💡 Zero Conditional (verdade geral): if + Simple Present, Simple Present.</div>
   </div>
 
   <div class="grammar-q">
-    <p class="qtext">2. Look! It ___ outside. Take an umbrella.</p>
-    <div class="mcq-options" id="gr_1_q1_opts" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="0">
-                  <span>rains</span>
+    <p class="qtext">2. If historians ___ more evidence, they will revise the theory.</p>
+    <div class="mcq-options" id="gr_11_q1_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_11_q1" value="0">
+                  <span>find</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="1">
-                  <span>rain</span>
+                  <input type="radio" name="gr_11_q1" value="1">
+                  <span>found</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="2">
-                  <span>is raining</span>
+                  <input type="radio" name="gr_11_q1" value="2">
+                  <span>will find</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q1" value="3">
-                  <span>rained</span>
+                  <input type="radio" name="gr_11_q1" value="3">
+                  <span>finding</span>
                 </label></div>
-    <div class="explain" id="gr_1_q1_explain">💡 Ações acontecendo agora usam o Present Continuous (is/are + -ing).</div>
+    <div class="explain" id="gr_11_q1_explain">💡 First Conditional: if + Simple Present, will + verbo base.</div>
   </div>
 
   <div class="grammar-q">
-    <p class="qtext">3. I ___ coffee in the morning, but today I ___ tea.</p>
-    <div class="mcq-options" id="gr_1_q2_opts" data-correct="0"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="0">
-                  <span>usually drink / am drinking</span>
+    <p class="qtext">3. Ice ___ if the temperature rises above zero degrees.</p>
+    <div class="mcq-options" id="gr_11_q2_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_11_q2" value="0">
+                  <span>melts</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="1">
-                  <span>am usually drinking / drink</span>
+                  <input type="radio" name="gr_11_q2" value="1">
+                  <span>will melt</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="2">
-                  <span>drink / drinking</span>
+                  <input type="radio" name="gr_11_q2" value="2">
+                  <span>melted</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q2" value="3">
-                  <span>drinks / drink</span>
+                  <input type="radio" name="gr_11_q2" value="3">
+                  <span>would melt</span>
                 </label></div>
-    <div class="explain" id="gr_1_q2_explain">💡 Hábito geral (Simple Present) x exceção no momento (Present Continuous).</div>
+    <div class="explain" id="gr_11_q2_explain">💡 Zero Conditional descreve fatos científicos/gerais.</div>
   </div>
 
   <div class="grammar-q">
-    <p class="qtext">4. My brother ___ English at the university this semester.</p>
-    <div class="mcq-options" id="gr_1_q3_opts" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="0">
-                  <span>studies</span>
+    <p class="qtext">4. If the museum ___ the new exhibit next month, attendance will likely increase.</p>
+    <div class="mcq-options" id="gr_11_q3_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_11_q3" value="0">
+                  <span>opens</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="1">
-                  <span>study</span>
+                  <input type="radio" name="gr_11_q3" value="1">
+                  <span>open</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="2">
-                  <span>is studying</span>
+                  <input type="radio" name="gr_11_q3" value="2">
+                  <span>opened</span>
                 </label><label class="mcq-option">
-                  <input type="radio" name="gr_1_q3" value="3">
-                  <span>studied</span>
+                  <input type="radio" name="gr_11_q3" value="3">
+                  <span>will open</span>
                 </label></div>
-    <div class="explain" id="gr_1_q3_explain">💡 Ação temporária em curso no período atual usa Present Continuous.</div>
+    <div class="explain" id="gr_11_q3_explain">💡 No First Conditional, a oração com &quot;if&quot; usa Simple Present mesmo referindo-se ao futuro.</div>
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkGrammar('gr_1', 4, [1, 2, 0, 2])">Verificar respostas</button>
+    <button class="btn btn-primary" onclick="checkGrammar('gr_11', 4, [0, 0, 0, 0])">Verificar respostas</button>
   </div>
-  <div class="feedback" id="gr_1_feedback"></div>
+  <div class="feedback" id="gr_11_feedback"></div>
 
 </section>
 
@@ -1254,7 +1285,7 @@ function downloadReport(){
 
 <footer class="site-footer">
   <div class="fmark">dyse</div>
-  <p>Do You Speak English? &middot; Material de apoio TOEFL iBT &middot; Atividade 01/16</p>
+  <p>Do You Speak English? &middot; Material de apoio TOEFL iBT &middot; Atividade 11/16</p>
 </footer>
 
 </body>
