@@ -7,8 +7,8 @@
    painel da professora) usam este mesmo arquivo.
    ====================================================================== */
 
-const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";   // <-- 1) troque aqui
-const SUPABASE_ANON_KEY = "SUA-CHAVE-ANON-PUBLICA-AQUI";   // <-- 2) troque aqui
+const SUPABASE_URL = "https://vnpjsjrqghttsagbssxx.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZucGpzanJxZ2h0dHNhZ2Jzc3h4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4MjMzNzYsImV4cCI6MjEwMDM5OTM3Nn0.g_p_IgFbellbbeSP3MVA8kEKh7GdB3zne6x6fqW4avU";
 
 /* Não altere daqui pra baixo. */
 
