@@ -475,7 +475,14 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   </div>
 </div>
 
-<div class="wrap" style="margin-top:40px;" id="coursesWrap"></div>
+<div class="wrap" style="margin-top:26px;">
+  <div id="pageNotice" style="display:none;" class="feedback bad">
+    <span id="pageNoticeText"></span>
+    <button type="button" onclick="document.getElementById('pageNotice').style.display='none'" style="float:right; background:none; border:none; font-weight:800; cursor:pointer; color:inherit;">×</button>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:14px;" id="coursesWrap"></div>
 
 <footer class="site-footer">
   <div class="fmark">dyse</div>
@@ -485,6 +492,21 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 <script src="/assets/dyse-auth.js"></script>
 <script>
   const COURSES = [{id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]}];
+
+  const NOTICE_MESSAGES = {
+    'locked': '🔒 Essa atividade ainda não foi liberada pela professora. Assim que ela liberar, o card aparece colorido e você pode clicar nele.',
+    'not-teacher': 'Essa página é exclusiva para professores.'
+  };
+  (function showNoticeIfAny(){
+    const notice = new URLSearchParams(location.search).get('notice');
+    if(notice && NOTICE_MESSAGES[notice]){
+      document.getElementById('pageNoticeText').textContent = NOTICE_MESSAGES[notice];
+      document.getElementById('pageNotice').style.display = 'block';
+      document.getElementById('pageNotice').classList.add('show');
+      // limpa o parâmetro da URL pra não reaparecer se a pessoa atualizar a página
+      history.replaceState(null, '', location.pathname);
+    }
+  })();
 
   (async () => {
     const session = await dyseRequireAuth();
