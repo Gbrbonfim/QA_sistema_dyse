@@ -119,6 +119,7 @@
 
   /* ---------- Mobile nav: hamburger + drawer ---------- */
   .nav-links{ display:flex; align-items:center; gap:18px; }
+  .nav-right{ display:flex; align-items:center; gap:18px; }
   .nav-toggle{
     display:none; flex:none; width:40px; height:40px; border-radius:12px;
     background:transparent; border:none; cursor:pointer;
@@ -155,7 +156,7 @@
     .nav-toggle, .nav-backdrop, .nav-drawer{ display:none !important; }
   }
   @media(max-width:640px){
-    .nav > .nav-links{ display:none; }
+    .nav-login-desktop{ display:none; }
     .nav-toggle{ display:flex; }
   }
 
@@ -527,13 +528,13 @@
         </span>
         DYSE
       </div>
-      <div class="nav-links">
-        <a href="/login.html" class="nav-login">Área do Aluno</a>
+      <div class="nav-right">
+        <a href="/login.html" class="nav-login nav-login-desktop">Área do Aluno</a>
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
         <a href="https://wa.me/554187355010?text=Oi%2C%20quero%20garantir%20minha%20vaga%20na%20DYSE%21" target="_blank" rel="noopener" class="nav-cta">Quero minha vaga →</a>
       </div>
-      <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </header>
   <div class="nav-backdrop" id="navBackdrop"></div>
@@ -543,7 +544,6 @@
       <button type="button" class="nav-drawer-close" id="navDrawerClose" aria-label="Fechar menu">×</button>
     </div>
     <a href="/login.html" class="nav-login">Área do Aluno</a>
-    <a href="https://wa.me/554187355010?text=Oi%2C%20quero%20garantir%20minha%20vaga%20na%20DYSE%21" target="_blank" rel="noopener" class="btn nav-cta">Quero minha vaga →</a>
   </nav>
 </div>
 
