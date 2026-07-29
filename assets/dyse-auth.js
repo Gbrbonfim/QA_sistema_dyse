@@ -1,5 +1,5 @@
 /* ======================================================================
-   DYSE · Do You Speak English?
+   DYSE · Do You Speak English
    Módulo central de autenticação e salvamento de progresso (Supabase)
    ----------------------------------------------------------------------
    Este é o ÚNICO arquivo onde você precisa colar a URL e a chave do seu
