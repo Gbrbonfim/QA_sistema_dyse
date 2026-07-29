@@ -477,74 +477,89 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 <script src="/assets/dyse-auth.js"></script>
 <script>
   function showTab(which){
-    document.getElementById('tabLogin').classList.toggle('active', which==='login');
-    document.getElementById('tabSignup').classList.toggle('active', which==='signup');
-    document.getElementById('formLogin').style.display = which==='login' ? 'block' : 'none';
-    document.getElementById('formSignup').style.display = which==='signup' ? 'block' : 'none';
+    document.getElementById('tabLogin').classList.toggle('active', which === 'login');
+    document.getElementById('tabSignup').classList.toggle('active', which === 'signup');
+    document.getElementById('formLogin').style.display = which === 'login' ? 'block' : 'none';
+    document.getElementById('formSignup').style.display = which === 'signup' ? 'block' : 'none';
     document.getElementById('authMsg').classList.remove('show');
   }
 
   function getNextUrl(){
     const params = new URLSearchParams(location.search);
-    return params.get('next') || '/area-do-aluno.html';
+    return params.get('next');
   }
 
   function showMsg(text, ok){
     const el = document.getElementById('authMsg');
     el.textContent = text;
     el.classList.add('show');
-    el.classList.remove('ok','bad');
+    el.classList.remove('ok', 'bad');
     el.classList.add(ok ? 'ok' : 'bad');
   }
 
-  async function handleLogin(e){
-    e.preventDefault();
+  async function handleLogin(event){
+    event.preventDefault();
+
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
+
     showMsg('Entrando...', true);
-    const { error } = await sb.auth.signInWithPassword({ email, password });
+
+    const { data, error } = await sb.auth.signInWithPassword({
+      email,
+      password
+    });
+
     if(error){
       showMsg('Não foi possível entrar: ' + translateError(error.message), false);
       return false;
     }
-    location.href = getNextUrl();
+
+    await dyseRedirectAfterAuth(data.session, getNextUrl());
     return false;
   }
 
-  async function handleSignup(e){
-    e.preventDefault();
+  async function handleSignup(event){
+    event.preventDefault();
+
     const full_name = document.getElementById('signupName').value.trim();
     const email = document.getElementById('signupEmail').value.trim();
     const password = document.getElementById('signupPassword').value;
+
     showMsg('Criando conta...', true);
+
     const { data, error } = await sb.auth.signUp({
-      email, password,
+      email,
+      password,
       options: { data: { full_name } }
     });
+
     if(error){
       showMsg('Não foi possível criar a conta: ' + translateError(error.message), false);
       return false;
     }
+
     if(data.session){
-      location.href = getNextUrl();
+      await dyseRedirectAfterAuth(data.session, getNextUrl());
     } else {
       showMsg('Conta criada! Verifique seu e-mail para confirmar antes de entrar.', true);
     }
+
     return false;
   }
 
-  function translateError(msg){
-    if(/already registered|already exists/i.test(msg)) return 'este e-mail já está cadastrado.';
-    if(/invalid login credentials/i.test(msg)) return 'e-mail ou senha incorretos.';
-    if(/password.*(6|least)/i.test(msg)) return 'a senha precisa ter pelo menos 6 caracteres.';
-    if(/email.*invalid/i.test(msg)) return 'e-mail inválido.';
-    return msg;
+  function translateError(message){
+    if(/already registered|already exists/i.test(message)) return 'este e-mail já está cadastrado.';
+    if(/invalid login credentials/i.test(message)) return 'e-mail ou senha incorretos.';
+    if(/password.*(6|least)/i.test(message)) return 'a senha precisa ter pelo menos 6 caracteres.';
+    if(/email.*invalid/i.test(message)) return 'e-mail inválido.';
+    return message;
   }
 
-  // se já estiver logado, pula direto pra área do aluno
+  // Usuário já autenticado: direciona conforme profiles.role.
   (async () => {
-    const { data } = await sb.auth.getSession();
-    if(data.session) location.href = getNextUrl();
+    const session = await dyseGetSession();
+    if(session) await dyseRedirectAfterAuth(session, getNextUrl());
   })();
 </script>
 </body>
