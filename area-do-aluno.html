@@ -441,16 +441,14 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
       <span class="mark">👁 dyse</span>
       <span>Do You Speak English? &middot; Área do Aluno</span>
     </div>
-    <span class="eyebrow-badge">Minhas atividades</span>
-    <h1 class="title">Suas 16 atividades TOEFL iBT</h1>
+    <span class="eyebrow-badge">Meus cursos</span>
+    <h1 class="title">Suas atividades</h1>
     <p class="subtitle">Continue de onde parou. Seu progresso é salvo automaticamente no seu login.</p>
     <div class="dyse-auth-bar" id="authBar"></div>
   </div>
 </div>
 
-<div class="wrap" style="margin-top:40px;">
-  <div class="dash-grid" id="activityGrid"></div>
-</div>
+<div class="wrap" style="margin-top:40px;" id="coursesWrap"></div>
 
 <footer class="site-footer">
   <div class="fmark">dyse</div>
@@ -459,29 +457,36 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 
 <script src="/assets/dyse-auth.js"></script>
 <script>
-  const ACTIVITIES = [{num:1, theme:"Rotina Diária", level:"A2 · Iniciante"},{num:2, theme:"Viagens e Turismo", level:"A2 · Iniciante"},{num:3, theme:"Alimentação e Saúde", level:"B1 · Pré-intermediário"},{num:4, theme:"Compras e Dinheiro", level:"B1 · Pré-intermediário"},{num:5, theme:"Meio Ambiente", level:"B1 · Pré-intermediário"},{num:6, theme:"Tecnologia", level:"B1+ · Intermediário"},{num:7, theme:"Educação", level:"B2 · Intermediário"},{num:8, theme:"Trabalho e Carreira", level:"B2 · Intermediário"},{num:9, theme:"Cultura e Mídia", level:"B2 · Intermediário"},{num:10, theme:"Ciência", level:"B2+ · Intermediário-avançado"},{num:11, theme:"História", level:"C1 · Avançado"},{num:12, theme:"Psicologia", level:"C1 · Avançado"},{num:13, theme:"Negócios e Economia", level:"C1 · Avançado"},{num:14, theme:"Questões Globais", level:"C1 · Avançado"},{num:15, theme:"Artes e Literatura", level:"C1+ · Avançado"},{num:16, theme:"Revisão Geral", level:"C1 · Revisão Final"}];
+  const COURSES = [{id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]}];
 
   (async () => {
     const session = await dyseRequireAuth();
     if(!session) return;
     dyseRenderAuthBar('authBar');
 
-    const results = await dyseListMyResults();
-    const doneMap = {};
-    results.forEach(r => doneMap[r.activity_num] = r);
+    const results = await dyseListMyResults(); // todos os cursos do aluno
+    const doneMap = {}; // "course:num" -> resultado
+    results.forEach(r => doneMap[r.course + ':' + r.activity_num] = r);
 
-    const grid = document.getElementById('activityGrid');
-    grid.innerHTML = ACTIVITIES.map(a => {
-      const done = doneMap[a.num];
-      const badge = done
-        ? '<span class="dash-badge done">✓ Enviada</span>'
-        : '<span class="dash-badge pending">Pendente</span>';
-      return '<a class="dash-card" href="/toefl_atividade_' + a.num + '.html">' +
-        badge +
-        '<div class="n">' + String(a.num).padStart(2,'0') + '</div>' +
-        '<div class="t">' + a.theme + '</div>' +
-        '<div class="l">' + a.level + '</div>' +
-      '</a>';
+    const wrap = document.getElementById('coursesWrap');
+    wrap.innerHTML = COURSES.map(course => {
+      const cards = course.activities.map(a => {
+        const done = doneMap[course.id + ':' + a.num];
+        const badge = done
+          ? '<span class="dash-badge done">✓ Enviada</span>'
+          : '<span class="dash-badge pending">Pendente</span>';
+        return '<a class="dash-card" href="/atividades/' + course.id + '/atividade_' + a.num + '.html">' +
+          badge +
+          '<div class="n">' + String(a.num).padStart(2,'0') + '</div>' +
+          '<div class="t">' + a.theme + '</div>' +
+          '<div class="l">' + a.level + '</div>' +
+        '</a>';
+      }).join('');
+      return '<section style="margin-bottom:40px;">' +
+        '<h2 style="font-family:\'Lobster\',cursive; color:var(--amaranth); font-size:1.7rem; margin-bottom:4px;">' + course.name + '</h2>' +
+        '<p style="color:var(--seal-soft); font-size:.9rem; margin-bottom:16px;">' + course.description + '</p>' +
+        '<div class="dash-grid">' + cards + '</div>' +
+      '</section>';
     }).join('');
   })();
 </script>
