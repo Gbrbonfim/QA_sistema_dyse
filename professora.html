@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Painel da Professora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+
+:root{
+  --amaranth:#D03B55;
+  --amaranth-dark:#B22C44;
+  --gamboge:#F0A224;
+  --gamboge-dark:#CE8613;
+  --cherry:#FCABAF;
+  --orangered:#EB6424;
+  --seal:#3A1D10;
+  --seal-soft:#562915;
+  --antique:#FFEAD6;
+  --antique-soft:#FFF3E6;
+  --white:#FFFFFF;
+  --ok:#2E8B57;
+  --bad:#C0392B;
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:10px;
+  --shadow-card:0 10px 30px rgba(58,29,16,0.12);
+  --font-display:'Lobster', cursive;
+  --font-body:'Poppins', sans-serif;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html, body{max-width:100%; overflow-x:hidden;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--antique);
+  color:var(--seal);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;
+  word-break:break-word;
+}
+
+/* decorative background texture */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(240,162,36,0.10) 0, transparent 45%),
+    radial-gradient(circle at 92% 18%, rgba(208,59,85,0.10) 0, transparent 40%),
+    radial-gradient(circle at 50% 95%, rgba(235,100,36,0.08) 0, transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.wrap{position:relative; z-index:1; max-width:920px; margin:0 auto; padding:0 20px 80px; width:100%;}
+
+/* ---------- STUDENT ID CARD ---------- */
+.student-id-card{
+  background:#fff; border-radius:var(--radius-md); padding:16px 20px; margin:-30px auto 24px;
+  box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:6px; position:relative; z-index:3;
+  border-left:6px solid var(--gamboge);
+}
+.student-id-card label{font-weight:700; font-size:.88rem; color:var(--seal);}
+.student-id-card input{
+  border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:10px 14px; font-family:var(--font-body);
+  font-size:.95rem; width:100%; color:var(--seal);
+}
+.student-id-card input:focus{outline:none; border-color:var(--amaranth);}
+.student-id-card .hint{font-size:.76rem; color:var(--seal-soft); opacity:.75;}
+
+/* ---------- REPORT ACTIONS ---------- */
+.report-actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:18px;}
+.btn-ghost.light{background:transparent; color:var(--antique); border:2px solid rgba(255,255,255,0.35);}
+.btn-ghost.light:hover{border-color:var(--gamboge); color:var(--gamboge);}
+
+/* ---------- HERO / HEADER ---------- */
+.hero{
+  background:var(--amaranth);
+  color:var(--antique-soft);
+  padding:38px 20px 64px;
+  position:relative;
+  overflow:hidden;
+  border-bottom:6px solid var(--gamboge);
+}
+.hero::after{
+  content:"dyse";
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:15vw;
+  right:-4%;
+  top:-8%;
+  color:rgba(255,255,255,0.05);
+  white-space:nowrap;
+  pointer-events:none;
+  line-height:1;
+}
+.hero-inner{max-width:920px; margin:0 auto; position:relative; z-index:2;}
+.brand-row{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
+  opacity:.85; margin-bottom:26px; min-width:0;
+}
+.brand-row .mark{
+  display:inline-flex; align-items:center; gap:8px; font-family:var(--font-display);
+  font-size:1.35rem; letter-spacing:0; text-transform:none; color:var(--antique);
+}
+.brand-row .mark svg{width:26px; height:26px; flex:none;}
+
+.eyebrow-badge{
+  display:inline-block; background:var(--gamboge); color:var(--seal);
+  font-weight:700; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+  padding:6px 14px; border-radius:999px; margin-bottom:14px;
+}
+h1.title{
+  font-family:var(--font-display);
+  font-size:clamp(2.1rem, 6vw, 3.4rem);
+  margin:0 0 10px;
+  color:var(--antique);
+  line-height:1.05;
+}
+.subtitle{font-size:1.02rem; max-width:56ch; color:var(--antique-soft); opacity:.95;}
+.hero-meta{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;}
+.pill{
+  background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.35);
+  color:var(--antique); padding:7px 14px; border-radius:999px; font-size:.82rem; font-weight:600;
+}
+
+/* ---------- STEPPER ---------- */
+.stepper{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:8px;
+  margin:0 auto 34px; max-width:920px; padding:0 20px; position:relative; z-index:3;
+}
+.step{
+  background:var(--white); border-radius:16px; padding:12px 8px; text-align:center;
+  box-shadow:var(--shadow-card); font-size:.72rem; font-weight:700; color:var(--seal-soft);
+  display:flex; flex-direction:column; align-items:center; gap:6px; border:2px solid transparent;
+  transition:.25s;
+}
+.step .dot{width:10px;height:10px;border-radius:50%;background:#e4d4c4;transition:.25s;}
+.step.done{border-color:var(--ok);}
+.step.done .dot{background:var(--ok);}
+.step .label{letter-spacing:.03em;}
+
+/* ---------- SECTION CARDS ---------- */
+section.card{
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  padding:32px clamp(18px,4vw,40px);
+  margin-bottom:28px;
+  box-shadow:var(--shadow-card);
+  border-top:8px solid var(--accent, var(--amaranth));
+  position:relative;
+}
+.card-head{display:flex; align-items:center; gap:12px; margin-bottom:6px; flex-wrap:wrap; min-width:0;}
+.card-head > div{min-width:0; flex:1 1 auto;}
+.icon-badge{
+  width:44px; height:44px; border-radius:14px; background:var(--accent, var(--amaranth));
+  display:flex; align-items:center; justify-content:center; flex:none;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+.icon-badge svg{width:24px; height:24px; stroke:#fff; fill:none;}
+.card-eyebrow{font-size:.72rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent,var(--amaranth));}
+.card-title{font-family:var(--font-display); font-size:1.7rem; margin:0; color:var(--seal);}
+.card-instructions{
+  background:var(--antique-soft); border-radius:var(--radius-sm); padding:12px 16px;
+  font-weight:600; font-size:.95rem; margin:16px 0 20px; color:var(--seal-soft);
+  border-left:4px solid var(--accent,var(--amaranth));
+}
+
+/* ---------- GENERIC ELEMENTS ---------- */
+.passage-box{
+  background:var(--antique-soft); border-radius:var(--radius-md); padding:20px 22px;
+  font-size:1rem; margin-bottom:20px; white-space:pre-wrap;
+}
+.passage-title{font-weight:800; margin-bottom:8px; color:var(--seal);}
+.format-tag{
+  display:inline-block; font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+  background:var(--cherry); color:var(--seal); padding:3px 10px; border-radius:999px; margin-bottom:10px;
+}
+
+.gap-input{
+  width:64px; max-width:40vw; border:none; border-bottom:2px solid var(--accent,var(--amaranth));
+  background:transparent; font-family:var(--font-body); font-weight:700; font-size:1rem;
+  padding:2px 4px; text-align:center; color:var(--seal); margin:0 2px;
+}
+.gap-input:focus{outline:none; border-bottom-color:var(--gamboge); background:var(--antique-soft);}
+.gap-input.correct{border-bottom-color:var(--ok); background:#e9f7ee;}
+.gap-hint{
+  display:inline-block; font-size:.72rem; font-weight:700; color:var(--bad);
+  background:#fbeceb; border-radius:6px; padding:2px 6px; margin:0 4px 4px 2px; white-space:nowrap;
+}
+.gap-input.wrong{border-bottom-color:var(--bad); background:#fbeceb;}
+
+.mcq-options{display:flex; flex-direction:column; gap:10px; margin-bottom:18px;}
+.mcq-option{
+  display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:var(--radius-sm);
+  border:2px solid #eee0cf; cursor:pointer; font-weight:600; font-size:.95rem; transition:.2s;
+  background:#fff;
+}
+.mcq-option:hover{border-color:var(--gamboge);}
+.mcq-option input{accent-color:var(--amaranth); width:18px; height:18px; flex:none;}
+.mcq-option.correct{border-color:var(--ok); background:#eaf7ee;}
+.mcq-option.wrong{border-color:var(--bad); background:#fbeceb;}
+
+.dialogue-line{display:flex; gap:10px; margin-bottom:10px; align-items:flex-start; min-width:0;}
+.dialogue-speaker{
+  flex:none; width:30px; height:30px; border-radius:50%; background:var(--seal-soft);
+  color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:.85rem;
+}
+.dialogue-speaker.b{background:var(--orangered);}
+.dialogue-text{background:var(--antique-soft); border-radius:14px; padding:9px 14px; font-size:.95rem; min-width:0; flex:1 1 auto;}
+
+.btn{
+  font-family:var(--font-body); font-weight:700; font-size:.88rem; letter-spacing:.01em;
+  border:none; border-radius:999px; padding:11px 22px; cursor:pointer; transition:.2s;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn-primary{background:var(--amaranth); color:#fff;}
+.btn-primary:hover{background:var(--amaranth-dark);}
+.btn-secondary{background:var(--gamboge); color:var(--seal);}
+.btn-secondary:hover{background:var(--gamboge-dark); color:#fff;}
+.btn-ghost{background:transparent; color:var(--seal-soft); border:2px solid #e4d4c4;}
+.btn-ghost:hover{border-color:var(--amaranth); color:var(--amaranth);}
+.btn-audio{background:var(--seal-soft); color:#fff;}
+.btn-audio:hover{background:var(--seal);}
+.btn:disabled{opacity:.5; cursor:not-allowed;}
+.btn-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:8px;}
+
+.feedback{
+  margin-top:14px; padding:12px 16px; border-radius:var(--radius-sm); font-weight:600; font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback.ok{background:#eaf7ee; color:var(--ok); border:1px solid #bfe6cc;}
+.feedback.bad{background:#fbeceb; color:var(--bad); border:1px solid #f3c6c2;}
+
+.chips-bank{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+.chip{
+  background:var(--antique-soft); border:2px solid var(--cherry); color:var(--seal);
+  padding:8px 16px; border-radius:999px; font-weight:600; font-size:.88rem; cursor:pointer; transition:.15s;
+}
+.chip:hover{background:var(--cherry);}
+.chip.used{opacity:.35; pointer-events:none;}
+.answer-strip{
+  min-height:52px; border:2px dashed #e4c9a8; border-radius:var(--radius-sm);
+  padding:10px 14px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px;
+  background:var(--antique-soft);
+}
+.answer-strip .placed{
+  background:var(--gamboge); color:var(--seal); padding:7px 14px; border-radius:999px; font-weight:700;
+  font-size:.88rem; cursor:pointer;
+}
+.answer-strip .empty-hint{color:#b39a80; font-size:.85rem; font-style:italic;}
+
+textarea.write-area{
+  width:100%; min-height:170px; border-radius:var(--radius-md); border:2px solid #eee0cf;
+  padding:16px; font-family:var(--font-body); font-size:.96rem; resize:vertical; color:var(--seal);
+}
+textarea.write-area:focus{outline:none; border-color:var(--amaranth);}
+.word-count{font-size:.82rem; color:var(--seal-soft); margin-top:6px; font-weight:600;}
+.word-count.enough{color:var(--ok);}
+
+.checklist{display:flex; flex-direction:column; gap:8px; margin:16px 0;}
+.checklist label{display:flex; align-items:flex-start; gap:10px; font-size:.9rem; font-weight:500; cursor:pointer;}
+.checklist input{accent-color:var(--amaranth); margin-top:3px;}
+
+.model-answer{
+  margin-top:14px; background:var(--antique-soft); border-radius:var(--radius-sm); padding:16px 18px;
+  font-size:.92rem; white-space:pre-wrap; display:none; border-left:4px solid var(--gamboge);
+}
+.model-answer.show{display:block;}
+
+.interview-block, .repeat-block{
+  background:var(--antique-soft); border-radius:var(--radius-md); padding:18px 20px; margin-bottom:16px;
+}
+.q-number{
+  display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;
+  border-radius:50%; background:var(--amaranth); color:#fff; font-weight:800; font-size:.8rem; margin-right:8px;
+}
+.mic-status{font-size:.82rem; font-weight:600; color:var(--seal-soft); margin-top:8px; min-height:20px;}
+.transcript-box{
+  margin-top:8px; background:#fff; border:2px solid #eee0cf; border-radius:var(--radius-sm);
+  padding:10px 14px; font-size:.9rem; min-height:20px; color:var(--seal-soft);
+}
+.match-bar{height:8px; border-radius:6px; background:#e4d4c4; margin-top:8px; overflow:hidden;}
+.match-bar span{display:block; height:100%; background:var(--ok); width:0%; transition:.4s;}
+
+.grammar-q{border-bottom:1px solid #f0e3d2; padding:18px 0;}
+.grammar-q:last-child{border-bottom:none;}
+.grammar-q .qtext{font-weight:700; margin-bottom:10px;}
+.qflag{
+  display:inline-block; font-size:.74rem; font-weight:800; padding:2px 9px; border-radius:999px;
+  margin-left:8px; vertical-align:middle; white-space:nowrap;
+}
+.qflag.correct{background:#eaf7ee; color:var(--ok);}
+.qflag.wrong{background:#fbeceb; color:var(--bad);}
+.qflag.unanswered{background:#fdf0dd; color:#a06a2e;}
+.explain{
+  margin-top:10px; font-size:.85rem; background:var(--antique-soft); border-radius:var(--radius-sm);
+  padding:10px 14px; display:none; color:var(--seal-soft);
+}
+.explain.show{display:block;}
+
+.score-summary{
+  background:var(--seal); color:var(--antique); border-radius:var(--radius-lg); padding:30px;
+  text-align:center; margin-top:8px;
+}
+.score-summary h2{font-family:var(--font-display); font-size:2rem; margin:0 0 8px; color:var(--gamboge);}
+.score-summary p{margin:0 0 16px; opacity:.9;}
+#scoreBig{font-size:2.6rem; font-weight:800; color:#fff;}
+
+footer.site-footer{text-align:center; padding:30px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.75;}
+footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; color:var(--amaranth);}
+
+.top-link{display:inline-flex; align-items:center; gap:6px; color:var(--antique); text-decoration:none; font-weight:700; font-size:.82rem;}
+
+/* ---------- AUTH GATE (loading overlay while checking login) ---------- */
+html:not(.dyse-auth-ready) #dyseAuthGate{
+  position:fixed; inset:0; z-index:9999; background:var(--antique);
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
+}
+html.dyse-auth-ready #dyseAuthGate{display:none;}
+.dyse-spinner{
+  width:38px; height:38px; border-radius:50%; border:4px solid #e4d4c4; border-top-color:var(--amaranth);
+  animation:dyse-spin 0.8s linear infinite;
+}
+@keyframes dyse-spin{to{transform:rotate(360deg);}}
+#dyseAuthGate p{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
+
+/* ---------- AUTH BAR (logged-in user strip) ---------- */
+.dyse-auth-bar{
+  display:flex; align-items:center; justify-content:flex-end; gap:14px; flex-wrap:wrap;
+  font-size:.82rem; font-weight:600; margin-top:14px; color:var(--antique);
+}
+.dyse-auth-name{opacity:.95;}
+.dyse-auth-link{color:var(--gamboge); text-decoration:underline; text-underline-offset:3px;}
+.dyse-auth-link:hover{color:#fff;}
+.dyse-auth-logout{
+  background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35); color:var(--antique);
+  padding:5px 14px; border-radius:999px; font-size:.78rem; font-weight:700; cursor:pointer;
+}
+.dyse-auth-logout:hover{background:rgba(255,255,255,.3);}
+
+/* ---------- AUTH FORM (login / signup pages) ---------- */
+.auth-shell{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+.auth-card{
+  background:#fff; border-radius:var(--radius-lg); padding:40px clamp(24px,5vw,44px); max-width:440px; width:100%;
+  box-shadow:var(--shadow-card); border-top:8px solid var(--amaranth);
+}
+.auth-logo{font-family:var(--font-display); font-size:2rem; color:var(--amaranth); text-align:center; margin-bottom:4px;}
+.auth-tag{text-align:center; font-size:.8rem; color:var(--seal-soft); margin-bottom:26px; opacity:.8;}
+.auth-tabs{display:flex; background:var(--antique-soft); border-radius:999px; padding:4px; margin-bottom:22px;}
+.auth-tab{flex:1; text-align:center; padding:9px; border-radius:999px; font-weight:700; font-size:.85rem; cursor:pointer; color:var(--seal-soft); border:none; background:transparent;}
+.auth-tab.active{background:var(--amaranth); color:#fff;}
+.auth-field{margin-bottom:16px;}
+.auth-field label{display:block; font-weight:700; font-size:.85rem; margin-bottom:6px; color:var(--seal);}
+.auth-field input{
+  width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:11px 14px;
+  font-family:var(--font-body); font-size:.95rem; color:var(--seal);
+}
+.auth-field input:focus{outline:none; border-color:var(--amaranth);}
+.auth-submit{width:100%; justify-content:center; margin-top:6px; font-size:.95rem; padding:13px;}
+.auth-msg{margin-top:16px; padding:11px 14px; border-radius:var(--radius-sm); font-size:.85rem; font-weight:600; display:none;}
+.auth-msg.show{display:block;}
+.auth-msg.ok{background:#eaf7ee; color:var(--ok);}
+.auth-msg.bad{background:#fbeceb; color:var(--bad);}
+.auth-foot{text-align:center; margin-top:22px; font-size:.78rem; color:var(--seal-soft);}
+.auth-foot a{color:var(--amaranth); font-weight:700;}
+
+/* ---------- DASHBOARD (área do aluno / professora) ---------- */
+.dash-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; margin-top:24px;}
+.dash-card{
+  background:#fff; border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-card);
+  border-left:6px solid var(--amaranth); text-decoration:none; color:var(--seal); display:block; transition:.2s;
+  position:relative;
+}
+.dash-card:nth-child(4n+2){border-left-color:var(--gamboge);}
+.dash-card:nth-child(4n+3){border-left-color:var(--orangered);}
+.dash-card:nth-child(4n){border-left-color:var(--seal-soft);}
+.dash-card:hover{transform:translateY(-3px); box-shadow:0 14px 34px rgba(58,29,16,.16);}
+.dash-card .n{font-family:var(--font-display); font-size:1.5rem; color:var(--amaranth);}
+.dash-card .t{font-weight:700; font-size:1rem; margin:4px 0 2px;}
+.dash-card .l{font-size:.78rem; color:var(--seal-soft); opacity:.75;}
+.dash-badge{
+  position:absolute; top:16px; right:16px; font-size:.68rem; font-weight:800; padding:3px 10px; border-radius:999px;
+}
+.dash-badge.done{background:#eaf7ee; color:var(--ok);}
+.dash-badge.pending{background:#fdf0dd; color:#a06a2e;}
+.dash-table{width:100%; border-collapse:collapse; background:#fff; border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-card); font-size:.85rem;}
+.dash-table th, .dash-table td{padding:10px 14px; text-align:left; border-bottom:1px solid #f0e3d2;}
+.dash-table th{background:var(--seal-soft); color:#fff; font-weight:700; font-size:.76rem; text-transform:uppercase; letter-spacing:.04em;}
+.dash-table tr:last-child td{border-bottom:none;}
+.dash-table tr:hover td{background:var(--antique-soft);}
+.dash-filter{display:flex; gap:10px; flex-wrap:wrap; margin:20px 0;}
+.dash-filter input, .dash-filter select{
+  border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
+}
+
+/* ---------- TOGGLE SWITCH (liberar/ocultar atividade) ---------- */
+.manage-course-block{background:#fff; border-radius:var(--radius-md); padding:20px 24px; margin-bottom:20px; box-shadow:var(--shadow-card);}
+.manage-course-title{font-family:var(--font-display); color:var(--amaranth); font-size:1.3rem; margin-bottom:14px;}
+.manage-row{
+  display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 0;
+  border-bottom:1px solid #f0e3d2;
+}
+.manage-row:last-child{border-bottom:none;}
+.manage-row .info{font-size:.9rem;}
+.manage-row .info b{color:var(--seal);}
+.dyse-toggle{position:relative; display:inline-block; width:46px; height:26px; flex:none;}
+.dyse-toggle input{opacity:0; width:0; height:0;}
+.dyse-toggle .slider{
+  position:absolute; cursor:pointer; inset:0; background:#e4d4c4; border-radius:999px; transition:.2s;
+}
+.dyse-toggle .slider::before{
+  content:""; position:absolute; height:20px; width:20px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:.2s;
+}
+.dyse-toggle input:checked + .slider{background:var(--ok);}
+.dyse-toggle input:checked + .slider::before{transform:translateX(20px);}
+
+@media (max-width:640px){
+  .stepper{grid-template-columns:repeat(5,1fr); gap:6px; margin-top:14px;}
+  .step{padding:8px 4px; font-size:.62rem;}
+  .step .label{display:none;}
+  section.card{padding:24px 16px;}
+  h1.title{font-size:2.1rem;}
+  .student-id-card{margin-top:-24px;}
+  .report-actions{flex-direction:column;}
+  .report-actions .btn{width:100%; justify-content:center;}
+  .gap-input{width:56px;}
+}
+
+@media (max-width:380px){
+  .wrap{padding:0 14px 60px;}
+  .hero{padding:32px 14px 56px;}
+  .card-eyebrow{font-size:.66rem;}
+  .card-title{font-size:1.4rem;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{transition:none !important;}
+}
+
+</style>
+</head>
+<body>
+<div id="dyseAuthGate">
+  <div class="dyse-spinner"></div>
+  <p>dyse</p>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <span>Do You Speak English? &middot; Painel da Professora</span>
+    </div>
+    <span class="eyebrow-badge">Acesso restrito</span>
+    <h1 class="title">Resultados dos alunos</h1>
+    <p class="subtitle">Acompanhe o que cada aluno respondeu certo, errado ou deixou em branco em cada atividade.</p>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:40px;">
+
+  <div class="auth-tabs" style="max-width:420px; margin-bottom:26px;">
+    <button type="button" class="auth-tab active" id="tabResults" onclick="showPanel('results')">Resultados</button>
+    <button type="button" class="auth-tab" id="tabManage" onclick="showPanel('manage')">Gerenciar atividades</button>
+  </div>
+
+  <div id="panelResults">
+  <div class="dash-filter">
+    <input type="text" id="filterName" placeholder="Filtrar por nome do aluno...">
+    <select id="filterCourse">
+      <option value="">Todos os cursos</option>
+    </select>
+    <select id="filterActivity">
+      <option value="">Todas as atividades</option>
+    </select>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table class="dash-table" id="resultsTable">
+      <thead>
+        <tr>
+          <th>Aluno</th>
+          <th>E-mail</th>
+          <th>Curso</th>
+          <th>Atividade</th>
+          <th>Enviado em</th>
+          <th>Relatório</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+  </div>
+
+  <div id="reportModal" style="display:none; position:fixed; inset:0; background:rgba(58,29,16,.6); z-index:999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:#fff; border-radius:20px; padding:26px; max-width:640px; width:100%; max-height:80vh; overflow-y:auto;">
+      <h3 style="font-family:'Lobster',cursive; color:var(--amaranth); margin-bottom:14px;" id="modalTitle"></h3>
+      <pre id="modalReport" style="white-space:pre-wrap; font-family:var(--font-body); font-size:.85rem; line-height:1.7;"></pre>
+      <button class="btn btn-primary" style="margin-top:16px;" onclick="document.getElementById('reportModal').style.display='none'">Fechar</button>
+    </div>
+  </div>
+  </div>
+
+  <div id="panelManage" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
+      Ative para liberar uma atividade pros alunos, ou desative para escondê-la. Você (professora) sempre consegue acessar qualquer atividade pra revisar, mesmo oculta.
+    </p>
+    <div id="manageCourses"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? &middot; Painel da Professora</p>
+</footer>
+
+<script src="/assets/dyse-auth.js"></script>
+<script>
+  let ALL_RESULTS = [];
+  const COURSE_NAMES = {'toefl':'TOEFL iBT'};
+
+  function renderTable(){
+    const nameFilter = document.getElementById('filterName').value.trim().toLowerCase();
+    const courseFilter = document.getElementById('filterCourse').value;
+    const actFilter = document.getElementById('filterActivity').value;
+    const rows = ALL_RESULTS.filter(r => {
+      const nameOk = !nameFilter || (r.student_name||'').toLowerCase().includes(nameFilter);
+      const courseOk = !courseFilter || r.course === courseFilter;
+      const actOk = !actFilter || String(r.activity_num) === actFilter;
+      return nameOk && courseOk && actOk;
+    });
+    document.getElementById('resultsBody').innerHTML = rows.map((r,i) => {
+      const date = new Date(r.updated_at).toLocaleString('pt-BR');
+      const courseName = COURSE_NAMES[r.course] || r.course;
+      return '<tr>' +
+        '<td>' + (r.student_name||'-') + '</td>' +
+        '<td>' + (r.student_email||'-') + '</td>' +
+        '<td>' + courseName + '</td>' +
+        '<td>Atividade ' + String(r.activity_num).padStart(2,'0') + ' — ' + (r.activity_theme||'') + '</td>' +
+        '<td>' + date + '</td>' +
+        '<td><button class="btn btn-ghost" style="padding:6px 14px; font-size:.78rem;" onclick="openReport(' + i + ')">Ver relatório</button></td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum resultado encontrado.</td></tr>';
+    window.__filteredRows = rows;
+  }
+
+  function openReport(i){
+    const r = window.__filteredRows[i];
+    document.getElementById('modalTitle').textContent = r.student_name + ' — ' + (COURSE_NAMES[r.course] || r.course) + ' — Atividade ' + r.activity_num;
+    document.getElementById('modalReport').textContent = r.report_text || '(sem relatório de texto)';
+    document.getElementById('reportModal').style.display = 'flex';
+  }
+
+  document.getElementById('filterName').addEventListener('input', renderTable);
+  document.getElementById('filterCourse').addEventListener('change', renderTable);
+  document.getElementById('filterActivity').addEventListener('change', renderTable);
+
+  function showPanel(which){
+    document.getElementById('tabResults').classList.toggle('active', which==='results');
+    document.getElementById('tabManage').classList.toggle('active', which==='manage');
+    document.getElementById('panelResults').style.display = which==='results' ? 'block' : 'none';
+    document.getElementById('panelManage').style.display = which==='manage' ? 'block' : 'none';
+  }
+
+  const COURSES = [{id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]}];
+
+  async function loadManagePanel(){
+    const container = document.getElementById('manageCourses');
+    container.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+    const blocks = [];
+    for(const course of COURSES){
+      const publishedMap = await dyseGetPublishedMap(course.id);
+      const rows = course.activities.map(a => {
+        const isOn = !!publishedMap[a.num];
+        return '<div class="manage-row">' +
+          '<div class="info"><b>' + String(a.num).padStart(2,'0') + '.</b> ' + a.theme + ' <span style="opacity:.6;">(' + a.level + ')</span></div>' +
+          '<label class="dyse-toggle">' +
+            '<input type="checkbox" ' + (isOn ? 'checked' : '') + ' onchange="togglePublish(\'' + course.id + '\', ' + a.num + ', this.checked)">' +
+            '<span class="slider"></span>' +
+          '</label>' +
+        '</div>';
+      }).join('');
+      blocks.push('<div class="manage-course-block"><div class="manage-course-title">' + course.name + '</div>' + rows + '</div>');
+    }
+    container.innerHTML = blocks.join('');
+  }
+
+  async function togglePublish(courseId, activityNum, isChecked){
+    await dyseSetPublished(courseId, activityNum, isChecked);
+  }
+
+  (async () => {
+    const session = await dyseRequireTeacher();
+    if(!session) return;
+    dyseRenderAuthBar('authBar');
+
+    ALL_RESULTS = await dyseListAllResults();
+    loadManagePanel();
+
+    const courseSelect = document.getElementById('filterCourse');
+    const courses = [...new Set(ALL_RESULTS.map(r=>r.course))].sort();
+    courses.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = COURSE_NAMES[c] || c;
+      courseSelect.appendChild(opt);
+    });
+
+    const actSelect = document.getElementById('filterActivity');
+    const nums = [...new Set(ALL_RESULTS.map(r=>r.activity_num))].sort((a,b)=>a-b);
+    nums.forEach(n => {
+      const opt = document.createElement('option');
+      opt.value = n;
+      opt.textContent = 'Atividade ' + String(n).padStart(2,'0');
+      actSelect.appendChild(opt);
+    });
+
+    renderTable();
+  })();
+</script>
+</body>
+</html>
