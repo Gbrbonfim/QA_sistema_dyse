@@ -510,11 +510,25 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     return params.get('next'); // pode ser null — nesse caso decidimos pelo cargo (ver getPostLoginUrl)
   }
 
+  // corre contra um "relógio": se a busca do perfil demorar mais que 6s
+  // (rede lenta, instabilidade, etc.), segue em frente em vez de travar.
+  function withTimeout(promise, ms, fallback){
+    return Promise.race([
+      promise,
+      new Promise(resolve => setTimeout(() => resolve(fallback), ms))
+    ]);
+  }
+
   async function getPostLoginUrl(session){
     const explicitNext = getNextUrl();
     if(explicitNext) return explicitNext; // veio de um link específico (ex: tentou abrir uma atividade sem estar logado)
-    const profile = await dyseGetProfile(session);
-    return (profile && profile.role === 'teacher') ? '/professora.html' : '/area-do-aluno.html';
+    try{
+      const profile = await withTimeout(dyseGetProfile(session), 6000, null);
+      return (profile && profile.role === 'teacher') ? '/professora.html' : '/area-do-aluno.html';
+    }catch(e){
+      console.error('Não foi possível verificar o cargo do usuário, seguindo como aluno:', e);
+      return '/area-do-aluno.html';
+    }
   }
 
   function showMsg(text, ok){
@@ -530,12 +544,17 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     showMsg('Entrando...', true);
-    const { data, error } = await sb.auth.signInWithPassword({ email, password });
-    if(error){
-      showMsg('Não foi possível entrar: ' + translateError(error.message), false);
-      return false;
+    try{
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+      if(error){
+        showMsg('Não foi possível entrar: ' + translateError(error.message), false);
+        return false;
+      }
+      location.href = await getPostLoginUrl(data.session);
+    }catch(err){
+      console.error(err);
+      showMsg('Algo deu errado ao entrar. Verifique sua internet e tente novamente.', false);
     }
-    location.href = await getPostLoginUrl(data.session);
     return false;
   }
 
@@ -545,18 +564,23 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     const email = document.getElementById('signupEmail').value.trim();
     const password = document.getElementById('signupPassword').value;
     showMsg('Criando conta...', true);
-    const { data, error } = await sb.auth.signUp({
-      email, password,
-      options: { data: { full_name } }
-    });
-    if(error){
-      showMsg('Não foi possível criar a conta: ' + translateError(error.message), false);
-      return false;
-    }
-    if(data.session){
-      location.href = await getPostLoginUrl(data.session); // conta nova sempre entra como 'student', então vai pra área do aluno
-    } else {
-      showMsg('Conta criada! Verifique seu e-mail para confirmar antes de entrar.', true);
+    try{
+      const { data, error } = await sb.auth.signUp({
+        email, password,
+        options: { data: { full_name } }
+      });
+      if(error){
+        showMsg('Não foi possível criar a conta: ' + translateError(error.message), false);
+        return false;
+      }
+      if(data.session){
+        location.href = await getPostLoginUrl(data.session); // conta nova sempre entra como 'student', então vai pra área do aluno
+      } else {
+        showMsg('Conta criada! Verifique seu e-mail para confirmar antes de entrar.', true);
+      }
+    }catch(err){
+      console.error(err);
+      showMsg('Algo deu errado ao criar a conta. Verifique sua internet e tente novamente.', false);
     }
     return false;
   }
@@ -571,8 +595,12 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 
   // se já estiver logado, pula direto pro lugar certo (professora ou área do aluno)
   (async () => {
-    const { data } = await sb.auth.getSession();
-    if(data.session) location.href = await getPostLoginUrl(data.session);
+    try{
+      const { data } = await sb.auth.getSession();
+      if(data.session) location.href = await getPostLoginUrl(data.session);
+    }catch(e){
+      console.error('Falha ao checar sessão existente:', e);
+    }
   })();
 </script>
 </body>
