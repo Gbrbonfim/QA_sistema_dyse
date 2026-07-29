@@ -403,6 +403,27 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
 }
 
+/* ---------- TOGGLE SWITCH (liberar/ocultar atividade) ---------- */
+.manage-course-block{background:#fff; border-radius:var(--radius-md); padding:20px 24px; margin-bottom:20px; box-shadow:var(--shadow-card);}
+.manage-course-title{font-family:var(--font-display); color:var(--amaranth); font-size:1.3rem; margin-bottom:14px;}
+.manage-row{
+  display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 0;
+  border-bottom:1px solid #f0e3d2;
+}
+.manage-row:last-child{border-bottom:none;}
+.manage-row .info{font-size:.9rem;}
+.manage-row .info b{color:var(--seal);}
+.dyse-toggle{position:relative; display:inline-block; width:46px; height:26px; flex:none;}
+.dyse-toggle input{opacity:0; width:0; height:0;}
+.dyse-toggle .slider{
+  position:absolute; cursor:pointer; inset:0; background:#e4d4c4; border-radius:999px; transition:.2s;
+}
+.dyse-toggle .slider::before{
+  content:""; position:absolute; height:20px; width:20px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:.2s;
+}
+.dyse-toggle input:checked + .slider{background:var(--ok);}
+.dyse-toggle input:checked + .slider::before{transform:translateX(20px);}
+
 @media (max-width:640px){
   .stepper{grid-template-columns:repeat(5,1fr); gap:6px; margin-top:14px;}
   .step{padding:8px 4px; font-size:.62rem;}
@@ -486,7 +507,14 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 
   function getNextUrl(){
     const params = new URLSearchParams(location.search);
-    return params.get('next') || '/area-do-aluno.html';
+    return params.get('next'); // pode ser null — nesse caso decidimos pelo cargo (ver getPostLoginUrl)
+  }
+
+  async function getPostLoginUrl(session){
+    const explicitNext = getNextUrl();
+    if(explicitNext) return explicitNext; // veio de um link específico (ex: tentou abrir uma atividade sem estar logado)
+    const profile = await dyseGetProfile(session);
+    return (profile && profile.role === 'teacher') ? '/professora.html' : '/area-do-aluno.html';
   }
 
   function showMsg(text, ok){
@@ -502,12 +530,12 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     showMsg('Entrando...', true);
-    const { error } = await sb.auth.signInWithPassword({ email, password });
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
     if(error){
       showMsg('Não foi possível entrar: ' + translateError(error.message), false);
       return false;
     }
-    location.href = getNextUrl();
+    location.href = await getPostLoginUrl(data.session);
     return false;
   }
 
@@ -526,7 +554,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
       return false;
     }
     if(data.session){
-      location.href = getNextUrl();
+      location.href = await getPostLoginUrl(data.session); // conta nova sempre entra como 'student', então vai pra área do aluno
     } else {
       showMsg('Conta criada! Verifique seu e-mail para confirmar antes de entrar.', true);
     }
@@ -541,10 +569,10 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     return msg;
   }
 
-  // se já estiver logado, pula direto pra área do aluno
+  // se já estiver logado, pula direto pro lugar certo (professora ou área do aluno)
   (async () => {
     const { data } = await sb.auth.getSession();
-    if(data.session) location.href = getNextUrl();
+    if(data.session) location.href = await getPostLoginUrl(data.session);
   })();
 </script>
 </body>
