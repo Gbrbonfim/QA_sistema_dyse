@@ -451,6 +451,9 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 <div class="wrap" style="margin-top:40px;">
   <div class="dash-filter">
     <input type="text" id="filterName" placeholder="Filtrar por nome do aluno...">
+    <select id="filterCourse">
+      <option value="">Todos os cursos</option>
+    </select>
     <select id="filterActivity">
       <option value="">Todas as atividades</option>
     </select>
@@ -462,6 +465,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
         <tr>
           <th>Aluno</th>
           <th>E-mail</th>
+          <th>Curso</th>
           <th>Atividade</th>
           <th>Enviado em</th>
           <th>Relatório</th>
@@ -488,36 +492,42 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 <script src="/assets/dyse-auth.js"></script>
 <script>
   let ALL_RESULTS = [];
+  const COURSE_NAMES = {'toefl':'TOEFL iBT'};
 
   function renderTable(){
     const nameFilter = document.getElementById('filterName').value.trim().toLowerCase();
+    const courseFilter = document.getElementById('filterCourse').value;
     const actFilter = document.getElementById('filterActivity').value;
     const rows = ALL_RESULTS.filter(r => {
       const nameOk = !nameFilter || (r.student_name||'').toLowerCase().includes(nameFilter);
+      const courseOk = !courseFilter || r.course === courseFilter;
       const actOk = !actFilter || String(r.activity_num) === actFilter;
-      return nameOk && actOk;
+      return nameOk && courseOk && actOk;
     });
     document.getElementById('resultsBody').innerHTML = rows.map((r,i) => {
       const date = new Date(r.updated_at).toLocaleString('pt-BR');
+      const courseName = COURSE_NAMES[r.course] || r.course;
       return '<tr>' +
         '<td>' + (r.student_name||'-') + '</td>' +
         '<td>' + (r.student_email||'-') + '</td>' +
+        '<td>' + courseName + '</td>' +
         '<td>Atividade ' + String(r.activity_num).padStart(2,'0') + ' — ' + (r.activity_theme||'') + '</td>' +
         '<td>' + date + '</td>' +
         '<td><button class="btn btn-ghost" style="padding:6px 14px; font-size:.78rem;" onclick="openReport(' + i + ')">Ver relatório</button></td>' +
       '</tr>';
-    }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhum resultado encontrado.</td></tr>';
+    }).join('') || '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum resultado encontrado.</td></tr>';
     window.__filteredRows = rows;
   }
 
   function openReport(i){
     const r = window.__filteredRows[i];
-    document.getElementById('modalTitle').textContent = r.student_name + ' — Atividade ' + r.activity_num;
+    document.getElementById('modalTitle').textContent = r.student_name + ' — ' + (COURSE_NAMES[r.course] || r.course) + ' — Atividade ' + r.activity_num;
     document.getElementById('modalReport').textContent = r.report_text || '(sem relatório de texto)';
     document.getElementById('reportModal').style.display = 'flex';
   }
 
   document.getElementById('filterName').addEventListener('input', renderTable);
+  document.getElementById('filterCourse').addEventListener('change', renderTable);
   document.getElementById('filterActivity').addEventListener('change', renderTable);
 
   (async () => {
@@ -526,6 +536,15 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     dyseRenderAuthBar('authBar');
 
     ALL_RESULTS = await dyseListAllResults();
+
+    const courseSelect = document.getElementById('filterCourse');
+    const courses = [...new Set(ALL_RESULTS.map(r=>r.course))].sort();
+    courses.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = COURSE_NAMES[c] || c;
+      courseSelect.appendChild(opt);
+    });
 
     const actSelect = document.getElementById('filterActivity');
     const nums = [...new Set(ALL_RESULTS.map(r=>r.activity_num))].sort((a,b)=>a-b);
