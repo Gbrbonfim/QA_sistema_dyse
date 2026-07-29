@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Atividade 11 — História</title>
+<meta name="description" content="Atividade TOEFL iBT 11 — História — Reading, Listening, Writing, Speaking e Grammar. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --amaranth:#D03B55;
+  --amaranth-dark:#B22C44;
+  --gamboge:#F0A224;
+  --gamboge-dark:#CE8613;
+  --cherry:#FCABAF;
+  --orangered:#EB6424;
+  --seal:#3A1D10;
+  --seal-soft:#562915;
+  --antique:#FFEAD6;
+  --antique-soft:#FFF3E6;
+  --white:#FFFFFF;
+  --ok:#2E8B57;
+  --bad:#C0392B;
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:10px;
+  --shadow-card:0 10px 30px rgba(58,29,16,0.12);
+  --font-display:'Lobster', cursive;
+  --font-body:'Poppins', sans-serif;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html, body{max-width:100%; overflow-x:hidden;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--antique);
+  color:var(--seal);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;
+  word-break:break-word;
+}
+
+/* decorative background texture */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(240,162,36,0.10) 0, transparent 45%),
+    radial-gradient(circle at 92% 18%, rgba(208,59,85,0.10) 0, transparent 40%),
+    radial-gradient(circle at 50% 95%, rgba(235,100,36,0.08) 0, transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.wrap{position:relative; z-index:1; max-width:920px; margin:0 auto; padding:0 20px 80px; width:100%;}
+
+/* ---------- STUDENT ID CARD ---------- */
+.student-id-card{
+  background:#fff; border-radius:var(--radius-md); padding:16px 20px; margin:-30px auto 24px;
+  box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:6px; position:relative; z-index:3;
+  border-left:6px solid var(--gamboge);
+}
+.student-id-card label{font-weight:700; font-size:.88rem; color:var(--seal);}
+.student-id-card input{
+  border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:10px 14px; font-family:var(--font-body);
+  font-size:.95rem; width:100%; color:var(--seal);
+}
+.student-id-card input:focus{outline:none; border-color:var(--amaranth);}
+.student-id-card .hint{font-size:.76rem; color:var(--seal-soft); opacity:.75;}
+
+/* ---------- REPORT ACTIONS ---------- */
+.report-actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:18px;}
+.btn-ghost.light{background:transparent; color:var(--antique); border:2px solid rgba(255,255,255,0.35);}
+.btn-ghost.light:hover{border-color:var(--gamboge); color:var(--gamboge);}
+
+/* ---------- HERO / HEADER ---------- */
+.hero{
+  background:var(--amaranth);
+  color:var(--antique-soft);
+  padding:38px 20px 64px;
+  position:relative;
+  overflow:hidden;
+  border-bottom:6px solid var(--gamboge);
+}
+.hero::after{
+  content:"dyse";
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:15vw;
+  right:-4%;
+  top:-8%;
+  color:rgba(255,255,255,0.05);
+  white-space:nowrap;
+  pointer-events:none;
+  line-height:1;
+}
+.hero-inner{max-width:920px; margin:0 auto; position:relative; z-index:2;}
+.brand-row{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
+  opacity:.85; margin-bottom:26px; min-width:0;
+}
+.brand-row .mark{
+  display:inline-flex; align-items:center; gap:8px; font-family:var(--font-display);
+  font-size:1.35rem; letter-spacing:0; text-transform:none; color:var(--antique);
+}
+.brand-row .mark svg{width:26px; height:26px; flex:none;}
+
+.eyebrow-badge{
+  display:inline-block; background:var(--gamboge); color:var(--seal);
+  font-weight:700; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+  padding:6px 14px; border-radius:999px; margin-bottom:14px;
+}
+h1.title{
+  font-family:var(--font-display);
+  font-size:clamp(2.1rem, 6vw, 3.4rem);
+  margin:0 0 10px;
+  color:var(--antique);
+  line-height:1.05;
+}
+.subtitle{font-size:1.02rem; max-width:56ch; color:var(--antique-soft); opacity:.95;}
+.hero-meta{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;}
+.pill{
+  background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.35);
+  color:var(--antique); padding:7px 14px; border-radius:999px; font-size:.82rem; font-weight:600;
+}
+
+/* ---------- STEPPER ---------- */
+.stepper{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:8px;
+  margin:0 auto 34px; max-width:920px; padding:0 20px; position:relative; z-index:3;
+}
+.step{
+  background:var(--white); border-radius:16px; padding:12px 8px; text-align:center;
+  box-shadow:var(--shadow-card); font-size:.72rem; font-weight:700; color:var(--seal-soft);
+  display:flex; flex-direction:column; align-items:center; gap:6px; border:2px solid transparent;
+  transition:.25s;
+}
+.step .dot{width:10px;height:10px;border-radius:50%;background:#e4d4c4;transition:.25s;}
+.step.done{border-color:var(--ok);}
+.step.done .dot{background:var(--ok);}
+.step .label{letter-spacing:.03em;}
+
+/* ---------- SECTION CARDS ---------- */
+section.card{
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  padding:32px clamp(18px,4vw,40px);
+  margin-bottom:28px;
+  box-shadow:var(--shadow-card);
+  border-top:8px solid var(--accent, var(--amaranth));
+  position:relative;
+}
+.card-head{display:flex; align-items:center; gap:12px; margin-bottom:6px; flex-wrap:wrap; min-width:0;}
+.card-head > div{min-width:0; flex:1 1 auto;}
+.icon-badge{
+  width:44px; height:44px; border-radius:14px; background:var(--accent, var(--amaranth));
+  display:flex; align-items:center; justify-content:center; flex:none;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+.icon-badge svg{width:24px; height:24px; stroke:#fff; fill:none;}
+.card-eyebrow{font-size:.72rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent,var(--amaranth));}
+.card-title{font-family:var(--font-display); font-size:1.7rem; margin:0; color:var(--seal);}
+.card-instructions{
+  background:var(--antique-soft); border-radius:var(--radius-sm); padding:12px 16px;
+  font-weight:600; font-size:.95rem; margin:16px 0 20px; color:var(--seal-soft);
+  border-left:4px solid var(--accent,var(--amaranth));
+}
+
+/* ---------- GENERIC ELEMENTS ---------- */
+.passage-box{
+  background:var(--antique-soft); border-radius:var(--radius-md); padding:20px 22px;
+  font-size:1rem; margin-bottom:20px; white-space:pre-wrap;
+}
+.passage-title{font-weight:800; margin-bottom:8px; color:var(--seal);}
+.format-tag{
+  display:inline-block; font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em;
+  background:var(--cherry); color:var(--seal); padding:3px 10px; border-radius:999px; margin-bottom:10px;
+}
+
+.gap-input{
+  width:64px; max-width:40vw; border:none; border-bottom:2px solid var(--accent,var(--amaranth));
+  background:transparent; font-family:var(--font-body); font-weight:700; font-size:1rem;
+  padding:2px 4px; text-align:center; color:var(--seal); margin:0 2px;
+}
+.gap-input:focus{outline:none; border-bottom-color:var(--gamboge); background:var(--antique-soft);}
+.gap-input.correct{border-bottom-color:var(--ok); background:#e9f7ee;}
+.gap-hint{
+  display:inline-block; font-size:.72rem; font-weight:700; color:var(--bad);
+  background:#fbeceb; border-radius:6px; padding:2px 6px; margin:0 4px 4px 2px; white-space:nowrap;
+}
+.gap-input.wrong{border-bottom-color:var(--bad); background:#fbeceb;}
+
+.mcq-options{display:flex; flex-direction:column; gap:10px; margin-bottom:18px;}
+.mcq-option{
+  display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:var(--radius-sm);
+  border:2px solid #eee0cf; cursor:pointer; font-weight:600; font-size:.95rem; transition:.2s;
+  background:#fff;
+}
+.mcq-option:hover{border-color:var(--gamboge);}
+.mcq-option input{accent-color:var(--amaranth); width:18px; height:18px; flex:none;}
+.mcq-option.correct{border-color:var(--ok); background:#eaf7ee;}
+.mcq-option.wrong{border-color:var(--bad); background:#fbeceb;}
+
+.dialogue-line{display:flex; gap:10px; margin-bottom:10px; align-items:flex-start; min-width:0;}
+.dialogue-speaker{
+  flex:none; width:30px; height:30px; border-radius:50%; background:var(--seal-soft);
+  color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:.85rem;
+}
+.dialogue-speaker.b{background:var(--orangered);}
+.dialogue-text{background:var(--antique-soft); border-radius:14px; padding:9px 14px; font-size:.95rem; min-width:0; flex:1 1 auto;}
+
+.btn{
+  font-family:var(--font-body); font-weight:700; font-size:.88rem; letter-spacing:.01em;
+  border:none; border-radius:999px; padding:11px 22px; cursor:pointer; transition:.2s;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn-primary{background:var(--amaranth); color:#fff;}
+.btn-primary:hover{background:var(--amaranth-dark);}
+.btn-secondary{background:var(--gamboge); color:var(--seal);}
+.btn-secondary:hover{background:var(--gamboge-dark); color:#fff;}
+.btn-ghost{background:transparent; color:var(--seal-soft); border:2px solid #e4d4c4;}
+.btn-ghost:hover{border-color:var(--amaranth); color:var(--amaranth);}
+.btn-audio{background:var(--seal-soft); color:#fff;}
+.btn-audio:hover{background:var(--seal);}
+.btn:disabled{opacity:.5; cursor:not-allowed;}
+.btn-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:8px;}
+
+.feedback{
+  margin-top:14px; padding:12px 16px; border-radius:var(--radius-sm); font-weight:600; font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback.ok{background:#eaf7ee; color:var(--ok); border:1px solid #bfe6cc;}
+.feedback.bad{background:#fbeceb; color:var(--bad); border:1px solid #f3c6c2;}
+
+.chips-bank{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+.chip{
+  background:var(--antique-soft); border:2px solid var(--cherry); color:var(--seal);
+  padding:8px 16px; border-radius:999px; font-weight:600; font-size:.88rem; cursor:pointer; transition:.15s;
+}
+.chip:hover{background:var(--cherry);}
+.chip.used{opacity:.35; pointer-events:none;}
+.answer-strip{
+  min-height:52px; border:2px dashed #e4c9a8; border-radius:var(--radius-sm);
+  padding:10px 14px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px;
+  background:var(--antique-soft);
+}
+.answer-strip .placed{
+  background:var(--gamboge); color:var(--seal); padding:7px 14px; border-radius:999px; font-weight:700;
+  font-size:.88rem; cursor:pointer;
+}
+.answer-strip .empty-hint{color:#b39a80; font-size:.85rem; font-style:italic;}
+
+textarea.write-area{
+  width:100%; min-height:170px; border-radius:var(--radius-md); border:2px solid #eee0cf;
+  padding:16px; font-family:var(--font-body); font-size:.96rem; resize:vertical; color:var(--seal);
+}
+textarea.write-area:focus{outline:none; border-color:var(--amaranth);}
+.word-count{font-size:.82rem; color:var(--seal-soft); margin-top:6px; font-weight:600;}
+.word-count.enough{color:var(--ok);}
+
+.checklist{display:flex; flex-direction:column; gap:8px; margin:16px 0;}
+.checklist label{display:flex; align-items:flex-start; gap:10px; font-size:.9rem; font-weight:500; cursor:pointer;}
+.checklist input{accent-color:var(--amaranth); margin-top:3px;}
+
+.model-answer{
+  margin-top:14px; background:var(--antique-soft); border-radius:var(--radius-sm); padding:16px 18px;
+  font-size:.92rem; white-space:pre-wrap; display:none; border-left:4px solid var(--gamboge);
+}
+.model-answer.show{display:block;}
+
+.interview-block, .repeat-block{
+  background:var(--antique-soft); border-radius:var(--radius-md); padding:18px 20px; margin-bottom:16px;
+}
+.q-number{
+  display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;
+  border-radius:50%; background:var(--amaranth); color:#fff; font-weight:800; font-size:.8rem; margin-right:8px;
+}
+.mic-status{font-size:.82rem; font-weight:600; color:var(--seal-soft); margin-top:8px; min-height:20px;}
+.transcript-box{
+  margin-top:8px; background:#fff; border:2px solid #eee0cf; border-radius:var(--radius-sm);
+  padding:10px 14px; font-size:.9rem; min-height:20px; color:var(--seal-soft);
+}
+.match-bar{height:8px; border-radius:6px; background:#e4d4c4; margin-top:8px; overflow:hidden;}
+.match-bar span{display:block; height:100%; background:var(--ok); width:0%; transition:.4s;}
+
+.grammar-q{border-bottom:1px solid #f0e3d2; padding:18px 0;}
+.grammar-q:last-child{border-bottom:none;}
+.grammar-q .qtext{font-weight:700; margin-bottom:10px;}
+.qflag{
+  display:inline-block; font-size:.74rem; font-weight:800; padding:2px 9px; border-radius:999px;
+  margin-left:8px; vertical-align:middle; white-space:nowrap;
+}
+.qflag.correct{background:#eaf7ee; color:var(--ok);}
+.qflag.wrong{background:#fbeceb; color:var(--bad);}
+.qflag.unanswered{background:#fdf0dd; color:#a06a2e;}
+.explain{
+  margin-top:10px; font-size:.85rem; background:var(--antique-soft); border-radius:var(--radius-sm);
+  padding:10px 14px; display:none; color:var(--seal-soft);
+}
+.explain.show{display:block;}
+
+.score-summary{
+  background:var(--seal); color:var(--antique); border-radius:var(--radius-lg); padding:30px;
+  text-align:center; margin-top:8px;
+}
+.score-summary h2{font-family:var(--font-display); font-size:2rem; margin:0 0 8px; color:var(--gamboge);}
+.score-summary p{margin:0 0 16px; opacity:.9;}
+#scoreBig{font-size:2.6rem; font-weight:800; color:#fff;}
+
+footer.site-footer{text-align:center; padding:30px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.75;}
+footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; color:var(--amaranth);}
+
+.top-link{display:inline-flex; align-items:center; gap:6px; color:var(--antique); text-decoration:none; font-weight:700; font-size:.82rem;}
+
+/* ---------- AUTH GATE (loading overlay while checking login) ---------- */
+html:not(.dyse-auth-ready) #dyseAuthGate{
+  position:fixed; inset:0; z-index:9999; background:var(--antique);
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
+}
+html.dyse-auth-ready #dyseAuthGate{display:none;}
+.dyse-spinner{
+  width:38px; height:38px; border-radius:50%; border:4px solid #e4d4c4; border-top-color:var(--amaranth);
+  animation:dyse-spin 0.8s linear infinite;
+}
+@keyframes dyse-spin{to{transform:rotate(360deg);}}
+#dyseAuthGate p{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
+
+/* ---------- AUTH BAR (logged-in user strip) ---------- */
+.dyse-auth-bar{
+  display:flex; align-items:center; justify-content:flex-end; gap:14px; flex-wrap:wrap;
+  font-size:.82rem; font-weight:600; margin-top:14px; color:var(--antique);
+}
+.dyse-auth-name{opacity:.95;}
+.dyse-auth-link{color:var(--gamboge); text-decoration:underline; text-underline-offset:3px;}
+.dyse-auth-link:hover{color:#fff;}
+.dyse-auth-logout{
+  background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35); color:var(--antique);
+  padding:5px 14px; border-radius:999px; font-size:.78rem; font-weight:700; cursor:pointer;
+}
+.dyse-auth-logout:hover{background:rgba(255,255,255,.3);}
+
+/* ---------- AUTH FORM (login / signup pages) ---------- */
+.auth-shell{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+.auth-card{
+  background:#fff; border-radius:var(--radius-lg); padding:40px clamp(24px,5vw,44px); max-width:440px; width:100%;
+  box-shadow:var(--shadow-card); border-top:8px solid var(--amaranth);
+}
+.auth-logo{font-family:var(--font-display); font-size:2rem; color:var(--amaranth); text-align:center; margin-bottom:4px;}
+.auth-tag{text-align:center; font-size:.8rem; color:var(--seal-soft); margin-bottom:26px; opacity:.8;}
+.auth-tabs{display:flex; background:var(--antique-soft); border-radius:999px; padding:4px; margin-bottom:22px;}
+.auth-tab{flex:1; text-align:center; padding:9px; border-radius:999px; font-weight:700; font-size:.85rem; cursor:pointer; color:var(--seal-soft); border:none; background:transparent;}
+.auth-tab.active{background:var(--amaranth); color:#fff;}
+.auth-field{margin-bottom:16px;}
+.auth-field label{display:block; font-weight:700; font-size:.85rem; margin-bottom:6px; color:var(--seal);}
+.auth-field input{
+  width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:11px 14px;
+  font-family:var(--font-body); font-size:.95rem; color:var(--seal);
+}
+.auth-field input:focus{outline:none; border-color:var(--amaranth);}
+.auth-submit{width:100%; justify-content:center; margin-top:6px; font-size:.95rem; padding:13px;}
+.auth-msg{margin-top:16px; padding:11px 14px; border-radius:var(--radius-sm); font-size:.85rem; font-weight:600; display:none;}
+.auth-msg.show{display:block;}
+.auth-msg.ok{background:#eaf7ee; color:var(--ok);}
+.auth-msg.bad{background:#fbeceb; color:var(--bad);}
+.auth-foot{text-align:center; margin-top:22px; font-size:.78rem; color:var(--seal-soft);}
+.auth-foot a{color:var(--amaranth); font-weight:700;}
+
+/* ---------- DASHBOARD (área do aluno / professora) ---------- */
+.dash-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; margin-top:24px;}
+.dash-card{
+  background:#fff; border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-card);
+  border-left:6px solid var(--amaranth); text-decoration:none; color:var(--seal); display:block; transition:.2s;
+  position:relative;
+}
+.dash-card:nth-child(4n+2){border-left-color:var(--gamboge);}
+.dash-card:nth-child(4n+3){border-left-color:var(--orangered);}
+.dash-card:nth-child(4n){border-left-color:var(--seal-soft);}
+.dash-card:hover{transform:translateY(-3px); box-shadow:0 14px 34px rgba(58,29,16,.16);}
+.dash-card .n{font-family:var(--font-display); font-size:1.5rem; color:var(--amaranth);}
+.dash-card .t{font-weight:700; font-size:1rem; margin:4px 0 2px;}
+.dash-card .l{font-size:.78rem; color:var(--seal-soft); opacity:.75;}
+.dash-badge{
+  position:absolute; top:16px; right:16px; font-size:.68rem; font-weight:800; padding:3px 10px; border-radius:999px;
+}
+.dash-badge.done{background:#eaf7ee; color:var(--ok);}
+.dash-badge.pending{background:#fdf0dd; color:#a06a2e;}
+.dash-table{width:100%; border-collapse:collapse; background:#fff; border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-card); font-size:.85rem;}
+.dash-table th, .dash-table td{padding:10px 14px; text-align:left; border-bottom:1px solid #f0e3d2;}
+.dash-table th{background:var(--seal-soft); color:#fff; font-weight:700; font-size:.76rem; text-transform:uppercase; letter-spacing:.04em;}
+.dash-table tr:last-child td{border-bottom:none;}
+.dash-table tr:hover td{background:var(--antique-soft);}
+.dash-filter{display:flex; gap:10px; flex-wrap:wrap; margin:20px 0;}
+.dash-filter input, .dash-filter select{
+  border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
+}
+
+/* ---------- TOGGLE SWITCH (liberar/ocultar atividade) ---------- */
+.manage-course-block{background:#fff; border-radius:var(--radius-md); padding:20px 24px; margin-bottom:20px; box-shadow:var(--shadow-card);}
+.manage-course-title{font-family:var(--font-display); color:var(--amaranth); font-size:1.3rem; margin-bottom:14px;}
+.manage-row{
+  display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 0;
+  border-bottom:1px solid #f0e3d2;
+}
+.manage-row:last-child{border-bottom:none;}
+.manage-row .info{font-size:.9rem;}
+.manage-row .info b{color:var(--seal);}
+.dyse-toggle{position:relative; display:inline-block; width:46px; height:26px; flex:none;}
+.dyse-toggle input{opacity:0; width:0; height:0;}
+.dyse-toggle .slider{
+  position:absolute; cursor:pointer; inset:0; background:#e4d4c4; border-radius:999px; transition:.2s;
+}
+.dyse-toggle .slider::before{
+  content:""; position:absolute; height:20px; width:20px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:.2s;
+}
+.dyse-toggle input:checked + .slider{background:var(--ok);}
+.dyse-toggle input:checked + .slider::before{transform:translateX(20px);}
+
+@media (max-width:640px){
+  .stepper{grid-template-columns:repeat(5,1fr); gap:6px; margin-top:14px;}
+  .step{padding:8px 4px; font-size:.62rem;}
+  .step .label{display:none;}
+  section.card{padding:24px 16px;}
+  h1.title{font-size:2.1rem;}
+  .student-id-card{margin-top:-24px;}
+  .report-actions{flex-direction:column;}
+  .report-actions .btn{width:100%; justify-content:center;}
+  .gap-input{width:56px;}
+}
+
+@media (max-width:380px){
+  .wrap{padding:0 14px 60px;}
+  .hero{padding:32px 14px 56px;}
+  .card-eyebrow{font-size:.66rem;}
+  .card-title{font-size:1.4rem;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{transition:none !important;}
+}
+
+</style>
+</head>
+<body>
+<div id="dyseAuthGate">
+  <div class="dyse-spinner"></div>
+  <p>dyse</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script>
+
+/* ================= DYSE · TOEFL Activity Engine ================= */
+
+/* ---------- CONFIGURAÇÃO DO RELATÓRIO (edite aqui) ---------- */
+const TEACHER_EMAIL = "professora@doyouspeakenglish.com.br"; // <-- troque pelo e-mail da professora
+const FORMSPREE_ENDPOINT = ""; // opcional: cole aqui o endpoint do Formspree (ex: "https://formspree.io/f/xxxxxxx") para envio automático sem abrir o app de e-mail
+const ACTIVITY_LABEL = "11 — História";
+const CURRENT_IDX = 11;
+const COURSE = "toefl";
+
+const STORAGE_KEY = "dyse_toefl_activity11progress";
+let progress = {reading:false, listening:false, writing:false, speaking:false, grammar:false};
+try{
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+  if(saved) progress = saved;
+}catch(e){}
+
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }catch(e){}
+  updateStepper();
+}
+function markDone(key){
+  progress[key] = true;
+  saveProgress();
+  scheduleAutosave();
+}
+function updateStepper(){
+  Object.keys(progress).forEach(k=>{
+    const el = document.querySelector('.step[data-step="'+k+'"]');
+    if(el){ el.classList.toggle('done', !!progress[k]); }
+  });
+  const doneCount = Object.values(progress).filter(Boolean).length;
+  const scoreBig = document.getElementById('scoreBig');
+  if(scoreBig) scoreBig.textContent = doneCount + ' / 5';
+}
+
+/* ---------- Nome do aluno (via login Supabase) ---------- */
+function getStudentName(){
+  return window.__dyseStudentName || '';
+}
+
+/* ---------- Autosave do progresso no Supabase (com debounce) ---------- */
+let __autosaveTimer = null;
+function scheduleAutosave(){
+  if(typeof dyseSaveResult !== 'function') return;
+  clearTimeout(__autosaveTimer);
+  __autosaveTimer = setTimeout(runAutosave, 900);
+}
+async function runAutosave(){
+  const statusEl = document.getElementById('autosaveStatus');
+  try{
+    const text = buildReportText();
+    const res = await dyseSaveResult(COURSE, CURRENT_IDX, ACTIVITY_LABEL, text, {progress: progress});
+    if(statusEl){
+      statusEl.textContent = res.error
+        ? '⚠️ Não foi possível salvar seu progresso agora. Verifique sua internet.'
+        : '💾 Progresso salvo · ' + new Date().toLocaleTimeString('pt-BR');
+      statusEl.classList.toggle('bad', !!res.error);
+    }
+  }catch(e){ /* ignore */ }
+}
+
+/* ---------- Inicialização: exige login e restaura progresso salvo ----------
+   O check de sessão começa imediatamente (evita "piscar" a página pra quem
+   não está logado), mas tudo que mexe no DOM espera o HTML carregar. */
+function dyseCheckAuth(){
+  if(typeof dyseRequireAuth !== 'function'){
+    document.documentElement.classList.add('dyse-auth-ready');
+    return Promise.resolve(null);
+  }
+  return dyseRequireAuth();
+}
+const __dyseSessionPromise = dyseCheckAuth();
+
+document.addEventListener('DOMContentLoaded', async function(){
+  const session = await __dyseSessionPromise;
+  if(session){
+    try{
+      if(typeof dyseRequirePublished === 'function'){
+        const allowed = await dyseRequirePublished(COURSE, CURRENT_IDX);
+        if(!allowed) return; // já está redirecionando
+      }
+    }catch(e){
+      console.error('dyseRequirePublished falhou, liberando a página mesmo assim:', e);
+    }
+    window.__dyseStudentName = (session.user.user_metadata && session.user.user_metadata.full_name) || session.user.email;
+    dyseRenderAuthBar('authBar');
+    try{
+      if(typeof dyseLoadResult === 'function'){
+        const existing = await dyseLoadResult(COURSE, CURRENT_IDX);
+        if(existing && existing.meta && existing.meta.progress){
+          progress = Object.assign({}, progress, existing.meta.progress);
+        }
+      }
+    }catch(e){
+      console.error('dyseLoadResult falhou, seguindo sem restaurar progresso salvo:', e);
+    }
+  }
+  updateStepper();
+});
+
+/* ---------- Text-to-speech (Listening & Speaking) ---------- */
+function speak(text, onend){
+  if(!('speechSynthesis' in window)){
+    alert('Seu navegador não tem suporte a áudio (Web Speech API). Tente usar o Google Chrome.');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-US';
+  utter.rate = 0.92;
+  utter.pitch = 1;
+  if(onend) utter.onend = onend;
+  window.speechSynthesis.speak(utter);
+}
+function speakSequence(lines, delay){
+  if(!('speechSynthesis' in window)){
+    alert('Seu navegador não tem suporte a áudio (Web Speech API). Tente usar o Google Chrome.');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  let i = 0;
+  function next(){
+    if(i >= lines.length) return;
+    const utter = new SpeechSynthesisUtterance(lines[i]);
+    utter.lang = 'en-US';
+    utter.rate = 0.92;
+    utter.onend = function(){ i++; setTimeout(next, delay||350); };
+    window.speechSynthesis.speak(utter);
+  }
+  next();
+}
+
+/* ---------- Normalization helper ---------- */
+function norm(s){
+  return (s||'').trim().toLowerCase().replace(/[.,!?;:'"’‘]/g,'').replace(/\s+/g,' ');
+}
+
+/* ---------- READING: Complete the Words ---------- */
+function checkGaps(containerId, answers, feedbackId, stepKey){
+  const container = document.getElementById(containerId);
+  const inputs = container.querySelectorAll('.gap-input');
+  let correct = 0;
+  inputs.forEach((inp, idx)=>{
+    const ok = norm(inp.value) === norm(answers[idx]);
+    inp.classList.remove('correct','wrong');
+    inp.classList.add(ok?'correct':'wrong');
+    // remove any previous hint before adding a new one
+    const next = inp.nextElementSibling;
+    if(next && next.classList && next.classList.contains('gap-hint')) next.remove();
+    if(!ok){
+      const hint = document.createElement('span');
+      hint.className = 'gap-hint';
+      hint.textContent = inp.value.trim()
+        ? '✗ correto: ' + answers[idx]
+        : '✗ não respondido — correto: ' + answers[idx];
+      inp.insertAdjacentElement('afterend', hint);
+    }
+    if(ok) correct++;
+  });
+  const fb = document.getElementById(feedbackId);
+  fb.classList.add('show');
+  if(correct === inputs.length){
+    fb.classList.remove('bad'); fb.classList.add('ok');
+    fb.textContent = '✓ Muito bem! Você acertou todas as ' + inputs.length + ' lacunas.';
+  } else {
+    fb.classList.remove('ok'); fb.classList.add('bad');
+    fb.textContent = 'Você acertou ' + correct + ' de ' + inputs.length + ' lacunas. As respostas corretas foram indicadas em vermelho acima.';
+  }
+  if(stepKey) markDone(stepKey);
+}
+
+/* ---------- Shared: flag a question with a correct/wrong/unanswered label ---------- */
+function flagQuestion(pEl, state){
+  if(!pEl) return;
+  let flag = pEl.querySelector('.qflag');
+  if(flag) flag.remove();
+  flag = document.createElement('span');
+  flag.className = 'qflag ' + state;
+  flag.textContent = state === 'correct' ? ' ✓ Correta'
+    : state === 'wrong' ? ' ✗ Incorreta'
+    : ' — Não respondida';
+  pEl.appendChild(flag);
+}
+
+/* ---------- MCQ (Reading / Listening) ---------- */
+function checkMCQ(name, correctIndex, feedbackId, stepKey){
+  const selected = document.querySelector('input[name="'+name+'"]:checked');
+  const optionsWrap = document.getElementById(name+'_options');
+  const options = optionsWrap.querySelectorAll('.mcq-option');
+  const questionEl = optionsWrap.previousElementSibling;
+  const fb = document.getElementById(feedbackId);
+  options.forEach((opt, idx)=>{
+    opt.classList.remove('correct','wrong');
+    if(idx === correctIndex) opt.classList.add('correct');
+  });
+  fb.classList.add('show');
+  if(!selected){
+    flagQuestion(questionEl, 'unanswered');
+    fb.classList.remove('ok'); fb.classList.add('bad');
+    fb.textContent = '✗ Você não respondeu esta questão. A alternativa correta está destacada em verde.';
+    if(stepKey) markDone(stepKey);
+    return;
+  }
+  const chosenIdx = parseInt(selected.value, 10);
+  if(chosenIdx !== correctIndex){
+    options[chosenIdx].classList.add('wrong');
+  }
+  if(chosenIdx === correctIndex){
+    flagQuestion(questionEl, 'correct');
+    fb.classList.remove('bad'); fb.classList.add('ok');
+    fb.textContent = '✓ Correto! Muito bem.';
+  } else {
+    flagQuestion(questionEl, 'wrong');
+    fb.classList.remove('ok'); fb.classList.add('bad');
+    fb.textContent = '✗ Não foi dessa vez. A alternativa correta está destacada em verde.';
+  }
+  if(stepKey) markDone(stepKey);
+}
+
+/* ---------- WRITING: Build a Sentence ---------- */
+function chipClick(chipEl, stripId, bankId){
+  chipEl.classList.add('used');
+  const strip = document.getElementById(stripId);
+  const hint = strip.querySelector('.empty-hint');
+  if(hint) hint.remove();
+  const placed = document.createElement('span');
+  placed.className = 'placed';
+  placed.textContent = chipEl.dataset.value;
+  placed.dataset.origin = chipEl.id;
+  placed.onclick = function(){
+    placed.remove();
+    document.getElementById(placed.dataset.origin).classList.remove('used');
+    const s = document.getElementById(stripId);
+    if(!s.querySelector('.placed')){
+      const h = document.createElement('span');
+      h.className='empty-hint'; h.textContent='Clique nas palavras abaixo para montar a frase...';
+      s.appendChild(h);
+    }
+  };
+  strip.appendChild(placed);
+}
+function resetStrip(stripId, bankId){
+  const strip = document.getElementById(stripId);
+  strip.innerHTML = '<span class="empty-hint">Clique nas palavras abaixo para montar a frase...</span>';
+  document.querySelectorAll('#'+bankId+' .chip').forEach(c=>c.classList.remove('used'));
+}
+function checkSentence(stripId, target, feedbackId, stepKey){
+  const strip = document.getElementById(stripId);
+  const words = Array.from(strip.querySelectorAll('.placed')).map(p=>p.textContent);
+  const built = words.join(' ');
+  const fb = document.getElementById(feedbackId);
+  fb.classList.add('show');
+  if(built && norm(built) === norm(target)){
+    fb.classList.remove('bad'); fb.classList.add('ok');
+    fb.textContent = '✓ Perfeito! Frase montada corretamente: "' + target + '"';
+  } else if(!built){
+    fb.classList.remove('ok'); fb.classList.add('bad');
+    fb.textContent = '✗ Você não montou nenhuma frase. A resposta correta era: "' + target + '"';
+  } else {
+    fb.classList.remove('ok'); fb.classList.add('bad');
+    fb.textContent = '✗ Ainda não está correto. Sua frase: "' + built + '". A resposta correta era: "' + target + '"';
+  }
+  if(stepKey) markDone(stepKey);
+}
+
+/* ---------- WRITING: word counter ---------- */
+function countWords(textareaId, counterId, minWords){
+  const ta = document.getElementById(textareaId);
+  const counter = document.getElementById(counterId);
+  function update(){
+    const words = ta.value.trim().split(/\s+/).filter(Boolean).length;
+    counter.textContent = words + ' palavras (mínimo recomendado: ' + minWords + ')';
+    counter.classList.toggle('enough', words >= minWords);
+  }
+  ta.addEventListener('input', update);
+  update();
+}
+function toggleModel(btn, modelId, stepKey){
+  const el = document.getElementById(modelId);
+  el.classList.toggle('show');
+  btn.textContent = el.classList.contains('show') ? 'Ocultar resposta modelo' : 'Ver resposta modelo';
+  if(stepKey) markDone(stepKey);
+}
+
+/* ---------- SPEAKING: recognition ---------- */
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+function similarity(a, b){
+  const wa = norm(a).split(' ').filter(Boolean);
+  const wb = new Set(norm(b).split(' ').filter(Boolean));
+  if(wa.length === 0) return 0;
+  let hit = 0;
+  wa.forEach(w=>{ if(wb.has(w)) hit++; });
+  return Math.round((hit / wa.length) * 100);
+}
+function startRecognition(targetText, statusId, transcriptId, barId, stepKey){
+  const statusEl = document.getElementById(statusId);
+  const transcriptEl = document.getElementById(transcriptId);
+  const barEl = document.getElementById(barId);
+  if(!SpeechRec){
+    statusEl.textContent = 'Reconhecimento de voz não disponível neste navegador. Use o Google Chrome no computador ou pratique em voz alta com um colega/professor.';
+    return;
+  }
+  const rec = new SpeechRec();
+  rec.lang = 'en-US';
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  statusEl.textContent = '🎙️ Ouvindo... fale agora.';
+  rec.start();
+  rec.onresult = function(e){
+    const said = e.results[0][0].transcript;
+    transcriptEl.textContent = said;
+    if(targetText){
+      const pct = similarity(targetText, said);
+      barEl.querySelector('span').style.width = pct + '%';
+      statusEl.textContent = pct >= 80 ? '✓ Ótima pronúncia! (' + pct + '% de correspondência)'
+        : pct >= 50 ? 'Bom começo (' + pct + '% de correspondência). Tente novamente para melhorar.'
+        : 'Continue praticando (' + pct + '% de correspondência).';
+    } else {
+      statusEl.textContent = '✓ Resposta gravada como texto abaixo.';
+    }
+    if(stepKey) markDone(stepKey);
+  };
+  rec.onerror = function(e){
+    statusEl.textContent = 'Não foi possível captar o áudio (' + e.error + '). Verifique a permissão do microfone e tente novamente.';
+  };
+}
+
+/* ---------- GRAMMAR quiz ---------- */
+function checkGrammar(prefix, total, correctAnswers){
+  let score = 0;
+  for(let i=0;i<total;i++){
+    const name = prefix + '_q' + i;
+    const selected = document.querySelector('input[name="'+name+'"]:checked');
+    const optsWrap = document.getElementById(name+'_opts');
+    const options = optsWrap.querySelectorAll('.mcq-option');
+    const explain = document.getElementById(name+'_explain');
+    const qEl = optsWrap.previousElementSibling;
+    options.forEach((opt, idx)=>{
+      opt.classList.remove('correct','wrong');
+      if(idx === correctAnswers[i]) opt.classList.add('correct');
+    });
+    if(selected){
+      const chosen = parseInt(selected.value,10);
+      if(chosen === correctAnswers[i]){ score++; flagQuestion(qEl, 'correct'); }
+      else { options[chosen].classList.add('wrong'); flagQuestion(qEl, 'wrong'); }
+    } else {
+      flagQuestion(qEl, 'unanswered');
+    }
+    if(explain) explain.classList.add('show');
+  }
+  const fb = document.getElementById(prefix+'_feedback');
+  fb.classList.add('show');
+  fb.classList.remove('ok','bad');
+  fb.classList.add(score === total ? 'ok' : 'bad');
+  fb.textContent = 'Você acertou ' + score + ' de ' + total + ' questões. As respostas corretas e as explicações foram destacadas acima.';
+  markDone('grammar');
+}
+
+/* ================= RELATÓRIO PARA A PROFESSORA ================= */
+function textOf(el){ return el ? el.textContent.trim() : ''; }
+
+function reportReading(){
+  const lines = [];
+  const gapBox = document.querySelector('.passage-box[data-answers]');
+  if(gapBox){
+    const answers = JSON.parse(gapBox.dataset.answers);
+    const inputs = gapBox.querySelectorAll('.gap-input');
+    let correct = 0; const wrong = [];
+    inputs.forEach((inp,i)=>{
+      const ok = norm(inp.value) === norm(answers[i]);
+      if(ok) correct++;
+      else wrong.push('   - lacuna ' + (i+1) + ': aluno escreveu "' + (inp.value || '(em branco)') + '" | correto: "' + answers[i] + '"');
+    });
+    lines.push('READING (Complete the Words): ' + correct + '/' + inputs.length + ' corretas');
+    lines.push(...wrong);
+    return lines;
+  }
+  const opts = document.getElementById('rd_' + CURRENT_IDX + '_options');
+  if(opts){
+    const question = textOf(opts.previousElementSibling);
+    const selected = opts.querySelector('input:checked');
+    const correctIdx = parseInt(opts.dataset.correct, 10);
+    const spans = opts.querySelectorAll('.mcq-option span');
+    const chosenText = selected ? textOf(spans[parseInt(selected.value,10)]) : '(não respondeu)';
+    const correctText = textOf(spans[correctIdx]);
+    const ok = selected && parseInt(selected.value,10) === correctIdx;
+    lines.push('READING: ' + question);
+    lines.push('   Resposta do aluno: ' + chosenText + (selected ? (ok ? '  [correta]' : '  [incorreta — correta: ' + correctText + ']') : ''));
+  }
+  return lines;
+}
+
+function reportListening(){
+  const lines = [];
+  const opts = document.getElementById('ls_' + CURRENT_IDX + '_options');
+  if(opts){
+    const question = textOf(opts.previousElementSibling);
+    const selected = opts.querySelector('input:checked');
+    const correctIdx = parseInt(opts.dataset.correct, 10);
+    const spans = opts.querySelectorAll('.mcq-option span');
+    const chosenText = selected ? textOf(spans[parseInt(selected.value,10)]) : '(não respondeu)';
+    const correctText = textOf(spans[correctIdx]);
+    const ok = selected && parseInt(selected.value,10) === correctIdx;
+    lines.push('LISTENING: ' + question);
+    lines.push('   Resposta do aluno: ' + chosenText + (selected ? (ok ? '  [correta]' : '  [incorreta — correta: ' + correctText + ']') : ''));
+  }
+  return lines;
+}
+
+function reportWriting(){
+  const lines = [];
+  const strip = document.getElementById('strip_' + CURRENT_IDX);
+  if(strip){
+    const target = strip.dataset.target || '';
+    const built = Array.from(strip.querySelectorAll('.placed')).map(p=>p.textContent).join(' ');
+    const ok = norm(built) === norm(target);
+    lines.push('WRITING (Build a Sentence):');
+    lines.push('   Frase do aluno: "' + (built || '(vazio)') + '"' + (built ? (ok ? '  [correta]' : '  [incorreta — esperado: "' + target + '"]') : ''));
+    return lines;
+  }
+  const area = document.getElementById('wr_area_' + CURRENT_IDX);
+  if(area){
+    const words = area.value.trim().split(/\s+/).filter(Boolean).length;
+    lines.push('WRITING: (' + words + ' palavras)');
+    lines.push(area.value.trim() ? '    + area.value.trim() + ' : '   (o aluno não escreveu nada)');
+  }
+  return lines;
+}
+
+function reportSpeaking(){
+  const lines = [];
+  const blocks = document.querySelectorAll('.repeat-block[data-target], .interview-block[data-target]');
+  blocks.forEach((b, i)=>{
+    const target = b.dataset.target;
+    const transcriptEl = b.querySelector('.transcript-box');
+    const transcript = transcriptEl ? transcriptEl.textContent.trim() : '';
+    lines.push('SPEAKING ' + (i+1) + ': "' + target + '"');
+    lines.push(transcript ? '   Transcrição captada: "' + transcript + '"' : '   (sem gravação registrada — pratique a pronúncia oralmente com o aluno)');
+  });
+  return lines;
+}
+
+function reportGrammar(){
+  const lines = [];
+  const groups = document.querySelectorAll('[id^="gr_' + CURRENT_IDX + '_q"][id$="_opts"]');
+  let correct = 0;
+  const details = [];
+  groups.forEach((opts)=>{
+    const qEl = opts.previousElementSibling;
+    const question = textOf(qEl);
+    const selected = opts.querySelector('input:checked');
+    const correctIdx = parseInt(opts.dataset.correct, 10);
+    const spans = opts.querySelectorAll('.mcq-option span');
+    const ok = selected && parseInt(selected.value,10) === correctIdx;
+    if(ok) correct++;
+    if(!ok){
+      const chosenText = selected ? textOf(spans[parseInt(selected.value,10)]) : '(não respondeu)';
+      details.push('   - ' + question + ' | aluno: "' + chosenText + '" | correto: "' + textOf(spans[correctIdx]) + '"');
+    }
+  });
+  lines.push('GRAMMAR: ' + correct + '/' + groups.length + ' corretas');
+  lines.push(...details);
+  return lines;
+}
+
+function buildReportText(){
+  const name = getStudentName() || '(nome não informado)';
+  const date = new Date().toLocaleString('pt-BR');
+  const parts = [];
+  parts.push('RELATÓRIO DE ATIVIDADE — DYSE · Do You Speak English?');
+  parts.push('Atividade: ' + ACTIVITY_LABEL);
+  parts.push('Aluno(a): ' + name);
+  parts.push('Data: ' + date);
+  parts.push('');
+  parts.push(reportReading().join('\n'));
+  parts.push('');
+  parts.push(reportListening().join('\n'));
+  parts.push('');
+  parts.push(reportWriting().join('\n'));
+  parts.push('');
+  parts.push(reportSpeaking().join('\n'));
+  parts.push('');
+  parts.push(reportGrammar().join('\n'));
+  parts.push('');
+  parts.push('— Gerado automaticamente pela atividade DYSE.');
+  return parts.join('\n');
+}
+
+function showReportStatus(msg, ok){
+  const el = document.getElementById('reportStatus');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  el.classList.remove('ok','bad');
+  el.classList.add(ok ? 'ok' : 'bad');
+}
+
+async function sendReport(){
+  const name = getStudentName() || 'Aluno(a)';
+  const text = buildReportText();
+  await runAutosave(); // garante que o progresso mais recente já está salvo no Supabase
+
+  if(FORMSPREE_ENDPOINT){
+    try{
+      const resp = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {'Accept':'application/json', 'Content-Type':'application/json'},
+        body: JSON.stringify({
+          email: TEACHER_EMAIL,
+          subject: 'Relatório DYSE — ' + ACTIVITY_LABEL + ' — ' + name,
+          message: text,
+          aluno: name,
+          atividade: ACTIVITY_LABEL
+        })
+      });
+      if(resp.ok){
+        showReportStatus('✓ Relatório enviado automaticamente para a professora!', true);
+        return;
+      }
+    }catch(e){ /* falls through to mailto */ }
+  }
+
+  const subject = encodeURIComponent('Relatório DYSE — ' + ACTIVITY_LABEL + ' — ' + name);
+  const body = encodeURIComponent(text);
+  window.location.href = 'mailto:' + TEACHER_EMAIL + '?subject=' + subject + '&body=' + body;
+  showReportStatus('✓ Abrindo seu aplicativo de e-mail com o relatório preenchido. Basta clicar em enviar.', true);
+}
+
+function copyReport(){
+  const text = buildReportText();
+  navigator.clipboard.writeText(text).then(()=>{
+    showReportStatus('✓ Relatório copiado! Cole (Ctrl/Cmd+V) onde quiser enviar.', true);
+  }).catch(()=>{
+    showReportStatus('Não foi possível copiar automaticamente. Tente novamente.', false);
+  });
+}
+
+function downloadReport(){
+  const name = getStudentName() || 'aluno';
+  const text = buildReportText();
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'relatorio-' + ACTIVITY_LABEL.replace(/[^a-zA-Z0-9]+/g,'-') + '-' + name.replace(/[^a-zA-Z0-9]+/g,'-') + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showReportStatus('✓ Relatório baixado em .txt', true);
+}
+
+</script>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 2.7 5.9 1 10c1.7 4.1 6 7 11 7s9.3-2.9 11-7c-1.7-4.1-6-7-11-7zm0 11.5A4.5 4.5 0 1 1 16.5 10 4.5 4.5 0 0 1 12 14.5z"/></svg> dyse</span>
+      <span>Do You Speak English? · Prep TOEFL iBT</span>
+    </div>
+    <span class="eyebrow-badge">Atividade 11 de 16</span>
+    <h1 class="title">História</h1>
+    <p class="subtitle">Pratique as cinco habilidades do novo formato do TOEFL iBT&reg; — Reading, Listening, Writing, Speaking e Grammar — em uma única atividade temática.</p>
+    <div class="hero-meta">
+      <span class="pill">📘 History</span>
+      <span class="pill">🎯 C1 · Avançado</span>
+      <span class="pill">⏱️ ~25–35 min</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="stepper">
+  <div class="step" data-step="reading"><span class="dot"></span><span class="label">Reading</span></div>
+  <div class="step" data-step="listening"><span class="dot"></span><span class="label">Listening</span></div>
+  <div class="step" data-step="writing"><span class="dot"></span><span class="label">Writing</span></div>
+  <div class="step" data-step="speaking"><span class="dot"></span><span class="label">Speaking</span></div>
+  <div class="step" data-step="grammar"><span class="dot"></span><span class="label">Grammar</span></div>
+</div>
+
+<p id="autosaveStatus" style="text-align:center; font-size:.78rem; font-weight:600; color:var(--seal-soft); opacity:.75; margin:-20px 0 24px;">💾 Seu progresso é salvo automaticamente.</p>
+
+<div class="wrap">
+  
+<section class="card" id="sec-reading" style="--accent:var(--amaranth)">
+  <div class="card-head">
+    <div class="icon-badge" style="background:var(--amaranth)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-7a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h8z"/></svg>
+    </div>
+    <div>
+      <div class="card-eyebrow">Reading &middot; Read an Academic Passage</div>
+      <h2 class="card-title">História</h2>
+    </div>
+  </div>
+  <div class="card-instructions">Read the passage.</div>
+  
+  <div class="passage-box">
+    <div class="passage-title">The Silk Road as a Network of Exchange</div>
+    Although often described as a single trade route, the Silk Road was actually a vast network of interconnected paths linking East Asia to the Mediterranean. Along these routes, merchants exchanged not only silk and spices but also technologies, religious ideas, and artistic styles. Buddhism, for instance, spread from India into Central Asia and China largely through contact along these trade paths. Historians note that the Silk Road&#x27;s influence extended well beyond commerce, functioning as a conduit for cultural transformation across diverse civilizations. Its decline in the fifteenth century is often attributed to the rise of maritime trade routes, which offered faster and less politically complicated alternatives for transporting goods between regions.
+  </div>
+  <p style="font-weight:700; margin-bottom:10px;">According to the passage, what ultimately contributed to the decline of the Silk Road?</p>
+  <div class="mcq-options" id="rd_11_options" data-correct="2"><label class="mcq-option">
+                  <input type="radio" name="rd_11" value="0">
+                  <span>A sudden decrease in demand for silk</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_11" value="1">
+                  <span>The spread of Buddhism into China</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_11" value="2">
+                  <span>The rise of faster maritime trade routes</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="rd_11" value="3">
+                  <span>Political unity across Central Asia</span>
+                </label></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="checkMCQ('rd_11', 2, 'rd_feedback_11', 'reading')">Verificar resposta</button>
+  </div>
+  <div class="feedback" id="rd_feedback_11"></div>
+
+</section>
+
+  
+<section class="card" id="sec-listening" style="--accent:var(--orangered)">
+  <div class="card-head">
+    <div class="icon-badge" style="background:var(--orangered)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+    </div>
+    <div>
+      <div class="card-eyebrow">Listening &middot; Listen to an Academic Talk</div>
+      <h2 class="card-title">História</h2>
+    </div>
+  </div>
+  <div class="card-instructions">Listen to part of a talk in a world history class.</div>
+  
+  <div class="btn-row" style="margin-bottom:16px;">
+    <button class="btn btn-audio" onclick="speak(&quot;One common misconception about the Silk Road is that it was a single, continuous road traveled from end to end by the same merchants. In reality, it functioned more like a relay system. Goods typically passed through many hands, with different traders controlling different sections of the route based on local knowledge and political relationships. This structure meant that an item made in China might change ownership a dozen times before reaching a market in the Mediterranean. It also explains why cultural exchange was so powerful along these routes: each transaction was also an opportunity for ideas, language, and customs to travel alongside physical goods.&quot;)">&#128266; Play audio</button>
+  </div>
+  <details style="margin-bottom:18px;">
+    <summary style="cursor:pointer; font-weight:700; color:var(--seal-soft); font-size:.85rem;">Mostrar transcrição (opcional)</summary>
+    <div class="passage-box" style="margin-top:10px;">One common misconception about the Silk Road is that it was a single, continuous road traveled from end to end by the same merchants. In reality, it functioned more like a relay system. Goods typically passed through many hands, with different traders controlling different sections of the route based on local knowledge and political relationships. This structure meant that an item made in China might change ownership a dozen times before reaching a market in the Mediterranean. It also explains why cultural exchange was so powerful along these routes: each transaction was also an opportunity for ideas, language, and customs to travel alongside physical goods.</div>
+  </details>
+  <p style="font-weight:700; margin-bottom:10px;">What point does the speaker make about how goods traveled on the Silk Road?</p>
+  <div class="mcq-options" id="ls_11_options" data-correct="1"><label class="mcq-option">
+                  <input type="radio" name="ls_11" value="0">
+                  <span>The same merchants carried goods the entire distance</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="ls_11" value="1">
+                  <span>Goods usually changed hands many times along different sections of the route</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="ls_11" value="2">
+                  <span>Goods were transported mainly by sea</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="ls_11" value="3">
+                  <span>Cultural exchange rarely happened during trade</span>
+                </label></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="checkMCQ('ls_11', 1, 'ls_feedback_11', 'listening')">Verificar resposta</button>
+  </div>
+  <div class="feedback" id="ls_feedback_11"></div>
+
+</section>
+
+  
+<section class="card" id="sec-writing" style="--accent:var(--gamboge)">
+  <div class="card-head">
+    <div class="icon-badge" style="background:var(--gamboge)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--seal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+    </div>
+    <div>
+      <div class="card-eyebrow">Writing &middot; Write for an Academic Discussion</div>
+      <h2 class="card-title">História</h2>
+    </div>
+  </div>
+  <div class="card-instructions">Write for an academic discussion.</div>
+  
+  <div class="passage-box">
+    <div class="passage-title">Dr. Whitfield</div>
+    Historians often debate whether trade or conquest had a greater impact on cultural exchange throughout history. In your view, which force — peaceful trade or military expansion — has done more to spread ideas and technologies between civilizations?
+  </div>
+  <div class="passage-box" style="background:var(--cherry);">
+    <div class="passage-title">Hana</div>
+    I lean toward trade, since merchants had strong incentives to maintain long-term relationships, which allowed ideas to spread gradually and peacefully over generations.
+  </div>
+  <div class="passage-box" style="background:var(--cherry);">
+    <div class="passage-title">Tomas</div>
+    I&#x27;d argue conquest often forced rapid cultural blending, since conquerors and conquered peoples had no choice but to live and interact closely together.
+  </div>
+  <p style="font-weight:700; margin:14px 0 6px;">Sua resposta deve:</p>
+  <ul style="margin-top:0;"><li>Express and support your own opinion.</li><li>Respond to at least one point made by Hana or Tomas.</li><li>Use at least 100 words.</li></ul>
+  <textarea class="write-area" id="wr_area_11" placeholder="Write your discussion post here..."></textarea>
+  <div class="word-count" id="wr_count_11"></div>
+  <p style="font-weight:700; margin:16px 0 4px;">Autoavaliação:</p>
+  <div class="checklist"><label><input type="checkbox"><span>Express and support your own opinion.</span></label><label><input type="checkbox"><span>Respond to at least one point made by Hana or Tomas.</span></label><label><input type="checkbox"><span>Use at least 100 words.</span></label></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" id="wr_modelbtn_11" onclick="toggleModel(this, 'wr_model_11', 'writing')">Ver resposta modelo</button>
+  </div>
+  <div class="model-answer" id="wr_model_11">I find Hana&#x27;s argument more convincing overall, though I think Tomas raises an important point about the speed of change. Trade networks like the Silk Road demonstrate how sustained, voluntary contact allowed technologies, religions, and artistic styles to spread across enormous distances over centuries. This kind of exchange tends to be more durable because it isn&#x27;t dependent on the outcome of a single conflict. That said, Tomas is right that conquest can accelerate blending in the short term, as seen in empires that absorbed diverse populations quickly. Still, I would argue that trade&#x27;s gradual, repeated contact created deeper and more lasting cultural transformations than most single military campaigns.</div>
+  <script>countWords('wr_area_11', 'wr_count_11', 100);</script>
+
+</section>
+
+  
+<section class="card" id="sec-speaking" style="--accent:var(--seal-soft)">
+  <div class="card-head">
+    <div class="icon-badge" style="background:var(--seal-soft)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    </div>
+    <div>
+      <div class="card-eyebrow">Speaking &middot; Take an Interview</div>
+      <h2 class="card-title">História</h2>
+    </div>
+  </div>
+  <div class="card-instructions">Please answer the interviewer&#x27;s questions about history.</div>
+  <div class="passage-box">You are being interviewed for a university podcast about the value of studying history.</div>
+  <div class="interview-block" data-target="Why do you think it&#x27;s important to study history?">
+    <p><span class="q-number">1</span><strong>Why do you think it&#x27;s important to study history?</strong></p>
+    <div class="btn-row">
+      <button class="btn btn-audio" onclick="speak(&quot;Why do you think it&#x27;s important to study history?&quot;)">&#128266; Play question</button>
+      <button class="btn btn-primary" onclick="startRecognition('', 'sp_status_11_0', 'sp_trans_11_0', 'sp_bar_11_0', 'speaking')">&#127908; Gravar minha resposta (45s)</button>
+    </div>
+    <div class="mic-status" id="sp_status_11_0"></div>
+    <div class="transcript-box" id="sp_trans_11_0" style="display:none;"></div>
+    <div class="match-bar" id="sp_bar_11_0" style="display:none;"><span></span></div>
+  </div>
+
+  <div class="interview-block" data-target="Describe a historical event that you find particularly interesting.">
+    <p><span class="q-number">2</span><strong>Describe a historical event that you find particularly interesting.</strong></p>
+    <div class="btn-row">
+      <button class="btn btn-audio" onclick="speak(&quot;Describe a historical event that you find particularly interesting.&quot;)">&#128266; Play question</button>
+      <button class="btn btn-primary" onclick="startRecognition('', 'sp_status_11_1', 'sp_trans_11_1', 'sp_bar_11_1', 'speaking')">&#127908; Gravar minha resposta (45s)</button>
+    </div>
+    <div class="mic-status" id="sp_status_11_1"></div>
+    <div class="transcript-box" id="sp_trans_11_1" style="display:none;"></div>
+    <div class="match-bar" id="sp_bar_11_1" style="display:none;"><span></span></div>
+  </div>
+
+  <div class="interview-block" data-target="Do you think modern trade has the same cultural impact as ancient trade routes? Explain.">
+    <p><span class="q-number">3</span><strong>Do you think modern trade has the same cultural impact as ancient trade routes? Explain.</strong></p>
+    <div class="btn-row">
+      <button class="btn btn-audio" onclick="speak(&quot;Do you think modern trade has the same cultural impact as ancient trade routes? Explain.&quot;)">&#128266; Play question</button>
+      <button class="btn btn-primary" onclick="startRecognition('', 'sp_status_11_2', 'sp_trans_11_2', 'sp_bar_11_2', 'speaking')">&#127908; Gravar minha resposta (45s)</button>
+    </div>
+    <div class="mic-status" id="sp_status_11_2"></div>
+    <div class="transcript-box" id="sp_trans_11_2" style="display:none;"></div>
+    <div class="match-bar" id="sp_bar_11_2" style="display:none;"><span></span></div>
+  </div>
+
+</section>
+
+  
+<section class="card" id="sec-grammar" style="--accent:var(--cherry)">
+  <div class="card-head">
+    <div class="icon-badge" style="background:var(--cherry)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--seal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    </div>
+    <div>
+      <div class="card-eyebrow">Grammar &middot; Conditionals (Zero and First)</div>
+      <h2 class="card-title">História</h2>
+    </div>
+  </div>
+  <div class="card-instructions">Choose the correct option for each sentence.</div>
+  
+  <p style="font-weight:700; margin-bottom:4px;">Tema: Conditionals (Zero and First)</p>
+  
+  <div class="grammar-q">
+    <p class="qtext">1. If trade routes ___ safe, merchants generally use them more often.</p>
+    <div class="mcq-options" id="gr_11_q0_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_11_q0" value="0">
+                  <span>are</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q0" value="1">
+                  <span>were</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q0" value="2">
+                  <span>will be</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q0" value="3">
+                  <span>had been</span>
+                </label></div>
+    <div class="explain" id="gr_11_q0_explain">💡 Zero Conditional (verdade geral): if + Simple Present, Simple Present.</div>
+  </div>
+
+  <div class="grammar-q">
+    <p class="qtext">2. If historians ___ more evidence, they will revise the theory.</p>
+    <div class="mcq-options" id="gr_11_q1_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_11_q1" value="0">
+                  <span>find</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q1" value="1">
+                  <span>found</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q1" value="2">
+                  <span>will find</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q1" value="3">
+                  <span>finding</span>
+                </label></div>
+    <div class="explain" id="gr_11_q1_explain">💡 First Conditional: if + Simple Present, will + verbo base.</div>
+  </div>
+
+  <div class="grammar-q">
+    <p class="qtext">3. Ice ___ if the temperature rises above zero degrees.</p>
+    <div class="mcq-options" id="gr_11_q2_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_11_q2" value="0">
+                  <span>melts</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q2" value="1">
+                  <span>will melt</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q2" value="2">
+                  <span>melted</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q2" value="3">
+                  <span>would melt</span>
+                </label></div>
+    <div class="explain" id="gr_11_q2_explain">💡 Zero Conditional descreve fatos científicos/gerais.</div>
+  </div>
+
+  <div class="grammar-q">
+    <p class="qtext">4. If the museum ___ the new exhibit next month, attendance will likely increase.</p>
+    <div class="mcq-options" id="gr_11_q3_opts" data-correct="0"><label class="mcq-option">
+                  <input type="radio" name="gr_11_q3" value="0">
+                  <span>opens</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q3" value="1">
+                  <span>open</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q3" value="2">
+                  <span>opened</span>
+                </label><label class="mcq-option">
+                  <input type="radio" name="gr_11_q3" value="3">
+                  <span>will open</span>
+                </label></div>
+    <div class="explain" id="gr_11_q3_explain">💡 No First Conditional, a oração com &quot;if&quot; usa Simple Present mesmo referindo-se ao futuro.</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="checkGrammar('gr_11', 4, [0, 0, 0, 0])">Verificar respostas</button>
+  </div>
+  <div class="feedback" id="gr_11_feedback"></div>
+
+</section>
+
+
+  <section class="score-summary">
+    <h2>Progresso da atividade</h2>
+    <p>Toda vez que você clica em <strong>"Verificar"</strong> em qualquer seção acima, sua resposta — certa, errada ou em branco — já fica registrada e é enviada automaticamente para a professora. Não precisa baixar nem copiar nada.</p>
+    <div id="scoreBig">0 / 5</div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? &middot; Material de apoio TOEFL iBT &middot; Atividade 11/16</p>
+</footer>
+
+</body>
+</html>
