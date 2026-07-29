@@ -117,6 +117,48 @@
   }
   .nav-login:hover{ border-bottom-color:var(--amaranth); }
 
+  /* ---------- Mobile nav: hamburger + drawer ---------- */
+  .nav-links{ display:flex; align-items:center; gap:18px; }
+  .nav-toggle{
+    display:none; flex:none; width:40px; height:40px; border-radius:12px;
+    background:transparent; border:none; cursor:pointer;
+    align-items:center; justify-content:center; gap:5px; flex-direction:column;
+  }
+  .nav-toggle span{ display:block; width:22px; height:2.5px; border-radius:2px; background:var(--amaranth); transition:.25s; }
+  .nav-toggle.open span:nth-child(1){ transform:translateY(7.5px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2){ opacity:0; }
+  .nav-toggle.open span:nth-child(3){ transform:translateY(-7.5px) rotate(-45deg); }
+
+  .nav-backdrop{
+    position:fixed; inset:0; background:rgba(58,29,16,.45); z-index:199;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .nav-backdrop.show{ opacity:1; pointer-events:auto; }
+
+  .nav-drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(78vw, 300px);
+    background:var(--off); z-index:200; box-shadow:-10px 0 30px rgba(58,29,16,.2);
+    transform:translateX(100%); transition:transform .3s ease;
+    display:flex; flex-direction:column; padding:22px 22px 30px; gap:6px;
+  }
+  .nav-drawer.open{ transform:translateX(0); }
+  .nav-drawer-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+  .nav-drawer-close{ background:none; border:none; font-size:26px; line-height:1; color:var(--brown); cursor:pointer; padding:4px 8px; }
+  .nav-drawer a.nav-login{
+    padding:14px 4px; border-bottom:1px solid rgba(86,41,21,0.1); font-size:16px;
+  }
+  .nav-drawer a.nav-cta{
+    margin-top:14px; text-align:center; justify-content:center; display:flex;
+  }
+
+  @media(min-width:641px){
+    .nav-toggle, .nav-backdrop, .nav-drawer{ display:none !important; }
+  }
+  @media(max-width:640px){
+    .nav > .nav-links{ display:none; }
+    .nav-toggle{ display:flex; }
+  }
+
   /* ---------- Buttons ---------- */
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
@@ -485,10 +527,24 @@
         </span>
         DYSE
       </div>
-      <a href="/login.html" class="nav-login">Área do Aluno</a>
-      <a href="https://wa.me/554187355010?text=Oi%2C%20quero%20garantir%20minha%20vaga%20na%20DYSE%21" target="_blank" rel="noopener" class="nav-cta">Quero minha vaga →</a>
+      <div class="nav-links">
+        <a href="/login.html" class="nav-login">Área do Aluno</a>
+        <a href="https://wa.me/554187355010?text=Oi%2C%20quero%20garantir%20minha%20vaga%20na%20DYSE%21" target="_blank" rel="noopener" class="nav-cta">Quero minha vaga →</a>
+      </div>
+      <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
+  <div class="nav-backdrop" id="navBackdrop"></div>
+  <nav class="nav-drawer" id="navDrawer" aria-hidden="true">
+    <div class="nav-drawer-head">
+      <div class="logo" style="font-size:19px;">DYSE</div>
+      <button type="button" class="nav-drawer-close" id="navDrawerClose" aria-label="Fechar menu">×</button>
+    </div>
+    <a href="/login.html" class="nav-login">Área do Aluno</a>
+    <a href="https://wa.me/554187355010?text=Oi%2C%20quero%20garantir%20minha%20vaga%20na%20DYSE%21" target="_blank" rel="noopener" class="btn nav-cta">Quero minha vaga →</a>
+  </nav>
 </div>
 
 <!-- ===== HERO ===== -->
@@ -731,5 +787,38 @@
   <p style="margin-top:6px; opacity:.7;">© 2026 DYSE. Todos os direitos reservados.</p>
 </footer>
 
+<script>
+  (function(){
+    const toggle = document.getElementById('navToggle');
+    const drawer = document.getElementById('navDrawer');
+    const backdrop = document.getElementById('navBackdrop');
+    const closeBtn = document.getElementById('navDrawerClose');
+
+    function openDrawer(){
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      toggle.classList.add('open');
+      toggle.setAttribute('aria-expanded', 'true');
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer(){
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', function(){
+      drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+    });
+    closeBtn.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+    window.addEventListener('keydown', e => { if(e.key === 'Escape') closeDrawer(); });
+  })();
+</script>
 </body>
 </html>
