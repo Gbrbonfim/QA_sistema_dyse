@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DYSE · Atividade 14 — Questões Globais</title>
-<meta name="description" content="Atividade TOEFL iBT 14 — Questões Globais — Reading, Listening, Writing, Speaking e Grammar. Do You Speak English (DYSE).">
+<title>DYSE · Minhas Atividades</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 
 :root{
@@ -393,6 +393,12 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 }
 .dash-badge.done{background:#eaf7ee; color:var(--ok);}
 .dash-badge.pending{background:#fdf0dd; color:#a06a2e;}
+.dash-badge.locked{background:#e4d4c4; color:#6b5a45;}
+.dash-card.locked{
+  cursor:not-allowed; opacity:.5; filter:grayscale(.6);
+  border-left-color:#c9b79c !important;
+}
+.dash-card.locked:hover{transform:none; box-shadow:var(--shadow-card);}
 .dash-table{width:100%; border-collapse:collapse; background:#fff; border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-card); font-size:.85rem;}
 .dash-table th, .dash-table td{padding:10px 14px; text-align:left; border-bottom:1px solid #f0e3d2;}
 .dash-table th{background:var(--seal-soft); color:#fff; font-weight:700; font-size:.76rem; text-transform:uppercase; letter-spacing:.04em;}
@@ -456,865 +462,78 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   <p>dyse</p>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="/assets/dyse-auth.js"></script>
-<script>
-
-/* ================= DYSE · TOEFL Activity Engine ================= */
-
-/* ---------- CONFIGURAÇÃO DO RELATÓRIO (edite aqui) ---------- */
-const TEACHER_EMAIL = "professora@doyouspeakenglish.com.br"; // <-- troque pelo e-mail da professora
-const FORMSPREE_ENDPOINT = ""; // opcional: cole aqui o endpoint do Formspree (ex: "https://formspree.io/f/xxxxxxx") para envio automático sem abrir o app de e-mail
-const ACTIVITY_LABEL = "14 — Questões Globais";
-const CURRENT_IDX = 14;
-const COURSE = "toefl";
-
-const STORAGE_KEY = "dyse_toefl_activity14progress";
-let progress = {reading:false, listening:false, writing:false, speaking:false, grammar:false};
-try{
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-  if(saved) progress = saved;
-}catch(e){}
-
-function saveProgress(){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }catch(e){}
-  updateStepper();
-}
-function markDone(key){
-  progress[key] = true;
-  saveProgress();
-  scheduleAutosave();
-}
-function updateStepper(){
-  Object.keys(progress).forEach(k=>{
-    const el = document.querySelector('.step[data-step="'+k+'"]');
-    if(el){ el.classList.toggle('done', !!progress[k]); }
-  });
-  const doneCount = Object.values(progress).filter(Boolean).length;
-  const scoreBig = document.getElementById('scoreBig');
-  if(scoreBig) scoreBig.textContent = doneCount + ' / 5';
-}
-
-/* ---------- Nome do aluno (via login Supabase) ---------- */
-function getStudentName(){
-  return window.__dyseStudentName || '';
-}
-
-/* ---------- Autosave do progresso no Supabase (com debounce) ---------- */
-let __autosaveTimer = null;
-function scheduleAutosave(){
-  if(typeof dyseSaveResult !== 'function') return;
-  clearTimeout(__autosaveTimer);
-  __autosaveTimer = setTimeout(runAutosave, 900);
-}
-async function runAutosave(){
-  const statusEl = document.getElementById('autosaveStatus');
-  try{
-    const text = buildReportText();
-    const res = await dyseSaveResult(COURSE, CURRENT_IDX, ACTIVITY_LABEL, text, {progress: progress});
-    if(statusEl){
-      statusEl.textContent = res.error
-        ? '⚠️ Não foi possível salvar seu progresso agora. Verifique sua internet.'
-        : '💾 Progresso salvo · ' + new Date().toLocaleTimeString('pt-BR');
-      statusEl.classList.toggle('bad', !!res.error);
-    }
-  }catch(e){ /* ignore */ }
-}
-
-/* ---------- Inicialização: exige login e restaura progresso salvo ----------
-   O check de sessão começa imediatamente (evita "piscar" a página pra quem
-   não está logado), mas tudo que mexe no DOM espera o HTML carregar. */
-function dyseCheckAuth(){
-  if(typeof dyseRequireAuth !== 'function'){
-    document.documentElement.classList.add('dyse-auth-ready');
-    return Promise.resolve(null);
-  }
-  return dyseRequireAuth();
-}
-const __dyseSessionPromise = dyseCheckAuth();
-
-document.addEventListener('DOMContentLoaded', async function(){
-  const session = await __dyseSessionPromise;
-  if(session){
-    try{
-      if(typeof dyseRequirePublished === 'function'){
-        const allowed = await dyseRequirePublished(COURSE, CURRENT_IDX);
-        if(!allowed) return; // já está redirecionando
-      }
-    }catch(e){
-      console.error('dyseRequirePublished falhou, liberando a página mesmo assim:', e);
-    }
-    window.__dyseStudentName = (session.user.user_metadata && session.user.user_metadata.full_name) || session.user.email;
-    dyseRenderAuthBar('authBar');
-    try{
-      if(typeof dyseLoadResult === 'function'){
-        const existing = await dyseLoadResult(COURSE, CURRENT_IDX);
-        if(existing && existing.meta && existing.meta.progress){
-          progress = Object.assign({}, progress, existing.meta.progress);
-        }
-      }
-    }catch(e){
-      console.error('dyseLoadResult falhou, seguindo sem restaurar progresso salvo:', e);
-    }
-  }
-  updateStepper();
-});
-
-/* ---------- Text-to-speech (Listening & Speaking) ---------- */
-function speak(text, onend){
-  if(!('speechSynthesis' in window)){
-    alert('Seu navegador não tem suporte a áudio (Web Speech API). Tente usar o Google Chrome.');
-    return;
-  }
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'en-US';
-  utter.rate = 0.92;
-  utter.pitch = 1;
-  if(onend) utter.onend = onend;
-  window.speechSynthesis.speak(utter);
-}
-function speakSequence(lines, delay){
-  if(!('speechSynthesis' in window)){
-    alert('Seu navegador não tem suporte a áudio (Web Speech API). Tente usar o Google Chrome.');
-    return;
-  }
-  window.speechSynthesis.cancel();
-  let i = 0;
-  function next(){
-    if(i >= lines.length) return;
-    const utter = new SpeechSynthesisUtterance(lines[i]);
-    utter.lang = 'en-US';
-    utter.rate = 0.92;
-    utter.onend = function(){ i++; setTimeout(next, delay||350); };
-    window.speechSynthesis.speak(utter);
-  }
-  next();
-}
-
-/* ---------- Normalization helper ---------- */
-function norm(s){
-  return (s||'').trim().toLowerCase().replace(/[.,!?;:'"’‘]/g,'').replace(/\s+/g,' ');
-}
-
-/* ---------- READING: Complete the Words ---------- */
-function checkGaps(containerId, answers, feedbackId, stepKey){
-  const container = document.getElementById(containerId);
-  const inputs = container.querySelectorAll('.gap-input');
-  let correct = 0;
-  inputs.forEach((inp, idx)=>{
-    const ok = norm(inp.value) === norm(answers[idx]);
-    inp.classList.remove('correct','wrong');
-    inp.classList.add(ok?'correct':'wrong');
-    // remove any previous hint before adding a new one
-    const next = inp.nextElementSibling;
-    if(next && next.classList && next.classList.contains('gap-hint')) next.remove();
-    if(!ok){
-      const hint = document.createElement('span');
-      hint.className = 'gap-hint';
-      hint.textContent = inp.value.trim()
-        ? '✗ correto: ' + answers[idx]
-        : '✗ não respondido — correto: ' + answers[idx];
-      inp.insertAdjacentElement('afterend', hint);
-    }
-    if(ok) correct++;
-  });
-  const fb = document.getElementById(feedbackId);
-  fb.classList.add('show');
-  if(correct === inputs.length){
-    fb.classList.remove('bad'); fb.classList.add('ok');
-    fb.textContent = '✓ Muito bem! Você acertou todas as ' + inputs.length + ' lacunas.';
-  } else {
-    fb.classList.remove('ok'); fb.classList.add('bad');
-    fb.textContent = 'Você acertou ' + correct + ' de ' + inputs.length + ' lacunas. As respostas corretas foram indicadas em vermelho acima.';
-  }
-  if(stepKey) markDone(stepKey);
-}
-
-/* ---------- Shared: flag a question with a correct/wrong/unanswered label ---------- */
-function flagQuestion(pEl, state){
-  if(!pEl) return;
-  let flag = pEl.querySelector('.qflag');
-  if(flag) flag.remove();
-  flag = document.createElement('span');
-  flag.className = 'qflag ' + state;
-  flag.textContent = state === 'correct' ? ' ✓ Correta'
-    : state === 'wrong' ? ' ✗ Incorreta'
-    : ' — Não respondida';
-  pEl.appendChild(flag);
-}
-
-/* ---------- MCQ (Reading / Listening) ---------- */
-function checkMCQ(name, correctIndex, feedbackId, stepKey){
-  const selected = document.querySelector('input[name="'+name+'"]:checked');
-  const optionsWrap = document.getElementById(name+'_options');
-  const options = optionsWrap.querySelectorAll('.mcq-option');
-  const questionEl = optionsWrap.previousElementSibling;
-  const fb = document.getElementById(feedbackId);
-  options.forEach((opt, idx)=>{
-    opt.classList.remove('correct','wrong');
-    if(idx === correctIndex) opt.classList.add('correct');
-  });
-  fb.classList.add('show');
-  if(!selected){
-    flagQuestion(questionEl, 'unanswered');
-    fb.classList.remove('ok'); fb.classList.add('bad');
-    fb.textContent = '✗ Você não respondeu esta questão. A alternativa correta está destacada em verde.';
-    if(stepKey) markDone(stepKey);
-    return;
-  }
-  const chosenIdx = parseInt(selected.value, 10);
-  if(chosenIdx !== correctIndex){
-    options[chosenIdx].classList.add('wrong');
-  }
-  if(chosenIdx === correctIndex){
-    flagQuestion(questionEl, 'correct');
-    fb.classList.remove('bad'); fb.classList.add('ok');
-    fb.textContent = '✓ Correto! Muito bem.';
-  } else {
-    flagQuestion(questionEl, 'wrong');
-    fb.classList.remove('ok'); fb.classList.add('bad');
-    fb.textContent = '✗ Não foi dessa vez. A alternativa correta está destacada em verde.';
-  }
-  if(stepKey) markDone(stepKey);
-}
-
-/* ---------- WRITING: Build a Sentence ---------- */
-function chipClick(chipEl, stripId, bankId){
-  chipEl.classList.add('used');
-  const strip = document.getElementById(stripId);
-  const hint = strip.querySelector('.empty-hint');
-  if(hint) hint.remove();
-  const placed = document.createElement('span');
-  placed.className = 'placed';
-  placed.textContent = chipEl.dataset.value;
-  placed.dataset.origin = chipEl.id;
-  placed.onclick = function(){
-    placed.remove();
-    document.getElementById(placed.dataset.origin).classList.remove('used');
-    const s = document.getElementById(stripId);
-    if(!s.querySelector('.placed')){
-      const h = document.createElement('span');
-      h.className='empty-hint'; h.textContent='Clique nas palavras abaixo para montar a frase...';
-      s.appendChild(h);
-    }
-  };
-  strip.appendChild(placed);
-}
-function resetStrip(stripId, bankId){
-  const strip = document.getElementById(stripId);
-  strip.innerHTML = '<span class="empty-hint">Clique nas palavras abaixo para montar a frase...</span>';
-  document.querySelectorAll('#'+bankId+' .chip').forEach(c=>c.classList.remove('used'));
-}
-function checkSentence(stripId, target, feedbackId, stepKey){
-  const strip = document.getElementById(stripId);
-  const words = Array.from(strip.querySelectorAll('.placed')).map(p=>p.textContent);
-  const built = words.join(' ');
-  const fb = document.getElementById(feedbackId);
-  fb.classList.add('show');
-  if(built && norm(built) === norm(target)){
-    fb.classList.remove('bad'); fb.classList.add('ok');
-    fb.textContent = '✓ Perfeito! Frase montada corretamente: "' + target + '"';
-  } else if(!built){
-    fb.classList.remove('ok'); fb.classList.add('bad');
-    fb.textContent = '✗ Você não montou nenhuma frase. A resposta correta era: "' + target + '"';
-  } else {
-    fb.classList.remove('ok'); fb.classList.add('bad');
-    fb.textContent = '✗ Ainda não está correto. Sua frase: "' + built + '". A resposta correta era: "' + target + '"';
-  }
-  if(stepKey) markDone(stepKey);
-}
-
-/* ---------- WRITING: word counter ---------- */
-function countWords(textareaId, counterId, minWords){
-  const ta = document.getElementById(textareaId);
-  const counter = document.getElementById(counterId);
-  function update(){
-    const words = ta.value.trim().split(/\s+/).filter(Boolean).length;
-    counter.textContent = words + ' palavras (mínimo recomendado: ' + minWords + ')';
-    counter.classList.toggle('enough', words >= minWords);
-  }
-  ta.addEventListener('input', update);
-  update();
-}
-function toggleModel(btn, modelId, stepKey){
-  const el = document.getElementById(modelId);
-  el.classList.toggle('show');
-  btn.textContent = el.classList.contains('show') ? 'Ocultar resposta modelo' : 'Ver resposta modelo';
-  if(stepKey) markDone(stepKey);
-}
-
-/* ---------- SPEAKING: recognition ---------- */
-const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-function similarity(a, b){
-  const wa = norm(a).split(' ').filter(Boolean);
-  const wb = new Set(norm(b).split(' ').filter(Boolean));
-  if(wa.length === 0) return 0;
-  let hit = 0;
-  wa.forEach(w=>{ if(wb.has(w)) hit++; });
-  return Math.round((hit / wa.length) * 100);
-}
-function startRecognition(targetText, statusId, transcriptId, barId, stepKey){
-  const statusEl = document.getElementById(statusId);
-  const transcriptEl = document.getElementById(transcriptId);
-  const barEl = document.getElementById(barId);
-  if(!SpeechRec){
-    statusEl.textContent = 'Reconhecimento de voz não disponível neste navegador. Use o Google Chrome no computador ou pratique em voz alta com um colega/professor.';
-    return;
-  }
-  const rec = new SpeechRec();
-  rec.lang = 'en-US';
-  rec.interimResults = false;
-  rec.maxAlternatives = 1;
-  statusEl.textContent = '🎙️ Ouvindo... fale agora.';
-  rec.start();
-  rec.onresult = function(e){
-    const said = e.results[0][0].transcript;
-    transcriptEl.textContent = said;
-    if(targetText){
-      const pct = similarity(targetText, said);
-      barEl.querySelector('span').style.width = pct + '%';
-      statusEl.textContent = pct >= 80 ? '✓ Ótima pronúncia! (' + pct + '% de correspondência)'
-        : pct >= 50 ? 'Bom começo (' + pct + '% de correspondência). Tente novamente para melhorar.'
-        : 'Continue praticando (' + pct + '% de correspondência).';
-    } else {
-      statusEl.textContent = '✓ Resposta gravada como texto abaixo.';
-    }
-    if(stepKey) markDone(stepKey);
-  };
-  rec.onerror = function(e){
-    statusEl.textContent = 'Não foi possível captar o áudio (' + e.error + '). Verifique a permissão do microfone e tente novamente.';
-  };
-}
-
-/* ---------- GRAMMAR quiz ---------- */
-function checkGrammar(prefix, total, correctAnswers){
-  let score = 0;
-  for(let i=0;i<total;i++){
-    const name = prefix + '_q' + i;
-    const selected = document.querySelector('input[name="'+name+'"]:checked');
-    const optsWrap = document.getElementById(name+'_opts');
-    const options = optsWrap.querySelectorAll('.mcq-option');
-    const explain = document.getElementById(name+'_explain');
-    const qEl = optsWrap.previousElementSibling;
-    options.forEach((opt, idx)=>{
-      opt.classList.remove('correct','wrong');
-      if(idx === correctAnswers[i]) opt.classList.add('correct');
-    });
-    if(selected){
-      const chosen = parseInt(selected.value,10);
-      if(chosen === correctAnswers[i]){ score++; flagQuestion(qEl, 'correct'); }
-      else { options[chosen].classList.add('wrong'); flagQuestion(qEl, 'wrong'); }
-    } else {
-      flagQuestion(qEl, 'unanswered');
-    }
-    if(explain) explain.classList.add('show');
-  }
-  const fb = document.getElementById(prefix+'_feedback');
-  fb.classList.add('show');
-  fb.classList.remove('ok','bad');
-  fb.classList.add(score === total ? 'ok' : 'bad');
-  fb.textContent = 'Você acertou ' + score + ' de ' + total + ' questões. As respostas corretas e as explicações foram destacadas acima.';
-  markDone('grammar');
-}
-
-/* ================= RELATÓRIO PARA A PROFESSORA ================= */
-function textOf(el){ return el ? el.textContent.trim() : ''; }
-
-function reportReading(){
-  const lines = [];
-  const gapBox = document.querySelector('.passage-box[data-answers]');
-  if(gapBox){
-    const answers = JSON.parse(gapBox.dataset.answers);
-    const inputs = gapBox.querySelectorAll('.gap-input');
-    let correct = 0; const wrong = [];
-    inputs.forEach((inp,i)=>{
-      const ok = norm(inp.value) === norm(answers[i]);
-      if(ok) correct++;
-      else wrong.push('   - lacuna ' + (i+1) + ': aluno escreveu "' + (inp.value || '(em branco)') + '" | correto: "' + answers[i] + '"');
-    });
-    lines.push('READING (Complete the Words): ' + correct + '/' + inputs.length + ' corretas');
-    lines.push(...wrong);
-    return lines;
-  }
-  const opts = document.getElementById('rd_' + CURRENT_IDX + '_options');
-  if(opts){
-    const question = textOf(opts.previousElementSibling);
-    const selected = opts.querySelector('input:checked');
-    const correctIdx = parseInt(opts.dataset.correct, 10);
-    const spans = opts.querySelectorAll('.mcq-option span');
-    const chosenText = selected ? textOf(spans[parseInt(selected.value,10)]) : '(não respondeu)';
-    const correctText = textOf(spans[correctIdx]);
-    const ok = selected && parseInt(selected.value,10) === correctIdx;
-    lines.push('READING: ' + question);
-    lines.push('   Resposta do aluno: ' + chosenText + (selected ? (ok ? '  [correta]' : '  [incorreta — correta: ' + correctText + ']') : ''));
-  }
-  return lines;
-}
-
-function reportListening(){
-  const lines = [];
-  const opts = document.getElementById('ls_' + CURRENT_IDX + '_options');
-  if(opts){
-    const question = textOf(opts.previousElementSibling);
-    const selected = opts.querySelector('input:checked');
-    const correctIdx = parseInt(opts.dataset.correct, 10);
-    const spans = opts.querySelectorAll('.mcq-option span');
-    const chosenText = selected ? textOf(spans[parseInt(selected.value,10)]) : '(não respondeu)';
-    const correctText = textOf(spans[correctIdx]);
-    const ok = selected && parseInt(selected.value,10) === correctIdx;
-    lines.push('LISTENING: ' + question);
-    lines.push('   Resposta do aluno: ' + chosenText + (selected ? (ok ? '  [correta]' : '  [incorreta — correta: ' + correctText + ']') : ''));
-  }
-  return lines;
-}
-
-function reportWriting(){
-  const lines = [];
-  const strip = document.getElementById('strip_' + CURRENT_IDX);
-  if(strip){
-    const target = strip.dataset.target || '';
-    const built = Array.from(strip.querySelectorAll('.placed')).map(p=>p.textContent).join(' ');
-    const ok = norm(built) === norm(target);
-    lines.push('WRITING (Build a Sentence):');
-    lines.push('   Frase do aluno: "' + (built || '(vazio)') + '"' + (built ? (ok ? '  [correta]' : '  [incorreta — esperado: "' + target + '"]') : ''));
-    return lines;
-  }
-  const area = document.getElementById('wr_area_' + CURRENT_IDX);
-  if(area){
-    const words = area.value.trim().split(/\s+/).filter(Boolean).length;
-    lines.push('WRITING: (' + words + ' palavras)');
-    lines.push(area.value.trim() ? '    + area.value.trim() + ' : '   (o aluno não escreveu nada)');
-  }
-  return lines;
-}
-
-function reportSpeaking(){
-  const lines = [];
-  const blocks = document.querySelectorAll('.repeat-block[data-target], .interview-block[data-target]');
-  blocks.forEach((b, i)=>{
-    const target = b.dataset.target;
-    const transcriptEl = b.querySelector('.transcript-box');
-    const transcript = transcriptEl ? transcriptEl.textContent.trim() : '';
-    lines.push('SPEAKING ' + (i+1) + ': "' + target + '"');
-    lines.push(transcript ? '   Transcrição captada: "' + transcript + '"' : '   (sem gravação registrada — pratique a pronúncia oralmente com o aluno)');
-  });
-  return lines;
-}
-
-function reportGrammar(){
-  const lines = [];
-  const groups = document.querySelectorAll('[id^="gr_' + CURRENT_IDX + '_q"][id$="_opts"]');
-  let correct = 0;
-  const details = [];
-  groups.forEach((opts)=>{
-    const qEl = opts.previousElementSibling;
-    const question = textOf(qEl);
-    const selected = opts.querySelector('input:checked');
-    const correctIdx = parseInt(opts.dataset.correct, 10);
-    const spans = opts.querySelectorAll('.mcq-option span');
-    const ok = selected && parseInt(selected.value,10) === correctIdx;
-    if(ok) correct++;
-    if(!ok){
-      const chosenText = selected ? textOf(spans[parseInt(selected.value,10)]) : '(não respondeu)';
-      details.push('   - ' + question + ' | aluno: "' + chosenText + '" | correto: "' + textOf(spans[correctIdx]) + '"');
-    }
-  });
-  lines.push('GRAMMAR: ' + correct + '/' + groups.length + ' corretas');
-  lines.push(...details);
-  return lines;
-}
-
-function buildReportText(){
-  const name = getStudentName() || '(nome não informado)';
-  const date = new Date().toLocaleString('pt-BR');
-  const parts = [];
-  parts.push('RELATÓRIO DE ATIVIDADE — DYSE · Do You Speak English?');
-  parts.push('Atividade: ' + ACTIVITY_LABEL);
-  parts.push('Aluno(a): ' + name);
-  parts.push('Data: ' + date);
-  parts.push('');
-  parts.push(reportReading().join('\n'));
-  parts.push('');
-  parts.push(reportListening().join('\n'));
-  parts.push('');
-  parts.push(reportWriting().join('\n'));
-  parts.push('');
-  parts.push(reportSpeaking().join('\n'));
-  parts.push('');
-  parts.push(reportGrammar().join('\n'));
-  parts.push('');
-  parts.push('— Gerado automaticamente pela atividade DYSE.');
-  return parts.join('\n');
-}
-
-function showReportStatus(msg, ok){
-  const el = document.getElementById('reportStatus');
-  if(!el) return;
-  el.textContent = msg;
-  el.classList.add('show');
-  el.classList.remove('ok','bad');
-  el.classList.add(ok ? 'ok' : 'bad');
-}
-
-async function sendReport(){
-  const name = getStudentName() || 'Aluno(a)';
-  const text = buildReportText();
-  await runAutosave(); // garante que o progresso mais recente já está salvo no Supabase
-
-  if(FORMSPREE_ENDPOINT){
-    try{
-      const resp = await fetch(FORMSPREE_ENDPOINT, {
-        method: 'POST',
-        headers: {'Accept':'application/json', 'Content-Type':'application/json'},
-        body: JSON.stringify({
-          email: TEACHER_EMAIL,
-          subject: 'Relatório DYSE — ' + ACTIVITY_LABEL + ' — ' + name,
-          message: text,
-          aluno: name,
-          atividade: ACTIVITY_LABEL
-        })
-      });
-      if(resp.ok){
-        showReportStatus('✓ Relatório enviado automaticamente para a professora!', true);
-        return;
-      }
-    }catch(e){ /* falls through to mailto */ }
-  }
-
-  const subject = encodeURIComponent('Relatório DYSE — ' + ACTIVITY_LABEL + ' — ' + name);
-  const body = encodeURIComponent(text);
-  window.location.href = 'mailto:' + TEACHER_EMAIL + '?subject=' + subject + '&body=' + body;
-  showReportStatus('✓ Abrindo seu aplicativo de e-mail com o relatório preenchido. Basta clicar em enviar.', true);
-}
-
-function copyReport(){
-  const text = buildReportText();
-  navigator.clipboard.writeText(text).then(()=>{
-    showReportStatus('✓ Relatório copiado! Cole (Ctrl/Cmd+V) onde quiser enviar.', true);
-  }).catch(()=>{
-    showReportStatus('Não foi possível copiar automaticamente. Tente novamente.', false);
-  });
-}
-
-function downloadReport(){
-  const name = getStudentName() || 'aluno';
-  const text = buildReportText();
-  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'relatorio-' + ACTIVITY_LABEL.replace(/[^a-zA-Z0-9]+/g,'-') + '-' + name.replace(/[^a-zA-Z0-9]+/g,'-') + '.txt';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-  showReportStatus('✓ Relatório baixado em .txt', true);
-}
-
-</script>
-
 <div class="hero">
   <div class="hero-inner">
     <div class="brand-row">
-      <span class="mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7 3 2.7 5.9 1 10c1.7 4.1 6 7 11 7s9.3-2.9 11-7c-1.7-4.1-6-7-11-7zm0 11.5A4.5 4.5 0 1 1 16.5 10 4.5 4.5 0 0 1 12 14.5z"/></svg> dyse</span>
-      <span>Do You Speak English? · Prep TOEFL iBT</span>
+      <span class="mark">👁 dyse</span>
+      <span>Do You Speak English? &middot; Área do Aluno</span>
     </div>
-    <span class="eyebrow-badge">Atividade 14 de 16</span>
-    <h1 class="title">Questões Globais</h1>
-    <p class="subtitle">Pratique as cinco habilidades do novo formato do TOEFL iBT&reg; — Reading, Listening, Writing, Speaking e Grammar — em uma única atividade temática.</p>
-    <div class="hero-meta">
-      <span class="pill">📘 Global Issues</span>
-      <span class="pill">🎯 C1 · Avançado</span>
-      <span class="pill">⏱️ ~25–35 min</span>
-    </div>
+    <span class="eyebrow-badge">Meus cursos</span>
+    <h1 class="title">Suas atividades</h1>
+    <p class="subtitle">Continue de onde parou. Seu progresso é salvo automaticamente no seu login.</p>
     <div class="dyse-auth-bar" id="authBar"></div>
   </div>
 </div>
 
-<div class="stepper">
-  <div class="step" data-step="reading"><span class="dot"></span><span class="label">Reading</span></div>
-  <div class="step" data-step="listening"><span class="dot"></span><span class="label">Listening</span></div>
-  <div class="step" data-step="writing"><span class="dot"></span><span class="label">Writing</span></div>
-  <div class="step" data-step="speaking"><span class="dot"></span><span class="label">Speaking</span></div>
-  <div class="step" data-step="grammar"><span class="dot"></span><span class="label">Grammar</span></div>
-</div>
-
-<p id="autosaveStatus" style="text-align:center; font-size:.78rem; font-weight:600; color:var(--seal-soft); opacity:.75; margin:-20px 0 24px;">💾 Seu progresso é salvo automaticamente.</p>
-
-<div class="wrap">
-  
-<section class="card" id="sec-reading" style="--accent:var(--amaranth)">
-  <div class="card-head">
-    <div class="icon-badge" style="background:var(--amaranth)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-7a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h8z"/></svg>
-    </div>
-    <div>
-      <div class="card-eyebrow">Reading &middot; Read an Academic Passage</div>
-      <h2 class="card-title">Questões Globais</h2>
-    </div>
-  </div>
-  <div class="card-instructions">Read the passage.</div>
-  
-  <div class="passage-box">
-    <div class="passage-title">Water Scarcity and Global Agriculture</div>
-    Agriculture accounts for roughly seventy percent of global freshwater use, making it central to any discussion of water scarcity. As populations grow and climate patterns shift, many regions that once relied on predictable rainfall now face longer droughts and less reliable water supplies. In response, some farmers have adopted drip irrigation systems, which deliver water directly to plant roots and can reduce consumption by up to sixty percent compared to traditional flooding methods. Despite these advances, the technology remains too expensive for many smallholder farmers in developing regions, raising concerns that water-efficient agriculture could deepen existing inequalities between large and small-scale producers.
-  </div>
-  <p style="font-weight:700; margin-bottom:10px;">What concern does the passage raise about drip irrigation?</p>
-  <div class="mcq-options" id="rd_14_options" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="rd_14" value="0">
-                  <span>It uses more water than traditional methods</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="rd_14" value="1">
-                  <span>It is illegal in many developing countries</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="rd_14" value="2">
-                  <span>Its cost could deepen inequalities between large and small farmers</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="rd_14" value="3">
-                  <span>It cannot be used for most crops</span>
-                </label></div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkMCQ('rd_14', 2, 'rd_feedback_14', 'reading')">Verificar resposta</button>
-  </div>
-  <div class="feedback" id="rd_feedback_14"></div>
-
-</section>
-
-  
-<section class="card" id="sec-listening" style="--accent:var(--orangered)">
-  <div class="card-head">
-    <div class="icon-badge" style="background:var(--orangered)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-    </div>
-    <div>
-      <div class="card-eyebrow">Listening &middot; Listen to an Academic Talk</div>
-      <h2 class="card-title">Questões Globais</h2>
-    </div>
-  </div>
-  <div class="card-instructions">Listen to part of a talk in a global studies class.</div>
-  
-  <div class="btn-row" style="margin-bottom:16px;">
-    <button class="btn btn-audio" onclick="speak(&quot;When we talk about water scarcity, it&#x27;s important to distinguish between physical and economic scarcity. Physical scarcity occurs when a region simply doesn&#x27;t have enough water to meet demand, often due to geography or climate. Economic scarcity, on the other hand, occurs when water exists but people lack the infrastructure or financial resources to access it reliably. Interestingly, many regions facing severe water stress actually suffer more from economic scarcity than physical scarcity, meaning that investment in infrastructure, rather than simply finding new water sources, could resolve much of the crisis.&quot;)">&#128266; Play audio</button>
-  </div>
-  <details style="margin-bottom:18px;">
-    <summary style="cursor:pointer; font-weight:700; color:var(--seal-soft); font-size:.85rem;">Mostrar transcrição (opcional)</summary>
-    <div class="passage-box" style="margin-top:10px;">When we talk about water scarcity, it&#x27;s important to distinguish between physical and economic scarcity. Physical scarcity occurs when a region simply doesn&#x27;t have enough water to meet demand, often due to geography or climate. Economic scarcity, on the other hand, occurs when water exists but people lack the infrastructure or financial resources to access it reliably. Interestingly, many regions facing severe water stress actually suffer more from economic scarcity than physical scarcity, meaning that investment in infrastructure, rather than simply finding new water sources, could resolve much of the crisis.</div>
-  </details>
-  <p style="font-weight:700; margin-bottom:10px;">According to the speaker, what could help resolve water scarcity in many regions?</p>
-  <div class="mcq-options" id="ls_14_options" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="ls_14" value="0">
-                  <span>Finding entirely new water sources</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="ls_14" value="1">
-                  <span>Reducing the global population</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="ls_14" value="2">
-                  <span>Investment in infrastructure to improve access</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="ls_14" value="3">
-                  <span>Banning agricultural water use completely</span>
-                </label></div>
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkMCQ('ls_14', 2, 'ls_feedback_14', 'listening')">Verificar resposta</button>
-  </div>
-  <div class="feedback" id="ls_feedback_14"></div>
-
-</section>
-
-  
-<section class="card" id="sec-writing" style="--accent:var(--gamboge)">
-  <div class="card-head">
-    <div class="icon-badge" style="background:var(--gamboge)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--seal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-    </div>
-    <div>
-      <div class="card-eyebrow">Writing &middot; Write for an Academic Discussion</div>
-      <h2 class="card-title">Questões Globais</h2>
-    </div>
-  </div>
-  <div class="card-instructions">Write for an academic discussion.</div>
-  
-  <div class="passage-box">
-    <div class="passage-title">Dr. Okafor</div>
-    Some argue that wealthy nations have a responsibility to fund water-infrastructure projects in developing countries, while others believe each country should be responsible for solving its own resource challenges. What is your position on this issue?
-  </div>
-  <div class="passage-box" style="background:var(--cherry);">
-    <div class="passage-title">Lena</div>
-    I think wealthier nations should help fund these projects, since global trade and historical inequalities have contributed to many of these resource gaps in the first place.
-  </div>
-  <div class="passage-box" style="background:var(--cherry);">
-    <div class="passage-title">Kwame</div>
-    I see the point, but I worry that outside funding can create dependency instead of building local capacity to maintain the systems long-term.
-  </div>
-  <p style="font-weight:700; margin:14px 0 6px;">Sua resposta deve:</p>
-  <ul style="margin-top:0;"><li>Express and support your own opinion.</li><li>Respond to at least one point made by Lena or Kwame.</li><li>Use at least 100 words.</li></ul>
-  <textarea class="write-area" id="wr_area_14" placeholder="Write your discussion post here..."></textarea>
-  <div class="word-count" id="wr_count_14"></div>
-  <p style="font-weight:700; margin:16px 0 4px;">Autoavaliação:</p>
-  <div class="checklist"><label><input type="checkbox"><span>Express and support your own opinion.</span></label><label><input type="checkbox"><span>Respond to at least one point made by Lena or Kwame.</span></label><label><input type="checkbox"><span>Use at least 100 words.</span></label></div>
-  <div class="btn-row">
-    <button class="btn btn-secondary" id="wr_modelbtn_14" onclick="toggleModel(this, 'wr_model_14', 'writing')">Ver resposta modelo</button>
-  </div>
-  <div class="model-answer" id="wr_model_14">I agree with Kwame that dependency is a real risk, but I don&#x27;t think it means wealthier nations should avoid involvement altogether. A better approach might combine Lena&#x27;s point about shared responsibility with Kwame&#x27;s concern about sustainability: funding could focus on training local engineers and technicians rather than simply building infrastructure and leaving. This way, communities gain both the physical systems and the knowledge to maintain them independently over time. Historical inequalities, as Lena mentions, do create an argument for wealthier nations to contribute, but the design of that support matters just as much as the funding itself.</div>
-  <script>countWords('wr_area_14', 'wr_count_14', 100);</script>
-
-</section>
-
-  
-<section class="card" id="sec-speaking" style="--accent:var(--seal-soft)">
-  <div class="card-head">
-    <div class="icon-badge" style="background:var(--seal-soft)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-    </div>
-    <div>
-      <div class="card-eyebrow">Speaking &middot; Listen and Repeat</div>
-      <h2 class="card-title">Questões Globais</h2>
-    </div>
-  </div>
-  <div class="card-instructions">Listen and repeat each sentence only once. You are recording an introduction for a global studies podcast.</div>
-  
-  <div class="repeat-block" data-target="Water scarcity affects billions of people around the world.">
-    <p><span class="q-number">1</span><strong>Water scarcity affects billions of people around the world.</strong></p>
-    <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Water scarcity affects billions of people around the world.&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Water scarcity affects billions of people around the world.&quot;, 'sp_status_14_0', 'sp_trans_14_0', 'sp_bar_14_0', 'speaking')">&#127908; Gravar minha voz</button>
-    </div>
-    <div class="mic-status" id="sp_status_14_0"></div>
-    <div class="transcript-box" id="sp_trans_14_0"></div>
-    <div class="match-bar" id="sp_bar_14_0"><span></span></div>
-  </div>
-
-  <div class="repeat-block" data-target="Agriculture alone accounts for most of the planet&#x27;s freshwater use.">
-    <p><span class="q-number">2</span><strong>Agriculture alone accounts for most of the planet&#x27;s freshwater use.</strong></p>
-    <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Agriculture alone accounts for most of the planet&#x27;s freshwater use.&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Agriculture alone accounts for most of the planet&#x27;s freshwater use.&quot;, 'sp_status_14_1', 'sp_trans_14_1', 'sp_bar_14_1', 'speaking')">&#127908; Gravar minha voz</button>
-    </div>
-    <div class="mic-status" id="sp_status_14_1"></div>
-    <div class="transcript-box" id="sp_trans_14_1"></div>
-    <div class="match-bar" id="sp_bar_14_1"><span></span></div>
-  </div>
-
-  <div class="repeat-block" data-target="Solving this crisis will likely require both new technology and stronger infrastructure investment.">
-    <p><span class="q-number">3</span><strong>Solving this crisis will likely require both new technology and stronger infrastructure investment.</strong></p>
-    <div class="btn-row">
-      <button class="btn btn-audio" onclick="speak(&quot;Solving this crisis will likely require both new technology and stronger infrastructure investment.&quot;)">&#128266; Play</button>
-      <button class="btn btn-primary" onclick="startRecognition(&quot;Solving this crisis will likely require both new technology and stronger infrastructure investment.&quot;, 'sp_status_14_2', 'sp_trans_14_2', 'sp_bar_14_2', 'speaking')">&#127908; Gravar minha voz</button>
-    </div>
-    <div class="mic-status" id="sp_status_14_2"></div>
-    <div class="transcript-box" id="sp_trans_14_2"></div>
-    <div class="match-bar" id="sp_bar_14_2"><span></span></div>
-  </div>
-
-</section>
-
-  
-<section class="card" id="sec-grammar" style="--accent:var(--cherry)">
-  <div class="card-head">
-    <div class="icon-badge" style="background:var(--cherry)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--seal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-    </div>
-    <div>
-      <div class="card-eyebrow">Grammar &middot; Relative Clauses</div>
-      <h2 class="card-title">Questões Globais</h2>
-    </div>
-  </div>
-  <div class="card-instructions">Choose the correct option for each sentence.</div>
-  
-  <p style="font-weight:700; margin-bottom:4px;">Tema: Relative Clauses</p>
-  
-  <div class="grammar-q">
-    <p class="qtext">1. Drip irrigation, ___ reduces water use significantly, is still too expensive for many farmers.</p>
-    <div class="mcq-options" id="gr_14_q0_opts" data-correct="1"><label class="mcq-option">
-                  <input type="radio" name="gr_14_q0" value="0">
-                  <span>that</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q0" value="1">
-                  <span>which</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q0" value="2">
-                  <span>who</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q0" value="3">
-                  <span>whose</span>
-                </label></div>
-    <div class="explain" id="gr_14_q0_explain">💡 &quot;Which&quot; introduz oração relativa não restritiva sobre coisas, separada por vírgula.</div>
-  </div>
-
-  <div class="grammar-q">
-    <p class="qtext">2. Farmers ___ crops depend heavily on rainfall are the most affected by drought.</p>
-    <div class="mcq-options" id="gr_14_q1_opts" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="gr_14_q1" value="0">
-                  <span>who</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q1" value="1">
-                  <span>which</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q1" value="2">
-                  <span>whose</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q1" value="3">
-                  <span>whom</span>
-                </label></div>
-    <div class="explain" id="gr_14_q1_explain">💡 &quot;Whose&quot; indica posse, ligando &quot;farmers&quot; e &quot;their crops&quot;.</div>
-  </div>
-
-  <div class="grammar-q">
-    <p class="qtext">3. The region ___ we visited last year is now experiencing severe water stress.</p>
-    <div class="mcq-options" id="gr_14_q2_opts" data-correct="2"><label class="mcq-option">
-                  <input type="radio" name="gr_14_q2" value="0">
-                  <span>who</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q2" value="1">
-                  <span>whose</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q2" value="2">
-                  <span>that</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q2" value="3">
-                  <span>whom</span>
-                </label></div>
-    <div class="explain" id="gr_14_q2_explain">💡 &quot;That&quot; pode substituir &quot;which&quot; em orações restritivas sobre lugares/coisas.</div>
-  </div>
-
-  <div class="grammar-q">
-    <p class="qtext">4. Dr. Okafor, ___ research focuses on water policy, will lead the seminar.</p>
-    <div class="mcq-options" id="gr_14_q3_opts" data-correct="1"><label class="mcq-option">
-                  <input type="radio" name="gr_14_q3" value="0">
-                  <span>who</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q3" value="1">
-                  <span>whose</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q3" value="2">
-                  <span>which</span>
-                </label><label class="mcq-option">
-                  <input type="radio" name="gr_14_q3" value="3">
-                  <span>that</span>
-                </label></div>
-    <div class="explain" id="gr_14_q3_explain">💡 &quot;Whose&quot; liga a pessoa (Dr. Okafor) à coisa possuída (research).</div>
-  </div>
-
-  <div class="btn-row">
-    <button class="btn btn-primary" onclick="checkGrammar('gr_14', 4, [1, 2, 2, 1])">Verificar respostas</button>
-  </div>
-  <div class="feedback" id="gr_14_feedback"></div>
-
-</section>
-
-
-  <section class="score-summary">
-    <h2>Progresso da atividade</h2>
-    <p>Toda vez que você clica em <strong>"Verificar"</strong> em qualquer seção acima, sua resposta — certa, errada ou em branco — já fica registrada e é enviada automaticamente para a professora. Não precisa baixar nem copiar nada.</p>
-    <div id="scoreBig">0 / 5</div>
-  </section>
-</div>
+<div class="wrap" style="margin-top:40px;" id="coursesWrap"></div>
 
 <footer class="site-footer">
   <div class="fmark">dyse</div>
-  <p>Do You Speak English? &middot; Material de apoio TOEFL iBT &middot; Atividade 14/16</p>
+  <p>Do You Speak English? &middot; Área do Aluno</p>
 </footer>
 
+<script src="/assets/dyse-auth.js"></script>
+<script>
+  const COURSES = [{id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]}];
+
+  (async () => {
+    const session = await dyseRequireAuth();
+    if(!session) return;
+    dyseRenderAuthBar('authBar');
+
+    const results = await dyseListMyResults(); // todos os cursos do aluno
+    const doneMap = {}; // "course:num" -> resultado
+    results.forEach(r => doneMap[r.course + ':' + r.activity_num] = r);
+
+    const wrap = document.getElementById('coursesWrap');
+    const sections = [];
+    for(const course of COURSES){
+      const publishedSet = await dyseGetPublishedSet(course.id);
+
+      const cards = course.activities.map(a => {
+        const isPublished = publishedSet.has(a.num);
+        const done = doneMap[course.id + ':' + a.num];
+
+        if(!isPublished){
+          return '<div class="dash-card locked">' +
+            '<span class="dash-badge locked">🔒 Em breve</span>' +
+            '<div class="n">' + String(a.num).padStart(2,'0') + '</div>' +
+            '<div class="t">' + a.theme + '</div>' +
+            '<div class="l">' + a.level + '</div>' +
+          '</div>';
+        }
+
+        const badge = done
+          ? '<span class="dash-badge done">✓ Enviada</span>'
+          : '<span class="dash-badge pending">Pendente</span>';
+        return '<a class="dash-card" href="/atividades/' + course.id + '/atividade_' + a.num + '.html">' +
+          badge +
+          '<div class="n">' + String(a.num).padStart(2,'0') + '</div>' +
+          '<div class="t">' + a.theme + '</div>' +
+          '<div class="l">' + a.level + '</div>' +
+        '</a>';
+      }).join('');
+
+      sections.push(
+        '<section style="margin-bottom:40px;">' +
+          '<h2 style="font-family:\'Lobster\',cursive; color:var(--amaranth); font-size:1.7rem; margin-bottom:4px;">' + course.name + '</h2>' +
+          '<p style="color:var(--seal-soft); font-size:.9rem; margin-bottom:16px;">' + course.description + '</p>' +
+          '<div class="dash-grid">' + cards + '</div>' +
+        '</section>'
+      );
+    }
+    wrap.innerHTML = sections.join('');
+  })();
+</script>
 </body>
 </html>
