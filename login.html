@@ -559,24 +559,13 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 
   async function getPostLoginUrl(session){
     const explicitNext = getNextUrl();
+    if(explicitNext) return explicitNext; // veio de um link específico (ex: tentou abrir uma atividade sem estar logado)
     try{
       const profile = await withTimeout(dyseGetProfile(session), 6000, null);
-      const isTeacher = dyseIsTeacher(profile);
-
-      if(explicitNext){
-        // Professoras nunca devem cair em páginas de aluno, mesmo vindo de um
-        // link que pedia especificamente essa página (ex: tentou abrir
-        // /area-do-aluno.html sem estar logada e foi redirecionada pra cá).
-        if(isTeacher && explicitNext.startsWith('/area-do-aluno')){
-          return '/professora.html';
-        }
-        return explicitNext; // ex: um link direto de atividade — mantém o destino original
-      }
-
-      return isTeacher ? '/professora.html' : '/area-do-aluno.html';
+      return (profile && profile.role === 'teacher') ? '/professora.html' : '/area-do-aluno.html';
     }catch(e){
       console.error('Não foi possível verificar o cargo do usuário, seguindo como aluno:', e);
-      return explicitNext || '/area-do-aluno.html';
+      return '/area-do-aluno.html';
     }
   }
 
@@ -616,7 +605,10 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     try{
       const { data, error } = await sb.auth.signUp({
         email, password,
-        options: { data: { full_name } }
+        options: {
+          data: { full_name },
+          emailRedirectTo: location.origin + '/login.html'
+        }
       });
       if(error){
         showMsg('Não foi possível criar a conta: ' + translateError(error.message), false);
@@ -644,9 +636,32 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 
   // se já estiver logado, pula direto pro lugar certo (professora ou área do aluno)
   (async () => {
+    // Trata o retorno do link de confirmação de e-mail. O Supabase redireciona
+    // de volta pra cá com os tokens (e "type=signup") no "#" da URL quando dá
+    // certo, ou com "error_description" quando o link expirou / já foi usado
+    // (isso é comum quando o antivírus de e-mail "clica" no link sozinho antes
+    // do aluno, gastando o link de uso único).
+    const hashParams = new URLSearchParams(location.hash.replace(/^#/, ''));
+    const queryParams = new URLSearchParams(location.search);
+    const errorDesc = hashParams.get('error_description') || queryParams.get('error_description');
+    const confirmedNow = hashParams.get('type') === 'signup';
+
+    if(errorDesc){
+      showMsg('Não foi possível confirmar pelo link: ' + decodeURIComponent(errorDesc.replace(/\+/g, ' ')) + '. Se o e-mail já foi confirmado antes, é só entrar normalmente abaixo — senão, peça pra professora reenviar o convite.', false);
+      history.replaceState(null, '', location.pathname);
+    }
+
     try{
       const { data } = await sb.auth.getSession();
-      if(data.session) location.href = await getPostLoginUrl(data.session);
+      if(data.session){
+        if(confirmedNow){
+          showMsg('E-mail confirmado com sucesso! Entrando...', true);
+          history.replaceState(null, '', location.pathname);
+          setTimeout(async () => { location.href = await getPostLoginUrl(data.session); }, 900);
+        } else {
+          location.href = await getPostLoginUrl(data.session);
+        }
+      }
     }catch(e){
       console.error('Falha ao checar sessão existente:', e);
     }
