@@ -526,7 +526,8 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 
   const NOTICE_MESSAGES = {
     'locked': '🔒 Essa atividade ainda não foi liberada pela professora. Assim que ela liberar, o card aparece colorido e você pode clicar nele.',
-    'not-teacher': 'Essa página é exclusiva para professores.'
+    'not-teacher': 'Essa página é exclusiva para professores.',
+    'not-admin': 'Essa página é exclusiva para a gestão.'
   };
   (function showNoticeIfAny(){
     const notice = new URLSearchParams(location.search).get('notice');
@@ -543,23 +544,49 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     const session = await dyseRequireAuth();
     if(!session) return;
 
-    // Se por qualquer motivo uma professora acabar aqui (link antigo, sessão
-    // já aberta antes de ser promovida, etc.), manda ela pro painel certo.
+    // Se por qualquer motivo uma professora ou a gestão acabar aqui (link
+    // antigo, sessão já aberta antes de ser promovida, etc.), manda pro painel certo.
     const profile = await dyseGetProfile(session);
-    if(profile && profile.role === 'teacher'){
+    if(dyseIsAdmin(profile)){
+      location.href = '/gestao.html';
+      return;
+    }
+    if(dyseIsTeacher(profile)){
       location.href = '/professora.html';
       return;
     }
 
     dyseRenderAuthBar('authBar');
 
+    const wrap = document.getElementById('coursesWrap');
+
+    // Sem turma vinculada, a gestão ainda não decidiu o que esse aluno pode
+    // ver — não dá pra saber quais matérias mostrar, então nenhuma aparece.
+    if(!profile || !profile.turma_id){
+      wrap.innerHTML =
+        '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
+          '<div class="course-folder-icon">🗂️</div>' +
+          '<div class="course-folder-info">' +
+            '<div class="course-folder-name">Você ainda não está em uma turma</div>' +
+            '<div class="course-folder-desc">Fale com a coordenação pra ser vinculado(a) a uma turma — assim que isso acontecer, os cursos liberados pra sua turma aparecem aqui.</div>' +
+          '</div>' +
+        '</div>';
+      return;
+    }
+
+    const allTurmaMaterias = await dyseListAllTurmaMaterias();
+    const allowedSlugs = new Set(
+      allTurmaMaterias.filter(tm => tm.turma_id === profile.turma_id).map(tm => tm.materia_slug)
+    );
+
     const results = await dyseListMyResults(); // todos os cursos do aluno
     const doneMap = {}; // "course:num" -> resultado
     results.forEach(r => doneMap[r.course + ':' + r.activity_num] = r);
 
-    const wrap = document.getElementById('coursesWrap');
     const cards = [];
     for(const course of COURSES){
+      if(!allowedSlugs.has(course.id)) continue; // matéria não liberada pra turma do aluno
+
       const publishedSet = await dyseGetPublishedSet(course.id);
       const publishedCount = course.activities.filter(a => publishedSet.has(a.num)).length;
       const doneCount = course.activities.filter(a => doneMap[course.id + ':' + a.num]).length;
@@ -576,7 +603,15 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
         '</a>'
       );
     }
-    wrap.innerHTML = '<div class="course-folder-grid">' + cards.join('') + '</div>';
+    wrap.innerHTML = cards.length
+      ? '<div class="course-folder-grid">' + cards.join('') + '</div>'
+      : '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
+          '<div class="course-folder-icon">🗂️</div>' +
+          '<div class="course-folder-info">' +
+            '<div class="course-folder-name">Nenhuma matéria liberada ainda</div>' +
+            '<div class="course-folder-desc">Sua turma ainda não tem nenhuma matéria liberada pela gestão.</div>' +
+          '</div>' +
+        '</div>';
   })();
 </script>
 </body>

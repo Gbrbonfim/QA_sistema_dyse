@@ -49,7 +49,7 @@ async function dyseGetProfile(session){
     const { data: created, error: upsertError } = await sb
       .from('profiles')
       .upsert(
-        { id: session.user.id, full_name: fallbackName }, // sem "role" aqui: se a linha já existir, não sobrescreve o role dela
+        { id: session.user.id, full_name: fallbackName, email: session.user.email }, // sem "role" aqui: se a linha já existir, não sobrescreve o role dela
         { onConflict: 'id', ignoreDuplicates: false }
       )
       .select('*')
@@ -92,6 +92,23 @@ async function dyseRequireTeacher(){
   });
   if(!dyseIsTeacher(profile)){
     location.href = '/area-do-aluno.html?notice=not-teacher';
+    return null;
+  }
+  return session;
+}
+
+/* Checagem de cargo "gestão" (admin), mesmo padrão tolerante do dyseIsTeacher. */
+function dyseIsAdmin(profile){
+  return !!(profile && String(profile.role || '').trim().toLowerCase() === 'admin');
+}
+
+/* Bloqueia a página caso o usuário não seja da gestão. */
+async function dyseRequireAdmin(){
+  const session = await dyseRequireAuth();
+  if(!session) return null;
+  const profile = await dyseGetProfile(session);
+  if(!dyseIsAdmin(profile)){
+    location.href = dyseIsTeacher(profile) ? '/professora.html?notice=not-admin' : '/area-do-aluno.html?notice=not-admin';
     return null;
   }
   return session;
@@ -224,7 +241,7 @@ async function dyseRequirePublished(course, activityNum){
   const session = await dyseGetSession();
   if(!session) return false;
   const profile = await dyseGetProfile(session);
-  if(dyseIsTeacher(profile)) return true;
+  if(dyseIsTeacher(profile) || dyseIsAdmin(profile)) return true;
 
   const published = await dyseGetPublishedSet(course);
   if(!published.has(activityNum)){
@@ -232,4 +249,121 @@ async function dyseRequirePublished(course, activityNum){
     return false;
   }
   return true;
+}
+
+/* ======================================================================
+   GESTÃO — turmas, matérias e permissões (usado por /gestao.html e,
+   pra leitura, também por /professora.html e /area-do-aluno.html)
+   ====================================================================== */
+
+/* ---------- Turmas ---------- */
+async function dyseListTurmas(){
+  const { data, error } = await sb.from('turmas').select('*').order('name', { ascending: true });
+  return error ? [] : data;
+}
+
+async function dyseCreateTurma(name, description){
+  const { data, error } = await sb.from('turmas').insert({ name, description }).select('*').maybeSingle();
+  return { data, error };
+}
+
+async function dyseUpdateTurma(id, fields){
+  const { error } = await sb.from('turmas').update(fields).eq('id', id);
+  return { error };
+}
+
+async function dyseDeleteTurma(id){
+  const { error } = await sb.from('turmas').delete().eq('id', id);
+  return { error };
+}
+
+/* ---------- Matérias ---------- */
+async function dyseListMaterias(){
+  const { data, error } = await sb.from('materias').select('*').order('name', { ascending: true });
+  return error ? [] : data;
+}
+
+async function dyseCreateMateria(slug, name, description){
+  const { data, error } = await sb.from('materias').insert({ slug, name, description }).select('*').maybeSingle();
+  return { data, error };
+}
+
+async function dyseDeleteMateria(slug){
+  const { error } = await sb.from('materias').delete().eq('slug', slug);
+  return { error };
+}
+
+/* ---------- Matérias liberadas por turma ---------- */
+async function dyseListAllTurmaMaterias(){
+  const { data, error } = await sb.from('turma_materias').select('*');
+  return error ? [] : data;
+}
+
+async function dyseSetTurmaMateria(turmaId, materiaSlug, enabled){
+  if(enabled){
+    const { error } = await sb.from('turma_materias').insert({ turma_id: turmaId, materia_slug: materiaSlug });
+    return { error };
+  }
+  const { error } = await sb.from('turma_materias').delete().eq('turma_id', turmaId).eq('materia_slug', materiaSlug);
+  return { error };
+}
+
+/* ---------- Turmas permitidas por professor ---------- */
+async function dyseListAllTeacherTurmas(){
+  const { data, error } = await sb.from('teacher_turmas').select('*');
+  return error ? [] : data;
+}
+
+/* Turmas do professor logado (sem argumento) — usado no painel da professora. */
+async function dyseListMyTurmas(){
+  const session = await dyseGetSession();
+  if(!session) return [];
+  const { data, error } = await sb.from('teacher_turmas').select('turma_id').eq('teacher_id', session.user.id);
+  return error ? [] : data;
+}
+
+async function dyseSetTeacherTurma(teacherId, turmaId, enabled){
+  if(enabled){
+    const { error } = await sb.from('teacher_turmas').insert({ teacher_id: teacherId, turma_id: turmaId });
+    return { error };
+  }
+  const { error } = await sb.from('teacher_turmas').delete().eq('teacher_id', teacherId).eq('turma_id', turmaId);
+  return { error };
+}
+
+/* ---------- Perfis por papel (alunos / professoras) ---------- */
+/* Comparação tolerante a maiúsculas/espaço extra (mesmo motivo do
+   dyseIsTeacher/dyseIsAdmin): um ".eq('role', role)" exato deixaria de fora
+   contas cujo "role" foi digitado com variação no Table Editor do Supabase. */
+async function dyseListProfilesByRole(role){
+  const { data, error } = await sb.from('profiles').select('*').order('full_name', { ascending: true });
+  if(error || !data) return [];
+  const target = String(role).trim().toLowerCase();
+  return data.filter(p => String(p.role || '').trim().toLowerCase() === target);
+}
+
+async function dyseSetStudentTurma(studentId, turmaId){
+  const { error } = await sb.from('profiles').update({ turma_id: turmaId }).eq('id', studentId);
+  return { error };
+}
+
+/* ---------- Quais atividades de uma matéria a gestão libera pro professor ---------- */
+async function dyseListMateriaActivities(materiaSlug){
+  const { data, error } = await sb.from('materia_activities').select('*').eq('materia_slug', materiaSlug);
+  return error ? [] : data;
+}
+
+async function dyseListAllMateriaActivities(){
+  const { data, error } = await sb.from('materia_activities').select('*');
+  return error ? [] : data;
+}
+
+async function dyseSetMateriaActivityReleased(materiaSlug, activityNum, released){
+  const { error } = await sb
+    .from('materia_activities')
+    .upsert(
+      { materia_slug: materiaSlug, activity_num: activityNum, released_to_teachers: released, updated_at: new Date().toISOString() },
+      { onConflict: 'materia_slug,activity_num' }
+    );
+  return { error };
 }
