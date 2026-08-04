@@ -61,7 +61,7 @@ body::before{
   z-index:0;
 }
 
-.wrap{position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:0 20px 80px; width:100%;}
+.wrap{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:0 20px 80px; width:100%;}
 
 /* ---------- HERO / HEADER ---------- */
 .hero{
@@ -84,7 +84,7 @@ body::before{
   pointer-events:none;
   line-height:1;
 }
-.hero-inner{max-width:1000px; margin:0 auto; position:relative; z-index:2;}
+.hero-inner{max-width:1280px; margin:0 auto; position:relative; z-index:2;}
 .brand-row{
   display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
   font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
@@ -182,6 +182,29 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .dash-table th{background:var(--seal-soft); color:#fff; font-weight:700; font-size:.76rem; text-transform:uppercase; letter-spacing:.04em;}
 .dash-table tr:last-child td{border-bottom:none;}
 .dash-table tr:hover td{background:var(--antique-soft);}
+
+/* Tabelas com muitas colunas (ex: Alunos) usam scroll horizontal em telas
+   médias (normal pra tabela de dados), mas viram cards empilhados no
+   celular — rolar uma tabela de 8 colunas na horizontal com o dedo é uma
+   experiência ruim. Cada <td> precisa de um atributo data-label="..." (com
+   o mesmo texto do <th> da coluna) pra virar o rótulo do card. */
+@media (max-width:760px){
+  .dash-table-responsive thead{ display:none; }
+  .dash-table-responsive, .dash-table-responsive tbody, .dash-table-responsive tr, .dash-table-responsive td{ display:block; width:100%; }
+  .dash-table-responsive{ background:transparent; box-shadow:none; border-radius:0; }
+  .dash-table-responsive tr{
+    background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card);
+    margin-bottom:14px; padding:14px 16px; border:1px solid #f0e3d2;
+  }
+  .dash-table-responsive td{ padding:8px 0; border-bottom:1px solid #f6ece0; }
+  .dash-table-responsive td:last-child{ border-bottom:none; padding-bottom:0; }
+  .dash-table-responsive td:empty{ display:none; }
+  .dash-table-responsive td::before{
+    content:attr(data-label); display:block; font-weight:700; font-size:.68rem; text-transform:uppercase;
+    letter-spacing:.04em; color:var(--seal-soft); opacity:.65; margin-bottom:3px;
+  }
+}
+
 .dash-filter{display:flex; gap:10px; flex-wrap:wrap; margin:0 0 16px;}
 .dash-filter input, .dash-filter select{
   border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
@@ -288,6 +311,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   .report-modal-panel{margin:0; width:100%; max-width:100%; height:100dvh; max-height:100dvh; border-radius:0;}
   section.gestao-card{padding:20px 16px;}
   h1.title{font-size:2.1rem;}
+  .dash-filter input, .dash-filter select{width:100%;}
+  .gestao-form{flex-direction:column; align-items:stretch;}
+  .gestao-form .gestao-field{flex:1 1 auto;}
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -442,7 +468,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       </select>
     </div>
     <div style="overflow-x:auto;">
-      <table class="dash-table" id="alunosTable">
+      <table class="dash-table dash-table-responsive" id="alunosTable">
         <thead>
           <tr>
             <th>Aluno</th>
@@ -1223,16 +1249,16 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
     document.getElementById('alunosBody').innerHTML = rows.map(({ s, turma, periodo, modalidade, professor }) => {
       return '<tr>' +
-        '<td>' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
-        '<td>' + escapeHtmlLocal(s.email || '-') + '</td>' +
-        '<td>' + (turma ? escapeHtmlLocal(turma.name) : '<span class="no-turma">Sem turma</span>') + '</td>' +
-        '<td>' + (modalidade ? escapeHtmlLocal(modalidade.name) : '<span class="no-turma">Sem modalidade</span>') + '</td>' +
-        '<td>' + (professor ? escapeHtmlLocal(professor.full_name || '') : '<span class="no-turma">Sem professor</span>') + '</td>' +
-        '<td>' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
-        '<td><button type="button" class="btn btn-ghost btn-sm" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
-        '<td><div class="btn-row">' +
-          '<button type="button" class="btn btn-ghost btn-sm" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
-          '<button type="button" class="btn btn-danger btn-sm" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
+        '<td data-label="Aluno">' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
+        '<td data-label="E-mail">' + escapeHtmlLocal(s.email || '-') + '</td>' +
+        '<td data-label="Turma">' + (turma ? escapeHtmlLocal(turma.name) : '<span class="no-turma">Sem turma</span>') + '</td>' +
+        '<td data-label="Modalidade">' + (modalidade ? escapeHtmlLocal(modalidade.name) : '<span class="no-turma">Sem modalidade</span>') + '</td>' +
+        '<td data-label="Professor responsável">' + (professor ? escapeHtmlLocal(professor.full_name || '') : '<span class="no-turma">Sem professor</span>') + '</td>' +
+        '<td data-label="Situação">' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
+        '<td data-label="Financeiro"><button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
+        '<td data-label="Acesso"><div class="btn-row">' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
+          '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
         '</div></td>' +
       '</tr>';
     }).join('') || '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
