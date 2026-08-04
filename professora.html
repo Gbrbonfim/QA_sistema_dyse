@@ -623,6 +623,8 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 
   <div id="panelResults">
+  <p id="myTurmasInfo" style="font-size:.85rem; color:var(--seal-soft); margin-bottom:16px;"></p>
+
   <div class="dash-filter">
     <input type="text" id="filterName" placeholder="Filtrar por nome do aluno...">
     <select id="filterCourse">
@@ -639,6 +641,7 @@ body.dyse-modal-open{overflow:hidden;}
         <tr>
           <th>Aluno</th>
           <th>E-mail</th>
+          <th>Turma</th>
           <th>Curso</th>
           <th>Atividade</th>
           <th>Enviado em</th>
@@ -684,6 +687,7 @@ body.dyse-modal-open{overflow:hidden;}
 <script src="/assets/dyse-auth.js"></script>
 <script>
   let ALL_RESULTS = [];
+  let TURMA_NAME_BY_USER = {}; // user_id -> nome da turma (ou "-" se sem turma)
   const COURSE_NAMES = {'toefl':'TOEFL iBT'};
 
   function renderTable(){
@@ -702,13 +706,35 @@ body.dyse-modal-open{overflow:hidden;}
       return '<tr>' +
         '<td>' + (r.student_name||'-') + '</td>' +
         '<td>' + (r.student_email||'-') + '</td>' +
+        '<td>' + (TURMA_NAME_BY_USER[r.user_id] || '-') + '</td>' +
         '<td>' + courseName + '</td>' +
         '<td>Atividade ' + String(r.activity_num).padStart(2,'0') + ' — ' + (r.activity_theme||'') + '</td>' +
         '<td>' + date + '</td>' +
         '<td><button class="btn btn-ghost" style="padding:6px 14px; font-size:.78rem;" onclick="openReport(' + i + ')">Ver relatório</button></td>' +
       '</tr>';
-    }).join('') || '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum resultado encontrado.</td></tr>';
+    }).join('') || '<tr><td colspan="7" style="text-align:center; opacity:.6;">Nenhum resultado encontrado.</td></tr>';
     window.__filteredRows = rows;
+  }
+
+  /* ---------- Turmas permitidas a este professor (informativo) ---------- */
+  async function loadMyTurmasInfo(){
+    const [myLinks, allTurmas, students] = await Promise.all([
+      dyseListMyTurmas(),
+      dyseListTurmas(),
+      dyseListProfilesByRole('student') // já vem filtrado pelas turmas permitidas (RLS)
+    ]);
+    const myTurmaIds = new Set(myLinks.map(l => l.turma_id));
+    const myTurmas = allTurmas.filter(t => myTurmaIds.has(t.id));
+    const turmaNameById = {};
+    allTurmas.forEach(t => turmaNameById[t.id] = t.name);
+
+    TURMA_NAME_BY_USER = {};
+    students.forEach(s => { TURMA_NAME_BY_USER[s.id] = s.turma_id ? (turmaNameById[s.turma_id] || '-') : '-'; });
+
+    const info = document.getElementById('myTurmasInfo');
+    info.innerHTML = myTurmas.length
+      ? '<b>Turmas com acesso:</b> ' + myTurmas.map(t => t.name).join(', ')
+      : '⚠️ Você ainda não tem nenhuma turma vinculada — peça à gestão pra te vincular a uma turma. Até lá, nenhum resultado aparece aqui.';
   }
 
   /* ---------- Link de pré-visualização de atividade ----------
@@ -969,8 +995,22 @@ body.dyse-modal-open{overflow:hidden;}
     const blocks = [];
     for(const course of COURSES){
       const publishedMap = await dyseGetPublishedMap(course.id);
+      const materiaActivities = await dyseListMateriaActivities(course.id);
+      const releasedMap = {};
+      materiaActivities.forEach(ma => releasedMap[ma.activity_num] = ma.released_to_teachers);
       const rows = course.activities.map(a => {
         const isOn = !!publishedMap[a.num];
+        // Se a gestão nunca configurou essa atividade pra essa matéria, trata
+        // como liberada (mesmo comportamento de antes dessa trava existir).
+        const isReleased = releasedMap[a.num] !== undefined ? releasedMap[a.num] : true;
+        if(!isReleased){
+          return '<div class="manage-row">' +
+            '<div class="info"><b>' + String(a.num).padStart(2,'0') + '.</b> ' + a.theme + ' <span style="opacity:.6;">(' + a.level + ')</span></div>' +
+            '<div class="manage-row-actions">' +
+              '<span style="font-size:.76rem; color:var(--seal-soft); opacity:.75;">🔒 Aguardando liberação da gestão</span>' +
+            '</div>' +
+          '</div>';
+        }
         return '<div class="manage-row">' +
           '<div class="info"><b>' + String(a.num).padStart(2,'0') + '.</b> ' + a.theme + ' <span style="opacity:.6;">(' + a.level + ')</span></div>' +
           '<div class="manage-row-actions">' +
@@ -997,6 +1037,7 @@ body.dyse-modal-open{overflow:hidden;}
     dyseRenderAuthBar('authBar');
 
     ALL_RESULTS = await dyseListAllResults();
+    await loadMyTurmasInfo();
     loadManagePanel();
 
     const courseSelect = document.getElementById('filterCourse');

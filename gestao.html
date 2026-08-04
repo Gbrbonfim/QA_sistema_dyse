@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Painel da Gestão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+
+:root{
+  --amaranth:#D03B55;
+  --amaranth-dark:#B22C44;
+  --gamboge:#F0A224;
+  --gamboge-dark:#CE8613;
+  --cherry:#FCABAF;
+  --orangered:#EB6424;
+  --seal:#3A1D10;
+  --seal-soft:#562915;
+  --antique:#FFEAD6;
+  --antique-soft:#FFF3E6;
+  --white:#FFFFFF;
+  --ok:#2E8B57;
+  --bad:#C0392B;
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:10px;
+  --shadow-card:0 10px 30px rgba(58,29,16,0.12);
+  --font-display:'Lobster', cursive;
+  --font-body:'Poppins', sans-serif;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html, body{max-width:100%; overflow-x:hidden;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--antique);
+  color:var(--seal);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(240,162,36,0.10) 0, transparent 45%),
+    radial-gradient(circle at 92% 18%, rgba(208,59,85,0.10) 0, transparent 40%),
+    radial-gradient(circle at 50% 95%, rgba(235,100,36,0.08) 0, transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.wrap{position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:0 20px 80px; width:100%;}
+
+/* ---------- HERO / HEADER ---------- */
+.hero{
+  background:var(--amaranth);
+  color:var(--antique-soft);
+  padding:38px 20px 64px;
+  position:relative;
+  overflow:hidden;
+  border-bottom:6px solid var(--gamboge);
+}
+.hero::after{
+  content:"dyse";
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:15vw;
+  right:-4%;
+  top:-8%;
+  color:rgba(255,255,255,0.05);
+  white-space:nowrap;
+  pointer-events:none;
+  line-height:1;
+}
+.hero-inner{max-width:1000px; margin:0 auto; position:relative; z-index:2;}
+.brand-row{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
+  opacity:.85; margin-bottom:26px; min-width:0;
+}
+.brand-row .mark{
+  display:inline-flex; align-items:center; gap:8px; font-family:var(--font-display);
+  font-size:1.35rem; letter-spacing:0; text-transform:none; color:var(--antique);
+}
+.eyebrow-badge{
+  display:inline-block; background:var(--gamboge); color:var(--seal);
+  font-weight:700; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+  padding:6px 14px; border-radius:999px; margin-bottom:14px;
+}
+h1.title{
+  font-family:var(--font-display);
+  font-size:clamp(2.1rem, 6vw, 3.4rem);
+  margin:0 0 10px;
+  color:var(--antique);
+  line-height:1.05;
+}
+.subtitle{font-size:1.02rem; max-width:60ch; color:var(--antique-soft); opacity:.95;}
+
+/* ---------- AUTH GATE / AUTH BAR ---------- */
+html:not(.dyse-auth-ready) #dyseAuthGate{
+  position:fixed; inset:0; z-index:9999; background:var(--antique);
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
+}
+html.dyse-auth-ready #dyseAuthGate{display:none;}
+.dyse-spinner{
+  width:38px; height:38px; border-radius:50%; border:4px solid #e4d4c4; border-top-color:var(--amaranth);
+  animation:dyse-spin 0.8s linear infinite;
+}
+@keyframes dyse-spin{to{transform:rotate(360deg);}}
+#dyseAuthGate p{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
+
+.dyse-auth-bar{
+  display:flex; align-items:center; justify-content:flex-end; gap:14px; flex-wrap:wrap;
+  font-size:.82rem; font-weight:600; margin-top:14px; color:var(--antique);
+}
+.dyse-auth-name{opacity:.95;}
+.dyse-auth-link{color:var(--gamboge); text-decoration:underline; text-underline-offset:3px;}
+.dyse-auth-link:hover{color:#fff;}
+.dyse-auth-logout{
+  background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35); color:var(--antique);
+  padding:5px 14px; border-radius:999px; font-size:.78rem; font-weight:700; cursor:pointer;
+}
+.dyse-auth-logout:hover{background:rgba(255,255,255,.3);}
+
+/* ---------- TABS ---------- */
+.auth-tabs{display:flex; background:var(--antique-soft); border-radius:999px; padding:4px; margin-bottom:22px; flex-wrap:wrap;}
+.auth-tab{flex:1; text-align:center; padding:9px; border-radius:999px; font-weight:700; font-size:.85rem; cursor:pointer; color:var(--seal-soft); border:none; background:transparent; white-space:nowrap;}
+.auth-tab.active{background:var(--amaranth); color:#fff;}
+
+/* ---------- CARDS / FORMS ---------- */
+.gestao-card{background:#fff; border-radius:var(--radius-md); padding:20px 24px; margin-bottom:24px; box-shadow:var(--shadow-card);}
+.gestao-card-title{font-family:var(--font-display); color:var(--amaranth); font-size:1.3rem; margin-bottom:14px;}
+.gestao-form{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;}
+.gestao-field{flex:1 1 180px; min-width:0;}
+.gestao-field label{display:block; font-weight:700; font-size:.78rem; margin-bottom:6px; color:var(--seal);}
+.gestao-field input, .gestao-field select, .gestao-field textarea{
+  width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:10px 13px;
+  font-family:var(--font-body); font-size:.88rem; color:var(--seal);
+}
+.gestao-field input:focus, .gestao-field select:focus, .gestao-field textarea:focus{outline:none; border-color:var(--amaranth);}
+.gestao-hint{font-size:.74rem; color:var(--seal-soft); opacity:.75; margin-top:4px;}
+
+.btn{
+  font-family:var(--font-body); font-weight:700; font-size:.88rem; letter-spacing:.01em;
+  border:none; border-radius:999px; padding:11px 22px; cursor:pointer; transition:.2s;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn-primary{background:var(--amaranth); color:#fff;}
+.btn-primary:hover{background:var(--amaranth-dark);}
+.btn-ghost{background:transparent; color:var(--seal-soft); border:2px solid #e4d4c4;}
+.btn-ghost:hover{border-color:var(--amaranth); color:var(--amaranth);}
+.btn-danger{background:transparent; color:var(--bad); border:2px solid #f3c6c2;}
+.btn-danger:hover{background:#fbeceb;}
+.btn:disabled{opacity:.5; cursor:not-allowed;}
+
+/* Tamanhos consistentes pra ações compactas (linha de tabela, linha de lista) —
+   mesma grade de 8px entre botões em todo lugar, em vez de padding solto. */
+.btn-sm{padding:7px 16px; font-size:.78rem;}
+.btn-xs{padding:5px 13px; font-size:.74rem;}
+.btn-row{display:inline-flex; align-items:center; gap:8px; flex-wrap:nowrap;}
+
+.auth-msg{margin-top:14px; padding:11px 14px; border-radius:var(--radius-sm); font-size:.85rem; font-weight:600; display:none;}
+.auth-msg.show{display:block;}
+.auth-msg.ok{background:#eaf7ee; color:var(--ok);}
+.auth-msg.bad{background:#fbeceb; color:var(--bad);}
+
+/* ---------- TABLE ---------- */
+.dash-table{width:100%; border-collapse:collapse; background:#fff; border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-card); font-size:.85rem;}
+.dash-table th, .dash-table td{padding:10px 14px; text-align:left; border-bottom:1px solid #f0e3d2; vertical-align:middle;}
+.dash-table th{background:var(--seal-soft); color:#fff; font-weight:700; font-size:.76rem; text-transform:uppercase; letter-spacing:.04em;}
+.dash-table tr:last-child td{border-bottom:none;}
+.dash-table tr:hover td{background:var(--antique-soft);}
+.dash-filter{display:flex; gap:10px; flex-wrap:wrap; margin:0 0 16px;}
+.dash-filter input, .dash-filter select{
+  border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
+}
+.no-turma{color:var(--bad); font-weight:700;}
+.pill-count{
+  display:inline-block; font-size:.72rem; font-weight:800; background:var(--antique-soft); color:var(--seal-soft);
+  padding:2px 10px; border-radius:999px;
+}
+
+/* ---------- TOGGLE / CHIP LIST (matérias e turmas por professor) ---------- */
+.dyse-toggle{position:relative; display:inline-block; width:40px; height:22px; flex:none;}
+.dyse-toggle input{opacity:0; width:0; height:0;}
+.dyse-toggle .slider{
+  position:absolute; cursor:pointer; inset:0; background:#e4d4c4; border-radius:999px; transition:.2s;
+}
+.dyse-toggle .slider::before{
+  content:""; position:absolute; height:16px; width:16px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:.2s;
+}
+.dyse-toggle input:checked + .slider{background:var(--ok);}
+.dyse-toggle input:checked + .slider::before{transform:translateX(18px);}
+
+.chip-toggle-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid #f0e3d2;}
+.chip-toggle-row:last-child{border-bottom:none;}
+.chip-toggle-row .name{font-size:.87rem; font-weight:600;}
+.chip-toggle-list{max-height:260px; overflow-y:auto;}
+
+/* ---------- ATIVIDADES (caixa expansível com preview) ---------- */
+.activity-row{border-bottom:1px solid #f0e3d2;}
+.activity-row:last-child{border-bottom:none;}
+.activity-row-head{display:flex; align-items:center; gap:10px; padding:9px 0;}
+.activity-caret{
+  flex:none; width:24px; height:24px; border-radius:50%; border:none; background:var(--antique-soft);
+  color:var(--seal-soft); cursor:pointer; font-size:.7rem; display:flex; align-items:center; justify-content:center;
+  transition:.2s;
+}
+.activity-caret:hover{background:var(--cherry);}
+.activity-caret.open{transform:rotate(90deg);}
+.activity-row-head .name{font-size:.87rem; font-weight:600; flex:1 1 auto; min-width:0;}
+.activity-preview{display:none; padding:0 0 16px 34px;}
+.activity-preview.open{display:block;}
+.activity-preview iframe{
+  width:100%; height:60vh; border:2px solid #eee0cf; border-radius:var(--radius-sm); background:#fff;
+}
+.activity-preview .open-tab{display:block; margin-top:8px; font-size:.76rem;}
+
+/* ---------- BUSCA DE ALUNO (dentro do modal de turma) ---------- */
+.modal-search-input{
+  width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 13px;
+  font-family:var(--font-body); font-size:.85rem; color:var(--seal); margin-bottom:8px;
+}
+.modal-search-input:focus{outline:none; border-color:var(--amaranth);}
+.search-result-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0;}
+.search-result-row .name{font-size:.85rem;}
+.search-result-row .name small{opacity:.6; font-weight:600;}
+.student-in-turma-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid #f0e3d2;}
+.student-in-turma-row:last-child{border-bottom:none;}
+
+/* ---------- MODAL (detalhe da turma) ---------- */
+body.dyse-modal-open{overflow:hidden;}
+.report-modal{position:fixed; inset:0; z-index:999; display:none;}
+.report-modal.open{display:block;}
+.report-modal-backdrop{position:absolute; inset:0; background:rgba(58,29,16,.62);}
+.report-modal-panel{
+  position:relative; background:#fff; margin:5vh auto; width:min(560px, 94vw);
+  max-height:90dvh; border-radius:24px; box-shadow:0 24px 60px rgba(0,0,0,.35);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+/* o modal de atividades precisa de mais largura pra caber o preview */
+#materiaModal .report-modal-panel{width:min(900px, 94vw);}
+.report-modal-header{
+  display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+  padding:22px 24px 16px; border-bottom:1px solid #f0e3d2; flex:none; background:#fff;
+}
+.report-modal-header h3{
+  font-family:'Lobster',cursive; color:var(--amaranth); margin:0; font-size:1.45rem;
+  line-height:1.25; overflow-wrap:break-word;
+}
+.report-modal-close{
+  flex:none; width:36px; height:36px; border-radius:50%; border:none; background:var(--antique-soft);
+  color:var(--seal-soft); font-size:1.4rem; line-height:1; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:.2s;
+}
+.report-modal-close:hover{background:var(--cherry); color:var(--seal);}
+.report-modal-body{overflow-y:auto; -webkit-overflow-scrolling:touch; padding:20px 24px 28px; flex:1 1 auto;}
+.report-section-head{font-weight:800; font-size:.9rem; color:var(--seal); margin:18px 0 6px;}
+.report-section-head:first-child{margin-top:0;}
+.report-line{font-size:.85rem; color:var(--seal-soft);}
+
+footer.site-footer{text-align:center; padding:30px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.75;}
+footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; color:var(--amaranth);}
+
+@media (max-width:640px){
+  .report-modal-panel{margin:0; width:100%; max-width:100%; height:100dvh; max-height:100dvh; border-radius:0;}
+  section.gestao-card{padding:20px 16px;}
+  h1.title{font-size:2.1rem;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{transition:none !important;}
+}
+
+</style>
+</head>
+<body>
+<div id="dyseAuthGate">
+  <div class="dyse-spinner"></div>
+  <p>dyse</p>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <span>Do You Speak English? &middot; Painel da Gestão</span>
+    </div>
+    <span class="eyebrow-badge">Acesso restrito</span>
+    <h1 class="title">Gestão de turmas</h1>
+    <p class="subtitle">Crie turmas, cadastre matérias, decida o que cada turma pode acessar e vincule alunos e professores.</p>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:40px;">
+
+  <div class="auth-tabs">
+    <button type="button" class="auth-tab active" id="tabTurmas" onclick="showPanel('turmas')">Turmas</button>
+    <button type="button" class="auth-tab" id="tabMaterias" onclick="showPanel('materias')">Matérias</button>
+    <button type="button" class="auth-tab" id="tabAlunos" onclick="showPanel('alunos')">Alunos</button>
+    <button type="button" class="auth-tab" id="tabProfessores" onclick="showPanel('professores')">Professores</button>
+  </div>
+
+  <!-- ---------- TURMAS ---------- -->
+  <div id="panelTurmas">
+    <div class="gestao-card">
+      <div class="gestao-card-title">Nova turma</div>
+      <form class="gestao-form" onsubmit="return handleCreateTurma(event)">
+        <div class="gestao-field" style="flex:1 1 220px;">
+          <label>Nome da turma</label>
+          <input type="text" id="newTurmaName" placeholder="Ex: Turma A — Manhã" required>
+        </div>
+        <div class="gestao-field" style="flex:2 1 260px;">
+          <label>Descrição (opcional)</label>
+          <input type="text" id="newTurmaDesc" placeholder="Ex: Alunos do 3º ano, período da manhã">
+        </div>
+        <button type="submit" class="btn btn-primary">+ Criar turma</button>
+      </form>
+      <div class="auth-msg" id="turmaMsg"></div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="dash-table" id="turmasTable">
+        <thead>
+          <tr>
+            <th>Turma</th>
+            <th>Matérias liberadas</th>
+            <th>Professores</th>
+            <th>Alunos</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="turmasBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ---------- MATÉRIAS ---------- -->
+  <div id="panelMaterias" style="display:none;">
+    <div class="gestao-card">
+      <div class="gestao-card-title">Nova matéria</div>
+      <form class="gestao-form" onsubmit="return handleCreateMateria(event)">
+        <div class="gestao-field" style="flex:1 1 160px;">
+          <label>Identificador (slug)</label>
+          <input type="text" id="newMateriaSlug" placeholder="Ex: toefl" required pattern="[a-z0-9\-]+">
+        </div>
+        <div class="gestao-field" style="flex:1 1 200px;">
+          <label>Nome</label>
+          <input type="text" id="newMateriaName" placeholder="Ex: TOEFL iBT" required>
+        </div>
+        <div class="gestao-field" style="flex:2 1 240px;">
+          <label>Descrição (opcional)</label>
+          <input type="text" id="newMateriaDesc" placeholder="Ex: Preparatório pro exame TOEFL">
+        </div>
+        <button type="submit" class="btn btn-primary">+ Criar matéria</button>
+      </form>
+      <p class="gestao-hint">O <code>toefl</code> já vem cadastrado (é o único curso que existe hoje) —
+        você só precisa usar este formulário se um curso novo for adicionado ao código no futuro.
+        O identificador (slug) precisa bater com o curso já existente no site pra a liberação valer
+        na área do aluno. Matérias novas cadastradas aqui não criam atividades sozinhas — isso ainda
+        é feito direto no código.</p>
+      <div class="auth-msg" id="materiaMsg"></div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="dash-table" id="materiasTable">
+        <thead>
+          <tr>
+            <th>Slug</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Turmas usando</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="materiasBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ---------- ALUNOS ---------- -->
+  <div id="panelAlunos" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
+      Consulta apenas. Pra colocar ou tirar um aluno de uma turma, vá na aba <b>Turmas</b> → <b>Gerenciar</b> da turma desejada.
+    </p>
+    <div class="dash-filter">
+      <input type="text" id="filterAlunoName" placeholder="Filtrar por nome do aluno..." oninput="renderAlunosTable()">
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="dash-table" id="alunosTable">
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>E-mail</th>
+            <th>Turma</th>
+          </tr>
+        </thead>
+        <tbody id="alunosBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ---------- PROFESSORES ---------- -->
+  <div id="panelProfessores" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
+      Ative as turmas que cada professor(a) pode acessar. Sem nenhuma turma marcada, ele(a) não
+      vê resultado de nenhum aluno no painel da professora.
+    </p>
+    <div id="professoresList"></div>
+  </div>
+
+</div>
+
+<!-- Modal de detalhe da turma -->
+<div id="turmaModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeTurmaModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="turmaModalTitle">
+    <div class="report-modal-header">
+      <h3 id="turmaModalTitle"></h3>
+      <button type="button" class="report-modal-close" onclick="closeTurmaModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="turmaModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de atividades liberadas ao professor, dentro de uma matéria -->
+<div id="materiaModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeMateriaModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="materiaModalTitle">
+    <div class="report-modal-header">
+      <h3 id="materiaModalTitle"></h3>
+      <button type="button" class="report-modal-close" onclick="closeMateriaModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="materiaModalBody"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? &middot; Painel da Gestão</p>
+</footer>
+
+<script src="/assets/dyse-auth.js"></script>
+<script>
+  let TURMAS = [], MATERIAS = [], STUDENTS = [], TEACHERS = [], TURMA_MATERIAS = [], TEACHER_TURMAS = [], MATERIA_ACTIVITIES_DB = [];
+
+  /* Atividades de cada matéria — mesma lista fixa usada em professora.html e
+     area-do-aluno.html (o conteúdo delas é feito à mão no código, não vem
+     do banco). Serve só pra esta tela saber que nomes mostrar; a matéria
+     que ainda não tem curso no código (slug sem entrada aqui) não ganha o
+     botão "Gerenciar atividades". */
+  const MATERIA_ACTIVITY_NAMES = {
+    toefl: [{num:1, theme:'Rotina Diária'},{num:2, theme:'Viagens e Turismo'},{num:3, theme:'Alimentação e Saúde'},{num:4, theme:'Compras e Dinheiro'},{num:5, theme:'Meio Ambiente'},{num:6, theme:'Tecnologia'},{num:7, theme:'Educação'},{num:8, theme:'Trabalho e Carreira'},{num:9, theme:'Cultura e Mídia'},{num:10, theme:'Ciência'},{num:11, theme:'História'},{num:12, theme:'Psicologia'},{num:13, theme:'Negócios e Economia'},{num:14, theme:'Questões Globais'},{num:15, theme:'Artes e Literatura'},{num:16, theme:'Revisão Geral'}]
+  };
+
+  function showPanel(which){
+    ['turmas','materias','alunos','professores'].forEach(p => {
+      document.getElementById('tab' + capitalize(p)).classList.toggle('active', p===which);
+      document.getElementById('panel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
+    });
+  }
+  function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function escapeHtmlLocal(s){
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  function flashMsg(elId, text, ok){
+    const el = document.getElementById(elId);
+    el.textContent = text;
+    el.classList.add('show');
+    el.classList.remove('ok','bad');
+    el.classList.add(ok ? 'ok' : 'bad');
+    setTimeout(() => el.classList.remove('show'), 3500);
+  }
+
+  async function loadAll(){
+    [TURMAS, MATERIAS, STUDENTS, TEACHERS, TURMA_MATERIAS, TEACHER_TURMAS, MATERIA_ACTIVITIES_DB] = await Promise.all([
+      dyseListTurmas(),
+      dyseListMaterias(),
+      dyseListProfilesByRole('student'),
+      dyseListProfilesByRole('teacher'),
+      dyseListAllTurmaMaterias(),
+      dyseListAllTeacherTurmas(),
+      dyseListAllMateriaActivities()
+    ]);
+    renderTurmasTable();
+    renderMateriasTable();
+    renderAlunosTable();
+    renderProfessoresList();
+  }
+
+  /* ---------- TURMAS ---------- */
+  function renderTurmasTable(){
+    document.getElementById('turmasBody').innerHTML = TURMAS.map(t => {
+      const materiaCount = TURMA_MATERIAS.filter(tm => tm.turma_id === t.id).length;
+      const teacherCount = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id).length;
+      const studentCount = STUDENTS.filter(s => s.turma_id === t.id).length;
+      return '<tr>' +
+        '<td><b>' + escapeHtmlLocal(t.name) + '</b>' + (t.description ? '<div style="opacity:.65; font-size:.78rem;">' + escapeHtmlLocal(t.description) + '</div>' : '') + '</td>' +
+        '<td><span class="pill-count">' + materiaCount + '</span></td>' +
+        '<td><span class="pill-count">' + teacherCount + '</span></td>' +
+        '<td><span class="pill-count">' + studentCount + '</span></td>' +
+        '<td><div class="btn-row">' +
+          '<button type="button" class="btn btn-ghost btn-sm" onclick="openTurmaModal(\'' + t.id + '\')">Gerenciar</button>' +
+          '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma turma criada ainda.</td></tr>';
+  }
+
+  async function handleCreateTurma(e){
+    e.preventDefault();
+    const name = document.getElementById('newTurmaName').value.trim();
+    const description = document.getElementById('newTurmaDesc').value.trim();
+    if(!name) return false;
+    const { error } = await dyseCreateTurma(name, description || null);
+    if(error){ flashMsg('turmaMsg', 'Não foi possível criar a turma: ' + error.message, false); return false; }
+    document.getElementById('newTurmaName').value = '';
+    document.getElementById('newTurmaDesc').value = '';
+    flashMsg('turmaMsg', 'Turma criada!', true);
+    TURMAS = await dyseListTurmas();
+    renderTurmasTable();
+    return false;
+  }
+
+  async function handleDeleteTurma(turmaId){
+    const t = TURMAS.find(x => x.id === turmaId);
+    if(!confirm('Excluir a turma "' + (t ? t.name : '') + '"? Os alunos dela ficam sem turma.')) return;
+    await dyseDeleteTurma(turmaId);
+    await loadAll();
+  }
+
+  let CURRENT_TURMA_MODAL_ID = null;
+
+  function openTurmaModal(turmaId){
+    const t = TURMAS.find(x => x.id === turmaId);
+    if(!t) return;
+    CURRENT_TURMA_MODAL_ID = turmaId;
+    document.getElementById('turmaModalTitle').textContent = t.name;
+
+    const materiasHtml = MATERIAS.length
+      ? '<div class="chip-toggle-list">' + MATERIAS.map(m => {
+          const on = TURMA_MATERIAS.some(tm => tm.turma_id === t.id && tm.materia_slug === m.slug);
+          return '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(m.name) + '</span>' +
+            '<label class="dyse-toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleTurmaMateria(\'' + t.id + '\', \'' + m.slug + '\', this.checked, this)"><span class="slider"></span></label></div>';
+        }).join('') + '</div>'
+      : '<p class="report-line" style="opacity:.6;">Nenhuma matéria cadastrada ainda — crie uma na aba Matérias.</p>';
+
+    document.getElementById('turmaModalBody').innerHTML =
+      '<div class="report-section-head">Matérias liberadas</div>' + materiasHtml +
+      '<div class="report-section-head">Professores com acesso</div>' +
+      '<input type="text" class="modal-search-input" id="turmaTeacherSearch" placeholder="Buscar professor(a) pra adicionar..." oninput="renderTurmaTeacherSearch()">' +
+      '<div id="turmaTeacherSearchResults"></div>' +
+      '<div id="turmaTeachersList"></div>' +
+      '<div class="report-section-head">Alunos nesta turma</div>' +
+      '<input type="text" class="modal-search-input" id="turmaStudentSearch" placeholder="Buscar aluno pra adicionar..." oninput="renderTurmaStudentSearch()">' +
+      '<div id="turmaStudentSearchResults"></div>' +
+      '<div id="turmaStudentsList"></div>';
+
+    renderTurmaTeacherSearch();
+    renderTurmaTeachersList();
+    renderTurmaStudentSearch();
+    renderTurmaStudentsList();
+
+    document.getElementById('turmaModal').classList.add('open');
+    document.getElementById('turmaModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeTurmaModal(){
+    document.getElementById('turmaModal').classList.remove('open');
+    document.getElementById('turmaModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_TURMA_MODAL_ID = null;
+  }
+
+  function renderTurmaTeachersList(){
+    const container = document.getElementById('turmaTeachersList');
+    if(!container || !CURRENT_TURMA_MODAL_ID) return;
+    const assignedIds = new Set(TEACHER_TURMAS.filter(tt => tt.turma_id === CURRENT_TURMA_MODAL_ID).map(tt => tt.teacher_id));
+    const teachersInTurma = TEACHERS.filter(p => assignedIds.has(p.id));
+    container.innerHTML = teachersInTurma.length
+      ? teachersInTurma.map(p =>
+          '<div class="student-in-turma-row"><span class="name">' + escapeHtmlLocal(p.full_name || p.id) + '</span>' +
+          '<button type="button" class="btn btn-danger btn-xs" onclick="removeTeacherFromTurma(\'' + p.id + '\')">Remover</button></div>'
+        ).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum professor com acesso ainda — busque acima pra adicionar.</p>';
+  }
+
+  function renderTurmaTeacherSearch(){
+    const results = document.getElementById('turmaTeacherSearchResults');
+    const input = document.getElementById('turmaTeacherSearch');
+    if(!results || !input || !CURRENT_TURMA_MODAL_ID) return;
+    const query = input.value.trim().toLowerCase();
+    if(!query){ results.innerHTML = ''; return; }
+
+    const assignedIds = new Set(TEACHER_TURMAS.filter(tt => tt.turma_id === CURRENT_TURMA_MODAL_ID).map(tt => tt.teacher_id));
+    const matches = TEACHERS
+      .filter(p => (p.full_name || '').toLowerCase().includes(query) || (p.email || '').toLowerCase().includes(query))
+      .filter(p => !assignedIds.has(p.id))
+      .slice(0, 8);
+
+    results.innerHTML = matches.length
+      ? matches.map(p =>
+          '<div class="search-result-row"><span class="name">' + escapeHtmlLocal(p.full_name || p.id) + '</span>' +
+          '<button type="button" class="btn btn-primary btn-xs" onclick="addTeacherToTurma(\'' + p.id + '\')">+ Adicionar</button></div>'
+        ).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum professor encontrado.</p>';
+  }
+
+  async function addTeacherToTurma(teacherId){
+    const { error } = await dyseSetTeacherTurma(teacherId, CURRENT_TURMA_MODAL_ID, true);
+    if(error){ alert('Não foi possível adicionar o professor: ' + error.message); return; }
+    TEACHER_TURMAS.push({ teacher_id: teacherId, turma_id: CURRENT_TURMA_MODAL_ID });
+    document.getElementById('turmaTeacherSearch').value = '';
+    renderTurmaTeacherSearch();
+    renderTurmaTeachersList();
+    renderTurmasTable();
+  }
+
+  async function removeTeacherFromTurma(teacherId){
+    const { error } = await dyseSetTeacherTurma(teacherId, CURRENT_TURMA_MODAL_ID, false);
+    if(error){ alert('Não foi possível remover o professor: ' + error.message); return; }
+    TEACHER_TURMAS = TEACHER_TURMAS.filter(tt => !(tt.teacher_id === teacherId && tt.turma_id === CURRENT_TURMA_MODAL_ID));
+    renderTurmaTeacherSearch();
+    renderTurmaTeachersList();
+    renderTurmasTable();
+  }
+
+  function renderTurmaStudentsList(){
+    const container = document.getElementById('turmaStudentsList');
+    if(!container || !CURRENT_TURMA_MODAL_ID) return;
+    const studentsInTurma = STUDENTS.filter(s => s.turma_id === CURRENT_TURMA_MODAL_ID);
+    container.innerHTML = studentsInTurma.length
+      ? studentsInTurma.map(s =>
+          '<div class="student-in-turma-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.id) + '</span>' +
+          '<button type="button" class="btn btn-danger btn-xs" onclick="removeStudentFromTurma(\'' + s.id + '\')">Remover</button></div>'
+        ).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum aluno nesta turma ainda — busque acima pra adicionar.</p>';
+  }
+
+  function renderTurmaStudentSearch(){
+    const results = document.getElementById('turmaStudentSearchResults');
+    const input = document.getElementById('turmaStudentSearch');
+    if(!results || !input || !CURRENT_TURMA_MODAL_ID) return;
+    const query = input.value.trim().toLowerCase();
+    if(!query){ results.innerHTML = ''; return; }
+
+    const matches = STUDENTS
+      .filter(s => (s.full_name || '').toLowerCase().includes(query) || (s.email || '').toLowerCase().includes(query))
+      .filter(s => s.turma_id !== CURRENT_TURMA_MODAL_ID)
+      .slice(0, 8);
+
+    results.innerHTML = matches.length
+      ? matches.map(s => {
+          const currentTurma = TURMAS.find(t => t.id === s.turma_id);
+          const label = currentTurma ? ' <small>(está em "' + escapeHtmlLocal(currentTurma.name) + '")</small>' : ' <small>(sem turma)</small>';
+          return '<div class="search-result-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.id) + label + '</span>' +
+            '<button type="button" class="btn btn-primary btn-xs" onclick="addStudentToTurma(\'' + s.id + '\')">+ Adicionar</button></div>';
+        }).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum aluno encontrado.</p>';
+  }
+
+  async function addStudentToTurma(studentId){
+    const { error } = await dyseSetStudentTurma(studentId, CURRENT_TURMA_MODAL_ID);
+    if(error){ alert('Não foi possível adicionar o aluno: ' + error.message); return; }
+    const s = STUDENTS.find(x => x.id === studentId);
+    if(s) s.turma_id = CURRENT_TURMA_MODAL_ID;
+    document.getElementById('turmaStudentSearch').value = '';
+    renderTurmaStudentSearch();
+    renderTurmaStudentsList();
+    renderTurmasTable();
+    renderAlunosTable();
+  }
+
+  async function removeStudentFromTurma(studentId){
+    const { error } = await dyseSetStudentTurma(studentId, null);
+    if(error){ alert('Não foi possível remover o aluno: ' + error.message); return; }
+    const s = STUDENTS.find(x => x.id === studentId);
+    if(s) s.turma_id = null;
+    renderTurmaStudentSearch();
+    renderTurmaStudentsList();
+    renderTurmasTable();
+    renderAlunosTable();
+  }
+
+  async function toggleTurmaMateria(turmaId, slug, enabled, checkboxEl){
+    const { error } = await dyseSetTurmaMateria(turmaId, slug, enabled);
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !enabled; // desfaz a marcação na tela
+      return;
+    }
+    if(enabled) TURMA_MATERIAS.push({ turma_id: turmaId, materia_slug: slug });
+    else TURMA_MATERIAS = TURMA_MATERIAS.filter(tm => !(tm.turma_id === turmaId && tm.materia_slug === slug));
+    renderTurmasTable();
+    renderMateriasTable();
+  }
+
+  async function toggleTeacherTurma(teacherId, turmaId, enabled, checkboxEl){
+    const { error } = await dyseSetTeacherTurma(teacherId, turmaId, enabled);
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !enabled; // desfaz a marcação na tela
+      return;
+    }
+    if(enabled) TEACHER_TURMAS.push({ teacher_id: teacherId, turma_id: turmaId });
+    else TEACHER_TURMAS = TEACHER_TURMAS.filter(tt => !(tt.teacher_id === teacherId && tt.turma_id === turmaId));
+    renderTurmasTable();
+  }
+
+  /* ---------- MATÉRIAS ---------- */
+  function renderMateriasTable(){
+    document.getElementById('materiasBody').innerHTML = MATERIAS.map(m => {
+      const turmaCount = TURMA_MATERIAS.filter(tm => tm.materia_slug === m.slug).length;
+      const activities = MATERIA_ACTIVITY_NAMES[m.slug];
+      const releasedCount = activities
+        ? MATERIA_ACTIVITIES_DB.filter(ma => ma.materia_slug === m.slug && ma.released_to_teachers).length
+        : 0;
+      const activitiesBtn = activities
+        ? '<button type="button" class="btn btn-ghost btn-sm" onclick="openMateriaModal(\'' + m.slug + '\')">Atividades (' + releasedCount + '/' + activities.length + ')</button>'
+        : '';
+      return '<tr>' +
+        '<td><code>' + escapeHtmlLocal(m.slug) + '</code></td>' +
+        '<td>' + escapeHtmlLocal(m.name) + '</td>' +
+        '<td>' + escapeHtmlLocal(m.description || '-') + '</td>' +
+        '<td><span class="pill-count">' + turmaCount + '</span></td>' +
+        '<td><div class="btn-row">' + activitiesBtn +
+          '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteMateria(\'' + m.slug + '\')">Excluir</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma matéria cadastrada ainda.</td></tr>';
+  }
+
+  const ACTIVITY_URL_TEMPLATE = '/atividades/{course}/atividade_{num}.html';
+  function activityUrl(course, num){
+    return ACTIVITY_URL_TEMPLATE.replace('{course}', course).replace('{num}', num);
+  }
+
+  function openMateriaModal(slug){
+    const m = MATERIAS.find(x => x.slug === slug);
+    const activities = MATERIA_ACTIVITY_NAMES[slug];
+    if(!m || !activities) return;
+    document.getElementById('materiaModalTitle').textContent = m.name;
+
+    document.getElementById('materiaModalBody').innerHTML =
+      '<p class="report-line" style="margin-bottom:14px;">Clique na seta pra ver a atividade. O toggle controla se ela ' +
+      'fica disponível pro professor publicar/ocultar pros alunos dele em "Gerenciar atividades" — desmarcada, nem ' +
+      'aparece como opção pra ele.</p>' +
+      activities.map(a => {
+        const row = MATERIA_ACTIVITIES_DB.find(ma => ma.materia_slug === slug && ma.activity_num === a.num);
+        const on = row ? !!row.released_to_teachers : false;
+        const rowId = 'activity-preview-' + slug + '-' + a.num;
+        return '<div class="activity-row">' +
+          '<div class="activity-row-head">' +
+            '<button type="button" class="activity-caret" onclick="toggleActivityPreview(\'' + slug + '\', ' + a.num + ', this)">▸</button>' +
+            '<span class="name">' + String(a.num).padStart(2,'0') + '. ' + escapeHtmlLocal(a.theme) + '</span>' +
+            '<label class="dyse-toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleMateriaActivity(\'' + slug + '\', ' + a.num + ', this.checked, this)"><span class="slider"></span></label>' +
+          '</div>' +
+          '<div class="activity-preview" id="' + rowId + '"></div>' +
+        '</div>';
+      }).join('');
+
+    document.getElementById('materiaModal').classList.add('open');
+    document.getElementById('materiaModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function toggleActivityPreview(slug, activityNum, caretEl){
+    const box = document.getElementById('activity-preview-' + slug + '-' + activityNum);
+    if(!box) return;
+    const opening = !box.classList.contains('open');
+    box.classList.toggle('open', opening);
+    caretEl.classList.toggle('open', opening);
+    caretEl.textContent = opening ? '▾' : '▸';
+    // carrega o iframe só na primeira vez que abrir (evita 16 iframes de uma vez)
+    if(opening && !box.dataset.loaded){
+      box.dataset.loaded = '1';
+      const url = activityUrl(slug, activityNum);
+      box.innerHTML = '<iframe src="' + url + '" loading="lazy" title="Preview da atividade"></iframe>' +
+        '<a class="open-tab" href="' + url + '" target="_blank" rel="noopener">↗ Abrir em outra aba</a>';
+    }
+  }
+
+  function closeMateriaModal(){
+    document.getElementById('materiaModal').classList.remove('open');
+    document.getElementById('materiaModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+  }
+
+  async function toggleMateriaActivity(slug, activityNum, enabled, checkboxEl){
+    const { error } = await dyseSetMateriaActivityReleased(slug, activityNum, enabled);
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !enabled;
+      return;
+    }
+    const existing = MATERIA_ACTIVITIES_DB.find(ma => ma.materia_slug === slug && ma.activity_num === activityNum);
+    if(existing) existing.released_to_teachers = enabled;
+    else MATERIA_ACTIVITIES_DB.push({ materia_slug: slug, activity_num: activityNum, released_to_teachers: enabled });
+    renderMateriasTable();
+  }
+
+  async function handleCreateMateria(e){
+    e.preventDefault();
+    const slug = document.getElementById('newMateriaSlug').value.trim().toLowerCase();
+    const name = document.getElementById('newMateriaName').value.trim();
+    const description = document.getElementById('newMateriaDesc').value.trim();
+    if(!slug || !name) return false;
+    const { error } = await dyseCreateMateria(slug, name, description || null);
+    if(error){ flashMsg('materiaMsg', 'Não foi possível criar a matéria: ' + error.message, false); return false; }
+    document.getElementById('newMateriaSlug').value = '';
+    document.getElementById('newMateriaName').value = '';
+    document.getElementById('newMateriaDesc').value = '';
+    flashMsg('materiaMsg', 'Matéria criada!', true);
+    MATERIAS = await dyseListMaterias();
+    renderMateriasTable();
+    return false;
+  }
+
+  async function handleDeleteMateria(slug){
+    if(!confirm('Excluir a matéria "' + slug + '"? Ela deixa de ficar liberada pra qualquer turma.')) return;
+    await dyseDeleteMateria(slug);
+    await loadAll();
+  }
+
+  /* ---------- ALUNOS (só consulta — vincular turma é feito dentro de "Gerenciar" da turma) ---------- */
+  function renderAlunosTable(){
+    const filter = (document.getElementById('filterAlunoName').value || '').trim().toLowerCase();
+    const rows = STUDENTS.filter(s => !filter || (s.full_name||'').toLowerCase().includes(filter));
+    document.getElementById('alunosBody').innerHTML = rows.map(s => {
+      const turma = TURMAS.find(t => t.id === s.turma_id);
+      return '<tr>' +
+        '<td>' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
+        '<td>' + escapeHtmlLocal(s.email || '-') + '</td>' +
+        '<td>' + (turma ? escapeHtmlLocal(turma.name) : '<span class="no-turma">Sem turma</span>') + '</td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
+  }
+
+  /* ---------- PROFESSORES ---------- */
+  function renderProfessoresList(){
+    const container = document.getElementById('professoresList');
+    if(!TEACHERS.length){
+      container.innerHTML = '<p style="opacity:.6;">Nenhum professor cadastrado ainda.</p>';
+      return;
+    }
+    container.innerHTML = TEACHERS.map(p => {
+      const rows = TURMAS.map(t => {
+        const on = TEACHER_TURMAS.some(tt => tt.teacher_id === p.id && tt.turma_id === t.id);
+        return '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(t.name) + '</span>' +
+          '<label class="dyse-toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleTeacherTurma(\'' + p.id + '\', \'' + t.id + '\', this.checked, this)"><span class="slider"></span></label></div>';
+      }).join('') || '<p class="report-line" style="opacity:.6;">Nenhuma turma criada ainda.</p>';
+      return '<div class="gestao-card"><div class="gestao-card-title" style="font-size:1.1rem;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' + rows + '</div>';
+    }).join('');
+  }
+
+  document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeTurmaModal(); closeMateriaModal(); } });
+
+  (async () => {
+    const session = await dyseRequireAdmin();
+    if(!session) return;
+    dyseRenderAuthBar('authBar');
+    await loadAll();
+  })();
+</script>
+</body>
+</html>
