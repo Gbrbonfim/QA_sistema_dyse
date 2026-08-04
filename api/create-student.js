@@ -76,8 +76,10 @@ module.exports = async function handler(req, res){
     return;
   }
 
+  const origin = req.headers.origin || ('https://' + req.headers.host);
   const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: fullName }
+    data: { full_name: fullName },
+    redirectTo: origin + '/definir-senha.html'
   });
   if(inviteError){
     res.status(400).json({ error: inviteError.message });

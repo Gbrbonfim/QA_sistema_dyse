@@ -119,6 +119,20 @@ async function dyseLogout(){
   location.href = '/login.html';
 }
 
+/* ---------- Reenviar acesso (aluno ou professor) ----------
+   Mesmo fluxo de "esqueci minha senha" do Supabase — funciona tanto pra
+   quem nunca definiu senha (convite ainda não aceito) quanto pra quem já
+   tem conta ativa e perdeu o acesso. Usa a chave anônima (sem precisar de
+   service_role nem de função serverless) porque reenviar/recuperar acesso
+   por e-mail é uma operação pública por natureza (é o mesmo "esqueci minha
+   senha" que qualquer usuário poderia acionar sozinho em /login.html). */
+async function dyseReenviarAcesso(email){
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/definir-senha.html'
+  });
+  return { error };
+}
+
 /* ---------- Barra "Olá, Fulano · Sair" ---------- */
 async function dyseRenderAuthBar(containerId){
   const el = document.getElementById(containerId);

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Definir senha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+
+:root{
+  --amaranth:#D03B55;
+  --amaranth-dark:#B22C44;
+  --gamboge:#F0A224;
+  --seal:#3A1D10;
+  --seal-soft:#562915;
+  --antique:#FFEAD6;
+  --antique-soft:#FFF3E6;
+  --ok:#2E8B57;
+  --bad:#C0392B;
+  --radius-lg:28px;
+  --radius-sm:10px;
+  --shadow-card:0 10px 30px rgba(58,29,16,0.12);
+  --font-display:'Lobster', cursive;
+  --font-body:'Poppins', sans-serif;
+}
+
+*{box-sizing:border-box;}
+html, body{max-width:100%; overflow-x:hidden;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--antique);
+  color:var(--seal);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(240,162,36,0.10) 0, transparent 45%),
+    radial-gradient(circle at 92% 18%, rgba(208,59,85,0.10) 0, transparent 40%),
+    radial-gradient(circle at 50% 95%, rgba(235,100,36,0.08) 0, transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.auth-shell{position:relative; z-index:1; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+.auth-card{
+  background:#fff; border-radius:var(--radius-lg); padding:40px clamp(24px,5vw,44px); max-width:440px; width:100%;
+  box-shadow:var(--shadow-card); border-top:8px solid var(--amaranth);
+}
+.auth-logo{font-family:var(--font-display); font-size:2rem; color:var(--amaranth); text-align:center; margin-bottom:4px;}
+.auth-tag{text-align:center; font-size:.8rem; color:var(--seal-soft); margin-bottom:26px; opacity:.8;}
+.auth-field{margin-bottom:16px;}
+.auth-field label{display:block; font-weight:700; font-size:.85rem; margin-bottom:6px; color:var(--seal);}
+.auth-field input{
+  width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:11px 14px;
+  font-family:var(--font-body); font-size:.95rem; color:var(--seal);
+}
+.auth-field input:focus{outline:none; border-color:var(--amaranth);}
+.auth-hint{font-size:.76rem; color:var(--seal-soft); opacity:.75; margin:-10px 0 16px;}
+.btn{
+  font-family:var(--font-body); font-weight:700; font-size:.88rem; letter-spacing:.01em;
+  border:none; border-radius:999px; padding:11px 22px; cursor:pointer; transition:.2s;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+}
+.btn-primary{background:var(--amaranth); color:#fff;}
+.btn-primary:hover{background:var(--amaranth-dark);}
+.btn:disabled{opacity:.5; cursor:not-allowed;}
+.auth-submit{width:100%; font-size:.95rem; padding:13px; margin-top:6px;}
+.auth-msg{margin-top:16px; padding:11px 14px; border-radius:var(--radius-sm); font-size:.85rem; font-weight:600; display:none;}
+.auth-msg.show{display:block;}
+.auth-msg.ok{background:#eaf7ee; color:var(--ok);}
+.auth-msg.bad{background:#fbeceb; color:var(--bad);}
+.auth-foot{text-align:center; margin-top:22px; font-size:.78rem; color:var(--seal-soft);}
+.auth-foot a{color:var(--amaranth); font-weight:700;}
+
+.dyse-spinner{
+  width:38px; height:38px; border-radius:50%; border:4px solid #e4d4c4; border-top-color:var(--amaranth);
+  animation:dyse-spin 0.8s linear infinite; margin:0 auto 18px;
+}
+@keyframes dyse-spin{to{transform:rotate(360deg);}}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important;}
+}
+
+</style>
+</head>
+<body>
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-logo">dyse</div>
+    <div class="auth-tag">Do You Speak English? &middot; Definir senha de acesso</div>
+
+    <!-- Enquanto o supabase-js processa o link do e-mail (leva menos de 1s) -->
+    <div id="verificando" style="text-align:center; padding:20px 0;">
+      <div class="dyse-spinner"></div>
+      <p style="font-size:.85rem; color:var(--seal-soft);">Verificando seu link de acesso...</p>
+    </div>
+
+    <!-- Link válido: formulário pra definir a senha -->
+    <form id="formSenha" onsubmit="return handleDefinirSenha(event)" style="display:none;">
+      <p id="paraEmail" style="font-size:.85rem; color:var(--seal-soft); margin-bottom:18px;"></p>
+      <div class="auth-field">
+        <label for="novaSenha">Nova senha</label>
+        <input type="password" id="novaSenha" required autocomplete="new-password" minlength="6" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="auth-field">
+        <label for="confirmarSenha">Confirmar senha</label>
+        <input type="password" id="confirmarSenha" required autocomplete="new-password" minlength="6" placeholder="Repita a senha">
+      </div>
+      <button type="submit" class="btn btn-primary auth-submit" id="btnSalvarSenha">Salvar senha e entrar</button>
+    </form>
+
+    <!-- Link inválido/expirado -->
+    <div id="semSessao" style="display:none; text-align:center;">
+      <p style="font-size:.9rem; color:var(--seal-soft); margin-bottom:18px;">
+        Este link de acesso não é mais válido — pode já ter sido usado ou ter expirado.
+        Peça pra gestão reenviar o seu acesso, ou tente entrar normalmente se já tiver uma senha.
+      </p>
+      <a href="/login.html" class="btn btn-primary auth-submit" style="text-decoration:none;">Ir para o login</a>
+    </div>
+
+    <div class="auth-msg" id="authMsg"></div>
+
+    <div class="auth-foot">Precisa de ajuda? Fale com a DYSE pelo WhatsApp.</div>
+  </div>
+</div>
+
+<script src="/assets/dyse-auth.js"></script>
+<script>
+  function showMsg(text, ok){
+    const el = document.getElementById('authMsg');
+    el.textContent = text;
+    el.classList.add('show');
+    el.classList.remove('ok','bad');
+    el.classList.add(ok ? 'ok' : 'bad');
+  }
+
+  async function handleDefinirSenha(e){
+    e.preventDefault();
+    const senha = document.getElementById('novaSenha').value;
+    const confirmar = document.getElementById('confirmarSenha').value;
+    if(senha.length < 6){ showMsg('A senha precisa ter pelo menos 6 caracteres.', false); return false; }
+    if(senha !== confirmar){ showMsg('As senhas não coincidem.', false); return false; }
+
+    const btn = document.getElementById('btnSalvarSenha');
+    btn.disabled = true;
+    try{
+      const { error } = await sb.auth.updateUser({ password: senha });
+      if(error){ showMsg('Não foi possível salvar: ' + error.message, false); btn.disabled = false; return false; }
+      showMsg('Senha definida! Entrando...', true);
+      location.href = '/login.html'; // já com sessão ativa — login.html redireciona pro lugar certo sozinho
+    }catch(err){
+      showMsg('Algo deu errado. Verifique sua internet e tente novamente.', false);
+      btn.disabled = false;
+    }
+    return false;
+  }
+
+  // O supabase-js já processa o token do link (#access_token=...&type=invite/recovery)
+  // sozinho ao carregar a página (detectSessionInUrl, ligado por padrão) — só
+  // precisamos esperar a sessão aparecer pra saber se o link era válido.
+  (async () => {
+    const { data } = await sb.auth.getSession();
+    document.getElementById('verificando').style.display = 'none';
+    if(!data.session){
+      document.getElementById('semSessao').style.display = 'block';
+      return;
+    }
+    document.getElementById('paraEmail').textContent = 'Definindo a senha de acesso para ' + data.session.user.email;
+    document.getElementById('formSenha').style.display = 'block';
+  })();
+</script>
+</body>
+</html>
