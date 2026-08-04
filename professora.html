@@ -682,7 +682,7 @@ body.dyse-modal-open{overflow:hidden;}
     <div style="overflow-x:auto;">
       <table class="dash-table" id="finProfTable">
         <thead>
-          <tr><th>Aluno</th><th>Modalidade</th><th>Valor</th></tr>
+          <tr><th>Aluno</th><th>Modalidade</th><th>Valor a receber</th></tr>
         </thead>
         <tbody id="finProfBody"></tbody>
       </table>
@@ -1094,7 +1094,7 @@ body.dyse-modal-open{overflow:hidden;}
       return '<tr>' +
         '<td>' + escapeHtmlLocal(l.aluno_nome || l.aluno_id) + '</td>' +
         '<td>' + (mod ? escapeHtmlLocal(mod.name) : '-') + '</td>' +
-        '<td>' + formatMoney(l.valor_recebido) + '</td>' +
+        '<td>' + formatMoney(l.valor_pago_professor) + '</td>' +
       '</tr>';
     }).join('') : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhum aluno neste mês.</td></tr>';
   }

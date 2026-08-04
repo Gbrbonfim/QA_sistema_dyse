@@ -471,7 +471,11 @@ function dyseValorVigente(valoresDaModalidade, mesCompetencia){
 /* ---------- Vínculo financeiro aluno↔professor↔modalidade (histórico por período) ----------
    Sem "alunoId", traz o histórico de todos os alunos. */
 async function dyseListAlunoFinanceiroHistorico(alunoId){
-  let query = sb.from('aluno_financeiro_historico').select('*').order('data_inicio', { ascending: false });
+  // Ordena por data_inicio e, em caso de empate (mais de uma edição no mesmo
+  // dia — comum em testes), por "id" como critério de desempate: garante que
+  // a edição mais recente sempre "ganha" de forma determinística, em vez de
+  // depender da ordem que o banco devolve linhas com data_inicio igual.
+  let query = sb.from('aluno_financeiro_historico').select('*').order('data_inicio', { ascending: false }).order('id', { ascending: false });
   if(alunoId) query = query.eq('aluno_id', alunoId);
   const { data, error } = await query;
   return error ? [] : data;
@@ -580,7 +584,13 @@ async function dyseGerarMensalidadesDoMes(mes){
     if(h.data_inicio > fimDoMesStr) return;
     if(h.data_fim && h.data_fim < mes) return;
     const atual = porAluno[h.aluno_id];
-    if(!atual || h.data_inicio > atual.data_inicio) porAluno[h.aluno_id] = h;
+    // Desempate por "id" quando duas edições caem na mesma data_inicio (mais
+    // de uma troca no mesmo dia) — sem isso, a mais recente podia perder de
+    // uma mais antiga dependendo só da ordem de iteração.
+    const ganha = !atual
+      || h.data_inicio > atual.data_inicio
+      || (h.data_inicio === atual.data_inicio && h.id > atual.id);
+    if(ganha) porAluno[h.aluno_id] = h;
   });
 
   const linhas = Object.keys(porAluno)
