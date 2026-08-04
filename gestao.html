@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Painel da Gestão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
+<style>
+
+:root{
+  --amaranth:#D03B55;
+  --amaranth-dark:#B22C44;
+  --gamboge:#F0A224;
+  --gamboge-dark:#CE8613;
+  --cherry:#FCABAF;
+  --orangered:#EB6424;
+  --seal:#3A1D10;
+  --seal-soft:#562915;
+  --antique:#FFEAD6;
+  --antique-soft:#FFF3E6;
+  --white:#FFFFFF;
+  --ok:#2E8B57;
+  --bad:#C0392B;
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:10px;
+  --shadow-card:0 10px 30px rgba(58,29,16,0.12);
+  --font-display:'Lobster', cursive;
+  --font-body:'Poppins', sans-serif;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+html, body{max-width:100%; overflow-x:hidden;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--antique);
+  color:var(--seal);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(240,162,36,0.10) 0, transparent 45%),
+    radial-gradient(circle at 92% 18%, rgba(208,59,85,0.10) 0, transparent 40%),
+    radial-gradient(circle at 50% 95%, rgba(235,100,36,0.08) 0, transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.wrap{position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:0 20px 80px; width:100%;}
+
+/* ---------- HERO / HEADER ---------- */
+.hero{
+  background:var(--amaranth);
+  color:var(--antique-soft);
+  padding:38px 20px 64px;
+  position:relative;
+  overflow:hidden;
+  border-bottom:6px solid var(--gamboge);
+}
+.hero::after{
+  content:"dyse";
+  position:absolute;
+  font-family:var(--font-display);
+  font-size:15vw;
+  right:-4%;
+  top:-8%;
+  color:rgba(255,255,255,0.05);
+  white-space:nowrap;
+  pointer-events:none;
+  line-height:1;
+}
+.hero-inner{max-width:1000px; margin:0 auto; position:relative; z-index:2;}
+.brand-row{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
+  opacity:.85; margin-bottom:26px; min-width:0;
+}
+.brand-row .mark{
+  display:inline-flex; align-items:center; gap:8px; font-family:var(--font-display);
+  font-size:1.35rem; letter-spacing:0; text-transform:none; color:var(--antique);
+}
+.eyebrow-badge{
+  display:inline-block; background:var(--gamboge); color:var(--seal);
+  font-weight:700; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+  padding:6px 14px; border-radius:999px; margin-bottom:14px;
+}
+h1.title{
+  font-family:var(--font-display);
+  font-size:clamp(2.1rem, 6vw, 3.4rem);
+  margin:0 0 10px;
+  color:var(--antique);
+  line-height:1.05;
+}
+.subtitle{font-size:1.02rem; max-width:60ch; color:var(--antique-soft); opacity:.95;}
+
+/* ---------- AUTH GATE / AUTH BAR ---------- */
+html:not(.dyse-auth-ready) #dyseAuthGate{
+  position:fixed; inset:0; z-index:9999; background:var(--antique);
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
+}
+html.dyse-auth-ready #dyseAuthGate{display:none;}
+.dyse-spinner{
+  width:38px; height:38px; border-radius:50%; border:4px solid #e4d4c4; border-top-color:var(--amaranth);
+  animation:dyse-spin 0.8s linear infinite;
+}
+@keyframes dyse-spin{to{transform:rotate(360deg);}}
+#dyseAuthGate p{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
+
+.dyse-auth-bar{
+  display:flex; align-items:center; justify-content:flex-end; gap:14px; flex-wrap:wrap;
+  font-size:.82rem; font-weight:600; margin-top:14px; color:var(--antique);
+}
+.dyse-auth-name{opacity:.95;}
+.dyse-auth-link{color:var(--gamboge); text-decoration:underline; text-underline-offset:3px;}
+.dyse-auth-link:hover{color:#fff;}
+.dyse-auth-logout{
+  background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35); color:var(--antique);
+  padding:5px 14px; border-radius:999px; font-size:.78rem; font-weight:700; cursor:pointer;
+}
+.dyse-auth-logout:hover{background:rgba(255,255,255,.3);}
+
+/* ---------- TABS ---------- */
+.auth-tabs{display:flex; background:var(--antique-soft); border-radius:999px; padding:4px; margin-bottom:22px; flex-wrap:wrap;}
+.auth-tab{flex:1; text-align:center; padding:9px; border-radius:999px; font-weight:700; font-size:.85rem; cursor:pointer; color:var(--seal-soft); border:none; background:transparent; white-space:nowrap;}
+.auth-tab.active{background:var(--amaranth); color:#fff;}
+
+/* ---------- CARDS / FORMS ---------- */
+.gestao-card{background:#fff; border-radius:var(--radius-md); padding:20px 24px; margin-bottom:24px; box-shadow:var(--shadow-card);}
+.gestao-card-title{font-family:var(--font-display); color:var(--amaranth); font-size:1.3rem; margin-bottom:14px;}
+.gestao-form{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;}
+.gestao-field{flex:1 1 180px; min-width:0;}
+.gestao-field label{display:block; font-weight:700; font-size:.78rem; margin-bottom:6px; color:var(--seal);}
+.gestao-field input, .gestao-field select, .gestao-field textarea{
+  width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:10px 13px;
+  font-family:var(--font-body); font-size:.88rem; color:var(--seal);
+}
+.gestao-field input:focus, .gestao-field select:focus, .gestao-field textarea:focus{outline:none; border-color:var(--amaranth);}
+.gestao-hint{font-size:.74rem; color:var(--seal-soft); opacity:.75; margin-top:4px;}
+
+.btn{
+  font-family:var(--font-body); font-weight:700; font-size:.88rem; letter-spacing:.01em;
+  border:none; border-radius:999px; padding:11px 22px; cursor:pointer; transition:.2s;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn-primary{background:var(--amaranth); color:#fff;}
+.btn-primary:hover{background:var(--amaranth-dark);}
+.btn-ghost{background:transparent; color:var(--seal-soft); border:2px solid #e4d4c4;}
+.btn-ghost:hover{border-color:var(--amaranth); color:var(--amaranth);}
+.btn-danger{background:transparent; color:var(--bad); border:2px solid #f3c6c2;}
+.btn-danger:hover{background:#fbeceb;}
+.btn:disabled{opacity:.5; cursor:not-allowed;}
+
+/* Tamanhos consistentes pra ações compactas (linha de tabela, linha de lista) —
+   mesma grade de 8px entre botões em todo lugar, em vez de padding solto. */
+.btn-sm{padding:7px 16px; font-size:.78rem;}
+.btn-xs{padding:5px 13px; font-size:.74rem;}
+.btn-row{display:inline-flex; align-items:center; gap:8px; flex-wrap:nowrap;}
+
+.auth-msg{margin-top:14px; padding:11px 14px; border-radius:var(--radius-sm); font-size:.85rem; font-weight:600; display:none;}
+.auth-msg.show{display:block;}
+.auth-msg.ok{background:#eaf7ee; color:var(--ok);}
+.auth-msg.bad{background:#fbeceb; color:var(--bad);}
+
+/* ---------- TABLE ---------- */
+.dash-table{width:100%; border-collapse:collapse; background:#fff; border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-card); font-size:.85rem;}
+.dash-table th, .dash-table td{padding:10px 14px; text-align:left; border-bottom:1px solid #f0e3d2; vertical-align:middle;}
+.dash-table th{background:var(--seal-soft); color:#fff; font-weight:700; font-size:.76rem; text-transform:uppercase; letter-spacing:.04em;}
+.dash-table tr:last-child td{border-bottom:none;}
+.dash-table tr:hover td{background:var(--antique-soft);}
+.dash-filter{display:flex; gap:10px; flex-wrap:wrap; margin:0 0 16px;}
+.dash-filter input, .dash-filter select{
+  border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
+}
+.no-turma{color:var(--bad); font-weight:700;}
+.pill-count{
+  display:inline-block; font-size:.72rem; font-weight:800; background:var(--antique-soft); color:var(--seal-soft);
+  padding:2px 10px; border-radius:999px;
+}
+.pill-count.pill-ok{background:#eaf7ee; color:var(--ok);}
+.pill-count.pill-bad{background:#fbeceb; color:var(--bad);}
+
+/* ---------- FINANCEIRO: indicadores e gráfico ---------- */
+.kpi-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:14px; margin-bottom:24px;}
+.kpi-card{background:#fff; border-radius:var(--radius-md); padding:16px 18px; box-shadow:var(--shadow-card);}
+.kpi-value{font-family:var(--font-display); color:var(--amaranth); font-size:1.4rem; line-height:1.1;}
+.kpi-label{font-size:.74rem; color:var(--seal-soft); opacity:.8; margin-top:4px; text-transform:uppercase; letter-spacing:.03em;}
+.chart-wrap{background:#fff; border-radius:var(--radius-md); padding:18px; box-shadow:var(--shadow-card); margin-bottom:24px;}
+.fin-subtabs{max-width:640px;}
+
+/* ---------- TOGGLE / CHIP LIST (matérias e turmas por professor) ---------- */
+.dyse-toggle{position:relative; display:inline-block; width:40px; height:22px; flex:none;}
+.dyse-toggle input{opacity:0; width:0; height:0;}
+.dyse-toggle .slider{
+  position:absolute; cursor:pointer; inset:0; background:#e4d4c4; border-radius:999px; transition:.2s;
+}
+.dyse-toggle .slider::before{
+  content:""; position:absolute; height:16px; width:16px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:.2s;
+}
+.dyse-toggle input:checked + .slider{background:var(--ok);}
+.dyse-toggle input:checked + .slider::before{transform:translateX(18px);}
+
+.chip-toggle-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid #f0e3d2;}
+.chip-toggle-row:last-child{border-bottom:none;}
+.chip-toggle-row .name{font-size:.87rem; font-weight:600;}
+.chip-toggle-list{max-height:260px; overflow-y:auto;}
+
+/* ---------- ATIVIDADES (caixa expansível com preview) ---------- */
+.activity-row{border-bottom:1px solid #f0e3d2;}
+.activity-row:last-child{border-bottom:none;}
+.activity-row-head{display:flex; align-items:center; gap:10px; padding:9px 0;}
+.activity-caret{
+  flex:none; width:24px; height:24px; border-radius:50%; border:none; background:var(--antique-soft);
+  color:var(--seal-soft); cursor:pointer; font-size:.7rem; display:flex; align-items:center; justify-content:center;
+  transition:.2s;
+}
+.activity-caret:hover{background:var(--cherry);}
+.activity-caret.open{transform:rotate(90deg);}
+.activity-row-head .name{font-size:.87rem; font-weight:600; flex:1 1 auto; min-width:0;}
+.activity-preview{display:none; padding:0 0 16px 34px;}
+.activity-preview.open{display:block;}
+.activity-preview iframe{
+  width:100%; height:60vh; border:2px solid #eee0cf; border-radius:var(--radius-sm); background:#fff;
+}
+.activity-preview .open-tab{display:block; margin-top:8px; font-size:.76rem;}
+
+/* ---------- BUSCA DE ALUNO (dentro do modal de turma) ---------- */
+.modal-search-input{
+  width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 13px;
+  font-family:var(--font-body); font-size:.85rem; color:var(--seal); margin-bottom:8px;
+}
+.modal-search-input:focus{outline:none; border-color:var(--amaranth);}
+.search-result-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0;}
+.search-result-row .name{font-size:.85rem;}
+.search-result-row .name small{opacity:.6; font-weight:600;}
+.student-in-turma-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid #f0e3d2;}
+.student-in-turma-row:last-child{border-bottom:none;}
+
+/* ---------- MODAL (detalhe da turma) ---------- */
+body.dyse-modal-open{overflow:hidden;}
+.report-modal{position:fixed; inset:0; z-index:999; display:none;}
+.report-modal.open{display:block;}
+.report-modal-backdrop{position:absolute; inset:0; background:rgba(58,29,16,.62);}
+.report-modal-panel{
+  position:relative; background:#fff; margin:5vh auto; width:min(560px, 94vw);
+  max-height:90dvh; border-radius:24px; box-shadow:0 24px 60px rgba(0,0,0,.35);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+/* o modal de atividades precisa de mais largura pra caber o preview */
+#materiaModal .report-modal-panel{width:min(900px, 94vw);}
+.report-modal-header{
+  display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+  padding:22px 24px 16px; border-bottom:1px solid #f0e3d2; flex:none; background:#fff;
+}
+.report-modal-header h3{
+  font-family:'Lobster',cursive; color:var(--amaranth); margin:0; font-size:1.45rem;
+  line-height:1.25; overflow-wrap:break-word;
+}
+.report-modal-close{
+  flex:none; width:36px; height:36px; border-radius:50%; border:none; background:var(--antique-soft);
+  color:var(--seal-soft); font-size:1.4rem; line-height:1; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:.2s;
+}
+.report-modal-close:hover{background:var(--cherry); color:var(--seal);}
+.report-modal-body{overflow-y:auto; -webkit-overflow-scrolling:touch; padding:20px 24px 28px; flex:1 1 auto;}
+.report-section-head{font-weight:800; font-size:.9rem; color:var(--seal); margin:18px 0 6px;}
+.report-section-head:first-child{margin-top:0;}
+.report-line{font-size:.85rem; color:var(--seal-soft);}
+
+footer.site-footer{text-align:center; padding:30px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.75;}
+footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; color:var(--amaranth);}
+
+@media (max-width:640px){
+  .report-modal-panel{margin:0; width:100%; max-width:100%; height:100dvh; max-height:100dvh; border-radius:0;}
+  section.gestao-card{padding:20px 16px;}
+  h1.title{font-size:2.1rem;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{transition:none !important;}
+}
+
+</style>
+</head>
+<body>
+<div id="dyseAuthGate">
+  <div class="dyse-spinner"></div>
+  <p>dyse</p>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <span>Do You Speak English? &middot; Painel da Gestão</span>
+    </div>
+    <span class="eyebrow-badge">Acesso restrito</span>
+    <h1 class="title">Gestão de turmas</h1>
+    <p class="subtitle">Crie turmas, cadastre matérias, decida o que cada turma pode acessar e vincule alunos e professores.</p>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:40px;">
+
+  <div class="auth-tabs">
+    <button type="button" class="auth-tab active" id="tabTurmas" onclick="showPanel('turmas')">Turmas</button>
+    <button type="button" class="auth-tab" id="tabMaterias" onclick="showPanel('materias')">Matérias</button>
+    <button type="button" class="auth-tab" id="tabAlunos" onclick="showPanel('alunos')">Alunos</button>
+    <button type="button" class="auth-tab" id="tabProfessores" onclick="showPanel('professores')">Professores</button>
+    <button type="button" class="auth-tab" id="tabFinanceiro" onclick="showPanel('financeiro')">Financeiro</button>
+  </div>
+
+  <!-- ---------- TURMAS ---------- -->
+  <div id="panelTurmas">
+    <div class="gestao-card">
+      <div class="gestao-card-title">Nova turma</div>
+      <form class="gestao-form" onsubmit="return handleCreateTurma(event)">
+        <div class="gestao-field" style="flex:1 1 220px;">
+          <label>Nome da turma</label>
+          <input type="text" id="newTurmaName" placeholder="Ex: Turma A — Manhã" required>
+        </div>
+        <div class="gestao-field" style="flex:2 1 260px;">
+          <label>Descrição (opcional)</label>
+          <input type="text" id="newTurmaDesc" placeholder="Ex: Alunos do 3º ano, período da manhã">
+        </div>
+        <button type="submit" class="btn btn-primary">+ Criar turma</button>
+      </form>
+      <div class="auth-msg" id="turmaMsg"></div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="dash-table" id="turmasTable">
+        <thead>
+          <tr>
+            <th>Turma</th>
+            <th>Matérias liberadas</th>
+            <th>Professores</th>
+            <th>Alunos</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="turmasBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ---------- MATÉRIAS ---------- -->
+  <div id="panelMaterias" style="display:none;">
+    <div class="gestao-card">
+      <div class="gestao-card-title">Nova matéria</div>
+      <form class="gestao-form" onsubmit="return handleCreateMateria(event)">
+        <div class="gestao-field" style="flex:1 1 160px;">
+          <label>Identificador (slug)</label>
+          <input type="text" id="newMateriaSlug" placeholder="Ex: toefl" required pattern="[a-z0-9\-]+">
+        </div>
+        <div class="gestao-field" style="flex:1 1 200px;">
+          <label>Nome</label>
+          <input type="text" id="newMateriaName" placeholder="Ex: TOEFL iBT" required>
+        </div>
+        <div class="gestao-field" style="flex:2 1 240px;">
+          <label>Descrição (opcional)</label>
+          <input type="text" id="newMateriaDesc" placeholder="Ex: Preparatório pro exame TOEFL">
+        </div>
+        <button type="submit" class="btn btn-primary">+ Criar matéria</button>
+      </form>
+      <p class="gestao-hint">O <code>toefl</code> já vem cadastrado (é o único curso que existe hoje) —
+        você só precisa usar este formulário se um curso novo for adicionado ao código no futuro.
+        O identificador (slug) precisa bater com o curso já existente no site pra a liberação valer
+        na área do aluno. Matérias novas cadastradas aqui não criam atividades sozinhas — isso ainda
+        é feito direto no código.</p>
+      <div class="auth-msg" id="materiaMsg"></div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="dash-table" id="materiasTable">
+        <thead>
+          <tr>
+            <th>Slug</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Turmas usando</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="materiasBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ---------- ALUNOS ---------- -->
+  <div id="panelAlunos" style="display:none;">
+    <div class="gestao-card">
+      <div class="gestao-card-title">Cadastrar novo aluno</div>
+      <form class="gestao-form" onsubmit="return handleCreateStudent(event)">
+        <div class="gestao-field" style="flex:1 1 220px;">
+          <label>Nome completo</label>
+          <input type="text" id="newStudentName" required>
+        </div>
+        <div class="gestao-field" style="flex:1 1 220px;">
+          <label>E-mail</label>
+          <input type="email" id="newStudentEmail" required>
+        </div>
+        <button type="submit" class="btn btn-primary">+ Cadastrar aluno</button>
+      </form>
+      <p class="gestao-hint">O aluno recebe um e-mail do sistema com o link pra definir a senha e acessar. Depois de cadastrado, vincule turma (aba Turmas) e dados financeiros (botão "Editar financeiro" abaixo) normalmente.</p>
+      <div class="auth-msg" id="newStudentMsg"></div>
+    </div>
+
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
+      Pra colocar ou tirar um aluno de uma turma (acesso a conteúdo), vá na aba <b>Turmas</b> → <b>Gerenciar</b>
+      da turma desejada. O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui,
+      pelo botão "Editar financeiro" de cada aluno.
+    </p>
+    <div class="dash-filter">
+      <input type="text" id="filterAlunoName" placeholder="Filtrar por nome do aluno..." oninput="renderAlunosTable()">
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="dash-table" id="alunosTable">
+        <thead>
+          <tr>
+            <th>Aluno</th>
+            <th>E-mail</th>
+            <th>Turma</th>
+            <th>Modalidade</th>
+            <th>Professor responsável</th>
+            <th>Situação</th>
+            <th>Financeiro</th>
+          </tr>
+        </thead>
+        <tbody id="alunosBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ---------- PROFESSORES ---------- -->
+  <div id="panelProfessores" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
+      Ative as turmas que cada professor(a) pode acessar. Sem nenhuma turma marcada, ele(a) não
+      vê resultado de nenhum aluno no painel da professora.
+    </p>
+    <div id="professoresList"></div>
+  </div>
+
+  <!-- ---------- FINANCEIRO ---------- -->
+  <div id="panelFinanceiro" style="display:none;">
+    <div class="auth-tabs fin-subtabs">
+      <button type="button" class="auth-tab active" id="finTabModalidades" onclick="showFinPanel('modalidades')">Modalidades</button>
+      <button type="button" class="auth-tab" id="finTabPagamentos" onclick="showFinPanel('pagamentos')">Pagamentos</button>
+      <button type="button" class="auth-tab" id="finTabGastos" onclick="showFinPanel('gastos')">Gastos</button>
+      <button type="button" class="auth-tab" id="finTabRelatorio" onclick="showFinPanel('relatorio')">Relatório</button>
+      <button type="button" class="auth-tab" id="finTabFechamento" onclick="showFinPanel('fechamento')">Fechamento</button>
+    </div>
+
+    <!-- Modalidades e valores -->
+    <div id="finPanelModalidades">
+      <div class="gestao-card">
+        <div class="gestao-card-title">Nova modalidade</div>
+        <form class="gestao-form" onsubmit="return handleCreateModalidade(event)">
+          <div class="gestao-field" style="flex:1 1 160px;">
+            <label>Identificador (slug)</label>
+            <input type="text" id="newModalidadeSlug" placeholder="Ex: semi-intensivo" required pattern="[a-z0-9\-]+">
+          </div>
+          <div class="gestao-field" style="flex:1 1 200px;">
+            <label>Nome</label>
+            <input type="text" id="newModalidadeName" placeholder="Ex: Semi-intensivo" required>
+          </div>
+          <div class="gestao-field" style="flex:1 1 240px;">
+            <label>Valor pago ao professor</label>
+            <select id="newModalidadeCustom">
+              <option value="0">Fixo — mesmo valor pra todo aluno nessa modalidade</option>
+              <option value="1">Personalizado — definido aluno a aluno (como Intensivo)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">+ Criar modalidade</button>
+        </form>
+        <div class="auth-msg" id="modalidadeMsg"></div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="modalidadesTable">
+          <thead>
+            <tr><th>Modalidade</th><th>Valor pago ao professor</th><th>Vigente desde</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="modalidadesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pagamentos aos professores -->
+    <div id="finPanelPagamentos" style="display:none;">
+      <div class="dash-filter">
+        <input type="month" id="pagamentosMes" onchange="loadPagamentosMes()">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="loadPagamentosMes()">↻ Atualizar mês</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="pagamentosTable">
+          <thead>
+            <tr><th>Professor</th><th>Alunos</th><th>Modalidades</th><th>Total previsto</th><th>Total pago</th><th>Status</th><th>Data pagamento</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="pagamentosBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Gastos personalizados -->
+    <div id="finPanelGastos" style="display:none;">
+      <div class="gestao-card">
+        <div class="gestao-card-title">Gastos padrão (aplicados a todos os alunos ativos, todo mês)</div>
+        <p class="gestao-hint" style="margin-bottom:14px;">Ex: assinatura do Flexge por aluno. Ao gerar/atualizar o mês, um gasto igual a este é lançado automaticamente pra cada aluno ativo — sem precisar cadastrar aluno por aluno.</p>
+        <form class="gestao-form" onsubmit="return handleCreateGastoPadrao(event)">
+          <div class="gestao-field" style="flex:2 1 200px;">
+            <label>Descrição</label>
+            <input type="text" id="newGastoPadraoDescricao" placeholder="Ex: Flexge" required>
+          </div>
+          <div class="gestao-field" style="flex:1 1 160px;">
+            <label>Tipo</label>
+            <select id="newGastoPadraoTipo">
+              <option value="material">Material</option>
+              <option value="comissao">Comissão</option>
+              <option value="taxa">Taxa</option>
+              <option value="desconto">Desconto/Bolsa</option>
+              <option value="outro" selected>Outro</option>
+            </select>
+          </div>
+          <div class="gestao-field" style="flex:1 1 200px;">
+            <label>Forma de cálculo</label>
+            <select id="newGastoPadraoFormaCalculo">
+              <option value="fixo">Valor fixo em reais</option>
+              <option value="percentual">Percentual sobre o valor recebido</option>
+            </select>
+          </div>
+          <div class="gestao-field" style="flex:1 1 140px;">
+            <label>Valor</label>
+            <input type="number" step="0.01" id="newGastoPadraoValor" required>
+          </div>
+          <button type="submit" class="btn btn-primary">+ Adicionar</button>
+        </form>
+        <div class="auth-msg" id="gastoPadraoMsg"></div>
+        <div style="overflow-x:auto; margin-top:16px;">
+          <table class="dash-table" id="gastosPadraoTable">
+            <thead>
+              <tr><th>Descrição</th><th>Tipo</th><th>Cálculo</th><th>Valor</th><th>Ativo</th><th>Ações</th></tr>
+            </thead>
+            <tbody id="gastosPadraoBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="gestao-card-title" style="margin-bottom:12px;">Gastos por aluno</div>
+      <div class="dash-filter">
+        <input type="month" id="gastosMes" onchange="loadGastosMes()">
+        <select id="gastosAlunoFiltro" onchange="loadGastosMes()"><option value="">Todos os alunos</option></select>
+        <button type="button" class="btn btn-primary btn-sm" onclick="openGastoModal(null)">+ Novo gasto</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="gastosTable">
+          <thead>
+            <tr><th>Aluno</th><th>Descrição</th><th>Tipo</th><th>Cálculo</th><th>Valor</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="gastosBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Relatório Lucro Mensal -->
+    <div id="finPanelRelatorio" style="display:none;">
+      <div class="dash-filter">
+        <input type="month" id="relatorioMes" onchange="loadRelatorioMes()">
+        <select id="relatorioProfessor" onchange="renderRelatorio()"><option value="">Todos os professores</option></select>
+        <select id="relatorioModalidade" onchange="renderRelatorio()"><option value="">Todas as modalidades</option></select>
+        <input type="text" id="relatorioAluno" placeholder="Filtrar por aluno..." oninput="renderRelatorio()">
+      </div>
+      <div class="kpi-grid" id="relatorioKpis"></div>
+      <div class="chart-wrap"><canvas id="chartEvolucao" height="90"></canvas></div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="relatorioTable">
+          <thead>
+            <tr><th>Aluno</th><th>Professor</th><th>Modalidade</th><th>Recebido</th><th>Pago ao professor</th><th>Gastos</th><th>Lucro</th><th>Margem</th></tr>
+          </thead>
+          <tbody id="relatorioBody"></tbody>
+        </table>
+      </div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="exportarRelatorioCSV()">⬇ CSV</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="exportarRelatorioExcel()">⬇ Excel</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="exportarRelatorioPDF()">⬇ PDF</button>
+      </div>
+    </div>
+
+    <!-- Fechamento mensal -->
+    <div id="finPanelFechamento" style="display:none;">
+      <div class="dash-filter">
+        <input type="month" id="fechamentoMes" onchange="checarFechamento()">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="checarFechamento()">↻ Verificar pendências</button>
+      </div>
+      <div class="gestao-card" id="fechamentoAvisos"></div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" id="btnFecharMes" onclick="handleFecharMes()">🔒 Fechar mês</button>
+        <button type="button" class="btn btn-danger" id="btnReabrirMes" onclick="handleReabrirMes()" style="display:none;">🔓 Reabrir mês</button>
+      </div>
+      <div style="overflow-x:auto; margin-top:24px;">
+        <table class="dash-table" id="fechamentosTable">
+          <thead><tr><th>Mês</th><th>Status</th><th>Fechado em</th><th>Reaberto em</th></tr></thead>
+          <tbody id="fechamentosBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal de detalhe da turma -->
+<div id="turmaModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeTurmaModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="turmaModalTitle">
+    <div class="report-modal-header">
+      <h3 id="turmaModalTitle"></h3>
+      <button type="button" class="report-modal-close" onclick="closeTurmaModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="turmaModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de atividades liberadas ao professor, dentro de uma matéria -->
+<div id="materiaModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeMateriaModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="materiaModalTitle">
+    <div class="report-modal-header">
+      <h3 id="materiaModalTitle"></h3>
+      <button type="button" class="report-modal-close" onclick="closeMateriaModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="materiaModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de histórico/edição de valor de uma modalidade -->
+<div id="modalidadeModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeModalidadeModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalidadeModalTitle">
+    <div class="report-modal-header">
+      <h3 id="modalidadeModalTitle"></h3>
+      <button type="button" class="report-modal-close" onclick="closeModalidadeModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="modalidadeModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de edição do vínculo financeiro do aluno -->
+<div id="alunoFinModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeAlunoFinModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="alunoFinModalTitle">
+    <div class="report-modal-header">
+      <h3 id="alunoFinModalTitle"></h3>
+      <button type="button" class="report-modal-close" onclick="closeAlunoFinModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="alunoFinModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de registro de pagamento a um professor -->
+<div id="pagamentoModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closePagamentoModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="pagamentoModalTitle">
+    <div class="report-modal-header">
+      <h3 id="pagamentoModalTitle"></h3>
+      <button type="button" class="report-modal-close" onclick="closePagamentoModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="pagamentoModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de criação/edição de gasto personalizado -->
+<div id="gastoModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeGastoModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="gastoModalTitle">
+    <div class="report-modal-header">
+      <h3 id="gastoModalTitle">Novo gasto</h3>
+      <button type="button" class="report-modal-close" onclick="closeGastoModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="gastoModalBody"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? &middot; Painel da Gestão</p>
+</footer>
+
+<script src="/assets/dyse-auth.js"></script>
+<script>
+  let TURMAS = [], MATERIAS = [], STUDENTS = [], TEACHERS = [], TURMA_MATERIAS = [], TEACHER_TURMAS = [], MATERIA_ACTIVITIES_DB = [];
+  let MODALIDADES = [], MODALIDADE_VALORES = [], ALUNO_FIN_HISTORICO = [];
+
+  /* Atividades de cada matéria — mesma lista fixa usada em professora.html e
+     area-do-aluno.html (o conteúdo delas é feito à mão no código, não vem
+     do banco). Serve só pra esta tela saber que nomes mostrar; a matéria
+     que ainda não tem curso no código (slug sem entrada aqui) não ganha o
+     botão "Gerenciar atividades". */
+  const MATERIA_ACTIVITY_NAMES = {
+    toefl: [{num:1, theme:'Rotina Diária'},{num:2, theme:'Viagens e Turismo'},{num:3, theme:'Alimentação e Saúde'},{num:4, theme:'Compras e Dinheiro'},{num:5, theme:'Meio Ambiente'},{num:6, theme:'Tecnologia'},{num:7, theme:'Educação'},{num:8, theme:'Trabalho e Carreira'},{num:9, theme:'Cultura e Mídia'},{num:10, theme:'Ciência'},{num:11, theme:'História'},{num:12, theme:'Psicologia'},{num:13, theme:'Negócios e Economia'},{num:14, theme:'Questões Globais'},{num:15, theme:'Artes e Literatura'},{num:16, theme:'Revisão Geral'}]
+  };
+
+  function showPanel(which){
+    ['turmas','materias','alunos','professores','financeiro'].forEach(p => {
+      document.getElementById('tab' + capitalize(p)).classList.toggle('active', p===which);
+      document.getElementById('panel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
+    });
+    if(which === 'financeiro') showFinPanel('modalidades');
+  }
+  function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  /* ---------- Utilitários financeiros de exibição ---------- */
+  function formatMoney(n){
+    return 'R$ ' + Number(n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function formatDateBR(dateStr){
+    if(!dateStr) return '-';
+    const [y,m,d] = dateStr.split('-');
+    return d + '/' + m + '/' + y;
+  }
+  function formatMesLabel(mes){
+    const [y,m] = mes.split('-');
+    const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return nomes[parseInt(m,10)-1] + '/' + y.slice(2);
+  }
+  function competenciaToMonthInput(mes){
+    return (mes || dyseMesCompetencia()).slice(0,7);
+  }
+  function monthInputToCompetencia(val){
+    return val ? (val + '-01') : dyseMesCompetencia();
+  }
+  function statusBadge(status){
+    const labels = { pendente:'Pendente', pago:'Pago', pago_parcial:'Pago parcialmente', cancelado:'Cancelado' };
+    const cls = status === 'pago' ? 'pill-ok' : (status === 'cancelado' ? 'pill-bad' : '');
+    return '<span class="pill-count' + (cls ? ' ' + cls : '') + '">' + (labels[status] || status) + '</span>';
+  }
+
+  function escapeHtmlLocal(s){
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  function flashMsg(elId, text, ok){
+    const el = document.getElementById(elId);
+    el.textContent = text;
+    el.classList.add('show');
+    el.classList.remove('ok','bad');
+    el.classList.add(ok ? 'ok' : 'bad');
+    setTimeout(() => el.classList.remove('show'), 3500);
+  }
+
+  async function loadAll(){
+    [TURMAS, MATERIAS, STUDENTS, TEACHERS, TURMA_MATERIAS, TEACHER_TURMAS, MATERIA_ACTIVITIES_DB, MODALIDADES, MODALIDADE_VALORES, ALUNO_FIN_HISTORICO] = await Promise.all([
+      dyseListTurmas(),
+      dyseListMaterias(),
+      dyseListProfilesByRole('student'),
+      dyseListProfilesByRole('teacher'),
+      dyseListAllTurmaMaterias(),
+      dyseListAllTeacherTurmas(),
+      dyseListAllMateriaActivities(),
+      dyseListModalidades(),
+      dyseListModalidadeValores(),
+      dyseListAlunoFinanceiroHistorico()
+    ]);
+    renderTurmasTable();
+    renderMateriasTable();
+    renderAlunosTable();
+    renderProfessoresList();
+    renderModalidadesTable();
+
+    // Mantém o mês corrente sempre em dia pra quem entra direto no painel do
+    // professor sem a gestão ter aberto as abas Pagamentos/Relatório/Fechamento
+    // antes — sem isso, a tabela "mensalidades" simplesmente não existe ainda
+    // pro mês atual e o professor vê tudo zerado mesmo com alunos vinculados.
+    await dyseGerarMensalidadesDoMes(dyseMesCompetencia());
+  }
+
+  /* ---------- TURMAS ---------- */
+  function renderTurmasTable(){
+    document.getElementById('turmasBody').innerHTML = TURMAS.map(t => {
+      const materiaCount = TURMA_MATERIAS.filter(tm => tm.turma_id === t.id).length;
+      const teacherCount = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id).length;
+      const studentCount = STUDENTS.filter(s => s.turma_id === t.id).length;
+      return '<tr>' +
+        '<td><b>' + escapeHtmlLocal(t.name) + '</b>' + (t.description ? '<div style="opacity:.65; font-size:.78rem;">' + escapeHtmlLocal(t.description) + '</div>' : '') + '</td>' +
+        '<td><span class="pill-count">' + materiaCount + '</span></td>' +
+        '<td><span class="pill-count">' + teacherCount + '</span></td>' +
+        '<td><span class="pill-count">' + studentCount + '</span></td>' +
+        '<td><div class="btn-row">' +
+          '<button type="button" class="btn btn-ghost btn-sm" onclick="openTurmaModal(\'' + t.id + '\')">Gerenciar</button>' +
+          '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma turma criada ainda.</td></tr>';
+  }
+
+  async function handleCreateTurma(e){
+    e.preventDefault();
+    const name = document.getElementById('newTurmaName').value.trim();
+    const description = document.getElementById('newTurmaDesc').value.trim();
+    if(!name) return false;
+    const { error } = await dyseCreateTurma(name, description || null);
+    if(error){ flashMsg('turmaMsg', 'Não foi possível criar a turma: ' + error.message, false); return false; }
+    document.getElementById('newTurmaName').value = '';
+    document.getElementById('newTurmaDesc').value = '';
+    flashMsg('turmaMsg', 'Turma criada!', true);
+    TURMAS = await dyseListTurmas();
+    renderTurmasTable();
+    return false;
+  }
+
+  async function handleDeleteTurma(turmaId){
+    const t = TURMAS.find(x => x.id === turmaId);
+    if(!confirm('Excluir a turma "' + (t ? t.name : '') + '"? Os alunos dela ficam sem turma.')) return;
+    await dyseDeleteTurma(turmaId);
+    await loadAll();
+  }
+
+  let CURRENT_TURMA_MODAL_ID = null;
+
+  function openTurmaModal(turmaId){
+    const t = TURMAS.find(x => x.id === turmaId);
+    if(!t) return;
+    CURRENT_TURMA_MODAL_ID = turmaId;
+    document.getElementById('turmaModalTitle').textContent = t.name;
+
+    const materiasHtml = MATERIAS.length
+      ? '<div class="chip-toggle-list">' + MATERIAS.map(m => {
+          const on = TURMA_MATERIAS.some(tm => tm.turma_id === t.id && tm.materia_slug === m.slug);
+          return '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(m.name) + '</span>' +
+            '<label class="dyse-toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleTurmaMateria(\'' + t.id + '\', \'' + m.slug + '\', this.checked, this)"><span class="slider"></span></label></div>';
+        }).join('') + '</div>'
+      : '<p class="report-line" style="opacity:.6;">Nenhuma matéria cadastrada ainda — crie uma na aba Matérias.</p>';
+
+    document.getElementById('turmaModalBody').innerHTML =
+      '<div class="report-section-head">Matérias liberadas</div>' + materiasHtml +
+      '<div class="report-section-head">Professores com acesso</div>' +
+      '<input type="text" class="modal-search-input" id="turmaTeacherSearch" placeholder="Buscar professor(a) pra adicionar..." oninput="renderTurmaTeacherSearch()">' +
+      '<div id="turmaTeacherSearchResults"></div>' +
+      '<div id="turmaTeachersList"></div>' +
+      '<div class="report-section-head">Alunos nesta turma</div>' +
+      '<input type="text" class="modal-search-input" id="turmaStudentSearch" placeholder="Buscar aluno pra adicionar..." oninput="renderTurmaStudentSearch()">' +
+      '<div id="turmaStudentSearchResults"></div>' +
+      '<div id="turmaStudentsList"></div>';
+
+    renderTurmaTeacherSearch();
+    renderTurmaTeachersList();
+    renderTurmaStudentSearch();
+    renderTurmaStudentsList();
+
+    document.getElementById('turmaModal').classList.add('open');
+    document.getElementById('turmaModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeTurmaModal(){
+    document.getElementById('turmaModal').classList.remove('open');
+    document.getElementById('turmaModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_TURMA_MODAL_ID = null;
+  }
+
+  function renderTurmaTeachersList(){
+    const container = document.getElementById('turmaTeachersList');
+    if(!container || !CURRENT_TURMA_MODAL_ID) return;
+    const assignedIds = new Set(TEACHER_TURMAS.filter(tt => tt.turma_id === CURRENT_TURMA_MODAL_ID).map(tt => tt.teacher_id));
+    const teachersInTurma = TEACHERS.filter(p => assignedIds.has(p.id));
+    container.innerHTML = teachersInTurma.length
+      ? teachersInTurma.map(p =>
+          '<div class="student-in-turma-row"><span class="name">' + escapeHtmlLocal(p.full_name || p.id) + '</span>' +
+          '<button type="button" class="btn btn-danger btn-xs" onclick="removeTeacherFromTurma(\'' + p.id + '\')">Remover</button></div>'
+        ).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum professor com acesso ainda — busque acima pra adicionar.</p>';
+  }
+
+  function renderTurmaTeacherSearch(){
+    const results = document.getElementById('turmaTeacherSearchResults');
+    const input = document.getElementById('turmaTeacherSearch');
+    if(!results || !input || !CURRENT_TURMA_MODAL_ID) return;
+    const query = input.value.trim().toLowerCase();
+    if(!query){ results.innerHTML = ''; return; }
+
+    const assignedIds = new Set(TEACHER_TURMAS.filter(tt => tt.turma_id === CURRENT_TURMA_MODAL_ID).map(tt => tt.teacher_id));
+    const matches = TEACHERS
+      .filter(p => (p.full_name || '').toLowerCase().includes(query) || (p.email || '').toLowerCase().includes(query))
+      .filter(p => !assignedIds.has(p.id))
+      .slice(0, 8);
+
+    results.innerHTML = matches.length
+      ? matches.map(p =>
+          '<div class="search-result-row"><span class="name">' + escapeHtmlLocal(p.full_name || p.id) + '</span>' +
+          '<button type="button" class="btn btn-primary btn-xs" onclick="addTeacherToTurma(\'' + p.id + '\')">+ Adicionar</button></div>'
+        ).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum professor encontrado.</p>';
+  }
+
+  async function addTeacherToTurma(teacherId){
+    const { error } = await dyseSetTeacherTurma(teacherId, CURRENT_TURMA_MODAL_ID, true);
+    if(error){ alert('Não foi possível adicionar o professor: ' + error.message); return; }
+    TEACHER_TURMAS.push({ teacher_id: teacherId, turma_id: CURRENT_TURMA_MODAL_ID });
+    document.getElementById('turmaTeacherSearch').value = '';
+    renderTurmaTeacherSearch();
+    renderTurmaTeachersList();
+    renderTurmasTable();
+  }
+
+  async function removeTeacherFromTurma(teacherId){
+    const { error } = await dyseSetTeacherTurma(teacherId, CURRENT_TURMA_MODAL_ID, false);
+    if(error){ alert('Não foi possível remover o professor: ' + error.message); return; }
+    TEACHER_TURMAS = TEACHER_TURMAS.filter(tt => !(tt.teacher_id === teacherId && tt.turma_id === CURRENT_TURMA_MODAL_ID));
+    renderTurmaTeacherSearch();
+    renderTurmaTeachersList();
+    renderTurmasTable();
+  }
+
+  function renderTurmaStudentsList(){
+    const container = document.getElementById('turmaStudentsList');
+    if(!container || !CURRENT_TURMA_MODAL_ID) return;
+    const studentsInTurma = STUDENTS.filter(s => s.turma_id === CURRENT_TURMA_MODAL_ID);
+    container.innerHTML = studentsInTurma.length
+      ? studentsInTurma.map(s =>
+          '<div class="student-in-turma-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.id) + '</span>' +
+          '<button type="button" class="btn btn-danger btn-xs" onclick="removeStudentFromTurma(\'' + s.id + '\')">Remover</button></div>'
+        ).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum aluno nesta turma ainda — busque acima pra adicionar.</p>';
+  }
+
+  function renderTurmaStudentSearch(){
+    const results = document.getElementById('turmaStudentSearchResults');
+    const input = document.getElementById('turmaStudentSearch');
+    if(!results || !input || !CURRENT_TURMA_MODAL_ID) return;
+    const query = input.value.trim().toLowerCase();
+    if(!query){ results.innerHTML = ''; return; }
+
+    const matches = STUDENTS
+      .filter(s => (s.full_name || '').toLowerCase().includes(query) || (s.email || '').toLowerCase().includes(query))
+      .filter(s => s.turma_id !== CURRENT_TURMA_MODAL_ID)
+      .slice(0, 8);
+
+    results.innerHTML = matches.length
+      ? matches.map(s => {
+          const currentTurma = TURMAS.find(t => t.id === s.turma_id);
+          const label = currentTurma ? ' <small>(está em "' + escapeHtmlLocal(currentTurma.name) + '")</small>' : ' <small>(sem turma)</small>';
+          return '<div class="search-result-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.id) + label + '</span>' +
+            '<button type="button" class="btn btn-primary btn-xs" onclick="addStudentToTurma(\'' + s.id + '\')">+ Adicionar</button></div>';
+        }).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum aluno encontrado.</p>';
+  }
+
+  async function addStudentToTurma(studentId){
+    const { error } = await dyseSetStudentTurma(studentId, CURRENT_TURMA_MODAL_ID);
+    if(error){ alert('Não foi possível adicionar o aluno: ' + error.message); return; }
+    const s = STUDENTS.find(x => x.id === studentId);
+    if(s) s.turma_id = CURRENT_TURMA_MODAL_ID;
+    document.getElementById('turmaStudentSearch').value = '';
+    renderTurmaStudentSearch();
+    renderTurmaStudentsList();
+    renderTurmasTable();
+    renderAlunosTable();
+  }
+
+  async function removeStudentFromTurma(studentId){
+    const { error } = await dyseSetStudentTurma(studentId, null);
+    if(error){ alert('Não foi possível remover o aluno: ' + error.message); return; }
+    const s = STUDENTS.find(x => x.id === studentId);
+    if(s) s.turma_id = null;
+    renderTurmaStudentSearch();
+    renderTurmaStudentsList();
+    renderTurmasTable();
+    renderAlunosTable();
+  }
+
+  async function toggleTurmaMateria(turmaId, slug, enabled, checkboxEl){
+    const { error } = await dyseSetTurmaMateria(turmaId, slug, enabled);
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !enabled; // desfaz a marcação na tela
+      return;
+    }
+    if(enabled) TURMA_MATERIAS.push({ turma_id: turmaId, materia_slug: slug });
+    else TURMA_MATERIAS = TURMA_MATERIAS.filter(tm => !(tm.turma_id === turmaId && tm.materia_slug === slug));
+    renderTurmasTable();
+    renderMateriasTable();
+  }
+
+  async function toggleTeacherTurma(teacherId, turmaId, enabled, checkboxEl){
+    const { error } = await dyseSetTeacherTurma(teacherId, turmaId, enabled);
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !enabled; // desfaz a marcação na tela
+      return;
+    }
+    if(enabled) TEACHER_TURMAS.push({ teacher_id: teacherId, turma_id: turmaId });
+    else TEACHER_TURMAS = TEACHER_TURMAS.filter(tt => !(tt.teacher_id === teacherId && tt.turma_id === turmaId));
+    renderTurmasTable();
+  }
+
+  /* ---------- MATÉRIAS ---------- */
+  function renderMateriasTable(){
+    document.getElementById('materiasBody').innerHTML = MATERIAS.map(m => {
+      const turmaCount = TURMA_MATERIAS.filter(tm => tm.materia_slug === m.slug).length;
+      const activities = MATERIA_ACTIVITY_NAMES[m.slug];
+      const releasedCount = activities
+        ? MATERIA_ACTIVITIES_DB.filter(ma => ma.materia_slug === m.slug && ma.released_to_teachers).length
+        : 0;
+      const activitiesBtn = activities
+        ? '<button type="button" class="btn btn-ghost btn-sm" onclick="openMateriaModal(\'' + m.slug + '\')">Atividades (' + releasedCount + '/' + activities.length + ')</button>'
+        : '';
+      return '<tr>' +
+        '<td><code>' + escapeHtmlLocal(m.slug) + '</code></td>' +
+        '<td>' + escapeHtmlLocal(m.name) + '</td>' +
+        '<td>' + escapeHtmlLocal(m.description || '-') + '</td>' +
+        '<td><span class="pill-count">' + turmaCount + '</span></td>' +
+        '<td><div class="btn-row">' + activitiesBtn +
+          '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteMateria(\'' + m.slug + '\')">Excluir</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma matéria cadastrada ainda.</td></tr>';
+  }
+
+  const ACTIVITY_URL_TEMPLATE = '/atividades/{course}/atividade_{num}.html';
+  function activityUrl(course, num){
+    return ACTIVITY_URL_TEMPLATE.replace('{course}', course).replace('{num}', num);
+  }
+
+  function openMateriaModal(slug){
+    const m = MATERIAS.find(x => x.slug === slug);
+    const activities = MATERIA_ACTIVITY_NAMES[slug];
+    if(!m || !activities) return;
+    document.getElementById('materiaModalTitle').textContent = m.name;
+
+    document.getElementById('materiaModalBody').innerHTML =
+      '<p class="report-line" style="margin-bottom:14px;">Clique na seta pra ver a atividade. O toggle controla se ela ' +
+      'fica disponível pro professor publicar/ocultar pros alunos dele em "Gerenciar atividades" — desmarcada, nem ' +
+      'aparece como opção pra ele.</p>' +
+      activities.map(a => {
+        const row = MATERIA_ACTIVITIES_DB.find(ma => ma.materia_slug === slug && ma.activity_num === a.num);
+        const on = row ? !!row.released_to_teachers : false;
+        const rowId = 'activity-preview-' + slug + '-' + a.num;
+        return '<div class="activity-row">' +
+          '<div class="activity-row-head">' +
+            '<button type="button" class="activity-caret" onclick="toggleActivityPreview(\'' + slug + '\', ' + a.num + ', this)">▸</button>' +
+            '<span class="name">' + String(a.num).padStart(2,'0') + '. ' + escapeHtmlLocal(a.theme) + '</span>' +
+            '<label class="dyse-toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleMateriaActivity(\'' + slug + '\', ' + a.num + ', this.checked, this)"><span class="slider"></span></label>' +
+          '</div>' +
+          '<div class="activity-preview" id="' + rowId + '"></div>' +
+        '</div>';
+      }).join('');
+
+    document.getElementById('materiaModal').classList.add('open');
+    document.getElementById('materiaModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function toggleActivityPreview(slug, activityNum, caretEl){
+    const box = document.getElementById('activity-preview-' + slug + '-' + activityNum);
+    if(!box) return;
+    const opening = !box.classList.contains('open');
+    box.classList.toggle('open', opening);
+    caretEl.classList.toggle('open', opening);
+    caretEl.textContent = opening ? '▾' : '▸';
+    // carrega o iframe só na primeira vez que abrir (evita 16 iframes de uma vez)
+    if(opening && !box.dataset.loaded){
+      box.dataset.loaded = '1';
+      const url = activityUrl(slug, activityNum);
+      box.innerHTML = '<iframe src="' + url + '" loading="lazy" title="Preview da atividade"></iframe>' +
+        '<a class="open-tab" href="' + url + '" target="_blank" rel="noopener">↗ Abrir em outra aba</a>';
+    }
+  }
+
+  function closeMateriaModal(){
+    document.getElementById('materiaModal').classList.remove('open');
+    document.getElementById('materiaModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+  }
+
+  async function toggleMateriaActivity(slug, activityNum, enabled, checkboxEl){
+    const { error } = await dyseSetMateriaActivityReleased(slug, activityNum, enabled);
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !enabled;
+      return;
+    }
+    const existing = MATERIA_ACTIVITIES_DB.find(ma => ma.materia_slug === slug && ma.activity_num === activityNum);
+    if(existing) existing.released_to_teachers = enabled;
+    else MATERIA_ACTIVITIES_DB.push({ materia_slug: slug, activity_num: activityNum, released_to_teachers: enabled });
+    renderMateriasTable();
+  }
+
+  async function handleCreateMateria(e){
+    e.preventDefault();
+    const slug = document.getElementById('newMateriaSlug').value.trim().toLowerCase();
+    const name = document.getElementById('newMateriaName').value.trim();
+    const description = document.getElementById('newMateriaDesc').value.trim();
+    if(!slug || !name) return false;
+    const { error } = await dyseCreateMateria(slug, name, description || null);
+    if(error){ flashMsg('materiaMsg', 'Não foi possível criar a matéria: ' + error.message, false); return false; }
+    document.getElementById('newMateriaSlug').value = '';
+    document.getElementById('newMateriaName').value = '';
+    document.getElementById('newMateriaDesc').value = '';
+    flashMsg('materiaMsg', 'Matéria criada!', true);
+    MATERIAS = await dyseListMaterias();
+    renderMateriasTable();
+    return false;
+  }
+
+  async function handleDeleteMateria(slug){
+    if(!confirm('Excluir a matéria "' + slug + '"? Ela deixa de ficar liberada pra qualquer turma.')) return;
+    await dyseDeleteMateria(slug);
+    await loadAll();
+  }
+
+  /* ---------- ALUNOS ---------- */
+  async function handleCreateStudent(e){
+    e.preventDefault();
+    const full_name = document.getElementById('newStudentName').value.trim();
+    const email = document.getElementById('newStudentEmail').value.trim();
+    if(!full_name || !email) return false;
+
+    const session = await dyseGetSession();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    try{
+      const resp = await fetch('/api/create-student', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ full_name, email })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if(!resp.ok){
+        flashMsg('newStudentMsg', 'Não foi possível cadastrar: ' + (result.error || resp.statusText), false);
+        return false;
+      }
+      document.getElementById('newStudentName').value = '';
+      document.getElementById('newStudentEmail').value = '';
+      flashMsg('newStudentMsg', 'Aluno cadastrado! Ele já recebeu o e-mail de acesso.', true);
+      STUDENTS = await dyseListProfilesByRole('student');
+      renderAlunosTable();
+    }catch(err){
+      flashMsg('newStudentMsg', 'Erro de conexão com o servidor: ' + err.message, false);
+    }finally{
+      btn.disabled = false;
+    }
+    return false;
+  }
+
+  function renderAlunosTable(){
+    const filter = (document.getElementById('filterAlunoName').value || '').trim().toLowerCase();
+    const rows = STUDENTS.filter(s => !filter || (s.full_name||'').toLowerCase().includes(filter));
+    document.getElementById('alunosBody').innerHTML = rows.map(s => {
+      const turma = TURMAS.find(t => t.id === s.turma_id);
+      const historicoAluno = ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === s.id);
+      const periodo = dyseFindPeriodoAberto(historicoAluno);
+      const modalidade = periodo ? MODALIDADES.find(m => m.id === periodo.modalidade_id) : null;
+      const professor = periodo ? TEACHERS.find(t => t.id === periodo.professor_id) : null;
+      return '<tr>' +
+        '<td>' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
+        '<td>' + escapeHtmlLocal(s.email || '-') + '</td>' +
+        '<td>' + (turma ? escapeHtmlLocal(turma.name) : '<span class="no-turma">Sem turma</span>') + '</td>' +
+        '<td>' + (modalidade ? escapeHtmlLocal(modalidade.name) : '<span class="no-turma">Sem modalidade</span>') + '</td>' +
+        '<td>' + (professor ? escapeHtmlLocal(professor.full_name || '') : '<span class="no-turma">Sem professor</span>') + '</td>' +
+        '<td>' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
+        '<td><button type="button" class="btn btn-ghost btn-sm" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="7" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
+  }
+
+  /* ---------- PROFESSORES ---------- */
+  function renderProfessoresList(){
+    const container = document.getElementById('professoresList');
+    if(!TEACHERS.length){
+      container.innerHTML = '<p style="opacity:.6;">Nenhum professor cadastrado ainda.</p>';
+      return;
+    }
+    container.innerHTML = TEACHERS.map(p => {
+      const rows = TURMAS.map(t => {
+        const on = TEACHER_TURMAS.some(tt => tt.teacher_id === p.id && tt.turma_id === t.id);
+        return '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(t.name) + '</span>' +
+          '<label class="dyse-toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleTeacherTurma(\'' + p.id + '\', \'' + t.id + '\', this.checked, this)"><span class="slider"></span></label></div>';
+      }).join('') || '<p class="report-line" style="opacity:.6;">Nenhuma turma criada ainda.</p>';
+      return '<div class="gestao-card"><div class="gestao-card-title" style="font-size:1.1rem;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' + rows + '</div>';
+    }).join('');
+  }
+
+  /* ======================================================================
+     FINANCEIRO
+     ====================================================================== */
+
+  function showFinPanel(which){
+    ['modalidades','pagamentos','gastos','relatorio','fechamento'].forEach(p => {
+      document.getElementById('finTab' + capitalize(p)).classList.toggle('active', p===which);
+      document.getElementById('finPanel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
+    });
+    if(which === 'pagamentos' && !document.getElementById('pagamentosMes').value){
+      document.getElementById('pagamentosMes').value = competenciaToMonthInput(dyseMesCompetencia());
+      loadPagamentosMes();
+    }
+    if(which === 'gastos' && !document.getElementById('gastosMes').value){
+      document.getElementById('gastosMes').value = competenciaToMonthInput(dyseMesCompetencia());
+      loadGastosMes();
+    }
+    if(which === 'relatorio' && !document.getElementById('relatorioMes').value){
+      document.getElementById('relatorioMes').value = competenciaToMonthInput(dyseMesCompetencia());
+      loadRelatorioMes();
+    }
+    if(which === 'fechamento' && !document.getElementById('fechamentoMes').value){
+      document.getElementById('fechamentoMes').value = competenciaToMonthInput(dyseMesCompetencia());
+      checarFechamento();
+    }
+  }
+
+  /* ---------- Modalidades e valores ---------- */
+  function renderModalidadesTable(){
+    document.getElementById('modalidadesBody').innerHTML = MODALIDADES.map(m => {
+      const valores = MODALIDADE_VALORES.filter(v => v.modalidade_id === m.id);
+      const atual = dyseValorVigente(valores, dyseMesCompetencia());
+      const valorTexto = m.is_custom_value
+        ? '<span class="pill-count">Definido por aluno</span>'
+        : (atual != null ? formatMoney(atual) : '<span class="no-turma">Sem valor cadastrado</span>');
+      const ultima = valores.slice().sort((a,b) => b.vigente_desde.localeCompare(a.vigente_desde))[0];
+      return '<tr>' +
+        '<td><b>' + escapeHtmlLocal(m.name) + '</b> <span style="opacity:.6; font-size:.76rem;">(' + escapeHtmlLocal(m.slug) + ')</span></td>' +
+        '<td>' + valorTexto + '</td>' +
+        '<td>' + (ultima ? formatDateBR(ultima.vigente_desde) : '-') + '</td>' +
+        '<td><button type="button" class="btn btn-ghost btn-sm" onclick="openModalidadeModal(\'' + m.id + '\')">Histórico / editar valor</button></td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="4" style="text-align:center; opacity:.6;">Nenhuma modalidade cadastrada.</td></tr>';
+  }
+
+  async function handleCreateModalidade(e){
+    e.preventDefault();
+    const slug = document.getElementById('newModalidadeSlug').value.trim().toLowerCase();
+    const name = document.getElementById('newModalidadeName').value.trim();
+    const isCustom = document.getElementById('newModalidadeCustom').value === '1';
+    if(!slug || !name) return false;
+    const { error } = await dyseCreateModalidade(slug, name, isCustom);
+    if(error){ flashMsg('modalidadeMsg', 'Não foi possível criar a modalidade: ' + error.message, false); return false; }
+    document.getElementById('newModalidadeSlug').value = '';
+    document.getElementById('newModalidadeName').value = '';
+    flashMsg('modalidadeMsg', 'Modalidade criada!', true);
+    MODALIDADES = await dyseListModalidades();
+    renderModalidadesTable();
+    return false;
+  }
+
+  let CURRENT_MODALIDADE_MODAL_ID = null;
+
+  function openModalidadeModal(id){
+    const m = MODALIDADES.find(x => x.id === id);
+    if(!m) return;
+    CURRENT_MODALIDADE_MODAL_ID = id;
+    document.getElementById('modalidadeModalTitle').textContent = m.name;
+    renderModalidadeModalBody();
+    document.getElementById('modalidadeModal').classList.add('open');
+    document.getElementById('modalidadeModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeModalidadeModal(){
+    document.getElementById('modalidadeModal').classList.remove('open');
+    document.getElementById('modalidadeModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_MODALIDADE_MODAL_ID = null;
+  }
+
+  function renderModalidadeModalBody(){
+    const m = MODALIDADES.find(x => x.id === CURRENT_MODALIDADE_MODAL_ID);
+    if(!m) return;
+    const valores = MODALIDADE_VALORES.filter(v => v.modalidade_id === m.id).slice().sort((a,b) => b.vigente_desde.localeCompare(a.vigente_desde));
+    const historicoHtml = valores.length
+      ? valores.map(v => '<div class="chip-toggle-row"><span class="name">' + formatMoney(v.valor_professor) + '</span><span style="opacity:.65; font-size:.78rem;">desde ' + formatDateBR(v.vigente_desde) + '</span></div>').join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum valor cadastrado ainda.</p>';
+
+    const formHtml = m.is_custom_value
+      ? '<p class="report-line" style="opacity:.7;">Esta modalidade usa valor personalizado por aluno (definido na ficha financeira de cada aluno) — não tem valor de catálogo.</p>'
+      : '<form class="gestao-form" onsubmit="return handleSetModalidadeValor(event)">' +
+          '<div class="gestao-field" style="flex:1 1 140px;"><label>Novo valor (R$)</label><input type="number" step="0.01" min="0" id="newValorProfessor" required></div>' +
+          '<div class="gestao-field" style="flex:1 1 160px;"><label>Vigente desde</label><input type="month" id="newValorVigenteDesde" value="' + competenciaToMonthInput(dyseMesCompetencia()) + '" required></div>' +
+          '<button type="submit" class="btn btn-primary">+ Adicionar valor</button>' +
+        '</form>' +
+        '<p class="gestao-hint">Não sobrescreve o valor atual — só passa a valer a partir do mês escolhido. Meses anteriores continuam usando o valor que estava vigente na época.</p>';
+
+    document.getElementById('modalidadeModalBody').innerHTML =
+      '<div class="report-section-head">Histórico de valores</div>' + historicoHtml +
+      '<div class="report-section-head">Definir novo valor</div>' + formHtml;
+  }
+
+  async function handleSetModalidadeValor(e){
+    e.preventDefault();
+    const valor = parseFloat(document.getElementById('newValorProfessor').value);
+    const desde = monthInputToCompetencia(document.getElementById('newValorVigenteDesde').value);
+    const { error } = await dyseSetModalidadeValor(CURRENT_MODALIDADE_MODAL_ID, valor, desde);
+    if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+    MODALIDADE_VALORES = await dyseListModalidadeValores();
+    renderModalidadeModalBody();
+    renderModalidadesTable();
+    return false;
+  }
+
+  /* ---------- Ficha financeira do aluno ---------- */
+  let CURRENT_ALUNO_FIN_ID = null;
+
+  function openAlunoFinModal(alunoId){
+    const s = STUDENTS.find(x => x.id === alunoId);
+    if(!s) return;
+    CURRENT_ALUNO_FIN_ID = alunoId;
+    document.getElementById('alunoFinModalTitle').textContent = 'Financeiro — ' + (s.full_name || s.email || '');
+    renderAlunoFinModalBody();
+    document.getElementById('alunoFinModal').classList.add('open');
+    document.getElementById('alunoFinModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeAlunoFinModal(){
+    document.getElementById('alunoFinModal').classList.remove('open');
+    document.getElementById('alunoFinModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_ALUNO_FIN_ID = null;
+  }
+
+  function renderAlunoFinModalBody(){
+    const historico = ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === CURRENT_ALUNO_FIN_ID).slice().sort((a,b) => b.data_inicio.localeCompare(a.data_inicio));
+    const aberto = dyseFindPeriodoAberto(historico);
+    const modalidadeOptions = MODALIDADES.map(m => '<option value="' + m.id + '"' + (aberto && aberto.modalidade_id === m.id ? ' selected' : '') + '>' + escapeHtmlLocal(m.name) + '</option>').join('');
+    const professorOptions = '<option value="">Sem professor</option>' + TEACHERS.map(p => '<option value="' + p.id + '"' + (aberto && aberto.professor_id === p.id ? ' selected' : '') + '>' + escapeHtmlLocal(p.full_name || p.id) + '</option>').join('');
+    const modalidadeAtual = aberto ? MODALIDADES.find(m => m.id === aberto.modalidade_id) : null;
+    const mostraValorCustom = !!(modalidadeAtual && modalidadeAtual.is_custom_value);
+
+    const formHtml =
+      '<form class="gestao-form" onsubmit="return handleSetAlunoFinanceiro(event)" style="flex-direction:column; align-items:stretch;">' +
+        '<div class="gestao-field"><label>Modalidade</label><select id="finModalidade" onchange="onFinModalidadeChange()">' + modalidadeOptions + '</select></div>' +
+        '<div class="gestao-field"><label>Professor responsável</label><select id="finProfessor">' + professorOptions + '</select></div>' +
+        '<div class="gestao-field"><label>Valor mensal pago pelo aluno (R$)</label><input type="number" step="0.01" min="0" id="finValorAluno" value="' + (aberto ? aberto.valor_mensal_aluno : '') + '" required></div>' +
+        '<div class="gestao-field" id="finValorCustomWrap" style="display:' + (mostraValorCustom ? 'block' : 'none') + ';"><label>Valor pago ao professor (modalidade personalizada)</label><input type="number" step="0.01" min="0" id="finValorProfessorCustom" value="' + (aberto && aberto.valor_professor_customizado != null ? aberto.valor_professor_customizado : '') + '"></div>' +
+        '<div class="gestao-field"><label>Situação</label><select id="finSituacao">' +
+          ['ativo','pausado','cancelado','encerrado'].map(s => '<option value="' + s + '"' + (aberto && aberto.situacao === s ? ' selected' : '') + '>' + capitalize(s) + '</option>').join('') +
+        '</select></div>' +
+        '<div class="gestao-field"><label>Data de início com o professor</label><input type="date" id="finDataInicio" value="' + (aberto ? aberto.data_inicio : dyseHoje()) + '"' + (aberto ? ' disabled' : '') + '></div>' +
+        '<div class="gestao-field"><label>Observação</label><input type="text" id="finObservacao" value="' + escapeHtmlLocal(aberto ? (aberto.observacao || '') : '') + '"></div>' +
+        '<p class="gestao-hint">Trocar de professor ou de modalidade encerra o período atual automaticamente e abre um novo a partir de hoje — o histórico anterior fica preservado e os meses já calculados não mudam.</p>' +
+        '<button type="submit" class="btn btn-primary">Salvar</button>' +
+      '</form>';
+
+    const historicoHtml = historico.length
+      ? historico.map(h => {
+          const mod = MODALIDADES.find(m => m.id === h.modalidade_id);
+          const prof = TEACHERS.find(t => t.id === h.professor_id);
+          return '<div class="chip-toggle-row"><span class="name">' + (mod ? escapeHtmlLocal(mod.name) : '-') + ' · ' + (prof ? escapeHtmlLocal(prof.full_name || '') : 'sem professor') + '</span>' +
+            '<span style="opacity:.65; font-size:.78rem;">' + formatDateBR(h.data_inicio) + ' — ' + (h.data_fim ? formatDateBR(h.data_fim) : 'atual') + '</span></div>';
+        }).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum vínculo financeiro cadastrado ainda.</p>';
+
+    document.getElementById('alunoFinModalBody').innerHTML =
+      '<div class="report-section-head">Vínculo atual</div>' + formHtml +
+      '<div class="report-section-head">Histórico de períodos</div>' + historicoHtml;
+  }
+
+  function onFinModalidadeChange(){
+    const sel = document.getElementById('finModalidade');
+    const modalidade = MODALIDADES.find(m => m.id === sel.value);
+    document.getElementById('finValorCustomWrap').style.display = (modalidade && modalidade.is_custom_value) ? 'block' : 'none';
+  }
+
+  async function handleSetAlunoFinanceiro(e){
+    e.preventDefault();
+    const campos = {
+      modalidade_id: document.getElementById('finModalidade').value,
+      professor_id: document.getElementById('finProfessor').value || null,
+      valor_mensal_aluno: parseFloat(document.getElementById('finValorAluno').value || '0'),
+      valor_professor_customizado: document.getElementById('finValorProfessorCustom').value ? parseFloat(document.getElementById('finValorProfessorCustom').value) : null,
+      situacao: document.getElementById('finSituacao').value,
+      data_inicio: document.getElementById('finDataInicio').value || dyseHoje(),
+      observacao: document.getElementById('finObservacao').value.trim() || null
+    };
+    const { error } = await dyseSetAlunoFinanceiro(CURRENT_ALUNO_FIN_ID, campos);
+    if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+    ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
+    await dyseGerarMensalidadesDoMes(dyseMesCompetencia()); // reflete o vínculo novo no mês corrente na hora, sem esperar a gestão abrir Pagamentos/Relatório
+    renderAlunoFinModalBody();
+    renderAlunosTable();
+    return false;
+  }
+
+  /* ---------- Pagamentos aos professores ---------- */
+  let PAGAMENTOS_MES_ATUAL = dyseMesCompetencia();
+  let PAGAMENTOS_CACHE = [];
+
+  async function loadPagamentosMes(){
+    const mes = monthInputToCompetencia(document.getElementById('pagamentosMes').value);
+    PAGAMENTOS_MES_ATUAL = mes;
+    await dyseGerarMensalidadesDoMes(mes);
+    const [mensalidades, pagamentos] = await Promise.all([
+      dyseListMensalidades(mes),
+      dyseListPagamentosProfessores(mes)
+    ]);
+    PAGAMENTOS_CACHE = pagamentos;
+    renderPagamentosTable(mensalidades, pagamentos);
+  }
+
+  function renderPagamentosTable(mensalidades, pagamentos){
+    const porProfessor = {};
+    mensalidades.forEach(m => {
+      if(!m.professor_id) return;
+      (porProfessor[m.professor_id] = porProfessor[m.professor_id] || []).push(m);
+    });
+
+    const rows = Object.keys(porProfessor).map(profId => {
+      const linhas = porProfessor[profId];
+      const professor = TEACHERS.find(t => t.id === profId);
+      const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
+      const pagamento = pagamentos.find(p => p.professor_id === profId);
+      const modalidadesResumo = {};
+      linhas.forEach(l => {
+        const mod = MODALIDADES.find(m => m.id === l.modalidade_id);
+        const nome = mod ? mod.name : '-';
+        modalidadesResumo[nome] = (modalidadesResumo[nome] || 0) + 1;
+      });
+      const modalidadesTexto = Object.keys(modalidadesResumo).map(n => n + ' (' + modalidadesResumo[n] + ')').join(', ');
+      return { profId, professor, linhas, totalPrevisto, pagamento, modalidadesTexto, status: pagamento ? pagamento.status : 'pendente' };
+    });
+
+    document.getElementById('pagamentosBody').innerHTML = rows.length ? rows.map(r =>
+      '<tr>' +
+        '<td>' + escapeHtmlLocal(r.professor ? (r.professor.full_name || '') : '(professor removido)') + '</td>' +
+        '<td><span class="pill-count">' + r.linhas.length + '</span></td>' +
+        '<td style="font-size:.78rem;">' + escapeHtmlLocal(r.modalidadesTexto) + '</td>' +
+        '<td>' + formatMoney(r.totalPrevisto) + '</td>' +
+        '<td>' + (r.pagamento && r.pagamento.valor_pago != null ? formatMoney(r.pagamento.valor_pago) : '-') + '</td>' +
+        '<td>' + statusBadge(r.status) + '</td>' +
+        '<td>' + (r.pagamento && r.pagamento.data_pagamento ? formatDateBR(r.pagamento.data_pagamento) : '-') + '</td>' +
+        '<td><button type="button" class="btn btn-ghost btn-sm" onclick="openPagamentoModal(\'' + r.profId + '\')">Registrar pagamento</button></td>' +
+      '</tr>'
+    ).join('') : '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno com mensalidade gerada para este mês ainda.</td></tr>';
+  }
+
+  let CURRENT_PAGAMENTO_PROF_ID = null;
+
+  function openPagamentoModal(profId){
+    CURRENT_PAGAMENTO_PROF_ID = profId;
+    const professor = TEACHERS.find(t => t.id === profId);
+    const pagamento = PAGAMENTOS_CACHE.find(p => p.professor_id === profId);
+    document.getElementById('pagamentoModalTitle').textContent = 'Pagamento — ' + (professor ? professor.full_name : '');
+    const statusLabels = { pendente:'Pendente', pago:'Pago', pago_parcial:'Pago parcialmente', cancelado:'Cancelado' };
+    document.getElementById('pagamentoModalBody').innerHTML =
+      '<form class="gestao-form" onsubmit="return handleRegistrarPagamento(event)" style="flex-direction:column; align-items:stretch;">' +
+        '<div class="gestao-field"><label>Status</label><select id="pgStatus">' +
+          Object.keys(statusLabels).map(s => '<option value="' + s + '"' + (pagamento && pagamento.status === s ? ' selected' : '') + '>' + statusLabels[s] + '</option>').join('') +
+        '</select></div>' +
+        '<div class="gestao-field"><label>Valor efetivamente pago (R$)</label><input type="number" step="0.01" min="0" id="pgValorPago" value="' + (pagamento && pagamento.valor_pago != null ? pagamento.valor_pago : '') + '"></div>' +
+        '<div class="gestao-field"><label>Data do pagamento</label><input type="date" id="pgDataPagamento" value="' + (pagamento ? (pagamento.data_pagamento || '') : '') + '"></div>' +
+        '<div class="gestao-field"><label>Observações</label><input type="text" id="pgObservacoes" value="' + escapeHtmlLocal(pagamento ? (pagamento.observacoes || '') : '') + '"></div>' +
+        '<button type="submit" class="btn btn-primary">Salvar pagamento</button>' +
+      '</form>';
+    document.getElementById('pagamentoModal').classList.add('open');
+    document.getElementById('pagamentoModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closePagamentoModal(){
+    document.getElementById('pagamentoModal').classList.remove('open');
+    document.getElementById('pagamentoModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_PAGAMENTO_PROF_ID = null;
+  }
+
+  async function handleRegistrarPagamento(e){
+    e.preventDefault();
+    const campos = {
+      status: document.getElementById('pgStatus').value,
+      valor_pago: document.getElementById('pgValorPago').value ? parseFloat(document.getElementById('pgValorPago').value) : null,
+      data_pagamento: document.getElementById('pgDataPagamento').value || null,
+      observacoes: document.getElementById('pgObservacoes').value.trim() || null
+    };
+    const { error } = await dyseRegistrarPagamentoProfessor(CURRENT_PAGAMENTO_PROF_ID, PAGAMENTOS_MES_ATUAL, campos);
+    if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+    closePagamentoModal();
+    await loadPagamentosMes();
+    return false;
+  }
+
+  /* ---------- Gastos personalizados ---------- */
+  const GASTO_TIPO_LABELS = { material:'Material', comissao:'Comissão', taxa:'Taxa', desconto:'Desconto/Bolsa', outro:'Outro' };
+  let GASTOS_MES_ATUAL = dyseMesCompetencia();
+  let GASTOS_CACHE = [];
+  let GASTOS_PADRAO_CACHE = [];
+  let CURRENT_GASTO_ID = null;
+
+  function populateGastosAlunoFiltro(){
+    const sel = document.getElementById('gastosAlunoFiltro');
+    const current = sel.value;
+    sel.innerHTML = '<option value="">Todos os alunos</option>' + STUDENTS.map(s => '<option value="' + s.id + '">' + escapeHtmlLocal(s.full_name || s.email || '') + '</option>').join('');
+    sel.value = current;
+  }
+
+  async function loadGastosMes(){
+    const mes = monthInputToCompetencia(document.getElementById('gastosMes').value);
+    GASTOS_MES_ATUAL = mes;
+    populateGastosAlunoFiltro();
+    const alunoFiltro = document.getElementById('gastosAlunoFiltro').value || null;
+    [GASTOS_CACHE, GASTOS_PADRAO_CACHE] = await Promise.all([
+      dyseListGastos(alunoFiltro, mes),
+      dyseListGastosPadrao()
+    ]);
+    renderGastosPadraoTable();
+    renderGastosTable();
+  }
+
+  function renderGastosTable(){
+    document.getElementById('gastosBody').innerHTML = GASTOS_CACHE.length ? GASTOS_CACHE.map(g => {
+      const aluno = STUDENTS.find(s => s.id === g.aluno_id);
+      const valorTexto = g.forma_calculo === 'percentual' ? (Number(g.valor).toFixed(2) + '%') : formatMoney(g.valor);
+      return '<tr>' +
+        '<td>' + escapeHtmlLocal(aluno ? (aluno.full_name || aluno.email || '') : g.aluno_id) + '</td>' +
+        '<td>' + escapeHtmlLocal(g.descricao) + '</td>' +
+        '<td>' + (GASTO_TIPO_LABELS[g.tipo] || escapeHtmlLocal(g.tipo)) + '</td>' +
+        '<td>' + (g.forma_calculo === 'percentual' ? 'Percentual' : 'Fixo') + '</td>' +
+        '<td>' + valorTexto + '</td>' +
+        '<td><div class="btn-row">' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="openGastoModal(' + g.id + ')">Editar</button>' +
+          '<button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteGasto(' + g.id + ')">Excluir</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum gasto lançado neste mês.</td></tr>';
+  }
+
+  function renderGastosPadraoTable(){
+    document.getElementById('gastosPadraoBody').innerHTML = GASTOS_PADRAO_CACHE.length ? GASTOS_PADRAO_CACHE.map(g => {
+      const valorTexto = g.forma_calculo === 'percentual' ? (Number(g.valor).toFixed(2) + '%') : formatMoney(g.valor);
+      return '<tr>' +
+        '<td>' + escapeHtmlLocal(g.descricao) + '</td>' +
+        '<td>' + (GASTO_TIPO_LABELS[g.tipo] || escapeHtmlLocal(g.tipo)) + '</td>' +
+        '<td>' + (g.forma_calculo === 'percentual' ? 'Percentual' : 'Fixo') + '</td>' +
+        '<td>' + valorTexto + '</td>' +
+        '<td><label class="dyse-toggle"><input type="checkbox" ' + (g.ativo?'checked':'') + ' onchange="toggleGastoPadraoAtivo(' + g.id + ', this.checked, this)"><span class="slider"></span></label></td>' +
+        '<td><button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteGastoPadrao(' + g.id + ')">Excluir</button></td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum gasto padrão cadastrado.</td></tr>';
+  }
+
+  async function handleCreateGastoPadrao(e){
+    e.preventDefault();
+    const campos = {
+      descricao: document.getElementById('newGastoPadraoDescricao').value.trim(),
+      tipo: document.getElementById('newGastoPadraoTipo').value,
+      forma_calculo: document.getElementById('newGastoPadraoFormaCalculo').value,
+      valor: parseFloat(document.getElementById('newGastoPadraoValor').value)
+    };
+    if(!campos.descricao || isNaN(campos.valor)) return false;
+    const { error } = await dyseCreateGastoPadrao(campos);
+    if(error){ flashMsg('gastoPadraoMsg', 'Não foi possível criar: ' + error.message, false); return false; }
+    document.getElementById('newGastoPadraoDescricao').value = '';
+    document.getElementById('newGastoPadraoValor').value = '';
+    flashMsg('gastoPadraoMsg', 'Gasto padrão criado! Ele passa a valer a partir da próxima geração/atualização do mês.', true);
+    GASTOS_PADRAO_CACHE = await dyseListGastosPadrao();
+    renderGastosPadraoTable();
+    return false;
+  }
+
+  async function toggleGastoPadraoAtivo(id, ativo, checkboxEl){
+    const { error } = await dyseUpdateGastoPadrao(id, { ativo });
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !ativo;
+      return;
+    }
+    const g = GASTOS_PADRAO_CACHE.find(x => x.id === id);
+    if(g) g.ativo = ativo;
+  }
+
+  async function handleDeleteGastoPadrao(id){
+    if(!confirm('Excluir este gasto padrão? Isso remove também os gastos automáticos já lançados a partir dele em meses ainda abertos (meses fechados ficam protegidos).')) return;
+    const { error } = await dyseDeleteGastoPadrao(id);
+    if(error){ alert('Não foi possível excluir: ' + error.message); return; }
+    GASTOS_PADRAO_CACHE = await dyseListGastosPadrao();
+    renderGastosPadraoTable();
+  }
+
+  function openGastoModal(id){
+    CURRENT_GASTO_ID = id;
+    const gasto = id ? GASTOS_CACHE.find(g => g.id === id) : null;
+    document.getElementById('gastoModalTitle').textContent = gasto ? 'Editar gasto' : 'Novo gasto';
+    const alunoOptions = STUDENTS.map(s => '<option value="' + s.id + '"' + (gasto && gasto.aluno_id === s.id ? ' selected' : '') + '>' + escapeHtmlLocal(s.full_name || s.email || '') + '</option>').join('');
+    const tipoOptions = Object.keys(GASTO_TIPO_LABELS).map(t =>
+      '<option value="' + t + '"' + (gasto && gasto.tipo === t ? ' selected' : '') + '>' + GASTO_TIPO_LABELS[t] + '</option>'
+    ).join('');
+
+    document.getElementById('gastoModalBody').innerHTML =
+      '<form class="gestao-form" onsubmit="return handleSaveGasto(event)" style="flex-direction:column; align-items:stretch;">' +
+        '<div class="gestao-field"><label>Aluno</label><select id="gastoAluno" required' + (gasto ? ' disabled' : '') + '>' + alunoOptions + '</select></div>' +
+        '<div class="gestao-field"><label>Mês de competência</label><input type="month" id="gastoMes" value="' + competenciaToMonthInput(gasto ? gasto.mes_competencia : GASTOS_MES_ATUAL) + '" required' + (gasto ? ' disabled' : '') + '></div>' +
+        '<div class="gestao-field"><label>Descrição</label><input type="text" id="gastoDescricao" value="' + escapeHtmlLocal(gasto ? gasto.descricao : '') + '" placeholder="Ex: Material didático" required></div>' +
+        '<div class="gestao-field"><label>Tipo</label><select id="gastoTipo">' + tipoOptions + '</select></div>' +
+        '<div class="gestao-field"><label>Forma de cálculo</label><select id="gastoFormaCalculo" onchange="onGastoFormaCalculoChange()">' +
+          '<option value="fixo"' + (gasto && gasto.forma_calculo === 'fixo' ? ' selected' : '') + '>Valor fixo em reais</option>' +
+          '<option value="percentual"' + (gasto && gasto.forma_calculo === 'percentual' ? ' selected' : '') + '>Percentual sobre o valor recebido do aluno</option>' +
+        '</select></div>' +
+        '<div class="gestao-field"><label id="gastoValorLabel">Valor (R$)</label><input type="number" step="0.01" id="gastoValor" value="' + (gasto ? gasto.valor : '') + '" required></div>' +
+        '<div class="gestao-field"><label>Observação</label><input type="text" id="gastoObservacao" value="' + escapeHtmlLocal(gasto ? (gasto.observacao || '') : '') + '"></div>' +
+        '<p class="gestao-hint">O valor pode ser negativo pra lançar descontos, estornos ou ajustes. Se for percentual, é calculado em cima do valor recebido do aluno naquele mês (ex: comissão de 10%).</p>' +
+        '<button type="submit" class="btn btn-primary">Salvar</button>' +
+      '</form>';
+
+    onGastoFormaCalculoChange();
+    document.getElementById('gastoModal').classList.add('open');
+    document.getElementById('gastoModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function onGastoFormaCalculoChange(){
+    const forma = document.getElementById('gastoFormaCalculo').value;
+    document.getElementById('gastoValorLabel').textContent = forma === 'percentual' ? 'Valor (%)' : 'Valor (R$)';
+  }
+
+  function closeGastoModal(){
+    document.getElementById('gastoModal').classList.remove('open');
+    document.getElementById('gastoModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_GASTO_ID = null;
+  }
+
+  async function handleSaveGasto(e){
+    e.preventDefault();
+    const valor = parseFloat(document.getElementById('gastoValor').value);
+    if(CURRENT_GASTO_ID){
+      const { error } = await dyseUpdateGasto(CURRENT_GASTO_ID, {
+        descricao: document.getElementById('gastoDescricao').value.trim(),
+        tipo: document.getElementById('gastoTipo').value,
+        forma_calculo: document.getElementById('gastoFormaCalculo').value,
+        valor: valor,
+        observacao: document.getElementById('gastoObservacao').value.trim() || null
+      });
+      if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+    } else {
+      const { error } = await dyseCreateGasto({
+        aluno_id: document.getElementById('gastoAluno').value,
+        mes_competencia: monthInputToCompetencia(document.getElementById('gastoMes').value),
+        descricao: document.getElementById('gastoDescricao').value.trim(),
+        tipo: document.getElementById('gastoTipo').value,
+        forma_calculo: document.getElementById('gastoFormaCalculo').value,
+        valor: valor,
+        observacao: document.getElementById('gastoObservacao').value.trim() || null
+      });
+      if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+    }
+    closeGastoModal();
+    await loadGastosMes();
+    return false;
+  }
+
+  async function handleDeleteGasto(id){
+    if(!confirm('Excluir este gasto?')) return;
+    const { error } = await dyseDeleteGasto(id);
+    if(error){ alert('Não foi possível excluir: ' + error.message); return; }
+    await loadGastosMes();
+  }
+
+  /* ---------- Relatório Lucro Mensal ---------- */
+  let RELATORIO_MES_ATUAL = dyseMesCompetencia();
+  let RELATORIO_DATA = [];
+  let CHART_EVOLUCAO = null;
+
+  async function loadRelatorioMes(){
+    const mes = monthInputToCompetencia(document.getElementById('relatorioMes').value);
+    RELATORIO_MES_ATUAL = mes;
+    await dyseGerarMensalidadesDoMes(mes);
+    populateRelatorioFiltros();
+    await renderRelatorio();
+    await renderRelatorioChart();
+  }
+
+  function populateRelatorioFiltros(){
+    const selProf = document.getElementById('relatorioProfessor');
+    const selMod = document.getElementById('relatorioModalidade');
+    const currentProf = selProf.value, currentMod = selMod.value;
+    selProf.innerHTML = '<option value="">Todos os professores</option>' + TEACHERS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.full_name || '') + '</option>').join('');
+    selMod.innerHTML = '<option value="">Todas as modalidades</option>' + MODALIDADES.map(m => '<option value="' + m.id + '">' + escapeHtmlLocal(m.name) + '</option>').join('');
+    selProf.value = currentProf; selMod.value = currentMod;
+  }
+
+  async function renderRelatorio(){
+    const mes = RELATORIO_MES_ATUAL;
+    const [mensalidades, gastos] = await Promise.all([
+      dyseListMensalidades(mes),
+      dyseListGastos(null, mes)
+    ]);
+
+    const profFiltro = document.getElementById('relatorioProfessor').value;
+    const modFiltro = document.getElementById('relatorioModalidade').value;
+    const alunoFiltro = (document.getElementById('relatorioAluno').value || '').trim().toLowerCase();
+
+    const gastosPorAluno = {};
+    gastos.forEach(g => { (gastosPorAluno[g.aluno_id] = gastosPorAluno[g.aluno_id] || []).push(g); });
+
+    let linhas = mensalidades.map(m => {
+      const aluno = STUDENTS.find(s => s.id === m.aluno_id);
+      const professor = TEACHERS.find(t => t.id === m.professor_id);
+      const modalidade = MODALIDADES.find(mo => mo.id === m.modalidade_id);
+      const gastosDoAluno = gastosPorAluno[m.aluno_id] || [];
+      const { gastos: totalGastos, lucro } = dyseLucroMensalidade(m, gastosDoAluno);
+      const margem = Number(m.valor_recebido) > 0 ? (lucro / Number(m.valor_recebido) * 100) : 0;
+      return {
+        alunoNome: aluno ? (aluno.full_name || aluno.email || '') : '(aluno removido)',
+        professorNome: professor ? (professor.full_name || '') : '-',
+        professorId: m.professor_id,
+        modalidadeNome: modalidade ? modalidade.name : '-',
+        modalidadeId: m.modalidade_id,
+        valorRecebido: Number(m.valor_recebido),
+        valorPagoProfessor: Number(m.valor_pago_professor),
+        totalGastos,
+        lucro,
+        margem
+      };
+    });
+
+    if(profFiltro) linhas = linhas.filter(l => l.professorId === profFiltro);
+    if(modFiltro) linhas = linhas.filter(l => l.modalidadeId === modFiltro);
+    if(alunoFiltro) linhas = linhas.filter(l => l.alunoNome.toLowerCase().includes(alunoFiltro));
+
+    RELATORIO_DATA = linhas;
+    renderRelatorioTable(linhas);
+    renderRelatorioKpis(linhas);
+  }
+
+  function renderRelatorioTable(linhas){
+    document.getElementById('relatorioBody').innerHTML = linhas.length ? linhas.map(l =>
+      '<tr>' +
+        '<td>' + escapeHtmlLocal(l.alunoNome) + '</td>' +
+        '<td>' + escapeHtmlLocal(l.professorNome) + '</td>' +
+        '<td>' + escapeHtmlLocal(l.modalidadeNome) + '</td>' +
+        '<td>' + formatMoney(l.valorRecebido) + '</td>' +
+        '<td>' + formatMoney(l.valorPagoProfessor) + '</td>' +
+        '<td>' + formatMoney(l.totalGastos) + '</td>' +
+        '<td><b>' + formatMoney(l.lucro) + '</b></td>' +
+        '<td>' + l.margem.toFixed(1) + '%</td>' +
+      '</tr>'
+    ).join('') : '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum dado pra este mês/filtro.</td></tr>';
+  }
+
+  function renderRelatorioKpis(linhas){
+    const totalRecebido = linhas.reduce((s,l) => s+l.valorRecebido, 0);
+    const totalPagoProf = linhas.reduce((s,l) => s+l.valorPagoProfessor, 0);
+    const totalGastos = linhas.reduce((s,l) => s+l.totalGastos, 0);
+    const lucroTotal = linhas.reduce((s,l) => s+l.lucro, 0);
+    const margemGeral = totalRecebido > 0 ? (lucroTotal/totalRecebido*100) : 0;
+    const qtdAlunos = linhas.length;
+    const ticketMedio = qtdAlunos ? totalRecebido/qtdAlunos : 0;
+    const custoMedio = qtdAlunos ? (totalPagoProf+totalGastos)/qtdAlunos : 0;
+    const lucroMedio = qtdAlunos ? lucroTotal/qtdAlunos : 0;
+
+    const kpis = [
+      ['Total recebido', formatMoney(totalRecebido)],
+      ['Pago aos professores', formatMoney(totalPagoProf)],
+      ['Gastos personalizados', formatMoney(totalGastos)],
+      ['Lucro líquido', formatMoney(lucroTotal)],
+      ['Margem geral', margemGeral.toFixed(1) + '%'],
+      ['Alunos ativos', String(qtdAlunos)],
+      ['Ticket médio', formatMoney(ticketMedio)],
+      ['Custo médio/aluno', formatMoney(custoMedio)],
+      ['Lucro médio/aluno', formatMoney(lucroMedio)]
+    ];
+    document.getElementById('relatorioKpis').innerHTML = kpis.map(([label,val]) =>
+      '<div class="kpi-card"><div class="kpi-value">' + val + '</div><div class="kpi-label">' + label + '</div></div>'
+    ).join('');
+  }
+
+  async function renderRelatorioChart(){
+    const canvas = document.getElementById('chartEvolucao');
+    if(!canvas || typeof Chart === 'undefined') return;
+
+    // Monta os últimos 6 meses a partir das partes ano/mês da própria string
+    // "YYYY-MM-01" (nunca via "new Date(stringISO)" — isso é interpretado como
+    // UTC e, lido de volta com getFullYear()/getMonth() locais, "volta" um mês
+    // inteiro em fusos atrás de UTC, como o Brasil).
+    const [anoBase, mesBaseNum] = RELATORIO_MES_ATUAL.split('-').map(Number);
+    const meses = [];
+    for(let i = 5; i >= 0; i--){
+      const idx = (mesBaseNum - 1) - i; // 0-indexado, pode ficar negativo
+      const ano = anoBase + Math.floor(idx / 12);
+      const mesNum = ((idx % 12) + 12) % 12 + 1;
+      meses.push(ano + '-' + String(mesNum).padStart(2,'0') + '-01');
+    }
+
+    const receitas = [], pagos = [], lucros = [];
+    for(const mes of meses){
+      const [mensalidadesMes, gastosMes] = await Promise.all([dyseListMensalidades(mes), dyseListGastos(null, mes)]);
+      const gastosPorAluno = {};
+      gastosMes.forEach(g => { (gastosPorAluno[g.aluno_id] = gastosPorAluno[g.aluno_id] || []).push(g); });
+      let receita = 0, pago = 0, lucro = 0;
+      mensalidadesMes.forEach(m => {
+        receita += Number(m.valor_recebido);
+        pago += Number(m.valor_pago_professor);
+        lucro += dyseLucroMensalidade(m, gastosPorAluno[m.aluno_id] || []).lucro;
+      });
+      receitas.push(receita); pagos.push(pago); lucros.push(lucro);
+    }
+
+    const labels = meses.map(formatMesLabel);
+    if(CHART_EVOLUCAO) CHART_EVOLUCAO.destroy();
+    CHART_EVOLUCAO = new Chart(canvas.getContext('2d'), {
+      data: {
+        labels,
+        datasets: [
+          { type: 'bar', label: 'Receita', data: receitas, backgroundColor: '#F0A224' },
+          { type: 'bar', label: 'Pago a professores', data: pagos, backgroundColor: '#D03B55' },
+          { type: 'line', label: 'Lucro', data: lucros, borderColor: '#2E8B57', backgroundColor: '#2E8B57', tension: .3 }
+        ]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+
+  function relatorioExportRows(){
+    return RELATORIO_DATA.map(l => ({
+      'Aluno': l.alunoNome,
+      'Professor': l.professorNome,
+      'Modalidade': l.modalidadeNome,
+      'Valor recebido': l.valorRecebido,
+      'Pago ao professor': l.valorPagoProfessor,
+      'Gastos': l.totalGastos,
+      'Lucro': l.lucro,
+      'Margem (%)': Number(l.margem.toFixed(1))
+    }));
+  }
+
+  function exportarRelatorioExcel(){
+    if(typeof XLSX === 'undefined'){ alert('Biblioteca de exportação ainda não carregou — tente novamente em instantes.'); return; }
+    const ws = XLSX.utils.json_to_sheet(relatorioExportRows());
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Lucro Mensal');
+    XLSX.writeFile(wb, 'lucro-mensal-' + RELATORIO_MES_ATUAL + '.xlsx');
+  }
+
+  function exportarRelatorioCSV(){
+    if(typeof XLSX === 'undefined'){ alert('Biblioteca de exportação ainda não carregou — tente novamente em instantes.'); return; }
+    const ws = XLSX.utils.json_to_sheet(relatorioExportRows());
+    const csv = XLSX.utils.sheet_to_csv(ws);
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'lucro-mensal-' + RELATORIO_MES_ATUAL + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportarRelatorioPDF(){
+    if(typeof window.jspdf === 'undefined'){ alert('Biblioteca de exportação ainda não carregou — tente novamente em instantes.'); return; }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape' });
+    doc.setFontSize(14);
+    doc.text('Relatório de Lucro Mensal — ' + formatMesLabel(RELATORIO_MES_ATUAL), 14, 16);
+    doc.autoTable({
+      startY: 22,
+      head: [['Aluno','Professor','Modalidade','Recebido','Pago professor','Gastos','Lucro','Margem']],
+      body: RELATORIO_DATA.map(l => [l.alunoNome, l.professorNome, l.modalidadeNome, formatMoney(l.valorRecebido), formatMoney(l.valorPagoProfessor), formatMoney(l.totalGastos), formatMoney(l.lucro), l.margem.toFixed(1)+'%']),
+      styles: { fontSize: 8 }
+    });
+    doc.save('lucro-mensal-' + RELATORIO_MES_ATUAL + '.pdf');
+  }
+
+  /* ---------- Fechamento mensal ---------- */
+  let FECHAMENTO_MES_ATUAL = dyseMesCompetencia();
+
+  async function checarFechamento(){
+    const mes = monthInputToCompetencia(document.getElementById('fechamentoMes').value);
+    FECHAMENTO_MES_ATUAL = mes;
+    const [avisos, jaFechado] = await Promise.all([dyseValidarFechamento(mes), dyseMesFechado(mes)]);
+
+    document.getElementById('fechamentoAvisos').innerHTML = avisos.length
+      ? '<div class="gestao-card-title" style="color:var(--bad);">Pendências encontradas</div><ul style="padding-left:20px;">' + avisos.map(a => '<li class="report-line">' + escapeHtmlLocal(a) + '</li>').join('') + '</ul>'
+      : '<div class="gestao-card-title" style="color:var(--ok);">Nenhuma pendência encontrada</div><p class="report-line">O mês pode ser fechado com segurança.</p>';
+
+    document.getElementById('btnFecharMes').style.display = jaFechado ? 'none' : 'inline-flex';
+    document.getElementById('btnReabrirMes').style.display = jaFechado ? 'inline-flex' : 'none';
+
+    await renderFechamentosTable();
+  }
+
+  async function handleFecharMes(){
+    const avisos = await dyseValidarFechamento(FECHAMENTO_MES_ATUAL);
+    let observacao = null;
+    if(avisos.length){
+      const ok = confirm('Existem pendências neste mês:\n\n' + avisos.join('\n') + '\n\nDeseja fechar mesmo assim?');
+      if(!ok) return;
+      observacao = prompt('Observação sobre o fechamento (opcional):') || null;
+    }
+    const { error } = await dyseFecharMes(FECHAMENTO_MES_ATUAL, observacao);
+    if(error){ alert('Não foi possível fechar o mês: ' + error.message); return; }
+    await checarFechamento();
+  }
+
+  async function handleReabrirMes(){
+    const motivo = prompt('Motivo da reabertura (obrigatório):');
+    if(!motivo) return;
+    const { error } = await dyseReabrirMes(FECHAMENTO_MES_ATUAL, motivo);
+    if(error){ alert('Não foi possível reabrir o mês: ' + error.message); return; }
+    await checarFechamento();
+  }
+
+  async function renderFechamentosTable(){
+    const fechamentos = await dyseListFechamentos();
+    document.getElementById('fechamentosBody').innerHTML = fechamentos.length ? fechamentos.map(f => {
+      const status = f.fechado_em ? 'Fechado' : (f.reaberto_em ? 'Reaberto' : 'Aberto');
+      return '<tr>' +
+        '<td>' + formatMesLabel(f.mes_competencia) + '</td>' +
+        '<td>' + status + '</td>' +
+        '<td>' + (f.fechado_em ? new Date(f.fechado_em).toLocaleString('pt-BR') : '-') + '</td>' +
+        '<td>' + (f.reaberto_em ? new Date(f.reaberto_em).toLocaleString('pt-BR') : '-') + '</td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="4" style="text-align:center; opacity:.6;">Nenhum mês fechado ainda.</td></tr>';
+  }
+
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape'){
+      closeTurmaModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal(); closeGastoModal();
+    }
+  });
+
+  (async () => {
+    const session = await dyseRequireAdmin();
+    if(!session) return;
+    dyseRenderAuthBar('authBar');
+    await loadAll();
+  })();
+</script>
+</body>
+</html>

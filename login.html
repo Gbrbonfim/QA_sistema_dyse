@@ -561,18 +561,22 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     try{
       const profile = await withTimeout(dyseGetProfile(session), 6000, null);
       const isTeacher = dyseIsTeacher(profile);
+      const isAdmin = dyseIsAdmin(profile);
 
       if(explicitNext){
-        // Professoras nunca devem cair em páginas de aluno, mesmo vindo de um
-        // link que pedia especificamente essa página (ex: tentou abrir
+        // Professoras/gestão nunca devem cair em páginas de aluno, mesmo vindo
+        // de um link que pedia especificamente essa página (ex: tentou abrir
         // /area-do-aluno.html sem estar logada e foi redirecionada pra cá).
+        if(isAdmin && (explicitNext.startsWith('/area-do-aluno') || explicitNext.startsWith('/professora'))){
+          return '/gestao.html';
+        }
         if(isTeacher && explicitNext.startsWith('/area-do-aluno')){
           return '/professora.html';
         }
         return explicitNext; // ex: um link direto de atividade — mantém o destino original
       }
 
-      return isTeacher ? '/professora.html' : '/area-do-aluno.html';
+      return isAdmin ? '/gestao.html' : (isTeacher ? '/professora.html' : '/area-do-aluno.html');
     }catch(e){
       console.error('Não foi possível verificar o cargo do usuário, seguindo como aluno:', e);
       return explicitNext || '/area-do-aluno.html';
