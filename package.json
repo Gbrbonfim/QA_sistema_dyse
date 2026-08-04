@@ -1,0 +1,9 @@
+{
+  "name": "dyse-sistema",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site e paineis da DYSE (estatico) + funcoes serverless na Vercel para acoes que exigem a chave service_role do Supabase (nunca exposta no navegador).",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}

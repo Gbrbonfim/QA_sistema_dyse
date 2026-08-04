@@ -405,6 +405,23 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   <!-- ---------- ALUNOS ---------- -->
   <div id="panelAlunos" style="display:none;">
+    <div class="gestao-card">
+      <div class="gestao-card-title">Cadastrar novo aluno</div>
+      <form class="gestao-form" onsubmit="return handleCreateStudent(event)">
+        <div class="gestao-field" style="flex:1 1 220px;">
+          <label>Nome completo</label>
+          <input type="text" id="newStudentName" required>
+        </div>
+        <div class="gestao-field" style="flex:1 1 220px;">
+          <label>E-mail</label>
+          <input type="email" id="newStudentEmail" required>
+        </div>
+        <button type="submit" class="btn btn-primary">+ Cadastrar aluno</button>
+      </form>
+      <p class="gestao-hint">O aluno recebe um e-mail do sistema com o link pra definir a senha e acessar. Depois de cadastrado, vincule turma (aba Turmas) e dados financeiros (botão "Editar financeiro" abaixo) normalmente.</p>
+      <div class="auth-msg" id="newStudentMsg"></div>
+    </div>
+
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
       Pra colocar ou tirar um aluno de uma turma (acesso a conteúdo), vá na aba <b>Turmas</b> → <b>Gerenciar</b>
       da turma desejada. O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui,
@@ -1111,6 +1128,39 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   }
 
   /* ---------- ALUNOS ---------- */
+  async function handleCreateStudent(e){
+    e.preventDefault();
+    const full_name = document.getElementById('newStudentName').value.trim();
+    const email = document.getElementById('newStudentEmail').value.trim();
+    if(!full_name || !email) return false;
+
+    const session = await dyseGetSession();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    try{
+      const resp = await fetch('/api/create-student', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ full_name, email })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if(!resp.ok){
+        flashMsg('newStudentMsg', 'Não foi possível cadastrar: ' + (result.error || resp.statusText), false);
+        return false;
+      }
+      document.getElementById('newStudentName').value = '';
+      document.getElementById('newStudentEmail').value = '';
+      flashMsg('newStudentMsg', 'Aluno cadastrado! Ele já recebeu o e-mail de acesso.', true);
+      STUDENTS = await dyseListProfilesByRole('student');
+      renderAlunosTable();
+    }catch(err){
+      flashMsg('newStudentMsg', 'Erro de conexão com o servidor: ' + err.message, false);
+    }finally{
+      btn.disabled = false;
+    }
+    return false;
+  }
+
   function renderAlunosTable(){
     const filter = (document.getElementById('filterAlunoName').value || '').trim().toLowerCase();
     const rows = STUDENTS.filter(s => !filter || (s.full_name||'').toLowerCase().includes(filter));
