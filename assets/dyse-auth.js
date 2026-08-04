@@ -543,9 +543,9 @@ function dyseFindPeriodoAberto(historicoDoAluno){
 
 /* Cria/edita o vínculo financeiro do aluno. Trocar professor ou modalidade
    fecha o período aberto atual (data_fim = ontem) e abre um novo a partir
-   de hoje — preserva o histórico. Editar só valor/situação/observação no
-   período aberto atual atualiza a própria linha, sem gerar uma versão nova
-   a cada pequena edição. */
+   de hoje — preserva o histórico. Editar valor/situação/data de início/
+   parcelas/observação no período aberto atual atualiza a própria linha,
+   sem gerar uma versão nova a cada pequena edição. */
 async function dyseSetAlunoFinanceiro(alunoId, campos){
   const session = await dyseGetSession();
   const userId = session ? session.user.id : null;
@@ -565,6 +565,7 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
         valor_mensal_aluno: campos.valor_mensal_aluno,
         valor_professor_customizado: campos.valor_professor_customizado ?? null,
         situacao: campos.situacao,
+        data_inicio: campos.data_inicio || aberto.data_inicio,
         quantidade_parcelas: campos.quantidade_parcelas ?? null,
         observacao: campos.observacao || null
       })
