@@ -3,7 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DYSE | Do You Speak English? Turmas para iniciantes começam em 03/08</title>
+<title>DYSE Escola de Inglês | Inglês para adultos no seu ritmo</title>
+<meta name="description" content="Aprenda inglês com turmas niveladas, professores presentes, aplicativo com inteligência artificial, clube de escrita, aula de conversação e uma comunidade que acompanha sua evolução. Aulas 100% online, no seu ritmo.">
+<link rel="canonical" href="https://doyouspeakenglish.com.br/">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/brand/dyse-favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/brand/dyse-favicon-180.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DYSE Escola de Inglês">
+<meta property="og:title" content="DYSE Escola de Inglês | Inglês para adultos no seu ritmo">
+<meta property="og:description" content="Você não falhou no inglês. Só precisava de um jeito diferente de aprender. Turmas niveladas, professores presentes e uma comunidade que acompanha sua evolução.">
+<meta property="og:image" content="https://doyouspeakenglish.com.br/assets/images/brand/dyse-social-share.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
@@ -44,15 +54,23 @@
   .wrap{max-width:1140px; margin:0 auto; padding:0 24px;}
   section{position:relative; scroll-margin-top:100px;}
 
+  /* ---------- Accessibility ---------- */
+  .skip-link{
+    position:absolute; left:12px; top:-60px; z-index:1000;
+    background:var(--brown); color:#fff; padding:12px 18px; border-radius:10px;
+    font-weight:700; font-size:14px; transition:top .2s ease;
+  }
+  .skip-link:focus{ top:12px; }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible{
+    outline:3px solid var(--amaranth); outline-offset:2px; border-radius:6px;
+  }
+
   /* ---------- Sparkle icon ---------- */
   .sparkle{ display:inline-block; }
   .sparkle svg{ display:block; }
 
-  /* ---------- Sticky urgency banner ---------- */
-  /* wrapper keeps banner + header glued together while sticky,
-     so a wrapping banner on mobile never overlaps the nav below it */
+  /* ---------- Top brand banner ---------- */
   .site-top{ position:sticky; top:0; z-index:100; }
-
   .top-banner{
     background:var(--brown);
     color:var(--off);
@@ -68,15 +86,6 @@
     flex-wrap:wrap;
     row-gap:4px;
   }
-  .top-banner .pill{
-    background:var(--gamboge);
-    color:var(--brown);
-    padding:3px 12px;
-    border-radius:999px;
-    font-weight:800;
-    font-size:12.5px;
-    white-space:nowrap;
-  }
 
   /* ---------- Header ---------- */
   header.site{
@@ -86,18 +95,12 @@
   }
   .nav{
     display:flex; align-items:center; justify-content:space-between;
-    padding:14px 20px;
+    padding:12px 20px;
     max-width:1140px; margin:0 auto;
     gap:12px;
   }
-  .logo{
-    font-family:'Bricolage Grotesque', sans-serif;
-    font-weight:800;
-    font-size:clamp(19px, 4vw, 24px);
-    color:var(--amaranth);
-    display:flex; align-items:center; gap:8px;
-    flex:none;
-  }
+  .logo{ display:flex; align-items:center; flex:none; }
+  .logo img{ height:38px; width:auto; display:block; }
   .nav-cta{
     background:var(--amaranth);
     color:#fff;
@@ -117,9 +120,12 @@
   }
   .nav-login:hover{ border-bottom-color:var(--amaranth); }
 
-  /* ---------- Mobile nav: hamburger + drawer ---------- */
-  .nav-links{ display:flex; align-items:center; gap:18px; }
-  .nav-right{ display:flex; align-items:center; gap:18px; }
+  /* ---------- Desktop anchor menu + mobile hamburger/drawer ---------- */
+  .nav-links{ display:none; align-items:center; gap:20px; }
+  .nav-link{ font-weight:600; font-size:13.5px; color:var(--brown); padding:6px 2px; border-bottom:2px solid transparent; white-space:nowrap; }
+  .nav-link:hover{ color:var(--amaranth); border-bottom-color:var(--amaranth); }
+  @media(min-width:1080px){ .nav-links{ display:flex; } }
+  .nav-right{ display:flex; align-items:center; gap:16px; }
   .nav-toggle{
     display:none; flex:none; width:40px; height:40px; border-radius:12px;
     background:transparent; border:none; cursor:pointer;
@@ -137,16 +143,18 @@
   .nav-backdrop.show{ opacity:1; pointer-events:auto; }
 
   .nav-drawer{
-    position:fixed; top:0; right:0; height:100%; width:min(78vw, 300px);
+    position:fixed; top:0; right:0; height:100%; width:min(80vw, 320px);
     background:var(--off); z-index:200; box-shadow:-10px 0 30px rgba(58,29,16,.2);
     transform:translateX(100%); transition:transform .3s ease;
-    display:flex; flex-direction:column; padding:22px 22px 30px; gap:6px;
+    display:flex; flex-direction:column; padding:22px 22px 30px; gap:4px;
+    overflow-y:auto;
   }
   .nav-drawer.open{ transform:translateX(0); }
-  .nav-drawer-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+  .nav-drawer-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .nav-drawer-head img{ height:30px; }
   .nav-drawer-close{ background:none; border:none; font-size:26px; line-height:1; color:var(--brown); cursor:pointer; padding:4px 8px; }
   .nav-drawer a.nav-login{
-    padding:14px 4px; border-bottom:1px solid rgba(86,41,21,0.1); font-size:16px;
+    padding:13px 4px; border-bottom:1px solid rgba(86,41,21,0.1); font-size:15.5px;
   }
   .nav-drawer a.nav-cta{
     margin-top:14px; text-align:center; justify-content:center; display:flex;
@@ -158,9 +166,8 @@
   @media(max-width:640px){
     .nav-login-desktop{ display:none; }
     .nav-toggle{ display:flex; }
-
     .nav{ display:grid; grid-template-columns:1fr auto 1fr; grid-auto-flow:dense; align-items:center; }
-    .nav-right{ display:contents; } /* deixa os filhos participarem direto do grid do .nav */
+    .nav-right{ display:contents; }
     .logo{ grid-column:1; justify-self:start; }
     .nav-cta{ grid-column:2; justify-self:center; }
     .nav-toggle{ grid-column:3; justify-self:end; }
@@ -176,6 +183,7 @@
     cursor:pointer;
     border:none;
     transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+    font-family:inherit;
   }
   .btn-primary{
     background:linear-gradient(135deg, var(--amaranth), var(--persimmon));
@@ -200,7 +208,7 @@
   /* ---------- Hero ---------- */
   .hero{
     position:relative;
-    padding:76px 24px 90px;
+    padding:64px 24px 84px;
     background:
       radial-gradient(circle at 85% 10%, rgba(240,162,36,0.35), transparent 45%),
       radial-gradient(circle at 8% 85%, rgba(252,171,175,0.5), transparent 45%),
@@ -222,25 +230,22 @@
     font-weight:700;
     color:var(--amaranth);
     box-shadow:var(--shadow);
-    margin-bottom:22px;
+    margin-bottom:20px;
   }
+  .eyebrow img{ height:16px; width:auto; }
   .hero h1{
-    font-size:clamp(38px, 5.2vw, 60px);
+    font-size:clamp(32px, 4.6vw, 52px);
     color:var(--brown);
     margin-bottom:20px;
   }
-  .hero h1 .hl{
-    color:var(--amaranth);
-    position:relative;
-  }
   .hero p.lead{
-    font-size:19px;
+    font-size:18.5px;
     color:#6b4630;
-    max-width:520px;
-    margin-bottom:32px;
+    max-width:540px;
+    margin-bottom:30px;
   }
-  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:26px; }
-  .hero-note{ font-size:13.5px; color:#8a6a54; display:flex; align-items:center; gap:8px; }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:24px; }
+  .hero-note{ font-size:13.5px; color:#8a6a54; display:flex; align-items:center; gap:8px; max-width:480px; }
 
   .hero-art{
     position:relative;
@@ -253,7 +258,7 @@
     position:absolute;
     inset:6% 6%;
     border-radius:42% 58% 65% 35% / 45% 40% 60% 55%;
-    background:linear-gradient(135deg, var(--amaranth), var(--gamboge) 60%, var(--persimmon));
+    background:linear-gradient(135deg, var(--blossom), var(--cream) 60%, var(--gamboge));
     animation: morph 12s ease-in-out infinite;
     z-index:0;
   }
@@ -261,27 +266,13 @@
     0%,100%{ border-radius:42% 58% 65% 35% / 45% 40% 60% 55%; }
     50%{ border-radius:60% 40% 30% 70% / 55% 65% 35% 45%; }
   }
-  .hero-card{
+  .hero-ceo-card{
     position:relative;
     z-index:1;
     width:78%;
     margin:0 auto;
-    background:#fff;
-    border-radius:28px;
     box-shadow:0 30px 60px rgba(86,41,21,0.25);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center;
-    padding:30px 22px;
-    gap:10px;
   }
-  .hero-card .big-date{
-    font-family:'Bricolage Grotesque', sans-serif;
-    font-weight:800;
-    font-size:44px;
-    color:var(--amaranth);
-    line-height:1;
-  }
-  .hero-card .big-date span{ display:block; font-size:15px; font-weight:600; color:var(--brown); margin-top:6px; }
   .float-sparkle{ position:absolute; animation: float 5s ease-in-out infinite; }
   .float-sparkle.s1{ top:-2%; left:2%; animation-delay:0s; }
   .float-sparkle.s2{ bottom:4%; right:2%; animation-delay:1.2s; }
@@ -292,119 +283,121 @@
   }
 
   .marquee{
-    margin-top:64px;
+    margin-top:56px;
     border-top:1px solid rgba(86,41,21,0.1);
-    padding-top:28px;
-    display:flex; flex-wrap:wrap; gap:34px; justify-content:center;
-    color:#8a6a54; font-size:14px; font-weight:600;
+    padding-top:26px;
+    display:flex; flex-wrap:wrap; gap:30px; justify-content:center;
+    color:#8a6a54; font-size:13.5px; font-weight:600;
   }
   .marquee span{ display:flex; align-items:center; gap:8px; }
 
   /* ---------- Section shared ---------- */
-  .section-head{ text-align:center; max-width:680px; margin:0 auto 52px; }
+  .section-head{ text-align:center; max-width:680px; margin:0 auto 48px; }
   .section-head .eyebrow{ margin-bottom:16px; }
-  .section-head h2{ font-size:clamp(30px,4vw,42px); color:var(--brown); margin-bottom:14px; }
-  .section-head p{ color:#6b4630; font-size:17px; }
+  .section-head h2{ font-size:clamp(28px,3.8vw,40px); color:var(--brown); margin-bottom:14px; }
+  .section-head p{ color:#6b4630; font-size:16.5px; }
+  .section-cta{ text-align:center; margin-top:48px; }
 
-  .light{ background:var(--off); padding:96px 0; }
-  .tinted{ background:linear-gradient(180deg, var(--cream), var(--off)); padding:96px 0; }
+  .light{ background:var(--off); padding:88px 0; }
+  .tinted{ background:linear-gradient(180deg, var(--cream), var(--off)); padding:88px 0; }
   .dark{
     background:linear-gradient(135deg, var(--brown) 0%, #3a1b10 100%);
     color:var(--off);
-    padding:96px 0;
+    padding:88px 0;
   }
   .dark .section-head h2{ color:#fff; }
   .dark .section-head p{ color:rgba(255,248,240,0.75); }
 
-  /* ---------- Diferencial ---------- */
-  .diff-grid{
-    display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:center;
+  /* ---------- Pain points (frustrações) ---------- */
+  .pain-grid{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:8px; }
+  .pain-chip{
+    background:#fff; border:1px solid rgba(86,41,21,0.1); border-radius:999px;
+    padding:12px 20px; font-size:14.5px; font-weight:600; color:var(--brown);
+    box-shadow:0 8px 18px rgba(86,41,21,0.06);
   }
-  .diff-visual{
-    background:linear-gradient(160deg, var(--blossom), var(--cream));
-    border-radius:32px;
-    padding:40px;
-    position:relative;
-    box-shadow:var(--shadow);
+  .pain-close{
+    text-align:center; max-width:600px; margin:36px auto 0; font-size:16px; font-weight:600; color:var(--amaranth);
   }
-  .diff-quote{
-    background:#fff; border-radius:20px; padding:26px 24px; box-shadow:0 16px 30px rgba(86,41,21,0.12);
+
+  /* ---------- Generic icon card (soluções / diferenciais) ---------- */
+  .icon-card{
+    background:#fff; border-radius:22px; padding:30px 26px; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:12px; height:100%;
   }
-  .diff-quote p{ font-size:15.5px; color:var(--brown); font-style:italic; margin-bottom:14px; }
-  .diff-quote .who{ display:flex; align-items:center; gap:10px; font-size:13.5px; font-weight:700; color:var(--amaranth); }
-  .avatar{
-    width:34px; height:34px; border-radius:50%;
-    background:linear-gradient(135deg,var(--amaranth),var(--gamboge));
-    display:flex; align-items:center; justify-content:center;
-    color:#fff; font-size:13px; font-weight:800;
-  }
-  .diff-list{ display:flex; flex-direction:column; gap:22px; margin-top:28px; }
-  .diff-item{ display:flex; gap:16px; align-items:flex-start; }
-  .diff-item .ic{
-    flex:none; width:44px; height:44px; border-radius:14px;
+  .icon-card .ic{
+    flex:none; width:48px; height:48px; border-radius:15px;
     background:linear-gradient(135deg, var(--amaranth), var(--persimmon));
     display:flex; align-items:center; justify-content:center;
   }
-  .diff-item h4{ font-size:17px; color:var(--brown); margin-bottom:4px; }
-  .diff-item p{ font-size:15px; color:#6b4630; }
+  .icon-card h3{ font-size:18px; color:var(--brown); }
+  .icon-card p{ font-size:14.5px; color:#6b4630; }
 
-  /* ---------- Como funciona ---------- */
-  .aulas-grid{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
-  .aula-card{
-    background:#fff; border-radius:var(--radius); padding:34px;
-    box-shadow:var(--shadow);
-    border-top:5px solid var(--gamboge);
-  }
-  .aula-card.speaking{ border-top-color:var(--amaranth); }
-  .aula-tag{
-    display:inline-block; font-size:12.5px; font-weight:800; letter-spacing:.04em;
-    color:#fff; background:var(--gamboge); padding:5px 14px; border-radius:999px; margin-bottom:16px;
-  }
-  .aula-card.speaking .aula-tag{ background:var(--amaranth); }
-  .aula-card h3{ font-size:21px; color:var(--brown); margin-bottom:10px; }
-  .aula-card p{ font-size:15px; color:#6b4630; margin-bottom:14px; }
-  .aula-card ul{ display:flex; flex-direction:column; gap:8px; }
-  .aula-card ul li{ font-size:14.5px; color:var(--brown); display:flex; gap:8px; align-items:flex-start; }
+  .pillars-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .dif-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .dif-note{ text-align:center; margin-top:40px; font-weight:700; color:var(--amaranth); font-size:15px; }
 
-  /* included tools */
-  .tools-grid{
-    display:grid; grid-template-columns:repeat(2,1fr); gap:22px; margin-top:52px;
-    max-width:680px; margin-left:auto; margin-right:auto;
+  /* ---------- Como funciona: 4 etapas ---------- */
+  .steps-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; counter-reset:step; }
+  .step-card{
+    background:#fff; border-radius:var(--radius); padding:28px 22px;
+    box-shadow:var(--shadow); border-top:5px solid var(--gamboge); position:relative;
   }
-  .tool{
-    background:#fff; border-radius:18px; padding:24px; box-shadow:0 10px 24px rgba(86,41,21,0.08);
-    display:flex; gap:14px; align-items:flex-start;
+  .step-card:nth-child(2){ border-top-color:var(--persimmon); }
+  .step-card:nth-child(3){ border-top-color:var(--amaranth); }
+  .step-card:nth-child(4){ border-top-color:var(--blossom); }
+  .step-num{
+    font-family:'Bricolage Grotesque'; font-weight:800; font-size:15px; color:var(--amaranth);
+    background:var(--cream); width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; margin-bottom:14px;
   }
-  .tool .ic{ flex:none; width:38px; height:38px; }
-  .tool h4{ font-size:15.5px; color:var(--brown); margin-bottom:4px; }
-  .tool p{ font-size:13.5px; color:#6b4630; }
-  .tools-note{
-    text-align:center; margin-top:36px; font-weight:700; color:var(--amaranth); font-size:15px;
-  }
+  .step-card h3{ font-size:17px; color:var(--brown); margin-bottom:8px; }
+  .step-card p{ font-size:14px; color:#6b4630; }
 
   /* ---------- Comunidade ---------- */
-  .comunidade{
-    display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;
-  }
+  .comunidade{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
   .comunidade-card{
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.14);
-    border-radius:22px;
-    padding:26px;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    border-radius:22px; padding:26px;
   }
   .comunidade-stats{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:30px; }
   .stat{ background:rgba(255,255,255,0.06); border-radius:16px; padding:20px; border:1px solid rgba(255,255,255,0.12); }
   .stat b{ font-family:'Bricolage Grotesque'; font-size:30px; display:block; color:var(--gamboge); }
   .stat span{ font-size:13px; color:rgba(255,248,240,0.75); }
 
+  /* ---------- Rotina flow ---------- */
+  .flow{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:0; margin-top:8px; }
+  .flow-node{
+    background:#fff; border-radius:16px; padding:14px 18px; box-shadow:0 8px 18px rgba(86,41,21,0.08);
+    font-size:13.5px; font-weight:700; color:var(--brown); text-align:center;
+  }
+  .flow-arrow{ color:var(--amaranth); font-size:18px; padding:0 10px; flex:none; }
+  .flow-note{ text-align:center; max-width:600px; margin:32px auto 0; color:#6b4630; font-size:15px; }
+
+  /* ---------- App showcase ---------- */
+  .app-grid{ display:grid; grid-template-columns:1fr 0.85fr; gap:56px; align-items:center; }
+  .app-list{ display:flex; flex-direction:column; gap:18px; margin-top:26px; }
+  .app-list .item{ display:flex; gap:14px; align-items:flex-start; }
+  .app-list .ic{
+    flex:none; width:38px; height:38px; border-radius:12px;
+    background:linear-gradient(135deg, var(--amaranth), var(--gamboge));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .app-list p{ font-size:14.5px; color:var(--brown); font-weight:600; padding-top:6px; }
+  .app-note{ margin-top:22px; font-size:13.5px; color:#8a6a54; }
+  .phone-frame{
+    width:min(100%, 260px); aspect-ratio:9/18.5; margin:0 auto;
+    background:var(--brown); border-radius:44px; padding:14px;
+    box-shadow:0 30px 60px rgba(86,41,21,0.3);
+  }
+  .phone-screen{
+    width:100%; height:100%; border-radius:30px; overflow:hidden;
+    background:linear-gradient(160deg, var(--blossom), var(--gamboge));
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .phone-screen img{ width:70%; }
+
   /* ---------- Pricing ---------- */
-  .price-highlight{
-    text-align:center; max-width:560px; margin:0 auto 48px;
-  }
-  .price-highlight .tag{
-    display:inline-block; background:var(--amaranth); color:#fff; font-weight:800; font-size:13px;
-    padding:6px 16px; border-radius:999px; margin-bottom:14px;
-  }
+  .price-highlight{ text-align:center; max-width:560px; margin:0 auto 48px; }
   .price-highlight .from{ font-size:16px; color:#6b4630; margin-bottom:2px; }
   .price-highlight .value{ font-family:'Bricolage Grotesque'; font-size:56px; color:var(--brown); font-weight:800; }
   .price-highlight .value sup{ font-size:22px; top:-22px; }
@@ -413,99 +406,196 @@
   .pricing-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
   .price-card{
     background:#fff; border-radius:26px; padding:32px 28px; box-shadow:var(--shadow);
-    display:flex; flex-direction:column; gap:16px;
-    border:2px solid transparent;
-    position:relative;
+    display:flex; flex-direction:column; gap:14px;
+    border:2px solid transparent; position:relative;
     transition:transform .25s ease, box-shadow .25s ease;
   }
   .price-card:hover{ transform:translateY(-6px); box-shadow:0 24px 46px rgba(86,41,21,0.18); }
-  .price-card.featured{
-    border-color:var(--amaranth);
-    background:linear-gradient(180deg,#fff, #FFF3EC);
-  }
+  .price-card.featured{ border-color:var(--amaranth); background:linear-gradient(180deg,#fff, #FFF3EC); }
   .featured-badge{
     position:absolute; top:-14px; left:50%; transform:translateX(-50%);
     background:var(--amaranth); color:#fff; font-size:12px; font-weight:800;
     padding:6px 16px; border-radius:999px; white-space:nowrap;
   }
   .price-card h3{ font-size:20px; color:var(--brown); }
+  .price-card .for{ font-size:13px; color:var(--amaranth); font-weight:700; }
   .price-card .desc{ font-size:14px; color:#6b4630; }
-  .price-card .price-row{ display:flex; align-items:baseline; gap:6px; margin:6px 0; }
+  .price-card .price-row{ display:flex; align-items:baseline; gap:6px; margin:2px 0; }
   .price-card .price-row .num{ font-family:'Bricolage Grotesque'; font-size:34px; font-weight:800; color:var(--amaranth); }
   .price-card .price-row .per{ font-size:13px; color:#6b4630; }
   .price-card .alt-price{ font-size:13px; color:#8a6a54; }
   .price-card ul{ display:flex; flex-direction:column; gap:8px; margin:6px 0 4px; }
   .price-card ul li{ font-size:13.5px; color:var(--brown); display:flex; gap:8px; }
 
-  /* ---------- Depoimento full ---------- */
+  /* ---------- Depoimento ---------- */
   .testi{
     max-width:760px; margin:0 auto; text-align:center;
     background:#fff; border-radius:32px; padding:52px 44px; box-shadow:var(--shadow);
     position:relative;
   }
   .testi .quote-mark{ font-family:'Bricolage Grotesque'; font-size:70px; color:var(--blossom); line-height:0; position:relative; top:26px; }
-  .testi p{ font-size:20px; color:var(--brown); font-weight:500; margin-bottom:22px; }
+  .testi p{ font-size:19px; color:var(--brown); font-weight:500; margin-bottom:22px; }
   .testi .who{ display:flex; align-items:center; justify-content:center; gap:10px; font-weight:700; color:var(--amaranth); font-size:14px; }
+  .avatar{
+    width:34px; height:34px; border-radius:50%;
+    background:linear-gradient(135deg,var(--amaranth),var(--gamboge));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:13px; font-weight:800;
+  }
+
+  /* ---------- Quem somos / professores ---------- */
+  .diff-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:center; }
+  .diff-visual{
+    background:linear-gradient(160deg, var(--blossom), var(--cream)); border-radius:32px;
+    padding:40px; position:relative; box-shadow:var(--shadow);
+  }
+  .ceo-photo-card{ background:#fff; border-radius:24px; padding:14px; box-shadow:0 20px 40px rgba(86,41,21,0.2); text-align:center; }
+  .ceo-photo{ width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:18px; display:block; background:linear-gradient(160deg, var(--blossom), var(--cream)); }
+  .ceo-photo-caption{ padding-top:14px; }
+  .diff-list{ display:flex; flex-direction:column; gap:20px; margin-top:26px; }
+  .diff-item{ display:flex; gap:16px; align-items:flex-start; }
+  .diff-item .ic{
+    flex:none; width:40px; height:40px; border-radius:13px;
+    background:linear-gradient(135deg, var(--amaranth), var(--persimmon));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .diff-item h4{ font-size:16px; color:var(--brown); margin-bottom:3px; }
+  .diff-item p{ font-size:14.5px; color:#6b4630; }
+
+  /* ---------- Instagram ---------- */
+  .ig-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:14px; }
+  .ig-tile{
+    position:relative; display:block; aspect-ratio:1/1; border-radius:16px;
+    background-size:cover; background-position:center;
+    box-shadow:0 10px 24px rgba(86,41,21,0.1);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .ig-tile:hover{ transform:translateY(-4px); box-shadow:0 16px 32px rgba(86,41,21,0.18); }
+  .ig-ic{
+    position:absolute; top:8px; right:8px; width:24px; height:24px; border-radius:50%;
+    background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-list{ max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
+  .faq-item{
+    background:#fff; border-radius:16px; box-shadow:0 8px 20px rgba(86,41,21,0.07);
+    padding:4px 22px; border:1px solid rgba(86,41,21,0.06);
+  }
+  .faq-item summary{
+    list-style:none; cursor:pointer; padding:18px 28px 18px 0; position:relative;
+    font-weight:700; color:var(--brown); font-size:15.5px;
+  }
+  .faq-item summary::-webkit-details-marker{ display:none; }
+  .faq-item summary::after{
+    content:"+"; position:absolute; right:0; top:14px; font-size:22px; color:var(--amaranth);
+    font-weight:800; transition:transform .2s ease;
+  }
+  .faq-item[open] summary::after{ transform:rotate(45deg); }
+  .faq-item p{ padding-bottom:18px; color:#6b4630; font-size:14.5px; max-width:640px; }
+
+  /* ---------- Contact form ---------- */
+  .contact-card{
+    max-width:720px; margin:0 auto; background:#fff; border-radius:28px;
+    padding:40px 34px; box-shadow:var(--shadow);
+  }
+  .field-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:6px; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field.full{ grid-column:1 / -1; }
+  .field label{ font-size:13.5px; font-weight:700; color:var(--brown); }
+  .field input, .field select{
+    border:1.5px solid rgba(86,41,21,0.16); border-radius:12px; padding:12px 14px;
+    font-family:inherit; font-size:14.5px; color:var(--ink); background:var(--off);
+  }
+  .field input:focus, .field select:focus{ border-color:var(--amaranth); outline:none; }
+  .form-privacy{ font-size:12.5px; color:#8a6a54; margin-top:16px; }
+  .form-submit{ margin-top:22px; }
 
   /* ---------- Final CTA ---------- */
   .final-cta{
     background:linear-gradient(135deg, var(--amaranth), var(--persimmon) 60%, var(--gamboge));
-    padding:80px 24px;
-    text-align:center;
-    color:#fff;
-    border-radius:40px;
-    max-width:1080px;
-    margin:0 auto 0;
-    position:relative;
-    overflow:hidden;
+    padding:76px 24px; text-align:center; color:#fff; border-radius:40px;
+    max-width:1080px; margin:0 auto 0; position:relative; overflow:hidden;
   }
-  .final-cta h2{ font-size:clamp(28px,4vw,42px); margin-bottom:16px; }
-  .final-cta p{ font-size:17px; max-width:520px; margin:0 auto 30px; opacity:.95; }
-  .final-wrap{ padding:96px 0 96px; }
+  .final-cta h2{ font-size:clamp(26px,3.8vw,40px); margin-bottom:16px; }
+  .final-cta p{ font-size:16.5px; max-width:520px; margin:0 auto 28px; opacity:.95; }
+  .final-cta .note{ margin-top:16px; font-size:13.5px; opacity:.85; }
+  .final-wrap{ padding:88px 0 88px; }
 
   /* ---------- Footer ---------- */
-  footer{ background:var(--brown); color:rgba(255,248,240,0.7); padding:40px 24px; text-align:center; font-size:13.5px; }
-  footer .logo{ color:#fff; justify-content:center; margin-bottom:10px; }
+  footer{ background:var(--brown); color:rgba(255,248,240,0.75); padding:56px 24px 30px; }
+  .footer-grid{
+    max-width:1140px; margin:0 auto; display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px;
+    padding-bottom:32px; border-bottom:1px solid rgba(255,255,255,0.12);
+  }
+  .footer-brand img{ height:34px; margin-bottom:14px; }
+  .footer-brand p{ font-size:13.5px; max-width:320px; }
+  .footer-col h4{ font-family:'Poppins'; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:14px; letter-spacing:.03em; text-transform:uppercase; }
+  .footer-col ul{ display:flex; flex-direction:column; gap:10px; }
+  .footer-col a{ font-size:14px; }
+  .footer-col a:hover{ color:#fff; }
+  .footer-bottom{
+    max-width:1140px; margin:0 auto; padding-top:22px; display:flex; flex-wrap:wrap;
+    justify-content:space-between; gap:10px; font-size:12.5px;
+  }
+
+  /* ---------- Floating WhatsApp button ---------- */
+  .wa-float{
+    position:fixed; right:20px; bottom:20px; z-index:150;
+    width:58px; height:58px; border-radius:50%;
+    background:linear-gradient(135deg, var(--amaranth), var(--persimmon));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 14px 30px rgba(208,59,85,0.4);
+    transition:transform .2s ease;
+  }
+  .wa-float:hover{ transform:translateY(-3px) scale(1.04); }
 
   /* ---------- Responsive ---------- */
   @media(max-width:1080px){
     .hero-grid{ grid-template-columns:1fr 0.8fr; gap:34px; }
     .hero-art{ max-width:280px; padding:22px 10px; }
-    .hero-card{ padding:22px 16px; }
-    .hero-card .big-date{ font-size:36px; }
+    .pillars-grid, .dif-grid{ grid-template-columns:repeat(2,1fr); }
+    .steps-grid{ grid-template-columns:repeat(2,1fr); }
   }
   @media(max-width:900px){
-    .hero{ padding:56px 24px 64px; }
-    .diff-grid, .comunidade, .aulas-grid{ grid-template-columns:1fr; gap:36px; }
-    .tools-grid{ grid-template-columns:1fr 1fr; }
+    .hero{ padding:52px 24px 60px; }
+    .diff-grid, .comunidade, .app-grid{ grid-template-columns:1fr; gap:36px; }
     .pricing-grid{ grid-template-columns:1fr; max-width:460px; margin:0 auto; }
-    .light, .tinted, .dark{ padding:64px 0; }
-    .final-wrap{ padding:64px 0; }
+    .light, .tinted, .dark{ padding:60px 0; }
+    .final-wrap{ padding:60px 0; }
     .testi{ padding:40px 26px; }
+    .ig-grid{ grid-template-columns:repeat(3,1fr); }
+    .app-grid{ grid-template-columns:1fr; }
+    .phone-frame{ order:-1; margin-bottom:8px; }
+    .footer-grid{ grid-template-columns:1fr; gap:30px; }
   }
   @media(max-width:700px){
-    .hero-grid{ grid-template-columns:1fr; gap:36px; }
-    .hero-art{ order:-1; max-width:340px; margin:0 auto 8px; padding:26px 10px; }
+    .hero-grid{ grid-template-columns:1fr; gap:32px; }
+    .hero-art{ max-width:320px; margin:8px auto 0; padding:22px 10px; }
   }
   @media(max-width:640px){
     .wrap{ padding:0 18px; }
-    .hero{ padding:44px 18px 52px; }
-    .hero p.lead{ font-size:17px; }
-    .marquee{ gap:16px 22px; margin-top:44px; font-size:13px; }
-    .section-head{ margin-bottom:36px; }
-    .tools-grid{ grid-template-columns:1fr; }
+    .hero{ padding:40px 18px 48px; }
+    .hero p.lead{ font-size:16.5px; }
+    .marquee{ gap:14px 20px; margin-top:40px; font-size:12.5px; }
+    .section-head{ margin-bottom:34px; }
+    .pillars-grid, .dif-grid, .steps-grid{ grid-template-columns:1fr; }
+    .ig-grid{ grid-template-columns:repeat(2,1fr); }
     .hero-ctas{ flex-direction:column; align-items:stretch; }
     .btn{ width:100%; }
-    .final-cta{ border-radius:24px; padding:48px 22px; }
+    .final-cta{ border-radius:24px; padding:44px 22px; }
     .price-highlight .value{ font-size:44px; }
-    .nav{ padding:12px 18px; }
+    .nav{ padding:10px 18px; }
     .nav-cta{ padding:9px 14px; font-size:12.5px; }
     .comunidade-stats{ grid-template-columns:1fr 1fr; }
+    .field-grid{ grid-template-columns:1fr; }
+    .contact-card{ padding:30px 22px; }
+    .wa-float{ width:52px; height:52px; right:14px; bottom:14px; }
   }
   @media(max-width:380px){
-    .top-banner{ font-size:12px; padding:8px 10px; }
+    .top-banner{ font-size:11.5px; padding:8px 10px; }
     .nav-cta{ padding:8px 12px; font-size:12px; }
-    .logo{ font-size:18px; }
+    .logo img{ height:32px; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -514,73 +604,86 @@
 </style>
 </head>
 <body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
 
-<!-- ===== Sticky top: banner + header travel together ===== -->
+<!-- ===== Sticky top: brand banner + header travel together ===== -->
 <div class="site-top">
   <div class="top-banner">
     <span class="sparkle" aria-hidden="true">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="#F0A224"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="#F0A224"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg>
     </span>
-    Próxima turma de iniciantes
-    <span class="pill">começa em 03/08</span>
-    <span style="white-space:nowrap;">vagas limitadas</span>
+    <span>Nós trabalhamos com sonhos e traduzimos futuros.</span>
   </div>
 
   <header class="site">
     <div class="nav">
-      <div class="logo">
-        <span class="sparkle" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#D03B55"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg>
-        </span>
-        DYSE
+      <a href="/" class="logo" aria-label="DYSE, página inicial">
+        <img src="assets/images/brand/dyse-logo-primary.png" alt="DYSE">
+      </a>
+      <div class="nav-links">
+        <a href="#como-funciona" class="nav-link">Como funciona</a>
+        <a href="#diferenciais" class="nav-link">Diferenciais</a>
+        <a href="#comunidade" class="nav-link">Comunidade</a>
+        <a href="#modalidades" class="nav-link">Modalidades</a>
+        <a href="#depoimentos" class="nav-link">Depoimentos</a>
+        <a href="#duvidas" class="nav-link">Dúvidas</a>
       </div>
       <div class="nav-right">
         <a href="/login.html" class="nav-login nav-login-desktop">Área do Aluno</a>
         <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
-        <a href="https://wa.me/554187355010?text=Oi%2C%20quero%20garantir%20minha%20vaga%20na%20DYSE%21" target="_blank" rel="noopener" class="nav-cta">Quero minha vaga →</a>
+        <a href="#contato" class="nav-cta">Quero conhecer a DYSE</a>
       </div>
     </div>
   </header>
   <div class="nav-backdrop" id="navBackdrop"></div>
   <nav class="nav-drawer" id="navDrawer" aria-hidden="true">
     <div class="nav-drawer-head">
-      <div class="logo" style="font-size:19px;">DYSE</div>
+      <img src="assets/images/brand/dyse-logo-primary.png" alt="DYSE">
       <button type="button" class="nav-drawer-close" id="navDrawerClose" aria-label="Fechar menu">×</button>
     </div>
+    <a href="#como-funciona" class="nav-login">Como funciona</a>
+    <a href="#diferenciais" class="nav-login">Diferenciais</a>
+    <a href="#comunidade" class="nav-login">Comunidade</a>
+    <a href="#modalidades" class="nav-login">Modalidades</a>
+    <a href="#depoimentos" class="nav-login">Depoimentos</a>
+    <a href="#duvidas" class="nav-login">Dúvidas</a>
     <a href="/login.html" class="nav-login">Área do Aluno</a>
+    <a href="#contato" class="nav-cta btn btn-primary">Quero conhecer a DYSE</a>
   </nav>
 </div>
 
+<main id="conteudo">
 <!-- ===== HERO ===== -->
 <section class="hero">
   <div class="hero-grid">
     <div>
       <div class="eyebrow">
-        <span class="sparkle" aria-hidden="true">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#D03B55"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg>
-        </span>
-        Especialistas em iniciantes
+        <img src="assets/images/brand/dyse-symbol.png" alt="">
+        <span>Do you speak english?</span>
       </div>
-      <h1>Do You Speak English? <span class="hl">Ainda não. Mas em breve, sim.</span></h1>
-      <p class="lead">A DYSE é a escola feita para quem está começando do zero e quer aprender inglês de verdade, pra viajar, crescer no trabalho ou mudar de vida. Sem vergonha, sem pressa forçada, com gente que te acompanha de perto.</p>
+      <h1>Você não falhou no inglês. Só precisava de um jeito diferente de aprender.</h1>
+      <p class="lead">Na DYSE, você aprende no seu ritmo, em turmas realmente niveladas, com professores por perto, tecnologia personalizada e uma comunidade que acompanha cada etapa da sua evolução.</p>
       <div class="hero-ctas">
-        <a href="https://wa.me/554187355010?text=Oi%2C%20quero%20garantir%20minha%20vaga%20na%20DYSE%21" target="_blank" rel="noopener" class="btn btn-primary">Eu quero minha vaga</a>
-        <a href="#como-funciona" class="btn btn-ghost">Saber mais</a>
+        <a href="https://wa.me/554187355010?text=Ol%C3%A1!%20Conheci%20a%20DYSE%20pelo%20site%20e%20gostaria%20de%20entender%20qual%20turma%20combina%20mais%20com%20meu%20n%C3%ADvel%20e%20minha%20rotina." target="_blank" rel="noopener" class="btn btn-primary">Quero encontrar minha turma</a>
+        <a href="#como-funciona" class="btn btn-ghost">Entenda como funciona</a>
       </div>
       <div class="hero-note">
         <span class="sparkle" aria-hidden="true">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="#EB6424"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg>
         </span>
-        Reunião de alinhamento com a Teacher Letícia antes de fechar sua matrícula
+        <span>Aulas pensadas para adultos, rotinas reais e diferentes histórias com o inglês.</span>
       </div>
     </div>
     <div class="hero-art">
       <div class="blob"></div>
-      <div class="hero-card">
-        <span style="font-size:13px;font-weight:700;color:#8a6a54;letter-spacing:.04em;">PRÓXIMA TURMA</span>
-        <div class="big-date">03/08 <span>vagas limitadas, garanta a sua</span></div>
+      <div class="ceo-photo-card hero-ceo-card">
+        <img class="ceo-photo" src="assets/img/ceo-leticia.jpg" alt="Teacher Letícia Chagas, CEO da DYSE">
+        <div class="ceo-photo-caption">
+          <p style="font-weight:700; color:var(--brown); font-size:16.5px; margin-bottom:2px;">Teacher Letícia Chagas</p>
+          <p style="font-size:13px; color:var(--amaranth); font-weight:700;">CEO da DYSE · +10 anos com iniciantes</p>
+        </div>
       </div>
       <span class="float-sparkle s1"><svg width="34" height="34" viewBox="0 0 24 24" fill="#F0A224"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
       <span class="float-sparkle s2"><svg width="26" height="26" viewBox="0 0 24 24" fill="#D03B55"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
@@ -590,49 +693,115 @@
 
   <div class="wrap marquee">
     <span>👥 Turmas com no máximo 5 alunos</span>
-    <span>⏱️ 5 aulas de 50min cada por semana</span>
-    <span>🎯 Teacher escolhida pelo seu perfil e horário</span>
-    <span>🎥 Aulas ao vivo e gravadas</span>
-    <span>🗣️ Speaking Club toda semana</span>
+    <span>🎥 100% aulas ao vivo, nunca gravadas</span>
+    <span>📚 Material didático 100% incluso</span>
+    <span>🗣️ Aula de conversação toda semana</span>
+    <span>💻 100% online</span>
   </div>
 </section>
 
-<!-- ===== DIFERENCIAL ===== -->
+<!-- ===== FRUSTRAÇÕES ===== -->
 <section class="light">
-  <div class="wrap diff-grid">
-    <div class="diff-visual">
-      <div class="diff-quote">
-        <p>"Lee, hoje meu chefe me deu um feedback em inglês, e eu tô super feliz! Ele disse que fiz um bom trabalho liderando a reunião e compartilhando meu conhecimento."</p>
-        <div class="who"><span class="avatar">A</span> Aluna DYSE, sobre uma reunião no trabalho</div>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Talvez você se reconheça aqui</div>
+      <h2>Talvez aprender inglês nunca tenha sido o problema.</h2>
+      <p>Talvez o problema tenha sido tentar encaixar sua vida em um método que não respeitava sua rotina, seu nível ou a forma como você aprende.</p>
+    </div>
+    <div class="pain-grid">
+      <span class="pain-chip">"Eu começo, mas não consigo manter uma rotina."</span>
+      <span class="pain-chip">"Já fiz outros cursos e continuo travando."</span>
+      <span class="pain-chip">"Tenho medo de falar errado."</span>
+      <span class="pain-chip">"Não quero entrar em uma turma e me sentir perdida."</span>
+      <span class="pain-chip">"Acho que passou a minha idade."</span>
+      <span class="pain-chip">"Minha rotina já está cheia demais."</span>
+      <span class="pain-chip">"Sempre sinto que todos sabem mais do que eu."</span>
+      <span class="pain-chip">"Não quero investir novamente e me frustrar."</span>
+    </div>
+    <p class="pain-close">Na DYSE, essas dificuldades não são ignoradas. Elas fazem parte da construção da sua jornada.</p>
+  </div>
+</section>
+
+<!-- ===== SOLUÇÃO ===== -->
+<section class="tinted">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Como a DYSE é diferente</div>
+      <h2>Aqui, aprender inglês fica mais leve.</h2>
+      <p>Você encontra uma rotina possível, pessoas no mesmo momento de aprendizado e professores que acompanham sua evolução de verdade. A tecnologia ajuda você a praticar, mas o cuidado humano continua no centro de tudo.</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Seu nível é respeitado</h3>
+        <p>As turmas são cuidadosamente niveladas para que você não se sinta atrasada, pressionada ou deslocada.</p>
+      </div>
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Pessoas que combinam com sua jornada</h3>
+        <p>Além do nível de inglês, buscamos formar turmas com alunos que tenham objetivos, rotinas ou interesses em comum.</p>
+      </div>
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Você não estuda sozinha</h3>
+        <p>Professores, colegas e atividades complementares ajudam você a praticar mesmo fora da aula principal — como o Speaking Club, nossa aula semanal só de conversação.</p>
+      </div>
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Inglês dentro da sua rotina</h3>
+        <p>A proposta é criar constância sem transformar o estudo em mais uma obrigação pesada: 2 encontros por semana, sempre ao vivo, com material 100% incluso.</p>
+      </div>
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Tecnologia com acompanhamento humano</h3>
+        <p>O aplicativo e a inteligência artificial ampliam as possibilidades de prática, enquanto os professores continuam orientando sua evolução.</p>
       </div>
     </div>
-    <div>
-      <div class="eyebrow">Nosso diferencial</div>
-      <h2 style="font-size:clamp(28px,3.6vw,38px); color:var(--brown); margin-bottom:16px;">Aqui, começar do zero é o nosso ponto forte.</h2>
-      <p style="color:#6b4630; font-size:16px; margin-bottom:8px;">A metodologia é criada e supervisionada pela nossa gestora, <strong>Teacher Letícia Chagas</strong>, e você estuda com uma teacher escolhida especialmente para o seu perfil e horário.</p>
-      <div class="diff-list">
-        <div class="diff-item">
-          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
-          <div>
-            <h4>Reunião de alinhamento com a Teacher Letícia</h4>
-            <p>Você tira todas as suas dúvidas antes de fechar a matrícula. Combinado?</p>
-          </div>
-        </div>
-        <div class="diff-item">
-          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
-          <div>
-            <h4>Um time, não uma aula isolada</h4>
-            <p>Você entra numa comunidade que te acolhe e te ajuda a chegar no seu objetivo, cercada de gente na mesma jornada.</p>
-          </div>
-        </div>
-        <div class="diff-item">
-          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
-          <div>
-            <h4>Acompanhamento individual, sempre</h4>
-            <p>Seu objetivo é traçado no início e planejamos juntos como e em quanto tempo você chega lá.</p>
-          </div>
-        </div>
+  </div>
+</section>
+
+<!-- ===== DIFERENCIAIS ===== -->
+<section class="light" id="diferenciais">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">O que está incluído</div>
+      <h2>Muito mais do que uma aula de inglês.</h2>
+    </div>
+    <div class="dif-grid">
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Aplicativo com inteligência artificial</h3>
+        <p>Um ambiente exclusivo para praticar conteúdos, realizar atividades e reforçar o que foi aprendido nas aulas. A inteligência artificial ajuda a personalizar os exercícios de acordo com as necessidades de cada aluno — sempre como complemento das aulas, nunca no lugar do professor.</p>
       </div>
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Clube de escrita</h3>
+        <p>Um espaço para desenvolver a escrita de forma acompanhada, prática e sem medo de errar. Você organiza suas ideias, amplia o vocabulário e usa o inglês em situações reais. Incluso na mensalidade, sem custo extra.</p>
+      </div>
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Aula de conversação com professor</h3>
+        <p>O Speaking Club é um momento só pra praticar a fala, sempre ao vivo, com acompanhamento de uma teacher — inclusive com teacher americana. O objetivo não é só conversar, mas receber orientação, correções e incentivo pra ganhar segurança.</p>
+      </div>
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Turmas realmente niveladas</h3>
+        <p>Você estuda com pessoas num momento semelhante de aprendizado, em grupos de até 5 alunos. Ninguém precisa acompanhar uma turma avançada demais, nem se sentir atrasado por níveis muito diferentes.</p>
+      </div>
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Turmas formadas também por afinidade</h3>
+        <p>Além do nível, buscamos aproximar pessoas com objetivos, rotinas ou momentos de vida em comum. Isso torna as conversas mais naturais e ajuda a criar conexão entre os participantes.</p>
+      </div>
+      <div class="icon-card">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+        <h3>Uma comunidade que conhece você</h3>
+        <p>Na DYSE, você não é apenas mais um acesso ou número de matrícula. A Teacher Letícia supervisiona cada turma e conversa pessoalmente com você antes da matrícula, pra garantir que esse é o lugar certo pra sua jornada.</p>
+      </div>
+    </div>
+    <p class="dif-note">Material didático e todas essas ferramentas já estão inclusos na sua mensalidade. Você não paga nada a mais por nenhuma delas.</p>
+    <div class="section-cta">
+      <a href="https://wa.me/554187355010?text=Ol%C3%A1!%20Conheci%20a%20DYSE%20pelo%20site%20e%20gostaria%20de%20entender%20qual%20turma%20combina%20mais%20com%20meu%20n%C3%ADvel%20e%20minha%20rotina." target="_blank" rel="noopener" class="btn btn-primary">Quero encontrar minha turma</a>
     </div>
   </div>
 </section>
@@ -642,125 +811,128 @@
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">Como funciona</div>
-      <h2>Duas aulas por semana. Um plano feito pra você.</h2>
-      <p>Toda semana você tem dois encontros, cada um com um propósito diferente na sua evolução.</p>
+      <h2>Do primeiro contato à sua evolução.</h2>
+      <p>Um caminho simples, pensado pra te acompanhar do início ao fim.</p>
     </div>
-    <div class="aulas-grid">
-      <div class="aula-card">
-        <span class="aula-tag">AULA REGULAR</span>
-        <h3>Todas as habilidades, num só encontro</h3>
-        <p>Escuta, fala, escrita, gramática, interpretação de texto e vocabulário, em grupo, em dupla ou individual (VIP), como preferir.</p>
-        <ul>
-          <li>🧩 Grupo, dupla ou VIP</li>
-          <li>📚 Material incluso na mensalidade</li>
-          <li>🎥 Aula ao vivo e gravada</li>
-        </ul>
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-num">1</span>
+        <h3>Conhecemos você</h3>
+        <p>Entendemos seu histórico com o inglês, seus objetivos, sua rotina e suas principais dificuldades.</p>
       </div>
-      <div class="aula-card speaking">
-        <span class="aula-tag">SPEAKING CLUB</span>
-        <h3>Sua aula de conversação semanal</h3>
-        <p>Sempre em duplas ou trios, com alunos do seu nível, sob supervisão de uma teacher, inclusive com aula com teacher americana.</p>
-        <ul>
-          <li>🗣️ Conversa real, com apoio de perto</li>
-          <li>🌎 Turma nivelada pelo seu perfil</li>
-          <li>💛 Sem julgamento, só prática</li>
-        </ul>
+      <div class="step-card">
+        <span class="step-num">2</span>
+        <h3>Identificamos seu nível</h3>
+        <p>Realizamos uma avaliação para encontrar o ponto certo de início, sem julgamentos e sem colocar você em uma turma inadequada.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">3</span>
+        <h3>Encontramos a turma ideal</h3>
+        <p>Buscamos combinar nível, disponibilidade, objetivos e características em comum entre os participantes.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">4</span>
+        <h3>Acompanhamos sua evolução</h3>
+        <p>As aulas, o aplicativo, o clube de escrita e os encontros de conversação trabalham juntos pra ajudar você a praticar e continuar avançando.</p>
       </div>
     </div>
-
-    <div class="tools-grid">
-      <div class="tool"><span class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="#D03B55"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span><div><h4>App exclusivo</h4><p>Mapeia suas dificuldades e ajuda na pronúncia e gramática.</p></div></div>
-      <div class="tool"><span class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="#F0A224"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span><div><h4>Clube de escrita</h4><p>Incluso na mensalidade, sem custo extra.</p></div></div>
+    <div class="section-cta">
+      <a href="https://wa.me/554187355010?text=Ol%C3%A1!%20Quero%20descobrir%20meu%20n%C3%ADvel%20de%20ingl%C3%AAs%20e%20conhecer%20a%20turma%20ideal%20pra%20mim%20na%20DYSE." target="_blank" rel="noopener" class="btn btn-primary">Quero descobrir meu nível</a>
     </div>
-    <p class="tools-note">Tudo isso já incluído na sua mensalidade. Você não paga nada a mais por nenhuma dessas ferramentas.</p>
   </div>
 </section>
 
 <!-- ===== COMUNIDADE ===== -->
-<section class="dark">
+<section class="dark" id="comunidade">
   <div class="wrap comunidade">
     <div>
       <div class="eyebrow" style="background:rgba(255,255,255,0.08); color:var(--gamboge); border-color:rgba(255,255,255,0.14);">Imersão de verdade</div>
-      <h2 style="font-size:clamp(28px,3.6vw,38px); margin-bottom:16px;">Aprender rápido é aprender junto.</h2>
-      <p style="color:rgba(255,248,240,0.8); font-size:16px; margin-bottom:10px;">Não acreditamos em ensino isolado. Trabalhamos com grupos pequenos, no máximo 5 alunos, nivelados por idade, nível de inglês e objetivo parecido com o seu.</p>
-      <p style="color:rgba(255,248,240,0.8); font-size:16px;">Sabemos que aula em grupo pode assustar no início. Mas é o caminho mais rápido pra fluência: mais tempo de conversa, mais acolhimento e mais motivação pra seguir na jornada.</p>
+      <h2 style="font-size:clamp(28px,3.6vw,38px); margin-bottom:16px;">Uma escola onde você aprende inglês e cria conexões.</h2>
+      <p style="color:rgba(255,248,240,0.8); font-size:16px;">Aprender um idioma exige prática, confiança e constância. Tudo isso fica mais fácil quando existem pessoas caminhando com você. Na DYSE, cada turma também é um espaço de troca, incentivo e proximidade.</p>
       <div class="comunidade-stats">
         <div class="stat"><b>5</b><span>alunos por turma, no máximo</span></div>
-        <div class="stat"><b>2x</b><span>aulas por semana</span></div>
+        <div class="stat"><b>2x</b><span>encontros com professor por semana</span></div>
       </div>
     </div>
     <div class="comunidade-card">
-      <h3 style="font-size:19px; margin-bottom:14px;">O que você leva com a DYSE:</h3>
+      <h3 style="font-size:19px; margin-bottom:14px;">O que você encontra na DYSE:</h3>
       <ul style="display:flex; flex-direction:column; gap:12px;">
-        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Teacher escolhida pelo seu perfil e horário</li>
-        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Metodologia supervisionada pela Teacher Letícia Chagas</li>
-        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Turmas pequenas, niveladas por perfil</li>
-        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Acompanhamento individual do seu objetivo</li>
-        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Comunidade que te acolhe na jornada</li>
+        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Você terá com quem praticar.</li>
+        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Você poderá errar sem se sentir julgada.</li>
+        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Você será acompanhada durante o processo.</li>
+        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Você encontrará pessoas vivendo desafios parecidos.</li>
+        <li style="display:flex; gap:10px; font-size:14.5px; color:rgba(255,248,240,0.9);">✔️ Você não será apenas mais um nome em uma lista.</li>
       </ul>
-      <a href="https://wa.me/554187355010?text=Oi%2C%20quero%20garantir%20minha%20vaga%20na%20DYSE%21" target="_blank" rel="noopener" class="btn btn-light btn-block" style="margin-top:22px;">Quero fazer parte</a>
+      <a href="https://wa.me/554187355010?text=Ol%C3%A1!%20Conheci%20a%20DYSE%20pelo%20site%20e%20gostaria%20de%20entender%20qual%20turma%20combina%20mais%20com%20meu%20n%C3%ADvel%20e%20minha%20rotina." target="_blank" rel="noopener" class="btn btn-light btn-block" style="margin-top:22px;">Quero encontrar minha turma</a>
     </div>
   </div>
 </section>
 
-<!-- ===== MODALIDADES / PREÇOS ===== -->
-<section class="light" id="modalidades">
+<!-- ===== ROTINA ===== -->
+<section class="light">
   <div class="wrap">
-    <div class="price-highlight">
-      <span class="tag">Turmas começam em 03/08, vagas limitadas</span>
-      <h2 style="font-size:clamp(28px,3.6vw,38px); color:var(--brown); margin-bottom:6px;">Escolha como você quer estudar</h2>
-      <p style="color:#6b4630; font-size:16px;">Planos a partir de</p>
-      <div class="value"><sup>R$</sup>397<small>/mês</small></div>
-      <p style="color:#8a6a54; font-size:14px; margin-top:6px;">por aluno, na modalidade em grupo</p>
+    <div class="section-head">
+      <div class="eyebrow">Sua rotina, seu ritmo</div>
+      <h2>Você não precisa esperar a vida ficar menos corrida.</h2>
+      <p>O inglês precisa funcionar na rotina que você tem hoje. Por isso, a experiência da DYSE combina encontros com professores, prática orientada e atividades que se encaixam no seu dia a dia.</p>
     </div>
-
-    <div class="pricing-grid">
-      <div class="price-card featured">
-        <span class="featured-badge">Mais escolhido</span>
-        <h3>Modalidade Grupo</h3>
-        <p class="desc">Aula regular em grupo + Speaking Club em grupo</p>
-        <div class="price-row"><span class="num">R$397</span><span class="per">/mês, por aluno</span></div>
-        <span class="alt-price">Ou à vista (semestral): R$2.144 (10% off)</span>
-        <ul>
-          <li>👥 Turmas de até 5 alunos</li>
-          <li>📅 80 aulas por ano</li>
-          <li>💛 Ideal pra imersão e prática constante</li>
-        </ul>
-        <a href="https://wa.me/554187355010?text=Oi%2C%20queria%20o%20plano%20Grupo" target="_blank" rel="noopener" class="btn btn-primary btn-block">Eu quero essa</a>
-      </div>
-
-      <div class="price-card">
-        <h3>Modalidade Dupla</h3>
-        <p class="desc">Aula regular em dupla + Speaking Club em grupo</p>
-        <div class="price-row"><span class="num">R$580</span><span class="per">/mês, por aluno</span></div>
-        <span class="alt-price">Ou à vista (semestral): R$3.132 (10% off)</span>
-        <ul>
-          <li>🤝 Mais atenção, dividida com 1 colega</li>
-          <li>📅 80 aulas por ano</li>
-          <li>🎯 Ritmo mais próximo do seu</li>
-        </ul>
-        <a href="https://wa.me/554187355010?text=Oi%2C%20queria%20o%20plano%20Dupla" target="_blank" rel="noopener" class="btn btn-ghost btn-block">Quero esse plano</a>
-      </div>
-
-      <div class="price-card">
-        <h3>Modalidade VIP</h3>
-        <p class="desc">Aula regular individual + Speaking Club em grupo</p>
-        <div class="price-row"><span class="num">R$750</span><span class="per">/mês, por aluno</span></div>
-        <span class="alt-price">Ou à vista (semestral): R$4.050 (10% off)</span>
-        <ul>
-          <li>⭐ 100% do foco da teacher em você</li>
-          <li>📅 80 aulas por ano</li>
-          <li>🚀 Ritmo totalmente individual</li>
-        </ul>
-        <a href="https://wa.me/554187355010?text=Oi%2C%20queria%20o%20plano%20VIP" target="_blank" rel="noopener" class="btn btn-ghost btn-block">Quero esse plano</a>
-      </div>
+    <div class="flow">
+      <span class="flow-node">Aula principal</span><span class="flow-arrow">→</span>
+      <span class="flow-node">Prática no aplicativo</span><span class="flow-arrow">→</span>
+      <span class="flow-node">Atividades com IA</span><span class="flow-arrow">→</span>
+      <span class="flow-node">Clube de escrita</span><span class="flow-arrow">→</span>
+      <span class="flow-node">Aula de conversação</span><span class="flow-arrow">→</span>
+      <span class="flow-node">Interação com a turma</span><span class="flow-arrow">→</span>
+      <span class="flow-node">Orientação do professor</span><span class="flow-arrow">→</span>
+      <span class="flow-node">Acompanhamento da evolução</span>
     </div>
+    <p class="flow-note">Hoje, isso acontece em 2 encontros por semana com professores, mais as atividades complementares que você pratica no seu tempo.</p>
   </div>
 </section>
 
-<!-- ===== DEPOIMENTO ===== -->
+<!-- ===== APLICATIVO ===== -->
 <section class="tinted">
+  <div class="wrap app-grid">
+    <div>
+      <div class="eyebrow">Prática todos os dias</div>
+      <h2 style="font-size:clamp(28px,3.6vw,38px); color:var(--brown); margin-bottom:16px;">Seu inglês continua além da aula.</h2>
+      <p style="color:#6b4630; font-size:16px;">Com o aplicativo da DYSE, você pode revisar conteúdos, realizar atividades e praticar de acordo com suas necessidades. A inteligência artificial ajuda a criar uma experiência mais personalizada, enquanto os professores continuam acompanhando sua jornada.</p>
+      <div class="app-list">
+        <div class="item">
+          <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+          <p>Revisão dos conteúdos vistos em aula</p>
+        </div>
+        <div class="item">
+          <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+          <p>Atividades personalizadas com inteligência artificial</p>
+        </div>
+        <div class="item">
+          <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+          <p>Apoio de pronúncia e gramática</p>
+        </div>
+        <div class="item">
+          <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+          <p>Prática dentro da sua rotina, no seu tempo</p>
+        </div>
+      </div>
+      <p class="app-note">O aplicativo é um complemento das aulas — ele não substitui o acompanhamento do professor.</p>
+    </div>
+    <!-- TODO: substituir por screenshot real do app quando disponível -->
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <img src="assets/images/brand/dyse-symbol.png" alt="Aplicativo DYSE">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DEPOIMENTOS ===== -->
+<section class="light" id="depoimentos">
   <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Quem já passou por aqui</div>
+      <h2>Histórias de quem também achava que não conseguiria.</h2>
+    </div>
     <div class="testi">
       <div class="quote-mark">"</div>
       <p>"Hoje meu chefe me deu um feedback em inglês, e eu tô super feliz! Ele disse que fiz um bom trabalho liderando a reunião e compartilhando meu conhecimento da melhor forma."</p>
@@ -769,29 +941,321 @@
   </div>
 </section>
 
-<!-- ===== FINAL CTA ===== -->
-<section class="final-wrap" id="quero">
+<!-- ===== MODALIDADES ===== -->
+<section class="tinted" id="modalidades">
+  <div class="wrap">
+    <div class="price-highlight">
+      <div class="eyebrow">Modalidades</div>
+      <h2 style="font-size:clamp(28px,3.6vw,38px); color:var(--brown); margin-bottom:6px;">Escolha como você quer estudar</h2>
+      <p class="from">Planos a partir de</p>
+      <div class="value"><sup>R$</sup>397<small>/mês</small></div>
+      <p style="color:#8a6a54; font-size:14px; margin-top:6px;">por aluno, na modalidade em grupo</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card featured">
+        <span class="featured-badge">Mais escolhido</span>
+        <h3>Modalidade Grupo</h3>
+        <span class="for">Ideal pra quem quer imersão e prática constante em grupo</span>
+        <p class="desc">Aula regular em grupo + Speaking Club em grupo</p>
+        <div class="price-row"><span class="num">R$397</span><span class="per">/mês, por aluno</span></div>
+        <span class="alt-price">Ou à vista (semestral): R$2.144 (10% off)</span>
+        <ul>
+          <li>👥 Turmas de até 5 alunos</li>
+          <li>📅 80 aulas por ano, sempre ao vivo</li>
+          <li>📚 Material didático 100% incluso</li>
+        </ul>
+        <a href="https://wa.me/554187355010?text=Oi%2C%20queria%20o%20plano%20Grupo" target="_blank" rel="noopener" class="btn btn-primary btn-block">Encontrar a melhor opção para mim</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Modalidade Dupla</h3>
+        <span class="for">Ideal pra quem quer mais atenção, dividida com 1 colega</span>
+        <p class="desc">Aula regular em dupla + Speaking Club em grupo</p>
+        <div class="price-row"><span class="num">R$580</span><span class="per">/mês, por aluno</span></div>
+        <span class="alt-price">Ou à vista (semestral): R$3.132 (10% off)</span>
+        <ul>
+          <li>🤝 Ritmo mais próximo do seu</li>
+          <li>📅 80 aulas por ano, sempre ao vivo</li>
+          <li>📚 Material didático 100% incluso</li>
+        </ul>
+        <a href="https://wa.me/554187355010?text=Oi%2C%20queria%20o%20plano%20Dupla" target="_blank" rel="noopener" class="btn btn-ghost btn-block">Encontrar a melhor opção para mim</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Modalidade VIP</h3>
+        <span class="for">Ideal pra quem quer 100% do foco da teacher, no ritmo individual</span>
+        <p class="desc">Aula regular individual + Speaking Club em grupo</p>
+        <div class="price-row"><span class="num">R$750</span><span class="per">/mês, por aluno</span></div>
+        <span class="alt-price">Ou à vista (semestral): R$4.050 (10% off)</span>
+        <ul>
+          <li>⭐ 100% do foco da teacher em você</li>
+          <li>📅 80 aulas por ano, sempre ao vivo</li>
+          <li>📚 Material didático 100% incluso</li>
+        </ul>
+        <a href="https://wa.me/554187355010?text=Oi%2C%20queria%20o%20plano%20VIP" target="_blank" rel="noopener" class="btn btn-ghost btn-block">Encontrar a melhor opção para mim</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROFESSORES / QUEM SOMOS ===== -->
+<section class="light" id="quem-somos">
+  <div class="wrap diff-grid" style="grid-template-columns:1fr 0.9fr;">
+    <div>
+      <div class="eyebrow">Professores presentes em cada etapa</div>
+      <h2 style="font-size:clamp(28px,3.6vw,38px); color:var(--brown); margin-bottom:16px;">Uma escola criada por quem é especialista em tirar você do zero.</h2>
+      <p style="color:#6b4630; font-size:16px; margin-bottom:14px;">Na DYSE, o professor não está apenas na aula — ele orienta, acompanha e incentiva. A escola é liderada pela <strong>Teacher Letícia Chagas</strong>, CEO da DYSE, especialista em ensinar iniciantes absolutos há mais de 10 anos.</p>
+      <p style="color:#6b4630; font-size:16px;">É a Teacher Letícia quem cria e supervisiona a metodologia, escolhe a teacher ideal pro seu perfil e conversa pessoalmente com você antes da matrícula, pra garantir que a DYSE é o lugar certo pra sua jornada.</p>
+    </div>
+    <div class="diff-visual">
+      <div class="ceo-photo-card">
+        <img class="ceo-photo" src="assets/img/ceo-leticia.jpg" alt="Teacher Letícia Chagas, CEO da DYSE">
+        <div class="ceo-photo-caption">
+          <p style="font-weight:700; color:var(--brown); font-size:17px; margin-bottom:4px;">Teacher Letícia Chagas</p>
+          <p style="font-size:13.5px; color:var(--amaranth); font-weight:700;">CEO da DYSE</p>
+        </div>
+      </div>
+      <div class="comunidade-stats" style="margin-top:24px;">
+        <div class="stat" style="background:#fff; border:1px solid rgba(86,41,21,0.1);"><b style="color:var(--amaranth);">+10 anos</b><span style="color:#6b4630;">especialista em iniciantes</span></div>
+        <div class="stat" style="background:#fff; border:1px solid rgba(86,41,21,0.1);"><b style="color:var(--amaranth);">100%</b><span style="color:#6b4630;">das turmas supervisionadas por ela</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INSTAGRAM ===== -->
+<section class="tinted" id="instagram">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Acompanhe de perto</div>
+      <h2>Últimos posts da Teacher Letícia</h2>
+      <p>Bastidores das aulas, dicas de inglês e a rotina de quem ensina iniciantes há mais de 10 anos.</p>
+    </div>
+    <div class="ig-grid">
+      <a class="ig-tile" href="https://www.instagram.com/leticiachagas.teacherr/" target="_blank" rel="noopener" aria-label="Post no Instagram 1" style="background-image:url('assets/img/instagram-1.jpg'), linear-gradient(160deg, var(--blossom), var(--cream));">
+        <span class="ig-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D03B55" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#D03B55" stroke="none"/></svg></span>
+      </a>
+      <a class="ig-tile" href="https://www.instagram.com/leticiachagas.teacherr/" target="_blank" rel="noopener" aria-label="Post no Instagram 2" style="background-image:url('assets/img/instagram-2.jpg'), linear-gradient(160deg, var(--gamboge), var(--cream));">
+        <span class="ig-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D03B55" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#D03B55" stroke="none"/></svg></span>
+      </a>
+      <a class="ig-tile" href="https://www.instagram.com/leticiachagas.teacherr/" target="_blank" rel="noopener" aria-label="Post no Instagram 3" style="background-image:url('assets/img/instagram-3.jpg'), linear-gradient(160deg, var(--persimmon), var(--cream));">
+        <span class="ig-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D03B55" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#D03B55" stroke="none"/></svg></span>
+      </a>
+      <a class="ig-tile" href="https://www.instagram.com/leticiachagas.teacherr/" target="_blank" rel="noopener" aria-label="Post no Instagram 4" style="background-image:url('assets/img/instagram-4.jpg'), linear-gradient(160deg, var(--blossom), var(--gamboge));">
+        <span class="ig-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D03B55" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#D03B55" stroke="none"/></svg></span>
+      </a>
+      <a class="ig-tile" href="https://www.instagram.com/leticiachagas.teacherr/" target="_blank" rel="noopener" aria-label="Post no Instagram 5" style="background-image:url('assets/img/instagram-5.jpg'), linear-gradient(160deg, var(--cream), var(--blossom));">
+        <span class="ig-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D03B55" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#D03B55" stroke="none"/></svg></span>
+      </a>
+      <a class="ig-tile" href="https://www.instagram.com/leticiachagas.teacherr/" target="_blank" rel="noopener" aria-label="Post no Instagram 6" style="background-image:url('assets/img/instagram-6.jpg'), linear-gradient(160deg, var(--gamboge), var(--blossom));">
+        <span class="ig-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D03B55" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#D03B55" stroke="none"/></svg></span>
+      </a>
+    </div>
+    <div class="section-cta">
+      <a href="https://www.instagram.com/leticiachagas.teacherr/" target="_blank" rel="noopener" class="btn btn-ghost">Seguir @leticiachagas.teacherr</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="light" id="duvidas">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Dúvidas frequentes</div>
+      <h2>Perguntas que a gente ouve bastante.</h2>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Nunca estudei inglês. Posso começar?</summary>
+        <p>Sim. A DYSE é especialista em ensinar iniciantes absolutos — é literalmente o nosso ponto forte.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Já fiz outros cursos e não consegui aprender. A DYSE é indicada pra mim?</summary>
+        <p>Sim. Grande parte das nossas alunas chega depois de outras tentativas frustradas. Nossa metodologia foi pensada exatamente pra esse recomeço.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como vocês identificam meu nível?</summary>
+        <p>Através de uma reunião de alinhamento com a Teacher Letícia antes da matrícula, sem julgamentos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como as turmas são formadas?</summary>
+        <p>Por nível de inglês, e também considerando rotina, objetivos e momento de vida em comum, em grupos de até 5 alunos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>As pessoas da turma estarão no mesmo nível que eu?</summary>
+        <p>Sim, as turmas são niveladas justamente pra você não se sentir atrasada nem pressionada.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como vocês identificam afinidades entre os alunos?</summary>
+        <p>Na formação da turma, além do nível, buscamos aproximar quem tem objetivos, rotina ou momento de vida parecidos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>E se eu tiver pouco tempo pra estudar?</summary>
+        <p>A rotina da DYSE é pensada pra caber numa vida cheia: 2 encontros por semana com professor, mais atividades complementares no seu tempo.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Tenho mais de 40 anos. Ainda consigo aprender?</summary>
+        <p>Sim. Somos especialistas em ensinar adultos, sem limite de idade pra começar.</p>
+      </details>
+      <details class="faq-item">
+        <summary>O aplicativo substitui as aulas?</summary>
+        <p>Não. Ele é um complemento — serve pra você praticar entre uma aula e outra, mas o acompanhamento do professor continua no centro do método.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como funciona o aplicativo com inteligência artificial?</summary>
+        <p>Ele te ajuda a revisar conteúdo, praticar pronúncia e gramática com atividades personalizadas pro seu nível e suas dificuldades.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como funciona a aula de conversação?</summary>
+        <p>É o nosso Speaking Club: encontros semanais, sempre em duplas ou trios com alunos do seu nível, com apoio de uma teacher — inclusive aula com teacher americana.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como funciona o clube de escrita?</summary>
+        <p>É um espaço de prática de escrita acompanhada, incluso na mensalidade, sem custo extra.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Existe acompanhamento de professor?</summary>
+        <p>Sim, em todas as etapas: nas aulas, no Speaking Club e na reunião de alinhamento antes da matrícula.</p>
+      </details>
+      <details class="faq-item">
+        <summary>As aulas são online ou presenciais?</summary>
+        <p>100% online.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Posso conhecer a escola antes de me matricular?</summary>
+        <p>Sim. Antes de fechar a matrícula, você tem uma reunião de alinhamento com a Teacher Letícia pra tirar todas as suas dúvidas.</p>
+      </details>
+      <details class="faq-item">
+        <summary>O que acontece se eu tiver vergonha de falar?</summary>
+        <p>É por isso que as turmas são pequenas e niveladas, e o Speaking Club existe: um espaço sem julgamento, só prática.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como faço pra encontrar minha turma?</summary>
+        <p>Chame no WhatsApp ou preencha o formulário nesta página. A partir daí, a gente conversa com você, identifica seu nível e indica a turma ideal.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Quais modalidades estão disponíveis?</summary>
+        <p>Grupo, Dupla e VIP (individual) — você confere os detalhes de cada uma na seção <a href="#modalidades" style="color:var(--amaranth); font-weight:700;">Modalidades</a>.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como entro em contato?</summary>
+        <p>Pelo WhatsApp ou pelo formulário desta página — o que for mais fácil pra você.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FORMULÁRIO DE CONTATO ===== -->
+<section class="tinted" id="contato">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Vamos conversar?</div>
+      <h2>Conte um pouco sobre você</h2>
+      <p>Preencha os campos abaixo e a gente entra em contato pra entender qual turma combina mais com você.</p>
+    </div>
+    <form class="contact-card" id="contactForm">
+      <div class="field-grid">
+        <div class="field full">
+          <label for="f-nome">Nome</label>
+          <input type="text" id="f-nome" name="nome" required>
+        </div>
+        <div class="field full">
+          <label for="f-whatsapp">WhatsApp</label>
+          <input type="tel" id="f-whatsapp" name="whatsapp" required placeholder="(00) 00000-0000">
+        </div>
+        <div class="field">
+          <label for="f-nivel">Nível aproximado</label>
+          <select id="f-nivel" name="nivel">
+            <option value="Nunca estudei">Nunca estudei</option>
+            <option value="Iniciante">Iniciante</option>
+            <option value="Básico">Básico</option>
+            <option value="Intermediário">Intermediário</option>
+            <option value="Avançado">Avançado</option>
+            <option value="Não sei meu nível">Não sei meu nível</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-modalidade">Modalidade de interesse</label>
+          <select id="f-modalidade" name="modalidade">
+            <option value="Grupo">Grupo</option>
+            <option value="Dupla">Dupla</option>
+            <option value="VIP">VIP (individual)</option>
+            <option value="Não sei ainda">Não sei ainda</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-dificuldade">Principal dificuldade com o inglês</label>
+          <input type="text" id="f-dificuldade" name="dificuldade" placeholder="Ex: falar, manter rotina, gramática...">
+        </div>
+        <div class="field">
+          <label for="f-horario">Melhor horário para contato</label>
+          <select id="f-horario" name="horario">
+            <option value="Manhã">Manhã</option>
+            <option value="Tarde">Tarde</option>
+            <option value="Noite">Noite</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-submit">
+        <button type="submit" class="btn btn-primary btn-block">Quero conversar sobre meu inglês</button>
+      </div>
+      <p class="form-privacy">Seus dados serão utilizados apenas para que a equipe da DYSE entre em contato com você.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ===== CHAMADA FINAL ===== -->
+<section class="final-wrap">
   <div class="final-cta">
     <span class="sparkle" aria-hidden="true">
       <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" style="margin:0 auto 16px;"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg>
     </span>
-    <h2>As próximas turmas começam em 03/08.</h2>
-    <p>Preencha o formulário, converse com a Teacher Letícia e comece sua jornada rumo à fluência com quem entende de iniciantes.</p>
-    <a href="https://wa.me/554187355010?text=Oi%2C%20quero%20garantir%20minha%20vaga%20na%20DYSE%21" target="_blank" rel="noopener" class="btn btn-light">Eu quero minha vaga</a>
+    <h2>Talvez este seja o momento de recomeçar de um jeito diferente.</h2>
+    <p>Você não precisa esquecer suas experiências anteriores. Aqui, a gente começa entendendo o que não funcionou e constrói um caminho mais leve, possível e acompanhado.</p>
+    <a href="https://wa.me/554187355010?text=Ol%C3%A1!%20Vi%20o%20site%20da%20DYSE%20e%20quero%20conversar%20sobre%20o%20meu%20ingl%C3%AAs." target="_blank" rel="noopener" class="btn btn-light">Quero conversar sobre meu inglês</a>
+    <p class="note">Sem pressão e sem compromisso. Primeiro, queremos conhecer você.</p>
   </div>
 </section>
+</main>
 
 <!-- ===== FOOTER ===== -->
 <footer>
-  <div class="logo">
-    <span class="sparkle" aria-hidden="true">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="#F0A224"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg>
-    </span>
-    DYSE
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="assets/images/brand/dyse-logo-white.png" alt="DYSE">
+      <p>Escola de inglês para adultos que já tentaram antes. Turmas niveladas, professores presentes e uma comunidade que acompanha cada etapa da sua evolução. Aulas 100% online.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <ul>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#diferenciais">Diferenciais</a></li>
+        <li><a href="#comunidade">Comunidade</a></li>
+        <li><a href="#modalidades">Modalidades</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+        <li><a href="#duvidas">Dúvidas frequentes</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="https://wa.me/554187355010" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://www.instagram.com/leticiachagas.teacherr/" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="/login.html">Área do Aluno</a></li>
+      </ul>
+    </div>
   </div>
-  <p>Do You Speak English? Especialistas em iniciantes.</p>
-  <p style="margin-top:6px; opacity:.7;">© 2026 DYSE. Todos os direitos reservados.</p>
+  <div class="footer-bottom">
+    <span>© 2026 DYSE. Todos os direitos reservados.</span>
+    <span>Nós trabalhamos com sonhos e traduzimos futuros.</span>
+  </div>
 </footer>
+
+<!-- ===== Botão flutuante de WhatsApp ===== -->
+<a class="wa-float" href="https://wa.me/554187355010?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20DYSE%20e%20queria%20tirar%20uma%20d%C3%BAvida." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+</a>
 
 <script>
   (function(){
@@ -824,6 +1288,29 @@
     backdrop.addEventListener('click', closeDrawer);
     drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
     window.addEventListener('keydown', e => { if(e.key === 'Escape') closeDrawer(); });
+  })();
+
+  (function(){
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const nome = form.nome.value.trim();
+      const whatsapp = form.whatsapp.value.trim();
+      const nivel = form.nivel.value;
+      const modalidade = form.modalidade.value;
+      const dificuldade = form.dificuldade.value.trim();
+      const horario = form.horario.value;
+
+      let msg = `Olá! Me chamo ${nome} e vim pelo site da DYSE.\n`;
+      msg += `Meu WhatsApp: ${whatsapp}\n`;
+      msg += `Nível aproximado: ${nivel}\n`;
+      msg += `Modalidade de interesse: ${modalidade}\n`;
+      if (dificuldade) msg += `Principal dificuldade: ${dificuldade}\n`;
+      msg += `Melhor horário pra contato: ${horario}`;
+
+      const url = 'https://wa.me/554187355010?text=' + encodeURIComponent(msg);
+      window.open(url, '_blank', 'noopener');
+    });
   })();
 </script>
 </body>
