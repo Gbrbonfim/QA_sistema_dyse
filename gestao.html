@@ -428,7 +428,18 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       pelo botão "Editar financeiro" de cada aluno.
     </p>
     <div class="dash-filter">
-      <input type="text" id="filterAlunoName" placeholder="Filtrar por nome do aluno..." oninput="renderAlunosTable()">
+      <input type="text" id="filterAlunoName" placeholder="Filtrar por nome ou e-mail..." oninput="renderAlunosTable()">
+      <select id="filterAlunoTurma" onchange="renderAlunosTable()"><option value="">Todas as turmas</option></select>
+      <select id="filterAlunoModalidade" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
+      <select id="filterAlunoProfessor" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
+      <select id="filterAlunoSituacao" onchange="renderAlunosTable()">
+        <option value="">Todas as situações</option>
+        <option value="ativo">Ativo</option>
+        <option value="pausado">Pausado</option>
+        <option value="cancelado">Cancelado</option>
+        <option value="encerrado">Encerrado</option>
+        <option value="sem-vinculo">Sem vínculo financeiro</option>
+      </select>
     </div>
     <div style="overflow-x:auto;">
       <table class="dash-table" id="alunosTable">
@@ -781,6 +792,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     ]);
     renderTurmasTable();
     renderMateriasTable();
+    populateAlunosFiltros();
     renderAlunosTable();
     renderProfessoresList();
     renderModalidadesTable();
@@ -1161,15 +1173,54 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     return false;
   }
 
+  function populateAlunosFiltros(){
+    const selTurma = document.getElementById('filterAlunoTurma');
+    const selMod = document.getElementById('filterAlunoModalidade');
+    const selProf = document.getElementById('filterAlunoProfessor');
+    const curTurma = selTurma.value, curMod = selMod.value, curProf = selProf.value;
+
+    selTurma.innerHTML = '<option value="">Todas as turmas</option><option value="sem-turma">Sem turma</option>' +
+      TURMAS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('');
+    selMod.innerHTML = '<option value="">Todas as modalidades</option><option value="sem-modalidade">Sem modalidade</option>' +
+      MODALIDADES.map(m => '<option value="' + m.id + '">' + escapeHtmlLocal(m.name) + '</option>').join('');
+    selProf.innerHTML = '<option value="">Todos os professores</option><option value="sem-professor">Sem professor</option>' +
+      TEACHERS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.full_name || '') + '</option>').join('');
+
+    selTurma.value = curTurma;
+    selMod.value = curMod;
+    selProf.value = curProf;
+  }
+
   function renderAlunosTable(){
     const filter = (document.getElementById('filterAlunoName').value || '').trim().toLowerCase();
-    const rows = STUDENTS.filter(s => !filter || (s.full_name||'').toLowerCase().includes(filter));
-    document.getElementById('alunosBody').innerHTML = rows.map(s => {
+    const turmaFiltro = document.getElementById('filterAlunoTurma').value;
+    const modFiltro = document.getElementById('filterAlunoModalidade').value;
+    const profFiltro = document.getElementById('filterAlunoProfessor').value;
+    const situacaoFiltro = document.getElementById('filterAlunoSituacao').value;
+
+    const enriquecidos = STUDENTS.map(s => {
       const turma = TURMAS.find(t => t.id === s.turma_id);
       const historicoAluno = ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === s.id);
       const periodo = dyseFindPeriodoAberto(historicoAluno);
       const modalidade = periodo ? MODALIDADES.find(m => m.id === periodo.modalidade_id) : null;
       const professor = periodo ? TEACHERS.find(t => t.id === periodo.professor_id) : null;
+      return { s, turma, periodo, modalidade, professor };
+    });
+
+    const rows = enriquecidos.filter(({ s, turma, periodo, modalidade, professor }) => {
+      if(filter && !(s.full_name||'').toLowerCase().includes(filter) && !(s.email||'').toLowerCase().includes(filter)) return false;
+      if(turmaFiltro === 'sem-turma' && turma) return false;
+      if(turmaFiltro && turmaFiltro !== 'sem-turma' && (!turma || turma.id !== turmaFiltro)) return false;
+      if(modFiltro === 'sem-modalidade' && modalidade) return false;
+      if(modFiltro && modFiltro !== 'sem-modalidade' && (!modalidade || modalidade.id !== modFiltro)) return false;
+      if(profFiltro === 'sem-professor' && professor) return false;
+      if(profFiltro && profFiltro !== 'sem-professor' && (!professor || professor.id !== profFiltro)) return false;
+      if(situacaoFiltro === 'sem-vinculo' && periodo) return false;
+      if(situacaoFiltro && situacaoFiltro !== 'sem-vinculo' && (!periodo || periodo.situacao !== situacaoFiltro)) return false;
+      return true;
+    });
+
+    document.getElementById('alunosBody').innerHTML = rows.map(({ s, turma, periodo, modalidade, professor }) => {
       return '<tr>' +
         '<td>' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
         '<td>' + escapeHtmlLocal(s.email || '-') + '</td>' +
