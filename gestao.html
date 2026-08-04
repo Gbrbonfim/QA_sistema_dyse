@@ -448,13 +448,41 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       <div class="auth-msg" id="newStudentMsg"></div>
     </div>
 
+    <div class="gestao-card">
+      <div class="gestao-card-title">Importar alunos via CSV</div>
+      <p class="gestao-hint" style="margin-bottom:12px;">
+        Primeira linha = cabeçalho, com estas colunas (nesta ordem ou por nome — só <code>nome</code> e <code>email</code> são obrigatórios):<br>
+        <code>nome,email,modalidade,professor_email,valor_mensal,valor_professor,data_inicio,parcelas</code><br>
+        <code>modalidade</code>: slug (vip / grupo / dupla / intensivo) · <code>professor_email</code>: precisa bater com o e-mail de um professor já cadastrado ·
+        <code>valor_professor</code>: só usado se a modalidade for personalizada (Intensivo) · <code>data_inicio</code>: AAAA-MM-DD (padrão: hoje) ·
+        <code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido).
+        Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.
+      </p>
+      <form onsubmit="return handleImportarCSV(event)" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <input type="file" id="csvAlunosFile" accept=".csv,text/csv" required>
+        <button type="submit" class="btn btn-primary" id="btnImportarCSV">Importar CSV</button>
+      </form>
+      <div id="csvImportResults" style="margin-top:14px; display:flex; flex-direction:column; gap:4px; max-height:260px; overflow-y:auto;"></div>
+    </div>
+
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
       Pra colocar ou tirar um aluno de uma turma (acesso a conteúdo), vá na aba <b>Turmas</b> → <b>Gerenciar</b>
       da turma desejada. O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui,
       pelo botão "Editar financeiro" de cada aluno.
     </p>
     <div class="dash-filter">
-      <input type="text" id="filterAlunoName" placeholder="Filtrar por nome do aluno..." oninput="renderAlunosTable()">
+      <input type="text" id="filterAlunoName" placeholder="Filtrar por nome ou e-mail..." oninput="renderAlunosTable()">
+      <select id="filterAlunoTurma" onchange="renderAlunosTable()"><option value="">Todas as turmas</option></select>
+      <select id="filterAlunoModalidade" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
+      <select id="filterAlunoProfessor" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
+      <select id="filterAlunoSituacao" onchange="renderAlunosTable()">
+        <option value="">Todas as situações</option>
+        <option value="ativo">Ativo</option>
+        <option value="pausado">Pausado</option>
+        <option value="cancelado">Cancelado</option>
+        <option value="encerrado">Encerrado</option>
+        <option value="sem-vinculo">Sem vínculo financeiro</option>
+      </select>
     </div>
     <div style="overflow-x:auto;">
       <table class="dash-table dash-table-responsive" id="alunosTable">
@@ -736,6 +764,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     ]);
     renderTurmasTable();
     renderMateriasTable();
+    populateAlunosFiltros();
     renderAlunosTable();
     renderProfessoresList();
     renderModalidadesTable();
@@ -1116,15 +1145,178 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     return false;
   }
 
+  /* ---------- Importação de alunos via CSV ---------- */
+  /* Parser simples de uma linha CSV, com suporte a campos entre aspas
+     (pra caber vírgula dentro de algum valor, ex: observação). */
+  function parseCsvLine(line){
+    const result = [];
+    let cur = '', inQuotes = false;
+    for(let i = 0; i < line.length; i++){
+      const c = line[i];
+      if(inQuotes){
+        if(c === '"'){
+          if(line[i+1] === '"'){ cur += '"'; i++; }
+          else inQuotes = false;
+        } else cur += c;
+      } else {
+        if(c === '"') inQuotes = true;
+        else if(c === ','){ result.push(cur); cur = ''; }
+        else cur += c;
+      }
+    }
+    result.push(cur);
+    return result;
+  }
+
+  function parseCSV(text){
+    const lines = text.split(/\r?\n/).filter(l => l.trim().length);
+    if(!lines.length) return [];
+    const headers = parseCsvLine(lines[0]).map(h => h.trim().toLowerCase());
+    return lines.slice(1).map(line => {
+      const cols = parseCsvLine(line);
+      const row = {};
+      headers.forEach((h, i) => { row[h] = (cols[i] || '').trim(); });
+      return row;
+    });
+  }
+
+  function csvResultLine(id, texto){
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = texto;
+  }
+
+  /* Processa uma linha por vez (não em paralelo) — cada uma dispara um
+     e-mail de convite de verdade, então evita sobrecarregar/tomar rate
+     limit do Supabase e deixa o resultado de cada aluno claro na tela. */
+  async function handleImportarCSV(e){
+    e.preventDefault();
+    const fileInput = document.getElementById('csvAlunosFile');
+    const file = fileInput.files[0];
+    if(!file) return false;
+
+    const text = await file.text();
+    const linhas = parseCSV(text);
+    const resultsEl = document.getElementById('csvImportResults');
+    resultsEl.innerHTML = '';
+    if(!linhas.length){
+      resultsEl.innerHTML = '<p class="report-line" style="color:var(--bad);">Arquivo vazio ou sem linhas de dados (só o cabeçalho?).</p>';
+      return false;
+    }
+
+    const btn = document.getElementById('btnImportarCSV');
+    btn.disabled = true;
+    const session = await dyseGetSession();
+
+    for(let i = 0; i < linhas.length; i++){
+      const linha = linhas[i];
+      const nome = linha['nome'] || '';
+      const email = linha['email'] || '';
+      const rowId = 'csv-row-' + i;
+      resultsEl.insertAdjacentHTML('beforeend', '<div class="report-line" id="' + rowId + '">⏳ ' + escapeHtmlLocal(nome || '(sem nome)') + ' (' + escapeHtmlLocal(email || 'sem e-mail') + ') — processando...</div>');
+
+      if(!nome || !email){
+        csvResultLine(rowId, '❌ Linha ' + (i+2) + ': nome e e-mail são obrigatórios.');
+        continue;
+      }
+
+      try{
+        const resp = await fetch('/api/create-student', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+          body: JSON.stringify({ full_name: nome, email: email })
+        });
+        const result = await resp.json().catch(() => ({}));
+        if(!resp.ok){
+          csvResultLine(rowId, '❌ ' + escapeHtmlLocal(nome) + ' — ' + escapeHtmlLocal(result.error || resp.statusText));
+          continue;
+        }
+
+        const userId = result.user_id;
+        let extra = '';
+        const modalidadeSlug = (linha['modalidade'] || '').toLowerCase();
+        if(modalidadeSlug){
+          const modalidade = MODALIDADES.find(m => m.slug === modalidadeSlug);
+          if(!modalidade){
+            extra = ' — modalidade "' + escapeHtmlLocal(linha['modalidade']) + '" não encontrada, financeiro não vinculado';
+          } else {
+            const professorEmail = (linha['professor_email'] || '').toLowerCase();
+            const professor = professorEmail ? TEACHERS.find(t => (t.email||'').toLowerCase() === professorEmail) : null;
+            const { error: finError } = await dyseSetAlunoFinanceiro(userId, {
+              modalidade_id: modalidade.id,
+              professor_id: professor ? professor.id : null,
+              valor_mensal_aluno: parseFloat(linha['valor_mensal'] || '0') || 0,
+              valor_professor_customizado: linha['valor_professor'] ? parseFloat(linha['valor_professor']) : null,
+              situacao: 'ativo',
+              data_inicio: linha['data_inicio'] || dyseHoje(),
+              quantidade_parcelas: linha['parcelas'] ? parseInt(linha['parcelas'], 10) : null,
+              observacao: 'Importado via CSV'
+            });
+            extra = finError ? (' — financeiro: erro (' + finError.message + ')') : ' — financeiro vinculado';
+          }
+        }
+        csvResultLine(rowId, '✅ ' + escapeHtmlLocal(nome) + ' cadastrado' + extra);
+      }catch(err){
+        csvResultLine(rowId, '❌ ' + escapeHtmlLocal(nome) + ' — erro de conexão: ' + err.message);
+      }
+    }
+
+    btn.disabled = false;
+    fileInput.value = '';
+    STUDENTS = await dyseListProfilesByRole('student');
+    ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
+    populateAlunosFiltros();
+    renderAlunosTable();
+    return false;
+  }
+
+  function populateAlunosFiltros(){
+    const selTurma = document.getElementById('filterAlunoTurma');
+    const selMod = document.getElementById('filterAlunoModalidade');
+    const selProf = document.getElementById('filterAlunoProfessor');
+    const curTurma = selTurma.value, curMod = selMod.value, curProf = selProf.value;
+
+    selTurma.innerHTML = '<option value="">Todas as turmas</option><option value="sem-turma">Sem turma</option>' +
+      TURMAS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('');
+    selMod.innerHTML = '<option value="">Todas as modalidades</option><option value="sem-modalidade">Sem modalidade</option>' +
+      MODALIDADES.map(m => '<option value="' + m.id + '">' + escapeHtmlLocal(m.name) + '</option>').join('');
+    selProf.innerHTML = '<option value="">Todos os professores</option><option value="sem-professor">Sem professor</option>' +
+      TEACHERS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.full_name || '') + '</option>').join('');
+
+    selTurma.value = curTurma;
+    selMod.value = curMod;
+    selProf.value = curProf;
+  }
+
   function renderAlunosTable(){
     const filter = (document.getElementById('filterAlunoName').value || '').trim().toLowerCase();
-    const rows = STUDENTS.filter(s => !filter || (s.full_name||'').toLowerCase().includes(filter));
-    document.getElementById('alunosBody').innerHTML = rows.map(s => {
+    const turmaFiltro = document.getElementById('filterAlunoTurma').value;
+    const modFiltro = document.getElementById('filterAlunoModalidade').value;
+    const profFiltro = document.getElementById('filterAlunoProfessor').value;
+    const situacaoFiltro = document.getElementById('filterAlunoSituacao').value;
+
+    const enriquecidos = STUDENTS.map(s => {
       const turma = TURMAS.find(t => t.id === s.turma_id);
       const historicoAluno = ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === s.id);
       const periodo = dyseFindPeriodoAberto(historicoAluno);
       const modalidade = periodo ? MODALIDADES.find(m => m.id === periodo.modalidade_id) : null;
       const professor = periodo ? TEACHERS.find(t => t.id === periodo.professor_id) : null;
+      return { s, turma, periodo, modalidade, professor };
+    });
+
+    const rows = enriquecidos.filter(({ s, turma, periodo, modalidade, professor }) => {
+      if(filter && !(s.full_name||'').toLowerCase().includes(filter) && !(s.email||'').toLowerCase().includes(filter)) return false;
+      if(turmaFiltro === 'sem-turma' && turma) return false;
+      if(turmaFiltro && turmaFiltro !== 'sem-turma' && (!turma || turma.id !== turmaFiltro)) return false;
+      if(modFiltro === 'sem-modalidade' && modalidade) return false;
+      if(modFiltro && modFiltro !== 'sem-modalidade' && (!modalidade || modalidade.id !== modFiltro)) return false;
+      if(profFiltro === 'sem-professor' && professor) return false;
+      if(profFiltro && profFiltro !== 'sem-professor' && (!professor || professor.id !== profFiltro)) return false;
+      if(situacaoFiltro === 'sem-vinculo' && periodo) return false;
+      if(situacaoFiltro && situacaoFiltro !== 'sem-vinculo' && (!periodo || periodo.situacao !== situacaoFiltro)) return false;
+      return true;
+    });
+
+    document.getElementById('alunosBody').innerHTML = rows.map(({ s, turma, periodo, modalidade, professor }) => {
       return '<tr>' +
         '<td data-label="Aluno">' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
         '<td data-label="E-mail">' + escapeHtmlLocal(s.email || '-') + '</td>' +
@@ -1352,6 +1544,8 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
           ['ativo','pausado','cancelado','encerrado'].map(s => '<option value="' + s + '"' + (aberto && aberto.situacao === s ? ' selected' : '') + '>' + capitalize(s) + '</option>').join('') +
         '</select></div>' +
         '<div class="gestao-field"><label>Data de início com o professor</label><input type="date" id="finDataInicio" value="' + (aberto ? aberto.data_inicio : dyseHoje()) + '"' + (aberto ? ' disabled' : '') + '></div>' +
+        '<div class="gestao-field"><label>Quantidade de parcelas (meses que o professor recebe)</label><input type="number" step="1" min="1" id="finParcelas" placeholder="Deixe em branco pra sem prazo definido" value="' + (aberto && aberto.quantidade_parcelas ? aberto.quantidade_parcelas : '') + '" oninput="onFinParcelasChange()"></div>' +
+        '<p class="gestao-hint" id="finParcelasHint">' + finParcelasHintTexto(aberto) + '</p>' +
         '<div class="gestao-field"><label>Observação</label><input type="text" id="finObservacao" value="' + escapeHtmlLocal(aberto ? (aberto.observacao || '') : '') + '"></div>' +
         '<p class="gestao-hint">Trocar de professor ou de modalidade encerra o período atual automaticamente e abre um novo a partir de hoje — o histórico anterior fica preservado e os meses já calculados não mudam.</p>' +
         '<button type="submit" class="btn btn-primary">Salvar</button>' +
@@ -1361,7 +1555,8 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       ? historico.map(h => {
           const mod = MODALIDADES.find(m => m.id === h.modalidade_id);
           const prof = TEACHERS.find(t => t.id === h.professor_id);
-          return '<div class="chip-toggle-row"><span class="name">' + (mod ? escapeHtmlLocal(mod.name) : '-') + ' · ' + (prof ? escapeHtmlLocal(prof.full_name || '') : 'sem professor') + '</span>' +
+          const parcelasTexto = h.quantidade_parcelas ? (' · ' + h.quantidade_parcelas + 'x até ' + formatMesLabel(dyseUltimoMesPago(h))) : ' · sem prazo';
+          return '<div class="chip-toggle-row"><span class="name">' + (mod ? escapeHtmlLocal(mod.name) : '-') + ' · ' + (prof ? escapeHtmlLocal(prof.full_name || '') : 'sem professor') + escapeHtmlLocal(parcelasTexto) + '</span>' +
             '<span style="opacity:.65; font-size:.78rem;">' + formatDateBR(h.data_inicio) + ' — ' + (h.data_fim ? formatDateBR(h.data_fim) : 'atual') + '</span></div>';
         }).join('')
       : '<p class="report-line" style="opacity:.6;">Nenhum vínculo financeiro cadastrado ainda.</p>';
@@ -1377,6 +1572,24 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     document.getElementById('finValorCustomWrap').style.display = (modalidade && modalidade.is_custom_value) ? 'block' : 'none';
   }
 
+  /* Texto explicando até quando o professor recebe por este aluno, dado o
+     mês de início e a quantidade de parcelas — recalculado ao digitar. */
+  function calcularHintParcelas(dataInicio, parcelas){
+    if(!dataInicio) return '';
+    if(!parcelas) return 'Sem prazo definido — o professor recebe enquanto o vínculo estiver ativo.';
+    const mesInicio = dataInicio.slice(0,7) + '-01';
+    const ultimoMes = dyseUltimoMesPago({ data_inicio: dataInicio, quantidade_parcelas: parcelas });
+    return 'Professor recebe ' + parcelas + ' mês(es): ' + formatMesLabel(mesInicio) + ' até ' + formatMesLabel(ultimoMes) + '.';
+  }
+  function finParcelasHintTexto(aberto){
+    return calcularHintParcelas(aberto ? aberto.data_inicio : dyseHoje(), aberto ? aberto.quantidade_parcelas : null);
+  }
+  function onFinParcelasChange(){
+    const dataInicio = document.getElementById('finDataInicio').value;
+    const parcelas = parseInt(document.getElementById('finParcelas').value, 10) || null;
+    document.getElementById('finParcelasHint').textContent = calcularHintParcelas(dataInicio, parcelas);
+  }
+
   async function handleSetAlunoFinanceiro(e){
     e.preventDefault();
     const campos = {
@@ -1386,6 +1599,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       valor_professor_customizado: document.getElementById('finValorProfessorCustom').value ? parseFloat(document.getElementById('finValorProfessorCustom').value) : null,
       situacao: document.getElementById('finSituacao').value,
       data_inicio: document.getElementById('finDataInicio').value || dyseHoje(),
+      quantidade_parcelas: parseInt(document.getElementById('finParcelas').value, 10) || null,
       observacao: document.getElementById('finObservacao').value.trim() || null
     };
     const { error } = await dyseSetAlunoFinanceiro(CURRENT_ALUNO_FIN_ID, campos);

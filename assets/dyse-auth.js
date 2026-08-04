@@ -453,6 +453,20 @@ function dyseFimDoMes(mes){
   return y + '-' + String(m).padStart(2,'0') + '-' + String(ultimoDia).padStart(2,'0');
 }
 
+/* Último mês de competência (YYYY-MM-01) coberto pela quantidade de
+   parcelas de um período do histórico financeiro. Ex: data_inicio em
+   agosto/2026 com 6 parcelas cobre até janeiro/2027 (ago,set,out,nov,dez,jan)
+   — fevereiro em diante não gera mais mensalidade pra esse período. Sem
+   quantidade_parcelas definida, o período não tem prazo (retorna null). */
+function dyseUltimoMesPago(historicoRow){
+  if(!historicoRow.quantidade_parcelas) return null;
+  const [y, m] = historicoRow.data_inicio.split('-').map(Number);
+  const idx = (m - 1) + (Number(historicoRow.quantidade_parcelas) - 1);
+  const ano = y + Math.floor(idx / 12);
+  const mesNum = (idx % 12) + 1;
+  return ano + '-' + String(mesNum).padStart(2,'0') + '-01';
+}
+
 /* ---------- Modalidades (catálogo) ---------- */
 async function dyseListModalidades(){
   const { data, error } = await sb.from('modalidades').select('*').order('name', { ascending: true });
@@ -551,6 +565,7 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
         valor_mensal_aluno: campos.valor_mensal_aluno,
         valor_professor_customizado: campos.valor_professor_customizado ?? null,
         situacao: campos.situacao,
+        quantidade_parcelas: campos.quantidade_parcelas ?? null,
         observacao: campos.observacao || null
       })
       .eq('id', aberto.id);
@@ -577,6 +592,7 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
       valor_professor_customizado: campos.valor_professor_customizado ?? null,
       situacao: campos.situacao || 'ativo',
       data_inicio: campos.data_inicio || dyseHoje(),
+      quantidade_parcelas: campos.quantidade_parcelas ?? null,
       observacao: campos.observacao || null,
       criado_por: userId
     })
@@ -637,6 +653,10 @@ async function dyseGerarMensalidadesDoMes(mes){
   const linhas = Object.keys(porAluno)
     .map(alunoId => porAluno[alunoId])
     .filter(h => h.situacao === 'ativo')
+    .filter(h => {
+      const ultimoMesPago = dyseUltimoMesPago(h);
+      return !ultimoMesPago || mes <= ultimoMesPago; // fora das parcelas contratadas, o professor não recebe mais por este período
+    })
     .map(h => {
       const modalidade = modalidadeById[h.modalidade_id];
       const valorProfessor = (modalidade && modalidade.is_custom_value)
