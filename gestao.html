@@ -1634,10 +1634,17 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     const canvas = document.getElementById('chartEvolucao');
     if(!canvas || typeof Chart === 'undefined') return;
 
+    // Monta os últimos 6 meses a partir das partes ano/mês da própria string
+    // "YYYY-MM-01" (nunca via "new Date(stringISO)" — isso é interpretado como
+    // UTC e, lido de volta com getFullYear()/getMonth() locais, "volta" um mês
+    // inteiro em fusos atrás de UTC, como o Brasil).
+    const [anoBase, mesBaseNum] = RELATORIO_MES_ATUAL.split('-').map(Number);
     const meses = [];
-    const base = new Date(RELATORIO_MES_ATUAL);
     for(let i = 5; i >= 0; i--){
-      meses.push(dyseMesCompetencia(new Date(base.getFullYear(), base.getMonth() - i, 1)));
+      const idx = (mesBaseNum - 1) - i; // 0-indexado, pode ficar negativo
+      const ano = anoBase + Math.floor(idx / 12);
+      const mesNum = ((idx % 12) + 12) % 12 + 1;
+      meses.push(ano + '-' + String(mesNum).padStart(2,'0') + '-01');
     }
 
     const receitas = [], pagos = [], lucros = [];

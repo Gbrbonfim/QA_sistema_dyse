@@ -385,8 +385,31 @@ function dyseMesCompetencia(d){
   return y + '-' + m + '-01';
 }
 
+/* "new Date()" sem argumento aqui é proposital (não é string ISO sendo
+   reinterpretada) — mas toISOString() converte pra UTC, o que troca a data
+   errado à noite (fusos atrás de UTC, como o Brasil) perto da virada do dia.
+   Usa os getters locais em vez disso, pra "hoje" bater com o calendário
+   local do usuário. */
 function dyseHoje(){
-  return new Date().toISOString().slice(0, 10);
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + day;
+}
+
+/* Último dia (YYYY-MM-DD) do mês de competência informado (sempre "YYYY-MM-01").
+   Construído só com Date.UTC/getUTC*, nunca misturando uma string ISO
+   "parseada como UTC" com getters/setters que leem em horário local — essa
+   mistura é o erro clássico que fazia esta conta "voltar" pro dia 1 em fusos
+   atrás de UTC (Brasil incluído), cortando fora qualquer aluno cujo período
+   não começasse exatamente no dia 1. */
+function dyseFimDoMes(mes){
+  const [y, m] = mes.split('-').map(Number);
+  const proximoMes = m === 12 ? 1 : m + 1;
+  const anoProximo = m === 12 ? y + 1 : y;
+  const ultimoDia = new Date(Date.UTC(anoProximo, proximoMes - 1, 0)).getUTCDate();
+  return y + '-' + String(m).padStart(2,'0') + '-' + String(ultimoDia).padStart(2,'0');
 }
 
 /* ---------- Modalidades (catálogo) ---------- */
@@ -550,10 +573,7 @@ async function dyseGerarMensalidadesDoMes(mes){
   const nomeAlunoById = {};
   alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
 
-  const fimDoMes = new Date(mes);
-  fimDoMes.setMonth(fimDoMes.getMonth() + 1);
-  fimDoMes.setDate(0);
-  const fimDoMesStr = fimDoMes.toISOString().slice(0, 10);
+  const fimDoMesStr = dyseFimDoMes(mes);
 
   const porAluno = {};
   historico.forEach(h => {
