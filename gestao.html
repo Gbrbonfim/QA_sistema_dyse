@@ -694,6 +694,12 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     renderAlunosTable();
     renderProfessoresList();
     renderModalidadesTable();
+
+    // Mantém o mês corrente sempre em dia pra quem entra direto no painel do
+    // professor sem a gestão ter aberto as abas Pagamentos/Relatório/Fechamento
+    // antes — sem isso, a tabela "mensalidades" simplesmente não existe ainda
+    // pro mês atual e o professor vê tudo zerado mesmo com alunos vinculados.
+    await dyseGerarMensalidadesDoMes(dyseMesCompetencia());
   }
 
   /* ---------- TURMAS ---------- */
@@ -1259,6 +1265,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     const { error } = await dyseSetAlunoFinanceiro(CURRENT_ALUNO_FIN_ID, campos);
     if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
     ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
+    await dyseGerarMensalidadesDoMes(dyseMesCompetencia()); // reflete o vínculo novo no mês corrente na hora, sem esperar a gestão abrir Pagamentos/Relatório
     renderAlunoFinModalBody();
     renderAlunosTable();
     return false;
