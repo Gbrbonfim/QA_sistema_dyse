@@ -448,6 +448,23 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       <div class="auth-msg" id="newStudentMsg"></div>
     </div>
 
+    <div class="gestao-card">
+      <div class="gestao-card-title">Importar alunos via CSV</div>
+      <p class="gestao-hint" style="margin-bottom:12px;">
+        Primeira linha = cabeçalho, com estas colunas (nesta ordem ou por nome — só <code>nome</code> e <code>email</code> são obrigatórios):<br>
+        <code>nome,email,modalidade,professor_email,valor_mensal,valor_professor,data_inicio,parcelas</code><br>
+        <code>modalidade</code>: slug (vip / grupo / dupla / intensivo) · <code>professor_email</code>: precisa bater com o e-mail de um professor já cadastrado ·
+        <code>valor_professor</code>: só usado se a modalidade for personalizada (Intensivo) · <code>data_inicio</code>: AAAA-MM-DD (padrão: hoje) ·
+        <code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido).
+        Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.
+      </p>
+      <form onsubmit="return handleImportarCSV(event)" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <input type="file" id="csvAlunosFile" accept=".csv,text/csv" required>
+        <button type="submit" class="btn btn-primary" id="btnImportarCSV">Importar CSV</button>
+      </form>
+      <div id="csvImportResults" style="margin-top:14px; display:flex; flex-direction:column; gap:4px; max-height:260px; overflow-y:auto;"></div>
+    </div>
+
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
       Pra colocar ou tirar um aluno de uma turma (acesso a conteúdo), vá na aba <b>Turmas</b> → <b>Gerenciar</b>
       da turma desejada. O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui,
@@ -500,7 +517,6 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     <div class="auth-tabs fin-subtabs">
       <button type="button" class="auth-tab active" id="finTabModalidades" onclick="showFinPanel('modalidades')">Modalidades</button>
       <button type="button" class="auth-tab" id="finTabPagamentos" onclick="showFinPanel('pagamentos')">Pagamentos</button>
-      <button type="button" class="auth-tab" id="finTabGastos" onclick="showFinPanel('gastos')">Gastos</button>
       <button type="button" class="auth-tab" id="finTabRelatorio" onclick="showFinPanel('relatorio')">Relatório</button>
       <button type="button" class="auth-tab" id="finTabFechamento" onclick="showFinPanel('fechamento')">Fechamento</button>
     </div>
@@ -552,66 +568,6 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
             <tr><th>Professor</th><th>Alunos</th><th>Modalidades</th><th>Total previsto</th><th>Total pago</th><th>Status</th><th>Data pagamento</th><th>Ações</th></tr>
           </thead>
           <tbody id="pagamentosBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Gastos personalizados -->
-    <div id="finPanelGastos" style="display:none;">
-      <div class="gestao-card">
-        <div class="gestao-card-title">Gastos padrão (aplicados a todos os alunos ativos, todo mês)</div>
-        <p class="gestao-hint" style="margin-bottom:14px;">Ex: assinatura do Flexge por aluno. Ao gerar/atualizar o mês, um gasto igual a este é lançado automaticamente pra cada aluno ativo — sem precisar cadastrar aluno por aluno.</p>
-        <form class="gestao-form" onsubmit="return handleCreateGastoPadrao(event)">
-          <div class="gestao-field" style="flex:2 1 200px;">
-            <label>Descrição</label>
-            <input type="text" id="newGastoPadraoDescricao" placeholder="Ex: Flexge" required>
-          </div>
-          <div class="gestao-field" style="flex:1 1 160px;">
-            <label>Tipo</label>
-            <select id="newGastoPadraoTipo">
-              <option value="material">Material</option>
-              <option value="comissao">Comissão</option>
-              <option value="taxa">Taxa</option>
-              <option value="desconto">Desconto/Bolsa</option>
-              <option value="outro" selected>Outro</option>
-            </select>
-          </div>
-          <div class="gestao-field" style="flex:1 1 200px;">
-            <label>Forma de cálculo</label>
-            <select id="newGastoPadraoFormaCalculo">
-              <option value="fixo">Valor fixo em reais</option>
-              <option value="percentual">Percentual sobre o valor recebido</option>
-            </select>
-          </div>
-          <div class="gestao-field" style="flex:1 1 140px;">
-            <label>Valor</label>
-            <input type="number" step="0.01" id="newGastoPadraoValor" required>
-          </div>
-          <button type="submit" class="btn btn-primary">+ Adicionar</button>
-        </form>
-        <div class="auth-msg" id="gastoPadraoMsg"></div>
-        <div style="overflow-x:auto; margin-top:16px;">
-          <table class="dash-table" id="gastosPadraoTable">
-            <thead>
-              <tr><th>Descrição</th><th>Tipo</th><th>Cálculo</th><th>Valor</th><th>Ativo</th><th>Ações</th></tr>
-            </thead>
-            <tbody id="gastosPadraoBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="gestao-card-title" style="margin-bottom:12px;">Gastos por aluno</div>
-      <div class="dash-filter">
-        <input type="month" id="gastosMes" onchange="loadGastosMes()">
-        <select id="gastosAlunoFiltro" onchange="loadGastosMes()"><option value="">Todos os alunos</option></select>
-        <button type="button" class="btn btn-primary btn-sm" onclick="openGastoModal(null)">+ Novo gasto</button>
-      </div>
-      <div style="overflow-x:auto;">
-        <table class="dash-table" id="gastosTable">
-          <thead>
-            <tr><th>Aluno</th><th>Descrição</th><th>Tipo</th><th>Cálculo</th><th>Valor</th><th>Ações</th></tr>
-          </thead>
-          <tbody id="gastosBody"></tbody>
         </table>
       </div>
     </div>
@@ -723,17 +679,6 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   </div>
 </div>
 
-<!-- Modal de criação/edição de gasto personalizado -->
-<div id="gastoModal" class="report-modal" aria-hidden="true">
-  <div class="report-modal-backdrop" onclick="closeGastoModal()"></div>
-  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="gastoModalTitle">
-    <div class="report-modal-header">
-      <h3 id="gastoModalTitle">Novo gasto</h3>
-      <button type="button" class="report-modal-close" onclick="closeGastoModal()" aria-label="Fechar">&times;</button>
-    </div>
-    <div class="report-modal-body" id="gastoModalBody"></div>
-  </div>
-</div>
 
 <footer class="site-footer">
   <div class="fmark">dyse</div>
@@ -1200,6 +1145,130 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     return false;
   }
 
+  /* ---------- Importação de alunos via CSV ---------- */
+  /* Parser simples de uma linha CSV, com suporte a campos entre aspas
+     (pra caber vírgula dentro de algum valor, ex: observação). */
+  function parseCsvLine(line){
+    const result = [];
+    let cur = '', inQuotes = false;
+    for(let i = 0; i < line.length; i++){
+      const c = line[i];
+      if(inQuotes){
+        if(c === '"'){
+          if(line[i+1] === '"'){ cur += '"'; i++; }
+          else inQuotes = false;
+        } else cur += c;
+      } else {
+        if(c === '"') inQuotes = true;
+        else if(c === ','){ result.push(cur); cur = ''; }
+        else cur += c;
+      }
+    }
+    result.push(cur);
+    return result;
+  }
+
+  function parseCSV(text){
+    const lines = text.split(/\r?\n/).filter(l => l.trim().length);
+    if(!lines.length) return [];
+    const headers = parseCsvLine(lines[0]).map(h => h.trim().toLowerCase());
+    return lines.slice(1).map(line => {
+      const cols = parseCsvLine(line);
+      const row = {};
+      headers.forEach((h, i) => { row[h] = (cols[i] || '').trim(); });
+      return row;
+    });
+  }
+
+  function csvResultLine(id, texto){
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = texto;
+  }
+
+  /* Processa uma linha por vez (não em paralelo) — cada uma dispara um
+     e-mail de convite de verdade, então evita sobrecarregar/tomar rate
+     limit do Supabase e deixa o resultado de cada aluno claro na tela. */
+  async function handleImportarCSV(e){
+    e.preventDefault();
+    const fileInput = document.getElementById('csvAlunosFile');
+    const file = fileInput.files[0];
+    if(!file) return false;
+
+    const text = await file.text();
+    const linhas = parseCSV(text);
+    const resultsEl = document.getElementById('csvImportResults');
+    resultsEl.innerHTML = '';
+    if(!linhas.length){
+      resultsEl.innerHTML = '<p class="report-line" style="color:var(--bad);">Arquivo vazio ou sem linhas de dados (só o cabeçalho?).</p>';
+      return false;
+    }
+
+    const btn = document.getElementById('btnImportarCSV');
+    btn.disabled = true;
+    const session = await dyseGetSession();
+
+    for(let i = 0; i < linhas.length; i++){
+      const linha = linhas[i];
+      const nome = linha['nome'] || '';
+      const email = linha['email'] || '';
+      const rowId = 'csv-row-' + i;
+      resultsEl.insertAdjacentHTML('beforeend', '<div class="report-line" id="' + rowId + '">⏳ ' + escapeHtmlLocal(nome || '(sem nome)') + ' (' + escapeHtmlLocal(email || 'sem e-mail') + ') — processando...</div>');
+
+      if(!nome || !email){
+        csvResultLine(rowId, '❌ Linha ' + (i+2) + ': nome e e-mail são obrigatórios.');
+        continue;
+      }
+
+      try{
+        const resp = await fetch('/api/create-student', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+          body: JSON.stringify({ full_name: nome, email: email })
+        });
+        const result = await resp.json().catch(() => ({}));
+        if(!resp.ok){
+          csvResultLine(rowId, '❌ ' + escapeHtmlLocal(nome) + ' — ' + escapeHtmlLocal(result.error || resp.statusText));
+          continue;
+        }
+
+        const userId = result.user_id;
+        let extra = '';
+        const modalidadeSlug = (linha['modalidade'] || '').toLowerCase();
+        if(modalidadeSlug){
+          const modalidade = MODALIDADES.find(m => m.slug === modalidadeSlug);
+          if(!modalidade){
+            extra = ' — modalidade "' + escapeHtmlLocal(linha['modalidade']) + '" não encontrada, financeiro não vinculado';
+          } else {
+            const professorEmail = (linha['professor_email'] || '').toLowerCase();
+            const professor = professorEmail ? TEACHERS.find(t => (t.email||'').toLowerCase() === professorEmail) : null;
+            const { error: finError } = await dyseSetAlunoFinanceiro(userId, {
+              modalidade_id: modalidade.id,
+              professor_id: professor ? professor.id : null,
+              valor_mensal_aluno: parseFloat(linha['valor_mensal'] || '0') || 0,
+              valor_professor_customizado: linha['valor_professor'] ? parseFloat(linha['valor_professor']) : null,
+              situacao: 'ativo',
+              data_inicio: linha['data_inicio'] || dyseHoje(),
+              quantidade_parcelas: linha['parcelas'] ? parseInt(linha['parcelas'], 10) : null,
+              observacao: 'Importado via CSV'
+            });
+            extra = finError ? (' — financeiro: erro (' + finError.message + ')') : ' — financeiro vinculado';
+          }
+        }
+        csvResultLine(rowId, '✅ ' + escapeHtmlLocal(nome) + ' cadastrado' + extra);
+      }catch(err){
+        csvResultLine(rowId, '❌ ' + escapeHtmlLocal(nome) + ' — erro de conexão: ' + err.message);
+      }
+    }
+
+    btn.disabled = false;
+    fileInput.value = '';
+    STUDENTS = await dyseListProfilesByRole('student');
+    ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
+    populateAlunosFiltros();
+    renderAlunosTable();
+    return false;
+  }
+
   function populateAlunosFiltros(){
     const selTurma = document.getElementById('filterAlunoTurma');
     const selMod = document.getElementById('filterAlunoModalidade');
@@ -1330,17 +1399,13 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
      ====================================================================== */
 
   function showFinPanel(which){
-    ['modalidades','pagamentos','gastos','relatorio','fechamento'].forEach(p => {
+    ['modalidades','pagamentos','relatorio','fechamento'].forEach(p => {
       document.getElementById('finTab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('finPanel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
     });
     if(which === 'pagamentos' && !document.getElementById('pagamentosMes').value){
       document.getElementById('pagamentosMes').value = competenciaToMonthInput(dyseMesCompetencia());
       loadPagamentosMes();
-    }
-    if(which === 'gastos' && !document.getElementById('gastosMes').value){
-      document.getElementById('gastosMes').value = competenciaToMonthInput(dyseMesCompetencia());
-      loadGastosMes();
     }
     if(which === 'relatorio' && !document.getElementById('relatorioMes').value){
       document.getElementById('relatorioMes').value = competenciaToMonthInput(dyseMesCompetencia());
@@ -1479,6 +1544,8 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
           ['ativo','pausado','cancelado','encerrado'].map(s => '<option value="' + s + '"' + (aberto && aberto.situacao === s ? ' selected' : '') + '>' + capitalize(s) + '</option>').join('') +
         '</select></div>' +
         '<div class="gestao-field"><label>Data de início com o professor</label><input type="date" id="finDataInicio" value="' + (aberto ? aberto.data_inicio : dyseHoje()) + '"' + (aberto ? ' disabled' : '') + '></div>' +
+        '<div class="gestao-field"><label>Quantidade de parcelas (meses que o professor recebe)</label><input type="number" step="1" min="1" id="finParcelas" placeholder="Deixe em branco pra sem prazo definido" value="' + (aberto && aberto.quantidade_parcelas ? aberto.quantidade_parcelas : '') + '" oninput="onFinParcelasChange()"></div>' +
+        '<p class="gestao-hint" id="finParcelasHint">' + finParcelasHintTexto(aberto) + '</p>' +
         '<div class="gestao-field"><label>Observação</label><input type="text" id="finObservacao" value="' + escapeHtmlLocal(aberto ? (aberto.observacao || '') : '') + '"></div>' +
         '<p class="gestao-hint">Trocar de professor ou de modalidade encerra o período atual automaticamente e abre um novo a partir de hoje — o histórico anterior fica preservado e os meses já calculados não mudam.</p>' +
         '<button type="submit" class="btn btn-primary">Salvar</button>' +
@@ -1488,7 +1555,8 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       ? historico.map(h => {
           const mod = MODALIDADES.find(m => m.id === h.modalidade_id);
           const prof = TEACHERS.find(t => t.id === h.professor_id);
-          return '<div class="chip-toggle-row"><span class="name">' + (mod ? escapeHtmlLocal(mod.name) : '-') + ' · ' + (prof ? escapeHtmlLocal(prof.full_name || '') : 'sem professor') + '</span>' +
+          const parcelasTexto = h.quantidade_parcelas ? (' · ' + h.quantidade_parcelas + 'x até ' + formatMesLabel(dyseUltimoMesPago(h))) : ' · sem prazo';
+          return '<div class="chip-toggle-row"><span class="name">' + (mod ? escapeHtmlLocal(mod.name) : '-') + ' · ' + (prof ? escapeHtmlLocal(prof.full_name || '') : 'sem professor') + escapeHtmlLocal(parcelasTexto) + '</span>' +
             '<span style="opacity:.65; font-size:.78rem;">' + formatDateBR(h.data_inicio) + ' — ' + (h.data_fim ? formatDateBR(h.data_fim) : 'atual') + '</span></div>';
         }).join('')
       : '<p class="report-line" style="opacity:.6;">Nenhum vínculo financeiro cadastrado ainda.</p>';
@@ -1504,6 +1572,24 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     document.getElementById('finValorCustomWrap').style.display = (modalidade && modalidade.is_custom_value) ? 'block' : 'none';
   }
 
+  /* Texto explicando até quando o professor recebe por este aluno, dado o
+     mês de início e a quantidade de parcelas — recalculado ao digitar. */
+  function calcularHintParcelas(dataInicio, parcelas){
+    if(!dataInicio) return '';
+    if(!parcelas) return 'Sem prazo definido — o professor recebe enquanto o vínculo estiver ativo.';
+    const mesInicio = dataInicio.slice(0,7) + '-01';
+    const ultimoMes = dyseUltimoMesPago({ data_inicio: dataInicio, quantidade_parcelas: parcelas });
+    return 'Professor recebe ' + parcelas + ' mês(es): ' + formatMesLabel(mesInicio) + ' até ' + formatMesLabel(ultimoMes) + '.';
+  }
+  function finParcelasHintTexto(aberto){
+    return calcularHintParcelas(aberto ? aberto.data_inicio : dyseHoje(), aberto ? aberto.quantidade_parcelas : null);
+  }
+  function onFinParcelasChange(){
+    const dataInicio = document.getElementById('finDataInicio').value;
+    const parcelas = parseInt(document.getElementById('finParcelas').value, 10) || null;
+    document.getElementById('finParcelasHint').textContent = calcularHintParcelas(dataInicio, parcelas);
+  }
+
   async function handleSetAlunoFinanceiro(e){
     e.preventDefault();
     const campos = {
@@ -1513,6 +1599,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       valor_professor_customizado: document.getElementById('finValorProfessorCustom').value ? parseFloat(document.getElementById('finValorProfessorCustom').value) : null,
       situacao: document.getElementById('finSituacao').value,
       data_inicio: document.getElementById('finDataInicio').value || dyseHoje(),
+      quantidade_parcelas: parseInt(document.getElementById('finParcelas').value, 10) || null,
       observacao: document.getElementById('finObservacao').value.trim() || null
     };
     const { error } = await dyseSetAlunoFinanceiro(CURRENT_ALUNO_FIN_ID, campos);
@@ -1619,182 +1706,6 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     closePagamentoModal();
     await loadPagamentosMes();
     return false;
-  }
-
-  /* ---------- Gastos personalizados ---------- */
-  const GASTO_TIPO_LABELS = { material:'Material', comissao:'Comissão', taxa:'Taxa', desconto:'Desconto/Bolsa', outro:'Outro' };
-  let GASTOS_MES_ATUAL = dyseMesCompetencia();
-  let GASTOS_CACHE = [];
-  let GASTOS_PADRAO_CACHE = [];
-  let CURRENT_GASTO_ID = null;
-
-  function populateGastosAlunoFiltro(){
-    const sel = document.getElementById('gastosAlunoFiltro');
-    const current = sel.value;
-    sel.innerHTML = '<option value="">Todos os alunos</option>' + STUDENTS.map(s => '<option value="' + s.id + '">' + escapeHtmlLocal(s.full_name || s.email || '') + '</option>').join('');
-    sel.value = current;
-  }
-
-  async function loadGastosMes(){
-    const mes = monthInputToCompetencia(document.getElementById('gastosMes').value);
-    GASTOS_MES_ATUAL = mes;
-    populateGastosAlunoFiltro();
-    const alunoFiltro = document.getElementById('gastosAlunoFiltro').value || null;
-    [GASTOS_CACHE, GASTOS_PADRAO_CACHE] = await Promise.all([
-      dyseListGastos(alunoFiltro, mes),
-      dyseListGastosPadrao()
-    ]);
-    renderGastosPadraoTable();
-    renderGastosTable();
-  }
-
-  function renderGastosTable(){
-    document.getElementById('gastosBody').innerHTML = GASTOS_CACHE.length ? GASTOS_CACHE.map(g => {
-      const aluno = STUDENTS.find(s => s.id === g.aluno_id);
-      const valorTexto = g.forma_calculo === 'percentual' ? (Number(g.valor).toFixed(2) + '%') : formatMoney(g.valor);
-      return '<tr>' +
-        '<td>' + escapeHtmlLocal(aluno ? (aluno.full_name || aluno.email || '') : g.aluno_id) + '</td>' +
-        '<td>' + escapeHtmlLocal(g.descricao) + '</td>' +
-        '<td>' + (GASTO_TIPO_LABELS[g.tipo] || escapeHtmlLocal(g.tipo)) + '</td>' +
-        '<td>' + (g.forma_calculo === 'percentual' ? 'Percentual' : 'Fixo') + '</td>' +
-        '<td>' + valorTexto + '</td>' +
-        '<td><div class="btn-row">' +
-          '<button type="button" class="btn btn-ghost btn-xs" onclick="openGastoModal(' + g.id + ')">Editar</button>' +
-          '<button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteGasto(' + g.id + ')">Excluir</button>' +
-        '</div></td>' +
-      '</tr>';
-    }).join('') : '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum gasto lançado neste mês.</td></tr>';
-  }
-
-  function renderGastosPadraoTable(){
-    document.getElementById('gastosPadraoBody').innerHTML = GASTOS_PADRAO_CACHE.length ? GASTOS_PADRAO_CACHE.map(g => {
-      const valorTexto = g.forma_calculo === 'percentual' ? (Number(g.valor).toFixed(2) + '%') : formatMoney(g.valor);
-      return '<tr>' +
-        '<td>' + escapeHtmlLocal(g.descricao) + '</td>' +
-        '<td>' + (GASTO_TIPO_LABELS[g.tipo] || escapeHtmlLocal(g.tipo)) + '</td>' +
-        '<td>' + (g.forma_calculo === 'percentual' ? 'Percentual' : 'Fixo') + '</td>' +
-        '<td>' + valorTexto + '</td>' +
-        '<td><label class="dyse-toggle"><input type="checkbox" ' + (g.ativo?'checked':'') + ' onchange="toggleGastoPadraoAtivo(' + g.id + ', this.checked, this)"><span class="slider"></span></label></td>' +
-        '<td><button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteGastoPadrao(' + g.id + ')">Excluir</button></td>' +
-      '</tr>';
-    }).join('') : '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum gasto padrão cadastrado.</td></tr>';
-  }
-
-  async function handleCreateGastoPadrao(e){
-    e.preventDefault();
-    const campos = {
-      descricao: document.getElementById('newGastoPadraoDescricao').value.trim(),
-      tipo: document.getElementById('newGastoPadraoTipo').value,
-      forma_calculo: document.getElementById('newGastoPadraoFormaCalculo').value,
-      valor: parseFloat(document.getElementById('newGastoPadraoValor').value)
-    };
-    if(!campos.descricao || isNaN(campos.valor)) return false;
-    const { error } = await dyseCreateGastoPadrao(campos);
-    if(error){ flashMsg('gastoPadraoMsg', 'Não foi possível criar: ' + error.message, false); return false; }
-    document.getElementById('newGastoPadraoDescricao').value = '';
-    document.getElementById('newGastoPadraoValor').value = '';
-    flashMsg('gastoPadraoMsg', 'Gasto padrão criado! Ele passa a valer a partir da próxima geração/atualização do mês.', true);
-    GASTOS_PADRAO_CACHE = await dyseListGastosPadrao();
-    renderGastosPadraoTable();
-    return false;
-  }
-
-  async function toggleGastoPadraoAtivo(id, ativo, checkboxEl){
-    const { error } = await dyseUpdateGastoPadrao(id, { ativo });
-    if(error){
-      alert('Não foi possível salvar: ' + error.message);
-      if(checkboxEl) checkboxEl.checked = !ativo;
-      return;
-    }
-    const g = GASTOS_PADRAO_CACHE.find(x => x.id === id);
-    if(g) g.ativo = ativo;
-  }
-
-  async function handleDeleteGastoPadrao(id){
-    if(!confirm('Excluir este gasto padrão? Isso remove também os gastos automáticos já lançados a partir dele em meses ainda abertos (meses fechados ficam protegidos).')) return;
-    const { error } = await dyseDeleteGastoPadrao(id);
-    if(error){ alert('Não foi possível excluir: ' + error.message); return; }
-    GASTOS_PADRAO_CACHE = await dyseListGastosPadrao();
-    renderGastosPadraoTable();
-  }
-
-  function openGastoModal(id){
-    CURRENT_GASTO_ID = id;
-    const gasto = id ? GASTOS_CACHE.find(g => g.id === id) : null;
-    document.getElementById('gastoModalTitle').textContent = gasto ? 'Editar gasto' : 'Novo gasto';
-    const alunoOptions = STUDENTS.map(s => '<option value="' + s.id + '"' + (gasto && gasto.aluno_id === s.id ? ' selected' : '') + '>' + escapeHtmlLocal(s.full_name || s.email || '') + '</option>').join('');
-    const tipoOptions = Object.keys(GASTO_TIPO_LABELS).map(t =>
-      '<option value="' + t + '"' + (gasto && gasto.tipo === t ? ' selected' : '') + '>' + GASTO_TIPO_LABELS[t] + '</option>'
-    ).join('');
-
-    document.getElementById('gastoModalBody').innerHTML =
-      '<form class="gestao-form" onsubmit="return handleSaveGasto(event)" style="flex-direction:column; align-items:stretch;">' +
-        '<div class="gestao-field"><label>Aluno</label><select id="gastoAluno" required' + (gasto ? ' disabled' : '') + '>' + alunoOptions + '</select></div>' +
-        '<div class="gestao-field"><label>Mês de competência</label><input type="month" id="gastoMes" value="' + competenciaToMonthInput(gasto ? gasto.mes_competencia : GASTOS_MES_ATUAL) + '" required' + (gasto ? ' disabled' : '') + '></div>' +
-        '<div class="gestao-field"><label>Descrição</label><input type="text" id="gastoDescricao" value="' + escapeHtmlLocal(gasto ? gasto.descricao : '') + '" placeholder="Ex: Material didático" required></div>' +
-        '<div class="gestao-field"><label>Tipo</label><select id="gastoTipo">' + tipoOptions + '</select></div>' +
-        '<div class="gestao-field"><label>Forma de cálculo</label><select id="gastoFormaCalculo" onchange="onGastoFormaCalculoChange()">' +
-          '<option value="fixo"' + (gasto && gasto.forma_calculo === 'fixo' ? ' selected' : '') + '>Valor fixo em reais</option>' +
-          '<option value="percentual"' + (gasto && gasto.forma_calculo === 'percentual' ? ' selected' : '') + '>Percentual sobre o valor recebido do aluno</option>' +
-        '</select></div>' +
-        '<div class="gestao-field"><label id="gastoValorLabel">Valor (R$)</label><input type="number" step="0.01" id="gastoValor" value="' + (gasto ? gasto.valor : '') + '" required></div>' +
-        '<div class="gestao-field"><label>Observação</label><input type="text" id="gastoObservacao" value="' + escapeHtmlLocal(gasto ? (gasto.observacao || '') : '') + '"></div>' +
-        '<p class="gestao-hint">O valor pode ser negativo pra lançar descontos, estornos ou ajustes. Se for percentual, é calculado em cima do valor recebido do aluno naquele mês (ex: comissão de 10%).</p>' +
-        '<button type="submit" class="btn btn-primary">Salvar</button>' +
-      '</form>';
-
-    onGastoFormaCalculoChange();
-    document.getElementById('gastoModal').classList.add('open');
-    document.getElementById('gastoModal').setAttribute('aria-hidden','false');
-    document.body.classList.add('dyse-modal-open');
-  }
-
-  function onGastoFormaCalculoChange(){
-    const forma = document.getElementById('gastoFormaCalculo').value;
-    document.getElementById('gastoValorLabel').textContent = forma === 'percentual' ? 'Valor (%)' : 'Valor (R$)';
-  }
-
-  function closeGastoModal(){
-    document.getElementById('gastoModal').classList.remove('open');
-    document.getElementById('gastoModal').setAttribute('aria-hidden','true');
-    document.body.classList.remove('dyse-modal-open');
-    CURRENT_GASTO_ID = null;
-  }
-
-  async function handleSaveGasto(e){
-    e.preventDefault();
-    const valor = parseFloat(document.getElementById('gastoValor').value);
-    if(CURRENT_GASTO_ID){
-      const { error } = await dyseUpdateGasto(CURRENT_GASTO_ID, {
-        descricao: document.getElementById('gastoDescricao').value.trim(),
-        tipo: document.getElementById('gastoTipo').value,
-        forma_calculo: document.getElementById('gastoFormaCalculo').value,
-        valor: valor,
-        observacao: document.getElementById('gastoObservacao').value.trim() || null
-      });
-      if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
-    } else {
-      const { error } = await dyseCreateGasto({
-        aluno_id: document.getElementById('gastoAluno').value,
-        mes_competencia: monthInputToCompetencia(document.getElementById('gastoMes').value),
-        descricao: document.getElementById('gastoDescricao').value.trim(),
-        tipo: document.getElementById('gastoTipo').value,
-        forma_calculo: document.getElementById('gastoFormaCalculo').value,
-        valor: valor,
-        observacao: document.getElementById('gastoObservacao').value.trim() || null
-      });
-      if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
-    }
-    closeGastoModal();
-    await loadGastosMes();
-    return false;
-  }
-
-  async function handleDeleteGasto(id){
-    if(!confirm('Excluir este gasto?')) return;
-    const { error } = await dyseDeleteGasto(id);
-    if(error){ alert('Não foi possível excluir: ' + error.message); return; }
-    await loadGastosMes();
   }
 
   /* ---------- Relatório Lucro Mensal ---------- */
@@ -2054,7 +1965,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   document.addEventListener('keydown', e => {
     if(e.key === 'Escape'){
-      closeTurmaModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal(); closeGastoModal();
+      closeTurmaModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal();
     }
   });
 
