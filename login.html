@@ -508,6 +508,19 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
         <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••">
       </div>
       <button type="submit" class="btn btn-primary auth-submit">Entrar</button>
+      <div style="text-align:right; margin-top:10px;">
+        <a href="#" onclick="return toggleRecuperar(true)" style="font-size:.78rem; color:var(--amaranth); font-weight:700; text-decoration:none;">Esqueci minha senha</a>
+      </div>
+    </form>
+
+    <form id="formRecuperar" onsubmit="return handleRecuperarSenha(event)" style="display:none;">
+      <p style="font-size:.85rem; color:var(--seal-soft); margin-bottom:16px;">Informe seu e-mail cadastrado. Vamos te mandar um link pra você definir uma senha nova.</p>
+      <div class="auth-field">
+        <label for="recuperarEmail">E-mail</label>
+        <input type="email" id="recuperarEmail" required autocomplete="email" placeholder="seuemail@exemplo.com">
+      </div>
+      <button type="submit" class="btn btn-primary auth-submit">Enviar link de recuperação</button>
+      <button type="button" class="btn btn-ghost auth-submit" style="margin-top:8px;" onclick="return toggleRecuperar(false)">Voltar para o login</button>
     </form>
 
     <form id="formSignup" onsubmit="return handleSignup(event)" style="display:none;">
@@ -539,7 +552,33 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     document.getElementById('tabSignup').classList.toggle('active', which==='signup');
     document.getElementById('formLogin').style.display = which==='login' ? 'block' : 'none';
     document.getElementById('formSignup').style.display = which==='signup' ? 'block' : 'none';
+    document.getElementById('formRecuperar').style.display = 'none';
     document.getElementById('authMsg').classList.remove('show');
+  }
+
+  /* "Esqueci minha senha" não é uma aba (Entrar/Criar conta) — só troca o
+     formulário visível, sem mexer no estado ativo das abas. */
+  function toggleRecuperar(show){
+    document.getElementById('formLogin').style.display = show ? 'none' : (document.getElementById('tabLogin').classList.contains('active') ? 'block' : 'none');
+    document.getElementById('formSignup').style.display = show ? 'none' : (document.getElementById('tabSignup').classList.contains('active') ? 'block' : 'none');
+    document.getElementById('formRecuperar').style.display = show ? 'block' : 'none';
+    document.getElementById('authMsg').classList.remove('show');
+    return false;
+  }
+
+  async function handleRecuperarSenha(e){
+    e.preventDefault();
+    const email = document.getElementById('recuperarEmail').value.trim();
+    showMsg('Enviando...', true);
+    try{
+      const { error } = await dyseReenviarAcesso(email);
+      if(error){ showMsg('Não foi possível enviar: ' + translateError(error.message), false); return false; }
+      showMsg('Se esse e-mail estiver cadastrado, você vai receber um link em instantes. Confira também a caixa de spam.', true);
+    }catch(err){
+      console.error(err);
+      showMsg('Algo deu errado ao enviar. Verifique sua internet e tente novamente.', false);
+    }
+    return false;
   }
 
   function getNextUrl(){
