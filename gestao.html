@@ -503,6 +503,49 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
     <!-- Gastos personalizados -->
     <div id="finPanelGastos" style="display:none;">
+      <div class="gestao-card">
+        <div class="gestao-card-title">Gastos padrão (aplicados a todos os alunos ativos, todo mês)</div>
+        <p class="gestao-hint" style="margin-bottom:14px;">Ex: assinatura do Flexge por aluno. Ao gerar/atualizar o mês, um gasto igual a este é lançado automaticamente pra cada aluno ativo — sem precisar cadastrar aluno por aluno.</p>
+        <form class="gestao-form" onsubmit="return handleCreateGastoPadrao(event)">
+          <div class="gestao-field" style="flex:2 1 200px;">
+            <label>Descrição</label>
+            <input type="text" id="newGastoPadraoDescricao" placeholder="Ex: Flexge" required>
+          </div>
+          <div class="gestao-field" style="flex:1 1 160px;">
+            <label>Tipo</label>
+            <select id="newGastoPadraoTipo">
+              <option value="material">Material</option>
+              <option value="comissao">Comissão</option>
+              <option value="taxa">Taxa</option>
+              <option value="desconto">Desconto/Bolsa</option>
+              <option value="outro" selected>Outro</option>
+            </select>
+          </div>
+          <div class="gestao-field" style="flex:1 1 200px;">
+            <label>Forma de cálculo</label>
+            <select id="newGastoPadraoFormaCalculo">
+              <option value="fixo">Valor fixo em reais</option>
+              <option value="percentual">Percentual sobre o valor recebido</option>
+            </select>
+          </div>
+          <div class="gestao-field" style="flex:1 1 140px;">
+            <label>Valor</label>
+            <input type="number" step="0.01" id="newGastoPadraoValor" required>
+          </div>
+          <button type="submit" class="btn btn-primary">+ Adicionar</button>
+        </form>
+        <div class="auth-msg" id="gastoPadraoMsg"></div>
+        <div style="overflow-x:auto; margin-top:16px;">
+          <table class="dash-table" id="gastosPadraoTable">
+            <thead>
+              <tr><th>Descrição</th><th>Tipo</th><th>Cálculo</th><th>Valor</th><th>Ativo</th><th>Ações</th></tr>
+            </thead>
+            <tbody id="gastosPadraoBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="gestao-card-title" style="margin-bottom:12px;">Gastos por aluno</div>
       <div class="dash-filter">
         <input type="month" id="gastosMes" onchange="loadGastosMes()">
         <select id="gastosAlunoFiltro" onchange="loadGastosMes()"><option value="">Todos os alunos</option></select>
@@ -1406,6 +1449,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   const GASTO_TIPO_LABELS = { material:'Material', comissao:'Comissão', taxa:'Taxa', desconto:'Desconto/Bolsa', outro:'Outro' };
   let GASTOS_MES_ATUAL = dyseMesCompetencia();
   let GASTOS_CACHE = [];
+  let GASTOS_PADRAO_CACHE = [];
   let CURRENT_GASTO_ID = null;
 
   function populateGastosAlunoFiltro(){
@@ -1420,7 +1464,11 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     GASTOS_MES_ATUAL = mes;
     populateGastosAlunoFiltro();
     const alunoFiltro = document.getElementById('gastosAlunoFiltro').value || null;
-    GASTOS_CACHE = await dyseListGastos(alunoFiltro, mes);
+    [GASTOS_CACHE, GASTOS_PADRAO_CACHE] = await Promise.all([
+      dyseListGastos(alunoFiltro, mes),
+      dyseListGastosPadrao()
+    ]);
+    renderGastosPadraoTable();
     renderGastosTable();
   }
 
@@ -1440,6 +1488,58 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '</div></td>' +
       '</tr>';
     }).join('') : '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum gasto lançado neste mês.</td></tr>';
+  }
+
+  function renderGastosPadraoTable(){
+    document.getElementById('gastosPadraoBody').innerHTML = GASTOS_PADRAO_CACHE.length ? GASTOS_PADRAO_CACHE.map(g => {
+      const valorTexto = g.forma_calculo === 'percentual' ? (Number(g.valor).toFixed(2) + '%') : formatMoney(g.valor);
+      return '<tr>' +
+        '<td>' + escapeHtmlLocal(g.descricao) + '</td>' +
+        '<td>' + (GASTO_TIPO_LABELS[g.tipo] || escapeHtmlLocal(g.tipo)) + '</td>' +
+        '<td>' + (g.forma_calculo === 'percentual' ? 'Percentual' : 'Fixo') + '</td>' +
+        '<td>' + valorTexto + '</td>' +
+        '<td><label class="dyse-toggle"><input type="checkbox" ' + (g.ativo?'checked':'') + ' onchange="toggleGastoPadraoAtivo(' + g.id + ', this.checked, this)"><span class="slider"></span></label></td>' +
+        '<td><button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteGastoPadrao(' + g.id + ')">Excluir</button></td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum gasto padrão cadastrado.</td></tr>';
+  }
+
+  async function handleCreateGastoPadrao(e){
+    e.preventDefault();
+    const campos = {
+      descricao: document.getElementById('newGastoPadraoDescricao').value.trim(),
+      tipo: document.getElementById('newGastoPadraoTipo').value,
+      forma_calculo: document.getElementById('newGastoPadraoFormaCalculo').value,
+      valor: parseFloat(document.getElementById('newGastoPadraoValor').value)
+    };
+    if(!campos.descricao || isNaN(campos.valor)) return false;
+    const { error } = await dyseCreateGastoPadrao(campos);
+    if(error){ flashMsg('gastoPadraoMsg', 'Não foi possível criar: ' + error.message, false); return false; }
+    document.getElementById('newGastoPadraoDescricao').value = '';
+    document.getElementById('newGastoPadraoValor').value = '';
+    flashMsg('gastoPadraoMsg', 'Gasto padrão criado! Ele passa a valer a partir da próxima geração/atualização do mês.', true);
+    GASTOS_PADRAO_CACHE = await dyseListGastosPadrao();
+    renderGastosPadraoTable();
+    return false;
+  }
+
+  async function toggleGastoPadraoAtivo(id, ativo, checkboxEl){
+    const { error } = await dyseUpdateGastoPadrao(id, { ativo });
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !ativo;
+      return;
+    }
+    const g = GASTOS_PADRAO_CACHE.find(x => x.id === id);
+    if(g) g.ativo = ativo;
+  }
+
+  async function handleDeleteGastoPadrao(id){
+    if(!confirm('Excluir este gasto padrão? Isso remove também os gastos automáticos já lançados a partir dele em meses ainda abertos (meses fechados ficam protegidos).')) return;
+    const { error } = await dyseDeleteGastoPadrao(id);
+    if(error){ alert('Não foi possível excluir: ' + error.message); return; }
+    GASTOS_PADRAO_CACHE = await dyseListGastosPadrao();
+    renderGastosPadraoTable();
   }
 
   function openGastoModal(id){

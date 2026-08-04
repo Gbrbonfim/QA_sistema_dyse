@@ -862,6 +862,44 @@ create trigger trg_audit_fechamentos_mensais
   after insert or update or delete on public.fechamentos_mensais
   for each row execute procedure public.log_financeiro_auditoria();
 
+-- ----------------------------------------------------------------------
+-- 9.10) GASTOS PADRÃO — despesas que se aplicam automaticamente a TODOS os
+--       alunos ativos, todo mês (ex: assinatura do Flexge por aluno). É um
+--       catálogo (como "modalidades"); ao gerar as mensalidades do mês
+--       (dyseGerarMensalidadesDoMes), o sistema materializa uma linha em
+--       gastos_personalizados por (aluno ativo × gasto padrão ativo),
+--       marcada com "gasto_padrao_id" pra nunca duplicar em gerações
+--       seguintes. Gastos lançados manualmente continuam com
+--       "gasto_padrao_id" nulo e não são afetados por isto.
+-- ----------------------------------------------------------------------
+create table if not exists public.gastos_padrao (
+  id bigint generated always as identity primary key,
+  descricao text not null,
+  tipo text not null default 'outro',
+  forma_calculo text not null check (forma_calculo in ('fixo','percentual')),
+  valor numeric(10,2) not null,
+  ativo boolean not null default true,
+  criado_por uuid references auth.users(id),
+  criado_em timestamptz default now()
+);
+
+alter table public.gastos_padrao enable row level security;
+
+drop policy if exists "admins gerenciam gastos padrao" on public.gastos_padrao;
+create policy "admins gerenciam gastos padrao"
+  on public.gastos_padrao for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+drop trigger if exists trg_audit_gastos_padrao on public.gastos_padrao;
+create trigger trg_audit_gastos_padrao
+  after insert or update or delete on public.gastos_padrao
+  for each row execute procedure public.log_financeiro_auditoria();
+
+alter table public.gastos_personalizados add column if not exists gasto_padrao_id bigint references public.gastos_padrao(id) on delete cascade;
+alter table public.gastos_personalizados drop constraint if exists gastos_personalizados_aluno_mes_padrao_key;
+alter table public.gastos_personalizados add constraint gastos_personalizados_aluno_mes_padrao_key unique (aluno_id, mes_competencia, gasto_padrao_id);
+
 -- ======================================================================
 -- PRONTO! Depois de rodar este script:
 --

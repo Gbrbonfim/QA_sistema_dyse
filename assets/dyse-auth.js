@@ -605,6 +605,30 @@ async function dyseGerarMensalidadesDoMes(mes){
 
   if(!linhas.length) return { count: 0 };
   const { error } = await sb.from('mensalidades').upsert(linhas, { onConflict: 'aluno_id,mes_competencia' });
+
+  // Materializa os gastos padrão (ex: Flexge) como um gasto normal por aluno
+  // ativo neste mês — upsert por (aluno, mês, gasto_padrao_id) garante que
+  // rodar de novo não duplica, e gastos lançados manualmente (gasto_padrao_id
+  // nulo) nunca são tocados aqui.
+  const gastosPadrao = (await dyseListGastosPadrao()).filter(g => g.ativo);
+  if(gastosPadrao.length){
+    const gastosLinhas = [];
+    linhas.forEach(l => {
+      gastosPadrao.forEach(gp => {
+        gastosLinhas.push({
+          aluno_id: l.aluno_id,
+          mes_competencia: mes,
+          descricao: gp.descricao,
+          tipo: gp.tipo,
+          forma_calculo: gp.forma_calculo,
+          valor: gp.valor,
+          gasto_padrao_id: gp.id
+        });
+      });
+    });
+    await sb.from('gastos_personalizados').upsert(gastosLinhas, { onConflict: 'aluno_id,mes_competencia,gasto_padrao_id' });
+  }
+
   return { count: linhas.length, error };
 }
 
@@ -663,6 +687,39 @@ async function dyseUpdateGasto(id, fields){
 
 async function dyseDeleteGasto(id){
   const { error } = await sb.from('gastos_personalizados').delete().eq('id', id);
+  return { error };
+}
+
+/* ---------- Gastos padrão (aplicados automaticamente a TODOS os alunos ativos, todo mês) ---------- */
+async function dyseListGastosPadrao(){
+  const { data, error } = await sb.from('gastos_padrao').select('*').order('descricao', { ascending: true });
+  return error ? [] : data;
+}
+
+async function dyseCreateGastoPadrao(campos){
+  const session = await dyseGetSession();
+  const { data, error } = await sb
+    .from('gastos_padrao')
+    .insert({
+      descricao: campos.descricao,
+      tipo: campos.tipo || 'outro',
+      forma_calculo: campos.forma_calculo,
+      valor: campos.valor,
+      ativo: campos.ativo !== false,
+      criado_por: session ? session.user.id : null
+    })
+    .select('*')
+    .maybeSingle();
+  return { data, error };
+}
+
+async function dyseUpdateGastoPadrao(id, fields){
+  const { error } = await sb.from('gastos_padrao').update(fields).eq('id', id);
+  return { error };
+}
+
+async function dyseDeleteGastoPadrao(id){
+  const { error } = await sb.from('gastos_padrao').delete().eq('id', id);
   return { error };
 }
 
