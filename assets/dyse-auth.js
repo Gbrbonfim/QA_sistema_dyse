@@ -12,7 +12,34 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 /* Não altere daqui pra baixo. */
 
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+/* ---------- "Lembrar de mim" ----------
+   Por padrão o supabase-js guarda a sessão em localStorage (sobrevive
+   fechar o navegador). O checkbox "Lembrar de mim" do login troca isso: se
+   desmarcado, a sessão vai pra sessionStorage (some ao fechar a aba/
+   navegador, mas continua valendo enquanto a pessoa navega pelo site
+   normalmente). A preferência em si (dyse-lembrar) sempre fica em
+   localStorage — é só uma flag, não é dado sensível, e precisa estar
+   disponível antes mesmo de existir sessão pra decidir onde ler/gravar.
+   Como cada página estática recria o cliente do zero ao carregar
+   assets/dyse-auth.js, a escolha feita no login vale pra navegação inteira
+   até o próximo login. */
+function dyseSetLembrarDeMim(lembrar){
+  localStorage.setItem('dyse-lembrar', lembrar ? '1' : '0');
+}
+function dyseAuthStorage(){
+  const lembrar = localStorage.getItem('dyse-lembrar') !== '0'; // padrão: lembrar
+  return lembrar ? window.localStorage : window.sessionStorage;
+}
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    storage: {
+      getItem: (key) => dyseAuthStorage().getItem(key),
+      setItem: (key, value) => dyseAuthStorage().setItem(key, value),
+      removeItem: (key) => dyseAuthStorage().removeItem(key)
+    }
+  }
+});
 
 const TOTAL_ACTIVITIES = 16;
 
