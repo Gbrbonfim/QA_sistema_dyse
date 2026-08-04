@@ -775,5 +775,6 @@ async function dyseReabrirMes(mes, motivo){
 
   await sb.from('mensalidades').update({ fechado: false }).eq('mes_competencia', mes);
   await sb.from('gastos_personalizados').update({ fechado: false }).eq('mes_competencia', mes);
+  await dyseGerarMensalidadesDoMes(mes); // recalcula na hora — reabrir sozinho só destrava, não atualiza os dados
   return { error: null };
 }
