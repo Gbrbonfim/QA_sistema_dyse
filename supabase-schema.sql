@@ -472,6 +472,396 @@ create policy "admins veem todos os resultados"
   on public.activity_results for select
   using (public.is_admin());
 
+-- ----------------------------------------------------------------------
+-- 9) MÓDULO FINANCEIRO
+--    Valores pagos aos professores por modalidade (com histórico
+--    versionado), vínculo financeiro aluno↔professor↔modalidade (com
+--    histórico de períodos), mensalidades geradas por mês de competência,
+--    pagamentos aos professores, gastos personalizados, fechamento
+--    mensal (com trava) e auditoria. Importante: "modalidade" aqui é o
+--    plano financeiro do aluno (VIP/Grupo/Dupla/Intensivo) — é um
+--    conceito DIFERENTE de "turma" (que só controla acesso a matérias).
+--    Os dois não se misturam.
+-- ----------------------------------------------------------------------
+
+-- 9.1) Modalidades (catálogo)
+create table if not exists public.modalidades (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique,
+  name text not null,
+  is_custom_value boolean not null default false, -- true = "Intensivo": valor definido aluno a aluno, sem valor de catálogo
+  created_at timestamptz default now()
+);
+
+alter table public.modalidades enable row level security;
+
+drop policy if exists "qualquer usuario logado ve as modalidades" on public.modalidades;
+create policy "qualquer usuario logado ve as modalidades"
+  on public.modalidades for select
+  using (auth.role() = 'authenticated');
+
+drop policy if exists "admins gerenciam modalidades" on public.modalidades;
+create policy "admins gerenciam modalidades"
+  on public.modalidades for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+insert into public.modalidades (slug, name, is_custom_value) values
+  ('vip', 'VIP', false),
+  ('grupo', 'Grupo', false),
+  ('dupla', 'Dupla', false),
+  ('intensivo', 'Intensivo', true)
+on conflict (slug) do nothing;
+
+-- 9.2) Valores pagos ao professor por modalidade — HISTÓRICO VERSIONADO.
+--      Editar um valor NUNCA sobrescreve a linha anterior: insere uma nova
+--      linha com "vigente_desde". O valor vigente num mês de competência é
+--      sempre a linha de "vigente_desde" mais recente que seja <= aquele
+--      mês — assim, mudar o valor só afeta meses correntes/futuros.
+create table if not exists public.modalidade_valores (
+  id bigint generated always as identity primary key,
+  modalidade_id uuid not null references public.modalidades(id) on delete cascade,
+  valor_professor numeric(10,2) not null,
+  vigente_desde date not null default date_trunc('month', now())::date,
+  criado_por uuid references auth.users(id),
+  criado_em timestamptz default now()
+);
+
+create index if not exists idx_modalidade_valores_modalidade on public.modalidade_valores (modalidade_id, vigente_desde desc);
+
+alter table public.modalidade_valores enable row level security;
+
+drop policy if exists "qualquer usuario logado ve os valores de modalidade" on public.modalidade_valores;
+create policy "qualquer usuario logado ve os valores de modalidade"
+  on public.modalidade_valores for select
+  using (auth.role() = 'authenticated');
+
+drop policy if exists "admins gerenciam valores de modalidade" on public.modalidade_valores;
+create policy "admins gerenciam valores de modalidade"
+  on public.modalidade_valores for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- Seed dos valores iniciais (só insere se a modalidade ainda não tiver
+-- nenhum valor cadastrado — não sobrescreve edição já feita pela gestão).
+-- "Intensivo" fica de fora: não tem valor de catálogo, é definido aluno a
+-- aluno (campo "valor_professor_customizado" em aluno_financeiro_historico).
+insert into public.modalidade_valores (modalidade_id, valor_professor, vigente_desde)
+select m.id, v.valor, date_trunc('month', now())::date
+from public.modalidades m
+join (values ('vip', 200.00), ('grupo', 100.00), ('dupla', 150.00)) as v(slug, valor)
+  on v.slug = m.slug
+where not exists (select 1 from public.modalidade_valores mv where mv.modalidade_id = m.id);
+
+-- 9.3) Vínculo financeiro aluno↔professor↔modalidade, por PERÍODO.
+--      Cada linha é um período (data_inicio até data_fim, ou data_fim nula
+--      = período aberto/atual). Trocar de professor ou de modalidade fecha
+--      o período aberto (preenche data_fim) e abre um novo — o histórico
+--      nunca é sobrescrito, então meses anteriores continuam corretos.
+create table if not exists public.aluno_financeiro_historico (
+  id bigint generated always as identity primary key,
+  aluno_id uuid not null references auth.users(id) on delete cascade,
+  professor_id uuid references auth.users(id) on delete set null,
+  modalidade_id uuid not null references public.modalidades(id) on delete restrict,
+  valor_mensal_aluno numeric(10,2) not null default 0,
+  valor_professor_customizado numeric(10,2), -- só usado quando a modalidade é "Intensivo" (is_custom_value = true)
+  situacao text not null default 'ativo' check (situacao in ('ativo','pausado','cancelado','encerrado')),
+  data_inicio date not null default current_date,
+  data_fim date,
+  observacao text,
+  criado_por uuid references auth.users(id),
+  criado_em timestamptz default now()
+);
+
+create index if not exists idx_aluno_financeiro_aluno on public.aluno_financeiro_historico (aluno_id, data_inicio desc);
+create index if not exists idx_aluno_financeiro_professor on public.aluno_financeiro_historico (professor_id);
+
+alter table public.aluno_financeiro_historico enable row level security;
+
+drop policy if exists "professor ve historico dos proprios alunos" on public.aluno_financeiro_historico;
+create policy "professor ve historico dos proprios alunos"
+  on public.aluno_financeiro_historico for select
+  using (professor_id = auth.uid());
+
+drop policy if exists "admins gerenciam historico financeiro dos alunos" on public.aluno_financeiro_historico;
+create policy "admins gerenciam historico financeiro dos alunos"
+  on public.aluno_financeiro_historico for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- 9.4) Fechamento mensal (controle de qual mês de competência está
+--      travado para alteração).
+create table if not exists public.fechamentos_mensais (
+  id bigint generated always as identity primary key,
+  mes_competencia date not null unique,
+  fechado_em timestamptz,
+  fechado_por uuid references auth.users(id),
+  reaberto_em timestamptz,
+  reaberto_por uuid references auth.users(id),
+  observacao text
+);
+
+alter table public.fechamentos_mensais enable row level security;
+
+drop policy if exists "admins gerenciam fechamentos mensais" on public.fechamentos_mensais;
+create policy "admins gerenciam fechamentos mensais"
+  on public.fechamentos_mensais for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- "security definer": lida dentro do trigger de trava (9.8) e pode ser
+-- chamada por qualquer usuário autenticado sem expor a tabela inteira.
+create or replace function public.mes_esta_fechado(check_mes date)
+returns boolean
+language sql
+stable
+security definer set search_path = public
+as $$
+  select exists (
+    select 1 from public.fechamentos_mensais
+    where mes_competencia = date_trunc('month', check_mes)::date
+      and fechado_em is not null
+  );
+$$;
+
+-- 9.5) Mensalidades — o "razão" mensal por aluno, gerado a partir do
+--      histórico (9.3) e dos valores de modalidade (9.2). É esta tabela
+--      que fica CONGELADA quando o mês é fechado (ver 9.8). O status de
+--      pagamento em si (se o professor já recebeu) fica em
+--      "pagamentos_professores" (9.6), por professor+mês — não por aluno,
+--      pra não duplicar a mesma informação em dois lugares.
+create table if not exists public.mensalidades (
+  id bigint generated always as identity primary key,
+  aluno_id uuid not null references auth.users(id) on delete cascade,
+  aluno_nome text, -- copiado do perfil na geração: a RLS de "profiles" só libera pro professor os alunos
+                    -- das turmas dele (controle de acesso a matéria), que é um escopo DIFERENTE do vínculo
+                    -- financeiro (por professor_id, direto nesta tabela) — sem essa cópia, um aluno vinculado
+                    -- financeiramente mas fora das turmas do professor apareceria sem nome no painel dele.
+                    -- Mesmo padrão já usado em activity_results.student_name/student_email.
+  mes_competencia date not null,
+  professor_id uuid references auth.users(id) on delete set null,
+  modalidade_id uuid references public.modalidades(id) on delete set null,
+  valor_recebido numeric(10,2) not null default 0,      -- valor mensal pago pelo aluno naquele mês
+  valor_pago_professor numeric(10,2) not null default 0, -- comissão calculada pra este aluno naquele mês
+  observacoes text,
+  fechado boolean not null default false, -- espelha fechamentos_mensais, só pra exibição rápida sem join extra
+  atualizado_em timestamptz default now(),
+  unique (aluno_id, mes_competencia)
+);
+
+create index if not exists idx_mensalidades_mes on public.mensalidades (mes_competencia);
+create index if not exists idx_mensalidades_professor on public.mensalidades (professor_id, mes_competencia);
+
+alter table public.mensalidades enable row level security;
+
+drop policy if exists "professor ve as proprias mensalidades" on public.mensalidades;
+create policy "professor ve as proprias mensalidades"
+  on public.mensalidades for select
+  using (professor_id = auth.uid());
+
+drop policy if exists "admins gerenciam mensalidades" on public.mensalidades;
+create policy "admins gerenciam mensalidades"
+  on public.mensalidades for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- 9.6) Pagamentos aos professores — um registro por professor+mês (não por
+--      aluno). "Total previsto" não é armazenado aqui: é sempre a soma ao
+--      vivo de mensalidades.valor_pago_professor daquele professor/mês.
+create table if not exists public.pagamentos_professores (
+  id bigint generated always as identity primary key,
+  professor_id uuid not null references auth.users(id) on delete cascade,
+  mes_competencia date not null,
+  status text not null default 'pendente' check (status in ('pendente','pago','pago_parcial','cancelado')),
+  valor_pago numeric(10,2),
+  data_pagamento date,
+  observacoes text,
+  atualizado_por uuid references auth.users(id),
+  atualizado_em timestamptz default now(),
+  unique (professor_id, mes_competencia)
+);
+
+create index if not exists idx_pagamentos_professor_mes on public.pagamentos_professores (professor_id, mes_competencia);
+
+alter table public.pagamentos_professores enable row level security;
+
+drop policy if exists "professor ve os proprios pagamentos" on public.pagamentos_professores;
+create policy "professor ve os proprios pagamentos"
+  on public.pagamentos_professores for select
+  using (professor_id = auth.uid());
+
+drop policy if exists "admins gerenciam pagamentos de professores" on public.pagamentos_professores;
+create policy "admins gerenciam pagamentos de professores"
+  on public.pagamentos_professores for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- 9.7) Gastos personalizados — por aluno + mês. "valor" pode ser negativo
+--      (estorno/desconto). Quando forma_calculo = 'percentual', "valor" é
+--      a taxa em % (ex: 10.00 = 10%) calculada sobre mensalidades.valor_recebido
+--      na hora de montar o relatório (não fica armazenado, pra nunca ficar
+--      desatualizado se o valor recebido mudar enquanto o mês está aberto).
+--      Só a gestão usa esta tabela — não faz parte do painel do professor.
+create table if not exists public.gastos_personalizados (
+  id bigint generated always as identity primary key,
+  aluno_id uuid not null references auth.users(id) on delete cascade,
+  mes_competencia date not null,
+  descricao text not null,
+  tipo text not null default 'outro',
+  forma_calculo text not null check (forma_calculo in ('fixo','percentual')),
+  valor numeric(10,2) not null,
+  observacao text,
+  fechado boolean not null default false,
+  criado_por uuid references auth.users(id),
+  criado_em timestamptz default now()
+);
+
+create index if not exists idx_gastos_aluno_mes on public.gastos_personalizados (aluno_id, mes_competencia);
+
+alter table public.gastos_personalizados enable row level security;
+
+drop policy if exists "admins gerenciam gastos personalizados" on public.gastos_personalizados;
+create policy "admins gerenciam gastos personalizados"
+  on public.gastos_personalizados for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- 9.8) TRAVA DE MÊS FECHADO — bloqueia qualquer INSERT/UPDATE/DELETE em
+--      mensalidades, gastos_personalizados e pagamentos_professores se o
+--      mês de competência daquela linha já estiver fechado. Pra alterar,
+--      é preciso reabrir o mês antes (9.9 é feito pela tela, que limpa
+--      fechado_em em fechamentos_mensais antes de liberar a edição).
+create or replace function public.bloqueia_alteracao_mes_fechado()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+declare
+  check_mes date;
+begin
+  if TG_OP = 'DELETE' then
+    check_mes := old.mes_competencia;
+  else
+    check_mes := new.mes_competencia;
+  end if;
+
+  if public.mes_esta_fechado(check_mes) then
+    raise exception 'O mês % está fechado para alterações. Reabra o mês antes de continuar.', to_char(check_mes, 'MM/YYYY');
+  end if;
+
+  if TG_OP = 'DELETE' then
+    return old;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_bloqueia_mensalidade_fechada on public.mensalidades;
+create trigger trg_bloqueia_mensalidade_fechada
+  before insert or update or delete on public.mensalidades
+  for each row execute procedure public.bloqueia_alteracao_mes_fechado();
+
+drop trigger if exists trg_bloqueia_gasto_fechado on public.gastos_personalizados;
+create trigger trg_bloqueia_gasto_fechado
+  before insert or update or delete on public.gastos_personalizados
+  for each row execute procedure public.bloqueia_alteracao_mes_fechado();
+
+drop trigger if exists trg_bloqueia_pagamento_fechado on public.pagamentos_professores;
+create trigger trg_bloqueia_pagamento_fechado
+  before insert or update or delete on public.pagamentos_professores
+  for each row execute procedure public.bloqueia_alteracao_mes_fechado();
+
+-- 9.9) AUDITORIA — log genérico (trigger, não só JS) anexado nas tabelas
+--      financeiras. É trigger de banco (não só a tela) porque a gestão às
+--      vezes edita direto pelo Table Editor do Supabase (é o próprio fluxo
+--      documentado neste arquivo pra promover role) — um log só em JS
+--      perderia esses casos.
+create table if not exists public.financeiro_auditoria (
+  id bigint generated always as identity primary key,
+  tabela text not null,
+  registro_id text,
+  acao text not null,
+  usuario_id uuid references auth.users(id),
+  dados_antes jsonb,
+  dados_depois jsonb,
+  criado_em timestamptz default now()
+);
+
+create index if not exists idx_financeiro_auditoria_tabela on public.financeiro_auditoria (tabela, criado_em desc);
+
+alter table public.financeiro_auditoria enable row level security;
+
+drop policy if exists "admins veem a auditoria financeira" on public.financeiro_auditoria;
+create policy "admins veem a auditoria financeira"
+  on public.financeiro_auditoria for select
+  using (public.is_admin());
+
+create or replace function public.log_financeiro_auditoria()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+declare
+  rec_id text;
+begin
+  if TG_OP = 'DELETE' then
+    rec_id := (to_jsonb(old)->>'id');
+  else
+    rec_id := (to_jsonb(new)->>'id');
+  end if;
+
+  insert into public.financeiro_auditoria (tabela, registro_id, acao, usuario_id, dados_antes, dados_depois)
+  values (
+    TG_TABLE_NAME,
+    rec_id,
+    lower(TG_OP),
+    auth.uid(),
+    case when TG_OP in ('UPDATE','DELETE') then to_jsonb(old) else null end,
+    case when TG_OP in ('UPDATE','INSERT') then to_jsonb(new) else null end
+  );
+
+  if TG_OP = 'DELETE' then
+    return old;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_audit_modalidades on public.modalidades;
+create trigger trg_audit_modalidades
+  after insert or update or delete on public.modalidades
+  for each row execute procedure public.log_financeiro_auditoria();
+
+drop trigger if exists trg_audit_modalidade_valores on public.modalidade_valores;
+create trigger trg_audit_modalidade_valores
+  after insert or update or delete on public.modalidade_valores
+  for each row execute procedure public.log_financeiro_auditoria();
+
+drop trigger if exists trg_audit_aluno_financeiro_historico on public.aluno_financeiro_historico;
+create trigger trg_audit_aluno_financeiro_historico
+  after insert or update or delete on public.aluno_financeiro_historico
+  for each row execute procedure public.log_financeiro_auditoria();
+
+drop trigger if exists trg_audit_mensalidades on public.mensalidades;
+create trigger trg_audit_mensalidades
+  after insert or update or delete on public.mensalidades
+  for each row execute procedure public.log_financeiro_auditoria();
+
+drop trigger if exists trg_audit_pagamentos_professores on public.pagamentos_professores;
+create trigger trg_audit_pagamentos_professores
+  after insert or update or delete on public.pagamentos_professores
+  for each row execute procedure public.log_financeiro_auditoria();
+
+drop trigger if exists trg_audit_gastos_personalizados on public.gastos_personalizados;
+create trigger trg_audit_gastos_personalizados
+  after insert or update or delete on public.gastos_personalizados
+  for each row execute procedure public.log_financeiro_auditoria();
+
+drop trigger if exists trg_audit_fechamentos_mensais on public.fechamentos_mensais;
+create trigger trg_audit_fechamentos_mensais
+  after insert or update or delete on public.fechamentos_mensais
+  for each row execute procedure public.log_financeiro_auditoria();
+
 -- ======================================================================
 -- PRONTO! Depois de rodar este script:
 --
@@ -486,4 +876,9 @@ create policy "admins veem todos os resultados"
 -- 3. Todo aluno que se cadastrar entra automaticamente como "student", SEM
 --    turma — use o /gestao.html (aba Alunos) pra vincular cada um a uma
 --    turma. Sem turma, o aluno não enxerga nenhuma matéria liberada.
+-- 4. Módulo financeiro: na aba "Financeiro" do /gestao.html, vincule cada
+--    aluno a um professor responsável e uma modalidade (VIP/Grupo/Dupla/
+--    Intensivo). Os valores pagos ao professor por modalidade já vêm com
+--    R$200 (VIP) / R$100 (Grupo) / R$150 (Dupla) — "Intensivo" não tem
+--    valor de catálogo, é definido aluno a aluno na hora do vínculo.
 -- ======================================================================

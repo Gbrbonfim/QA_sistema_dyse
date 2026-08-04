@@ -440,6 +440,15 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
 }
 
+/* ---------- FINANCEIRO ---------- */
+.kpi-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:14px; margin:20px 0;}
+.kpi-card{background:#fff; border-radius:var(--radius-md); padding:16px 18px; box-shadow:var(--shadow-card);}
+.kpi-value{font-family:var(--font-display); color:var(--amaranth); font-size:1.4rem; line-height:1.1;}
+.kpi-label{font-size:.74rem; color:var(--seal-soft); opacity:.8; margin-top:4px; text-transform:uppercase; letter-spacing:.03em;}
+.pill-count{display:inline-block; font-size:.72rem; font-weight:800; background:var(--antique-soft); color:var(--seal-soft); padding:2px 10px; border-radius:999px;}
+.pill-count.pill-ok{background:#eaf7ee; color:var(--ok);}
+.pill-count.pill-bad{background:#fbeceb; color:var(--bad);}
+
 /* ---------- TOGGLE SWITCH (liberar/ocultar atividade) ---------- */
 .manage-course-block{background:#fff; border-radius:var(--radius-md); padding:20px 24px; margin-bottom:20px; box-shadow:var(--shadow-card);}
 .manage-course-title{font-family:var(--font-display); color:var(--amaranth); font-size:1.3rem; margin-bottom:14px;}
@@ -617,9 +626,10 @@ body.dyse-modal-open{overflow:hidden;}
 
 <div class="wrap" style="margin-top:40px;">
 
-  <div class="auth-tabs" style="max-width:420px; margin-bottom:26px;">
+  <div class="auth-tabs" style="max-width:560px; margin-bottom:26px;">
     <button type="button" class="auth-tab active" id="tabResults" onclick="showPanel('results')">Resultados</button>
     <button type="button" class="auth-tab" id="tabManage" onclick="showPanel('manage')">Gerenciar atividades</button>
+    <button type="button" class="auth-tab" id="tabFinanceiro" onclick="showPanel('financeiro')">Financeiro</button>
   </div>
 
   <div id="panelResults">
@@ -659,6 +669,33 @@ body.dyse-modal-open{overflow:hidden;}
       Clique em <b>👁 Visualizar</b> para abrir e revisar a atividade antes de liberar — como professora, você sempre consegue acessar qualquer atividade, mesmo oculta dos alunos. Ative o interruptor para liberar aos alunos, ou desative para escondê-la novamente.
     </p>
     <div id="manageCourses"></div>
+  </div>
+
+  <div id="panelFinanceiro" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
+      Aqui você só enxerga os seus próprios alunos e valores — nenhum dado de outro professor aparece nesta tela.
+    </p>
+    <div class="dash-filter">
+      <input type="month" id="finProfMes" onchange="loadFinanceiroProfessor()">
+    </div>
+    <div class="kpi-grid" id="finProfKpis"></div>
+    <div style="overflow-x:auto;">
+      <table class="dash-table" id="finProfTable">
+        <thead>
+          <tr><th>Aluno</th><th>Modalidade</th><th>Valor</th></tr>
+        </thead>
+        <tbody id="finProfBody"></tbody>
+      </table>
+    </div>
+    <div style="overflow-x:auto; margin-top:24px;">
+      <p style="font-size:.85rem; font-weight:700; color:var(--seal); margin-bottom:10px;">Histórico de meses anteriores</p>
+      <table class="dash-table" id="finProfHistoricoTable">
+        <thead>
+          <tr><th>Mês</th><th>Alunos</th><th>Total previsto</th><th>Total pago</th><th>Status</th><th>Data pagamento</th></tr>
+        </thead>
+        <tbody id="finProfHistoricoBody"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -983,8 +1020,100 @@ body.dyse-modal-open{overflow:hidden;}
   function showPanel(which){
     document.getElementById('tabResults').classList.toggle('active', which==='results');
     document.getElementById('tabManage').classList.toggle('active', which==='manage');
+    document.getElementById('tabFinanceiro').classList.toggle('active', which==='financeiro');
     document.getElementById('panelResults').style.display = which==='results' ? 'block' : 'none';
     document.getElementById('panelManage').style.display = which==='manage' ? 'block' : 'none';
+    document.getElementById('panelFinanceiro').style.display = which==='financeiro' ? 'block' : 'none';
+    if(which === 'financeiro' && !document.getElementById('finProfMes').value){
+      document.getElementById('finProfMes').value = competenciaToMonthInput(dyseMesCompetencia());
+      loadFinanceiroProfessor();
+    }
+  }
+
+  /* ======================================================================
+     FINANCEIRO — só os próprios dados (RLS já restringe; a filtragem por
+     professor_id nas chamadas dyseListMyMensalidades/dyseListMyPagamentos
+     é defesa em profundidade, não a única barreira).
+     ====================================================================== */
+  function competenciaToMonthInput(mes){ return (mes || dyseMesCompetencia()).slice(0,7); }
+  function monthInputToCompetencia(val){ return val ? (val + '-01') : dyseMesCompetencia(); }
+  function formatMoney(n){ return 'R$ ' + Number(n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function formatDateBR(dateStr){ if(!dateStr) return '-'; const [y,m,d] = dateStr.split('-'); return d + '/' + m + '/' + y; }
+  function formatMesLabel(mes){
+    const [y,m] = mes.split('-');
+    const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return nomes[parseInt(m,10)-1] + '/' + y.slice(2);
+  }
+  function statusBadge(status){
+    const labels = { pendente:'Pendente', pago:'Pago', pago_parcial:'Pago parcialmente', cancelado:'Cancelado' };
+    const cls = status === 'pago' ? 'pill-ok' : (status === 'cancelado' ? 'pill-bad' : '');
+    return '<span class="pill-count' + (cls ? ' ' + cls : '') + '">' + (labels[status] || status) + '</span>';
+  }
+
+  let MODALIDADES_CACHE = [];
+
+  async function loadFinanceiroProfessor(){
+    const mes = monthInputToCompetencia(document.getElementById('finProfMes').value);
+    if(!MODALIDADES_CACHE.length) MODALIDADES_CACHE = await dyseListModalidades();
+    const [todasMensalidades, pagamentos] = await Promise.all([
+      dyseListMyMensalidades(),
+      dyseListMyPagamentos()
+    ]);
+    const doMes = todasMensalidades.filter(m => m.mes_competencia === mes);
+    renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes));
+    renderFinanceiroTabela(doMes);
+    renderFinanceiroHistorico(todasMensalidades, pagamentos);
+  }
+
+  function renderFinanceiroKpis(linhas, pagamento){
+    const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
+    const porModalidade = {};
+    linhas.forEach(l => {
+      const mod = MODALIDADES_CACHE.find(m => m.id === l.modalidade_id);
+      const nome = mod ? mod.name : '-';
+      porModalidade[nome] = (porModalidade[nome] || 0) + 1;
+    });
+    const modalidadesTexto = Object.keys(porModalidade).map(n => n + ': ' + porModalidade[n]).join(' · ') || '-';
+
+    const kpis = [
+      ['Total de alunos', String(linhas.length)],
+      ['Por modalidade', modalidadesTexto],
+      ['Total previsto', formatMoney(totalPrevisto)],
+      ['Total pago', pagamento && pagamento.valor_pago != null ? formatMoney(pagamento.valor_pago) : '-'],
+      ['Status', statusBadge(pagamento ? pagamento.status : 'pendente')],
+      ['Data do pagamento', pagamento && pagamento.data_pagamento ? formatDateBR(pagamento.data_pagamento) : '-']
+    ];
+    document.getElementById('finProfKpis').innerHTML = kpis.map(([label,val]) =>
+      '<div class="kpi-card"><div class="kpi-value" style="font-size:1.05rem;">' + val + '</div><div class="kpi-label">' + label + '</div></div>'
+    ).join('');
+  }
+
+  function renderFinanceiroTabela(linhas){
+    document.getElementById('finProfBody').innerHTML = linhas.length ? linhas.map(l => {
+      const mod = MODALIDADES_CACHE.find(m => m.id === l.modalidade_id);
+      return '<tr>' +
+        '<td>' + escapeHtmlLocal(l.aluno_nome || l.aluno_id) + '</td>' +
+        '<td>' + (mod ? escapeHtmlLocal(mod.name) : '-') + '</td>' +
+        '<td>' + formatMoney(l.valor_recebido) + '</td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhum aluno neste mês.</td></tr>';
+  }
+
+  function renderFinanceiroHistorico(todasMensalidades, pagamentos){
+    const meses = [...new Set(todasMensalidades.map(m => m.mes_competencia))].sort((a,b) => b.localeCompare(a));
+    document.getElementById('finProfHistoricoBody').innerHTML = meses.length ? meses.map(mes => {
+      const linhas = todasMensalidades.filter(m => m.mes_competencia === mes);
+      const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
+      const pagamento = pagamentos.find(p => p.mes_competencia === mes);
+      return '<tr>' +
+        '<td>' + formatMesLabel(mes) + '</td>' +
+        '<td><span class="pill-count">' + linhas.length + '</span></td>' +
+        '<td>' + formatMoney(totalPrevisto) + '</td>' +
+        '<td>' + (pagamento && pagamento.valor_pago != null ? formatMoney(pagamento.valor_pago) : '-') + '</td>' +
+        '<td>' + statusBadge(pagamento ? pagamento.status : 'pendente') + '</td>' +
+        '<td>' + (pagamento && pagamento.data_pagamento ? formatDateBR(pagamento.data_pagamento) : '-') + '</td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhum mês com dados ainda.</td></tr>';
   }
 
   const COURSES = [{id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]}];
