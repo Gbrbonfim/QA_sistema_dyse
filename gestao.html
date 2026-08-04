@@ -144,6 +144,8 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .gestao-card-title{font-family:var(--font-display); color:var(--amaranth); font-size:1.3rem; margin-bottom:14px;}
 .gestao-form{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;}
 .gestao-field{flex:1 1 180px; min-width:0;}
+.gestao-form-col{flex-direction:column; align-items:stretch; gap:14px;}
+.gestao-form-col .gestao-field{flex:0 0 auto;}
 .gestao-field label{display:block; font-weight:700; font-size:.78rem; margin-bottom:6px; color:var(--seal);}
 .gestao-field input, .gestao-field select, .gestao-field textarea{
   width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:10px 13px;
@@ -1535,7 +1537,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     const mostraValorCustom = !!(modalidadeAtual && modalidadeAtual.is_custom_value);
 
     const formHtml =
-      '<form class="gestao-form" onsubmit="return handleSetAlunoFinanceiro(event)" style="flex-direction:column; align-items:stretch;">' +
+      '<form class="gestao-form gestao-form-col" onsubmit="return handleSetAlunoFinanceiro(event)">' +
         '<div class="gestao-field"><label>Modalidade</label><select id="finModalidade" onchange="onFinModalidadeChange()">' + modalidadeOptions + '</select></div>' +
         '<div class="gestao-field"><label>Professor responsável</label><select id="finProfessor">' + professorOptions + '</select></div>' +
         '<div class="gestao-field"><label>Valor mensal pago pelo aluno (R$)</label><input type="number" step="0.01" min="0" id="finValorAluno" value="' + (aberto ? aberto.valor_mensal_aluno : '') + '" required></div>' +
@@ -1543,7 +1545,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '<div class="gestao-field"><label>Situação</label><select id="finSituacao">' +
           ['ativo','pausado','cancelado','encerrado'].map(s => '<option value="' + s + '"' + (aberto && aberto.situacao === s ? ' selected' : '') + '>' + capitalize(s) + '</option>').join('') +
         '</select></div>' +
-        '<div class="gestao-field"><label>Data de início com o professor</label><input type="date" id="finDataInicio" value="' + (aberto ? aberto.data_inicio : dyseHoje()) + '"' + (aberto ? ' disabled' : '') + '></div>' +
+        '<div class="gestao-field"><label>Data de início com o professor</label><input type="date" id="finDataInicio" value="' + (aberto ? aberto.data_inicio : dyseHoje()) + '" oninput="onFinParcelasChange()"></div>' +
         '<div class="gestao-field"><label>Quantidade de parcelas (meses que o professor recebe)</label><input type="number" step="1" min="1" id="finParcelas" placeholder="Deixe em branco pra sem prazo definido" value="' + (aberto && aberto.quantidade_parcelas ? aberto.quantidade_parcelas : '') + '" oninput="onFinParcelasChange()"></div>' +
         '<p class="gestao-hint" id="finParcelasHint">' + finParcelasHintTexto(aberto) + '</p>' +
         '<div class="gestao-field"><label>Observação</label><input type="text" id="finObservacao" value="' + escapeHtmlLocal(aberto ? (aberto.observacao || '') : '') + '"></div>' +
@@ -1672,7 +1674,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     document.getElementById('pagamentoModalTitle').textContent = 'Pagamento — ' + (professor ? professor.full_name : '');
     const statusLabels = { pendente:'Pendente', pago:'Pago', pago_parcial:'Pago parcialmente', cancelado:'Cancelado' };
     document.getElementById('pagamentoModalBody').innerHTML =
-      '<form class="gestao-form" onsubmit="return handleRegistrarPagamento(event)" style="flex-direction:column; align-items:stretch;">' +
+      '<form class="gestao-form gestao-form-col" onsubmit="return handleRegistrarPagamento(event)">' +
         '<div class="gestao-field"><label>Status</label><select id="pgStatus">' +
           Object.keys(statusLabels).map(s => '<option value="' + s + '"' + (pagamento && pagamento.status === s ? ' selected' : '') + '>' + statusLabels[s] + '</option>').join('') +
         '</select></div>' +
