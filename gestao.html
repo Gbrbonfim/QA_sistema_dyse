@@ -1133,7 +1133,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '<td data-label="Professor responsável">' + (professor ? escapeHtmlLocal(professor.full_name || '') : '<span class="no-turma">Sem professor</span>') + '</td>' +
         '<td data-label="Situação">' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
         '<td data-label="Financeiro"><button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
-        '<td data-label="Acesso"><button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button></td>' +
+        '<td data-label="Acesso"><div class="btn-row">' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
+          '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
+        '</div></td>' +
       '</tr>';
     }).join('') || '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
   }
@@ -1167,6 +1170,36 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     const { error } = await dyseReenviarAcesso(email);
     if(error){ alert('Não foi possível reenviar: ' + error.message); return; }
     alert('E-mail de acesso reenviado para ' + email + '!');
+  }
+
+  /* ---------- Excluir aluno definitivamente ----------
+     Apagar só a linha de "profiles" (ex: pelo Table Editor do Supabase) não
+     remove a conta de auth.users — o e-mail continua "registrado" pra
+     sempre e a pessoa nunca mais consegue logar nem ser recadastrada. Esta
+     função passa pela Auth Admin API (via função serverless, só quem tem a
+     service_role consegue), que remove de auth.users de verdade — e
+     profiles cai junto sozinho (on delete cascade). */
+  async function handleExcluirAluno(id){
+    const aluno = STUDENTS.find(s => s.id === id);
+    const nome = aluno ? (aluno.full_name || aluno.email || '') : id;
+    if(!confirm('Excluir definitivamente "' + nome + '"? Isso remove a conta de login dele (não só o cadastro) e não pode ser desfeito.')) return;
+
+    const session = await dyseGetSession();
+    try{
+      const resp = await fetch('/api/delete-student', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ user_id: id })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if(!resp.ok){ alert('Não foi possível excluir: ' + (result.error || resp.statusText)); return; }
+      STUDENTS = await dyseListProfilesByRole('student');
+      ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
+      populateAlunosFiltros();
+      renderAlunosTable();
+    }catch(err){
+      alert('Erro de conexão com o servidor: ' + err.message);
+    }
   }
 
   /* ======================================================================

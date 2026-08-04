@@ -568,10 +568,12 @@ create table if not exists public.aluno_financeiro_historico (
   situacao text not null default 'ativo' check (situacao in ('ativo','pausado','cancelado','encerrado')),
   data_inicio date not null default current_date,
   data_fim date,
+  quantidade_parcelas int, -- nº de meses que o PROFESSOR recebe por este aluno a partir de data_inicio (ex: 6 = ago..jan); nulo = sem prazo definido
   observacao text,
   criado_por uuid references auth.users(id),
   criado_em timestamptz default now()
 );
+alter table public.aluno_financeiro_historico add column if not exists quantidade_parcelas int;
 
 create index if not exists idx_aluno_financeiro_aluno on public.aluno_financeiro_historico (aluno_id, data_inicio desc);
 create index if not exists idx_aluno_financeiro_professor on public.aluno_financeiro_historico (professor_id);
