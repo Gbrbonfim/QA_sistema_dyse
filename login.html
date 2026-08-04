@@ -507,6 +507,9 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
         <label for="loginPassword">Senha</label>
         <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••">
       </div>
+      <div class="checklist" style="margin:0 0 6px;">
+        <label><input type="checkbox" id="lembrarDeMim" checked> Lembrar de mim neste dispositivo</label>
+      </div>
       <button type="submit" class="btn btn-primary auth-submit">Entrar</button>
       <div style="text-align:right; margin-top:10px;">
         <a href="#" onclick="return toggleRecuperar(true)" style="font-size:.78rem; color:var(--amaranth); font-weight:700; text-decoration:none;">Esqueci minha senha</a>
@@ -634,6 +637,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     e.preventDefault();
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
+    dyseSetLembrarDeMim(document.getElementById('lembrarDeMim').checked); // precisa ser definido ANTES do login, pra sessão já nascer no lugar certo
     showMsg('Entrando...', true);
     try{
       const { data, error } = await sb.auth.signInWithPassword({ email, password });
