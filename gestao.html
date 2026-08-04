@@ -452,6 +452,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
             <th>Professor responsável</th>
             <th>Situação</th>
             <th>Financeiro</th>
+            <th>Acesso</th>
           </tr>
         </thead>
         <tbody id="alunosBody"></tbody>
@@ -1229,8 +1230,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '<td>' + (professor ? escapeHtmlLocal(professor.full_name || '') : '<span class="no-turma">Sem professor</span>') + '</td>' +
         '<td>' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
         '<td><button type="button" class="btn btn-ghost btn-sm" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
+        '<td><button type="button" class="btn btn-ghost btn-sm" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button></td>' +
       '</tr>';
-    }).join('') || '<tr><td colspan="7" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
+    }).join('') || '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
   }
 
   /* ---------- PROFESSORES ---------- */
@@ -1246,8 +1248,22 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         return '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(t.name) + '</span>' +
           '<label class="dyse-toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleTeacherTurma(\'' + p.id + '\', \'' + t.id + '\', this.checked, this)"><span class="slider"></span></label></div>';
       }).join('') || '<p class="report-line" style="opacity:.6;">Nenhuma turma criada ainda.</p>';
-      return '<div class="gestao-card"><div class="gestao-card-title" style="font-size:1.1rem;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' + rows + '</div>';
+      const header = '<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">' +
+        '<div><div class="gestao-card-title" style="font-size:1.1rem; margin-bottom:2px;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' +
+        '<span style="font-size:.78rem; opacity:.7;">' + escapeHtmlLocal(p.email || '') + '</span></div>' +
+        '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(p.email || '') + '\')"' + (p.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
+      '</div>';
+      return '<div class="gestao-card">' + header + rows + '</div>';
     }).join('');
+  }
+
+  /* ---------- Reenviar acesso (aluno ou professor) ---------- */
+  async function handleReenviarAcesso(email){
+    if(!email){ alert('Este cadastro não tem e-mail salvo.'); return; }
+    if(!confirm('Reenviar o e-mail de acesso para ' + email + '?')) return;
+    const { error } = await dyseReenviarAcesso(email);
+    if(error){ alert('Não foi possível reenviar: ' + error.message); return; }
+    alert('E-mail de acesso reenviado para ' + email + '!');
   }
 
   /* ======================================================================
