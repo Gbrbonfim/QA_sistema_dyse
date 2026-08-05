@@ -643,6 +643,24 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   </div>
 </div>
 
+<!-- Modal de edição de nome/descrição da turma -->
+<div id="turmaEditModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeTurmaEditModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="turmaEditModalTitle">
+    <div class="report-modal-header">
+      <h3 id="turmaEditModalTitle">Editar turma</h3>
+      <button type="button" class="report-modal-close" onclick="closeTurmaEditModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body">
+      <form class="gestao-form gestao-form-col" onsubmit="return handleSaveTurmaEdit(event)">
+        <div class="gestao-field"><label>Nome da turma</label><input type="text" id="turmaEditName" required></div>
+        <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="turmaEditDesc"></div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Modal de atividades liberadas ao professor, dentro de uma matéria -->
 <div id="materiaModal" class="report-modal" aria-hidden="true">
   <div class="report-modal-backdrop" onclick="closeMateriaModal()"></div>
@@ -796,19 +814,61 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   function renderTurmasTable(){
     document.getElementById('turmasBody').innerHTML = TURMAS.map(t => {
       const materiaCount = TURMA_MATERIAS.filter(tm => tm.turma_id === t.id).length;
-      const teacherCount = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id).length;
+      const professoresDaTurma = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id)
+        .map(tt => TEACHERS.find(p => p.id === tt.teacher_id))
+        .filter(Boolean);
       const studentCount = STUDENTS.filter(s => s.turma_id === t.id).length;
+      const professoresTexto = professoresDaTurma.length
+        ? professoresDaTurma.map(p => escapeHtmlLocal(p.full_name || '')).join(', ')
+        : 'Sem professor';
       return '<tr>' +
-        '<td><b>' + escapeHtmlLocal(t.name) + '</b>' + (t.description ? '<div style="opacity:.65; font-size:.78rem;">' + escapeHtmlLocal(t.description) + '</div>' : '') + '</td>' +
+        '<td><b>' + escapeHtmlLocal(t.name) + '</b>' +
+          (t.description ? '<div style="opacity:.65; font-size:.78rem;">' + escapeHtmlLocal(t.description) + '</div>' : '') +
+          '<div style="opacity:.65; font-size:.78rem;">' + professoresTexto + '</div>' +
+        '</td>' +
         '<td><span class="pill-count">' + materiaCount + '</span></td>' +
-        '<td><span class="pill-count">' + teacherCount + '</span></td>' +
+        '<td><span class="pill-count">' + professoresDaTurma.length + '</span></td>' +
         '<td><span class="pill-count">' + studentCount + '</span></td>' +
         '<td><div class="btn-row">' +
+          '<button type="button" class="btn btn-ghost btn-sm" onclick="openTurmaEditModal(\'' + t.id + '\')">Editar</button>' +
           '<button type="button" class="btn btn-ghost btn-sm" onclick="openTurmaModal(\'' + t.id + '\')">Gerenciar</button>' +
           '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
         '</div></td>' +
       '</tr>';
     }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma turma criada ainda.</td></tr>';
+  }
+
+  let CURRENT_TURMA_EDIT_ID = null;
+
+  function openTurmaEditModal(turmaId){
+    const t = TURMAS.find(x => x.id === turmaId);
+    if(!t) return;
+    CURRENT_TURMA_EDIT_ID = turmaId;
+    document.getElementById('turmaEditName').value = t.name || '';
+    document.getElementById('turmaEditDesc').value = t.description || '';
+    document.getElementById('turmaEditModal').classList.add('open');
+    document.getElementById('turmaEditModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeTurmaEditModal(){
+    document.getElementById('turmaEditModal').classList.remove('open');
+    document.getElementById('turmaEditModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_TURMA_EDIT_ID = null;
+  }
+
+  async function handleSaveTurmaEdit(e){
+    e.preventDefault();
+    const name = document.getElementById('turmaEditName').value.trim();
+    const description = document.getElementById('turmaEditDesc').value.trim();
+    if(!name || !CURRENT_TURMA_EDIT_ID) return false;
+    const { error } = await dyseUpdateTurma(CURRENT_TURMA_EDIT_ID, { name, description: description || null });
+    if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+    TURMAS = await dyseListTurmas();
+    renderTurmasTable();
+    closeTurmaEditModal();
+    return false;
   }
 
   async function handleCreateTurma(e){
