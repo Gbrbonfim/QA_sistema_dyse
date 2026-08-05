@@ -154,6 +154,11 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .gestao-field input:focus, .gestao-field select:focus, .gestao-field textarea:focus{outline:none; border-color:var(--amaranth);}
 .gestao-hint{font-size:.74rem; color:var(--seal-soft); opacity:.75; margin-top:4px;}
 
+/* Módulo Financeiro é exclusivo da role "financeiro" (acima de "admin") —
+   a trava de verdade é a RLS no banco, isto aqui só evita mostrar pra
+   quem não tem acesso uma tela que ia dar erro de permissão. */
+body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
+
 .btn{
   font-family:var(--font-body); font-weight:700; font-size:.88rem; letter-spacing:.01em;
   border:none; border-radius:999px; padding:11px 22px; cursor:pointer; transition:.2s;
@@ -351,7 +356,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     <button type="button" class="auth-tab" id="tabMaterias" onclick="showPanel('materias')">Matérias</button>
     <button type="button" class="auth-tab" id="tabAlunos" onclick="showPanel('alunos')">Alunos</button>
     <button type="button" class="auth-tab" id="tabProfessores" onclick="showPanel('professores')">Professores</button>
-    <button type="button" class="auth-tab" id="tabFinanceiro" onclick="showPanel('financeiro')">Financeiro</button>
+    <button type="button" class="auth-tab fin-only" id="tabFinanceiro" onclick="showPanel('financeiro')">Financeiro</button>
   </div>
 
   <!-- ---------- TURMAS ---------- -->
@@ -477,15 +482,15 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
       Pra colocar ou tirar um aluno de uma turma (acesso a conteúdo), vá na aba <b>Turmas</b> → <b>Gerenciar</b>
-      da turma desejada. O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui,
-      pelo botão "Editar financeiro" de cada aluno.
+      da turma desejada.
+      <span class="fin-only">O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui, pelo botão "Editar financeiro" de cada aluno.</span>
     </p>
     <div class="dash-filter">
       <input type="text" id="filterAlunoName" placeholder="Filtrar por nome ou e-mail..." oninput="renderAlunosTable()">
       <select id="filterAlunoTurma" onchange="renderAlunosTable()"><option value="">Todas as turmas</option></select>
-      <select id="filterAlunoModalidade" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
-      <select id="filterAlunoProfessor" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
-      <select id="filterAlunoSituacao" onchange="renderAlunosTable()">
+      <select id="filterAlunoModalidade" class="fin-only" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
+      <select id="filterAlunoProfessor" class="fin-only" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
+      <select id="filterAlunoSituacao" class="fin-only" onchange="renderAlunosTable()">
         <option value="">Todas as situações</option>
         <option value="ativo">Ativo</option>
         <option value="pausado">Pausado</option>
@@ -501,10 +506,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
             <th>Aluno</th>
             <th>E-mail</th>
             <th>Turma</th>
-            <th>Modalidade</th>
-            <th>Professor responsável</th>
-            <th>Situação</th>
-            <th>Financeiro</th>
+            <th class="fin-only">Modalidade</th>
+            <th class="fin-only">Professor responsável</th>
+            <th class="fin-only">Situação</th>
+            <th class="fin-only">Financeiro</th>
             <th>Acesso</th>
           </tr>
         </thead>
@@ -710,6 +715,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   };
 
   function showPanel(which){
+    // Trava também no front (a de verdade é a RLS): mesmo que alguém force
+    // showPanel('financeiro') pelo console, sem a role "financeiro" a aba
+    // fica bloqueada e cai em "alunos".
+    if(which === 'financeiro' && !document.body.classList.contains('dyse-can-financeiro')) which = 'alunos';
     ['turmas','materias','alunos','professores','financeiro'].forEach(p => {
       document.getElementById('tab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('panel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
@@ -1334,10 +1343,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '<td data-label="Aluno">' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
         '<td data-label="E-mail">' + escapeHtmlLocal(s.email || '-') + '</td>' +
         '<td data-label="Turma">' + (turma ? escapeHtmlLocal(turma.name) : '<span class="no-turma">Sem turma</span>') + '</td>' +
-        '<td data-label="Modalidade">' + (modalidade ? escapeHtmlLocal(modalidade.name) : '<span class="no-turma">Sem modalidade</span>') + '</td>' +
-        '<td data-label="Professor responsável">' + (professor ? escapeHtmlLocal(professor.full_name || '') : '<span class="no-turma">Sem professor</span>') + '</td>' +
-        '<td data-label="Situação">' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
-        '<td data-label="Financeiro"><button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
+        '<td class="fin-only" data-label="Modalidade">' + (modalidade ? escapeHtmlLocal(modalidade.name) : '<span class="no-turma">Sem modalidade</span>') + '</td>' +
+        '<td class="fin-only" data-label="Professor responsável">' + (professor ? escapeHtmlLocal(professor.full_name || '') : '<span class="no-turma">Sem professor</span>') + '</td>' +
+        '<td class="fin-only" data-label="Situação">' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
+        '<td class="fin-only" data-label="Financeiro"><button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
         '<td data-label="Acesso"><div class="btn-row">' +
           '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
           '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
@@ -1985,6 +1994,8 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   (async () => {
     const session = await dyseRequireAdmin();
     if(!session) return;
+    const profile = await dyseGetProfile(session);
+    document.body.classList.toggle('dyse-can-financeiro', dyseIsFinanceiro(profile));
     dyseRenderAuthBar('authBar');
     await loadAll();
   })();

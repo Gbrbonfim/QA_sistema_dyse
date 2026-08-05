@@ -62,14 +62,16 @@ module.exports = async function handler(req, res){
     return;
   }
 
-  // Confirma que quem está chamando é "admin" — mesma checagem que a RLS
-  // já faz no banco, repetida aqui porque a service_role ignora RLS.
+  // Confirma que quem está chamando é "admin" (ou "financeiro", que é um
+  // papel acima de admin — ver supabase-schema.sql) — mesma checagem que a
+  // RLS já faz no banco, repetida aqui porque a service_role ignora RLS.
   const { data: profile, error: profileError } = await admin
     .from('profiles')
     .select('role')
     .eq('id', userData.user.id)
     .maybeSingle();
-  if(profileError || !profile || String(profile.role || '').trim().toLowerCase() !== 'admin'){
+  const callerRole = profile ? String(profile.role || '').trim().toLowerCase() : '';
+  if(profileError || !profile || (callerRole !== 'admin' && callerRole !== 'financeiro')){
     res.status(403).json({ error: 'Só a gestão pode cadastrar alunos.' });
     return;
   }

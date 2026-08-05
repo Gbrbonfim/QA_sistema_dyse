@@ -124,9 +124,22 @@ async function dyseRequireTeacher(){
   return session;
 }
 
-/* Checagem de cargo "gestão" (admin), mesmo padrão tolerante do dyseIsTeacher. */
+/* Checagem de cargo "gestão" (admin), mesmo padrão tolerante do dyseIsTeacher.
+   "financeiro" é um papel ACIMA de admin (ver supabase-schema.sql, seção
+   1.1): quem é "financeiro" também conta como admin pra tudo que não é o
+   módulo financeiro em si (turmas/matérias/alunos/professores). */
 function dyseIsAdmin(profile){
-  return !!(profile && String(profile.role || '').trim().toLowerCase() === 'admin');
+  const role = profile ? String(profile.role || '').trim().toLowerCase() : '';
+  return role === 'admin' || role === 'financeiro';
+}
+
+/* Checagem estrita do papel "financeiro" — ao contrário de dyseIsAdmin(),
+   NÃO inclui "admin" comum. Usada só pra decidir se mostra a aba
+   Financeiro/colunas financeiras em gestao.html; a trava de verdade é a
+   RLS (is_financeiro() no banco), isto aqui é só pra não exibir uma tela
+   que vai dar erro de permissão pra quem não pode ver. */
+function dyseIsFinanceiro(profile){
+  return !!(profile && String(profile.role || '').trim().toLowerCase() === 'financeiro');
 }
 
 /* Bloqueia a página caso o usuário não seja da gestão. */
