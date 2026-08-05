@@ -440,6 +440,30 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
 }
 
+/* ---------- CAIXA SUSPENSA (details/summary nativo — sem JS) ---------- */
+details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
+details.dyse-collapsible > summary{
+  list-style:none; cursor:pointer; padding:14px 18px; display:flex; align-items:center; justify-content:space-between;
+  gap:10px; font-weight:700; color:var(--seal); font-size:.88rem;
+}
+details.dyse-collapsible > summary::-webkit-details-marker{display:none;}
+details.dyse-collapsible > summary:hover{background:var(--antique-soft);}
+details.dyse-collapsible > summary .chevron{transition:transform .2s; opacity:.55; flex:none; font-size:1rem;}
+details.dyse-collapsible[open] > summary .chevron{transform:rotate(90deg);}
+details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
+
+/* Bloco de curso em "Gerenciar atividades" também vira <details> — reaproveita
+   o mesmo visual de caixa branca que já tinha, só ganha o cabeçalho clicável. */
+details.manage-course-block{padding:0;}
+details.manage-course-block > summary.manage-course-title{
+  list-style:none; cursor:pointer; padding:20px 24px; margin-bottom:0;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+details.manage-course-block > summary.manage-course-title::-webkit-details-marker{display:none;}
+details.manage-course-block > summary.manage-course-title .chevron{transition:transform .2s; opacity:.55; font-size:1rem; flex:none;}
+details.manage-course-block[open] > summary.manage-course-title .chevron{transform:rotate(90deg);}
+details.manage-course-block .manage-course-body{padding:0 24px 20px;}
+
 /* ---------- FINANCEIRO ---------- */
 .kpi-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:14px; margin:20px 0;}
 .kpi-card{background:#fff; border-radius:var(--radius-md); padding:16px 18px; box-shadow:var(--shadow-card);}
@@ -680,14 +704,17 @@ body.dyse-modal-open{overflow:hidden;}
       <input type="month" id="finProfMes" onchange="loadFinanceiroProfessor()">
     </div>
     <div class="kpi-grid" id="finProfKpis"></div>
-    <div style="overflow-x:auto;">
-      <table class="dash-table" id="finProfTable">
-        <thead>
-          <tr><th>Aluno</th><th>Modalidade</th><th>Valor a receber</th></tr>
-        </thead>
-        <tbody id="finProfBody"></tbody>
-      </table>
-    </div>
+    <details class="dyse-collapsible">
+      <summary><span id="finProfTableSummary">Detalhamento por aluno</span><span class="chevron">›</span></summary>
+      <div class="dyse-collapsible-body" style="overflow-x:auto;">
+        <table class="dash-table" id="finProfTable">
+          <thead>
+            <tr><th>Aluno</th><th>Modalidade</th><th>Valor a receber</th></tr>
+          </thead>
+          <tbody id="finProfBody"></tbody>
+        </table>
+      </div>
+    </details>
     <div style="overflow-x:auto; margin-top:24px;">
       <p style="font-size:.85rem; font-weight:700; color:var(--seal); margin-bottom:10px;">Histórico de meses anteriores</p>
       <table class="dash-table" id="finProfHistoricoTable">
@@ -1207,6 +1234,7 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   function renderFinanceiroTabela(linhas){
+    document.getElementById('finProfTableSummary').textContent = 'Detalhamento por aluno (' + linhas.length + ')';
     document.getElementById('finProfBody').innerHTML = linhas.length ? linhas.map(l => {
       const mod = MODALIDADES_CACHE.find(m => m.id === l.modalidade_id);
       return '<tr>' +
@@ -1269,7 +1297,12 @@ body.dyse-modal-open{overflow:hidden;}
           '</div>' +
         '</div>';
       }).join('');
-      blocks.push('<div class="manage-course-block"><div class="manage-course-title">' + course.name + '</div>' + rows + '</div>');
+      blocks.push(
+        '<details class="dyse-collapsible manage-course-block" open>' +
+          '<summary class="manage-course-title"><span>' + course.name + ' <span class="pill-count">' + course.activities.length + '</span></span><span class="chevron">›</span></summary>' +
+          '<div class="manage-course-body">' + rows + '</div>' +
+        '</details>'
+      );
     }
     container.innerHTML = blocks.join('');
   }

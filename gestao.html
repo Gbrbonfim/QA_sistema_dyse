@@ -217,6 +217,19 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
   border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
 }
 .no-turma{color:var(--bad); font-weight:700;}
+
+/* ---------- CAIXA SUSPENSA (details/summary nativo — sem JS) ---------- */
+details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
+details.dyse-collapsible > summary{
+  list-style:none; cursor:pointer; padding:14px 18px; display:flex; align-items:center; justify-content:space-between;
+  gap:10px; font-weight:700; color:var(--seal); font-size:.88rem;
+}
+details.dyse-collapsible > summary::-webkit-details-marker{display:none;}
+details.dyse-collapsible > summary:hover{background:var(--antique-soft);}
+details.dyse-collapsible > summary .chevron{transition:transform .2s; opacity:.55; flex:none; font-size:1rem;}
+details.dyse-collapsible[open] > summary .chevron{transform:rotate(90deg);}
+details.dyse-collapsible > summary .summary-left{display:flex; align-items:center; gap:10px; min-width:0;}
+details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 .pill-count{
   display:inline-block; font-size:.72rem; font-weight:800; background:var(--antique-soft); color:var(--seal-soft);
   padding:2px 10px; border-radius:999px;
@@ -499,23 +512,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         <option value="sem-vinculo">Sem vínculo financeiro</option>
       </select>
     </div>
-    <div style="overflow-x:auto;">
-      <table class="dash-table dash-table-responsive" id="alunosTable">
-        <thead>
-          <tr>
-            <th>Aluno</th>
-            <th>E-mail</th>
-            <th>Turma</th>
-            <th class="fin-only">Modalidade</th>
-            <th class="fin-only">Professor responsável</th>
-            <th class="fin-only">Situação</th>
-            <th class="fin-only">Financeiro</th>
-            <th>Acesso</th>
-          </tr>
-        </thead>
-        <tbody id="alunosBody"></tbody>
-      </table>
-    </div>
+    <div id="alunosTableWrap"></div>
   </div>
 
   <!-- ---------- PROFESSORES ---------- -->
@@ -1338,7 +1335,41 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       return true;
     });
 
-    document.getElementById('alunosBody').innerHTML = rows.map(({ s, turma, periodo, modalidade, professor }) => {
+    const wrap = document.getElementById('alunosTableWrap');
+    const isFin = document.body.classList.contains('dyse-can-financeiro');
+
+    if(!isFin){
+      // Sem acesso financeiro, professor não é um dado visível — tabela única, sem agrupar.
+      wrap.innerHTML = renderAlunosTableHtml(rows);
+      return;
+    }
+
+    // Com acesso financeiro: agrupa em caixa suspensa por "Professor responsável".
+    // Quem não tem professor vinculado fica FORA das caixas, direto na tela.
+    const semProfessor = rows.filter(({ professor }) => !professor);
+    const porProfessorId = {};
+    rows.forEach(item => {
+      if(!item.professor) return;
+      (porProfessorId[item.professor.id] = porProfessorId[item.professor.id] || { professor: item.professor, itens: [] }).itens.push(item);
+    });
+    const grupos = Object.values(porProfessorId).sort((a, b) => (a.professor.full_name || '').localeCompare(b.professor.full_name || ''));
+
+    let html = '';
+    if(semProfessor.length){
+      html += '<div class="report-section-head">Sem professor responsável (' + semProfessor.length + ')</div>' + renderAlunosTableHtml(semProfessor);
+    }
+    html += grupos.map(({ professor, itens }) =>
+      '<details class="dyse-collapsible">' +
+        '<summary><span class="summary-left">' + escapeHtmlLocal(professor.full_name || '(sem nome)') + '<span class="pill-count">' + itens.length + '</span></span><span class="chevron">›</span></summary>' +
+        '<div class="dyse-collapsible-body">' + renderAlunosTableHtml(itens) + '</div>' +
+      '</details>'
+    ).join('');
+
+    wrap.innerHTML = html || '<p style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</p>';
+  }
+
+  function renderAlunosTableHtml(itens){
+    const bodyHtml = itens.map(({ s, turma, periodo, modalidade, professor }) => {
       return '<tr>' +
         '<td data-label="Aluno">' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
         '<td data-label="E-mail">' + escapeHtmlLocal(s.email || '-') + '</td>' +
@@ -1353,6 +1384,14 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '</div></td>' +
       '</tr>';
     }).join('') || '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
+    return '<div style="overflow-x:auto;"><table class="dash-table dash-table-responsive">' +
+      '<thead><tr>' +
+        '<th>Aluno</th><th>E-mail</th><th>Turma</th>' +
+        '<th class="fin-only">Modalidade</th><th class="fin-only">Professor responsável</th><th class="fin-only">Situação</th><th class="fin-only">Financeiro</th>' +
+        '<th>Acesso</th>' +
+      '</tr></thead>' +
+      '<tbody>' + bodyHtml + '</tbody>' +
+    '</table></div>';
   }
 
   /* ---------- PROFESSORES ---------- */
