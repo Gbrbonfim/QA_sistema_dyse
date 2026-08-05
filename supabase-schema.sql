@@ -38,6 +38,16 @@ alter table public.profiles add constraint profiles_role_check
 -- telas como a de gestão conseguirem listar/identificar alunos e professores.
 alter table public.profiles add column if not exists email text;
 
+-- Uma pessoa pode ser "admin" (gestão) E dar aula ao mesmo tempo — ex: uma
+-- professora que também gerencia os demais professores. Como "role" é uma
+-- coluna única (só um valor por vez), isso é resolvido com um flag à
+-- parte em vez de trocar a role principal: ela continua "admin" (gerencia
+-- turmas/professores/alunos normalmente) e, com "also_teacher" = true,
+-- GANHA por cima tudo que um "teacher" tem (acesso a /professora.html,
+-- gerenciar/publicar as próprias atividades, aparecer nas listas de
+-- professor pra vínculo financeiro e turma). Ver is_teacher() logo abaixo.
+alter table public.profiles add column if not exists also_teacher boolean not null default false;
+
 alter table public.profiles enable row level security;
 
 -- ----------------------------------------------------------------------
@@ -53,6 +63,9 @@ alter table public.profiles enable row level security;
 --    "security definer", elas leem "profiles" ignorando RLS (não reentram
 --    nas políticas), cortando o ciclo pela raiz.
 -- ----------------------------------------------------------------------
+-- true pra quem TEM role = 'teacher' OU tem o flag also_teacher = true
+-- (ver comentário em "also_teacher", acima) — ou seja, também vale pra um
+-- "admin" que também dá aula.
 create or replace function public.is_teacher()
 returns boolean
 language sql
@@ -60,7 +73,8 @@ stable
 security definer set search_path = public
 as $$
   select exists (
-    select 1 from public.profiles where id = auth.uid() and lower(trim(role)) = 'teacher'
+    select 1 from public.profiles
+    where id = auth.uid() and (lower(trim(role)) = 'teacher' or also_teacher = true)
   );
 $$;
 
@@ -943,6 +957,13 @@ alter table public.gastos_personalizados add constraint gastos_personalizados_al
 --    coluna "role" da linha da pessoa pra "teacher") — a tela de gestão
 --    organiza turma/matéria/permissões de quem já existe, não cria conta
 --    nem muda role.
+--    Alguém que é "admin" e TAMBÉM dá aula (ex: uma professora que também
+--    faz parte da gestão): não mude a role dela pra "teacher" (perderia o
+--    acesso de gestão) — em vez disso, na mesma linha, marque a coluna
+--    "also_teacher" como "true". Ela continua entrando por padrão em
+--    /gestao.html, e o botão "Painel da professora" que aparece pra ela lá
+--    (e em toda página) leva pra /professora.html, onde ela vê e gerencia
+--    as próprias turmas/atividades/financeiro normalmente.
 -- 3. Todo aluno que se cadastrar entra automaticamente como "student", SEM
 --    turma — use o /gestao.html (aba Alunos) pra vincular cada um a uma
 --    turma. Sem turma, o aluno não enxerga nenhuma matéria liberada.
