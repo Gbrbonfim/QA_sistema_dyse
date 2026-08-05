@@ -50,9 +50,11 @@ async function dyseGetSession(){
 }
 
 /* Checagem de cargo tolerante a maiúsculas/espaços extras, caso o valor
-   salvo no banco não esteja perfeitamente igual a "teacher". */
+   salvo no banco não esteja perfeitamente igual a "teacher". Também vale
+   pra quem tem o flag "also_teacher" (ex: um admin que também dá aula —
+   ver comentário em supabase-schema.sql, coluna profiles.also_teacher). */
 function dyseIsTeacher(profile){
-  return !!(profile && String(profile.role || '').trim().toLowerCase() === 'teacher');
+  return !!(profile && (String(profile.role || '').trim().toLowerCase() === 'teacher' || profile.also_teacher === true));
 }
 
 async function dyseGetProfile(session){
@@ -181,9 +183,20 @@ async function dyseRenderAuthBar(containerId){
   if(!session) return;
   const meta = session.user.user_metadata || {};
   const name = meta.full_name || session.user.email;
+  const profile = await dyseGetProfile(session);
+
+  // Quem acumula papéis (ex: admin que também dá aula, via also_teacher)
+  // ganha um link pra cada painel que tem direito, em vez de só um link
+  // fixo — sem isso não haveria como ela alcançar /professora.html a
+  // partir de /gestao.html (ou vice-versa) pela interface.
+  const links = [];
+  if(dyseIsAdmin(profile)) links.push('<a href="/gestao.html" class="dyse-auth-link">Painel da gestão</a>');
+  if(dyseIsTeacher(profile)) links.push('<a href="/professora.html" class="dyse-auth-link">Painel da professora</a>');
+  if(!links.length) links.push('<a href="/area-do-aluno.html" class="dyse-auth-link">Minhas atividades</a>');
+
   el.innerHTML =
     '<span class="dyse-auth-name">👤 ' + escapeHtml(name) + '</span>' +
-    '<a href="/area-do-aluno.html" class="dyse-auth-link">Minhas atividades</a>' +
+    links.join('') +
     '<button type="button" class="dyse-auth-logout" onclick="dyseLogout()">Sair</button>';
 }
 
@@ -388,12 +401,19 @@ async function dyseSetTeacherTurma(teacherId, turmaId, enabled){
 /* ---------- Perfis por papel (alunos / professoras) ---------- */
 /* Comparação tolerante a maiúsculas/espaço extra (mesmo motivo do
    dyseIsTeacher/dyseIsAdmin): um ".eq('role', role)" exato deixaria de fora
-   contas cujo "role" foi digitado com variação no Table Editor do Supabase. */
+   contas cujo "role" foi digitado com variação no Table Editor do Supabase.
+   Pedir role='teacher' também traz quem tem role diferente (ex: "admin")
+   mas o flag also_teacher=true — mesmo critério de dyseIsTeacher(), pra
+   essas contas aparecerem nas listas de professor (turmas, vínculo
+   financeiro etc.) igual a qualquer outra professora. */
 async function dyseListProfilesByRole(role){
   const { data, error } = await sb.from('profiles').select('*').order('full_name', { ascending: true });
   if(error || !data) return [];
   const target = String(role).trim().toLowerCase();
-  return data.filter(p => String(p.role || '').trim().toLowerCase() === target);
+  return data.filter(p => {
+    if(target === 'teacher') return dyseIsTeacher(p);
+    return String(p.role || '').trim().toLowerCase() === target;
+  });
 }
 
 async function dyseSetStudentTurma(studentId, turmaId){
