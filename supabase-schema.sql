@@ -25,10 +25,13 @@ create table if not exists public.profiles (
 );
 
 -- Adiciona o papel "admin" (gestão) para quem já rodou uma versão anterior
--- deste script, que só conhecia 'student'/'teacher'.
+-- deste script, que só conhecia 'student'/'teacher'. "financeiro" é um
+-- papel ACIMA de "admin": enxerga tudo que "admin" enxerga (turmas,
+-- matérias, alunos, professores) e, além disso, o módulo Financeiro —
+-- que "admin" sozinho NÃO acessa mais (ver 1.1 e a seção 9).
 alter table public.profiles drop constraint if exists profiles_role_check;
 alter table public.profiles add constraint profiles_role_check
-  check (role in ('student', 'teacher', 'admin'));
+  check (role in ('student', 'teacher', 'admin', 'financeiro'));
 
 -- "auth.users" guarda o e-mail, mas o app (chave anônima) não consegue ler
 -- essa tabela direto — por isso o e-mail também é copiado pra cá, pra
@@ -61,6 +64,12 @@ as $$
   );
 $$;
 
+-- "financeiro" é hierarquicamente ACIMA de "admin" (ver comentário na
+-- constraint da role, acima): por isso is_admin() aceita as duas roles —
+-- toda política de gestão "normal" (turmas/matérias/alunos/professores)
+-- usa is_admin() e continua liberada pra quem é "financeiro" também. Só as
+-- políticas do módulo financeiro (seção 9) usam is_financeiro() — essa sim
+-- estrita, só role = 'financeiro' — pra travar especificamente "admin".
 create or replace function public.is_admin()
 returns boolean
 language sql
@@ -68,7 +77,18 @@ stable
 security definer set search_path = public
 as $$
   select exists (
-    select 1 from public.profiles where id = auth.uid() and lower(trim(role)) = 'admin'
+    select 1 from public.profiles where id = auth.uid() and lower(trim(role)) in ('admin', 'financeiro')
+  );
+$$;
+
+create or replace function public.is_financeiro()
+returns boolean
+language sql
+stable
+security definer set search_path = public
+as $$
+  select exists (
+    select 1 from public.profiles where id = auth.uid() and lower(trim(role)) = 'financeiro'
   );
 $$;
 
@@ -482,6 +502,12 @@ create policy "admins veem todos os resultados"
 --    plano financeiro do aluno (VIP/Grupo/Dupla/Intensivo) — é um
 --    conceito DIFERENTE de "turma" (que só controla acesso a matérias).
 --    Os dois não se misturam.
+--
+--    Acesso: todas as tabelas/políticas de gestão desta seção usam
+--    is_financeiro() (role = 'financeiro'), NÃO is_admin() — quem é só
+--    "admin" (gestão comum) não tem acesso a nada daqui, nem pela tela nem
+--    direto pela API. "financeiro" é um papel à parte, promovido manualmente
+--    como qualquer outro (ver instruções no fim do arquivo).
 -- ----------------------------------------------------------------------
 
 -- 9.1) Modalidades (catálogo)
@@ -503,8 +529,8 @@ create policy "qualquer usuario logado ve as modalidades"
 drop policy if exists "admins gerenciam modalidades" on public.modalidades;
 create policy "admins gerenciam modalidades"
   on public.modalidades for all
-  using (public.is_admin())
-  with check (public.is_admin());
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
 
 insert into public.modalidades (slug, name, is_custom_value) values
   ('vip', 'VIP', false),
@@ -531,16 +557,20 @@ create index if not exists idx_modalidade_valores_modalidade on public.modalidad
 
 alter table public.modalidade_valores enable row level security;
 
+-- Só professor(a) (pra ver a própria comissão) e financeiro têm motivo pra
+-- ler os valores — "admin" comum e aluno ficam de fora (valor é dado
+-- financeiro, não é um rótulo público como o nome da modalidade).
 drop policy if exists "qualquer usuario logado ve os valores de modalidade" on public.modalidade_valores;
-create policy "qualquer usuario logado ve os valores de modalidade"
+drop policy if exists "professor e financeiro veem os valores de modalidade" on public.modalidade_valores;
+create policy "professor e financeiro veem os valores de modalidade"
   on public.modalidade_valores for select
-  using (auth.role() = 'authenticated');
+  using (public.is_teacher() or public.is_financeiro());
 
 drop policy if exists "admins gerenciam valores de modalidade" on public.modalidade_valores;
 create policy "admins gerenciam valores de modalidade"
   on public.modalidade_valores for all
-  using (public.is_admin())
-  with check (public.is_admin());
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
 
 -- Seed dos valores iniciais (só insere se a modalidade ainda não tiver
 -- nenhum valor cadastrado — não sobrescreve edição já feita pela gestão).
@@ -588,8 +618,8 @@ create policy "professor ve historico dos proprios alunos"
 drop policy if exists "admins gerenciam historico financeiro dos alunos" on public.aluno_financeiro_historico;
 create policy "admins gerenciam historico financeiro dos alunos"
   on public.aluno_financeiro_historico for all
-  using (public.is_admin())
-  with check (public.is_admin());
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
 
 -- 9.4) Fechamento mensal (controle de qual mês de competência está
 --      travado para alteração).
@@ -608,8 +638,8 @@ alter table public.fechamentos_mensais enable row level security;
 drop policy if exists "admins gerenciam fechamentos mensais" on public.fechamentos_mensais;
 create policy "admins gerenciam fechamentos mensais"
   on public.fechamentos_mensais for all
-  using (public.is_admin())
-  with check (public.is_admin());
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
 
 -- "security definer": lida dentro do trigger de trava (9.8) e pode ser
 -- chamada por qualquer usuário autenticado sem expor a tabela inteira.
@@ -664,8 +694,8 @@ create policy "professor ve as proprias mensalidades"
 drop policy if exists "admins gerenciam mensalidades" on public.mensalidades;
 create policy "admins gerenciam mensalidades"
   on public.mensalidades for all
-  using (public.is_admin())
-  with check (public.is_admin());
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
 
 -- 9.6) Pagamentos aos professores — um registro por professor+mês (não por
 --      aluno). "Total previsto" não é armazenado aqui: é sempre a soma ao
@@ -695,8 +725,8 @@ create policy "professor ve os proprios pagamentos"
 drop policy if exists "admins gerenciam pagamentos de professores" on public.pagamentos_professores;
 create policy "admins gerenciam pagamentos de professores"
   on public.pagamentos_professores for all
-  using (public.is_admin())
-  with check (public.is_admin());
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
 
 -- 9.7) Gastos personalizados — por aluno + mês. "valor" pode ser negativo
 --      (estorno/desconto). Quando forma_calculo = 'percentual', "valor" é
@@ -725,8 +755,8 @@ alter table public.gastos_personalizados enable row level security;
 drop policy if exists "admins gerenciam gastos personalizados" on public.gastos_personalizados;
 create policy "admins gerenciam gastos personalizados"
   on public.gastos_personalizados for all
-  using (public.is_admin())
-  with check (public.is_admin());
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
 
 -- 9.8) TRAVA DE MÊS FECHADO — bloqueia qualquer INSERT/UPDATE/DELETE em
 --      mensalidades, gastos_personalizados e pagamentos_professores se o
@@ -796,7 +826,7 @@ alter table public.financeiro_auditoria enable row level security;
 drop policy if exists "admins veem a auditoria financeira" on public.financeiro_auditoria;
 create policy "admins veem a auditoria financeira"
   on public.financeiro_auditoria for select
-  using (public.is_admin());
+  using (public.is_financeiro());
 
 create or replace function public.log_financeiro_auditoria()
 returns trigger
@@ -890,8 +920,8 @@ alter table public.gastos_padrao enable row level security;
 drop policy if exists "admins gerenciam gastos padrao" on public.gastos_padrao;
 create policy "admins gerenciam gastos padrao"
   on public.gastos_padrao for all
-  using (public.is_admin())
-  with check (public.is_admin());
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
 
 drop trigger if exists trg_audit_gastos_padrao on public.gastos_padrao;
 create trigger trg_audit_gastos_padrao
@@ -916,9 +946,14 @@ alter table public.gastos_personalizados add constraint gastos_personalizados_al
 -- 3. Todo aluno que se cadastrar entra automaticamente como "student", SEM
 --    turma — use o /gestao.html (aba Alunos) pra vincular cada um a uma
 --    turma. Sem turma, o aluno não enxerga nenhuma matéria liberada.
--- 4. Módulo financeiro: na aba "Financeiro" do /gestao.html, vincule cada
---    aluno a um professor responsável e uma modalidade (VIP/Grupo/Dupla/
---    Intensivo). Os valores pagos ao professor por modalidade já vêm com
---    R$200 (VIP) / R$100 (Grupo) / R$150 (Dupla) — "Intensivo" não tem
---    valor de catálogo, é definido aluno a aluno na hora do vínculo.
+-- 4. Módulo financeiro: só quem tem a role "financeiro" enxerga a aba
+--    Financeiro do /gestao.html (e a coluna/filtros financeiros na aba
+--    Alunos) — "admin" comum não vê mais. Pra liberar alguém (inclusive
+--    você mesmo, além da conta "admin"), mude a coluna "role" da pessoa
+--    pra "financeiro" no Table Editor, do mesmo jeito do passo 2. Uma vez
+--    lá, vincule cada aluno a um professor responsável e uma modalidade
+--    (VIP/Grupo/Dupla/Intensivo). Os valores pagos ao professor por
+--    modalidade já vêm com R$200 (VIP) / R$100 (Grupo) / R$150 (Dupla) —
+--    "Intensivo" não tem valor de catálogo, é definido aluno a aluno na
+--    hora do vínculo.
 -- ======================================================================
