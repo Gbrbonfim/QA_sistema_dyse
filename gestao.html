@@ -446,7 +446,11 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         </div>
         <button type="submit" class="btn btn-primary">+ Cadastrar aluno</button>
       </form>
-      <p class="gestao-hint">O aluno recebe um e-mail do sistema com o link pra definir a senha e acessar. Depois de cadastrado, vincule turma (aba Turmas) e dados financeiros (botão "Editar financeiro" abaixo) normalmente.</p>
+      <label style="display:flex; align-items:center; gap:8px; font-size:.82rem; margin-top:10px; cursor:pointer;">
+        <input type="checkbox" id="newStudentSkipEmail" style="width:auto;">
+        Não enviar e-mail agora (só cadastrar — libero o acesso depois com "Reenviar acesso")
+      </label>
+      <p class="gestao-hint">Por padrão o aluno recebe um e-mail do sistema com o link pra definir a senha e acessar. Marque a opção acima pra só criar a conta agora, sem avisar o aluno ainda. Depois de cadastrado, vincule turma (aba Turmas) e dados financeiros (botão "Editar financeiro" abaixo) normalmente.</p>
       <div class="auth-msg" id="newStudentMsg"></div>
     </div>
 
@@ -464,6 +468,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         <input type="file" id="csvAlunosFile" accept=".csv,text/csv" required>
         <button type="submit" class="btn btn-primary" id="btnImportarCSV">Importar CSV</button>
       </form>
+      <label style="display:flex; align-items:center; gap:8px; font-size:.82rem; margin-top:10px; cursor:pointer;">
+        <input type="checkbox" id="csvSkipEmail" style="width:auto;">
+        Não enviar e-mail agora (só cadastrar todos — libero o acesso de cada um depois com "Reenviar acesso")
+      </label>
       <div id="csvImportResults" style="margin-top:14px; display:flex; flex-direction:column; gap:4px; max-height:260px; overflow-y:auto;"></div>
     </div>
 
@@ -1123,11 +1131,12 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     const session = await dyseGetSession();
     const btn = e.target.querySelector('button[type="submit"]');
     btn.disabled = true;
+    const skipEmail = document.getElementById('newStudentSkipEmail').checked;
     try{
       const resp = await fetch('/api/create-student', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
-        body: JSON.stringify({ full_name, email })
+        body: JSON.stringify({ full_name, email, send_email: !skipEmail })
       });
       const result = await resp.json().catch(() => ({}));
       if(!resp.ok){
@@ -1136,7 +1145,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       }
       document.getElementById('newStudentName').value = '';
       document.getElementById('newStudentEmail').value = '';
-      flashMsg('newStudentMsg', 'Aluno cadastrado! Ele já recebeu o e-mail de acesso.', true);
+      flashMsg('newStudentMsg', result.email_sent ? 'Aluno cadastrado! Ele já recebeu o e-mail de acesso.' : 'Aluno cadastrado, sem enviar e-mail. Use "Reenviar acesso" quando quiser liberar o acesso dele.', true);
       STUDENTS = await dyseListProfilesByRole('student');
       renderAlunosTable();
     }catch(err){
@@ -1187,14 +1196,16 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     if(el) el.innerHTML = texto;
   }
 
-  /* Processa uma linha por vez (não em paralelo) — cada uma dispara um
-     e-mail de convite de verdade, então evita sobrecarregar/tomar rate
-     limit do Supabase e deixa o resultado de cada aluno claro na tela. */
+  /* Processa uma linha por vez (não em paralelo) — se for disparar e-mail
+     de convite de verdade, evita sobrecarregar/tomar rate limit do
+     Supabase, e deixa o resultado de cada aluno claro na tela de qualquer
+     forma. */
   async function handleImportarCSV(e){
     e.preventDefault();
     const fileInput = document.getElementById('csvAlunosFile');
     const file = fileInput.files[0];
     if(!file) return false;
+    const skipEmail = document.getElementById('csvSkipEmail').checked;
 
     const text = await file.text();
     const linhas = parseCSV(text);
@@ -1225,7 +1236,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         const resp = await fetch('/api/create-student', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
-          body: JSON.stringify({ full_name: nome, email: email })
+          body: JSON.stringify({ full_name: nome, email: email, send_email: !skipEmail })
         });
         const result = await resp.json().catch(() => ({}));
         if(!resp.ok){
@@ -1256,7 +1267,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
             extra = finError ? (' — financeiro: erro (' + finError.message + ')') : ' — financeiro vinculado';
           }
         }
-        csvResultLine(rowId, '✅ ' + escapeHtmlLocal(nome) + ' cadastrado' + extra);
+        csvResultLine(rowId, '✅ ' + escapeHtmlLocal(nome) + ' cadastrado' + (result.email_sent ? ' (e-mail enviado)' : ' (sem e-mail)') + extra);
       }catch(err){
         csvResultLine(rowId, '❌ ' + escapeHtmlLocal(nome) + ' — erro de conexão: ' + err.message);
       }
