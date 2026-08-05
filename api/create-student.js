@@ -16,13 +16,19 @@
 
    O que faz: recebe nome + e-mail de um aluno novo, confirma que quem
    está chamando é uma conta "admin" logada de verdade (via token da
-   sessão), cria a conta do aluno no Supabase Auth e dispara o e-mail de
-   convite (o próprio Supabase manda o link pra o aluno definir a senha).
-   O gatilho "handle_new_user" do banco cria a linha em "profiles"
-   automaticamente como "student" assim que a conta é criada.
+   sessão) e cria a conta do aluno no Supabase Auth. Por padrão dispara o
+   e-mail de convite (o próprio Supabase manda o link pra o aluno definir
+   a senha) — mas se o corpo da requisição vier com "send_email: false"
+   (usado no cadastro em lote inicial, antes de a gestão estar pronta pra
+   liberar acesso), a conta é criada direto com uma senha temporária
+   aleatória e NENHUM e-mail é disparado; o acesso real é enviado depois
+   pelo botão "Reenviar acesso". O gatilho "handle_new_user" do banco cria
+   a linha em "profiles" automaticamente como "student" assim que a conta
+   é criada, nos dois casos.
    ====================================================================== */
 
 const { createClient } = require('@supabase/supabase-js');
+const crypto = require('crypto');
 
 const SUPABASE_URL = "https://vnpjsjrqghttsagbssxx.supabase.co";
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -71,20 +77,43 @@ module.exports = async function handler(req, res){
   const body = req.body || {};
   const fullName = (body.full_name || '').trim();
   const email = (body.email || '').trim();
+  const sendEmail = body.send_email !== false; // default true — só não manda se vier explicitamente "false"
   if(!fullName || !email){
     res.status(400).json({ error: 'Nome e e-mail são obrigatórios.' });
     return;
   }
 
-  const origin = req.headers.origin || ('https://' + req.headers.host);
-  const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: fullName },
-    redirectTo: origin + '/definir-senha.html'
-  });
-  if(inviteError){
-    res.status(400).json({ error: inviteError.message });
+  if(sendEmail){
+    const origin = req.headers.origin || ('https://' + req.headers.host);
+    const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
+      data: { full_name: fullName },
+      redirectTo: origin + '/definir-senha.html'
+    });
+    if(inviteError){
+      res.status(400).json({ error: inviteError.message });
+      return;
+    }
+    res.status(200).json({ ok: true, user_id: invited.user.id, email_sent: true });
     return;
   }
 
-  res.status(200).json({ ok: true, user_id: invited.user.id });
+  // Cadastro em lote sem convite: cria a conta direto com uma senha
+  // temporária aleatória (que ninguém fica sabendo) em vez de convidar por
+  // e-mail. A conta já existe e aparece no painel normalmente; quando a
+  // gestão quiser liberar o acesso de verdade, usa o botão "Reenviar
+  // acesso" (manda um link de definir senha pro aluno, mesmo fluxo de
+  // "esqueci minha senha").
+  const tempPassword = crypto.randomBytes(24).toString('base64');
+  const { data: created, error: createError } = await admin.auth.admin.createUser({
+    email,
+    password: tempPassword,
+    email_confirm: true,
+    user_metadata: { full_name: fullName }
+  });
+  if(createError){
+    res.status(400).json({ error: createError.message });
+    return;
+  }
+
+  res.status(200).json({ ok: true, user_id: created.user.id, email_sent: false });
 };
