@@ -794,12 +794,21 @@ async function dyseGerarMensalidadesDoMes(mes){
 
   // Apaga linhas "órfãs" de professor que sobraram de uma geração anterior
   // (ex: mês tinha 2 professores rateados, recontagem agora só acha 1) —
-  // upsert sozinho não remove o que não está mais no cálculo.
-  const alunosProcessados = Object.keys(periodosPorAluno);
-  const chavesVivas = new Set(linhas.map(l => l.aluno_id + '|' + (l.professor_id || '')));
-  const existentes = (await dyseListMensalidades(mes)).filter(m => alunosProcessados.includes(m.aluno_id));
-  const idsParaApagar = existentes.filter(m => !chavesVivas.has(m.aluno_id + '|' + (m.professor_id || ''))).map(m => m.id);
-  if(idsParaApagar.length) await sb.from('mensalidades').delete().in('id', idsParaApagar);
+  // upsert sozinho não remove o que não está mais no cálculo. Só vale a
+  // consulta extra abaixo quando pelo menos um aluno teve mais de um
+  // período tocando o mês (troca de professor) — no caso comum (todo mundo
+  // com 1 período só), pula direto pro upsert. Sem essa checagem, TODA
+  // geração (troca de mês em Pagamentos, todo salvamento de vínculo
+  // financeiro, toda validação de fechamento) pagava um round-trip a mais
+  // no banco à toa.
+  const houveTrocaDeProfessorNoMes = Object.values(periodosPorAluno).some(periodos => periodos.length > 1);
+  if(houveTrocaDeProfessorNoMes){
+    const alunosProcessados = Object.keys(periodosPorAluno);
+    const chavesVivas = new Set(linhas.map(l => l.aluno_id + '|' + (l.professor_id || '')));
+    const existentes = (await dyseListMensalidades(mes)).filter(m => alunosProcessados.includes(m.aluno_id));
+    const idsParaApagar = existentes.filter(m => !chavesVivas.has(m.aluno_id + '|' + (m.professor_id || ''))).map(m => m.id);
+    if(idsParaApagar.length) await sb.from('mensalidades').delete().in('id', idsParaApagar);
+  }
 
   const { error } = await sb.from('mensalidades').upsert(linhas, { onConflict: 'aluno_id,mes_competencia,professor_id' });
 
