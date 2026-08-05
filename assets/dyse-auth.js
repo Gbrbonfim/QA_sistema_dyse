@@ -644,11 +644,18 @@ async function dyseMesFechado(mes){
 
 /* Gera/atualiza as mensalidades do mês a partir do histórico financeiro dos
    alunos e dos valores de modalidade vigentes naquele mês. Não faz nada se
-   o mês já estiver fechado (preserva o congelamento). Quando mais de um
-   período do histórico toca o mesmo mês (troca de professor/modalidade no
-   meio do mês), o período de "data_inicio" mais recente é o responsável
-   pelo mês inteiro. Só alunos com situação "ativo" nesse período geram
-   mensalidade. */
+   o mês já estiver fechado (preserva o congelamento). Só alunos com
+   situação "ativo" no período geram mensalidade.
+
+   Quando mais de um período do histórico toca o mesmo mês (troca de
+   professor no meio do mês), o valor é RATEADO entre os professores
+   envolvidos, proporcional a quantas aulas cada um deu ao aluno naquele
+   mês — contado via o módulo de presença (turma_sessoes/sessao_presencas,
+   usando a turma ATUAL do aluno: profiles.turma_id não é historizado, então
+   isso assume que a troca de turma acontece junto com a troca de professor
+   financeiro). Sem presença lançada ainda (mês futuro, chamada não feita),
+   cai no comportamento antigo: o período de "data_inicio" mais recente leva
+   o mês inteiro — garante que a geração nunca fica vazia. */
 async function dyseGerarMensalidadesDoMes(mes){
   if(await dyseMesFechado(mes)) return { skipped: true };
 
@@ -666,62 +673,151 @@ async function dyseGerarMensalidadesDoMes(mes){
     (valoresPorModalidade[v.modalidade_id] = valoresPorModalidade[v.modalidade_id] || []).push(v);
   });
   const nomeAlunoById = {};
-  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
+  const turmaIdByAluno = {};
+  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; turmaIdByAluno[a.id] = a.turma_id || null; });
 
   const fimDoMesStr = dyseFimDoMes(mes);
 
-  const porAluno = {};
+  function valorProfessorDoPeriodo(h){
+    const modalidade = modalidadeById[h.modalidade_id];
+    return (modalidade && modalidade.is_custom_value)
+      ? Number(h.valor_professor_customizado || 0)
+      : (dyseValorVigente(valoresPorModalidade[h.modalidade_id], mes) || 0);
+  }
+
+  // Agrupa TODOS os períodos elegíveis (ativo + dentro das parcelas
+  // contratadas) que tocam o mês, por aluno — não só um "vencedor". Como
+  // dyseListAlunoFinanceiroHistorico já ordena por data_inicio desc/id desc,
+  // cada array de períodos já sai com o mais recente primeiro.
+  const periodosPorAluno = {};
   historico.forEach(h => {
     if(h.data_inicio > fimDoMesStr) return;
     if(h.data_fim && h.data_fim < mes) return;
-    const atual = porAluno[h.aluno_id];
-    // Desempate por "id" quando duas edições caem na mesma data_inicio (mais
-    // de uma troca no mesmo dia) — sem isso, a mais recente podia perder de
-    // uma mais antiga dependendo só da ordem de iteração.
-    const ganha = !atual
-      || h.data_inicio > atual.data_inicio
-      || (h.data_inicio === atual.data_inicio && h.id > atual.id);
-    if(ganha) porAluno[h.aluno_id] = h;
+    if(h.situacao !== 'ativo') return;
+    const ultimoMesPago = dyseUltimoMesPago(h);
+    if(ultimoMesPago && mes > ultimoMesPago) return; // fora das parcelas contratadas
+    (periodosPorAluno[h.aluno_id] = periodosPorAluno[h.aluno_id] || []).push(h);
   });
 
-  const linhas = Object.keys(porAluno)
-    .map(alunoId => porAluno[alunoId])
-    .filter(h => h.situacao === 'ativo')
-    .filter(h => {
-      const ultimoMesPago = dyseUltimoMesPago(h);
-      return !ultimoMesPago || mes <= ultimoMesPago; // fora das parcelas contratadas, o professor não recebe mais por este período
-    })
-    .map(h => {
-      const modalidade = modalidadeById[h.modalidade_id];
-      const valorProfessor = (modalidade && modalidade.is_custom_value)
-        ? Number(h.valor_professor_customizado || 0)
-        : (dyseValorVigente(valoresPorModalidade[h.modalidade_id], mes) || 0);
-      return {
-        aluno_id: h.aluno_id,
-        aluno_nome: nomeAlunoById[h.aluno_id] || null,
-        mes_competencia: mes,
-        professor_id: h.professor_id,
-        modalidade_id: h.modalidade_id,
+  const sessoesPorTurma = {}; // cache por execução: turma_id -> sessões do mês
+  async function sessoesDaTurma(turmaId){
+    if(!(turmaId in sessoesPorTurma)) sessoesPorTurma[turmaId] = await dyseListSessoesTurma(turmaId, mes);
+    return sessoesPorTurma[turmaId];
+  }
+
+  const linhas = [];
+  for(const alunoId of Object.keys(periodosPorAluno)){
+    const periodos = periodosPorAluno[alunoId];
+    const nomeAluno = nomeAlunoById[alunoId] || null;
+
+    if(periodos.length === 1){
+      const h = periodos[0];
+      linhas.push({
+        aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
+        professor_id: h.professor_id, modalidade_id: h.modalidade_id,
         valor_recebido: Number(h.valor_mensal_aluno || 0),
-        valor_pago_professor: valorProfessor,
+        valor_pago_professor: valorProfessorDoPeriodo(h),
         atualizado_em: new Date().toISOString()
-      };
+      });
+      continue;
+    }
+
+    // Mais de um período tocando o mês (troca de professor no meio do mês).
+    const vencedor = periodos[0]; // mais recente — usado no fallback e como referência de valor_mensal_aluno
+    const turmaId = turmaIdByAluno[alunoId];
+    let contagemPorProfessor = null; // Map professor_id(ou null) -> nº de presenças
+
+    if(turmaId){
+      const sessoes = await sessoesDaTurma(turmaId);
+      // Só conta aulas de professores que fazem parte do vínculo financeiro
+      // deste aluno no mês — uma aula dada por um substituto sem vínculo
+      // financeiro não deve gerar pagamento a ele.
+      const professoresEntitulados = new Set(periodos.map(h => h.professor_id || null));
+      const professorPorSessao = {};
+      sessoes.forEach(s => { professorPorSessao[s.id] = s.professor_id || null; });
+      const sessoesEntituladasIds = sessoes.filter(s => professoresEntitulados.has(s.professor_id || null)).map(s => s.id);
+      if(sessoesEntituladasIds.length){
+        const presencas = await dyseListPresencasAluno(alunoId, sessoesEntituladasIds);
+        if(presencas.length){
+          contagemPorProfessor = new Map();
+          presencas.forEach(p => {
+            const prof = professorPorSessao[p.sessao_id];
+            contagemPorProfessor.set(prof, (contagemPorProfessor.get(prof) || 0) + 1);
+          });
+        }
+      }
+    }
+
+    if(!contagemPorProfessor || !contagemPorProfessor.size){
+      // Fallback: sem turma atual, ou zero presença lançada no mês —
+      // o período mais recente leva o mês inteiro (comportamento antigo).
+      linhas.push({
+        aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
+        professor_id: vencedor.professor_id, modalidade_id: vencedor.modalidade_id,
+        valor_recebido: Number(vencedor.valor_mensal_aluno || 0),
+        valor_pago_professor: valorProfessorDoPeriodo(vencedor),
+        atualizado_em: new Date().toISOString()
+      });
+      continue;
+    }
+
+    // Rateio proporcional às presenças. valor_recebido é uma "panela" única
+    // (o aluno paga UMA mensalidade) — divide em centavos exatos entre as
+    // linhas, sobra pro último item (ordem determinística por professor_id).
+    // valor_pago_professor NÃO é panela compartilhada: cada professor tem
+    // sua própria taxa (pode ter modalidade/valor diferente), multiplicada
+    // pela PRÓPRIA fração de aulas.
+    const totalContagem = [...contagemPorProfessor.values()].reduce((s, n) => s + n, 0);
+    const totalCentavos = Math.round(Number(vencedor.valor_mensal_aluno || 0) * 100);
+    const entradas = [...contagemPorProfessor.entries()].sort((a, b) => String(a[0]).localeCompare(String(b[0])));
+
+    let distribuidos = 0;
+    entradas.forEach(([professorId, contagem], idx) => {
+      const periodo = periodos.find(h => (h.professor_id || null) === professorId) || vencedor;
+      const share = contagem / totalContagem;
+      const isUltimo = idx === entradas.length - 1;
+      const centavos = isUltimo ? (totalCentavos - distribuidos) : Math.round(totalCentavos * share);
+      distribuidos += centavos;
+      const valorRecebido = centavos / 100;
+      if(valorRecebido <= 0) return; // fração arredondou pra zero — sem linha pra este professor
+      const valorProfessor = Math.round(valorProfessorDoPeriodo(periodo) * share * 100) / 100;
+      linhas.push({
+        aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
+        professor_id: professorId, modalidade_id: periodo.modalidade_id,
+        valor_recebido: valorRecebido, valor_pago_professor: valorProfessor,
+        atualizado_em: new Date().toISOString()
+      });
     });
+  }
 
   if(!linhas.length) return { count: 0 };
-  const { error } = await sb.from('mensalidades').upsert(linhas, { onConflict: 'aluno_id,mes_competencia' });
+
+  // Apaga linhas "órfãs" de professor que sobraram de uma geração anterior
+  // (ex: mês tinha 2 professores rateados, recontagem agora só acha 1) —
+  // upsert sozinho não remove o que não está mais no cálculo.
+  const alunosProcessados = Object.keys(periodosPorAluno);
+  const chavesVivas = new Set(linhas.map(l => l.aluno_id + '|' + (l.professor_id || '')));
+  const existentes = (await dyseListMensalidades(mes)).filter(m => alunosProcessados.includes(m.aluno_id));
+  const idsParaApagar = existentes.filter(m => !chavesVivas.has(m.aluno_id + '|' + (m.professor_id || ''))).map(m => m.id);
+  if(idsParaApagar.length) await sb.from('mensalidades').delete().in('id', idsParaApagar);
+
+  const { error } = await sb.from('mensalidades').upsert(linhas, { onConflict: 'aluno_id,mes_competencia,professor_id' });
 
   // Materializa os gastos padrão (ex: Flexge) como um gasto normal por aluno
   // ativo neste mês — upsert por (aluno, mês, gasto_padrao_id) garante que
   // rodar de novo não duplica, e gastos lançados manualmente (gasto_padrao_id
-  // nulo) nunca são tocados aqui.
+  // nulo) nunca são tocados aqui. Dedupe por aluno_id ANTES de montar o
+  // upsert: com o rateio, um aluno pode gerar 2+ "linhas" de mensalidade no
+  // mesmo mês — sem isso, a mesma chave (aluno, mês, gasto_padrao_id) seria
+  // enviada duas vezes no mesmo upsert e o Postgres rejeita.
   const gastosPadrao = (await dyseListGastosPadrao()).filter(g => g.ativo);
   if(gastosPadrao.length){
+    const alunoIdsUnicos = [...new Set(linhas.map(l => l.aluno_id))];
     const gastosLinhas = [];
-    linhas.forEach(l => {
+    alunoIdsUnicos.forEach(alunoId => {
       gastosPadrao.forEach(gp => {
         gastosLinhas.push({
-          aluno_id: l.aluno_id,
+          aluno_id: alunoId,
           mes_competencia: mes,
           descricao: gp.descricao,
           tipo: gp.tipo,
@@ -754,6 +850,79 @@ async function dyseListMyMensalidades(mes){
   let query = sb.from('mensalidades').select('*').eq('professor_id', session.user.id);
   if(mes) query = query.eq('mes_competencia', mes);
   const { data, error } = await query.order('mes_competencia', { ascending: false });
+  return error ? [] : data;
+}
+
+/* ======================================================================
+   PRESENÇA (CHAMADA) — sessões de aula por turma+data+professor e
+   presença por aluno dentro de cada sessão. Alimenta o rateio de
+   mensalidade em dyseGerarMensalidadesDoMes quando o vínculo financeiro
+   do aluno troca de professor no meio do mês.
+   ====================================================================== */
+
+/* Sessões de uma turma dentro de um mês de competência (mesma janela
+   usada em todo o financeiro: do início do mês até dyseFimDoMes). */
+async function dyseListSessoesTurma(turmaId, mes){
+  const { data, error } = await sb
+    .from('turma_sessoes')
+    .select('*')
+    .eq('turma_id', turmaId)
+    .gte('data', mes)
+    .lte('data', dyseFimDoMes(mes))
+    .order('data', { ascending: false });
+  return error ? [] : data;
+}
+
+/* Cria/atualiza a sessão de uma data pra turma, sempre em nome da
+   professora logada. onConflict inclui professor_id: reabrir a mesma
+   data só atualiza a própria sessão, nunca a de outra professora que
+   também deu aula pra essa turma no mesmo dia. */
+async function dyseUpsertSessaoTurma(turmaId, data, observacao){
+  const session = await dyseGetSession();
+  if(!session) return { error: { message: 'Sessão expirada.' } };
+  const { data: row, error } = await sb
+    .from('turma_sessoes')
+    .upsert({
+      turma_id: turmaId,
+      professor_id: session.user.id,
+      data: data || dyseHoje(),
+      observacao: observacao || null,
+      criado_por: session.user.id,
+      atualizado_em: new Date().toISOString()
+    }, { onConflict: 'turma_id,data,professor_id' })
+    .select('*')
+    .maybeSingle();
+  return { data: row, error };
+}
+
+/* Presenças já lançadas numa sessão (pra pré-marcar o checklist ao
+   reabrir uma data já registrada). */
+async function dyseListPresencasSessao(sessaoId){
+  const { data, error } = await sb.from('sessao_presencas').select('*').eq('sessao_id', sessaoId);
+  return error ? [] : data;
+}
+
+/* Grava a chamada inteira de uma sessão de uma vez.
+   "presencas" = [{ aluno_id, presente }, ...] — um item por aluno
+   matriculado na turma no momento da chamada. */
+async function dyseUpsertPresencas(sessaoId, presencas){
+  const linhas = (presencas || []).map(p => ({ sessao_id: sessaoId, aluno_id: p.aluno_id, presente: !!p.presente }));
+  if(!linhas.length) return { error: null };
+  const { error } = await sb.from('sessao_presencas').upsert(linhas, { onConflict: 'sessao_id,aluno_id' });
+  return { error };
+}
+
+/* Presenças (presente=true) de UM aluno, restritas a uma lista específica
+   de sessao_id — o chamador já filtrou por turma+mês+professores
+   elegíveis; aqui só falta cruzar com o aluno. */
+async function dyseListPresencasAluno(alunoId, sessaoIds){
+  if(!sessaoIds || !sessaoIds.length) return [];
+  const { data, error } = await sb
+    .from('sessao_presencas')
+    .select('sessao_id, presente')
+    .eq('aluno_id', alunoId)
+    .eq('presente', true)
+    .in('sessao_id', sessaoIds);
   return error ? [] : data;
 }
 
@@ -840,6 +1009,28 @@ function dyseLucroMensalidade(mensalidade, gastosDoAluno){
   const gastos = (gastosDoAluno || []).reduce((soma, g) => soma + dyseValorGasto(g, mensalidade.valor_recebido), 0);
   const lucro = Number(mensalidade.valor_recebido) - Number(mensalidade.valor_pago_professor) - gastos;
   return { gastos, lucro };
+}
+
+/* Lucro de um aluno num mês, dividido entre as mensalidades do mês (pode
+   haver mais de uma linha quando o vínculo trocou de professor no meio
+   do mês — rateio por presença). Gastos (fixos e percentuais) são
+   cobrados UMA VEZ por aluno, sobre a SOMA de "valor_recebido" das linhas
+   do mês, e distribuídos entre elas proporcionalmente à participação de
+   cada uma na soma — nunca duplicados por linha. Com uma linha só (o
+   caso comum), o resultado bate exatamente com o de dyseLucroMensalidade. */
+function dyseLucroPorAluno(mensalidadesDoAluno, gastosDoAluno){
+  const linhas = mensalidadesDoAluno || [];
+  const somaRecebido = linhas.reduce((s, m) => s + Number(m.valor_recebido || 0), 0);
+  const totalGastos = (gastosDoAluno || []).reduce((s, g) => s + dyseValorGasto(g, somaRecebido), 0);
+  const porMensalidadeId = {};
+  linhas.forEach(m => {
+    const share = somaRecebido > 0 ? Number(m.valor_recebido || 0) / somaRecebido : (linhas.length ? 1 / linhas.length : 0);
+    const gastos = totalGastos * share;
+    const lucro = Number(m.valor_recebido || 0) - Number(m.valor_pago_professor || 0) - gastos;
+    porMensalidadeId[m.id] = { gastos, lucro };
+  });
+  const lucroTotal = linhas.reduce((s, m) => s + porMensalidadeId[m.id].lucro, 0);
+  return { totalGastos, lucroTotal, porMensalidadeId };
 }
 
 /* ---------- Pagamentos aos professores (por professor + mês) ---------- */
