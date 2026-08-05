@@ -853,6 +853,69 @@ async function dyseListMyMensalidades(mes){
   return error ? [] : data;
 }
 
+/* Previsão (SEM gravar nada em "mensalidades") do que o professor logado
+   deve receber por aluno num mês que ainda não foi gerado oficialmente —
+   isso só acontece quando a gestão abre Pagamentos/Relatório pra aquele
+   mês em gestao.html. Sem isso, um mês futuro (ex: com parcelas
+   contratadas até lá) aparece vazio pro professor até alguém do
+   financeiro passar por aquele mês pelo menos uma vez.
+
+   Só usa dados que o próprio professor já enxerga via RLS (seu próprio
+   histórico financeiro) — não sabe se esse mês vai ser rateado com outro
+   professor (isso depende de presença lançada, calculada só na geração
+   oficial em dyseGerarMensalidadesDoMes), então é só uma estimativa: o
+   valor final pode sair diferente. Não usada pra meses já fechados —
+   quem chama decide isso antes (só faz sentido prever o que ainda não
+   existe). */
+async function dysePreverFinanceiroProfessor(mes){
+  const session = await dyseGetSession();
+  if(!session) return [];
+
+  const [historico, modalidades, valores, alunos] = await Promise.all([
+    dyseListAlunoFinanceiroHistorico(), // RLS já restringe ao próprio professor
+    dyseListModalidades(),
+    dyseListModalidadeValores(),
+    dyseListProfilesByRole('student')
+  ]);
+
+  const modalidadeById = {};
+  modalidades.forEach(m => { modalidadeById[m.id] = m; });
+  const valoresPorModalidade = {};
+  valores.forEach(v => { (valoresPorModalidade[v.modalidade_id] = valoresPorModalidade[v.modalidade_id] || []).push(v); });
+  const nomeAlunoById = {};
+  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
+
+  const fimDoMesStr = dyseFimDoMes(mes);
+  const porAluno = {};
+  historico.forEach(h => {
+    if((h.professor_id || null) !== session.user.id) return; // defesa em profundidade, RLS já filtra
+    if(h.situacao !== 'ativo') return;
+    if(h.data_inicio > fimDoMesStr) return;
+    if(h.data_fim && h.data_fim < mes) return;
+    const ultimoMesPago = dyseUltimoMesPago(h);
+    if(ultimoMesPago && mes > ultimoMesPago) return;
+    const atual = porAluno[h.aluno_id];
+    const ganha = !atual || h.data_inicio > atual.data_inicio || (h.data_inicio === atual.data_inicio && h.id > atual.id);
+    if(ganha) porAluno[h.aluno_id] = h;
+  });
+
+  return Object.values(porAluno).map(h => {
+    const modalidade = modalidadeById[h.modalidade_id];
+    const valorProfessor = (modalidade && modalidade.is_custom_value)
+      ? Number(h.valor_professor_customizado || 0)
+      : (dyseValorVigente(valoresPorModalidade[h.modalidade_id], mes) || 0);
+    return {
+      aluno_id: h.aluno_id,
+      aluno_nome: nomeAlunoById[h.aluno_id] || null,
+      mes_competencia: mes,
+      professor_id: h.professor_id,
+      modalidade_id: h.modalidade_id,
+      valor_recebido: Number(h.valor_mensal_aluno || 0),
+      valor_pago_professor: valorProfessor
+    };
+  });
+}
+
 /* ======================================================================
    PRESENÇA (CHAMADA) — sessões de aula por turma+data+professor e
    presença por aluno dentro de cada sessão. Alimenta o rateio de

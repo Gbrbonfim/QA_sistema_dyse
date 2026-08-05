@@ -703,6 +703,9 @@ body.dyse-modal-open{overflow:hidden;}
     <div class="dash-filter">
       <input type="month" id="finProfMes" onchange="loadFinanceiroProfessor()">
     </div>
+    <p id="finProfPrevisaoNote" style="display:none; background:var(--antique-soft); color:var(--seal-soft); border-radius:var(--radius-sm); padding:10px 14px; font-size:.8rem; margin-bottom:16px;">
+      ⚠️ Este mês ainda não foi gerado oficialmente pela gestão — os valores abaixo são uma previsão baseada no seu vínculo atual e podem mudar.
+    </p>
     <div class="kpi-grid" id="finProfKpis"></div>
     <details class="dyse-collapsible">
       <summary><span id="finProfTableSummary">Detalhamento por aluno</span><span class="chevron">›</span></summary>
@@ -1204,13 +1207,23 @@ body.dyse-modal-open{overflow:hidden;}
       dyseListMyMensalidades(),
       dyseListMyPagamentos()
     ]);
-    const doMes = todasMensalidades.filter(m => m.mes_competencia === mes);
-    renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes));
-    renderFinanceiroTabela(doMes);
+    let doMes = todasMensalidades.filter(m => m.mes_competencia === mes);
+    // Mês ainda sem mensalidade gerada oficialmente (só acontece quando a
+    // gestão abre Pagamentos/Relatório pra esse mês) — mostra uma previsão
+    // calculada na hora a partir do vínculo financeiro atual do professor,
+    // em vez de deixar a tela vazia até alguém do financeiro passar por lá.
+    let isPrevisao = false;
+    if(!doMes.length){
+      const previsao = await dysePreverFinanceiroProfessor(mes);
+      if(previsao.length){ doMes = previsao; isPrevisao = true; }
+    }
+    document.getElementById('finProfPrevisaoNote').style.display = isPrevisao ? 'block' : 'none';
+    renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes), isPrevisao);
+    renderFinanceiroTabela(doMes, isPrevisao);
     renderFinanceiroHistorico(todasMensalidades, pagamentos);
   }
 
-  function renderFinanceiroKpis(linhas, pagamento){
+  function renderFinanceiroKpis(linhas, pagamento, isPrevisao){
     const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
     const porModalidade = {};
     linhas.forEach(l => {
@@ -1233,8 +1246,8 @@ body.dyse-modal-open{overflow:hidden;}
     ).join('');
   }
 
-  function renderFinanceiroTabela(linhas){
-    document.getElementById('finProfTableSummary').textContent = 'Detalhamento por aluno (' + linhas.length + ')';
+  function renderFinanceiroTabela(linhas, isPrevisao){
+    document.getElementById('finProfTableSummary').textContent = 'Detalhamento por aluno' + (isPrevisao ? ' — previsão' : '') + ' (' + linhas.length + ')';
     document.getElementById('finProfBody').innerHTML = linhas.length ? linhas.map(l => {
       const mod = MODALIDADES_CACHE.find(m => m.id === l.modalidade_id);
       return '<tr>' +
