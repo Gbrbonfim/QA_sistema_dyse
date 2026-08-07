@@ -57,6 +57,15 @@ function dyseIsTeacher(profile){
   return !!(profile && (String(profile.role || '').trim().toLowerCase() === 'teacher' || profile.also_teacher === true));
 }
 
+/* Mesmo critério, espelhado pro flag "also_student" (ver comentário na
+   coluna profiles.also_student, supabase-schema.sql): quem NÃO é "student"
+   de role mas também faz atividades como aluno(a) precisa aparecer nas
+   listas de aluno (gestão → aba Alunos, chamada, vínculo financeiro, turma
+   do professor) igual a qualquer aluno de verdade. */
+function dyseIsStudent(profile){
+  return !!(profile && (String(profile.role || '').trim().toLowerCase() === 'student' || profile.also_student === true));
+}
+
 async function dyseGetProfile(session){
   if(!session) return null;
   try{
@@ -414,8 +423,29 @@ async function dyseListProfilesByRole(role){
   const target = String(role).trim().toLowerCase();
   return data.filter(p => {
     if(target === 'teacher') return dyseIsTeacher(p);
+    if(target === 'student') return dyseIsStudent(p);
     return String(p.role || '').trim().toLowerCase() === target;
   });
+}
+
+/* ---------- Contas (quem não é "student" puro: admin/financeiro/teacher) ----------
+   Tela "Contas" em gestao.html — deixa a gestão marcar also_teacher/also_student
+   e vincular turma pra essas contas, tudo pela tela (antes só dava pelo Table
+   Editor do Supabase, ver seção final de supabase-schema.sql). */
+async function dyseListGestaoAccounts(){
+  const { data, error } = await sb.from('profiles').select('*').order('full_name', { ascending: true });
+  if(error || !data) return [];
+  return data.filter(p => String(p.role || '').trim().toLowerCase() !== 'student');
+}
+
+async function dyseSetAlsoTeacher(profileId, value){
+  const { error } = await sb.from('profiles').update({ also_teacher: !!value }).eq('id', profileId);
+  return { error };
+}
+
+async function dyseSetAlsoStudent(profileId, value){
+  const { error } = await sb.from('profiles').update({ also_student: !!value }).eq('id', profileId);
+  return { error };
 }
 
 async function dyseSetStudentTurma(studentId, turmaId){
