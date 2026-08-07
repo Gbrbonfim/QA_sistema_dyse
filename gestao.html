@@ -230,6 +230,16 @@ details.dyse-collapsible > summary .chevron{transition:transform .2s; opacity:.5
 details.dyse-collapsible[open] > summary .chevron{transform:rotate(90deg);}
 details.dyse-collapsible > summary .summary-left{display:flex; align-items:center; gap:10px; min-width:0;}
 details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
+
+/* ---------- Linha de tabela expansível (pagamentos por professor) ---------- */
+tr.pag-row{cursor:pointer;}
+tr.pag-row:hover{background:var(--antique-soft);}
+.pag-chevron{display:inline-block; transition:transform .2s; opacity:.55; margin-right:8px;}
+.pag-chevron.open{transform:rotate(90deg);}
+tr.pag-detalhe-row td{background:#faf3ea; padding:0 14px 14px;}
+tr.pag-detalhe-row .dash-table{box-shadow:none;}
+tr.pag-detalhe-row .dash-table th{background:transparent; color:var(--seal-soft); font-size:.72rem;}
+
 .pill-count{
   display:inline-block; font-size:.72rem; font-weight:800; background:var(--antique-soft); color:var(--seal-soft);
   padding:2px 10px; border-radius:999px;
@@ -391,6 +401,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       <div class="auth-msg" id="turmaMsg"></div>
     </div>
 
+    <div class="dash-filter">
+      <input type="text" id="filterTurmaBusca" placeholder="Filtrar por nome da turma, descrição ou professor..." oninput="renderTurmasTable()">
+    </div>
     <div style="overflow-x:auto;">
       <table class="dash-table" id="turmasTable">
         <thead>
@@ -827,7 +840,16 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   /* ---------- TURMAS ---------- */
   function renderTurmasTable(){
-    document.getElementById('turmasBody').innerHTML = TURMAS.map(t => {
+    const busca = (document.getElementById('filterTurmaBusca').value || '').trim().toLowerCase();
+    const turmasFiltradas = !busca ? TURMAS : TURMAS.filter(t => {
+      const professoresDaTurma = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id)
+        .map(tt => TEACHERS.find(p => p.id === tt.teacher_id))
+        .filter(Boolean);
+      const alvo = [t.name, t.description, ...professoresDaTurma.map(p => p.full_name)]
+        .filter(Boolean).join(' ').toLowerCase();
+      return alvo.includes(busca);
+    });
+    document.getElementById('turmasBody').innerHTML = turmasFiltradas.map(t => {
       const materiaCount = TURMA_MATERIAS.filter(tm => tm.turma_id === t.id).length;
       const professoresDaTurma = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id)
         .map(tt => TEACHERS.find(p => p.id === tt.teacher_id))
@@ -850,7 +872,8 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
           '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
         '</div></td>' +
       '</tr>';
-    }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma turma criada ainda.</td></tr>';
+    }).join('') || ('<tr><td colspan="5" style="text-align:center; opacity:.6;">' +
+      (busca ? 'Nenhuma turma encontrada com esse filtro.' : 'Nenhuma turma criada ainda.') + '</td></tr>');
   }
 
   let CURRENT_TURMA_EDIT_ID = null;
@@ -1839,18 +1862,44 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       return { profId, professor, linhas, totalPrevisto, pagamento, modalidadesTexto, status: pagamento ? pagamento.status : 'pendente' };
     });
 
-    document.getElementById('pagamentosBody').innerHTML = rows.length ? rows.map(r =>
-      '<tr>' +
-        '<td>' + escapeHtmlLocal(r.professor ? (r.professor.full_name || '') : '(professor removido)') + '</td>' +
+    document.getElementById('pagamentosBody').innerHTML = rows.length ? rows.map(r => {
+      const detalheId = 'pagDetalhe-' + r.profId;
+      const detalheLinhas = r.linhas.slice().sort((a,b) => (a.aluno_nome||'').localeCompare(b.aluno_nome||'')).map(l => {
+        const mod = MODALIDADES.find(m => m.id === l.modalidade_id);
+        return '<tr>' +
+          '<td>' + escapeHtmlLocal(l.aluno_nome || '(sem nome)') + '</td>' +
+          '<td>' + (mod ? escapeHtmlLocal(mod.name) : '-') + '</td>' +
+          '<td>' + formatMoney(l.valor_pago_professor) + '</td>' +
+        '</tr>';
+      }).join('');
+      return '<tr class="pag-row" onclick="togglePagamentoDetalhe(\'' + r.profId + '\')">' +
+        '<td><span class="pag-chevron" id="pagChevron-' + r.profId + '">›</span>' + escapeHtmlLocal(r.professor ? (r.professor.full_name || '') : '(professor removido)') + '</td>' +
         '<td><span class="pill-count">' + r.linhas.length + '</span></td>' +
         '<td style="font-size:.78rem;">' + escapeHtmlLocal(r.modalidadesTexto) + '</td>' +
         '<td>' + formatMoney(r.totalPrevisto) + '</td>' +
         '<td>' + (r.pagamento && r.pagamento.valor_pago != null ? formatMoney(r.pagamento.valor_pago) : '-') + '</td>' +
         '<td>' + statusBadge(r.status) + '</td>' +
         '<td>' + (r.pagamento && r.pagamento.data_pagamento ? formatDateBR(r.pagamento.data_pagamento) : '-') + '</td>' +
-        '<td><button type="button" class="btn btn-ghost btn-sm" onclick="openPagamentoModal(\'' + r.profId + '\')">Registrar pagamento</button></td>' +
-      '</tr>'
-    ).join('') : '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno com mensalidade gerada para este mês ainda.</td></tr>';
+        '<td><button type="button" class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openPagamentoModal(\'' + r.profId + '\')">Registrar pagamento</button></td>' +
+      '</tr>' +
+      '<tr class="pag-detalhe-row" id="' + detalheId + '" style="display:none;">' +
+        '<td colspan="8">' +
+          '<table class="dash-table" style="margin:0; box-shadow:none;">' +
+            '<thead><tr><th>Aluno</th><th>Modalidade</th><th>Valor pago ao professor</th></tr></thead>' +
+            '<tbody>' + detalheLinhas + '</tbody>' +
+          '</table>' +
+        '</td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno com mensalidade gerada para este mês ainda.</td></tr>';
+  }
+
+  function togglePagamentoDetalhe(profId){
+    const row = document.getElementById('pagDetalhe-' + profId);
+    const chevron = document.getElementById('pagChevron-' + profId);
+    if(!row) return;
+    const abrindo = row.style.display === 'none';
+    row.style.display = abrindo ? 'table-row' : 'none';
+    if(chevron) chevron.classList.toggle('open', abrindo);
   }
 
   let CURRENT_PAGAMENTO_PROF_ID = null;
