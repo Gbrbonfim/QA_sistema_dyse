@@ -1236,7 +1236,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('finProfPrevisaoNote').style.display = isPrevisao ? 'block' : 'none';
     renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes), isPrevisao);
     renderFinanceiroTabela(doMes, isPrevisao);
-    renderFinanceiroHistorico(todasMensalidades, pagamentos);
+    await renderFinanceiroHistorico(todasMensalidades, pagamentos);
   }
 
   function renderFinanceiroKpis(linhas, pagamento, isPrevisao){
@@ -1274,14 +1274,30 @@ body.dyse-modal-open{overflow:hidden;}
     }).join('') : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhum aluno neste mês.</td></tr>';
   }
 
-  function renderFinanceiroHistorico(todasMensalidades, pagamentos){
-    const meses = [...new Set(todasMensalidades.map(m => m.mes_competencia))].sort((a,b) => b.localeCompare(a));
+  /* Mistura os meses com mensalidade REAL já gerada (mais confiável — pode
+     estar fechado/pago) com uma previsão calculada na hora pros meses que
+     os vínculos financeiros do professor cobrem mas que ainda ninguém
+     "visitou" em Pagamentos/Relatório (sem isso, um mês contratado ficava
+     simplesmente ausente da lista até a gestão abrir ele). Mês com dado
+     real nunca é substituído pela previsão. */
+  async function renderFinanceiroHistorico(todasMensalidades, pagamentos){
+    const mesesReais = new Set(todasMensalidades.map(m => m.mes_competencia));
+    const previsao = await dyseListMinhaPrevisaoHistoricoFinanceiro();
+    const linhasPorMes = {};
+    todasMensalidades.forEach(m => { (linhasPorMes[m.mes_competencia] = linhasPorMes[m.mes_competencia] || []).push(m); });
+    previsao.forEach(p => {
+      if(mesesReais.has(p.mes_competencia)) return;
+      (linhasPorMes[p.mes_competencia] = linhasPorMes[p.mes_competencia] || []).push(p);
+    });
+
+    const meses = Object.keys(linhasPorMes).sort((a,b) => b.localeCompare(a));
     document.getElementById('finProfHistoricoBody').innerHTML = meses.length ? meses.map(mes => {
-      const linhas = todasMensalidades.filter(m => m.mes_competencia === mes);
+      const linhas = linhasPorMes[mes];
+      const isPrevisaoDoMes = !mesesReais.has(mes);
       const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
       const pagamento = pagamentos.find(p => p.mes_competencia === mes);
       return '<tr>' +
-        '<td>' + formatMesLabel(mes) + '</td>' +
+        '<td>' + formatMesLabel(mes) + (isPrevisaoDoMes ? ' <span style="opacity:.55; font-size:.72rem;">(previsão)</span>' : '') + '</td>' +
         '<td><span class="pill-count">' + linhas.length + '</span></td>' +
         '<td>' + formatMoney(totalPrevisto) + '</td>' +
         '<td>' + (pagamento && pagamento.valor_pago != null ? formatMoney(pagamento.valor_pago) : '-') + '</td>' +
