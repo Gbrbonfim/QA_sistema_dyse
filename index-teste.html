@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE — Novo layout (teste local)</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Aprenda inglês com turmas niveladas, professores presentes, aplicativo com inteligência artificial, clube de escrita, aula de conversação e uma comunidade que acompanha sua evolução. Aulas 100% online, no seu ritmo.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/brand/dyse-favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/brand/dyse-favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --amaranth:#D03B55;
+    --gamboge:#F0A224;
+    --persimmon:#EB6424;
+    --blossom:#FCABAF;
+    --brown:#562915;
+    --cream:#FFEAD6;
+    --white:#FFFFFF;
+    --off:#FFF8F0;
+    --ink:#3A1B10;
+    --shadow: 0 12px 30px rgba(86,41,21,0.12);
+    --radius: 22px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0; min-width:0;}
+  img, svg{ max-width:100%; }
+  html{scroll-behavior:smooth; overflow-x:hidden;}
+  html, body{ max-width:100%; }
+  body{
+    font-family:'Poppins', sans-serif;
+    color:var(--ink);
+    background:var(--off);
+    line-height:1.6;
+    overflow-x:hidden;
+    position:relative;
+  }
+  h1,h2,h3,h4, .display{
+    font-family:'Bricolage Grotesque', sans-serif;
+    font-weight:700;
+    line-height:1.05;
+    letter-spacing:-0.01em;
+  }
+  a{text-decoration:none; color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1140px; margin:0 auto; padding:0 24px;}
+  section{position:relative; scroll-margin-top:100px;}
+
+  /* ---------- Accessibility ---------- */
+  .skip-link{
+    position:absolute; left:12px; top:-60px; z-index:1000;
+    background:var(--brown); color:#fff; padding:12px 18px; border-radius:10px;
+    font-weight:700; font-size:14px; transition:top .2s ease;
+  }
+  .skip-link:focus{ top:12px; }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible{
+    outline:3px solid var(--amaranth); outline-offset:2px; border-radius:6px;
+  }
+
+  /* ---------- Sparkle icon ---------- */
+  .sparkle{ display:inline-block; }
+  .sparkle svg{ display:block; }
+
+  /* ---------- Top brand banner ---------- */
+  .site-top{ position:sticky; top:0; z-index:100; }
+  .top-banner{
+    background:var(--brown);
+    color:var(--off);
+    text-align:center;
+    padding:10px 16px;
+    font-size:13.5px;
+    font-weight:600;
+    letter-spacing:.02em;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    row-gap:4px;
+  }
+
+  /* ---------- Header ---------- */
+  header.site{
+    background:rgba(255,248,240,0.94);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(86,41,21,0.08);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 20px;
+    max-width:1140px; margin:0 auto;
+    gap:12px;
+  }
+  .logo{ display:flex; align-items:center; flex:none; }
+  .logo img{ height:38px; width:auto; display:block; }
+  .nav-cta{
+    background:var(--amaranth);
+    color:#fff;
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:13.5px;
+    box-shadow:var(--shadow);
+    transition:transform .2s ease, box-shadow .2s ease;
+    white-space:nowrap;
+    flex:none;
+  }
+  .nav-cta:hover{ transform:translateY(-2px); box-shadow:0 16px 34px rgba(208,59,85,0.28); }
+  .nav-login{
+    font-weight:700; font-size:14px; color:var(--amaranth); padding:9px 6px; white-space:nowrap;
+    border-bottom:2px solid transparent;
+  }
+  .nav-login:hover{ border-bottom-color:var(--amaranth); }
+
+  /* ---------- Desktop anchor menu + mobile hamburger/drawer ---------- */
+  .nav-links{ display:none; align-items:center; gap:16px; }
+  .nav-link{ font-weight:600; font-size:13px; color:var(--brown); padding:6px 2px; border-bottom:2px solid transparent; white-space:nowrap; }
+  .nav-link:hover{ color:var(--amaranth); border-bottom-color:var(--amaranth); }
+  @media(min-width:1080px){ .nav-links{ display:flex; } }
+  .nav-right{ display:flex; align-items:center; gap:16px; }
+  .nav-toggle{
+    display:none; flex:none; width:40px; height:40px; border-radius:12px;
+    background:transparent; border:none; cursor:pointer;
+    align-items:center; justify-content:center; gap:5px; flex-direction:column;
+  }
+  .nav-toggle span{ display:block; width:22px; height:2.5px; border-radius:2px; background:var(--amaranth); transition:.25s; }
+  .nav-toggle.open span:nth-child(1){ transform:translateY(7.5px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2){ opacity:0; }
+  .nav-toggle.open span:nth-child(3){ transform:translateY(-7.5px) rotate(-45deg); }
+
+  .nav-backdrop{
+    position:fixed; inset:0; background:rgba(58,29,16,.45); z-index:199;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .nav-backdrop.show{ opacity:1; pointer-events:auto; }
+
+  .nav-drawer{
+    position:fixed; top:0; right:-340px; height:100%; width:min(80vw, 320px);
+    background:var(--off); z-index:200; box-shadow:-10px 0 30px rgba(58,29,16,.2);
+    transition:right .3s ease;
+    display:flex; flex-direction:column; padding:22px 22px 30px; gap:4px;
+    overflow-y:auto;
+  }
+  .nav-drawer.open{ right:0; }
+  .nav-drawer-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .nav-drawer-head img{ height:30px; }
+  .nav-drawer-close{ background:none; border:none; font-size:26px; line-height:1; color:var(--brown); cursor:pointer; padding:4px 8px; }
+  .nav-drawer a.nav-login{
+    padding:13px 4px; border-bottom:1px solid rgba(86,41,21,0.1); font-size:15.5px;
+  }
+  .nav-drawer a.nav-cta{
+    margin-top:14px; text-align:center; justify-content:center; display:flex;
+  }
+
+  @media(min-width:641px){
+    .nav-toggle, .nav-backdrop, .nav-drawer{ display:none !important; }
+  }
+  @media(max-width:640px){
+    .nav-login-desktop{ display:none; }
+    .nav-toggle{ display:flex; }
+    .nav{ display:grid; grid-template-columns:1fr auto 1fr; grid-auto-flow:dense; align-items:center; }
+    .nav-right{ display:contents; }
+    .logo{ grid-column:1; justify-self:start; }
+    .nav-cta{ grid-column:2; justify-self:center; }
+    .nav-toggle{ grid-column:3; justify-self:end; }
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:16px 34px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:16px;
+    cursor:pointer;
+    border:none;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+    font-family:inherit;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--amaranth), var(--persimmon));
+    color:#fff;
+    box-shadow:0 14px 30px rgba(208,59,85,0.35);
+  }
+  .btn-primary:hover{ transform:translateY(-3px); box-shadow:0 18px 38px rgba(208,59,85,0.45); }
+  .btn-ghost{
+    background:transparent;
+    color:var(--brown);
+    border:2px solid var(--brown);
+  }
+  .btn-ghost:hover{ background:var(--brown); color:#fff; }
+  .btn-light{
+    background:#fff;
+    color:var(--amaranth);
+    box-shadow:0 14px 30px rgba(86,41,21,0.15);
+  }
+  .btn-light:hover{ transform:translateY(-3px); }
+  .btn-block{ width:100%; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:64px 24px 84px;
+    background:
+      radial-gradient(circle at 85% 10%, rgba(240,162,36,0.35), transparent 45%),
+      radial-gradient(circle at 8% 85%, rgba(252,171,175,0.5), transparent 45%),
+      linear-gradient(180deg, var(--cream) 0%, var(--off) 100%);
+    overflow:hidden;
+  }
+  .hero-grid{
+    max-width:1140px; margin:0 auto;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px;
+    align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:#fff;
+    border:1px solid rgba(86,41,21,0.12);
+    padding:8px 16px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--amaranth);
+    box-shadow:var(--shadow);
+    margin-bottom:20px;
+  }
+  .eyebrow img{ height:16px; width:auto; }
+  .hero h1{
+    font-size:clamp(32px, 4.6vw, 52px);
+    color:var(--persimmon);
+    margin-bottom:20px;
+  }
+  .hero p.lead{
+    font-size:18.5px;
+    color:#6b4630;
+    max-width:540px;
+    margin-bottom:30px;
+  }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:24px; }
+  .hero-note{ font-size:13.5px; color:#8a6a54; display:flex; align-items:center; gap:8px; max-width:480px; }
+
+  .hero-art{
+    position:relative;
+    max-width:480px;
+    width:100%;
+    justify-self:center;
+    padding:34px 14px;
+  }
+  .blob{
+    position:absolute;
+    inset:6% 6%;
+    border-radius:42% 58% 65% 35% / 45% 40% 60% 55%;
+    background:linear-gradient(135deg, var(--blossom), var(--cream) 60%, var(--gamboge));
+    animation: morph 12s ease-in-out infinite;
+    z-index:0;
+  }
+  @keyframes morph{
+    0%,100%{ border-radius:42% 58% 65% 35% / 45% 40% 60% 55%; }
+    50%{ border-radius:60% 40% 30% 70% / 55% 65% 35% 45%; }
+  }
+  .hero-ceo-card{
+    position:relative;
+    z-index:1;
+    width:92%;
+    margin:0 auto;
+    box-shadow:0 30px 60px rgba(86,41,21,0.25);
+  }
+  .float-sparkle{ position:absolute; animation: float 5s ease-in-out infinite; }
+  .float-sparkle.s1{ top:-2%; left:2%; animation-delay:0s; }
+  .float-sparkle.s2{ bottom:4%; right:2%; animation-delay:1.2s; }
+  .float-sparkle.s3{ top:42%; right:-2%; animation-delay:2.4s; }
+  @keyframes float{
+    0%,100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-14px) rotate(12deg); }
+  }
+
+  .marquee{
+    margin-top:56px;
+    border-top:1px solid rgba(86,41,21,0.1);
+    padding-top:26px;
+    display:flex; flex-wrap:wrap; gap:30px; justify-content:center;
+    color:#8a6a54; font-size:13.5px; font-weight:600;
+  }
+  .marquee span{ display:flex; align-items:center; gap:8px; }
+
+  /* ---------- Section shared ---------- */
+  .section-head{ text-align:center; max-width:680px; margin:0 auto 48px; }
+  .section-head .eyebrow{ margin-bottom:16px; }
+  .section-head h2{ font-size:clamp(28px,3.8vw,40px); color:var(--brown); margin-bottom:14px; }
+  .section-head p{ color:#6b4630; font-size:16.5px; }
+  .section-cta{ text-align:center; margin-top:48px; }
+
+  .light{ background:var(--off); padding:88px 0; }
+  .tinted{ background:linear-gradient(180deg, var(--cream), var(--off)); padding:88px 0; }
+  .dark{
+    background:linear-gradient(135deg, var(--brown) 0%, #3a1b10 100%);
+    color:var(--off);
+    padding:88px 0;
+  }
+  .dark .section-head h2{ color:#fff; }
+  .dark .section-head p{ color:rgba(255,248,240,0.75); }
+
+  /* ---------- Pain points (acolhimento) ---------- */
+  .pain-grid{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:8px; }
+  .pain-chip{
+    background:#fff; border:1px solid rgba(86,41,21,0.1); border-radius:999px;
+    padding:12px 20px; font-size:14.5px; font-weight:600; color:var(--brown);
+    box-shadow:0 8px 18px rgba(86,41,21,0.06);
+  }
+  .pain-close{
+    text-align:center; max-width:600px; margin:36px auto 0; font-size:16px; font-weight:600; color:var(--gamboge);
+  }
+
+  /* ---------- Generic icon card (diferenciais) ---------- */
+  .icon-card{
+    background:#fff; border-radius:22px; padding:30px 26px; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:12px; height:100%;
+  }
+  .icon-card .ic{
+    flex:none; width:48px; height:48px; border-radius:15px;
+    background:linear-gradient(135deg, var(--amaranth), var(--persimmon));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .icon-card h3{ font-size:18px; color:var(--brown); }
+  .icon-card p{ font-size:14.5px; color:#6b4630; }
+
+  .dif-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .dif-note{ text-align:center; margin-top:40px; font-weight:700; color:var(--amaranth); font-size:15px; }
+
+  /* ---------- Como funciona: 4 etapas ---------- */
+  .steps-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; counter-reset:step; }
+  .step-card{
+    background:#fff; border-radius:var(--radius); padding:28px 22px;
+    box-shadow:var(--shadow); border-top:5px solid var(--gamboge); position:relative;
+  }
+  .step-card:nth-child(2){ border-top-color:var(--persimmon); }
+  .step-card:nth-child(3){ border-top-color:var(--amaranth); }
+  .step-card:nth-child(4){ border-top-color:var(--blossom); }
+  .step-num{
+    font-family:'Bricolage Grotesque'; font-weight:800; font-size:15px; color:var(--amaranth);
+    background:var(--cream); width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+  }
+  .step-card h3{ font-size:17px; color:var(--brown); margin-bottom:8px; }
+  .step-card p{ font-size:14px; color:#6b4630; }
+
+  /* ---------- Acolhimento / comunidade ---------- */
+  .comunidade{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; margin-top:64px; }
+  .comunidade-card{
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    border-radius:22px; padding:26px;
+  }
+  .comunidade-stats{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:30px; }
+  .stat{ background:rgba(255,255,255,0.06); border-radius:16px; padding:20px; border:1px solid rgba(255,255,255,0.12); }
+  .stat b{ font-family:'Bricolage Grotesque'; font-size:30px; display:block; color:var(--gamboge); }
+  .stat span{ font-size:13px; color:rgba(255,248,240,0.75); }
+  .mini-quote{
+    margin-top:18px; padding-top:18px; border-top:1px solid rgba(255,255,255,0.14);
+    font-size:14px; font-style:italic; color:rgba(255,248,240,0.9);
+  }
+  .mini-quote .who{ margin-top:8px; font-style:normal; font-weight:700; font-size:12.5px; color:var(--gamboge); display:flex; align-items:center; gap:8px; }
+
+  /* ---------- Pricing (valores) ---------- */
+  .price-highlight{ text-align:center; max-width:560px; margin:0 auto 48px; }
+  .price-highlight .from{ font-size:16px; color:#6b4630; margin-bottom:2px; }
+  .price-highlight .value{ font-family:'Bricolage Grotesque'; font-size:56px; color:var(--brown); font-weight:800; }
+  .price-highlight .value sup{ font-size:22px; top:-22px; }
+  .price-highlight .value small{ font-size:17px; font-weight:600; color:#6b4630; }
+
+  .pricing-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+  .price-card{
+    background:#fff; border-radius:26px; padding:32px 28px; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:14px;
+    border:2px solid transparent; position:relative;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .price-card:hover{ transform:translateY(-6px); box-shadow:0 24px 46px rgba(86,41,21,0.18); }
+  .price-card.featured{ border-color:var(--amaranth); background:linear-gradient(180deg,#fff, #FFF3EC); }
+  .featured-badge{
+    position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+    background:var(--amaranth); color:#fff; font-size:12px; font-weight:800;
+    padding:6px 16px; border-radius:999px; white-space:nowrap;
+  }
+  .price-card h3{ font-size:20px; color:var(--brown); }
+  .price-card .for{ font-size:13px; color:var(--amaranth); font-weight:700; }
+  .price-card .desc{ font-size:14px; color:#6b4630; }
+  .price-card .price-row{ display:flex; align-items:baseline; gap:6px; margin:2px 0; }
+  .price-card .price-row .num{ font-family:'Bricolage Grotesque'; font-size:34px; font-weight:800; color:var(--amaranth); }
+  .price-card .price-row .per{ font-size:13px; color:#6b4630; }
+  .price-card .alt-price{ font-size:13px; color:#8a6a54; }
+  .price-card ul{ display:flex; flex-direction:column; gap:8px; margin:6px 0 4px; }
+  .price-card ul li{ font-size:13.5px; color:var(--brown); display:flex; gap:8px; }
+
+  /* ---------- Letícia ---------- */
+  .diff-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:center; }
+  @media(min-width:901px){ .diff-grid.diff-grid-rev{ grid-template-columns:1fr 0.9fr; } }
+  .diff-visual{
+    background:linear-gradient(160deg, var(--blossom), var(--cream)); border-radius:32px;
+    padding:40px; position:relative; box-shadow:var(--shadow);
+  }
+  .ceo-photo-card{ background:#fff; border-radius:24px; padding:14px; box-shadow:0 20px 40px rgba(86,41,21,0.2); text-align:center; }
+  .ceo-photo{ width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:18px; display:block; background:linear-gradient(160deg, var(--blossom), var(--cream)); }
+  .ceo-photo-caption{ padding-top:14px; }
+
+  /* ---------- FAQ ---------- */
+  .faq-list{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:14px 20px; align-items:start; }
+  .faq-item{
+    background:#fff; border-radius:16px; box-shadow:0 8px 20px rgba(86,41,21,0.07);
+    padding:4px 22px; border:1px solid rgba(86,41,21,0.06);
+  }
+  .faq-item summary{
+    list-style:none; cursor:pointer; padding:18px 28px 18px 0; position:relative;
+    font-weight:700; color:var(--brown); font-size:15.5px;
+  }
+  .faq-item summary::-webkit-details-marker{ display:none; }
+  .faq-item summary::after{
+    content:"+"; position:absolute; right:0; top:14px; font-size:22px; color:var(--amaranth);
+    font-weight:800; transition:transform .2s ease;
+  }
+  .faq-item[open] summary::after{ transform:rotate(45deg); }
+  .faq-item p{ padding-bottom:18px; color:#6b4630; font-size:14.5px; max-width:640px; }
+
+  /* ---------- Final CTA ---------- */
+  .final-cta{
+    background:linear-gradient(135deg, var(--amaranth), var(--persimmon) 60%, var(--gamboge));
+    padding:76px 24px; text-align:center; color:#fff; border-radius:40px;
+    max-width:1080px; margin:0 auto 0; position:relative; overflow:hidden;
+  }
+  .final-cta h2{ font-size:clamp(26px,3.8vw,40px); margin-bottom:16px; }
+  .final-cta p{ font-size:16.5px; max-width:520px; margin:0 auto 28px; opacity:.95; }
+  .final-cta .note{ margin-top:16px; font-size:13.5px; opacity:.85; }
+  .final-wrap{ padding:88px 0 88px; }
+
+  /* ---------- Footer ---------- */
+  footer{ background:var(--brown); color:rgba(255,248,240,0.75); padding:56px 24px 30px; }
+  .footer-grid{
+    max-width:1140px; margin:0 auto; display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px;
+    padding-bottom:32px; border-bottom:1px solid rgba(255,255,255,0.12);
+  }
+  .footer-brand img{ height:34px; margin-bottom:14px; }
+  .footer-brand p{ font-size:13.5px; max-width:320px; }
+  .footer-col h4{ font-family:'Poppins'; font-size:13.5px; font-weight:700; color:#fff; margin-bottom:14px; letter-spacing:.03em; text-transform:uppercase; }
+  .footer-col ul{ display:flex; flex-direction:column; gap:10px; }
+  .footer-col a{ font-size:14px; }
+  .footer-col a:hover{ color:#fff; }
+  .footer-bottom{
+    max-width:1140px; margin:0 auto; padding-top:22px; display:flex; flex-wrap:wrap;
+    justify-content:space-between; gap:10px; font-size:12.5px;
+  }
+
+  /* ---------- Floating WhatsApp button ---------- */
+  .wa-float{
+    position:fixed; right:20px; bottom:20px; z-index:150;
+    width:58px; height:58px; border-radius:50%;
+    background:linear-gradient(135deg, var(--amaranth), var(--persimmon));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 14px 30px rgba(208,59,85,0.4);
+    transition:transform .2s ease;
+  }
+  .wa-float:hover{ transform:translateY(-3px) scale(1.04); }
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:1080px){
+    .hero-grid{ grid-template-columns:1fr 0.8fr; gap:34px; }
+    .hero-art{ max-width:340px; padding:22px 10px; }
+    .dif-grid{ grid-template-columns:repeat(2,1fr); }
+    .steps-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media(max-width:900px){
+    .hero{ padding:52px 24px 60px; }
+    .diff-grid, .comunidade{ grid-template-columns:1fr; gap:36px; }
+    .pricing-grid{ grid-template-columns:1fr; max-width:460px; margin:0 auto; }
+    .light, .tinted, .dark{ padding:60px 0; }
+    .final-wrap{ padding:60px 0; }
+    .footer-grid{ grid-template-columns:1fr; gap:30px; }
+  }
+  @media(max-width:700px){
+    .hero-grid{ grid-template-columns:1fr; gap:32px; }
+    .hero-art{ max-width:380px; margin:8px auto 0; padding:22px 10px; }
+  }
+  @media(max-width:640px){
+    .wrap{ padding:0 18px; }
+    .hero{ padding:40px 18px 48px; }
+    .hero p.lead{ font-size:16.5px; }
+    .marquee{ gap:14px 20px; margin-top:40px; font-size:12.5px; }
+    .section-head{ margin-bottom:34px; }
+    .dif-grid, .steps-grid, .faq-list{ grid-template-columns:1fr; }
+    .hero-ctas{ flex-direction:column; align-items:stretch; }
+    .btn{ width:100%; }
+    .final-cta{ border-radius:24px; padding:44px 22px; }
+    .price-highlight .value{ font-size:44px; }
+    .nav{ padding:10px 18px; }
+    .nav-cta{ padding:9px 14px; font-size:12.5px; }
+    .comunidade-stats{ grid-template-columns:1fr 1fr; }
+    .wa-float{ width:52px; height:52px; right:14px; bottom:14px; }
+  }
+  @media(max-width:380px){
+    .top-banner{ font-size:11.5px; padding:8px 10px; }
+    .nav-cta{ padding:8px 12px; font-size:12px; }
+    .logo img{ height:32px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+
+  /* ======================================================================
+     NOVO LAYOUT (esboço) — regras adicionadas, nada acima foi alterado
+     ====================================================================== */
+
+  /* ---------- Hero: lista de bullets ---------- */
+  .hero-bullets-frame{
+    border:2px solid var(--persimmon); border-radius:var(--radius);
+    padding:20px 24px; margin-bottom:28px; background:rgba(255,255,255,0.55);
+  }
+  .hero-bullets{ display:flex; flex-direction:column; gap:11px; }
+  .hero-bullets li{ display:flex; align-items:flex-start; gap:10px; font-size:15.5px; font-weight:600; color:var(--brown); }
+  .hero-bullets .arrow{ flex:none; color:var(--amaranth); font-weight:800; }
+  .hero-validated{ position:relative; z-index:1; text-align:center; margin-top:16px; font-size:13.5px; color:#6b4630; }
+  .hero-validated strong{ color:var(--amaranth); }
+
+  /* ---------- Vídeo ---------- */
+  .video-embed{
+    max-width:860px; margin:0 auto; border:2px solid var(--amaranth); border-radius:var(--radius);
+    overflow:hidden; box-shadow:var(--shadow); aspect-ratio:16/9; background:#fff;
+  }
+  .video-embed iframe, .video-embed #dyseVideoPlayer{ width:100%; height:100%; display:block; border:none; }
+  .video-embed-placeholder{
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;
+    color:var(--amaranth); font-weight:700; font-size:16px;
+    background:linear-gradient(160deg, var(--blossom), var(--cream));
+  }
+  .video-cta-wrap{ text-align:center; margin-top:32px; }
+  .video-cta.is-disabled{ opacity:.45; pointer-events:none; cursor:not-allowed; }
+  .video-cta-note{ margin-top:10px; font-size:13px; color:#8a6a54; }
+
+  /* ---------- Depoimentos: carrossel ---------- */
+  .testimonial-carousel{ overflow:hidden; }
+  .testimonial-track{
+    display:flex; gap:22px; overflow-x:auto; scroll-snap-type:x mandatory;
+    scroll-behavior:smooth; padding:6px 16vw 14px; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .testimonial-track::-webkit-scrollbar{ display:none; }
+  .testimonial-slot{
+    flex:0 0 auto; width:min(72vw, 340px); aspect-ratio:4/3; scroll-snap-align:center;
+    border:2px dashed var(--amaranth); border-radius:var(--radius);
+    display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;
+    background:#fff; color:var(--amaranth); font-weight:700; font-size:14px;
+  }
+</style>
+</head>
+<body>
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<!-- ===== Sticky top: brand banner + header travel together ===== -->
+<div class="site-top">
+  <div class="top-banner">
+    <span class="sparkle" aria-hidden="true">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="#F0A224"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg>
+    </span>
+    <span>Nós trabalhamos com sonhos e traduzimos futuros.</span>
+  </div>
+
+  <header class="site">
+    <div class="nav">
+      <a href="/" class="logo" aria-label="DYSE, página inicial">
+        <img src="assets/images/brand/dyse-logo-primary.png" alt="DYSE">
+      </a>
+      <div class="nav-links">
+        <a href="#video" class="nav-link">Vídeo</a>
+        <a href="#depoimentos" class="nav-link">Depoimentos</a>
+        <a href="#valores" class="nav-link">Valores</a>
+        <a href="#leticia" class="nav-link">Letícia</a>
+        <a href="#duvidas" class="nav-link">Dúvidas</a>
+      </div>
+      <div class="nav-right">
+        <a href="/login.html" class="nav-login nav-login-desktop">Área do Aluno</a>
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <a href="https://wa.me/554187355010?text=Ol%C3%A1!%20Conheci%20a%20DYSE%20pelo%20site%20e%20gostaria%20de%20entender%20qual%20turma%20combina%20mais%20com%20meu%20n%C3%ADvel%20e%20minha%20rotina." target="_blank" rel="noopener" class="nav-cta">Quero conhecer a DYSE</a>
+      </div>
+    </div>
+  </header>
+  <div class="nav-backdrop" id="navBackdrop"></div>
+  <nav class="nav-drawer" id="navDrawer" aria-hidden="true">
+    <div class="nav-drawer-head">
+      <img src="assets/images/brand/dyse-logo-primary.png" alt="DYSE">
+      <button type="button" class="nav-drawer-close" id="navDrawerClose" aria-label="Fechar menu">×</button>
+    </div>
+    <a href="#video" class="nav-login">Vídeo</a>
+    <a href="#depoimentos" class="nav-login">Depoimentos</a>
+    <a href="#valores" class="nav-login">Valores</a>
+    <a href="#leticia" class="nav-login">Letícia</a>
+    <a href="#duvidas" class="nav-login">Dúvidas</a>
+    <a href="/login.html" class="nav-login">Área do Aluno</a>
+    <a href="https://wa.me/554187355010?text=Ol%C3%A1!%20Conheci%20a%20DYSE%20pelo%20site%20e%20gostaria%20de%20entender%20qual%20turma%20combina%20mais%20com%20meu%20n%C3%ADvel%20e%20minha%20rotina." target="_blank" rel="noopener" class="nav-cta btn btn-primary">Quero conhecer a DYSE</a>
+  </nav>
+</div>
+
+<main id="conteudo">
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">
+        <img src="assets/images/brand/dyse-symbol.png" alt="">
+        <span>Do you speak english?</span>
+      </div>
+      <h1>Seu lugar seguro para aprender inglês!</h1>
+      <p class="lead"><strong>Você não precisa de mais pressão na sua rotina… precisa de um método que caiba nela!</strong></p>
+      <p style="color:#6b4630; font-size:15.5px; max-width:520px; margin-bottom:26px;">A DYSE é a escola de inglês feita para adultos reais: aqueles que trabalham, estudam e têm uma lista infinita de tarefas no dia a dia. Aqui, a gente não exige que você esqueça o português; a gente acolhe sua língua materna e constrói a sua confiança do zero!</p>
+      <div class="hero-bullets-frame">
+        <ul class="hero-bullets">
+          <li><span class="arrow">→</span> Aulas AO VIVO</li>
+          <li><span class="arrow">→</span> Mínimo de duas aulas por semana</li>
+          <li><span class="arrow">→</span> Faça até 16 aulas de conversação por mês</li>
+          <li><span class="arrow">→</span> App exclusivo</li>
+          <li><span class="arrow">→</span> Assessoria pedagógica: uma teacher para tirar suas dúvidas a semana toda</li>
+        </ul>
+      </div>
+      <div class="hero-ctas">
+        <a href="#video" class="btn btn-primary">Saiba mais</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="blob"></div>
+      <div class="ceo-photo-card hero-ceo-card">
+        <img class="ceo-photo" src="assets/img/ceo-leticia.jpg" alt="Teacher Letícia Chagas, CEO da DYSE">
+      </div>
+      <span class="float-sparkle s1"><svg width="34" height="34" viewBox="0 0 24 24" fill="#F0A224"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+      <span class="float-sparkle s2"><svg width="26" height="26" viewBox="0 0 24 24" fill="#D03B55"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+      <span class="float-sparkle s3"><svg width="20" height="20" viewBox="0 0 24 24" fill="#EB6424"><path d="M12 0c1 5.5 5.5 10 11 11-5.5 1-10 5.5-11 11-1-5.5-5.5-10-11-11 5.5-1 10-5.5 11-11z"/></svg></span>
+      <p class="hero-validated"><strong>Método validado:</strong> + de 250 alunos mudaram suas vidas com o método DYSE</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VÍDEO ===== -->
+<section class="tinted" id="video">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>É assim que vamos te guiar até a fluência</h2>
+    </div>
+    <div class="video-embed">
+      <!-- Vídeo de exemplo (temporário) — quando o vídeo definitivo estiver
+           pronto, troque só o videoId lá no script no fim da página. -->
+      <div id="dyseVideoPlayer"></div>
+    </div>
+    <div class="video-cta-wrap">
+      <a href="#valores" class="btn btn-primary video-cta is-disabled" id="btnQuantoCusta" aria-disabled="true">Quanto custa</a>
+      <p class="video-cta-note">O botão libera depois de alguns segundos de vídeo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DEPOIMENTOS ===== -->
+<section class="light" id="depoimentos">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Escute de quem importa: nossos alunos</h2>
+    </div>
+    <div class="testimonial-carousel">
+      <div class="testimonial-track" id="depoimentosTrack">
+        <div class="testimonial-slot"><span>Print da mensagem do aluno</span></div>
+        <div class="testimonial-slot"><span>Print da mensagem do aluno</span></div>
+        <div class="testimonial-slot"><span>Print da mensagem do aluno</span></div>
+        <div class="testimonial-slot"><span>Print da mensagem do aluno</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VALORES (mantido igual ao site atual) ===== -->
+<section class="tinted" id="valores">
+  <div class="wrap">
+    <div class="price-highlight">
+      <div class="eyebrow">Valores</div>
+      <h2 style="font-size:clamp(28px,3.6vw,38px); color:var(--brown); margin-bottom:6px;">Escolha como você quer estudar</h2>
+      <p class="from">Planos a partir de</p>
+      <div class="value"><sup>R$</sup>397<small>/mês</small></div>
+      <p style="color:#8a6a54; font-size:14px; margin-top:6px;">por aluno, na modalidade em grupo</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card featured">
+        <span class="featured-badge">Mais escolhido</span>
+        <h3>Modalidade Grupo</h3>
+        <span class="for">Ideal pra quem quer imersão e prática constante em grupo</span>
+        <p class="desc">Aula regular em grupo + Speaking Club em grupo</p>
+        <div class="price-row"><span class="num">R$397</span><span class="per">/mês, por aluno</span></div>
+        <span class="alt-price">Ou à vista (semestral): R$2.144 (10% off)</span>
+        <ul>
+          <li>👥 Turmas de até 5 alunos</li>
+          <li>📅 80 aulas por ano, sempre ao vivo</li>
+          <li>📚 Material didático 100% incluso</li>
+        </ul>
+        <a href="https://wa.me/554187355010?text=Oi%2C%20queria%20o%20plano%20Grupo" target="_blank" rel="noopener" class="btn btn-primary btn-block">Encontrar a melhor opção para mim</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Modalidade Dupla</h3>
+        <span class="for">Ideal pra quem quer mais atenção, dividida com 1 colega</span>
+        <p class="desc">Aula regular em dupla + Speaking Club em grupo</p>
+        <div class="price-row"><span class="num">R$580</span><span class="per">/mês, por aluno</span></div>
+        <span class="alt-price">Ou à vista (semestral): R$3.132 (10% off)</span>
+        <ul>
+          <li>🤝 Ritmo mais próximo do seu</li>
+          <li>📅 80 aulas por ano, sempre ao vivo</li>
+          <li>📚 Material didático 100% incluso</li>
+        </ul>
+        <a href="https://wa.me/554187355010?text=Oi%2C%20queria%20o%20plano%20Dupla" target="_blank" rel="noopener" class="btn btn-ghost btn-block">Encontrar a melhor opção para mim</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Modalidade VIP</h3>
+        <span class="for">Ideal pra quem quer 100% do foco da teacher, no ritmo individual</span>
+        <p class="desc">Aula regular individual + Speaking Club em grupo</p>
+        <div class="price-row"><span class="num">R$750</span><span class="per">/mês, por aluno</span></div>
+        <span class="alt-price">Ou à vista (semestral): R$4.050 (10% off)</span>
+        <ul>
+          <li>⭐ 100% do foco da teacher em você</li>
+          <li>📅 80 aulas por ano, sempre ao vivo</li>
+          <li>📚 Material didático 100% incluso</li>
+        </ul>
+        <a href="https://wa.me/554187355010?text=Oi%2C%20queria%20o%20plano%20VIP" target="_blank" rel="noopener" class="btn btn-ghost btn-block">Encontrar a melhor opção para mim</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== IDEALIZADORA / LETÍCIA (mantido igual ao site atual) ===== -->
+<section class="light" id="leticia">
+  <div class="wrap diff-grid diff-grid-rev">
+    <div>
+      <div class="eyebrow">Professores presentes em cada etapa</div>
+      <h2 style="font-size:clamp(28px,3.6vw,38px); color:var(--brown); margin-bottom:16px;">Uma escola criada por quem é especialista em tirar você do zero.</h2>
+      <p style="color:#6b4630; font-size:16px; margin-bottom:14px;">Na DYSE, o professor não está apenas na aula — ele orienta, acompanha e incentiva. A escola é liderada pela <strong>Teacher Letícia Chagas</strong>, CEO da DYSE, especialista em ensinar iniciantes absolutos há mais de 10 anos.</p>
+      <p style="color:#6b4630; font-size:16px;">É a Teacher Letícia quem cria e supervisiona a metodologia, escolhe a teacher ideal pro seu perfil e conversa pessoalmente com você antes da matrícula, pra garantir que a DYSE é o lugar certo pra sua jornada.</p>
+    </div>
+    <div class="diff-visual">
+      <div class="ceo-photo-card">
+        <img class="ceo-photo" src="assets/img/ceo-leticia.jpg" alt="Teacher Letícia Chagas, CEO da DYSE">
+        <div class="ceo-photo-caption">
+          <p style="font-weight:700; color:var(--brown); font-size:17px; margin-bottom:4px;">Teacher Letícia Chagas</p>
+          <p style="font-size:13.5px; color:var(--amaranth); font-weight:700;">CEO da DYSE</p>
+        </div>
+      </div>
+      <div class="comunidade-stats" style="margin-top:24px;">
+        <div class="stat" style="background:#fff; border:1px solid rgba(86,41,21,0.1);"><b style="color:var(--amaranth);">+10 anos</b><span style="color:#6b4630;">especialista em iniciantes</span></div>
+        <div class="stat" style="background:#fff; border:1px solid rgba(86,41,21,0.1);"><b style="color:var(--amaranth);">100%</b><span style="color:#6b4630;">das turmas supervisionadas por ela</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PERGUNTAS FREQUENTES (mantido igual ao site atual) ===== -->
+<section class="tinted" id="duvidas">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Dúvidas frequentes</div>
+      <h2>Perguntas que a gente ouve bastante.</h2>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Nunca estudei inglês. Posso começar?</summary>
+        <p>Sim. A DYSE é especialista em ensinar iniciantes absolutos — é literalmente o nosso ponto forte.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Já fiz outros cursos e não consegui aprender. A DYSE é indicada pra mim?</summary>
+        <p>Sim. Grande parte das nossas alunas chega depois de outras tentativas frustradas. Nossa metodologia foi pensada exatamente pra esse recomeço.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como vocês identificam meu nível?</summary>
+        <p>Através de uma reunião de alinhamento com a Teacher Letícia antes da matrícula, sem julgamentos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como as turmas são formadas?</summary>
+        <p>Por nível de inglês, e também considerando rotina, objetivos e momento de vida em comum, em grupos de até 5 alunos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>As pessoas da turma estarão no mesmo nível que eu?</summary>
+        <p>Sim, as turmas são niveladas justamente pra você não se sentir atrasada nem pressionada.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como vocês identificam afinidades entre os alunos?</summary>
+        <p>Na formação da turma, além do nível, buscamos aproximar quem tem objetivos, rotina ou momento de vida parecidos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>E se eu tiver pouco tempo pra estudar?</summary>
+        <p>A rotina da DYSE é pensada pra caber numa vida cheia: 2 encontros por semana com professor, mais atividades complementares no seu tempo.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Tenho mais de 40 anos. Ainda consigo aprender?</summary>
+        <p>Sim. Somos especialistas em ensinar adultos, sem limite de idade pra começar.</p>
+      </details>
+      <details class="faq-item">
+        <summary>O aplicativo substitui as aulas?</summary>
+        <p>Não. Ele é um complemento — serve pra você praticar entre uma aula e outra, mas o acompanhamento do professor continua no centro do método.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como funciona o aplicativo com inteligência artificial?</summary>
+        <p>Ele te ajuda a revisar conteúdo, praticar pronúncia e gramática com atividades personalizadas pro seu nível e suas dificuldades.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como funciona a aula de conversação?</summary>
+        <p>É o nosso Speaking Club: encontros semanais, sempre em duplas ou trios com alunos do seu nível, com apoio de uma teacher — inclusive aula com teacher americana.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como funciona o clube de escrita?</summary>
+        <p>É um espaço de prática de escrita acompanhada, incluso na mensalidade, sem custo extra.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Existe acompanhamento de professor?</summary>
+        <p>Sim, em todas as etapas: nas aulas, no Speaking Club e na reunião de alinhamento antes da matrícula.</p>
+      </details>
+      <details class="faq-item">
+        <summary>As aulas são online ou presenciais?</summary>
+        <p>100% online.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Posso conhecer a escola antes de me matricular?</summary>
+        <p>Sim. Antes de fechar a matrícula, você tem uma reunião de alinhamento com a Teacher Letícia pra tirar todas as suas dúvidas.</p>
+      </details>
+      <details class="faq-item">
+        <summary>O que acontece se eu tiver vergonha de falar?</summary>
+        <p>É por isso que as turmas são pequenas e niveladas, e o Speaking Club existe: um espaço sem julgamento, só prática.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como faço pra encontrar minha turma?</summary>
+        <p>Chame no WhatsApp. A partir daí, a gente conversa com você, identifica seu nível e indica a turma ideal.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Quais modalidades estão disponíveis?</summary>
+        <p>Grupo, Dupla e VIP (individual) — você confere os detalhes de cada uma na seção <a href="#valores" style="color:var(--amaranth); font-weight:700;">Valores</a>.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como entro em contato?</summary>
+        <p>Pelo WhatsApp — é só chamar a gente.</p>
+      </details>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="assets/images/brand/dyse-logo-white.png" alt="DYSE">
+      <p>Escola de inglês para adultos que já tentaram antes. Turmas niveladas, professores presentes e uma comunidade que acompanha cada etapa da sua evolução. Aulas 100% online.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <ul>
+        <li><a href="#video">Vídeo</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+        <li><a href="#valores">Valores</a></li>
+        <li><a href="#leticia">Letícia</a></li>
+        <li><a href="#duvidas">Dúvidas frequentes</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="https://wa.me/554187355010" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://www.instagram.com/leticiachagas.teacherr/" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="/login.html">Área do Aluno</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 DYSE. Todos os direitos reservados.</span>
+    <span>Nós trabalhamos com sonhos e traduzimos futuros.</span>
+  </div>
+</footer>
+
+<!-- ===== Botão flutuante de WhatsApp ===== -->
+<a class="wa-float" href="https://wa.me/554187355010?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20DYSE%20e%20queria%20tirar%20uma%20d%C3%BAvida." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+</a>
+
+<script>
+  (function(){
+    const toggle = document.getElementById('navToggle');
+    const drawer = document.getElementById('navDrawer');
+    const backdrop = document.getElementById('navBackdrop');
+    const closeBtn = document.getElementById('navDrawerClose');
+
+    function openDrawer(){
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      toggle.classList.add('open');
+      toggle.setAttribute('aria-expanded', 'true');
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer(){
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', function(){
+      drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+    });
+    closeBtn.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+    window.addEventListener('keydown', e => { if(e.key === 'Escape') closeDrawer(); });
+  })();
+
+  /* Vídeo toca sozinho assim que a seção aparece na tela (autoplay só
+     funciona mudo — é regra do navegador, não dá pra contornar; a pessoa
+     ativa o som pelo próprio controle do player do YouTube). O botão
+     "Quanto custa" libera 15s depois que o vídeo COMEÇA A TOCAR de verdade
+     (autoplay ou play manual, tanto faz). Se pausar antes de completar os
+     15s, a contagem cancela e só recomeça quando voltar a tocar. Pra trocar
+     o vídeo, basta mudar "videoId" abaixo. */
+  (function(){
+    const btn = document.getElementById('btnQuantoCusta');
+    const videoSection = document.getElementById('video');
+    if(!btn || !videoSection) return;
+    let unlockTimer = null;
+    let unlocked = false;
+    let player = null;
+    let playerReady = false;
+    let autoplayFired = false;
+
+    function unlockBtn(){
+      if(unlocked) return;
+      unlocked = true;
+      btn.classList.remove('is-disabled');
+      btn.removeAttribute('aria-disabled');
+    }
+
+    function tryAutoplay(){
+      if(autoplayFired || !playerReady) return;
+      autoplayFired = true;
+      player.mute();
+      player.playVideo();
+    }
+
+    function onPlayerReady(){
+      playerReady = true;
+      tryAutoplay(); // cobre o caso de a seção já estar visível quando o player termina de carregar
+    }
+
+    function onPlayerStateChange(event){
+      if(unlocked) return;
+      if(event.data === YT.PlayerState.PLAYING && !unlockTimer){
+        unlockTimer = setTimeout(unlockBtn, 15000);
+      } else if((event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) && unlockTimer){
+        clearTimeout(unlockTimer);
+        unlockTimer = null;
+      }
+    }
+
+    window.onYouTubeIframeAPIReady = function(){
+      player = new YT.Player('dyseVideoPlayer', {
+        videoId: 'a6tJlGaHFmo',
+        playerVars: { rel: 0 },
+        events: { onReady: onPlayerReady, onStateChange: onPlayerStateChange }
+      });
+    };
+
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    if('IntersectionObserver' in window){
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => { if(entry.isIntersecting) tryAutoplay(); });
+      }, { threshold: 0.5 });
+      observer.observe(videoSection);
+    }
+  })();
+
+  /* Carrossel de depoimentos: avança sozinho a cada poucos segundos, e
+     volta pro início ao chegar no fim (efeito contínuo). Pausa enquanto a
+     pessoa está com o mouse em cima ou tocando na tela, pra não brigar com
+     quem está navegando manualmente (scroll/swipe nativo continua ativo). */
+  (function(){
+    const track = document.getElementById('depoimentosTrack');
+    if(!track) return;
+    let paused = false;
+    track.addEventListener('mouseenter', () => { paused = true; });
+    track.addEventListener('mouseleave', () => { paused = false; });
+    track.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+
+    setInterval(() => {
+      if(paused) return;
+      const slot = track.querySelector('.testimonial-slot');
+      if(!slot) return;
+      const gap = 22;
+      const step = slot.getBoundingClientRect().width + gap;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if(track.scrollLeft >= maxScroll - 4){
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: step, behavior: 'smooth' });
+      }
+    }, 3500);
+  })();
+</script>
+</body>
+</html>
