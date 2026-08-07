@@ -604,12 +604,15 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
       const profile = await withTimeout(dyseGetProfile(session), 6000, null);
       const isTeacher = dyseIsTeacher(profile);
       const isAdmin = dyseIsAdmin(profile);
+      const alsoStudent = !!(profile && profile.also_student);
 
       if(explicitNext){
         // Gestão nunca deve cair na página de aluno, mesmo vindo de um link
         // que pedia especificamente essa página (ex: tentou abrir
-        // /area-do-aluno.html sem estar logada e foi redirecionada pra cá).
-        if(isAdmin && explicitNext.startsWith('/area-do-aluno')){
+        // /area-do-aluno.html sem estar logada e foi redirecionada pra cá) —
+        // A NÃO SER que ela também seja aluna (also_student), aí o link
+        // explícito é respeitado.
+        if(isAdmin && !alsoStudent && explicitNext.startsWith('/area-do-aluno')){
           return '/gestao.html';
         }
         // /professora só é bloqueada pra quem é admin E NÃO também dá aula
@@ -619,7 +622,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
         if(isAdmin && !isTeacher && explicitNext.startsWith('/professora')){
           return '/gestao.html';
         }
-        if(isTeacher && explicitNext.startsWith('/area-do-aluno')){
+        if(isTeacher && !alsoStudent && explicitNext.startsWith('/area-do-aluno')){
           return '/professora.html';
         }
         return explicitNext; // ex: um link direto de atividade — mantém o destino original

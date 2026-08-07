@@ -185,14 +185,16 @@ async function dyseRenderAuthBar(containerId){
   const name = meta.full_name || session.user.email;
   const profile = await dyseGetProfile(session);
 
-  // Quem acumula papéis (ex: admin que também dá aula, via also_teacher)
-  // ganha um link pra cada painel que tem direito, em vez de só um link
-  // fixo — sem isso não haveria como ela alcançar /professora.html a
-  // partir de /gestao.html (ou vice-versa) pela interface.
+  // Quem acumula papéis (ex: admin que também dá aula, via also_teacher; ou
+  // financeiro/admin/teacher que também é aluno, via also_student) ganha um
+  // link pra cada painel que tem direito, em vez de só um link fixo — sem
+  // isso não haveria como alcançar /professora.html ou /area-do-aluno.html
+  // a partir de /gestao.html (ou vice-versa) pela interface.
+  const alsoStudent = !!(profile && profile.also_student);
   const links = [];
   if(dyseIsAdmin(profile)) links.push('<a href="/gestao.html" class="dyse-auth-link">Painel da gestão</a>');
   if(dyseIsTeacher(profile)) links.push('<a href="/professora.html" class="dyse-auth-link">Painel da professora</a>');
-  if(!links.length) links.push('<a href="/area-do-aluno.html" class="dyse-auth-link">Minhas atividades</a>');
+  if(!links.length || alsoStudent) links.push('<a href="/area-do-aluno.html" class="dyse-auth-link">Minhas atividades</a>');
 
   el.innerHTML =
     '<span class="dyse-auth-name">👤 ' + escapeHtml(name) + '</span>' +
