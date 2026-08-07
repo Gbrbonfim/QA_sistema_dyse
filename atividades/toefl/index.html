@@ -522,9 +522,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     if(!session) return;
 
     const profile = await dyseGetProfile(session);
-    if(profile && profile.role === 'teacher'){
-      // professora enxerga liberado e oculto igual; segue normalmente, sem redirecionar
-    }
+    // professora enxerga liberado e oculto igual; segue normalmente, sem redirecionar
 
     dyseRenderAuthBar('authBar');
 
@@ -533,7 +531,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     results.forEach(r => doneMap[r.activity_num] = r);
 
     const publishedSet = await dyseGetPublishedSet(COURSE.id);
-    const isTeacher = !!(profile && profile.role === 'teacher');
+    const isTeacher = dyseIsTeacher(profile);
 
     // Agrupa as atividades pelo código de nível (o texto antes do " · ")
     const groups = [];

@@ -440,6 +440,30 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
 }
 
+/* ---------- CAIXA SUSPENSA (details/summary nativo — sem JS) ---------- */
+details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
+details.dyse-collapsible > summary{
+  list-style:none; cursor:pointer; padding:14px 18px; display:flex; align-items:center; justify-content:space-between;
+  gap:10px; font-weight:700; color:var(--seal); font-size:.88rem;
+}
+details.dyse-collapsible > summary::-webkit-details-marker{display:none;}
+details.dyse-collapsible > summary:hover{background:var(--antique-soft);}
+details.dyse-collapsible > summary .chevron{transition:transform .2s; opacity:.55; flex:none; font-size:1rem;}
+details.dyse-collapsible[open] > summary .chevron{transform:rotate(90deg);}
+details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
+
+/* Bloco de curso em "Gerenciar atividades" também vira <details> — reaproveita
+   o mesmo visual de caixa branca que já tinha, só ganha o cabeçalho clicável. */
+details.manage-course-block{padding:0;}
+details.manage-course-block > summary.manage-course-title{
+  list-style:none; cursor:pointer; padding:20px 24px; margin-bottom:0;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+details.manage-course-block > summary.manage-course-title::-webkit-details-marker{display:none;}
+details.manage-course-block > summary.manage-course-title .chevron{transition:transform .2s; opacity:.55; font-size:1rem; flex:none;}
+details.manage-course-block[open] > summary.manage-course-title .chevron{transform:rotate(90deg);}
+details.manage-course-block .manage-course-body{padding:0 24px 20px;}
+
 /* ---------- FINANCEIRO ---------- */
 .kpi-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:14px; margin:20px 0;}
 .kpi-card{background:#fff; border-radius:var(--radius-md); padding:16px 18px; box-shadow:var(--shadow-card);}
@@ -630,6 +654,7 @@ body.dyse-modal-open{overflow:hidden;}
     <button type="button" class="auth-tab active" id="tabResults" onclick="showPanel('results')">Resultados</button>
     <button type="button" class="auth-tab" id="tabManage" onclick="showPanel('manage')">Gerenciar atividades</button>
     <button type="button" class="auth-tab" id="tabFinanceiro" onclick="showPanel('financeiro')">Financeiro</button>
+    <button type="button" class="auth-tab" id="tabTurmas" onclick="showPanel('turmas')">Turmas</button>
   </div>
 
   <div id="panelResults">
@@ -678,15 +703,21 @@ body.dyse-modal-open{overflow:hidden;}
     <div class="dash-filter">
       <input type="month" id="finProfMes" onchange="loadFinanceiroProfessor()">
     </div>
+    <p id="finProfPrevisaoNote" style="display:none; background:var(--antique-soft); color:var(--seal-soft); border-radius:var(--radius-sm); padding:10px 14px; font-size:.8rem; margin-bottom:16px;">
+      ⚠️ Este mês ainda não foi gerado oficialmente pela gestão — os valores abaixo são uma previsão baseada no seu vínculo atual e podem mudar.
+    </p>
     <div class="kpi-grid" id="finProfKpis"></div>
-    <div style="overflow-x:auto;">
-      <table class="dash-table" id="finProfTable">
-        <thead>
-          <tr><th>Aluno</th><th>Modalidade</th><th>Valor a receber</th></tr>
-        </thead>
-        <tbody id="finProfBody"></tbody>
-      </table>
-    </div>
+    <details class="dyse-collapsible">
+      <summary><span id="finProfTableSummary">Detalhamento por aluno</span><span class="chevron">›</span></summary>
+      <div class="dyse-collapsible-body" style="overflow-x:auto;">
+        <table class="dash-table" id="finProfTable">
+          <thead>
+            <tr><th>Aluno</th><th>Modalidade</th><th>Valor a receber</th></tr>
+          </thead>
+          <tbody id="finProfBody"></tbody>
+        </table>
+      </div>
+    </details>
     <div style="overflow-x:auto; margin-top:24px;">
       <p style="font-size:.85rem; font-weight:700; color:var(--seal); margin-bottom:10px;">Histórico de meses anteriores</p>
       <table class="dash-table" id="finProfHistoricoTable">
@@ -694,6 +725,33 @@ body.dyse-modal-open{overflow:hidden;}
           <tr><th>Mês</th><th>Alunos</th><th>Total previsto</th><th>Total pago</th><th>Status</th><th>Data pagamento</th></tr>
         </thead>
         <tbody id="finProfHistoricoBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="panelTurmas" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
+      Escolha a turma e a data da aula pra marcar a presença de cada aluno. Ao reabrir uma data já registrada por você, a chamada salva é carregada de novo pra edição.
+    </p>
+    <div class="dash-filter">
+      <select id="chamadaTurmaSelect" onchange="onChamadaTurmaChange()"></select>
+      <input type="date" id="chamadaData" onchange="loadChamadaDoDia()">
+    </div>
+    <p id="chamadaMsg" style="font-size:.82rem; margin:8px 0; color:var(--seal-soft);"></p>
+    <div style="overflow-x:auto;">
+      <table class="dash-table" id="chamadaTable">
+        <thead><tr><th>Aluno</th><th>Presente</th></tr></thead>
+        <tbody id="chamadaBody"></tbody>
+      </table>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary" onclick="salvarChamada()">Salvar chamada</button>
+    </div>
+    <div style="overflow-x:auto; margin-top:24px;">
+      <p style="font-size:.85rem; font-weight:700; color:var(--seal); margin-bottom:10px;">Aulas registradas por você neste mês</p>
+      <table class="dash-table" id="chamadaHistoricoTable">
+        <thead><tr><th>Data</th><th>Presentes</th></tr></thead>
+        <tbody id="chamadaHistoricoBody"></tbody>
       </table>
     </div>
   </div>
@@ -1021,13 +1079,103 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('tabResults').classList.toggle('active', which==='results');
     document.getElementById('tabManage').classList.toggle('active', which==='manage');
     document.getElementById('tabFinanceiro').classList.toggle('active', which==='financeiro');
+    document.getElementById('tabTurmas').classList.toggle('active', which==='turmas');
     document.getElementById('panelResults').style.display = which==='results' ? 'block' : 'none';
     document.getElementById('panelManage').style.display = which==='manage' ? 'block' : 'none';
     document.getElementById('panelFinanceiro').style.display = which==='financeiro' ? 'block' : 'none';
+    document.getElementById('panelTurmas').style.display = which==='turmas' ? 'block' : 'none';
     if(which === 'financeiro' && !document.getElementById('finProfMes').value){
       document.getElementById('finProfMes').value = competenciaToMonthInput(dyseMesCompetencia());
       loadFinanceiroProfessor();
     }
+    if(which === 'turmas' && !CHAMADA_LOADED){
+      CHAMADA_LOADED = true;
+      loadPanelTurmas();
+    }
+  }
+
+  /* ======================================================================
+     TURMAS — chamada (presença) das turmas em que esta professora tem
+     acesso. Alimenta o rateio de mensalidade quando o vínculo financeiro
+     de um aluno troca de professor no meio do mês.
+     ====================================================================== */
+  let CHAMADA_LOADED = false;
+  let CHAMADA_MY_TURMAS = [];
+  let CHAMADA_STUDENTS = [];
+
+  async function loadPanelTurmas(){
+    const [myLinks, allTurmas] = await Promise.all([dyseListMyTurmas(), dyseListTurmas()]);
+    const myIds = new Set(myLinks.map(l => l.turma_id));
+    CHAMADA_MY_TURMAS = allTurmas.filter(t => myIds.has(t.id));
+    const sel = document.getElementById('chamadaTurmaSelect');
+    sel.innerHTML = CHAMADA_MY_TURMAS.length
+      ? CHAMADA_MY_TURMAS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('')
+      : '<option value="">Nenhuma turma vinculada</option>';
+    document.getElementById('chamadaData').value = dyseHoje();
+    if(CHAMADA_MY_TURMAS.length) await onChamadaTurmaChange();
+  }
+
+  async function onChamadaTurmaChange(){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    if(!turmaId){ document.getElementById('chamadaBody').innerHTML = ''; document.getElementById('chamadaHistoricoBody').innerHTML = ''; return; }
+    const students = await dyseListProfilesByRole('student'); // já vem só das turmas permitidas (RLS)
+    CHAMADA_STUDENTS = students.filter(s => s.turma_id === turmaId);
+    await loadChamadaDoDia();
+    await renderChamadaHistorico();
+  }
+
+  async function loadChamadaDoDia(){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    const data = document.getElementById('chamadaData').value || dyseHoje();
+    if(!turmaId) return;
+    const session = await dyseGetSession();
+    const mes = data.slice(0,7) + '-01';
+    const sessoes = await dyseListSessoesTurma(turmaId, mes);
+    const existente = sessoes.find(s => s.data === data && s.professor_id === session.user.id);
+    const presencasExistentes = existente ? await dyseListPresencasSessao(existente.id) : [];
+    const presenteById = {};
+    presencasExistentes.forEach(p => presenteById[p.aluno_id] = p.presente);
+
+    document.getElementById('chamadaBody').innerHTML = CHAMADA_STUDENTS.length
+      ? CHAMADA_STUDENTS.map(s => {
+          const presente = presenteById[s.id] !== undefined ? presenteById[s.id] : true;
+          return '<tr><td>' + escapeHtmlLocal(s.full_name || s.email || '') + '</td><td>' +
+            '<label class="dyse-toggle"><input type="checkbox" data-aluno="' + s.id + '" ' + (presente ? 'checked' : '') + '><span class="slider"></span></label>' +
+          '</td></tr>';
+        }).join('')
+      : '<tr><td colspan="2" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
+  }
+
+  async function salvarChamada(){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    const data = document.getElementById('chamadaData').value || dyseHoje();
+    const msg = document.getElementById('chamadaMsg');
+    if(!turmaId){ msg.textContent = 'Escolha uma turma.'; return; }
+    const { data: sessao, error } = await dyseUpsertSessaoTurma(turmaId, data, null);
+    if(error){ msg.textContent = 'Não foi possível salvar: ' + error.message; return; }
+    const presencas = [...document.querySelectorAll('#chamadaBody input[type="checkbox"]')]
+      .map(el => ({ aluno_id: el.dataset.aluno, presente: el.checked }));
+    const { error: errP } = await dyseUpsertPresencas(sessao.id, presencas);
+    msg.textContent = errP ? ('Erro ao salvar presença: ' + errP.message) : 'Chamada salva!';
+    await renderChamadaHistorico();
+  }
+
+  async function renderChamadaHistorico(){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    if(!turmaId) return;
+    const data = document.getElementById('chamadaData').value || dyseHoje();
+    const mes = data.slice(0,7) + '-01';
+    const session = await dyseGetSession();
+    const sessoes = await dyseListSessoesTurma(turmaId, mes);
+    const minhas = sessoes.filter(s => s.professor_id === session.user.id);
+    const linhas = await Promise.all(minhas.map(async s => {
+      const presencas = await dyseListPresencasSessao(s.id);
+      const presentes = presencas.filter(p => p.presente).length;
+      return '<tr><td>' + formatDateBR(s.data) + '</td><td>' + presentes + '/' + presencas.length + '</td></tr>';
+    }));
+    document.getElementById('chamadaHistoricoBody').innerHTML = linhas.length
+      ? linhas.join('')
+      : '<tr><td colspan="2" style="text-align:center; opacity:.6;">Nenhuma aula registrada este mês.</td></tr>';
   }
 
   /* ======================================================================
@@ -1059,13 +1207,23 @@ body.dyse-modal-open{overflow:hidden;}
       dyseListMyMensalidades(),
       dyseListMyPagamentos()
     ]);
-    const doMes = todasMensalidades.filter(m => m.mes_competencia === mes);
-    renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes));
-    renderFinanceiroTabela(doMes);
+    let doMes = todasMensalidades.filter(m => m.mes_competencia === mes);
+    // Mês ainda sem mensalidade gerada oficialmente (só acontece quando a
+    // gestão abre Pagamentos/Relatório pra esse mês) — mostra uma previsão
+    // calculada na hora a partir do vínculo financeiro atual do professor,
+    // em vez de deixar a tela vazia até alguém do financeiro passar por lá.
+    let isPrevisao = false;
+    if(!doMes.length){
+      const previsao = await dysePreverFinanceiroProfessor(mes);
+      if(previsao.length){ doMes = previsao; isPrevisao = true; }
+    }
+    document.getElementById('finProfPrevisaoNote').style.display = isPrevisao ? 'block' : 'none';
+    renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes), isPrevisao);
+    renderFinanceiroTabela(doMes, isPrevisao);
     renderFinanceiroHistorico(todasMensalidades, pagamentos);
   }
 
-  function renderFinanceiroKpis(linhas, pagamento){
+  function renderFinanceiroKpis(linhas, pagamento, isPrevisao){
     const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
     const porModalidade = {};
     linhas.forEach(l => {
@@ -1088,7 +1246,8 @@ body.dyse-modal-open{overflow:hidden;}
     ).join('');
   }
 
-  function renderFinanceiroTabela(linhas){
+  function renderFinanceiroTabela(linhas, isPrevisao){
+    document.getElementById('finProfTableSummary').textContent = 'Detalhamento por aluno' + (isPrevisao ? ' — previsão' : '') + ' (' + linhas.length + ')';
     document.getElementById('finProfBody').innerHTML = linhas.length ? linhas.map(l => {
       const mod = MODALIDADES_CACHE.find(m => m.id === l.modalidade_id);
       return '<tr>' +
@@ -1151,7 +1310,12 @@ body.dyse-modal-open{overflow:hidden;}
           '</div>' +
         '</div>';
       }).join('');
-      blocks.push('<div class="manage-course-block"><div class="manage-course-title">' + course.name + '</div>' + rows + '</div>');
+      blocks.push(
+        '<details class="dyse-collapsible manage-course-block" open>' +
+          '<summary class="manage-course-title"><span>' + course.name + ' <span class="pill-count">' + course.activities.length + '</span></span><span class="chevron">›</span></summary>' +
+          '<div class="manage-course-body">' + rows + '</div>' +
+        '</details>'
+      );
     }
     container.innerHTML = blocks.join('');
   }
