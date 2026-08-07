@@ -1073,6 +1073,7 @@ create trigger trg_audit_sessao_presencas
 --     chave antiga (aluno_id, mes_competencia) impedia isso.
 -- ----------------------------------------------------------------------
 alter table public.mensalidades drop constraint if exists mensalidades_aluno_id_mes_competencia_key;
+alter table public.mensalidades drop constraint if exists mensalidades_aluno_mes_professor_key;
 alter table public.mensalidades add constraint mensalidades_aluno_mes_professor_key unique (aluno_id, mes_competencia, professor_id);
 
 -- ======================================================================
