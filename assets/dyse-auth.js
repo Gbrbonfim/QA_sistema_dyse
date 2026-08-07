@@ -1015,9 +1015,15 @@ async function dyseListMinhaPrevisaoHistoricoFinanceiro(){
     const inicioMes = h.data_inicio.slice(0, 7) + '-01';
     const ultimoMesPago = dyseUltimoMesPago(h);
     const fimMes = h.data_fim ? (h.data_fim.slice(0, 7) + '-01') : null;
-    let teto = hoje;
-    if(ultimoMesPago && ultimoMesPago < teto) teto = ultimoMesPago;
-    if(fimMes && fimMes < teto) teto = fimMes;
+    // Teto do período: se tem parcelas contratadas, mostra o prazo INTEIRO
+    // (inclusive meses futuros ainda não vividos — "6 parcelas" precisa
+    // aparecer como 6 meses pra professora, não só os que já passaram).
+    // Um período encerrado (data_fim) nunca passa do mês em que foi
+    // fechado, mesmo que ainda sobrasse parcela. Sem parcela E sem
+    // data_fim (prazo indefinido) não dá pra saber quantos meses futuros
+    // existem, então fica só até o mês atual.
+    let teto = fimMes || ultimoMesPago || hoje;
+    if(fimMes && ultimoMesPago && ultimoMesPago < fimMes) teto = ultimoMesPago;
     for(let cursor = inicioMes; cursor <= teto; cursor = mesSeguinte(cursor)) mesesSet.add(cursor);
   });
 
