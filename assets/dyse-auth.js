@@ -705,8 +705,7 @@ async function dyseGerarMensalidadesDoMes(mes){
     (valoresPorModalidade[v.modalidade_id] = valoresPorModalidade[v.modalidade_id] || []).push(v);
   });
   const nomeAlunoById = {};
-  const turmaIdByAluno = {};
-  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; turmaIdByAluno[a.id] = a.turma_id || null; });
+  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
 
   const fimDoMesStr = dyseFimDoMes(mes);
 
@@ -731,10 +730,17 @@ async function dyseGerarMensalidadesDoMes(mes){
     (periodosPorAluno[h.aluno_id] = periodosPorAluno[h.aluno_id] || []).push(h);
   });
 
-  const sessoesPorTurma = {}; // cache por execução: turma_id -> sessões do mês
-  async function sessoesDaTurma(turmaId){
-    if(!(turmaId in sessoesPorTurma)) sessoesPorTurma[turmaId] = await dyseListSessoesTurma(turmaId, mes);
-    return sessoesPorTurma[turmaId];
+  // Cache por execução: sessões de aula do mês em QUALQUER turma — o rateio
+  // precisa enxergar aulas fora da turma cadastrada no perfil da aluna,
+  // porque a troca de professor no meio do mês pode vir acompanhada de
+  // troca de turma também (cada professora dá aula pra ela numa turma
+  // diferente, não necessariamente a mesma turma com professora nova).
+  // Buscada uma única vez, sob demanda (só quando algum aluno realmente
+  // precisa de rateio neste mês).
+  let sessoesDoMesCache = null;
+  async function sessoesDoMes(){
+    if(sessoesDoMesCache === null) sessoesDoMesCache = await dyseListSessoesDoMes(mes, fimDoMesStr);
+    return sessoesDoMesCache;
   }
 
   const linhas = [];
@@ -756,14 +762,15 @@ async function dyseGerarMensalidadesDoMes(mes){
 
     // Mais de um período tocando o mês (troca de professor no meio do mês).
     const vencedor = periodos[0]; // mais recente — usado no fallback e como referência de valor_mensal_aluno
-    const turmaId = turmaIdByAluno[alunoId];
     let contagemPorProfessor = null; // Map professor_id(ou null) -> nº de presenças
 
-    if(turmaId){
-      const sessoes = await sessoesDaTurma(turmaId);
+    {
+      const sessoes = await sessoesDoMes();
       // Só conta aulas de professores que fazem parte do vínculo financeiro
       // deste aluno no mês — uma aula dada por um substituto sem vínculo
-      // financeiro não deve gerar pagamento a ele.
+      // financeiro não deve gerar pagamento a ele. Não restringe por turma:
+      // cada professora entitulada pode ter dado aula pra este aluno numa
+      // turma diferente (ver comentário em sessoesDoMes, acima).
       const professoresEntitulados = new Set(periodos.map(h => h.professor_id || null));
       const professorPorSessao = {};
       sessoes.forEach(s => { professorPorSessao[s.id] = s.professor_id || null; });
@@ -974,6 +981,20 @@ async function dyseListSessoesTurma(turmaId, mes){
     .gte('data', mes)
     .lte('data', dyseFimDoMes(mes))
     .order('data', { ascending: false });
+  return error ? [] : data;
+}
+
+/* Sessões de aula dentro de um mês, em QUALQUER turma — usada pelo rateio
+   (dyseGerarMensalidadesDoMes) pra achar as aulas de cada professora
+   entitulada mesmo quando ela dá aula pra este aluno numa turma diferente
+   da cadastrada no perfil dele. "fimDoMesStr" já vem calculado de quem
+   chama, pra não recalcular por aluno dentro do mesmo laço. */
+async function dyseListSessoesDoMes(mes, fimDoMesStr){
+  const { data, error } = await sb
+    .from('turma_sessoes')
+    .select('*')
+    .gte('data', mes)
+    .lte('data', fimDoMesStr);
   return error ? [] : data;
 }
 
