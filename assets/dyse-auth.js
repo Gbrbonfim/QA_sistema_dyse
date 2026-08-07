@@ -970,6 +970,89 @@ async function dysePreverFinanceiroProfessor(mes){
   });
 }
 
+/* Mesma ideia de dysePreverFinanceiroProfessor, mas pra TODOS os meses que
+   os vínculos do professor tocam (não só um mês pedido) — alimenta
+   "Histórico de meses anteriores" em professora.html, que antes só
+   mostrava os meses em que a gestão já tinha aberto Pagamentos/Relatório
+   (dyseGerarMensalidadesDoMes gerando a linha real em "mensalidades") e
+   deixava buracos nos meses que ninguém tinha visitado ainda. O teto de
+   cada vínculo é o que vier primeiro entre: mês atual, fim do período
+   (data_fim) e a última parcela contratada (quantidade_parcelas). Sem
+   rateio entre professores aqui — sem chamada lançada não dá pra prever
+   divisão, então (igual dysePreverFinanceiroProfessor) cada mês fica só
+   com o período mais recente que o toca. */
+async function dyseListMinhaPrevisaoHistoricoFinanceiro(){
+  const session = await dyseGetSession();
+  if(!session) return [];
+
+  const [historico, modalidades, valores, alunos] = await Promise.all([
+    dyseListAlunoFinanceiroHistorico(), // RLS já restringe ao próprio professor
+    dyseListModalidades(),
+    dyseListModalidadeValores(),
+    dyseListProfilesByRole('student')
+  ]);
+
+  const meusPeriodos = historico.filter(h => (h.professor_id || null) === session.user.id && h.situacao === 'ativo');
+  if(!meusPeriodos.length) return [];
+
+  const modalidadeById = {};
+  modalidades.forEach(m => { modalidadeById[m.id] = m; });
+  const valoresPorModalidade = {};
+  valores.forEach(v => { (valoresPorModalidade[v.modalidade_id] = valoresPorModalidade[v.modalidade_id] || []).push(v); });
+  const nomeAlunoById = {};
+  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
+
+  function mesSeguinte(mes){
+    const [y, m] = mes.split('-').map(Number);
+    const mm = m === 12 ? 1 : m + 1;
+    const yy = m === 12 ? y + 1 : y;
+    return yy + '-' + String(mm).padStart(2, '0') + '-01';
+  }
+
+  const hoje = dyseMesCompetencia();
+  const mesesSet = new Set();
+  meusPeriodos.forEach(h => {
+    const inicioMes = h.data_inicio.slice(0, 7) + '-01';
+    const ultimoMesPago = dyseUltimoMesPago(h);
+    const fimMes = h.data_fim ? (h.data_fim.slice(0, 7) + '-01') : null;
+    let teto = hoje;
+    if(ultimoMesPago && ultimoMesPago < teto) teto = ultimoMesPago;
+    if(fimMes && fimMes < teto) teto = fimMes;
+    for(let cursor = inicioMes; cursor <= teto; cursor = mesSeguinte(cursor)) mesesSet.add(cursor);
+  });
+
+  const linhas = [];
+  mesesSet.forEach(mes => {
+    const fimDoMesStr = dyseFimDoMes(mes);
+    const porAluno = {};
+    meusPeriodos.forEach(h => {
+      if(h.data_inicio > fimDoMesStr) return;
+      if(h.data_fim && h.data_fim < mes) return;
+      const ultimoMesPago = dyseUltimoMesPago(h);
+      if(ultimoMesPago && mes > ultimoMesPago) return;
+      const atual = porAluno[h.aluno_id];
+      const ganha = !atual || h.data_inicio > atual.data_inicio || (h.data_inicio === atual.data_inicio && h.id > atual.id);
+      if(ganha) porAluno[h.aluno_id] = h;
+    });
+    Object.values(porAluno).forEach(h => {
+      const modalidade = modalidadeById[h.modalidade_id];
+      const valorProfessor = (modalidade && modalidade.is_custom_value)
+        ? Number(h.valor_professor_customizado || 0)
+        : (dyseValorVigente(valoresPorModalidade[h.modalidade_id], mes) || 0);
+      linhas.push({
+        aluno_id: h.aluno_id,
+        aluno_nome: nomeAlunoById[h.aluno_id] || null,
+        mes_competencia: mes,
+        professor_id: h.professor_id,
+        modalidade_id: h.modalidade_id,
+        valor_recebido: Number(h.valor_mensal_aluno || 0),
+        valor_pago_professor: valorProfessor
+      });
+    });
+  });
+  return linhas;
+}
+
 /* ======================================================================
    PRESENÇA (CHAMADA) — sessões de aula por turma+data+professor e
    presença por aluno dentro de cada sessão. Alimenta o rateio de
