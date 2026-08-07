@@ -369,6 +369,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     <button type="button" class="auth-tab" id="tabMaterias" onclick="showPanel('materias')">Matérias</button>
     <button type="button" class="auth-tab" id="tabAlunos" onclick="showPanel('alunos')">Alunos</button>
     <button type="button" class="auth-tab" id="tabProfessores" onclick="showPanel('professores')">Professores</button>
+    <button type="button" class="auth-tab" id="tabContas" onclick="showPanel('contas')">Contas</button>
     <button type="button" class="auth-tab fin-only" id="tabFinanceiro" onclick="showPanel('financeiro')">Financeiro</button>
   </div>
 
@@ -522,6 +523,18 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       vê resultado de nenhum aluno no painel da professora.
     </p>
     <div id="professoresList"></div>
+  </div>
+
+  <!-- ---------- CONTAS ---------- -->
+  <div id="panelContas" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
+      Contas de gestão, financeiro e professores que acumulam outro papel — ex: alguém do
+      financeiro que também faz atividades como aluno(a), ou alguém da gestão que também dá
+      aula. Marque o(s) acúmulo(s) e, se marcar "Também é aluno(a)", vincule a turma dela(e)
+      pra liberar as matérias — ela(e) passa a aparecer normalmente na aba Alunos, e a
+      professora da turma passa a vê-la(o) como aluna(o) igual a qualquer outra.
+    </p>
+    <div id="contasList"></div>
   </div>
 
   <!-- ---------- FINANCEIRO ---------- -->
@@ -718,7 +731,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 <script src="/assets/dyse-auth.js"></script>
 <script>
   let TURMAS = [], MATERIAS = [], STUDENTS = [], TEACHERS = [], TURMA_MATERIAS = [], TEACHER_TURMAS = [], MATERIA_ACTIVITIES_DB = [];
-  let MODALIDADES = [], MODALIDADE_VALORES = [], ALUNO_FIN_HISTORICO = [];
+  let MODALIDADES = [], MODALIDADE_VALORES = [], ALUNO_FIN_HISTORICO = [], CONTAS = [];
 
   /* Atividades de cada matéria — mesma lista fixa usada em professora.html e
      area-do-aluno.html (o conteúdo delas é feito à mão no código, não vem
@@ -734,7 +747,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     // showPanel('financeiro') pelo console, sem a role "financeiro" a aba
     // fica bloqueada e cai em "alunos".
     if(which === 'financeiro' && !document.body.classList.contains('dyse-can-financeiro')) which = 'alunos';
-    ['turmas','materias','alunos','professores','financeiro'].forEach(p => {
+    ['turmas','materias','alunos','professores','contas','financeiro'].forEach(p => {
       document.getElementById('tab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('panel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
     });
@@ -784,7 +797,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   }
 
   async function loadAll(){
-    [TURMAS, MATERIAS, STUDENTS, TEACHERS, TURMA_MATERIAS, TEACHER_TURMAS, MATERIA_ACTIVITIES_DB, MODALIDADES, MODALIDADE_VALORES, ALUNO_FIN_HISTORICO] = await Promise.all([
+    [TURMAS, MATERIAS, STUDENTS, TEACHERS, TURMA_MATERIAS, TEACHER_TURMAS, MATERIA_ACTIVITIES_DB, MODALIDADES, MODALIDADE_VALORES, ALUNO_FIN_HISTORICO, CONTAS] = await Promise.all([
       dyseListTurmas(),
       dyseListMaterias(),
       dyseListProfilesByRole('student'),
@@ -794,13 +807,15 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       dyseListAllMateriaActivities(),
       dyseListModalidades(),
       dyseListModalidadeValores(),
-      dyseListAlunoFinanceiroHistorico()
+      dyseListAlunoFinanceiroHistorico(),
+      dyseListGestaoAccounts()
     ]);
     renderTurmasTable();
     renderMateriasTable();
     populateAlunosFiltros();
     renderAlunosTable();
     renderProfessoresList();
+    renderContasList();
     renderModalidadesTable();
 
     // Mantém o mês corrente sempre em dia pra quem entra direto no painel do
@@ -1474,6 +1489,60 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       '</div>';
       return '<div class="gestao-card">' + header + rows + '</div>';
     }).join('');
+  }
+
+  /* ---------- CONTAS ---------- */
+  const ROLE_LABELS = { admin: 'Gestão', financeiro: 'Financeiro', teacher: 'Professora' };
+  function renderContasList(){
+    const container = document.getElementById('contasList');
+    if(!CONTAS.length){
+      container.innerHTML = '<p style="opacity:.6;">Nenhuma conta além das de aluno cadastrada ainda.</p>';
+      return;
+    }
+    container.innerHTML = CONTAS.map(p => {
+      const role = String(p.role || '').trim().toLowerCase();
+      const turmaOptions = '<option value="">Sem turma</option>' + TURMAS.map(t =>
+        '<option value="' + t.id + '"' + (p.turma_id === t.id ? ' selected' : '') + '>' + escapeHtmlLocal(t.name) + '</option>'
+      ).join('');
+      const header = '<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">' +
+        '<div><div class="gestao-card-title" style="font-size:1.1rem; margin-bottom:2px;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' +
+        '<span style="font-size:.78rem; opacity:.7;">' + escapeHtmlLocal(p.email || '') + ' · ' + (ROLE_LABELS[role] || capitalize(role)) + '</span></div>' +
+      '</div>';
+      const toggles = '<div class="chip-toggle-row"><span class="name">Também dá aula</span>' +
+          '<label class="dyse-toggle"><input type="checkbox" ' + (p.also_teacher?'checked':'') + (role === 'teacher' ? ' disabled title="Já é professora pelo papel principal"' : '') + ' onchange="toggleAlsoTeacher(\'' + p.id + '\', this.checked, this)"><span class="slider"></span></label></div>' +
+        '<div class="chip-toggle-row"><span class="name">Também é aluno(a)</span>' +
+          '<label class="dyse-toggle"><input type="checkbox" ' + (p.also_student?'checked':'') + ' onchange="toggleAlsoStudent(\'' + p.id + '\', this.checked, this)"><span class="slider"></span></label></div>' +
+        (p.also_student
+          ? '<div class="chip-toggle-row"><span class="name">Turma</span><select onchange="handleContaTurmaChange(\'' + p.id + '\', this.value)">' + turmaOptions + '</select></div>'
+          : '');
+      return '<div class="gestao-card">' + header + toggles + '</div>';
+    }).join('');
+  }
+
+  async function toggleAlsoTeacher(profileId, enabled, checkboxEl){
+    const { error } = await dyseSetAlsoTeacher(profileId, enabled);
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !enabled;
+      return;
+    }
+    await loadAll();
+  }
+
+  async function toggleAlsoStudent(profileId, enabled, checkboxEl){
+    const { error } = await dyseSetAlsoStudent(profileId, enabled);
+    if(error){
+      alert('Não foi possível salvar: ' + error.message);
+      if(checkboxEl) checkboxEl.checked = !enabled;
+      return;
+    }
+    await loadAll();
+  }
+
+  async function handleContaTurmaChange(profileId, turmaId){
+    const { error } = await dyseSetStudentTurma(profileId, turmaId || null);
+    if(error){ alert('Não foi possível salvar a turma: ' + error.message); return; }
+    await loadAll();
   }
 
   /* ---------- Reenviar acesso (aluno ou professor) ---------- */
