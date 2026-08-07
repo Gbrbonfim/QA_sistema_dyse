@@ -818,8 +818,14 @@ async function dyseGerarMensalidadesDoMes(mes){
       const centavos = isUltimo ? (totalCentavos - distribuidos) : Math.round(totalCentavos * share);
       distribuidos += centavos;
       const valorRecebido = centavos / 100;
-      if(valorRecebido <= 0) return; // fração arredondou pra zero — sem linha pra este professor
       const valorProfessor = Math.round(valorProfessorDoPeriodo(periodo) * share * 100) / 100;
+      // Só pula a linha se não houver NADA a registrar pra este professor —
+      // valor_recebido é o valor mensal do ALUNO (pode estar zerado por erro
+      // de cadastro, ou genuinamente ser R$0 nesse período) e valor_professor
+      // vem da tabela de modalidade, os dois são independentes: um valor
+      // recebido zerado não pode apagar a comissão da professora que deu a
+      // aula de verdade.
+      if(valorRecebido <= 0 && valorProfessor <= 0) return;
       linhas.push({
         aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
         professor_id: professorId, modalidade_id: periodo.modalidade_id,
