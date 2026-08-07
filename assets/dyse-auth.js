@@ -1020,6 +1020,16 @@ async function dyseUpsertSessaoTurma(turmaId, data, observacao){
   return { data: row, error };
 }
 
+/* Desfaz uma chamada já registrada (exclui a sessão de aula). As
+   presenças lançadas nela caem junto (sessao_presencas.sessao_id
+   referencia turma_sessoes com "on delete cascade"). Usado quando a
+   professora marcou a chamada errada (turma/data trocada, aula que não
+   rolou, etc.) e precisa registrar de novo do zero. */
+async function dyseExcluirSessaoTurma(sessaoId){
+  const { error } = await sb.from('turma_sessoes').delete().eq('id', sessaoId);
+  return { error };
+}
+
 /* Presenças já lançadas numa sessão (pra pré-marcar o checklist ao
    reabrir uma data já registrada). */
 async function dyseListPresencasSessao(sessaoId){
