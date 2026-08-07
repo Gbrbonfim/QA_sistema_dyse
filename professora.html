@@ -227,6 +227,9 @@ section.card{
 .btn-secondary:hover{background:var(--gamboge-dark); color:#fff;}
 .btn-ghost{background:transparent; color:var(--seal-soft); border:2px solid #e4d4c4;}
 .btn-ghost:hover{border-color:var(--amaranth); color:var(--amaranth);}
+.btn-danger{background:transparent; color:var(--bad); border:2px solid #f3c6c2;}
+.btn-danger:hover{background:#fbeceb;}
+.btn-xs{padding:5px 13px; font-size:.74rem;}
 .btn-audio{background:var(--seal-soft); color:#fff;}
 .btn-audio:hover{background:var(--seal);}
 .btn:disabled{opacity:.5; cursor:not-allowed;}
@@ -750,7 +753,7 @@ body.dyse-modal-open{overflow:hidden;}
     <div style="overflow-x:auto; margin-top:24px;">
       <p style="font-size:.85rem; font-weight:700; color:var(--seal); margin-bottom:10px;">Aulas registradas por você neste mês</p>
       <table class="dash-table" id="chamadaHistoricoTable">
-        <thead><tr><th>Data</th><th>Presentes</th></tr></thead>
+        <thead><tr><th>Data</th><th>Presentes</th><th>Ações</th></tr></thead>
         <tbody id="chamadaHistoricoBody"></tbody>
       </table>
     </div>
@@ -1171,11 +1174,24 @@ body.dyse-modal-open{overflow:hidden;}
     const linhas = await Promise.all(minhas.map(async s => {
       const presencas = await dyseListPresencasSessao(s.id);
       const presentes = presencas.filter(p => p.presente).length;
-      return '<tr><td>' + formatDateBR(s.data) + '</td><td>' + presentes + '/' + presencas.length + '</td></tr>';
+      return '<tr><td>' + formatDateBR(s.data) + '</td><td>' + presentes + '/' + presencas.length + '</td>' +
+        '<td><button type="button" class="btn btn-danger btn-xs" onclick="handleDesfazerChamada(' + s.id + ')">Desfazer</button></td></tr>';
     }));
     document.getElementById('chamadaHistoricoBody').innerHTML = linhas.length
       ? linhas.join('')
-      : '<tr><td colspan="2" style="text-align:center; opacity:.6;">Nenhuma aula registrada este mês.</td></tr>';
+      : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhuma aula registrada este mês.</td></tr>';
+  }
+
+  /* Desfaz uma chamada já salva (a professora marcou errado e quer
+     refazer do zero). Recarrega o dia atual também: se a sessão apagada
+     era a que estava carregada no checklist, os checkboxes voltam pro
+     padrão (sem chamada salva) em vez de continuar mostrando dado apagado. */
+  async function handleDesfazerChamada(sessaoId){
+    if(!confirm('Desfazer esta chamada? As presenças marcadas nela serão apagadas e não dá pra voltar atrás.')) return;
+    const { error } = await dyseExcluirSessaoTurma(sessaoId);
+    if(error){ alert('Não foi possível desfazer: ' + error.message); return; }
+    await loadChamadaDoDia();
+    await renderChamadaHistorico();
   }
 
   /* ======================================================================
