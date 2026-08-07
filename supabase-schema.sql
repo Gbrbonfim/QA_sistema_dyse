@@ -955,6 +955,126 @@ alter table public.gastos_personalizados add column if not exists gasto_padrao_i
 alter table public.gastos_personalizados drop constraint if exists gastos_personalizados_aluno_mes_padrao_key;
 alter table public.gastos_personalizados add constraint gastos_personalizados_aluno_mes_padrao_key unique (aluno_id, mes_competencia, gasto_padrao_id);
 
+-- ----------------------------------------------------------------------
+-- 10) MÓDULO DE PRESENÇA (CHAMADA)
+--     Registra, por sessão de aula (turma + data + professor), quais
+--     alunos estavam presentes. É a fonte de dados usada na seção 11 pra
+--     ratear a mensalidade entre dois professores quando o vínculo
+--     financeiro do aluno troca no meio do mês (ver dyseGerarMensalidadesDoMes
+--     em dyse-auth.js). Tabela de gestão de turma normal (como
+--     activity_results) — por isso a política de oversight usa is_admin()
+--     (que já cobre "financeiro", ver comentário na função is_admin() na
+--     seção 1), não is_financeiro().
+-- ----------------------------------------------------------------------
+
+-- 10.1) Sessões de aula. Chave inclui "professor_id" (não só turma+data)
+--       de propósito: se duas professoras derem aula pra mesma turma no
+--       mesmo dia (aula dupla, substituição), cada uma registra a própria
+--       sessão sem sobrescrever a chamada da outra.
+create table if not exists public.turma_sessoes (
+  id bigint generated always as identity primary key,
+  turma_id uuid not null references public.turmas(id) on delete cascade,
+  professor_id uuid references auth.users(id) on delete set null,
+  data date not null default current_date,
+  observacao text,
+  criado_por uuid references auth.users(id),
+  criado_em timestamptz default now(),
+  atualizado_em timestamptz default now()
+);
+
+alter table public.turma_sessoes drop constraint if exists turma_sessoes_turma_data_professor_key;
+alter table public.turma_sessoes add constraint turma_sessoes_turma_data_professor_key unique (turma_id, data, professor_id);
+
+create index if not exists idx_turma_sessoes_turma_data on public.turma_sessoes (turma_id, data desc);
+
+alter table public.turma_sessoes enable row level security;
+
+drop policy if exists "professoras gerenciam sessoes das turmas permitidas" on public.turma_sessoes;
+create policy "professoras gerenciam sessoes das turmas permitidas"
+  on public.turma_sessoes for all
+  using (public.teacher_can_see_turma(turma_id))
+  with check (public.teacher_can_see_turma(turma_id));
+
+drop policy if exists "admins gerenciam todas as sessoes" on public.turma_sessoes;
+create policy "admins gerenciam todas as sessoes"
+  on public.turma_sessoes for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- 10.2) Presença por aluno dentro de uma sessão. "presente" default true:
+--       ao fazer a chamada, o normal é desmarcar quem FALTOU — mas a tela
+--       sempre grava uma linha por aluno matriculado (presente=true ou
+--       false), nunca omite quem faltou, senão o rateio da seção 11
+--       trataria "sem linha" e "faltou" como a mesma coisa.
+create table if not exists public.sessao_presencas (
+  id bigint generated always as identity primary key,
+  sessao_id bigint not null references public.turma_sessoes(id) on delete cascade,
+  aluno_id uuid not null references auth.users(id) on delete cascade,
+  presente boolean not null default true,
+  criado_em timestamptz default now()
+);
+
+alter table public.sessao_presencas drop constraint if exists sessao_presencas_sessao_aluno_key;
+alter table public.sessao_presencas add constraint sessao_presencas_sessao_aluno_key unique (sessao_id, aluno_id);
+
+create index if not exists idx_sessao_presencas_aluno on public.sessao_presencas (aluno_id);
+create index if not exists idx_sessao_presencas_sessao on public.sessao_presencas (sessao_id);
+
+alter table public.sessao_presencas enable row level security;
+
+-- "sessao_presencas" não tem turma_id, só sessao_id — sobe até
+-- turma_sessoes pra achar a turma, igual ao padrão de
+-- activity_results→profiles.
+drop policy if exists "professoras gerenciam presencas das turmas permitidas" on public.sessao_presencas;
+create policy "professoras gerenciam presencas das turmas permitidas"
+  on public.sessao_presencas for all
+  using (
+    exists (
+      select 1 from public.turma_sessoes ts
+      where ts.id = public.sessao_presencas.sessao_id
+        and public.teacher_can_see_turma(ts.turma_id)
+    )
+  )
+  with check (
+    exists (
+      select 1 from public.turma_sessoes ts
+      where ts.id = public.sessao_presencas.sessao_id
+        and public.teacher_can_see_turma(ts.turma_id)
+    )
+  );
+
+drop policy if exists "admins gerenciam todas as presencas" on public.sessao_presencas;
+create policy "admins gerenciam todas as presencas"
+  on public.sessao_presencas for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- 10.3) Auditoria — mesma trilha genérica do módulo financeiro (9.9):
+--       presença agora tem consequência financeira direta (rateio de
+--       mensalidade, seção 11), então fica no mesmo log em caso de
+--       disputa sobre quem recebeu por quantas aulas.
+drop trigger if exists trg_audit_turma_sessoes on public.turma_sessoes;
+create trigger trg_audit_turma_sessoes
+  after insert or update or delete on public.turma_sessoes
+  for each row execute procedure public.log_financeiro_auditoria();
+
+drop trigger if exists trg_audit_sessao_presencas on public.sessao_presencas;
+create trigger trg_audit_sessao_presencas
+  after insert or update or delete on public.sessao_presencas
+  for each row execute procedure public.log_financeiro_auditoria();
+
+-- ----------------------------------------------------------------------
+-- 11) MENSALIDADES — permite mais de uma linha por (aluno, mês)
+--     Quando o vínculo financeiro do aluno troca de professor no meio do
+--     mês, dyseGerarMensalidadesDoMes() (dyse-auth.js) passa a gerar uma
+--     linha por professor envolvido, cada uma com sua fatia de
+--     valor_recebido/valor_pago_professor — rateio proporcional às aulas
+--     dadas por cada um, contadas via o módulo de presença (seção 10). A
+--     chave antiga (aluno_id, mes_competencia) impedia isso.
+-- ----------------------------------------------------------------------
+alter table public.mensalidades drop constraint if exists mensalidades_aluno_id_mes_competencia_key;
+alter table public.mensalidades add constraint mensalidades_aluno_mes_professor_key unique (aluno_id, mes_competencia, professor_id);
+
 -- ======================================================================
 -- PRONTO! Depois de rodar este script:
 --

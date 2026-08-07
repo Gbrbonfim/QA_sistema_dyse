@@ -217,6 +217,19 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
   border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
 }
 .no-turma{color:var(--bad); font-weight:700;}
+
+/* ---------- CAIXA SUSPENSA (details/summary nativo — sem JS) ---------- */
+details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
+details.dyse-collapsible > summary{
+  list-style:none; cursor:pointer; padding:14px 18px; display:flex; align-items:center; justify-content:space-between;
+  gap:10px; font-weight:700; color:var(--seal); font-size:.88rem;
+}
+details.dyse-collapsible > summary::-webkit-details-marker{display:none;}
+details.dyse-collapsible > summary:hover{background:var(--antique-soft);}
+details.dyse-collapsible > summary .chevron{transition:transform .2s; opacity:.55; flex:none; font-size:1rem;}
+details.dyse-collapsible[open] > summary .chevron{transform:rotate(90deg);}
+details.dyse-collapsible > summary .summary-left{display:flex; align-items:center; gap:10px; min-width:0;}
+details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 .pill-count{
   display:inline-block; font-size:.72rem; font-weight:800; background:var(--antique-soft); color:var(--seal-soft);
   padding:2px 10px; border-radius:999px;
@@ -499,23 +512,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         <option value="sem-vinculo">Sem vínculo financeiro</option>
       </select>
     </div>
-    <div style="overflow-x:auto;">
-      <table class="dash-table dash-table-responsive" id="alunosTable">
-        <thead>
-          <tr>
-            <th>Aluno</th>
-            <th>E-mail</th>
-            <th>Turma</th>
-            <th class="fin-only">Modalidade</th>
-            <th class="fin-only">Professor responsável</th>
-            <th class="fin-only">Situação</th>
-            <th class="fin-only">Financeiro</th>
-            <th>Acesso</th>
-          </tr>
-        </thead>
-        <tbody id="alunosBody"></tbody>
-      </table>
-    </div>
+    <div id="alunosTableWrap"></div>
   </div>
 
   <!-- ---------- PROFESSORES ---------- -->
@@ -643,6 +640,24 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       <button type="button" class="report-modal-close" onclick="closeTurmaModal()" aria-label="Fechar">&times;</button>
     </div>
     <div class="report-modal-body" id="turmaModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de edição de nome/descrição da turma -->
+<div id="turmaEditModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeTurmaEditModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="turmaEditModalTitle">
+    <div class="report-modal-header">
+      <h3 id="turmaEditModalTitle">Editar turma</h3>
+      <button type="button" class="report-modal-close" onclick="closeTurmaEditModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body">
+      <form class="gestao-form gestao-form-col" onsubmit="return handleSaveTurmaEdit(event)">
+        <div class="gestao-field"><label>Nome da turma</label><input type="text" id="turmaEditName" required></div>
+        <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="turmaEditDesc"></div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+    </div>
   </div>
 </div>
 
@@ -799,19 +814,61 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   function renderTurmasTable(){
     document.getElementById('turmasBody').innerHTML = TURMAS.map(t => {
       const materiaCount = TURMA_MATERIAS.filter(tm => tm.turma_id === t.id).length;
-      const teacherCount = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id).length;
+      const professoresDaTurma = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id)
+        .map(tt => TEACHERS.find(p => p.id === tt.teacher_id))
+        .filter(Boolean);
       const studentCount = STUDENTS.filter(s => s.turma_id === t.id).length;
+      const professoresTexto = professoresDaTurma.length
+        ? professoresDaTurma.map(p => escapeHtmlLocal(p.full_name || '')).join(', ')
+        : 'Sem professor';
       return '<tr>' +
-        '<td><b>' + escapeHtmlLocal(t.name) + '</b>' + (t.description ? '<div style="opacity:.65; font-size:.78rem;">' + escapeHtmlLocal(t.description) + '</div>' : '') + '</td>' +
+        '<td><b>' + escapeHtmlLocal(t.name) + '</b>' +
+          (t.description ? '<div style="opacity:.65; font-size:.78rem;">' + escapeHtmlLocal(t.description) + '</div>' : '') +
+          '<div style="opacity:.65; font-size:.78rem;">' + professoresTexto + '</div>' +
+        '</td>' +
         '<td><span class="pill-count">' + materiaCount + '</span></td>' +
-        '<td><span class="pill-count">' + teacherCount + '</span></td>' +
+        '<td><span class="pill-count">' + professoresDaTurma.length + '</span></td>' +
         '<td><span class="pill-count">' + studentCount + '</span></td>' +
         '<td><div class="btn-row">' +
+          '<button type="button" class="btn btn-ghost btn-sm" onclick="openTurmaEditModal(\'' + t.id + '\')">Editar</button>' +
           '<button type="button" class="btn btn-ghost btn-sm" onclick="openTurmaModal(\'' + t.id + '\')">Gerenciar</button>' +
           '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
         '</div></td>' +
       '</tr>';
     }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma turma criada ainda.</td></tr>';
+  }
+
+  let CURRENT_TURMA_EDIT_ID = null;
+
+  function openTurmaEditModal(turmaId){
+    const t = TURMAS.find(x => x.id === turmaId);
+    if(!t) return;
+    CURRENT_TURMA_EDIT_ID = turmaId;
+    document.getElementById('turmaEditName').value = t.name || '';
+    document.getElementById('turmaEditDesc').value = t.description || '';
+    document.getElementById('turmaEditModal').classList.add('open');
+    document.getElementById('turmaEditModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeTurmaEditModal(){
+    document.getElementById('turmaEditModal').classList.remove('open');
+    document.getElementById('turmaEditModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_TURMA_EDIT_ID = null;
+  }
+
+  async function handleSaveTurmaEdit(e){
+    e.preventDefault();
+    const name = document.getElementById('turmaEditName').value.trim();
+    const description = document.getElementById('turmaEditDesc').value.trim();
+    if(!name || !CURRENT_TURMA_EDIT_ID) return false;
+    const { error } = await dyseUpdateTurma(CURRENT_TURMA_EDIT_ID, { name, description: description || null });
+    if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+    TURMAS = await dyseListTurmas();
+    renderTurmasTable();
+    closeTurmaEditModal();
+    return false;
   }
 
   async function handleCreateTurma(e){
@@ -1338,7 +1395,41 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       return true;
     });
 
-    document.getElementById('alunosBody').innerHTML = rows.map(({ s, turma, periodo, modalidade, professor }) => {
+    const wrap = document.getElementById('alunosTableWrap');
+    const isFin = document.body.classList.contains('dyse-can-financeiro');
+
+    if(!isFin){
+      // Sem acesso financeiro, professor não é um dado visível — tabela única, sem agrupar.
+      wrap.innerHTML = renderAlunosTableHtml(rows);
+      return;
+    }
+
+    // Com acesso financeiro: agrupa em caixa suspensa por "Professor responsável".
+    // Quem não tem professor vinculado fica FORA das caixas, direto na tela.
+    const semProfessor = rows.filter(({ professor }) => !professor);
+    const porProfessorId = {};
+    rows.forEach(item => {
+      if(!item.professor) return;
+      (porProfessorId[item.professor.id] = porProfessorId[item.professor.id] || { professor: item.professor, itens: [] }).itens.push(item);
+    });
+    const grupos = Object.values(porProfessorId).sort((a, b) => (a.professor.full_name || '').localeCompare(b.professor.full_name || ''));
+
+    let html = '';
+    if(semProfessor.length){
+      html += '<div class="report-section-head">Sem professor responsável (' + semProfessor.length + ')</div>' + renderAlunosTableHtml(semProfessor);
+    }
+    html += grupos.map(({ professor, itens }) =>
+      '<details class="dyse-collapsible">' +
+        '<summary><span class="summary-left">' + escapeHtmlLocal(professor.full_name || '(sem nome)') + '<span class="pill-count">' + itens.length + '</span></span><span class="chevron">›</span></summary>' +
+        '<div class="dyse-collapsible-body">' + renderAlunosTableHtml(itens) + '</div>' +
+      '</details>'
+    ).join('');
+
+    wrap.innerHTML = html || '<p style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</p>';
+  }
+
+  function renderAlunosTableHtml(itens){
+    const bodyHtml = itens.map(({ s, turma, periodo, modalidade, professor }) => {
       return '<tr>' +
         '<td data-label="Aluno">' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
         '<td data-label="E-mail">' + escapeHtmlLocal(s.email || '-') + '</td>' +
@@ -1353,6 +1444,14 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '</div></td>' +
       '</tr>';
     }).join('') || '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
+    return '<div style="overflow-x:auto;"><table class="dash-table dash-table-responsive">' +
+      '<thead><tr>' +
+        '<th>Aluno</th><th>E-mail</th><th>Turma</th>' +
+        '<th class="fin-only">Modalidade</th><th class="fin-only">Professor responsável</th><th class="fin-only">Situação</th><th class="fin-only">Financeiro</th>' +
+        '<th>Acesso</th>' +
+      '</tr></thead>' +
+      '<tbody>' + bodyHtml + '</tbody>' +
+    '</table></div>';
   }
 
   /* ---------- PROFESSORES ---------- */
@@ -1766,15 +1865,22 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
     const gastosPorAluno = {};
     gastos.forEach(g => { (gastosPorAluno[g.aluno_id] = gastosPorAluno[g.aluno_id] || []).push(g); });
+    // Um aluno pode ter mais de uma linha de mensalidade no mesmo mês
+    // (rateio entre professores quando o vínculo trocou no meio do mês) —
+    // agrupa por aluno pra cobrar os gastos do aluno UMA VEZ (não por linha).
+    const mensalidadesPorAluno = {};
+    mensalidades.forEach(m => { (mensalidadesPorAluno[m.aluno_id] = mensalidadesPorAluno[m.aluno_id] || []).push(m); });
+    const lucroCache = {};
 
     let linhas = mensalidades.map(m => {
       const aluno = STUDENTS.find(s => s.id === m.aluno_id);
       const professor = TEACHERS.find(t => t.id === m.professor_id);
       const modalidade = MODALIDADES.find(mo => mo.id === m.modalidade_id);
-      const gastosDoAluno = gastosPorAluno[m.aluno_id] || [];
-      const { gastos: totalGastos, lucro } = dyseLucroMensalidade(m, gastosDoAluno);
+      if(!lucroCache[m.aluno_id]) lucroCache[m.aluno_id] = dyseLucroPorAluno(mensalidadesPorAluno[m.aluno_id], gastosPorAluno[m.aluno_id] || []);
+      const { gastos: totalGastos, lucro } = lucroCache[m.aluno_id].porMensalidadeId[m.id];
       const margem = Number(m.valor_recebido) > 0 ? (lucro / Number(m.valor_recebido) * 100) : 0;
       return {
+        alunoId: m.aluno_id,
         alunoNome: aluno ? (aluno.full_name || aluno.email || '') : '(aluno removido)',
         professorNome: professor ? (professor.full_name || '') : '-',
         professorId: m.professor_id,
@@ -1818,7 +1924,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     const totalGastos = linhas.reduce((s,l) => s+l.totalGastos, 0);
     const lucroTotal = linhas.reduce((s,l) => s+l.lucro, 0);
     const margemGeral = totalRecebido > 0 ? (lucroTotal/totalRecebido*100) : 0;
-    const qtdAlunos = linhas.length;
+    const qtdAlunos = new Set(linhas.map(l => l.alunoId)).size; // conta alunos distintos, não linhas (um aluno rateado gera 2+ linhas no mês)
     const ticketMedio = qtdAlunos ? totalRecebido/qtdAlunos : 0;
     const custoMedio = qtdAlunos ? (totalPagoProf+totalGastos)/qtdAlunos : 0;
     const lucroMedio = qtdAlunos ? lucroTotal/qtdAlunos : 0;
@@ -1861,11 +1967,16 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       const [mensalidadesMes, gastosMes] = await Promise.all([dyseListMensalidades(mes), dyseListGastos(null, mes)]);
       const gastosPorAluno = {};
       gastosMes.forEach(g => { (gastosPorAluno[g.aluno_id] = gastosPorAluno[g.aluno_id] || []).push(g); });
+      const mensalidadesPorAlunoMes = {};
+      mensalidadesMes.forEach(m => { (mensalidadesPorAlunoMes[m.aluno_id] = mensalidadesPorAlunoMes[m.aluno_id] || []).push(m); });
       let receita = 0, pago = 0, lucro = 0;
       mensalidadesMes.forEach(m => {
         receita += Number(m.valor_recebido);
         pago += Number(m.valor_pago_professor);
-        lucro += dyseLucroMensalidade(m, gastosPorAluno[m.aluno_id] || []).lucro;
+      });
+      // Gastos cobrados uma vez por aluno (não por linha) — mesmo motivo do renderRelatorio.
+      Object.keys(mensalidadesPorAlunoMes).forEach(alunoId => {
+        lucro += dyseLucroPorAluno(mensalidadesPorAlunoMes[alunoId], gastosPorAluno[alunoId] || []).lucroTotal;
       });
       receitas.push(receita); pagos.push(pago); lucros.push(lucro);
     }
