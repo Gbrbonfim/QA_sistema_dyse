@@ -727,6 +727,18 @@ body.dyse-modal-open{overflow:hidden;}
         <tbody id="finProfHistoricoBody"></tbody>
       </table>
     </div>
+    <details class="dyse-collapsible" style="margin-top:24px;">
+      <summary><span>Previsão dos próximos meses</span><span class="chevron">›</span></summary>
+      <div class="dyse-collapsible-body" style="overflow-x:auto;">
+        <p style="font-size:.78rem; color:var(--seal-soft); opacity:.8; margin:0 0 12px;">
+          Estimativa a partir do seu vínculo atual — calculada de uma vez, sem precisar trocar o mês acima um a um. Os valores oficiais só saem quando a gestão gerar cada mês.
+        </p>
+        <table class="dash-table" id="finProfPrevisaoTable">
+          <thead><tr><th>Mês</th><th>Alunos</th><th>Total previsto</th></tr></thead>
+          <tbody id="finProfPrevisaoBody"><tr><td colspan="3" style="text-align:center; opacity:.6;">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </details>
   </div>
 
   <div id="panelTurmas" style="display:none;">
@@ -753,6 +765,44 @@ body.dyse-modal-open{overflow:hidden;}
         <thead><tr><th>Data</th><th>Presentes</th></tr></thead>
         <tbody id="chamadaHistoricoBody"></tbody>
       </table>
+    </div>
+
+    <hr style="border:none; border-top:2px solid #f0e3d2; margin:32px 0 24px;">
+    <p style="font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); margin-bottom:6px;">Registro de Classe</p>
+    <p id="registroClasseSemNivel" style="color:var(--seal-soft); font-size:.85rem; display:none;">
+      Essa turma ainda não tem um nível acadêmico definido pela gestão — peça pra vincularem um nível a ela pra usar o Registro de Classe.
+    </p>
+    <div id="registroClasseWrap" style="display:none;">
+      <p style="color:var(--seal-soft); font-size:.85rem; margin-bottom:14px;">Escolha a aula ministrada — o plano dela e a lista de alunos da turma carregam automaticamente.</p>
+      <div class="dash-filter">
+        <select id="registroClasseAulaSelect" onchange="onRegistroClasseAulaChange()"></select>
+      </div>
+      <details class="dyse-collapsible">
+        <summary><span>Plano da aula (referência da coordenação)</span><span class="chevron">›</span></summary>
+        <div class="dyse-collapsible-body" id="registroClasseBlocoA"></div>
+      </details>
+      <div style="overflow-x:auto; margin-top:16px;">
+        <table class="dash-table" id="registroClasseTable">
+          <thead><tr id="registroClasseTheadRow"><th>Aluno</th></tr></thead>
+          <tbody id="registroClasseBody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:20px; display:flex; flex-direction:column; gap:12px; max-width:520px;">
+        <div><label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:4px;">Pontos a retomar na próxima aula</label>
+          <input type="text" id="registroClassePontos" style="width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;"></div>
+        <div><label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:4px;">Ajuste de ritmo necessário</label>
+          <input type="text" id="registroClasseRitmo" style="width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;"></div>
+        <label style="display:flex; align-items:center; gap:8px; font-size:.85rem; cursor:pointer; color:var(--seal);">
+          <input type="checkbox" id="registroClasseAlerta" style="width:auto;" onchange="document.getElementById('registroClasseAlertaMotivoWrap').style.display = this.checked ? 'block' : 'none'">
+          Alerta para Report Card
+        </label>
+        <div id="registroClasseAlertaMotivoWrap" style="display:none;"><label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:4px;">Motivo do alerta</label>
+          <input type="text" id="registroClasseAlertaMotivo" style="width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;"></div>
+      </div>
+      <p id="registroClasseMsg" style="font-size:.82rem; margin:10px 0; color:var(--seal-soft);"></p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" onclick="salvarRegistroClasse()">Salvar registro de classe</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1122,6 +1172,7 @@ body.dyse-modal-open{overflow:hidden;}
     CHAMADA_STUDENTS = students.filter(s => s.turma_id === turmaId);
     await loadChamadaDoDia();
     await renderChamadaHistorico();
+    await carregarRegistroClasseDaTurma();
   }
 
   async function loadChamadaDoDia(){
@@ -1179,6 +1230,152 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   /* ======================================================================
+     REGISTRO DE CLASSE — vinculado ao aluno, não à turma: o histórico de
+     cada aluno continua aparecendo mesmo depois de trocar de turma ou de
+     professor. Escalável por nível: os eixos de avaliação e a lista de
+     aulas vêm de niveis/nivel_aulas (cadastrados pela gestão), nada aqui é
+     fixo pra A1 nem pra 44 aulas.
+     ====================================================================== */
+  let REGISTRO_NIVEIS_CACHE = [];
+  let REGISTRO_AULAS_DA_TURMA = [];
+  let REGISTRO_EIXOS = [];
+  const LABEL_AVALIACAO = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' };
+
+  async function carregarRegistroClasseDaTurma(){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    const wrap = document.getElementById('registroClasseWrap');
+    const semNivel = document.getElementById('registroClasseSemNivel');
+    if(!turmaId){ wrap.style.display = 'none'; semNivel.style.display = 'none'; return; }
+
+    // "Nível" (A1, A2...) é uma matéria com currículo (total_aulas
+    // preenchido) vinculada à turma pelo mesmo turma_materias de
+    // "Matérias liberadas" — não existe um campo separado pra isso.
+    if(!REGISTRO_NIVEIS_CACHE.length) REGISTRO_NIVEIS_CACHE = await dyseListNiveis();
+    const turmaMaterias = await dyseListAllTurmaMaterias();
+    const nivel = REGISTRO_NIVEIS_CACHE.find(n => turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
+
+    if(!nivel){
+      wrap.style.display = 'none';
+      semNivel.style.display = 'block';
+      return;
+    }
+    semNivel.style.display = 'none';
+    wrap.style.display = 'block';
+
+    REGISTRO_EIXOS = nivel.eixos_avaliacao || [];
+    REGISTRO_AULAS_DA_TURMA = await dyseListNivelAulas(nivel.slug);
+
+    // Status ✓/⚠️ por aula: busca os registros de todos os alunos da turma
+    // de uma vez (poucas chamadas — turma é pequena) pra marcar quais aulas
+    // já têm registro completo.
+    const registrosPorAluno = await Promise.all(CHAMADA_STUDENTS.map(s => dyseListRegistrosClasse(s.id)));
+    const registrosPorAula = {};
+    registrosPorAluno.flat().forEach(r => { (registrosPorAula[r.nivel_aula_id] = registrosPorAula[r.nivel_aula_id] || 0); registrosPorAula[r.nivel_aula_id]++; });
+
+    const sel = document.getElementById('registroClasseAulaSelect');
+    const valorAnterior = sel.value;
+    sel.innerHTML = REGISTRO_AULAS_DA_TURMA.map(a => {
+      const feitos = registrosPorAula[a.id] || 0;
+      const status = !feitos ? '' : (feitos >= CHAMADA_STUDENTS.length ? ' ✓' : ' ⚠️');
+      return '<option value="' + a.id + '">' + String(a.numero).padStart(2,'0') + '. ' + escapeHtmlLocal(a.topico) + status + '</option>';
+    }).join('');
+    if(REGISTRO_AULAS_DA_TURMA.some(a => a.id === valorAnterior)) sel.value = valorAnterior;
+    if(REGISTRO_AULAS_DA_TURMA.length) await onRegistroClasseAulaChange();
+  }
+
+  function renderRegistroClasseBlocoA(aula){
+    const c = aula.conteudo || {};
+    const linhas = [
+      ['Habilidades foco', (c.habilidades || []).join(', ')],
+      ['Tarefa comunicativa final', c.tarefa_comunicativa],
+      ['Estrutura gramatical', c.estrutura_gramatical],
+      ['Pontos de atenção', (c.pontos_atencao || []).join(' · ')],
+      ['Foco fonético — som', c.foco_fonetico_som],
+      ['Foco fonético — erro típico', c.foco_fonetico_erro],
+      ['Foco fonético — correção sugerida', c.foco_fonetico_correcao],
+      ['Tarefa de casa', c.tarefa_de_casa]
+    ].filter(([, v]) => v);
+    document.getElementById('registroClasseBlocoA').innerHTML = linhas.map(([label, val]) =>
+      '<p style="margin:0 0 10px;"><b style="color:var(--seal); font-size:.8rem; text-transform:uppercase; letter-spacing:.03em; display:block; margin-bottom:2px;">' + escapeHtmlLocal(label) + '</b><span style="font-size:.88rem;">' + escapeHtmlLocal(val) + '</span></p>'
+    ).join('');
+  }
+
+  async function onRegistroClasseAulaChange(){
+    const aulaId = document.getElementById('registroClasseAulaSelect').value;
+    const aula = REGISTRO_AULAS_DA_TURMA.find(a => a.id === aulaId);
+    if(!aula) return;
+    renderRegistroClasseBlocoA(aula);
+
+    const alunoIds = CHAMADA_STUDENTS.map(s => s.id);
+    const existentes = await dyseListRegistrosClasseDaAula(alunoIds, aulaId);
+    const existentePorAluno = {};
+    existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
+
+    document.getElementById('registroClasseTheadRow').innerHTML =
+      '<th>Aluno</th>' + REGISTRO_EIXOS.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + '<th>Observações</th>';
+
+    document.getElementById('registroClasseBody').innerHTML = CHAMADA_STUDENTS.length
+      ? CHAMADA_STUDENTS.map(s => {
+          const reg = existentePorAluno[s.id];
+          const avaliacoes = (reg && reg.avaliacoes) || {};
+          const selects = REGISTRO_EIXOS.map(eixo => {
+            const atual = avaliacoes[eixo] || '';
+            const opts = ['', 'sim', 'parcial', 'nao', 'nao_participou'].map(v =>
+              '<option value="' + v + '"' + (atual === v ? ' selected' : '') + '>' + (v ? LABEL_AVALIACAO[v] : '—') + '</option>'
+            ).join('');
+            return '<td><select data-aluno="' + s.id + '" data-eixo="' + escapeHtmlLocal(eixo) + '">' + opts + '</select></td>';
+          }).join('');
+          return '<tr><td data-label="Aluno">' + escapeHtmlLocal(s.full_name || s.email || '') + '</td>' + selects +
+            '<td><input type="text" data-obs="' + s.id + '" value="' + escapeHtmlLocal(reg ? (reg.observacoes || '') : '') + '" style="width:100%; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem;"></td></tr>';
+        }).join('')
+      : '<tr><td colspan="' + (REGISTRO_EIXOS.length + 2) + '" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
+
+    const sessao = await dyseGetRegistroClasseSessao(document.getElementById('chamadaTurmaSelect').value, aulaId);
+    document.getElementById('registroClassePontos').value = sessao ? (sessao.pontos_a_retomar || '') : '';
+    document.getElementById('registroClasseRitmo').value = sessao ? (sessao.ajuste_de_ritmo || '') : '';
+    document.getElementById('registroClasseAlerta').checked = !!(sessao && sessao.alerta_report_card);
+    document.getElementById('registroClasseAlertaMotivo').value = sessao ? (sessao.alerta_report_card_motivo || '') : '';
+    document.getElementById('registroClasseAlertaMotivoWrap').style.display = (sessao && sessao.alerta_report_card) ? 'block' : 'none';
+    document.getElementById('registroClasseMsg').textContent = '';
+  }
+
+  async function salvarRegistroClasse(){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    const aulaId = document.getElementById('registroClasseAulaSelect').value;
+    const msg = document.getElementById('registroClasseMsg');
+    if(!turmaId || !aulaId){ msg.textContent = 'Escolha a turma e a aula.'; return; }
+
+    const porAluno = {};
+    CHAMADA_STUDENTS.forEach(s => { porAluno[s.id] = { avaliacoes: {}, observacoes: '' }; });
+    document.querySelectorAll('#registroClasseBody select[data-aluno]').forEach(el => {
+      if(el.value) porAluno[el.dataset.aluno].avaliacoes[el.dataset.eixo] = el.value;
+    });
+    document.querySelectorAll('#registroClasseBody input[data-obs]').forEach(el => {
+      porAluno[el.dataset.obs].observacoes = el.value.trim();
+    });
+
+    const resultados = await Promise.all(CHAMADA_STUDENTS.map(s =>
+      dyseUpsertRegistroClasse(s.id, aulaId, {
+        turma_id: turmaId,
+        avaliacoes: porAluno[s.id].avaliacoes,
+        observacoes: porAluno[s.id].observacoes || null
+      })
+    ));
+    const erroAluno = resultados.find(r => r.error);
+
+    const { error: erroSessao } = await dyseUpsertRegistroClasseSessao(turmaId, aulaId, {
+      pontos_a_retomar: document.getElementById('registroClassePontos').value.trim() || null,
+      ajuste_de_ritmo: document.getElementById('registroClasseRitmo').value.trim() || null,
+      alerta_report_card: document.getElementById('registroClasseAlerta').checked,
+      alerta_report_card_motivo: document.getElementById('registroClasseAlertaMotivo').value.trim() || null
+    });
+
+    if(erroAluno || erroSessao){ msg.textContent = 'Erro ao salvar: ' + ((erroAluno && erroAluno.error.message) || erroSessao.message); return; }
+    msg.textContent = 'Registro de classe salvo!';
+    await carregarRegistroClasseDaTurma(); // atualiza os indicadores ✓/⚠️ do seletor de aula
+  }
+
+  /* ======================================================================
      FINANCEIRO — só os próprios dados (RLS já restringe; a filtragem por
      professor_id nas chamadas dyseListMyMensalidades/dyseListMyPagamentos
      é defesa em profundidade, não a única barreira).
@@ -1221,6 +1418,35 @@ body.dyse-modal-open{overflow:hidden;}
     renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes), isPrevisao);
     renderFinanceiroTabela(doMes, isPrevisao);
     renderFinanceiroHistorico(todasMensalidades, pagamentos);
+    if(!FIN_PREVISAO_MESES_CARREGADA){
+      FIN_PREVISAO_MESES_CARREGADA = true;
+      loadFinanceiroPrevisaoMeses(); // roda em paralelo, não trava a tela principal
+    }
+  }
+
+  /* Lista de uma vez os próximos 6 meses (calculados em lote, sem repetir
+     consulta por mês) — evita ter que trocar o seletor de mês acima um a
+     um só pra ver a previsão de cada mês futuro. Carrega só uma vez por
+     visita ao painel (o vínculo financeiro não muda sozinho durante a
+     sessão). */
+  let FIN_PREVISAO_MESES_CARREGADA = false;
+  async function loadFinanceiroPrevisaoMeses(){
+    const [y, m] = dyseMesCompetencia().split('-').map(Number);
+    const proxMesNum = m === 12 ? 1 : m + 1;
+    const proxAno = m === 12 ? y + 1 : y;
+    const proximoMes = proxAno + '-' + String(proxMesNum).padStart(2,'0') + '-01';
+    const meses = await dysePreverFinanceiroProfessorMeses(proximoMes, 6);
+    renderFinanceiroPrevisaoMeses(meses);
+  }
+
+  function renderFinanceiroPrevisaoMeses(meses){
+    const comAlunos = meses.filter(m => m.linhas.length);
+    document.getElementById('finProfPrevisaoBody').innerHTML = comAlunos.length
+      ? comAlunos.map(m => {
+          const total = m.linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
+          return '<tr><td>' + formatMesLabel(m.mes) + '</td><td><span class="pill-count">' + m.linhas.length + '</span></td><td>' + formatMoney(total) + '</td></tr>';
+        }).join('')
+      : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhuma previsão pros próximos meses.</td></tr>';
   }
 
   function renderFinanceiroKpis(linhas, pagamento, isPrevisao){

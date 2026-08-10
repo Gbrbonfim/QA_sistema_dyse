@@ -697,6 +697,18 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   </div>
 </div>
 
+<!-- Modal de histórico acadêmico do aluno (Registro de Classe de todas as aulas) -->
+<div id="alunoHistoricoModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeAlunoHistoricoModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="alunoHistoricoModalTitle">
+    <div class="report-modal-header">
+      <h3 id="alunoHistoricoModalTitle">Histórico acadêmico</h3>
+      <button type="button" class="report-modal-close" onclick="closeAlunoHistoricoModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="alunoHistoricoModalBody"></div>
+  </div>
+</div>
+
 <!-- Modal de registro de pagamento a um professor -->
 <div id="pagamentoModal" class="report-modal" aria-hidden="true">
   <div class="report-modal-backdrop" onclick="closePagamentoModal()"></div>
@@ -718,7 +730,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 <script src="/assets/dyse-auth.js"></script>
 <script>
   let TURMAS = [], MATERIAS = [], STUDENTS = [], TEACHERS = [], TURMA_MATERIAS = [], TEACHER_TURMAS = [], MATERIA_ACTIVITIES_DB = [];
-  let MODALIDADES = [], MODALIDADE_VALORES = [], ALUNO_FIN_HISTORICO = [];
+  let MODALIDADES = [], MODALIDADE_VALORES = [], ALUNO_FIN_HISTORICO = [], NIVEIS = [];
 
   /* Atividades de cada matéria — mesma lista fixa usada em professora.html e
      area-do-aluno.html (o conteúdo delas é feito à mão no código, não vem
@@ -796,6 +808,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       dyseListModalidadeValores(),
       dyseListAlunoFinanceiroHistorico()
     ]);
+    // "Nível" (A1, A2...) é uma matéria com currículo — reconhecida por ter
+    // total_aulas preenchido (matérias comuns, tipo TOEFL, ficam sem isso).
+    NIVEIS = MATERIAS.filter(m => m.total_aulas != null);
     renderTurmasTable();
     renderMateriasTable();
     populateAlunosFiltros();
@@ -821,8 +836,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       const professoresTexto = professoresDaTurma.length
         ? professoresDaTurma.map(p => escapeHtmlLocal(p.full_name || '')).join(', ')
         : 'Sem professor';
+      const nivel = NIVEIS.find(n => TURMA_MATERIAS.some(tm => tm.turma_id === t.id && tm.materia_slug === n.slug));
       return '<tr>' +
         '<td><b>' + escapeHtmlLocal(t.name) + '</b>' +
+          (nivel ? ' <span class="pill-count">' + escapeHtmlLocal(nivel.name) + '</span>' : '') +
           (t.description ? '<div style="opacity:.65; font-size:.78rem;">' + escapeHtmlLocal(t.description) + '</div>' : '') +
           '<div style="opacity:.65; font-size:.78rem;">' + professoresTexto + '</div>' +
         '</td>' +
@@ -910,7 +927,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       : '<p class="report-line" style="opacity:.6;">Nenhuma matéria cadastrada ainda — crie uma na aba Matérias.</p>';
 
     document.getElementById('turmaModalBody').innerHTML =
-      '<div class="report-section-head">Matérias liberadas</div>' + materiasHtml +
+      '<div class="report-section-head">Matérias liberadas</div>' +
+      '<p class="gestao-hint" style="margin:0 0 10px;">Uma matéria com currículo cadastrado (ex: A1) também libera o Registro de Classe da professora pra essa turma.</p>' +
+      materiasHtml +
       '<div class="report-section-head">Professores com acesso</div>' +
       '<input type="text" class="modal-search-input" id="turmaTeacherSearch" placeholder="Buscar professor(a) pra adicionar..." oninput="renderTurmaTeacherSearch()">' +
       '<div id="turmaTeacherSearchResults"></div>' +
@@ -1439,6 +1458,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '<td class="fin-only" data-label="Situação">' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
         '<td class="fin-only" data-label="Financeiro"><button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
         '<td data-label="Acesso"><div class="btn-row">' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoHistoricoModal(\'' + s.id + '\')">Histórico</button>' +
           '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
           '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
         '</div></td>' +
@@ -1645,6 +1665,60 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     document.getElementById('alunoFinModal').setAttribute('aria-hidden','true');
     document.body.classList.remove('dyse-modal-open');
     CURRENT_ALUNO_FIN_ID = null;
+  }
+
+  /* ---------- Histórico acadêmico (Registro de Classe de todas as aulas) ----------
+     Vinculado ao aluno, não à turma — continua mostrando tudo mesmo depois
+     de trocas de turma/professor (o registro em si nunca é apagado nem
+     reiniciado, só a visibilidade de quem pode editar muda). */
+  let NIVEL_AULAS_POR_ID = null; // cache: { [nivel_aula_id]: { numero, topico, materia_slug } }
+
+  async function garantirNivelAulasCache(){
+    if(NIVEL_AULAS_POR_ID) return;
+    NIVEL_AULAS_POR_ID = {};
+    const listas = await Promise.all(NIVEIS.map(n => dyseListNivelAulas(n.slug)));
+    listas.flat().forEach(a => { NIVEL_AULAS_POR_ID[a.id] = a; });
+  }
+
+  async function openAlunoHistoricoModal(alunoId){
+    const s = STUDENTS.find(x => x.id === alunoId);
+    if(!s) return;
+    document.getElementById('alunoHistoricoModalTitle').textContent = 'Histórico acadêmico — ' + (s.full_name || s.email || '');
+    document.getElementById('alunoHistoricoModalBody').innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+    document.getElementById('alunoHistoricoModal').classList.add('open');
+    document.getElementById('alunoHistoricoModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+
+    await garantirNivelAulasCache();
+    const registros = (await dyseListRegistrosClasse(alunoId))
+      .map(r => ({ r, aula: NIVEL_AULAS_POR_ID[r.nivel_aula_id] || null }))
+      .sort((a, b) => (a.aula ? a.aula.numero : 0) - (b.aula ? b.aula.numero : 0));
+
+    if(!registros.length){
+      document.getElementById('alunoHistoricoModalBody').innerHTML = '<p class="report-line" style="opacity:.6;">Nenhum registro de classe ainda.</p>';
+      return;
+    }
+
+    document.getElementById('alunoHistoricoModalBody').innerHTML = registros.map(({ r, aula }) => {
+      const professor = TEACHERS.find(t => t.id === r.professor_id);
+      const turma = TURMAS.find(t => t.id === r.turma_id);
+      const avaliacoesTexto = Object.keys(r.avaliacoes || {}).map(eixo => {
+        const val = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' }[r.avaliacoes[eixo]] || r.avaliacoes[eixo];
+        return eixo + ': ' + val;
+      }).join(' · ');
+      return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:6px;">' +
+        '<span class="name">Aula ' + (aula ? String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlLocal(aula.topico) : '(aula removida)') + '</span>' +
+        '<span style="font-size:.78rem; opacity:.75;">' + formatDateBR(r.data_aula) + ' · ' + escapeHtmlLocal(professor ? (professor.full_name || '') : '(professor removido)') + ' · ' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + '</span>' +
+        (avaliacoesTexto ? '<span style="font-size:.82rem;">' + escapeHtmlLocal(avaliacoesTexto) + '</span>' : '') +
+        (r.observacoes ? '<span style="font-size:.8rem; opacity:.85;">' + escapeHtmlLocal(r.observacoes) + '</span>' : '') +
+      '</div>';
+    }).join('');
+  }
+
+  function closeAlunoHistoricoModal(){
+    document.getElementById('alunoHistoricoModal').classList.remove('open');
+    document.getElementById('alunoHistoricoModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
   }
 
   function renderAlunoFinModalBody(){

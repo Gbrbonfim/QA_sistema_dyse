@@ -862,21 +862,38 @@ async function dyseListMyMensalidades(mes){
   return error ? [] : data;
 }
 
+/* Gera "qtd" meses de competência (YYYY-MM-01) sequenciais a partir de
+   "mes" (inclusive). */
+function dyseProximosMeses(mes, qtd){
+  const meses = [];
+  let atual = mes;
+  for(let i = 0; i < qtd; i++){
+    meses.push(atual);
+    const [y, m] = atual.split('-').map(Number);
+    const proxMesNum = m === 12 ? 1 : m + 1;
+    const proxAno = m === 12 ? y + 1 : y;
+    atual = proxAno + '-' + String(proxMesNum).padStart(2,'0') + '-01';
+  }
+  return meses;
+}
+
 /* Previsão (SEM gravar nada em "mensalidades") do que o professor logado
-   deve receber por aluno num mês que ainda não foi gerado oficialmente —
-   isso só acontece quando a gestão abre Pagamentos/Relatório pra aquele
-   mês em gestao.html. Sem isso, um mês futuro (ex: com parcelas
-   contratadas até lá) aparece vazio pro professor até alguém do
-   financeiro passar por aquele mês pelo menos uma vez.
+   deve receber por aluno em cada um de "qtdMeses" meses a partir de
+   "mesInicial" (inclusive) — usada pra listar vários meses futuros de uma
+   vez (ex: "Previsão dos próximos meses" no painel da professora), sem
+   repetir as 4 consultas abaixo pra cada mês like dysePreverFinanceiroProfessor
+   fazia sendo chamada mês a mês (o que ficava lento ao trocar o seletor
+   repetidas vezes). Um mês só é gerado oficialmente (mensalidades de
+   verdade) quando a gestão abre Pagamentos/Relatório pra ele em
+   gestao.html — até lá, um mês futuro com parcelas contratadas aparece
+   vazio pro professor.
 
    Só usa dados que o próprio professor já enxerga via RLS (seu próprio
-   histórico financeiro) — não sabe se esse mês vai ser rateado com outro
-   professor (isso depende de presença lançada, calculada só na geração
-   oficial em dyseGerarMensalidadesDoMes), então é só uma estimativa: o
-   valor final pode sair diferente. Não usada pra meses já fechados —
-   quem chama decide isso antes (só faz sentido prever o que ainda não
-   existe). */
-async function dysePreverFinanceiroProfessor(mes){
+   histórico financeiro) — não sabe se algum desses meses vai ser rateado
+   com outro professor (isso depende de presença lançada, calculada só na
+   geração oficial em dyseGerarMensalidadesDoMes), então é só uma
+   estimativa: o valor final pode sair diferente. */
+async function dysePreverFinanceiroProfessorMeses(mesInicial, qtdMeses){
   const session = await dyseGetSession();
   if(!session) return [];
 
@@ -887,6 +904,7 @@ async function dysePreverFinanceiroProfessor(mes){
     dyseListProfilesByRole('student')
   ]);
 
+  const meuHistorico = historico.filter(h => (h.professor_id || null) === session.user.id); // defesa em profundidade, RLS já filtra
   const modalidadeById = {};
   modalidades.forEach(m => { modalidadeById[m.id] = m; });
   const valoresPorModalidade = {};
@@ -894,35 +912,45 @@ async function dysePreverFinanceiroProfessor(mes){
   const nomeAlunoById = {};
   alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
 
-  const fimDoMesStr = dyseFimDoMes(mes);
-  const porAluno = {};
-  historico.forEach(h => {
-    if((h.professor_id || null) !== session.user.id) return; // defesa em profundidade, RLS já filtra
-    if(h.situacao !== 'ativo') return;
-    if(h.data_inicio > fimDoMesStr) return;
-    if(h.data_fim && h.data_fim < mes) return;
-    const ultimoMesPago = dyseUltimoMesPago(h);
-    if(ultimoMesPago && mes > ultimoMesPago) return;
-    const atual = porAluno[h.aluno_id];
-    const ganha = !atual || h.data_inicio > atual.data_inicio || (h.data_inicio === atual.data_inicio && h.id > atual.id);
-    if(ganha) porAluno[h.aluno_id] = h;
-  });
+  return dyseProximosMeses(mesInicial, qtdMeses).map(mes => {
+    const fimDoMesStr = dyseFimDoMes(mes);
+    const porAluno = {};
+    meuHistorico.forEach(h => {
+      if(h.situacao !== 'ativo') return;
+      if(h.data_inicio > fimDoMesStr) return;
+      if(h.data_fim && h.data_fim < mes) return;
+      const ultimoMesPago = dyseUltimoMesPago(h);
+      if(ultimoMesPago && mes > ultimoMesPago) return;
+      const atual = porAluno[h.aluno_id];
+      const ganha = !atual || h.data_inicio > atual.data_inicio || (h.data_inicio === atual.data_inicio && h.id > atual.id);
+      if(ganha) porAluno[h.aluno_id] = h;
+    });
 
-  return Object.values(porAluno).map(h => {
-    const modalidade = modalidadeById[h.modalidade_id];
-    const valorProfessor = (modalidade && modalidade.is_custom_value)
-      ? Number(h.valor_professor_customizado || 0)
-      : (dyseValorVigente(valoresPorModalidade[h.modalidade_id], mes) || 0);
-    return {
-      aluno_id: h.aluno_id,
-      aluno_nome: nomeAlunoById[h.aluno_id] || null,
-      mes_competencia: mes,
-      professor_id: h.professor_id,
-      modalidade_id: h.modalidade_id,
-      valor_recebido: Number(h.valor_mensal_aluno || 0),
-      valor_pago_professor: valorProfessor
-    };
+    const linhas = Object.values(porAluno).map(h => {
+      const modalidade = modalidadeById[h.modalidade_id];
+      const valorProfessor = (modalidade && modalidade.is_custom_value)
+        ? Number(h.valor_professor_customizado || 0)
+        : (dyseValorVigente(valoresPorModalidade[h.modalidade_id], mes) || 0);
+      return {
+        aluno_id: h.aluno_id,
+        aluno_nome: nomeAlunoById[h.aluno_id] || null,
+        mes_competencia: mes,
+        professor_id: h.professor_id,
+        modalidade_id: h.modalidade_id,
+        valor_recebido: Number(h.valor_mensal_aluno || 0),
+        valor_pago_professor: valorProfessor
+      };
+    });
+    return { mes, linhas };
   });
+}
+
+/* Previsão de UM mês só — mantida por conveniência pra quem só precisa de
+   um mês (ex: o mês selecionado no painel), delega pra
+   dysePreverFinanceiroProfessorMeses. */
+async function dysePreverFinanceiroProfessor(mes){
+  const [resultado] = await dysePreverFinanceiroProfessorMeses(mes, 1);
+  return resultado ? resultado.linhas : [];
 }
 
 /* ======================================================================
@@ -996,6 +1024,109 @@ async function dyseListPresencasAluno(alunoId, sessaoIds){
     .eq('presente', true)
     .in('sessao_id', sessaoIds);
   return error ? [] : data;
+}
+
+/* ======================================================================
+   MÓDULO ACADÊMICO — Registro de Classe e histórico do aluno.
+   Escalável por nível: nenhuma função aqui é específica de A1 ou de 44
+   aulas — isso vem de niveis.total_aulas/eixos_avaliacao, cadastrado no
+   banco (ver schema.sql seção 12).
+   ====================================================================== */
+
+/* ---------- Níveis e aulas do nível ---------- */
+/* Um "nível" (A1, A2...) é uma matéria com currículo — reconhecida por ter
+   "total_aulas" preenchido (matérias comuns, tipo TOEFL, ficam com isso
+   nulo). Vincular/desvincular uma turma a um nível é o mesmo
+   dyseSetTurmaMateria(turmaId, slug, enabled) já usado em "Matérias
+   liberadas" — não existe uma função separada pra isso. */
+async function dyseListNiveis(){
+  const { data, error } = await sb.from('materias').select('*').not('total_aulas', 'is', null).order('name', { ascending: true });
+  return error ? [] : data;
+}
+
+async function dyseListNivelAulas(materiaSlug){
+  if(!materiaSlug) return [];
+  const { data, error } = await sb.from('nivel_aulas').select('*').eq('materia_slug', materiaSlug).order('numero', { ascending: true });
+  return error ? [] : data;
+}
+
+/* ---------- Registro de Classe (Bloco B — por aluno) ---------- */
+
+/* Histórico completo de um aluno, em qualquer turma/professor — a RLS
+   (teacher_can_see_turma pela turma ATUAL do aluno) já garante que só
+   quem pode ver o aluno agora enxerga isso, mesmo registros antigos
+   feitos por outro professor/turma. */
+async function dyseListRegistrosClasse(alunoId){
+  const { data, error } = await sb.from('registros_classe').select('*').eq('aluno_id', alunoId);
+  return error ? [] : data;
+}
+
+/* Registros de uma LISTA de alunos numa aula específica — usado pra
+   pré-preencher a tela de registro de uma turma inteira de uma vez. */
+async function dyseListRegistrosClasseDaAula(alunoIds, nivelAulaId){
+  if(!alunoIds || !alunoIds.length) return [];
+  const { data, error } = await sb
+    .from('registros_classe')
+    .select('*')
+    .eq('nivel_aula_id', nivelAulaId)
+    .in('aluno_id', alunoIds);
+  return error ? [] : data;
+}
+
+/* "avaliacoes" = { "Tarefa Final": "sim"|"parcial"|"nao"|"nao_participou", ... },
+   chaves = niveis.eixos_avaliacao do nível daquela aula. */
+async function dyseUpsertRegistroClasse(alunoId, nivelAulaId, campos){
+  const session = await dyseGetSession();
+  const userId = session ? session.user.id : null;
+  const { data, error } = await sb
+    .from('registros_classe')
+    .upsert({
+      aluno_id: alunoId,
+      nivel_aula_id: nivelAulaId,
+      turma_id: campos.turma_id || null,
+      professor_id: userId,
+      data_aula: campos.data_aula || dyseHoje(),
+      avaliacoes: campos.avaliacoes || {},
+      observacoes: campos.observacoes || null,
+      criado_por: userId,
+      atualizado_por: userId,
+      atualizado_em: new Date().toISOString()
+    }, { onConflict: 'aluno_id,nivel_aula_id' })
+    .select('*')
+    .maybeSingle();
+  return { data, error };
+}
+
+/* ---------- Planner da sessão (Bloco C — por turma+aula) ---------- */
+async function dyseGetRegistroClasseSessao(turmaId, nivelAulaId){
+  const { data, error } = await sb
+    .from('registro_classe_sessao')
+    .select('*')
+    .eq('turma_id', turmaId)
+    .eq('nivel_aula_id', nivelAulaId)
+    .maybeSingle();
+  return error ? null : data;
+}
+
+async function dyseUpsertRegistroClasseSessao(turmaId, nivelAulaId, campos){
+  const session = await dyseGetSession();
+  const userId = session ? session.user.id : null;
+  const { data, error } = await sb
+    .from('registro_classe_sessao')
+    .upsert({
+      turma_id: turmaId,
+      nivel_aula_id: nivelAulaId,
+      data_aula: campos.data_aula || dyseHoje(),
+      pontos_a_retomar: campos.pontos_a_retomar || null,
+      ajuste_de_ritmo: campos.ajuste_de_ritmo || null,
+      alerta_report_card: !!campos.alerta_report_card,
+      alerta_report_card_motivo: campos.alerta_report_card_motivo || null,
+      criado_por: userId,
+      atualizado_em: new Date().toISOString()
+    }, { onConflict: 'turma_id,nivel_aula_id' })
+    .select('*')
+    .maybeSingle();
+  return { data, error };
 }
 
 /* ---------- Gastos personalizados (por aluno + mês) ---------- */

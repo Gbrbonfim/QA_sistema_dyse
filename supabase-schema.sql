@@ -1064,7 +1064,681 @@ create trigger trg_audit_sessao_presencas
 --     chave antiga (aluno_id, mes_competencia) impedia isso.
 -- ----------------------------------------------------------------------
 alter table public.mensalidades drop constraint if exists mensalidades_aluno_id_mes_competencia_key;
+alter table public.mensalidades drop constraint if exists mensalidades_aluno_mes_professor_key;
 alter table public.mensalidades add constraint mensalidades_aluno_mes_professor_key unique (aluno_id, mes_competencia, professor_id);
+
+-- ----------------------------------------------------------------------
+-- 12) MÓDULO ACADÊMICO — Registro de Classe e histórico do aluno
+--     Escalável por nível (A1 é só o primeiro) — nada abaixo é específico
+--     de A1 ou de 44 aulas. Um "nível" (A1, A2, B1...) é cadastrado como
+--     MATÉRIA — mesma tabela/mecanismo já usado pro TOEFL (seção 8.2) e
+--     pro mesmo toggle "Matérias liberadas" da gestão — só que com
+--     "total_aulas"/"eixos_avaliacao" preenchidos, o que a identifica como
+--     uma matéria "com currículo" e libera o Registro de Classe pra
+--     qualquer turma que a tenha marcada em turma_materias. Não existe uma
+--     tabela "niveis" à parte de propósito: evita dois mecanismos
+--     parecidos (matérias x níveis) fazendo a mesma coisa — vincular
+--     conteúdo a uma turma.
+-- ----------------------------------------------------------------------
+
+-- 12.1) "materias" ganha os campos que uma matéria-com-currículo precisa.
+--       Ficam nulos pra matérias comuns (ex: TOEFL) — só uma matéria com
+--       total_aulas preenchido aparece como opção de nível no Registro de
+--       Classe. "eixos_avaliacao" define as colunas de avaliação do Bloco
+--       B daquele nível — cada um pode ter eixos diferentes.
+alter table public.materias add column if not exists total_aulas int;
+alter table public.materias add column if not exists eixos_avaliacao jsonb;
+
+-- 12.2) Aulas de cada matéria-com-currículo — Bloco A do modelo
+--       institucional (referência pedagógica da coordenação, não
+--       preenchida pelo professor). "conteudo" em JSONB pelo mesmo motivo
+--       de eixos_avaliacao: os campos do Bloco A podem variar por
+--       matéria/nível no futuro. O nome da tabela ("nivel_aulas") ficou
+--       do desenho anterior (com tabela "niveis" própria) — mantido pra
+--       não precisar renomear em cascata; conceitualmente hoje é "aulas
+--       de uma matéria com currículo".
+create table if not exists public.nivel_aulas (
+  id uuid primary key default gen_random_uuid(),
+  materia_slug text not null references public.materias(slug) on delete cascade,
+  numero int not null,
+  topico text not null,
+  conteudo jsonb not null default '{}'::jsonb,
+  criado_em timestamptz default now()
+);
+
+-- 12.3) MIGRAÇÃO — quem já rodou uma versão anterior deste script tem uma
+--       tabela "niveis" separada e "nivel_aulas.nivel_id"/"turmas.nivel_id"
+--       apontando pra ela. Este bloco só faz algo se "niveis" ainda
+--       existir; numa instalação nova (ou já migrada) não faz nada.
+do $migra_niveis_para_materias$
+begin
+  if exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'niveis') then
+    -- Leva o catálogo pra "materias" (sem sobrescrever se a matéria já existir).
+    insert into public.materias (slug, name, total_aulas, eixos_avaliacao)
+    select slug, nome, total_aulas, eixos_avaliacao from public.niveis
+    on conflict (slug) do nothing;
+
+    -- nivel_aulas: troca nivel_id (uuid → tabela niveis) por materia_slug (text → materias).
+    if exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'nivel_aulas' and column_name = 'nivel_id') then
+      alter table public.nivel_aulas add column if not exists materia_slug text references public.materias(slug) on delete cascade;
+      update public.nivel_aulas na set materia_slug = n.slug from public.niveis n where na.nivel_id = n.id and na.materia_slug is null;
+      alter table public.nivel_aulas alter column materia_slug set not null;
+      alter table public.nivel_aulas drop constraint if exists nivel_aulas_nivel_numero_key;
+      alter table public.nivel_aulas drop column nivel_id;
+    end if;
+
+    -- turmas.nivel_id vira uma linha em turma_materias (mesmo vínculo de "Matérias liberadas").
+    if exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'turmas' and column_name = 'nivel_id') then
+      insert into public.turma_materias (turma_id, materia_slug)
+      select t.id, n.slug from public.turmas t join public.niveis n on n.id = t.nivel_id
+      where t.nivel_id is not null
+      on conflict do nothing;
+      alter table public.turmas drop column nivel_id;
+    end if;
+
+    drop table public.niveis cascade;
+  end if;
+end $migra_niveis_para_materias$;
+
+-- Só depois da migração acima é garantido que "materia_slug" existe em
+-- toda instalação (nova ou antiga) — por isso a constraint/índice/RLS
+-- ficam aqui, não dentro do "create table" de 12.2.
+alter table public.nivel_aulas drop constraint if exists nivel_aulas_materia_numero_key;
+alter table public.nivel_aulas add constraint nivel_aulas_materia_numero_key unique (materia_slug, numero);
+
+create index if not exists idx_nivel_aulas_materia on public.nivel_aulas (materia_slug, numero);
+
+alter table public.nivel_aulas enable row level security;
+
+drop policy if exists "professoras e admins veem aulas do nivel" on public.nivel_aulas;
+create policy "professoras e admins veem aulas do nivel"
+  on public.nivel_aulas for select
+  using (public.is_teacher() or public.is_admin());
+
+drop policy if exists "admins gerenciam aulas do nivel" on public.nivel_aulas;
+create policy "admins gerenciam aulas do nivel"
+  on public.nivel_aulas for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- 12.4) Registro de Classe (Bloco B) — vinculado ao ALUNO, não à turma.
+--       "unique(aluno_id, nivel_aula_id)": um registro por aluno por aula,
+--       para sempre — troca de turma/professor nunca duplica nem reinicia
+--       o histórico. turma_id/professor_id aqui são só o retrato de quem
+--       registrou; quem PODE VER depende da turma atual do aluno (RLS
+--       abaixo), não da turma gravada aqui — é isso que faz o histórico
+--       "seguir" o aluno quando ele troca de turma/professor.
+create table if not exists public.registros_classe (
+  id bigint generated always as identity primary key,
+  aluno_id uuid not null references auth.users(id) on delete cascade,
+  nivel_aula_id uuid not null references public.nivel_aulas(id) on delete restrict,
+  turma_id uuid references public.turmas(id) on delete set null,
+  professor_id uuid references auth.users(id) on delete set null,
+  data_aula date not null default current_date,
+  avaliacoes jsonb not null default '{}'::jsonb,
+  observacoes text,
+  criado_por uuid references auth.users(id),
+  criado_em timestamptz default now(),
+  atualizado_por uuid references auth.users(id),
+  atualizado_em timestamptz default now()
+);
+
+alter table public.registros_classe drop constraint if exists registros_classe_aluno_aula_key;
+alter table public.registros_classe add constraint registros_classe_aluno_aula_key unique (aluno_id, nivel_aula_id);
+
+create index if not exists idx_registros_classe_aluno on public.registros_classe (aluno_id, nivel_aula_id);
+
+alter table public.registros_classe enable row level security;
+
+-- Mesmo padrão de activity_results (seção 8.7): visibilidade pela turma
+-- ATUAL do aluno via teacher_can_see_turma, não pela turma gravada no
+-- registro — assim a professora nova enxerga o que a antiga registrou.
+drop policy if exists "professoras veem registros dos alunos das turmas atuais" on public.registros_classe;
+create policy "professoras veem registros dos alunos das turmas atuais"
+  on public.registros_classe for select
+  using (
+    exists (
+      select 1 from public.profiles p
+      where p.id = public.registros_classe.aluno_id
+        and p.turma_id is not null
+        and public.teacher_can_see_turma(p.turma_id)
+    )
+  );
+
+drop policy if exists "professoras registram alunos das turmas atuais" on public.registros_classe;
+create policy "professoras registram alunos das turmas atuais"
+  on public.registros_classe for insert
+  with check (
+    exists (
+      select 1 from public.profiles p
+      where p.id = public.registros_classe.aluno_id
+        and p.turma_id is not null
+        and public.teacher_can_see_turma(p.turma_id)
+    )
+  );
+
+drop policy if exists "professoras atualizam registros dos alunos das turmas atuais" on public.registros_classe;
+create policy "professoras atualizam registros dos alunos das turmas atuais"
+  on public.registros_classe for update
+  using (
+    exists (
+      select 1 from public.profiles p
+      where p.id = public.registros_classe.aluno_id
+        and p.turma_id is not null
+        and public.teacher_can_see_turma(p.turma_id)
+    )
+  )
+  with check (
+    exists (
+      select 1 from public.profiles p
+      where p.id = public.registros_classe.aluno_id
+        and p.turma_id is not null
+        and public.teacher_can_see_turma(p.turma_id)
+    )
+  );
+
+drop policy if exists "admins gerenciam todos os registros de classe" on public.registros_classe;
+create policy "admins gerenciam todos os registros de classe"
+  on public.registros_classe for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- Auditoria — reaproveita o trigger genérico já usado em
+-- turma_sessoes/sessao_presencas/mensalidades (seção 9.9).
+drop trigger if exists trg_audit_registros_classe on public.registros_classe;
+create trigger trg_audit_registros_classe
+  after insert or update or delete on public.registros_classe
+  for each row execute procedure public.log_financeiro_auditoria();
+
+-- 12.5) Planner (Bloco C) — por turma+aula, não por aluno (é sobre o
+--       ritmo da turma, não do indivíduo).
+create table if not exists public.registro_classe_sessao (
+  id bigint generated always as identity primary key,
+  turma_id uuid not null references public.turmas(id) on delete cascade,
+  nivel_aula_id uuid not null references public.nivel_aulas(id) on delete restrict,
+  data_aula date not null default current_date,
+  pontos_a_retomar text,
+  ajuste_de_ritmo text,
+  alerta_report_card boolean not null default false,
+  alerta_report_card_motivo text,
+  criado_por uuid references auth.users(id),
+  criado_em timestamptz default now(),
+  atualizado_em timestamptz default now()
+);
+
+alter table public.registro_classe_sessao drop constraint if exists registro_classe_sessao_turma_aula_key;
+alter table public.registro_classe_sessao add constraint registro_classe_sessao_turma_aula_key unique (turma_id, nivel_aula_id);
+
+alter table public.registro_classe_sessao enable row level security;
+
+drop policy if exists "professoras gerenciam planner das turmas permitidas" on public.registro_classe_sessao;
+create policy "professoras gerenciam planner das turmas permitidas"
+  on public.registro_classe_sessao for all
+  using (public.teacher_can_see_turma(turma_id))
+  with check (public.teacher_can_see_turma(turma_id));
+
+drop policy if exists "admins gerenciam todo o planner" on public.registro_classe_sessao;
+create policy "admins gerenciam todo o planner"
+  on public.registro_classe_sessao for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+drop trigger if exists trg_audit_registro_classe_sessao on public.registro_classe_sessao;
+create trigger trg_audit_registro_classe_sessao
+  after insert or update or delete on public.registro_classe_sessao
+  for each row execute procedure public.log_financeiro_auditoria();
+
+-- 12.6) Seed da matéria "A1" (nível) e suas 44 aulas, extraído de
+--       "Registro de Classe & Planner Pedagógico A1 · Modelo
+--       Institucional" — idempotente: só insere o que ainda não existe
+--       (ON CONFLICT DO NOTHING), nunca sobrescreve edição manual feita
+--       depois (nem o nome/descrição da matéria, nem uma aula já editada).
+insert into public.materias (slug, name, description, total_aulas, eixos_avaliacao)
+values ('a1', 'A1', 'Currículo do nível A1 — 44 aulas.', 44, '["Tarefa Final","Speaking","Listening","Read./Writ."]'::jsonb)
+on conflict (slug) do nothing;
+
+insert into public.nivel_aulas (materia_slug, numero, topico, conteudo) values
+  ('a1', 1, $$Acolhimento — vocabulário de países, diálogo de apresentação, pronúncia (linking)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play: apresentar-se e perguntar nome e nacionalidade de um colega, encerrando a conversa de forma natural.$$,
+    'estrutura_gramatical', $$Chunks funcionais de apresentação (What's your name? / I'm from... / Where are you from?) tratados lexicalmente — sem antecipar to be (foco da Aula 02).$$,
+    'pontos_atencao', jsonb_build_array($$Primeiros 10 min: acolhimento + Trilha Pedagógica do nível (de onde o aluno parte e onde chega).$$, $$Países com pronúncia distante do português (Switzerland, Germany) geram insegurança — normalizar o erro.$$),
+    'foco_fonetico_som', $$Linking consoante+vogal entre palavras, destacado em 'meet you'.$$,
+    'foco_fonetico_erro', $$Fala truncada sem linking; troca do som de 'th' em 'thank you' por /t/ ou /f/.$$,
+    'foco_fonetico_correcao', $$Modelar a frase inteira e pedir eco (drilling) antes do role-play individual; gravar e comparar com o áudio original.$$,
+    'tarefa_de_casa', $$Flexge – ambientação.$$
+  )),
+  ('a1', 2, $$To Be afirmativo + subject pronouns$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Writing'),
+    'tarefa_comunicativa', $$Descrever uma pessoa famosa (nome, nacionalidade, profissão) usando o to be afirmativo, apresentando para a turma.$$,
+    'estrutura_gramatical', $$To be afirmativo (I'm/He's/She's/It's/We're/You're/They're) e subject pronouns, a partir dos chunks da Aula 01.$$,
+    'pontos_atencao', jsonb_build_array($$Confusão entre 'we're' e 'they're' quando o grupo não inclui o falante.$$, $$Esquecimento do apóstrofo em nomes próprios ('Adam's').$$),
+    'foco_fonetico_som', $$Três pronúncias do 's' de contração: /s/, /z/, /ɪz/; acento de frase na informação nova.$$,
+    'foco_fonetico_erro', $$Toda contração 's' pronunciada como /s/, sem distinguir /z/ e /ɪz/.$$,
+    'foco_fonetico_correcao', $$Drilling em pares mínimos 'he's/she's'; gravar a apresentação e comparar com o modelo do professor.$$,
+    'tarefa_de_casa', $$Preparação de slide 6 da aula 03.$$
+  )),
+  ('a1', 3, $$To Be negativo$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Corrigir informações falsas sobre nacionalidades de celebridades usando o to be negativo + afirmativo.$$,
+    'estrutura_gramatical', $$To be negativo (isn't/aren't/'m not) e formação de nacionalidades a partir do país (Brazil→Brazilian).$$,
+    'pontos_atencao', jsonb_build_array($$Aluno nega o verbo sem completar a informação certa depois ('She isn't Chinese' sem 'She's Japanese').$$, $$Confusão entre 'isn't' e 'aren't' conforme o sujeito.$$),
+    'foco_fonetico_som', $$Sílaba tônica em nacionalidades polissilábicas (Brazilian, Japanese, Chinese).$$,
+    'foco_fonetico_erro', $$Tonificação na sílaba errada por transferência do português; redução do isn't/aren't ambígua na fala rápida.$$,
+    'foco_fonetico_correcao', $$Identificar a sílaba tônica no drilling de nacionalidades; praticar pares contrastivos afirmativo/negativo em cadeia oral.$$,
+    'tarefa_de_casa', $$Slides 8, 9 e 10 + preparação slide 4 da aula 04.$$
+  )),
+  ('a1', 4, $$To Be interrogativo (Changing Nationalities)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Entrevistar um colega sobre nacionalidade e origem usando perguntas com to be e respostas curtas.$$,
+    'estrutura_gramatical', $$To be interrogativo (Am I.../Are you.../Is he...?) e short answers (Yes, he is. / No, she isn't.).$$,
+    'pontos_atencao', jsonb_build_array($$Confusão sobre quando usar 'from' na pergunta ('Are you Canada?').$$, $$Inversão sujeito-verbo ainda instável nas primeiras tentativas.$$),
+    'foco_fonetico_som', $$Entonação ascendente em perguntas de sim/não com to be.$$,
+    'foco_fonetico_erro', $$Entonação plana ou descendente, soando como afirmação.$$,
+    'foco_fonetico_correcao', $$Modelar a curva entonacional exagerando a subida no final da pergunta.$$,
+    'tarefa_de_casa', $$Slides 8 e 9.$$
+  )),
+  ('a1', 5, $$To Be revisão + saudações culturais$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening'),
+    'tarefa_comunicativa', $$Comparar formas de cumprimentar em diferentes países/culturas, revisando as três formas do to be.$$,
+    'estrutura_gramatical', $$Revisão integrada do to be (afirmativo, negativo, interrogativo) aplicada a saudações e partes do corpo.$$,
+    'pontos_atencao', jsonb_build_array($$Momento de consolidação — observar se erros das Aulas 2-4 ainda persistem antes da Aula 06.$$, $$Vocabulário cultural novo (bow, air kiss) não é foco gramatical, só enriquecimento.$$),
+    'foco_fonetico_som', $$Entonação em perguntas fechadas (revisão da Aula 04).$$,
+    'foco_fonetico_erro', $$Reincidência de erros anteriores; pronúncia de 'bow' /baʊ/ vs. /boʊ/ pode confundir.$$,
+    'foco_fonetico_correcao', $$Retomar rapidamente qualquer padrão de erro recorrente das aulas 2-4 antes de seguir.$$,
+    'tarefa_de_casa', $$Extra practice de vocabulário cultural.$$
+  )),
+  ('a1', 6, $$Vocabulário de hotel$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play: check-in em um hotel (recepcionista e hóspede) usando dados pessoais reais.$$,
+    'estrutura_gramatical', $$Perguntas funcionais com What's your...?/Where are you from? e o alfabeto para soletrar (spelling).$$,
+    'pontos_atencao', jsonb_build_array($$Soletração é ponto de atrito recorrente (letras como G, J, Y, W soam muito diferente do português).$$, $$Aluno pode confundir 'What's your name?' com o registro mais formal do check-in.$$),
+    'foco_fonetico_som', $$Nomes das letras do alfabeto, especialmente G /dʒiː/, J /dʒeɪ/, W /ˈdʌbəljuː/.$$,
+    'foco_fonetico_erro', $$Aluno 'aportuguesa' o nome das letras; confunde 'double' ao soletrar letras repetidas.$$,
+    'foco_fonetico_correcao', $$Drilling isolado do alfabeto antes de aplicá-lo a nomes reais; praticar 'double + letra'.$$,
+    'tarefa_de_casa', $$Soletrar o nome completo gravando áudio + preparação da aula 07.$$
+  )),
+  ('a1', 7, $$Artigos a/an + objetos de viagem$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Descrever o que tem na própria bolsa/mala usando a/an e vocabulário de objetos de viagem.$$,
+    'estrutura_gramatical', $$Artigos indefinidos a/an (regra do som inicial: consoante vs. vogal) com substantivos contáveis no singular.$$,
+    'pontos_atencao', jsonb_build_array($$A regra é sobre o SOM inicial, não a letra — focar em casos regulares nesta aula.$$, $$Aluno tende a esquecer o artigo por completo (interferência do português).$$),
+    'foco_fonetico_som', $$Diferença entre 'a' /ə/ (átono) e 'an' /ən/ diante de vogal.$$,
+    'foco_fonetico_erro', $$Uso de 'a' antes de som vocálico ('a apple'); omissão do artigo ao listar itens em sequência.$$,
+    'foco_fonetico_correcao', $$Drilling rápido de pares a/an antes da produção livre; modelar a lista completa da bolsa com todos os artigos.$$,
+    'tarefa_de_casa', $$Vídeo descrevendo itens da mala + slides 4, 5 e 6 da aula 08.$$
+  )),
+  ('a1', 8, $$Plurais + números + preços$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Perguntar e informar preços em um mercado usando plurais e um sistema de moeda (£, $ ou €).$$,
+    'estrutura_gramatical', $$Plural regular (+s/+es/+ies), números 11-100 e How much is/are...? + preços.$$,
+    'pontos_atencao', jsonb_build_array($$Par -teen/-ty é a maior fonte de mal-entendido — reforçar antes de seguir para preços.$$, $$Plural de consoante+y (baby→babies) precisa de mais prática que +s simples.$$),
+    'foco_fonetico_som', $$Acento tônico distintivo entre -TEEN (final tônica) e -ty (inicial tônica).$$,
+    'foco_fonetico_erro', $$Confundir 13 com 30, 14 com 40; regularizar todos os plurais como +s.$$,
+    'foco_fonetico_correcao', $$Drilling contrastivo em pares (13 vs. 30) com gesto de mão indicando a sílaba tônica.$$,
+    'tarefa_de_casa', $$Slides 11 e 12.$$
+  )),
+  ('a1', 9, $$Possessive adjectives$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Apresentar à turma as coisas favoritas de um colega usando adjetivos possessivos (his/her/their/our).$$,
+    'estrutura_gramatical', $$Possessive adjectives (my/your/his/her/its/our/their) em contraste com subject pronouns.$$,
+    'pontos_atencao', jsonb_build_array($$Confusão entre 'his' e 'her' na produção rápida.$$, $$Confusão entre subject pronoun e possessive adjective ('She bag is blue').$$),
+    'foco_fonetico_som', $$Diferenciação entre /hɪz/ (his) e /hɜːr/ (her).$$,
+    'foco_fonetico_erro', $$Uso de subject pronoun no lugar do possessive adjective.$$,
+    'foco_fonetico_correcao', $$Drilling de substituição rápida (I → my, she → her, they → their) antes da entrevista.$$,
+    'tarefa_de_casa', $$Slide 7 + preparação slides 2, 3 e 4 da próxima aula.$$
+  )),
+  ('a1', 10, $$Genitivo 's (família)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Descrever relações em uma árvore genealógica usando o genitivo 's e vocabulário de família.$$,
+    'estrutura_gramatical', $$Genitivo 's para posse/relação (Luke is Haley's brother) e vocabulário de parentesco.$$,
+    'pontos_atencao', jsonb_build_array($$Confusão entre genitivo 's (posse) e contração 's do to be — mesma grafia, funções diferentes.$$, $$Ordem das palavras: 'Haley's mother', não 'the mother of Haley'.$$),
+    'foco_fonetico_som', $$O 's' do genitivo segue a mesma regra /s/,/z/,/ɪz/ da 3ª pessoa/contrações.$$,
+    'foco_fonetico_erro', $$Inversão da ordem ('the brother of Haley'); confundir se o 's' é do to be ou do genitivo.$$,
+    'foco_fonetico_correcao', $$Praticar a transformação 'the X of Y' → 'Y's X' com exemplos da árvore genealógica.$$,
+    'tarefa_de_casa', $$Slides 10 e 11 da aula 10 + slides 4 e 5 preparação aula 11.$$
+  )),
+  ('a1', 11, $$Adjetivos$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Descrever a raça de cachorro favorita (ou outro animal) usando adjetivos, justificando a escolha.$$,
+    'estrutura_gramatical', $$Posição do adjetivo (antes do substantivo ou depois do to be) e invariabilidade de número (big dogs, não 'bigs dogs').$$,
+    'pontos_atencao', jsonb_build_array($$Erro clássico: pluralizar o adjetivo ('bigs dogs').$$, $$Ordem adjetivo+substantivo invertida por influência do português.$$),
+    'foco_fonetico_som', $$Ligação natural entre adjetivo e substantivo ('a friendly dog').$$,
+    'foco_fonetico_erro', $$Adicionar 's' ao adjetivo no plural; colocar o adjetivo depois do substantivo.$$,
+    'foco_fonetico_correcao', $$Drilling de frases curtas enfatizando que o adjetivo nunca muda; reordenação oral rápida.$$,
+    'tarefa_de_casa', $$Slides 8 e 9 + slides 3 e 4 da aula 12.$$
+  )),
+  ('a1', 12, $$Have/has + refeições$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Descrever o cardápio pessoal de dois dias da semana usando have/has + vocabulário de refeições.$$,
+    'estrutura_gramatical', $$Have/has no presente simples (have p/ I/you/we/they; has p/ he/she/it) aplicado a refeições e dias da semana.$$,
+    'pontos_atencao', jsonb_build_array($$Aluno usa 'have' para todas as pessoas, esquecendo 'has' — erro clássico de 3ª pessoa que reaparece na Aula 13.$$, $$Confusão entre 'have breakfast' e 'have a breakfast' (artigo desnecessário).$$),
+    'foco_fonetico_som', $$Pronúncia de 'has' /hæz/ com /z/ final, diferente de 'have' /hæv/.$$,
+    'foco_fonetico_erro', $$Omissão do 's' em 'has'; inserção de artigo indevido antes de refeições.$$,
+    'foco_fonetico_correcao', $$Drilling contrastivo I have / she has, reforçando o /z/ final de has.$$,
+    'tarefa_de_casa', $$Slides 6 e 10 da aula 12 + slide 3 da aula 13.$$
+  )),
+  ('a1', 13, $$Present Simple afirmativo + rotina diária$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Descrever a própria rotina diária e a de uma pessoa famosa usando o present simple afirmativo.$$,
+    'estrutura_gramatical', $$Present simple afirmativo com todas as pessoas, incluindo a regra ortográfica da 3ª pessoa (+s, +es, +ies).$$,
+    'pontos_atencao', jsonb_build_array($$A regra da 3ª pessoa (+s/+es/+ies) é o ponto crítico desta aula.$$, $$Aluno esquece o 's' mesmo sabendo a regra, por não haver marca equivalente no português falado.$$),
+    'foco_fonetico_som', $$O 's' final da 3ª pessoa: /s/, /z/ ou /ɪz/, mesma lógica do genitivo/contrações.$$,
+    'foco_fonetico_erro', $$Omissão sistemática do 's' na 3ª pessoa; aplicação incorreta da regra +es.$$,
+    'foco_fonetico_correcao', $$Drilling de substituição rápida (I get up → she gets up) até automatizar.$$,
+    'tarefa_de_casa', $$Slide 14 da aula 13.$$
+  )),
+  ('a1', 14, $$Dizer as horas$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening'),
+    'tarefa_comunicativa', $$Perguntar e responder horários de compromissos usando o sistema o'clock/past/to/quarter/half.$$,
+    'estrutura_gramatical', $$Estrutura para dizer as horas (minutos + past/to + hora) e a pergunta What time...?$$,
+    'pontos_atencao', jsonb_build_array($$Sistema past/to é bem diferente da lógica direta do português — maior fonte de confusão.$$, $$Uso de 'about' para horários aproximados reduz a ansiedade de precisão.$$),
+    'foco_fonetico_som', $$Entonação e ritmo ao dizer horários compostos ('a quarter past two').$$,
+    'foco_fonetico_erro', $$Tentar traduzir literalmente do português; confundir 'past' com 'to'.$$,
+    'foco_fonetico_correcao', $$Usar um relógio analógico físico/desenhado para visualizar por que 'to' aponta pra hora seguinte.$$,
+    'tarefa_de_casa', $$Slide 22 + estudar para a revisão da próxima aula.$$
+  )),
+  ('a1', 15, $$Revisão 1-14$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking'),
+    'tarefa_comunicativa', $$Entrevista com um colega usando perguntas pessoais variadas, cobrindo os pontos gramaticais das Aulas 1-14.$$,
+    'estrutura_gramatical', $$Revisão integrada: to be (3 formas), artigos a/an, plurais, números, possessivos, genitivo 's, have/has, present simple, advérbios de frequência.$$,
+    'pontos_atencao', jsonb_build_array($$Primeiro checkpoint formal de revisão-teste — usar Forms + fluência oral pra alimentar o Registro de Classe e o critério de progressão.$$, $$Observar se erros recorrentes das aulas 1-14 ainda aparecem sob pressão de fala espontânea.$$),
+    'foco_fonetico_som', $$Revisão geral: sons -ed/-s/'s finais e entonação de perguntas.$$,
+    'foco_fonetico_erro', $$Reincidência dos padrões já mapeados (3ª pessoa sem 's', a/an trocados, contrações omitidas).$$,
+    'foco_fonetico_correcao', $$Não interromper a entrevista pra corrigir — anotar padrões no Registro de Classe e planejar reforço na Aula 16.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (se não concluído em sala).$$
+  )),
+  ('a1', 16, $$Advérbios de frequência$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Writing'),
+    'tarefa_comunicativa', $$Escrever e compartilhar frases reais sobre os próprios hábitos usando advérbios de frequência variados.$$,
+    'estrutura_gramatical', $$Advérbios de frequência (always/usually/often/sometimes/never) e sua posição (antes de verbos comuns; depois do to be).$$,
+    'pontos_atencao', jsonb_build_array($$Posição do advérbio é o ponto crítico — antes de verbos comuns, mas depois do to be.$$, $$Confusão de intensidade entre 'often' e 'usually'.$$),
+    'foco_fonetico_som', $$Redução vocálica em 'usually' /ˈjuːʒuəli/.$$,
+    'foco_fonetico_erro', $$Colocar o advérbio sempre no início/fim da frase; pronunciar 'usually' sílaba por sílaba.$$,
+    'foco_fonetico_correcao', $$Cartões com sujeito+verbo de um lado e advérbio do outro, aluno decide a posição fisicamente.$$,
+    'tarefa_de_casa', $$Slide 8 da aula 16.$$
+  )),
+  ('a1', 17, $$Interrogativo com do/does$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Writing'),
+    'tarefa_comunicativa', $$Entrevistar um colega sobre hábitos de uso do celular usando perguntas com do/does e respostas curtas.$$,
+    'estrutura_gramatical', $$Present simple interrogativo com do/does (+ short answers) e question words antes do auxiliar.$$,
+    'pontos_atencao', jsonb_build_array($$Aluno tende a manter a estrutura do to be nas perguntas ('Is he use Instagram?').$$, $$Esquecimento do 's' em 'does' nas perguntas mesmo já dominando no afirmativo.$$),
+    'foco_fonetico_som', $$Redução do auxiliar 'do you' na fala rápida — reconhecimento auditivo, não produção obrigatória.$$,
+    'foco_fonetico_erro', $$Uso indevido de is/are em perguntas que pedem do/does; question word depois do auxiliar.$$,
+    'foco_fonetico_correcao', $$Quadro contrastivo: perguntas com to be (Aula 4) vs. do/does (esta aula).$$,
+    'tarefa_de_casa', $$Slide 13 + preparação slide 5 da aula 18.$$
+  )),
+  ('a1', 18, $$Present Simple completo + profissões$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Descrever a rotina de uma profissão à escolha, usando as três formas do present simple.$$,
+    'estrutura_gramatical', $$Consolidação do present simple nas 3 formas, aplicado a profissões (nurse, farmer, lawyer, engineer etc.).$$,
+    'pontos_atencao', jsonb_build_array($$Aula de consolidação de todo o present simple — checar se erros de 3ª pessoa (Aulas 13, 17) já foram superados.$$, $$Vocabulário de profissões é extenso; não cobrar produção de todas as palavras.$$),
+    'foco_fonetico_som', $$Consolidação da pronúncia do 's'/'es' final da 3ª pessoa (works, teaches, finishes).$$,
+    'foco_fonetico_erro', $$Reincidência pontual do 's' na 3ª pessoa; confusão residual entre do/does.$$,
+    'foco_fonetico_correcao', $$Usar o Registro de Classe das aulas anteriores pra identificar quem ainda troca do/does e reforçar direcionado.$$,
+    'tarefa_de_casa', $$Slides 12, 13 e 14.$$
+  )),
+  ('a1', 19, $$Hobbies — leitura, vocabulário e opiniões$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Conversar sobre hobbies que gostaria de experimentar, opinando com fun/boring/relaxing/difficult.$$,
+    'estrutura_gramatical', $$Vocabulário de hobbies e adjetivos de opinião em frases com to be (this is fun / I think X is relaxing).$$,
+    'pontos_atencao', jsonb_build_array($$Vocabulário amplo — priorizar reconhecimento e opinião sobre produção exaustiva.$$, $$Aluno pode confundir 'boring' com 'bored' — só um alerta pontual, sem aprofundar.$$),
+    'foco_fonetico_som', $$Entonação de opinião pessoal ('I think... is...') com ênfase no adjetivo.$$,
+    'foco_fonetico_erro', $$Troca de 'boring' por 'bored'; hesitação ao formar a opinião.$$,
+    'foco_fonetico_correcao', $$Modelar a estrutura 'I think + hobby + is + adjetivo' repetidas vezes antes da conversa livre.$$,
+    'tarefa_de_casa', $$Flexge + escrever 2 frases de opinião sobre hobbies diferentes.$$
+  )),
+  ('a1', 20, $$Questions com To Be e outros verbos$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Entrevistar um colega com bateria de perguntas pessoais variadas (to be + do/does) e contar à turma o que lembrou.$$,
+    'estrutura_gramatical', $$Contraste consolidado entre perguntas com to be (Am/Is/Are) e com outros verbos (Do/Does).$$,
+    'pontos_atencao', jsonb_build_array($$Fechamento formal do contraste to be vs. do/does (Aulas 4 e 17) — avaliar se já decide sem hesitação.$$, $$Perguntas mais íntimas podem gerar timidez — lembrar o princípio do erro como parte do processo.$$),
+    'foco_fonetico_som', $$Entonação consolidada: perguntas com to be (subida) vs. wh- com do/does (mais neutra).$$,
+    'foco_fonetico_erro', $$Hesitação na escolha do auxiliar correto sob pressão de fala espontânea.$$,
+    'foco_fonetico_correcao', $$Não interromper a entrevista — anotar padrões e fazer correção coletiva ao final, só nos 2-3 mais frequentes.$$,
+    'tarefa_de_casa', $$Reforçar oralmente as perguntas que geraram mais dúvida, registrando no Planner.$$
+  )),
+  ('a1', 21, $$Imperativos$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Dar instruções de uma receita simples usando verbos no imperativo (afirmativo e negativo).$$,
+    'estrutura_gramatical', $$Imperativo afirmativo (verbo no início) e negativo (Don't + verbo), aplicado a instruções de receita.$$,
+    'pontos_atencao', jsonb_build_array($$Aluno tende a adicionar sujeito antes do verbo imperativo ('You cook the eggs').$$, $$Ordem de advérbios/complementos em instruções longas pode gerar hesitação.$$),
+    'foco_fonetico_som', $$Entonação firme e direta de instruções, sem a suavização de polidez do português.$$,
+    'foco_fonetico_erro', $$Inserção de sujeito antes do verbo; uso de 'no' em vez de 'don't'.$$,
+    'foco_fonetico_correcao', $$Drilling de transformação: frase com sujeito → imperativo sem sujeito, com os verbos da receita.$$,
+    'tarefa_de_casa', $$Slide 11.$$
+  )),
+  ('a1', 22, $$Object pronouns$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Conversar sobre filmes e animais favoritos, opinando com object pronouns (it/them/him/her).$$,
+    'estrutura_gramatical', $$Object pronouns (me/you/him/her/it/us/them) em contraste com subject pronouns (Aula 2) e possessive adjectives (Aula 9).$$,
+    'pontos_atencao', jsonb_build_array($$Maior confusão: usar subject pronoun após verbo/preposição ('I love she' em vez de 'I love her').$$, $$Diferenciação entre 'it' e 'him/her' ao falar de pets com nome.$$),
+    'foco_fonetico_som', $$Contraste sutil entre 'him' /hɪm/ e 'her' /hɜːr/ na fala conectada.$$,
+    'foco_fonetico_erro', $$Uso de subject pronoun após verbo; uso de 'it' para pessoas.$$,
+    'foco_fonetico_correcao', $$Drilling de substituição imediata: 'I like Naomi Watts' → 'I like her'.$$,
+    'tarefa_de_casa', $$Slides 9, 10 e 11.$$
+  )),
+  ('a1', 23, $$Pedidos em restaurante$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play: pedir comida em um restaurante usando I'll have.../I'll start with... e side dishes.$$,
+    'estrutura_gramatical', $$Expressões funcionais pra pedir comida e vocabulário de cardápio (appetizer, main course, side dish).$$,
+    'pontos_atencao', jsonb_build_array($$'I'll' é fórmula fixa pra pedidos — não é necessário explicar o futuro com will neste nível.$$, $$'Side dish' é conceito cultural sem equivalente direto — reforçar com exemplos do cardápio.$$),
+    'foco_fonetico_som', $$Pronúncia da contração 'I'll' /aɪl/.$$,
+    'foco_fonetico_erro', $$Pronunciar 'I'll' como duas sílabas separadas; esquecer 'with a side of...'.$$,
+    'foco_fonetico_correcao', $$Drilling da contração isoladamente antes de inserir em frases completas.$$,
+    'tarefa_de_casa', $$Slide 9 + preparação slides 3-6.$$
+  )),
+  ('a1', 24, $$Can (habilidade)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening'),
+    'tarefa_comunicativa', $$Dizer o que consegue e não consegue fazer (esportes/fitness) usando can/can't.$$,
+    'estrutura_gramatical', $$Can/can't para habilidade, invariável para todas as pessoas, com a diferença /kæn/ forte vs. /kən/ fraco.$$,
+    'pontos_atencao', jsonb_build_array($$Distinção can forte vs. fraco é sutil — muitos alunos pronunciam sempre forte.$$, $$Aluno usa 'do' desnecessariamente com can ('Do you can...?').$$),
+    'foco_fonetico_som', $$Can forte /kæn/ em perguntas/negativas; can fraco /kən/ em afirmativas.$$,
+    'foco_fonetico_erro', $$Pronunciar 'can' sempre forte; inserir do/does antes de can.$$,
+    'foco_fonetico_correcao', $$Drilling contrastivo com pares mínimos (I can dance vs. Can you dance?).$$,
+    'tarefa_de_casa', $$Slides 10, 11 e 12.$$
+  )),
+  ('a1', 25, $$Can/Could (pedidos educados)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play: pedir um café (estilo Starbucks) usando Can I have.../Could I have.../I'd like...$$,
+    'estrutura_gramatical', $$Can/Could/I'd like para pedidos educados (diferente do can de habilidade da Aula 24).$$,
+    'pontos_atencao', jsonb_build_array($$Diferenciar este 'can' do 'can' de habilidade (Aula 24) — contraste explícito.$$, $$'Could'/'I'd like' são formas mais educadas — não obrigatórias neste nível.$$),
+    'foco_fonetico_som', $$Pronúncia de 'could' /kʊd/ e de 'I'd like' /aɪd laɪk/ como bloco fluido.$$,
+    'foco_fonetico_erro', $$Confundir a função com a de habilidade; pronunciar 'could' como 'coud' /kaʊd/.$$,
+    'foco_fonetico_correcao', $$Contraste rápido: 'Can you swim?' vs. 'Can I have a coffee?' antes do role-play.$$,
+    'tarefa_de_casa', $$Slides 12 e 13.$$
+  )),
+  ('a1', 26, $$Can/Can't (permissão)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play: perguntar e responder sobre regras em uma escola/lugar novo usando can/can't (permissão).$$,
+    'estrutura_gramatical', $$Can/can't para regras e permissão (terceira função de can), com short answers.$$,
+    'pontos_atencao', jsonb_build_array($$Terceira função de 'can' — nomear explicitamente a diferença (habilidade/pedido/permissão).$$, $$'Can I...?' de permissão e de pedido educado são estruturalmente idênticos.$$),
+    'foco_fonetico_som', $$Entonação de resposta curta 'Yes, you can' vs. 'No, you can't' (ênfase no 't' final).$$,
+    'foco_fonetico_erro', $$Dificuldade em perceber can /kən/ vs. can't /kænt/ em fala rápida.$$,
+    'foco_fonetico_correcao', $$Drilling específico de discriminação auditiva can/can't com pares contrastantes.$$,
+    'tarefa_de_casa', $$Slides 7 e 8 + preparação slides 4 e 5 da aula 27.$$
+  )),
+  ('a1', 27, $$Present Continuous afirmativo + roupas$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Descrever o que está vestindo (ou uma celebridade) agora, usando o present continuous afirmativo.$$,
+    'estrutura_gramatical', $$Present continuous afirmativo (to be + verbo-ing) com regras ortográficas (+ing, -e+ing, dobra de consoante) e vocabulário de roupas.$$,
+    'pontos_atencao', jsonb_build_array($$Regras ortográficas do -ing são o ponto técnico mais denso da aula.$$, $$Itens sempre no plural (jeans, shorts) vs. singular (a jacket) podem confundir a concordância.$$),
+    'foco_fonetico_som', $$Pronúncia do -ing como /ɪŋ/ (nunca com 'g' forte no final).$$,
+    'foco_fonetico_erro', $$Aplicar a mesma regra de -ing pra todos os verbos; pronunciar o -ing com 'g' forte.$$,
+    'foco_fonetico_correcao', $$Agrupar verbos por regra ortográfica antes do exercício de escrita.$$,
+    'tarefa_de_casa', $$Slides 15 e 16 + preparação slide 3 da aula 28.$$
+  )),
+  ('a1', 28, $$Present Continuous completo + clima$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Descrever o que está acontecendo agora e o clima no momento, usando o present continuous nas 3 formas.$$,
+    'estrutura_gramatical', $$Present continuous completo (afirmativa, negativa, interrogativa) e vocabulário de estações/clima.$$,
+    'pontos_atencao', jsonb_build_array($$Aula de consolidação — checar se as regras do -ing (Aula 27) já estão internalizadas.$$, $$Negativa/interrogativa seguem o padrão do to be (Aulas 3-4), aproveitar essa base.$$),
+    'foco_fonetico_som', $$Entonação de perguntas no present continuous, reaproveitando o padrão do to be.$$,
+    'foco_fonetico_erro', $$Uso de do/does pra negar/perguntar; esquecimento do to be auxiliar na negativa.$$,
+    'foco_fonetico_correcao', $$Reforçar que o present continuous usa sempre to be, nunca do/does.$$,
+    'tarefa_de_casa', $$Slides 13, 14 e 15 + preparação slide 3 da aula 29.$$
+  )),
+  ('a1', 29, $$Present Simple vs Continuous$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Sugerir um lugar para ir de acordo com o hábito da pessoa e o clima atual, contrastando simple e continuous.$$,
+    'estrutura_gramatical', $$Contraste de uso entre present simple (hábitos: always/usually/sometimes/never) e continuous (agora/hoje).$$,
+    'pontos_atencao', jsonb_build_array($$Ponto crítico de todo o bloco 13-28: decidir qual tempo usar conforme o contexto, não só conjugar certo.$$, $$Marcadores temporais são a pista mais confiável — reforçar essa associação.$$),
+    'foco_fonetico_som', $$Sem padrão fonético novo central — foco na escolha do tempo verbal certo.$$,
+    'foco_fonetico_erro', $$Uso do continuous para hábitos gerais; confusão sem marcador temporal explícito.$$,
+    'foco_fonetico_correcao', $$Quadro contrastivo visual (marcadores de hábito vs. momento) fixado durante a aula.$$,
+    'tarefa_de_casa', $$Slides 11 e 12.$$
+  )),
+  ('a1', 30, $$Revisão GRANDE 16-29$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking'),
+    'tarefa_comunicativa', $$Role-plays e jogo de perguntas cobrindo advérbios, do/does, profissões, hobbies, imperativos, object pronouns, restaurante, can, simple vs. continuous.$$,
+    'estrutura_gramatical', $$Revisão integrada de todo o bloco das Aulas 16-29.$$,
+    'pontos_atencao', jsonb_build_array($$Maior revisão do nível até aqui (14 aulas) — usar Forms + fluência oral como dado robusto pro Registro de Classe.$$, $$As três funções de 'can' tendem a se confundir sob pressão de revisão ampla.$$),
+    'foco_fonetico_som', $$Revisão consolidada: -ing, 3ª pessoa, can forte/fraco, contrações do to be.$$,
+    'foco_fonetico_erro', $$Mistura das três funções de can; reincidência pontual de erros já mapeados.$$,
+    'foco_fonetico_correcao', $$Usar o Registro de Classe pra mapear os 2-3 padrões mais recorrentes e planejar reforço nas Aulas 31+.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (se não concluído em sala).$$
+  )),
+  ('a1', 31, $$There is/are + casa$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Descrever a própria casa cômodo por cômodo, usando there is/are (+ some/any).$$,
+    'estrutura_gramatical', $$There is/are nas 3 formas + some (afirmativa)/any (negativa e interrogativa), com vocabulário de cômodos e móveis.$$,
+    'pontos_atencao', jsonb_build_array($$Distinção some (afirmativa) vs. any (negativa/interrogativa) é o ponto técnico central.$$, $$Muito vocabulário novo — priorizar o padrão gramatical sobre a lista completa.$$),
+    'foco_fonetico_som', $$Contração 'there's' /ðɛərz/ nas afirmativas.$$,
+    'foco_fonetico_erro', $$Uso de 'some' em perguntas/negativas; concordância incorreta is/are com singular/plural.$$,
+    'foco_fonetico_correcao', $$Drilling de transformação: afirmativa com some → negativa/interrogativa com any.$$,
+    'tarefa_de_casa', $$Slide 10 + preparação slides 10, 11 e 12 da aula 32.$$
+  )),
+  ('a1', 32, $$To Be passado (was/were)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Jogo: adivinhar onde/quem celebridades eram quando jovens, usando was/were.$$,
+    'estrutura_gramatical', $$Passado do to be (was/were) afirmativo, com marcadores de tempo passado (yesterday, last night, in 2010).$$,
+    'pontos_atencao', jsonb_build_array($$Aluno usa 'was' para todas as pessoas, esquecendo 'were' para you/we/they.$$, $$Marcadores de tempo passado são novos e precisam de destaque.$$),
+    'foco_fonetico_som', $$Diferenciação de vogal entre was /wʌz/ e were /wɜːr/.$$,
+    'foco_fonetico_erro', $$Uso de 'was' para you/we/they; omissão dos marcadores de tempo passado.$$,
+    'foco_fonetico_correcao', $$Drilling contrastivo was/were com os pronomes, destacando a diferença vocálica.$$,
+    'tarefa_de_casa', $$Slides 14 e 15 + separar uma foto antiga para a próxima aula.$$
+  )),
+  ('a1', 33, $$Meses, datas, números ordinais$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Perguntar e dizer datas (aniversário, feriados) usando números ordinais e os meses do ano.$$,
+    'estrutura_gramatical', $$Números ordinais (first, second, third...thirtieth) e estrutura pra dizer datas (the + ordinal + of + mês).$$,
+    'pontos_atencao', jsonb_build_array($$Ordinais irregulares (first, second, third, fifth, eighth, ninth, twelfth) precisam de destaque especial.$$, $$Duas formas de dizer a data podem confundir — deixar claro que ambas são aceitas.$$),
+    'foco_fonetico_som', $$Pronúncia do sufixo '-th' como em 'thanks' /θ/, presente em quase todos os ordinais.$$,
+    'foco_fonetico_erro', $$Regularizar ordinais irregulares ('threeth' em vez de 'third'); omitir o artigo 'the'.$$,
+    'foco_fonetico_correcao', $$Isolar e praticar repetidamente os ordinais irregulares antes de generalizar a regra +th.$$,
+    'tarefa_de_casa', $$Flexge.$$
+  )),
+  ('a1', 34, $$Was/were completo + signos do zodíaco$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Descobrir o signo do zodíaco de um colega/familiar a partir da data de nascimento, usando was/were nas 3 formas.$$,
+    'estrutura_gramatical', $$Consolidação de was/were nas 3 formas (afirmativa, negativa, interrogativa + short answers), aplicado aos signos.$$,
+    'pontos_atencao', jsonb_build_array($$Fecha o sistema was/were — checar se a distinção por pessoa já está consolidada.$$, $$Nomes dos signos têm pronúncia bem diferente do português.$$),
+    'foco_fonetico_som', $$Pronúncia dos nomes dos signos (Sagittarius, Capricorn, Aquarius), origem grega/latina.$$,
+    'foco_fonetico_erro', $$Negativa/interrogativa com was/were ainda inconsistente ('Were he a scientist?').$$,
+    'foco_fonetico_correcao', $$Retomar rapidamente o quadro was/were por pessoa antes da atividade de signos.$$,
+    'tarefa_de_casa', $$Slides 17, 18 e 19.$$
+  )),
+  ('a1', 35, $$Past Simple regular — formação e regras$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Contar os fatos principais de uma viagem passada usando o past simple regular.$$,
+    'estrutura_gramatical', $$Past simple regular (+ed/-d/-ied, dobra de consoante) nas 3 formas, com o auxiliar did.$$,
+    'pontos_atencao', jsonb_build_array($$Regras ortográficas do -ed são o núcleo técnico desta aula.$$, $$Negativa/interrogativa com 'did' + verbo na forma base é padrão novo que precisa de reforço.$$),
+    'foco_fonetico_som', $$As três pronúncias do -ed: /t/, /d/, /ɪd/ conforme o som final do verbo.$$,
+    'foco_fonetico_erro', $$Conjugar o verbo principal mesmo depois de 'did'; pronunciar todos os -ed como /ɪd/.$$,
+    'foco_fonetico_correcao', $$Reforçar que 'did' já carrega o passado; drilling das 3 pronúncias do -ed com os verbos do deck.$$,
+    'tarefa_de_casa', $$Slides 10, 11 e 12.$$
+  )),
+  ('a1', 36, $$Pronúncia do -ed + vocabulário de férias$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Narrar uma história de viagem com pronúncia correta do passado (-ed) e vocabulário de férias.$$,
+    'estrutura_gramatical', $$Consolidação da pronúncia do -ed (/t/, /d/, /ɪd/) e expressões de viagem (pack bags, book flight, enjoy the trip).$$,
+    'pontos_atencao', jsonb_build_array($$Aula 'gêmea' da 35, dedicada à automatização da pronúncia — não introduzir gramática nova.$$, $$Expressões de viagem tendem a ser traduzidas literalmente — reforçar como blocos fixos.$$),
+    'foco_fonetico_som', $$Consolidação das 3 pronúncias do -ed em fala corrida (narrativa).$$,
+    'foco_fonetico_erro', $$Persistência de pronunciar todo -ed como /ɪd/ sob pressão de fala espontânea.$$,
+    'foco_fonetico_correcao', $$Feedback fonético específico durante a narrativa da Tarefa Final, sem interromper o fluxo.$$,
+    'tarefa_de_casa', $$Flexge.$$
+  )),
+  ('a1', 37, $$Past Simple irregular — verbos centrais$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Contar o que fez/comeu/bebeu em um evento recente usando verbos irregulares centrais no past simple.$$,
+    'estrutura_gramatical', $$Past simple irregular (find→found, make→made, spend→spent, have→had, do→did, give→gave, eat→ate, drink→drank) e could/couldn't.$$,
+    'pontos_atencao', jsonb_build_array($$Verbos irregulares exigem memorização direta — 'não tem regra, é decorar'.$$, $$'Could' como passado de 'can' não usa did/didn't — mesma exceção do próprio can.$$),
+    'foco_fonetico_som', $$Pronúncia específica: /faʊnd/ (found), /meɪd/ (made), /spɛnt/ (spent), /eɪt/ (ate), /dræŋk/ (drank).$$,
+    'foco_fonetico_erro', $$Regularizar verbos irregulares ('eated' em vez de 'ate'); usar didn't + could em vez de couldn't.$$,
+    'foco_fonetico_correcao', $$Jogos de memorização rápida (presente→passado) antes da produção livre.$$,
+    'tarefa_de_casa', $$Slides 13 e 14.$$
+  )),
+  ('a1', 38, $$Vocabulário de aniversário + prática extra$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Entrevistar um colega sobre um aniversário memorável e escrever sobre o próprio, consolidando past simple regular e irregular.$$,
+    'estrutura_gramatical', $$Consolidação do past simple (regular + irregular) aplicado a aniversários (lugares, comidas, presentes, atividades).$$,
+    'pontos_atencao', jsonb_build_array($$Mistura perguntas com was/were e com did no mesmo bloco — ótimo teste de consolidação.$$, $$Vocabulário de festa é extenso; priorizar a gramática sobre 100% do vocabulário.$$),
+    'foco_fonetico_som', $$Revisão consolidada das pronúncias do -ed e verbos irregulares centrais (Aulas 35-37).$$,
+    'foco_fonetico_erro', $$Confundir was/were (estado/lugar) e did (ações) na mesma sequência.$$,
+    'foco_fonetico_correcao', $$Não interromper a entrevista — anotar no Registro de Classe e reforçar pontualmente ao final.$$,
+    'tarefa_de_casa', $$Slides 25, 26 e 27.$$
+  )),
+  ('a1', 39, $$Past Simple regular + irregular combinados$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Escrever e narrar um roteiro de 'um dia na minha vida' combinando past simple regular e irregular.$$,
+    'estrutura_gramatical', $$Consolidação final do past simple (regular + irregular + was/were + could) via a história de vida de uma influenciadora.$$,
+    'pontos_atencao', jsonb_build_array($$Aula de fechamento do bloco de passado (Aulas 32-39) antes da grande revisão (Aula 40).$$, $$Narrativa de vida real ajuda o aluno a perceber a função comunicativa do passado.$$),
+    'foco_fonetico_som', $$Consolidação geral de todos os padrões fonéticos do passado trabalhados até aqui.$$,
+    'foco_fonetico_erro', $$Mistura ocasional de regular/irregular; perda de consistência temporal ao narrar.$$,
+    'foco_fonetico_correcao', $$Sugerir que o aluno rascunhe o roteiro por escrito antes de narrar oralmente.$$,
+    'tarefa_de_casa', $$Slide 9.$$
+  )),
+  ('a1', 40, $$Revisão 31-39$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Writing'),
+    'tarefa_comunicativa', $$Checklist de autoavaliação (can-do) com um colega, cobrindo casa/móveis, passado do to be, datas/zodíaco, férias e aniversário.$$,
+    'estrutura_gramatical', $$Revisão integrada de todo o bloco das Aulas 31-39: there is/are + some/any, was/were, datas/ordinais, past simple, could.$$,
+    'pontos_atencao', jsonb_build_array($$Penúltima revisão antes do bloco final — o checklist alimenta o Registro de Classe e prepara a Aula 44.$$, $$Observar a consistência do passado, já que será revisitado comparando com o futuro.$$),
+    'foco_fonetico_som', $$Revisão consolidada de todos os padrões fonéticos do bloco 31-39.$$,
+    'foco_fonetico_erro', $$Itens do checklist marcados 'não consigo ainda' devem virar dado real pro planejamento, não falha a esconder.$$,
+    'foco_fonetico_correcao', $$Usar os itens marcados pra montar reforço/repescagem se necessário.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (se não concluído em sala).$$
+  )),
+  ('a1', 41, $$Present Continuous p/ futuro (compromissos)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Role-play: marcar um encontro com um colega, encontrando um dia/horário livre em comum.$$,
+    'estrutura_gramatical', $$Present continuous para futuro combinado/compromissos (What are you doing tonight?), com marcadores (tonight, tomorrow, next week).$$,
+    'pontos_atencao', jsonb_build_array($$Segunda função do present continuous (depois de 'agora', Aulas 27-28) — reforçar que o marcador temporal muda o sentido.$$, $$Aluno pode tentar usar 'will' por transferência — redirecionar gentilmente.$$),
+    'foco_fonetico_som', $$Entonação de convite/negociação ('Would you like to meet for lunch?').$$,
+    'foco_fonetico_erro', $$Confundir futuro combinado com ação em andamento agora, sem o marcador temporal.$$,
+    'foco_fonetico_correcao', $$Reforçar que o marcador temporal (tonight, next week) sinaliza 'futuro combinado', com contraste direto com a Aula 28.$$,
+    'tarefa_de_casa', $$Google Forms + escrever a própria agenda da semana com 3 compromissos reais.$$
+  )),
+  ('a1', 42, $$Present Continuous p/ futuro (viagens)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Planejar e apresentar uma viagem dos sonhos, usando o present continuous para futuro combinado.$$,
+    'estrutura_gramatical', $$Consolidação do present continuous para futuro (Aula 41), aplicado a planos de viagem (pack bags, book flight, exchange money).$$,
+    'pontos_atencao', jsonb_build_array($$Amplia o uso da Aula 41 para um contexto mais extenso — bom teste de transferência.$$, $$Vocabulário de preparativos é extenso; priorizar a estrutura gramatical.$$),
+    'foco_fonetico_som', $$Entonação de entusiasmo/expectativa ao falar de planos de viagem ('I'm so excited!').$$,
+    'foco_fonetico_erro', $$Voltar ao present simple ou usar 'will' ao descrever planos já combinados.$$,
+    'foco_fonetico_correcao', $$Reforçar, com exemplos lado a lado, que planos já decididos pedem present continuous, não will.$$,
+    'tarefa_de_casa', $$Google Forms + parágrafo sobre a viagem dos sonhos com pelo menos 4 frases no present continuous de futuro.$$
+  )),
+  ('a1', 43, $$Revisão GRANDE de todos os tempos verbais$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening'),
+    'tarefa_comunicativa', $$Entrevista com perguntas variadas cobrindo o curso inteiro, incluindo comparação de objetos antigos vs. tecnologia atual.$$,
+    'estrutura_gramatical', $$Revisão integrada de todos os tempos verbais do A1: to be, present simple, present continuous (agora e futuro), passado.$$,
+    'pontos_atencao', jsonb_build_array($$Revisão mais ampla do nível — ensaio geral pra Apresentação Final (Aula 44) e Avaliação Final de Nível.$$, $$Observar com atenção a escolha correta do tempo verbal em conversa livre e extensa.$$),
+    'foco_fonetico_som', $$Revisão consolidada de todos os padrões fonéticos centrais do curso.$$,
+    'foco_fonetico_erro', $$Mistura ocasional de tempos verbais em conversa longa e espontânea.$$,
+    'foco_fonetico_correcao', $$Não interromper — usar o Registro de Classe pra consolidar um panorama final de cada aluno antes da Aula 44.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (se não concluído em sala).$$
+  )),
+  ('a1', 44, $$Apresentação Final de Nível — "Minha história até aqui — e minha próxima viagem"$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening'),
+    'tarefa_comunicativa', $$Parte A — apresentação individual (3-4 min): quem eu sou, rotina, viagem/evento marcante, lugar/pessoa importante, próximo destino dos sonhos. Parte B (1-2 min): interação espontânea com o professor numa situação sorteada (hotel/restaurante/loja).$$,
+    'estrutura_gramatical', $$To be/possessivos/genitivo 's (Bloco 1) · Present simple e advérbios (Bloco 2) · Past simple (Bloco 3) · Adjetivos e there is/are (Bloco 4) · Present continuous para futuro (Bloco 5).$$,
+    'pontos_atencao', jsonb_build_array($$Prioridade 100% da aula é a Apresentação Final — não cortar tempo de apresentação por revisão extra.$$, $$Usar o Registro de Classe desta aula + revisões-teste anteriores (15/30/40/43) como base pro Report Card semestral.$$),
+    'foco_fonetico_som', $$Fluência e entonação natural na fala espontânea, integrando os padrões fonéticos de todo o curso.$$,
+    'foco_fonetico_erro', $$Sob pressão da apresentação, padrões de erro já mapeados podem reaparecer pontualmente — não é reprovação automática.$$,
+    'foco_fonetico_correcao', $$Não corrigir durante a apresentação — reservar observações pro feedback individual após a atividade.$$,
+    'tarefa_de_casa', $$Nenhuma — ao final, o professor agenda a Avaliação Final de Nível (evento formal, fora da grade).$$
+  ))
+on conflict (materia_slug, numero) do nothing;
 
 -- ======================================================================
 -- PRONTO! Depois de rodar este script:
