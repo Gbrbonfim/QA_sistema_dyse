@@ -515,6 +515,8 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 
 <div class="wrap" style="margin-top:14px;" id="coursesWrap"></div>
 
+<div class="wrap" style="margin-top:14px;" id="reportCardsWrap"></div>
+
 <footer class="site-footer">
   <div class="fmark">dyse</div>
   <p>Do You Speak English? &middot; Área do Aluno</p>
@@ -612,7 +614,69 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
             '<div class="course-folder-desc">Sua turma ainda não tem nenhuma matéria liberada pela gestão.</div>' +
           '</div>' +
         '</div>';
+
+    await renderMeusReportCards(session.user.id);
   })();
+
+  /* ---------- Report Cards liberados (visão somente leitura) ---------- */
+  function escapeHtmlLocal(str){
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+  function formatPPRLabel(v){ return { PP: 'PP — Atingiu plenamente', P: 'P — Atingiu parcialmente', R: 'R — Precisa de reforço' }[v] || '[Preenchimento necessário]'; }
+  const ENCAMINHAMENTO_LABELS = { sem_ressalvas: 'Segue para o próximo período sem ressalvas', reforco: 'Reforço pontual', protocolo: 'Protocolo 6.5.1 acionado (Coordenação)' };
+
+  async function renderMeusReportCards(alunoId){
+    const wrap = document.getElementById('reportCardsWrap');
+    const [cards, materias] = await Promise.all([
+      dyseListReportCards(alunoId), // RLS já só devolve os liberados pra este aluno
+      dyseListMaterias()
+    ]);
+    if(!cards.length){ wrap.innerHTML = ''; return; }
+
+    wrap.innerHTML = '<p style="font-family:var(--font-display); font-size:1.5rem; color:var(--seal); margin-bottom:14px;">Meus Report Cards</p>' +
+      cards.map(rc => renderReportCardReadOnly(rc, materias)).join('');
+  }
+
+  function renderReportCardReadOnly(rc, materias){
+    const d = rc.dados || {};
+    const nivel = materias.find(m => m.slug === rc.materia_slug);
+    const freq = d.frequencia || {};
+    const eixos = d.avaliacao_eixos || {};
+    const eixosHtml = Object.keys(eixos).map(eixo => {
+      const info = eixos[eixo];
+      return '<div style="display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid #f0e3d2;">' +
+        '<span>' + escapeHtmlLocal(eixo) + '</span><b style="color:var(--seal);">' + formatPPRLabel(info.nivel) + '</b></div>' +
+        (info.observacoes ? '<p style="font-size:.8rem; color:var(--seal-soft); margin:2px 0 8px;">' + escapeHtmlLocal(info.observacoes) + '</p>' : '');
+    }).join('');
+
+    const revisoes = d.revisoes_teste || [];
+    const revisoesHtml = revisoes.length ? '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Revisões-teste</p>' +
+      revisoes.map(rv => '<p style="font-size:.85rem; color:var(--seal-soft); margin-bottom:4px;">Aula ' + rv.aula_numero + ' — ' + escapeHtmlLocal(rv.aula_topico || '') + ': fluência oral ' + formatPPRLabel(rv.fluencia_oral) + '</p>').join('') : '';
+
+    const af = d.apresentacao_final;
+    const apresentacaoHtml = af ? '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Apresentação Final de Nível (Aula ' + af.aula_numero + ')</p>' +
+      Object.keys(af.eixos).map(eixo => '<p style="font-size:.85rem; color:var(--seal-soft); margin-bottom:4px;">' + escapeHtmlLocal(eixo) + ': ' + formatPPRLabel(af.eixos[eixo].nivel) + '</p>').join('') +
+      '<p style="font-size:.85rem; margin-top:6px;"><b>Resultado:</b> ' + (af.resultado === 'aprovado' ? 'Aprovado' : (af.resultado === 'protocolo' ? 'Encaminhado para protocolo 6.5.1' : '[Preenchimento necessário]')) + '</p>' : '';
+
+    const enc = d.encaminhamento || {};
+
+    return '<details style="background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:16px; overflow:hidden;">' +
+      '<summary style="cursor:pointer; padding:18px 22px; font-family:var(--font-display); font-size:1.2rem; color:var(--amaranth); list-style:none;">' +
+        escapeHtmlLocal(nivel ? nivel.name : rc.materia_slug) + ' — ' + rc.semestre + 'º semestre (aulas ' + rc.aula_inicio + '-' + rc.aula_fim + ')' +
+      '</summary>' +
+      '<div style="padding:0 22px 22px; color:var(--seal-soft); font-size:.9rem;">' +
+        '<p><b style="color:var(--seal);">Frequência:</b> ' + (freq.aulas_presentes ?? '-') + ' de ' + (freq.aulas_previstas ?? '-') + ' aulas (' + (freq.percentual ?? '-') + '%)</p>' +
+        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Avaliação por eixo</p>' + eixosHtml +
+        revisoesHtml + apresentacaoHtml +
+        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Pontos fortes</p><p>' + (d.pontos_fortes ? escapeHtmlLocal(d.pontos_fortes) : '[Preenchimento necessário]') + '</p>' +
+        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Pontos de desenvolvimento</p><p>' + (d.pontos_desenvolvimento ? escapeHtmlLocal(d.pontos_desenvolvimento) : '[Preenchimento necessário]') + '</p>' +
+        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Considerações da professora</p><p>' + (d.consideracoes_professor ? escapeHtmlLocal(d.consideracoes_professor) : '[Preenchimento necessário]') + '</p>' +
+        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Encaminhamento</p><p>' + (enc.tipo ? escapeHtmlLocal(ENCAMINHAMENTO_LABELS[enc.tipo] || enc.tipo) : '[Preenchimento necessário]') + (enc.motivo ? ' — ' + escapeHtmlLocal(enc.motivo) : '') + '</p>' +
+      '</div>' +
+    '</details>';
+  }
 </script>
 </body>
 </html>

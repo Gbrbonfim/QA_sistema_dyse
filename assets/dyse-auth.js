@@ -1129,6 +1129,237 @@ async function dyseUpsertRegistroClasseSessao(turmaId, nivelAulaId, campos){
   return { data, error };
 }
 
+async function dyseListRegistroClasseSessoesPorPares(turmaIds, nivelAulaIds){
+  if(!turmaIds.length || !nivelAulaIds.length) return [];
+  const { data, error } = await sb
+    .from('registro_classe_sessao')
+    .select('*')
+    .in('turma_id', turmaIds)
+    .in('nivel_aula_id', nivelAulaIds);
+  return error ? [] : data;
+}
+
+/* ======================================================================
+   REPORT CARD — geração a partir do Registro de Classe acumulado, com
+   fluxo de aprovação em 3 etapas (rascunho → liberado_professor →
+   liberado_aluno). O aluno nunca vê rascunho; o professor só vê depois
+   de liberado (RLS, schema seção 13). Escalável: os checkpoints de
+   revisão e a aula de apresentação final são detectados pelo TÓPICO da
+   aula (padrão "revisão"/"apresentação final"), não por número fixo —
+   funciona pra qualquer nível/syllabus futuro sem mudar código.
+   ====================================================================== */
+const DYSE_LIMIAR_PP = 0.7; // >=70% "sim" entre as amostras do eixo -> sugere PP
+const DYSE_LIMIAR_R = 0.35; // <=35% "sim" -> sugere R; entre os dois -> P
+
+/* Sugestão PP/P/R a partir de uma lista de avaliações ('sim'|'parcial'|'nao',
+   já sem "nao_participou") de um único eixo. Nunca inventa: sem amostra,
+   retorna null. */
+function dyseSugerirPPR(valores){
+  if(!valores.length) return null;
+  const sim = valores.filter(v => v === 'sim').length;
+  const proporcaoSim = sim / valores.length;
+  const nivel = proporcaoSim >= DYSE_LIMIAR_PP ? 'PP' : (proporcaoSim <= DYSE_LIMIAR_R ? 'R' : 'P');
+  return { nivel, amostras: valores.length };
+}
+
+function dyseMapAvaliacaoParaPPR(valor){
+  return { sim: 'PP', parcial: 'P', nao: 'R' }[valor] || null;
+}
+
+/* Gera (ou regenera, enquanto ainda em rascunho) o Report Card de um
+   aluno num intervalo de aulas de uma matéria/nível. Recusa sobrescrever
+   um Report Card que já saiu de rascunho — depois de liberado, os
+   campos são editados direto (dyseUpdateReportCard), nunca regerados por
+   cima, pra não apagar revisão já feita. */
+async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, aulaFim){
+  const session = await dyseGetSession();
+  const userId = session ? session.user.id : null;
+
+  const { data: existente } = await sb
+    .from('report_cards').select('id, status')
+    .eq('aluno_id', alunoId).eq('materia_slug', materiaSlug).eq('semestre', semestre)
+    .maybeSingle();
+  if(existente && existente.status !== 'rascunho'){
+    return { error: { message: 'Este Report Card já foi liberado — edite os campos direto em vez de gerar de novo, pra não perder revisão já feita.' } };
+  }
+
+  const [todasAulas, todosRegistros, alunos, materias] = await Promise.all([
+    dyseListNivelAulas(materiaSlug),
+    dyseListRegistrosClasse(alunoId),
+    dyseListProfilesByRole('student'),
+    dyseListMaterias()
+  ]);
+
+  const aulaPorId = {}; todasAulas.forEach(a => { aulaPorId[a.id] = a; });
+  const aulasDoIntervalo = todasAulas.filter(a => a.numero >= aulaInicio && a.numero <= aulaFim);
+  const registrosDoIntervalo = todosRegistros.filter(r => {
+    const aula = aulaPorId[r.nivel_aula_id];
+    return aula && aula.numero >= aulaInicio && aula.numero <= aulaFim;
+  });
+  const registroPorNumero = {};
+  registrosDoIntervalo.forEach(r => { const aula = aulaPorId[r.nivel_aula_id]; if(aula) registroPorNumero[aula.numero] = r; });
+
+  // Frequência: presente = tem registro E pelo menos um eixo diferente de
+  // "não participou". Aula sem registro nenhum não conta como ausência —
+  // vira um aviso separado (pode só não ter sido lançada ainda).
+  let presentes = 0, semRegistro = 0;
+  aulasDoIntervalo.forEach(a => {
+    const r = registroPorNumero[a.numero];
+    if(!r){ semRegistro++; return; }
+    const participou = Object.values(r.avaliacoes || {}).some(v => v !== 'nao_participou');
+    if(participou) presentes++;
+  });
+  const previstas = aulasDoIntervalo.length;
+  const percentual = previstas ? Math.round((presentes / previstas) * 1000) / 10 : 0;
+  const frequencia = { aulas_previstas: previstas, aulas_presentes: presentes, percentual, criterio_atingido: percentual >= 75, aulas_sem_registro: semRegistro };
+
+  // Avaliação por eixo — uma sugestão por eixo configurado na matéria/nível.
+  const materiaAtual = materias.find(m => m.slug === materiaSlug);
+  const eixosNivel = (materiaAtual && materiaAtual.eixos_avaliacao) || [];
+  const avaliacaoEixos = {};
+  eixosNivel.forEach(eixo => {
+    const valores = registrosDoIntervalo.map(r => (r.avaliacoes || {})[eixo]).filter(v => v && v !== 'nao_participou');
+    const sugestao = dyseSugerirPPR(valores);
+    avaliacaoEixos[eixo] = { nivel: sugestao ? sugestao.nivel : null, amostras: sugestao ? sugestao.amostras : 0, observacoes: '' };
+  });
+
+  // Revisões-teste: aulas de revisão dentro do intervalo. Nota do Forms e
+  // validade oficial não têm fonte de dado — ficam pendentes; "fluência
+  // oral" é sugerida a partir do eixo "Tarefa Final" daquela aula.
+  const checkpoints = aulasDoIntervalo.filter(a => /revis[ãa]o/i.test(a.topico));
+  const revisoesTeste = checkpoints.map(a => {
+    const r = registroPorNumero[a.numero];
+    const tarefaFinal = r ? (r.avaliacoes || {})['Tarefa Final'] : null;
+    return {
+      aula_numero: a.numero,
+      aula_topico: a.topico,
+      nota_forms: null,
+      fluencia_oral: tarefaFinal && tarefaFinal !== 'nao_participou' ? dyseMapAvaliacaoParaPPR(tarefaFinal) : null,
+      validade_oficial: null
+    };
+  });
+
+  // Apresentação Final — só se a aula correspondente estiver no intervalo.
+  const aulaFinal = aulasDoIntervalo.find(a => /apresenta[çc][ãa]o final/i.test(a.topico));
+  let apresentacaoFinal = null;
+  if(aulaFinal){
+    const r = registroPorNumero[aulaFinal.numero];
+    const tarefaFinal = r ? (r.avaliacoes || {})['Tarefa Final'] : null;
+    apresentacaoFinal = {
+      aula_numero: aulaFinal.numero,
+      eixos: {
+        'Cumprimento da Tarefa': { nivel: tarefaFinal && tarefaFinal !== 'nao_participou' ? dyseMapAvaliacaoParaPPR(tarefaFinal) : null, observacoes: '' },
+        'Gramática do Nível': { nivel: null, observacoes: '' },
+        'Fluência e Pronúncia': { nivel: null, observacoes: '' },
+        'Interação': { nivel: null, observacoes: '' },
+        'Vocabulário do Nível': { nivel: null, observacoes: '' }
+      },
+      resultado: null
+    };
+  }
+
+  // Alertas do Planner (Bloco C) do período — referência pro professor
+  // escrever os blocos F/G/H, igual a nota metodológica do modelo pede.
+  // Usa o turma_id GRAVADO em cada registro (retrato de onde o aluno
+  // estava naquela aula específica), não a turma atual.
+  const turmaIds = [...new Set(registrosDoIntervalo.map(r => r.turma_id).filter(Boolean))];
+  const nivelAulaIds = registrosDoIntervalo.map(r => r.nivel_aula_id);
+  const paresValidos = new Set(registrosDoIntervalo.filter(r => r.turma_id).map(r => r.turma_id + '|' + r.nivel_aula_id));
+  const sessoesCandidatas = await dyseListRegistroClasseSessoesPorPares(turmaIds, nivelAulaIds);
+  const alertasPlanner = sessoesCandidatas
+    .filter(s => s.alerta_report_card && paresValidos.has(s.turma_id + '|' + s.nivel_aula_id))
+    .map(s => { const aula = aulaPorId[s.nivel_aula_id]; return { aula_numero: aula ? aula.numero : null, aula_topico: aula ? aula.topico : null, motivo: s.alerta_report_card_motivo || null }; })
+    .sort((a, b) => (a.aula_numero || 0) - (b.aula_numero || 0));
+
+  const dados = {
+    frequencia,
+    avaliacao_eixos: avaliacaoEixos,
+    revisoes_teste: revisoesTeste,
+    apresentacao_final: apresentacaoFinal,
+    alertas_planner: alertasPlanner,
+    pontos_fortes: '',
+    pontos_desenvolvimento: '',
+    consideracoes_professor: '',
+    encaminhamento: { tipo: null, motivo: '' }
+  };
+
+  const aluno = alunos.find(a => a.id === alunoId);
+  const ultimoRegistro = registrosDoIntervalo[registrosDoIntervalo.length - 1];
+
+  const { data, error } = await sb
+    .from('report_cards')
+    .upsert({
+      aluno_id: alunoId,
+      materia_slug: materiaSlug,
+      semestre,
+      aula_inicio: aulaInicio,
+      aula_fim: aulaFim,
+      status: 'rascunho',
+      dados,
+      turma_id: (aluno && aluno.turma_id) || null,
+      professor_id: ultimoRegistro ? ultimoRegistro.professor_id : null,
+      gerado_por: userId,
+      gerado_em: new Date().toISOString(),
+      atualizado_em: new Date().toISOString()
+    }, { onConflict: 'aluno_id,materia_slug,semestre' })
+    .select('*')
+    .maybeSingle();
+  return { data, error };
+}
+
+async function dyseListReportCards(alunoId){
+  let query = sb.from('report_cards').select('*');
+  if(alunoId) query = query.eq('aluno_id', alunoId);
+  const { data, error } = await query.order('semestre', { ascending: true });
+  return error ? [] : data;
+}
+
+async function dyseUpdateReportCard(id, dados){
+  const { data, error } = await sb
+    .from('report_cards')
+    .update({ dados, atualizado_em: new Date().toISOString() })
+    .eq('id', id)
+    .select('*')
+    .maybeSingle();
+  return { data, error };
+}
+
+async function dyseLiberarReportCardProfessor(id){
+  const session = await dyseGetSession();
+  const userId = session ? session.user.id : null;
+  const { data, error } = await sb
+    .from('report_cards')
+    .update({ status: 'liberado_professor', liberado_professor_por: userId, liberado_professor_em: new Date().toISOString() })
+    .eq('id', id)
+    .select('*')
+    .maybeSingle();
+  return { data, error };
+}
+
+/* Marca quem/quando revisou, sem mudar o status — "Liberar para Aluno" é
+   uma ação separada e explícita (dyseLiberarReportCardAluno). */
+async function dyseMarcarReportCardRevisado(id){
+  const session = await dyseGetSession();
+  const userId = session ? session.user.id : null;
+  const { error } = await sb
+    .from('report_cards')
+    .update({ revisado_por: userId, revisado_em: new Date().toISOString() })
+    .eq('id', id);
+  return { error };
+}
+
+async function dyseLiberarReportCardAluno(id){
+  const session = await dyseGetSession();
+  const userId = session ? session.user.id : null;
+  const { data, error } = await sb
+    .from('report_cards')
+    .update({ status: 'liberado_aluno', liberado_aluno_por: userId, liberado_aluno_em: new Date().toISOString() })
+    .eq('id', id)
+    .select('*')
+    .maybeSingle();
+  return { data, error };
+}
+
 /* ---------- Gastos personalizados (por aluno + mês) ---------- */
 async function dyseListGastos(alunoId, mes){
   let query = sb.from('gastos_personalizados').select('*');

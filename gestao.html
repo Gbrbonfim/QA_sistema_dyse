@@ -709,6 +709,18 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   </div>
 </div>
 
+<!-- Modal de visualização/edição de um Report Card -->
+<div id="reportCardModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeReportCardModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="reportCardModalTitle">
+    <div class="report-modal-header">
+      <h3 id="reportCardModalTitle">Report Card</h3>
+      <button type="button" class="report-modal-close" onclick="closeReportCardModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="reportCardModalBody"></div>
+  </div>
+</div>
+
 <!-- Modal de registro de pagamento a um professor -->
 <div id="pagamentoModal" class="report-modal" aria-hidden="true">
   <div class="report-modal-backdrop" onclick="closePagamentoModal()"></div>
@@ -1680,9 +1692,12 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     listas.flat().forEach(a => { NIVEL_AULAS_POR_ID[a.id] = a; });
   }
 
+  let CURRENT_ALUNO_HISTORICO_ID = null;
+
   async function openAlunoHistoricoModal(alunoId){
     const s = STUDENTS.find(x => x.id === alunoId);
     if(!s) return;
+    CURRENT_ALUNO_HISTORICO_ID = alunoId;
     document.getElementById('alunoHistoricoModalTitle').textContent = 'Histórico acadêmico — ' + (s.full_name || s.email || '');
     document.getElementById('alunoHistoricoModalBody').innerHTML = '<p style="opacity:.6;">Carregando...</p>';
     document.getElementById('alunoHistoricoModal').classList.add('open');
@@ -1694,31 +1709,253 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       .map(r => ({ r, aula: NIVEL_AULAS_POR_ID[r.nivel_aula_id] || null }))
       .sort((a, b) => (a.aula ? a.aula.numero : 0) - (b.aula ? b.aula.numero : 0));
 
-    if(!registros.length){
-      document.getElementById('alunoHistoricoModalBody').innerHTML = '<p class="report-line" style="opacity:.6;">Nenhum registro de classe ainda.</p>';
-      return;
-    }
+    const historicoHtml = registros.length
+      ? registros.map(({ r, aula }) => {
+          const professor = TEACHERS.find(t => t.id === r.professor_id);
+          const turma = TURMAS.find(t => t.id === r.turma_id);
+          const avaliacoesTexto = Object.keys(r.avaliacoes || {}).map(eixo => {
+            const val = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' }[r.avaliacoes[eixo]] || r.avaliacoes[eixo];
+            return eixo + ': ' + val;
+          }).join(' · ');
+          return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:6px;">' +
+            '<span class="name">Aula ' + (aula ? String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlLocal(aula.topico) : '(aula removida)') + '</span>' +
+            '<span style="font-size:.78rem; opacity:.75;">' + formatDateBR(r.data_aula) + ' · ' + escapeHtmlLocal(professor ? (professor.full_name || '') : '(professor removido)') + ' · ' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + '</span>' +
+            (avaliacoesTexto ? '<span style="font-size:.82rem;">' + escapeHtmlLocal(avaliacoesTexto) + '</span>' : '') +
+            (r.observacoes ? '<span style="font-size:.8rem; opacity:.85;">' + escapeHtmlLocal(r.observacoes) + '</span>' : '') +
+          '</div>';
+        }).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum registro de classe ainda.</p>';
 
-    document.getElementById('alunoHistoricoModalBody').innerHTML = registros.map(({ r, aula }) => {
-      const professor = TEACHERS.find(t => t.id === r.professor_id);
-      const turma = TURMAS.find(t => t.id === r.turma_id);
-      const avaliacoesTexto = Object.keys(r.avaliacoes || {}).map(eixo => {
-        const val = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' }[r.avaliacoes[eixo]] || r.avaliacoes[eixo];
-        return eixo + ': ' + val;
-      }).join(' · ');
-      return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:6px;">' +
-        '<span class="name">Aula ' + (aula ? String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlLocal(aula.topico) : '(aula removida)') + '</span>' +
-        '<span style="font-size:.78rem; opacity:.75;">' + formatDateBR(r.data_aula) + ' · ' + escapeHtmlLocal(professor ? (professor.full_name || '') : '(professor removido)') + ' · ' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + '</span>' +
-        (avaliacoesTexto ? '<span style="font-size:.82rem;">' + escapeHtmlLocal(avaliacoesTexto) + '</span>' : '') +
-        (r.observacoes ? '<span style="font-size:.8rem; opacity:.85;">' + escapeHtmlLocal(r.observacoes) + '</span>' : '') +
-      '</div>';
-    }).join('');
+    document.getElementById('alunoHistoricoModalBody').innerHTML =
+      '<div class="report-section-head">Report Cards</div>' +
+      '<div id="alunoReportCardsList"></div>' +
+      renderGerarReportCardForm() +
+      '<div class="report-section-head">Registro de Classe (por aula)</div>' +
+      historicoHtml;
+
+    await renderAlunoReportCardsList(alunoId);
   }
 
   function closeAlunoHistoricoModal(){
     document.getElementById('alunoHistoricoModal').classList.remove('open');
     document.getElementById('alunoHistoricoModal').setAttribute('aria-hidden','true');
     document.body.classList.remove('dyse-modal-open');
+    CURRENT_ALUNO_HISTORICO_ID = null;
+  }
+
+  const REPORT_CARD_STATUS_LABELS = { rascunho: 'Rascunho', liberado_professor: 'Liberado p/ Professor', liberado_aluno: 'Liberado p/ Aluno' };
+  function reportCardStatusBadge(status){
+    const cls = status === 'liberado_aluno' ? 'pill-ok' : (status === 'rascunho' ? '' : 'pill-ok');
+    return '<span class="pill-count' + (cls ? ' ' + cls : '') + '">' + (REPORT_CARD_STATUS_LABELS[status] || status) + '</span>';
+  }
+
+  async function renderAlunoReportCardsList(alunoId){
+    const cards = await dyseListReportCards(alunoId);
+    document.getElementById('alunoReportCardsList').innerHTML = cards.length
+      ? cards.map(rc => {
+          const nivel = MATERIAS.find(m => m.slug === rc.materia_slug);
+          return '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(nivel ? nivel.name : rc.materia_slug) + ' · ' + rc.semestre + 'º semestre (aulas ' + rc.aula_inicio + '-' + rc.aula_fim + ')' + '</span>' +
+            reportCardStatusBadge(rc.status) +
+            '<button type="button" class="btn btn-ghost btn-xs" style="margin-left:8px;" onclick="openReportCardModal(' + rc.id + ', \'gestao\')">Abrir</button></div>';
+        }).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum Report Card gerado ainda.</p>';
+  }
+
+  function renderGerarReportCardForm(){
+    const opcoesNivel = NIVEIS.map(n => '<option value="' + n.slug + '" data-total="' + (n.total_aulas || '') + '">' + escapeHtmlLocal(n.name) + '</option>').join('');
+    return '<div class="gestao-form" style="margin:10px 0 16px; align-items:flex-end;">' +
+      '<div class="gestao-field" style="flex:1 1 140px;"><label>Nível</label><select id="rcGerarNivel" onchange="onRcGerarNivelChange()">' + opcoesNivel + '</select></div>' +
+      '<div class="gestao-field" style="flex:0 0 110px;"><label>Semestre</label><select id="rcGerarSemestre" onchange="onRcGerarNivelChange()"><option value="1">1º</option><option value="2">2º</option></select></div>' +
+      '<div class="gestao-field" style="flex:0 0 90px;"><label>Aula início</label><input type="number" min="1" id="rcGerarInicio"></div>' +
+      '<div class="gestao-field" style="flex:0 0 90px;"><label>Aula fim</label><input type="number" min="1" id="rcGerarFim"></div>' +
+      '<button type="button" class="btn btn-primary" onclick="handleGerarReportCard()">Gerar Report Card</button>' +
+    '</div>' +
+    '<p class="auth-msg" id="rcGerarMsg"></p>';
+  }
+
+  function onRcGerarNivelChange(){
+    const sel = document.getElementById('rcGerarNivel');
+    const semestre = document.getElementById('rcGerarSemestre').value;
+    const totalAulas = Number(sel.selectedOptions[0] && sel.selectedOptions[0].dataset.total) || 0;
+    if(!totalAulas) return;
+    const metade = Math.ceil(totalAulas / 2);
+    document.getElementById('rcGerarInicio').value = semestre === '1' ? 1 : metade + 1;
+    document.getElementById('rcGerarFim').value = semestre === '1' ? metade : totalAulas;
+  }
+
+  async function handleGerarReportCard(){
+    const alunoId = CURRENT_ALUNO_HISTORICO_ID;
+    const materiaSlug = document.getElementById('rcGerarNivel').value;
+    const semestre = parseInt(document.getElementById('rcGerarSemestre').value, 10);
+    const aulaInicio = parseInt(document.getElementById('rcGerarInicio').value, 10);
+    const aulaFim = parseInt(document.getElementById('rcGerarFim').value, 10);
+    if(!alunoId || !materiaSlug || !aulaInicio || !aulaFim){ flashMsg('rcGerarMsg', 'Preencha nível, semestre e o intervalo de aulas.', false); return; }
+    const { data, error } = await dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, aulaFim);
+    if(error){ flashMsg('rcGerarMsg', error.message, false); return; }
+    flashMsg('rcGerarMsg', 'Report Card gerado!', true);
+    await renderAlunoReportCardsList(alunoId);
+    openReportCardModal(data.id, 'gestao');
+  }
+
+  /* ---------- Modal do Report Card (visão A-I, edição + transição de status) ----------
+     "contexto" ('gestao'|'professora') só controla qual botão de transição
+     aparece — o resto do formulário é o mesmo dos dois lados. */
+  let CURRENT_REPORT_CARD = null;
+  let CURRENT_REPORT_CARD_CONTEXTO = 'gestao';
+
+  const AVALIACAO_PPR_LABELS = { PP: 'PP — Atingiu plenamente', P: 'P — Atingiu parcialmente', R: 'R — Precisa de reforço' };
+  function selectPPR(idAttr, valorAtual){
+    const opts = ['', 'PP', 'P', 'R'].map(v => '<option value="' + v + '"' + (valorAtual === v ? ' selected' : '') + '>' + (v ? AVALIACAO_PPR_LABELS[v] : '[Preenchimento necessário]') + '</option>').join('');
+    return '<select ' + idAttr + '>' + opts + '</select>';
+  }
+
+  async function openReportCardModal(id, contexto){
+    const cards = await dyseListReportCards(); // RLS já filtra o que este usuário pode ver
+    const rc = cards.find(c => c.id === id);
+    if(!rc){ alert('Report Card não encontrado ou sem permissão pra ver.'); return; }
+    CURRENT_REPORT_CARD = rc;
+    CURRENT_REPORT_CARD_CONTEXTO = contexto || 'gestao';
+    renderReportCardModalBody();
+    document.getElementById('reportCardModal').classList.add('open');
+    document.getElementById('reportCardModal').setAttribute('aria-hidden', 'false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeReportCardModal(){
+    document.getElementById('reportCardModal').classList.remove('open');
+    document.getElementById('reportCardModal').setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_REPORT_CARD = null;
+  }
+
+  function renderReportCardModalBody(){
+    const rc = CURRENT_REPORT_CARD;
+    const d = rc.dados || {};
+    const aluno = STUDENTS.find(s => s.id === rc.aluno_id);
+    const nivel = MATERIAS.find(m => m.slug === rc.materia_slug);
+    document.getElementById('reportCardModalTitle').textContent = 'Report Card — ' + (aluno ? (aluno.full_name || aluno.email) : '');
+
+    const freq = d.frequencia || {};
+    const blocoFrequencia =
+      '<div class="report-section-head">B · Frequência</div>' +
+      '<p class="report-line">' + (freq.aulas_presentes ?? '-') + ' de ' + (freq.aulas_previstas ?? '-') + ' aulas (' + (freq.percentual ?? '-') + '%) — critério mínimo 75%: ' +
+      (freq.criterio_atingido ? '<b style="color:var(--ok);">Atingido</b>' : '<b style="color:var(--bad);">Não atingido</b>') + '</p>' +
+      (freq.aulas_sem_registro ? '<p class="gestao-hint">⚠️ ' + freq.aulas_sem_registro + ' aula(s) do período ainda sem Registro de Classe lançado.</p>' : '');
+
+    const eixos = d.avaliacao_eixos || {};
+    const blocoEixos = '<div class="report-section-head">C · Avaliação Qualitativa por Eixo</div>' +
+      Object.keys(eixos).map(eixo => {
+        const info = eixos[eixo];
+        return '<div class="gestao-form gestao-form-col" style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #f0e3d2;">' +
+          '<b>' + escapeHtmlLocal(eixo) + '</b> <span style="opacity:.6; font-size:.78rem;">(' + info.amostras + ' amostra(s) no período)</span>' +
+          '<div class="gestao-field">' + selectPPR('data-rc-eixo="' + escapeHtmlLocal(eixo) + '"', info.nivel) + '</div>' +
+          '<div class="gestao-field"><input type="text" placeholder="Observações (padrão de erro / aula específica)" data-rc-eixo-obs="' + escapeHtmlLocal(eixo) + '" value="' + escapeHtmlLocal(info.observacoes || '') + '"></div>' +
+        '</div>';
+      }).join('');
+
+    const revisoes = d.revisoes_teste || [];
+    const blocoRevisoes = revisoes.length ? '<div class="report-section-head">D · Desempenho nas Revisões-Teste</div>' +
+      '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>Aula</th><th>Nota/Resultado Forms</th><th>Fluência oral</th><th>Validade</th></tr></thead><tbody>' +
+      revisoes.map((rv, i) => '<tr>' +
+        '<td>' + rv.aula_numero + ' — ' + escapeHtmlLocal(rv.aula_topico || '') + '</td>' +
+        '<td><input type="text" style="width:100px;" placeholder="[Preenchimento necessário]" data-rc-rev-nota="' + i + '" value="' + escapeHtmlLocal(rv.nota_forms || '') + '"></td>' +
+        '<td>' + selectPPR('data-rc-rev-fluencia="' + i + '"', rv.fluencia_oral) + '</td>' +
+        '<td><select data-rc-rev-validade="' + i + '"><option value=""' + (!rv.validade_oficial ? ' selected' : '') + '>[Preenchimento necessário]</option><option value="oficial"' + (rv.validade_oficial === 'oficial' ? ' selected' : '') + '>Oficial</option><option value="diagnostico"' + (rv.validade_oficial === 'diagnostico' ? ' selected' : '') + '>Diagnóstico informal</option></select></td>' +
+      '</tr>').join('') + '</tbody></table></div>' : '';
+
+    const af = d.apresentacao_final;
+    const blocoFinal = af ? '<div class="report-section-head">E · Apresentação Final de Nível (Aula ' + af.aula_numero + ')</div>' +
+      Object.keys(af.eixos).map(eixo => {
+        const info = af.eixos[eixo];
+        return '<div class="gestao-form gestao-form-col" style="margin-bottom:10px;">' +
+          '<b>' + escapeHtmlLocal(eixo) + '</b>' +
+          '<div class="gestao-field">' + selectPPR('data-rc-final-eixo="' + escapeHtmlLocal(eixo) + '"', info.nivel) + '</div>' +
+        '</div>';
+      }).join('') +
+      '<div class="gestao-field"><label>Resultado da Apresentação Final</label><select id="rcFinalResultado">' +
+        '<option value=""' + (!af.resultado ? ' selected' : '') + '>[Preenchimento necessário]</option>' +
+        '<option value="aprovado"' + (af.resultado === 'aprovado' ? ' selected' : '') + '>Aprovado</option>' +
+        '<option value="protocolo"' + (af.resultado === 'protocolo' ? ' selected' : '') + '>Encaminhar para protocolo 6.5.1</option>' +
+      '</select></div>' : '';
+
+    const alertas = d.alertas_planner || [];
+    const blocoAlertas = alertas.length ? '<div class="report-section-head">Alertas do Planner no período (referência)</div>' +
+      '<p class="gestao-hint">Marcados como "Alerta para Report Card" pelo professor durante as aulas — revise antes de decidir os eixos acima.</p>' +
+      alertas.map(a => '<p class="report-line">Aula ' + a.aula_numero + ' — ' + escapeHtmlLocal(a.aula_topico || '') + ': ' + escapeHtmlLocal(a.motivo || '') + '</p>').join('') : '';
+
+    const enc = d.encaminhamento || {};
+    const blocoRestante =
+      '<div class="report-section-head">F · Pontos Fortes e de Desenvolvimento</div>' +
+      '<div class="gestao-field"><label>Pontos fortes</label><input type="text" id="rcPontosFortes" value="' + escapeHtmlLocal(d.pontos_fortes || '') + '" placeholder="[Preenchimento necessário]"></div>' +
+      '<div class="gestao-field"><label>Pontos de desenvolvimento</label><input type="text" id="rcPontosDesenvolvimento" value="' + escapeHtmlLocal(d.pontos_desenvolvimento || '') + '" placeholder="[Preenchimento necessário]"></div>' +
+      '<div class="report-section-head">G · Considerações Pessoais do Professor(a)</div>' +
+      '<div class="gestao-field"><input type="text" id="rcConsideracoes" value="' + escapeHtmlLocal(d.consideracoes_professor || '') + '" placeholder="[Preenchimento necessário]"></div>' +
+      '<div class="report-section-head">H · Encaminhamento</div>' +
+      '<div class="gestao-field"><select id="rcEncaminhamentoTipo">' +
+        '<option value=""' + (!enc.tipo ? ' selected' : '') + '>[Preenchimento necessário]</option>' +
+        '<option value="sem_ressalvas"' + (enc.tipo === 'sem_ressalvas' ? ' selected' : '') + '>Segue sem ressalvas</option>' +
+        '<option value="reforco"' + (enc.tipo === 'reforco' ? ' selected' : '') + '>Reforço pontual</option>' +
+        '<option value="protocolo"' + (enc.tipo === 'protocolo' ? ' selected' : '') + '>Protocolo 6.5.1 acionado</option>' +
+      '</select></div>' +
+      '<div class="gestao-field"><label>Motivo / plano de reforço (se aplicável)</label><input type="text" id="rcEncaminhamentoMotivo" value="' + escapeHtmlLocal(enc.motivo || '') + '"></div>';
+
+    let botoesTransicao = '';
+    if(CURRENT_REPORT_CARD_CONTEXTO === 'gestao' && rc.status === 'rascunho'){
+      botoesTransicao = '<button type="button" class="btn btn-primary" onclick="handleLiberarReportCardProfessor()">Liberar para Professor</button>';
+    } else if(CURRENT_REPORT_CARD_CONTEXTO === 'professora' && (rc.status === 'liberado_professor' || rc.status === 'liberado_aluno')){
+      botoesTransicao = rc.status === 'liberado_professor'
+        ? '<button type="button" class="btn btn-primary" onclick="handleLiberarReportCardAluno()">Liberar para Aluno</button>'
+        : '<span class="pill-count pill-ok">Já liberado pro aluno</span>';
+    }
+
+    document.getElementById('reportCardModalBody').innerHTML =
+      '<p class="report-line"><b>Turma/nível:</b> ' + escapeHtmlLocal(nivel ? nivel.name : rc.materia_slug) + ' · ' + rc.semestre + 'º semestre (aulas ' + rc.aula_inicio + '-' + rc.aula_fim + ')</p>' +
+      '<p class="report-line"><b>Status:</b> ' + reportCardStatusBadge(rc.status) + '</p>' +
+      blocoFrequencia + blocoEixos + blocoRevisoes + blocoFinal + blocoAlertas + blocoRestante +
+      '<div class="btn-row" style="margin-top:16px;"><button type="button" class="btn btn-ghost" onclick="handleSalvarReportCard()">Salvar</button>' + botoesTransicao + '</div>' +
+      '<p class="auth-msg" id="rcModalMsg"></p>';
+  }
+
+  function coletarDadosReportCardDoFormulario(){
+    const d = JSON.parse(JSON.stringify(CURRENT_REPORT_CARD.dados || {})); // clona — preserva frequencia/alertas_planner/amostras
+    document.querySelectorAll('[data-rc-eixo]').forEach(el => { d.avaliacao_eixos[el.dataset.rcEixo].nivel = el.value || null; });
+    document.querySelectorAll('[data-rc-eixo-obs]').forEach(el => { d.avaliacao_eixos[el.dataset.rcEixoObs].observacoes = el.value.trim(); });
+    document.querySelectorAll('[data-rc-rev-nota]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevNota)].nota_forms = el.value.trim() || null; });
+    document.querySelectorAll('[data-rc-rev-fluencia]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevFluencia)].fluencia_oral = el.value || null; });
+    document.querySelectorAll('[data-rc-rev-validade]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevValidade)].validade_oficial = el.value || null; });
+    if(d.apresentacao_final){
+      document.querySelectorAll('[data-rc-final-eixo]').forEach(el => { d.apresentacao_final.eixos[el.dataset.rcFinalEixo].nivel = el.value || null; });
+      const resultadoEl = document.getElementById('rcFinalResultado');
+      if(resultadoEl) d.apresentacao_final.resultado = resultadoEl.value || null;
+    }
+    d.pontos_fortes = document.getElementById('rcPontosFortes').value.trim();
+    d.pontos_desenvolvimento = document.getElementById('rcPontosDesenvolvimento').value.trim();
+    d.consideracoes_professor = document.getElementById('rcConsideracoes').value.trim();
+    d.encaminhamento = {
+      tipo: document.getElementById('rcEncaminhamentoTipo').value || null,
+      motivo: document.getElementById('rcEncaminhamentoMotivo').value.trim()
+    };
+    return d;
+  }
+
+  async function handleSalvarReportCard(){
+    const dados = coletarDadosReportCardDoFormulario();
+    const { data, error } = await dyseUpdateReportCard(CURRENT_REPORT_CARD.id, dados);
+    if(error){ flashMsg('rcModalMsg', 'Erro ao salvar: ' + error.message, false); return; }
+    CURRENT_REPORT_CARD = data;
+    if(CURRENT_REPORT_CARD_CONTEXTO === 'professora') await dyseMarcarReportCardRevisado(CURRENT_REPORT_CARD.id);
+    flashMsg('rcModalMsg', 'Salvo!', true);
+  }
+
+  async function handleLiberarReportCardProfessor(){
+    if(!confirm('Liberar este Report Card para a professora revisar/completar?')) return;
+    const dados = coletarDadosReportCardDoFormulario();
+    await dyseUpdateReportCard(CURRENT_REPORT_CARD.id, dados);
+    const { data, error } = await dyseLiberarReportCardProfessor(CURRENT_REPORT_CARD.id);
+    if(error){ flashMsg('rcModalMsg', 'Erro: ' + error.message, false); return; }
+    CURRENT_REPORT_CARD = data;
+    renderReportCardModalBody();
+    if(CURRENT_ALUNO_HISTORICO_ID) await renderAlunoReportCardsList(CURRENT_ALUNO_HISTORICO_ID);
   }
 
   function renderAlunoFinModalBody(){

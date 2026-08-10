@@ -655,6 +655,7 @@ body.dyse-modal-open{overflow:hidden;}
     <button type="button" class="auth-tab" id="tabManage" onclick="showPanel('manage')">Gerenciar atividades</button>
     <button type="button" class="auth-tab" id="tabFinanceiro" onclick="showPanel('financeiro')">Financeiro</button>
     <button type="button" class="auth-tab" id="tabTurmas" onclick="showPanel('turmas')">Turmas</button>
+    <button type="button" class="auth-tab" id="tabReportCards" onclick="showPanel('reportcards')">Report Cards</button>
   </div>
 
   <div id="panelResults">
@@ -805,6 +806,13 @@ body.dyse-modal-open{overflow:hidden;}
       </div>
     </div>
   </div>
+
+  <div id="panelReportCards" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
+      Report Cards liberados pela gestão pra você revisar/completar. Depois de revisar, use "Liberar para Aluno" — só a partir daí ele fica visível no painel do aluno.
+    </p>
+    <div id="reportCardsListaProfessora"></div>
+  </div>
 </div>
 
 <!-- O modal fica FORA da .wrap de propósito: .wrap cria seu próprio contexto de
@@ -821,6 +829,18 @@ body.dyse-modal-open{overflow:hidden;}
       <button type="button" class="report-modal-close" onclick="closeReport()" aria-label="Fechar relatório">&times;</button>
     </div>
     <div class="report-modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de visualização/edição de um Report Card -->
+<div id="reportCardModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeReportCardModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="reportCardModalTitle">
+    <div class="report-modal-header">
+      <h3 id="reportCardModalTitle">Report Card</h3>
+      <button type="button" class="report-modal-close" onclick="closeReportCardModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="reportCardModalBody"></div>
   </div>
 </div>
 
@@ -1130,10 +1150,12 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('tabManage').classList.toggle('active', which==='manage');
     document.getElementById('tabFinanceiro').classList.toggle('active', which==='financeiro');
     document.getElementById('tabTurmas').classList.toggle('active', which==='turmas');
+    document.getElementById('tabReportCards').classList.toggle('active', which==='reportcards');
     document.getElementById('panelResults').style.display = which==='results' ? 'block' : 'none';
     document.getElementById('panelManage').style.display = which==='manage' ? 'block' : 'none';
     document.getElementById('panelFinanceiro').style.display = which==='financeiro' ? 'block' : 'none';
     document.getElementById('panelTurmas').style.display = which==='turmas' ? 'block' : 'none';
+    document.getElementById('panelReportCards').style.display = which==='reportcards' ? 'block' : 'none';
     if(which === 'financeiro' && !document.getElementById('finProfMes').value){
       document.getElementById('finProfMes').value = competenciaToMonthInput(dyseMesCompetencia());
       loadFinanceiroProfessor();
@@ -1141,6 +1163,10 @@ body.dyse-modal-open{overflow:hidden;}
     if(which === 'turmas' && !CHAMADA_LOADED){
       CHAMADA_LOADED = true;
       loadPanelTurmas();
+    }
+    if(which === 'reportcards' && !REPORT_CARDS_LOADED){
+      REPORT_CARDS_LOADED = true;
+      loadPanelReportCards();
     }
   }
 
@@ -1373,6 +1399,205 @@ body.dyse-modal-open{overflow:hidden;}
     if(erroAluno || erroSessao){ msg.textContent = 'Erro ao salvar: ' + ((erroAluno && erroAluno.error.message) || erroSessao.message); return; }
     msg.textContent = 'Registro de classe salvo!';
     await carregarRegistroClasseDaTurma(); // atualiza os indicadores ✓/⚠️ do seletor de aula
+  }
+
+  /* ======================================================================
+     REPORT CARDS — revisão/complemento dos campos pendentes e liberação
+     final pro aluno. A gestão já gerou e liberou pra cá (RLS só deixa a
+     professora enxergar quando status <> 'rascunho'); "Liberar para
+     Aluno" é a única transição que esta tela faz.
+     ====================================================================== */
+  let REPORT_CARDS_LOADED = false;
+  let REPORT_CARDS_STUDENTS_CACHE = [];
+  let REPORT_CARDS_MATERIAS_CACHE = [];
+
+  const REPORT_CARD_STATUS_LABELS = { rascunho: 'Rascunho', liberado_professor: 'Liberado p/ Professor', liberado_aluno: 'Liberado p/ Aluno' };
+  function reportCardStatusBadge(status){
+    const cls = status === 'rascunho' ? '' : 'pill-ok';
+    return '<span class="pill-count' + (cls ? ' ' + cls : '') + '">' + (REPORT_CARD_STATUS_LABELS[status] || status) + '</span>';
+  }
+
+  async function loadPanelReportCards(){
+    const [cards, students, materias] = await Promise.all([
+      dyseListReportCards(), // RLS já restringe: só os liberados dos alunos das turmas atuais
+      dyseListProfilesByRole('student'),
+      dyseListMaterias()
+    ]);
+    REPORT_CARDS_STUDENTS_CACHE = students;
+    REPORT_CARDS_MATERIAS_CACHE = materias;
+    document.getElementById('reportCardsListaProfessora').innerHTML = cards.length
+      ? cards.map(rc => {
+          const aluno = students.find(s => s.id === rc.aluno_id);
+          const nivel = materias.find(m => m.slug === rc.materia_slug);
+          return '<div class="report-line" style="display:flex; align-items:center; justify-content:space-between; gap:10px; border-bottom:1px solid #f0e3d2; padding-bottom:10px;">' +
+            '<span><b>' + escapeHtmlLocal(aluno ? (aluno.full_name || aluno.email) : '(aluno)') + '</b> — ' + escapeHtmlLocal(nivel ? nivel.name : rc.materia_slug) + ' · ' + rc.semestre + 'º semestre</span>' +
+            reportCardStatusBadge(rc.status) +
+            '<button type="button" class="btn btn-ghost btn-xs" onclick="openReportCardModal(' + rc.id + ', \'professora\')">Abrir</button>' +
+          '</div>';
+        }).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum Report Card liberado pra você ainda.</p>';
+  }
+
+  let CURRENT_REPORT_CARD = null;
+  let CURRENT_REPORT_CARD_CONTEXTO = 'professora';
+
+  const AVALIACAO_PPR_LABELS = { PP: 'PP — Atingiu plenamente', P: 'P — Atingiu parcialmente', R: 'R — Precisa de reforço' };
+  function selectPPR(idAttr, valorAtual){
+    const opts = ['', 'PP', 'P', 'R'].map(v => '<option value="' + v + '"' + (valorAtual === v ? ' selected' : '') + '>' + (v ? AVALIACAO_PPR_LABELS[v] : '[Preenchimento necessário]') + '</option>').join('');
+    return '<select ' + idAttr + '>' + opts + '</select>';
+  }
+
+  function pfCampo(labelText, innerHtml){
+    return '<div style="margin-bottom:10px;"><label style="font-weight:700; font-size:.82rem; color:var(--seal); display:block; margin-bottom:4px;">' + labelText + '</label>' + innerHtml + '</div>';
+  }
+  function pfInput(idAttr, value, placeholder){
+    return '<input type="text" ' + idAttr + ' value="' + escapeHtmlLocal(value || '') + '" placeholder="' + (placeholder || '') + '" style="width:100%; max-width:520px; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;">';
+  }
+
+  async function openReportCardModal(id, contexto){
+    const cards = await dyseListReportCards();
+    const rc = cards.find(c => c.id === id);
+    if(!rc){ alert('Report Card não encontrado ou sem permissão pra ver.'); return; }
+    CURRENT_REPORT_CARD = rc;
+    CURRENT_REPORT_CARD_CONTEXTO = contexto || 'professora';
+    renderReportCardModalBody();
+    document.getElementById('reportCardModal').classList.add('open');
+    document.getElementById('reportCardModal').setAttribute('aria-hidden', 'false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeReportCardModal(){
+    document.getElementById('reportCardModal').classList.remove('open');
+    document.getElementById('reportCardModal').setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_REPORT_CARD = null;
+  }
+
+  function renderReportCardModalBody(){
+    const rc = CURRENT_REPORT_CARD;
+    const d = rc.dados || {};
+    const aluno = REPORT_CARDS_STUDENTS_CACHE.find(s => s.id === rc.aluno_id);
+    const nivel = REPORT_CARDS_MATERIAS_CACHE.find(m => m.slug === rc.materia_slug);
+    document.getElementById('reportCardModalTitle').textContent = 'Report Card — ' + (aluno ? (aluno.full_name || aluno.email) : '');
+
+    const freq = d.frequencia || {};
+    const blocoFrequencia =
+      '<div class="report-section-head">B · Frequência</div>' +
+      '<p class="report-line">' + (freq.aulas_presentes ?? '-') + ' de ' + (freq.aulas_previstas ?? '-') + ' aulas (' + (freq.percentual ?? '-') + '%) — critério mínimo 75%: ' +
+      (freq.criterio_atingido ? '<b style="color:var(--ok);">Atingido</b>' : '<b style="color:var(--bad);">Não atingido</b>') + '</p>' +
+      (freq.aulas_sem_registro ? '<p class="report-line">⚠️ ' + freq.aulas_sem_registro + ' aula(s) do período ainda sem Registro de Classe lançado.</p>' : '');
+
+    const eixos = d.avaliacao_eixos || {};
+    const blocoEixos = '<div class="report-section-head">C · Avaliação Qualitativa por Eixo</div>' +
+      Object.keys(eixos).map(eixo => {
+        const info = eixos[eixo];
+        return '<div style="margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid #f0e3d2;">' +
+          '<b>' + escapeHtmlLocal(eixo) + '</b> <span style="opacity:.6; font-size:.78rem;">(' + info.amostras + ' amostra(s) no período)</span>' +
+          pfCampo('Nível', selectPPR('data-rc-eixo="' + escapeHtmlLocal(eixo) + '"', info.nivel)) +
+          pfCampo('Observações', pfInput('data-rc-eixo-obs="' + escapeHtmlLocal(eixo) + '"', info.observacoes, 'Padrão de erro / aula específica')) +
+        '</div>';
+      }).join('');
+
+    const revisoes = d.revisoes_teste || [];
+    const blocoRevisoes = revisoes.length ? '<div class="report-section-head">D · Desempenho nas Revisões-Teste</div>' +
+      '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>Aula</th><th>Nota/Resultado Forms</th><th>Fluência oral</th><th>Validade</th></tr></thead><tbody>' +
+      revisoes.map((rv, i) => '<tr>' +
+        '<td>' + rv.aula_numero + ' — ' + escapeHtmlLocal(rv.aula_topico || '') + '</td>' +
+        '<td>' + pfInput('data-rc-rev-nota="' + i + '"', rv.nota_forms, '[Preenchimento necessário]') + '</td>' +
+        '<td>' + selectPPR('data-rc-rev-fluencia="' + i + '"', rv.fluencia_oral) + '</td>' +
+        '<td><select data-rc-rev-validade="' + i + '"><option value=""' + (!rv.validade_oficial ? ' selected' : '') + '>[Preenchimento necessário]</option><option value="oficial"' + (rv.validade_oficial === 'oficial' ? ' selected' : '') + '>Oficial</option><option value="diagnostico"' + (rv.validade_oficial === 'diagnostico' ? ' selected' : '') + '>Diagnóstico informal</option></select></td>' +
+      '</tr>').join('') + '</tbody></table></div>' : '';
+
+    const af = d.apresentacao_final;
+    const blocoFinal = af ? '<div class="report-section-head">E · Apresentação Final de Nível (Aula ' + af.aula_numero + ')</div>' +
+      Object.keys(af.eixos).map(eixo => {
+        const info = af.eixos[eixo];
+        return '<div style="margin-bottom:10px;"><b>' + escapeHtmlLocal(eixo) + '</b>' + pfCampo('', selectPPR('data-rc-final-eixo="' + escapeHtmlLocal(eixo) + '"', info.nivel)) + '</div>';
+      }).join('') +
+      pfCampo('Resultado da Apresentação Final', '<select id="rcFinalResultado">' +
+        '<option value=""' + (!af.resultado ? ' selected' : '') + '>[Preenchimento necessário]</option>' +
+        '<option value="aprovado"' + (af.resultado === 'aprovado' ? ' selected' : '') + '>Aprovado</option>' +
+        '<option value="protocolo"' + (af.resultado === 'protocolo' ? ' selected' : '') + '>Encaminhar para protocolo 6.5.1</option>' +
+      '</select>') : '';
+
+    const alertas = d.alertas_planner || [];
+    const blocoAlertas = alertas.length ? '<div class="report-section-head">Alertas do Planner no período (referência)</div>' +
+      '<p class="report-line">Marcados como "Alerta para Report Card" durante as aulas — revise antes de decidir os eixos acima.</p>' +
+      alertas.map(a => '<p class="report-line">Aula ' + a.aula_numero + ' — ' + escapeHtmlLocal(a.aula_topico || '') + ': ' + escapeHtmlLocal(a.motivo || '') + '</p>').join('') : '';
+
+    const enc = d.encaminhamento || {};
+    const blocoRestante =
+      '<div class="report-section-head">F · Pontos Fortes e de Desenvolvimento</div>' +
+      pfCampo('Pontos fortes', pfInput('id="rcPontosFortes"', d.pontos_fortes, '[Preenchimento necessário]')) +
+      pfCampo('Pontos de desenvolvimento', pfInput('id="rcPontosDesenvolvimento"', d.pontos_desenvolvimento, '[Preenchimento necessário]')) +
+      '<div class="report-section-head">G · Considerações Pessoais do Professor(a)</div>' +
+      pfCampo('', pfInput('id="rcConsideracoes"', d.consideracoes_professor, '[Preenchimento necessário]')) +
+      '<div class="report-section-head">H · Encaminhamento</div>' +
+      pfCampo('Tipo', '<select id="rcEncaminhamentoTipo">' +
+        '<option value=""' + (!enc.tipo ? ' selected' : '') + '>[Preenchimento necessário]</option>' +
+        '<option value="sem_ressalvas"' + (enc.tipo === 'sem_ressalvas' ? ' selected' : '') + '>Segue sem ressalvas</option>' +
+        '<option value="reforco"' + (enc.tipo === 'reforco' ? ' selected' : '') + '>Reforço pontual</option>' +
+        '<option value="protocolo"' + (enc.tipo === 'protocolo' ? ' selected' : '') + '>Protocolo 6.5.1 acionado</option>' +
+      '</select>') +
+      pfCampo('Motivo / plano de reforço (se aplicável)', pfInput('id="rcEncaminhamentoMotivo"', enc.motivo, ''));
+
+    let botoesTransicao = '';
+    if(rc.status === 'liberado_professor'){
+      botoesTransicao = '<button type="button" class="btn btn-primary" onclick="handleLiberarReportCardAluno()">Liberar para Aluno</button>';
+    } else if(rc.status === 'liberado_aluno'){
+      botoesTransicao = '<span class="pill-count pill-ok">Já liberado pro aluno</span>';
+    }
+
+    document.getElementById('reportCardModalBody').innerHTML =
+      '<p class="report-line"><b>Nível:</b> ' + escapeHtmlLocal(nivel ? nivel.name : rc.materia_slug) + ' · ' + rc.semestre + 'º semestre (aulas ' + rc.aula_inicio + '-' + rc.aula_fim + ')</p>' +
+      '<p class="report-line"><b>Status:</b> ' + reportCardStatusBadge(rc.status) + '</p>' +
+      blocoFrequencia + blocoEixos + blocoRevisoes + blocoFinal + blocoAlertas + blocoRestante +
+      '<div class="btn-row" style="margin-top:16px;"><button type="button" class="btn btn-ghost" onclick="handleSalvarReportCard()">Salvar</button>' + botoesTransicao + '</div>' +
+      '<p style="font-size:.82rem; margin:10px 0; color:var(--seal-soft);" id="rcModalMsg"></p>';
+  }
+
+  function coletarDadosReportCardDoFormulario(){
+    const d = JSON.parse(JSON.stringify(CURRENT_REPORT_CARD.dados || {}));
+    document.querySelectorAll('[data-rc-eixo]').forEach(el => { d.avaliacao_eixos[el.dataset.rcEixo].nivel = el.value || null; });
+    document.querySelectorAll('[data-rc-eixo-obs]').forEach(el => { d.avaliacao_eixos[el.dataset.rcEixoObs].observacoes = el.value.trim(); });
+    document.querySelectorAll('[data-rc-rev-nota]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevNota)].nota_forms = el.value.trim() || null; });
+    document.querySelectorAll('[data-rc-rev-fluencia]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevFluencia)].fluencia_oral = el.value || null; });
+    document.querySelectorAll('[data-rc-rev-validade]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevValidade)].validade_oficial = el.value || null; });
+    if(d.apresentacao_final){
+      document.querySelectorAll('[data-rc-final-eixo]').forEach(el => { d.apresentacao_final.eixos[el.dataset.rcFinalEixo].nivel = el.value || null; });
+      const resultadoEl = document.getElementById('rcFinalResultado');
+      if(resultadoEl) d.apresentacao_final.resultado = resultadoEl.value || null;
+    }
+    d.pontos_fortes = document.getElementById('rcPontosFortes').value.trim();
+    d.pontos_desenvolvimento = document.getElementById('rcPontosDesenvolvimento').value.trim();
+    d.consideracoes_professor = document.getElementById('rcConsideracoes').value.trim();
+    d.encaminhamento = {
+      tipo: document.getElementById('rcEncaminhamentoTipo').value || null,
+      motivo: document.getElementById('rcEncaminhamentoMotivo').value.trim()
+    };
+    return d;
+  }
+
+  async function handleSalvarReportCard(){
+    const dados = coletarDadosReportCardDoFormulario();
+    const { data, error } = await dyseUpdateReportCard(CURRENT_REPORT_CARD.id, dados);
+    const msg = document.getElementById('rcModalMsg');
+    if(error){ msg.textContent = 'Erro ao salvar: ' + error.message; return; }
+    CURRENT_REPORT_CARD = data;
+    await dyseMarcarReportCardRevisado(CURRENT_REPORT_CARD.id);
+    msg.textContent = 'Salvo!';
+  }
+
+  async function handleLiberarReportCardAluno(){
+    if(!confirm('Liberar este Report Card pro aluno visualizar? Confirme que os campos pendentes foram revisados antes.')) return;
+    const dados = coletarDadosReportCardDoFormulario();
+    await dyseUpdateReportCard(CURRENT_REPORT_CARD.id, dados);
+    const { data, error } = await dyseLiberarReportCardAluno(CURRENT_REPORT_CARD.id);
+    const msg = document.getElementById('rcModalMsg');
+    if(error){ msg.textContent = 'Erro: ' + error.message; return; }
+    CURRENT_REPORT_CARD = data;
+    renderReportCardModalBody();
+    await loadPanelReportCards();
   }
 
   /* ======================================================================

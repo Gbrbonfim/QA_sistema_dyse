@@ -1740,6 +1740,114 @@ insert into public.nivel_aulas (materia_slug, numero, topico, conteudo) values
   ))
 on conflict (materia_slug, numero) do nothing;
 
+-- ----------------------------------------------------------------------
+-- 13) REPORT CARD — geração a partir do Registro de Classe, com fluxo de
+--     aprovação em 3 etapas (Gestão gera → libera pro Professor →
+--     Professor revisa/completa → libera pro Aluno). O aluno NUNCA vê um
+--     Report Card em rascunho; o professor só vê depois de liberado.
+-- ----------------------------------------------------------------------
+
+-- 13.1) O Report Card pede 5 eixos (Speaking/Listening/Reading/Writing/
+--       Gramática), mas o Registro de Classe do A1 só tinha 4 (sem
+--       Gramática, com Reading/Writing combinados em "Read./Writ."). Em
+--       vez de deixar 3 eixos permanentemente sem fonte de dado, expande
+--       os eixos do A1 pra bater com o Report Card — dirigido só por
+--       config (materias.eixos_avaliacao), sem mudar código do Registro
+--       de Classe. Idempotente: só migra quem ainda está no default
+--       antigo, não sobrescreve customização manual feita depois.
+update public.materias
+set eixos_avaliacao = '["Tarefa Final","Speaking","Listening","Reading","Writing","Gramática"]'::jsonb
+where slug = 'a1'
+  and eixos_avaliacao = '["Tarefa Final","Speaking","Listening","Read./Writ."]'::jsonb;
+
+-- 13.2) Um Report Card por (aluno, matéria/nível, semestre) — igual
+--       Registro de Classe, vinculado ao ALUNO (não à turma), então
+--       sobrevive a troca de turma/professor. "dados" em JSONB guarda os
+--       blocos B-I (frequência, avaliação por eixo, revisões-teste,
+--       apresentação final, pontos fortes/fracos, considerações,
+--       encaminhamento) — estrutura pode evoluir por nível sem migração.
+create table if not exists public.report_cards (
+  id bigint generated always as identity primary key,
+  aluno_id uuid not null references auth.users(id) on delete cascade,
+  materia_slug text not null references public.materias(slug) on delete restrict,
+  semestre int not null check (semestre in (1,2)),
+  aula_inicio int not null,
+  aula_fim int not null,
+  status text not null default 'rascunho' check (status in ('rascunho','liberado_professor','liberado_aluno')),
+  dados jsonb not null default '{}'::jsonb,
+  turma_id uuid references public.turmas(id) on delete set null,
+  professor_id uuid references auth.users(id) on delete set null,
+  gerado_por uuid references auth.users(id),
+  gerado_em timestamptz,
+  liberado_professor_por uuid references auth.users(id),
+  liberado_professor_em timestamptz,
+  revisado_por uuid references auth.users(id),
+  revisado_em timestamptz,
+  liberado_aluno_por uuid references auth.users(id),
+  liberado_aluno_em timestamptz,
+  atualizado_em timestamptz default now()
+);
+
+alter table public.report_cards drop constraint if exists report_cards_aluno_materia_semestre_key;
+alter table public.report_cards add constraint report_cards_aluno_materia_semestre_key unique (aluno_id, materia_slug, semestre);
+
+create index if not exists idx_report_cards_aluno on public.report_cards (aluno_id);
+
+alter table public.report_cards enable row level security;
+
+-- Professor: só enxerga depois de liberado (nunca rascunho), mesmo padrão
+-- de registros_classe — visibilidade pela turma ATUAL do aluno.
+drop policy if exists "professoras veem report cards liberados dos alunos atuais" on public.report_cards;
+create policy "professoras veem report cards liberados dos alunos atuais"
+  on public.report_cards for select
+  using (
+    status <> 'rascunho'
+    and exists (
+      select 1 from public.profiles p
+      where p.id = public.report_cards.aluno_id
+        and p.turma_id is not null
+        and public.teacher_can_see_turma(p.turma_id)
+    )
+  );
+
+drop policy if exists "professoras atualizam report cards liberados dos alunos atuais" on public.report_cards;
+create policy "professoras atualizam report cards liberados dos alunos atuais"
+  on public.report_cards for update
+  using (
+    status <> 'rascunho'
+    and exists (
+      select 1 from public.profiles p
+      where p.id = public.report_cards.aluno_id
+        and p.turma_id is not null
+        and public.teacher_can_see_turma(p.turma_id)
+    )
+  )
+  with check (
+    exists (
+      select 1 from public.profiles p
+      where p.id = public.report_cards.aluno_id
+        and p.turma_id is not null
+        and public.teacher_can_see_turma(p.turma_id)
+    )
+  );
+
+-- Aluno: só o próprio, só depois de liberado pra ele.
+drop policy if exists "aluno ve o proprio report card liberado" on public.report_cards;
+create policy "aluno ve o proprio report card liberado"
+  on public.report_cards for select
+  using (aluno_id = auth.uid() and status = 'liberado_aluno');
+
+drop policy if exists "admins gerenciam todos os report cards" on public.report_cards;
+create policy "admins gerenciam todos os report cards"
+  on public.report_cards for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+drop trigger if exists trg_audit_report_cards on public.report_cards;
+create trigger trg_audit_report_cards
+  after insert or update or delete on public.report_cards
+  for each row execute procedure public.log_financeiro_auditoria();
+
 -- ======================================================================
 -- PRONTO! Depois de rodar este script:
 --
