@@ -1472,6 +1472,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '<td data-label="Acesso"><div class="btn-row">' +
           '<button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoHistoricoModal(\'' + s.id + '\')">Histórico</button>' +
           '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="handleDefinirSenhaTemporaria(\'' + s.id + '\')">Definir senha temporária</button>' +
           '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
         '</div></td>' +
       '</tr>';
@@ -1503,6 +1504,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '<div><div class="gestao-card-title" style="font-size:1.1rem; margin-bottom:2px;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' +
         '<span style="font-size:.78rem; opacity:.7;">' + escapeHtmlLocal(p.email || '') + '</span></div>' +
         '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(p.email || '') + '\')"' + (p.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
+        '<button type="button" class="btn btn-ghost btn-xs" onclick="handleDefinirSenhaTemporaria(\'' + p.id + '\')">Definir senha temporária</button>' +
       '</div>';
       return '<div class="gestao-card">' + header + rows + '</div>';
     }).join('');
@@ -1515,6 +1517,31 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     const { error } = await dyseReenviarAcesso(email);
     if(error){ alert('Não foi possível reenviar: ' + error.message); return; }
     alert('E-mail de acesso reenviado para ' + email + '!');
+  }
+
+  /* ---------- Definir senha temporária (aluno ou professor) ----------
+     Não depende de e-mail chegando: define a senha direto via Auth Admin
+     API (função serverless, só quem tem a service_role consegue) e
+     devolve a senha na resposta pra gestão repassar pro dono da conta —
+     ela não fica salva em nenhuma tabela. */
+  async function handleDefinirSenhaTemporaria(id){
+    const pessoa = STUDENTS.find(s => s.id === id) || TEACHERS.find(p => p.id === id);
+    const nome = pessoa ? (pessoa.full_name || pessoa.email || '') : id;
+    if(!confirm('Gerar uma senha temporária nova para "' + nome + '"? A senha atual dele(a) deixa de funcionar imediatamente.')) return;
+
+    const session = await dyseGetSession();
+    try{
+      const resp = await fetch('/api/set-temp-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ user_id: id })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if(!resp.ok){ alert('Não foi possível definir a senha: ' + (result.error || resp.statusText)); return; }
+      prompt('Senha temporária de ' + nome + ' (' + result.email + ') — copie e envie pra ele(a). Não será mostrada de novo:', result.temp_password);
+    }catch(err){
+      alert('Erro de conexão com o servidor: ' + err.message);
+    }
   }
 
   /* ---------- Excluir aluno definitivamente ----------
