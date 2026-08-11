@@ -48,6 +48,15 @@ alter table public.profiles add column if not exists email text;
 -- professor pra vínculo financeiro e turma). Ver is_teacher() logo abaixo.
 alter table public.profiles add column if not exists also_teacher boolean not null default false;
 
+-- Mesma ideia, agora pro caminho inverso: alguém de gestão/financeiro que
+-- também é aluno (ex: faz as próprias atividades) e precisa acessar
+-- /area-do-aluno.html sem perder o papel principal. Não precisa de uma
+-- função is_student() própria porque nada na RLS distingue aluno por
+-- role — activity_results já é liberado por auth.uid() = user_id pra
+-- qualquer autenticado; este flag só destrava a NAVEGAÇÃO (login.html e
+-- area-do-aluno.html bloqueiam admin/teacher por padrão, ver lá).
+alter table public.profiles add column if not exists also_student boolean not null default false;
+
 alter table public.profiles enable row level security;
 
 -- ----------------------------------------------------------------------
@@ -1866,6 +1875,12 @@ create trigger trg_audit_report_cards
 --    /gestao.html, e o botão "Painel da professora" que aparece pra ela lá
 --    (e em toda página) leva pra /professora.html, onde ela vê e gerencia
 --    as próprias turmas/atividades/financeiro normalmente.
+--    Mesma lógica pro caminho inverso — alguém de gestão/financeiro/professor
+--    que TAMBÉM é aluno (faz as próprias atividades): marque "also_student"
+--    como "true" na linha da pessoa. Ela continua entrando por padrão no
+--    painel principal dela, e ganha o link "Minhas atividades" (leva pra
+--    /area-do-aluno.html). Sem turma vinculada (aba Alunos → vincular
+--    turma) ela não vê nenhuma matéria liberada lá, igual qualquer aluno.
 -- 3. Todo aluno que se cadastrar entra automaticamente como "student", SEM
 --    turma — use o /gestao.html (aba Alunos) pra vincular cada um a uma
 --    turma. Sem turma, o aluno não enxerga nenhuma matéria liberada.

@@ -57,6 +57,15 @@ function dyseIsTeacher(profile){
   return !!(profile && (String(profile.role || '').trim().toLowerCase() === 'teacher' || profile.also_teacher === true));
 }
 
+/* Mesmo critério, espelhado pro flag "also_student" (ver comentário na
+   coluna profiles.also_student, supabase-schema.sql): quem NÃO é "student"
+   de role mas também faz atividades como aluno(a) precisa aparecer nas
+   listas de aluno (gestão → aba Alunos, chamada, vínculo financeiro, turma
+   do professor) igual a qualquer aluno de verdade. */
+function dyseIsStudent(profile){
+  return !!(profile && (String(profile.role || '').trim().toLowerCase() === 'student' || profile.also_student === true));
+}
+
 async function dyseGetProfile(session){
   if(!session) return null;
   try{
@@ -185,14 +194,16 @@ async function dyseRenderAuthBar(containerId){
   const name = meta.full_name || session.user.email;
   const profile = await dyseGetProfile(session);
 
-  // Quem acumula papéis (ex: admin que também dá aula, via also_teacher)
-  // ganha um link pra cada painel que tem direito, em vez de só um link
-  // fixo — sem isso não haveria como ela alcançar /professora.html a
-  // partir de /gestao.html (ou vice-versa) pela interface.
+  // Quem acumula papéis (ex: admin que também dá aula, via also_teacher; ou
+  // financeiro/admin/teacher que também é aluno, via also_student) ganha um
+  // link pra cada painel que tem direito, em vez de só um link fixo — sem
+  // isso não haveria como alcançar /professora.html ou /area-do-aluno.html
+  // a partir de /gestao.html (ou vice-versa) pela interface.
+  const alsoStudent = !!(profile && profile.also_student);
   const links = [];
   if(dyseIsAdmin(profile)) links.push('<a href="/gestao.html" class="dyse-auth-link">Painel da gestão</a>');
   if(dyseIsTeacher(profile)) links.push('<a href="/professora.html" class="dyse-auth-link">Painel da professora</a>');
-  if(!links.length) links.push('<a href="/area-do-aluno.html" class="dyse-auth-link">Minhas atividades</a>');
+  if(!links.length || alsoStudent) links.push('<a href="/area-do-aluno.html" class="dyse-auth-link">Minhas atividades</a>');
 
   el.innerHTML =
     '<span class="dyse-auth-name">👤 ' + escapeHtml(name) + '</span>' +
@@ -412,8 +423,29 @@ async function dyseListProfilesByRole(role){
   const target = String(role).trim().toLowerCase();
   return data.filter(p => {
     if(target === 'teacher') return dyseIsTeacher(p);
+    if(target === 'student') return dyseIsStudent(p);
     return String(p.role || '').trim().toLowerCase() === target;
   });
+}
+
+/* ---------- Contas (quem não é "student" puro: admin/financeiro/teacher) ----------
+   Tela "Contas" em gestao.html — deixa a gestão marcar also_teacher/also_student
+   e vincular turma pra essas contas, tudo pela tela (antes só dava pelo Table
+   Editor do Supabase, ver seção final de supabase-schema.sql). */
+async function dyseListGestaoAccounts(){
+  const { data, error } = await sb.from('profiles').select('*').order('full_name', { ascending: true });
+  if(error || !data) return [];
+  return data.filter(p => String(p.role || '').trim().toLowerCase() !== 'student');
+}
+
+async function dyseSetAlsoTeacher(profileId, value){
+  const { error } = await sb.from('profiles').update({ also_teacher: !!value }).eq('id', profileId);
+  return { error };
+}
+
+async function dyseSetAlsoStudent(profileId, value){
+  const { error } = await sb.from('profiles').update({ also_student: !!value }).eq('id', profileId);
+  return { error };
 }
 
 async function dyseSetStudentTurma(studentId, turmaId){
@@ -673,8 +705,7 @@ async function dyseGerarMensalidadesDoMes(mes){
     (valoresPorModalidade[v.modalidade_id] = valoresPorModalidade[v.modalidade_id] || []).push(v);
   });
   const nomeAlunoById = {};
-  const turmaIdByAluno = {};
-  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; turmaIdByAluno[a.id] = a.turma_id || null; });
+  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
 
   const fimDoMesStr = dyseFimDoMes(mes);
 
@@ -699,10 +730,17 @@ async function dyseGerarMensalidadesDoMes(mes){
     (periodosPorAluno[h.aluno_id] = periodosPorAluno[h.aluno_id] || []).push(h);
   });
 
-  const sessoesPorTurma = {}; // cache por execução: turma_id -> sessões do mês
-  async function sessoesDaTurma(turmaId){
-    if(!(turmaId in sessoesPorTurma)) sessoesPorTurma[turmaId] = await dyseListSessoesTurma(turmaId, mes);
-    return sessoesPorTurma[turmaId];
+  // Cache por execução: sessões de aula do mês em QUALQUER turma — o rateio
+  // precisa enxergar aulas fora da turma cadastrada no perfil da aluna,
+  // porque a troca de professor no meio do mês pode vir acompanhada de
+  // troca de turma também (cada professora dá aula pra ela numa turma
+  // diferente, não necessariamente a mesma turma com professora nova).
+  // Buscada uma única vez, sob demanda (só quando algum aluno realmente
+  // precisa de rateio neste mês).
+  let sessoesDoMesCache = null;
+  async function sessoesDoMes(){
+    if(sessoesDoMesCache === null) sessoesDoMesCache = await dyseListSessoesDoMes(mes, fimDoMesStr);
+    return sessoesDoMesCache;
   }
 
   const linhas = [];
@@ -724,14 +762,15 @@ async function dyseGerarMensalidadesDoMes(mes){
 
     // Mais de um período tocando o mês (troca de professor no meio do mês).
     const vencedor = periodos[0]; // mais recente — usado no fallback e como referência de valor_mensal_aluno
-    const turmaId = turmaIdByAluno[alunoId];
     let contagemPorProfessor = null; // Map professor_id(ou null) -> nº de presenças
 
-    if(turmaId){
-      const sessoes = await sessoesDaTurma(turmaId);
+    {
+      const sessoes = await sessoesDoMes();
       // Só conta aulas de professores que fazem parte do vínculo financeiro
       // deste aluno no mês — uma aula dada por um substituto sem vínculo
-      // financeiro não deve gerar pagamento a ele.
+      // financeiro não deve gerar pagamento a ele. Não restringe por turma:
+      // cada professora entitulada pode ter dado aula pra este aluno numa
+      // turma diferente (ver comentário em sessoesDoMes, acima).
       const professoresEntitulados = new Set(periodos.map(h => h.professor_id || null));
       const professorPorSessao = {};
       sessoes.forEach(s => { professorPorSessao[s.id] = s.professor_id || null; });
@@ -779,8 +818,14 @@ async function dyseGerarMensalidadesDoMes(mes){
       const centavos = isUltimo ? (totalCentavos - distribuidos) : Math.round(totalCentavos * share);
       distribuidos += centavos;
       const valorRecebido = centavos / 100;
-      if(valorRecebido <= 0) return; // fração arredondou pra zero — sem linha pra este professor
       const valorProfessor = Math.round(valorProfessorDoPeriodo(periodo) * share * 100) / 100;
+      // Só pula a linha se não houver NADA a registrar pra este professor —
+      // valor_recebido é o valor mensal do ALUNO (pode estar zerado por erro
+      // de cadastro, ou genuinamente ser R$0 nesse período) e valor_professor
+      // vem da tabela de modalidade, os dois são independentes: um valor
+      // recebido zerado não pode apagar a comissão da professora que deu a
+      // aula de verdade.
+      if(valorRecebido <= 0 && valorProfessor <= 0) return;
       linhas.push({
         aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
         professor_id: professorId, modalidade_id: periodo.modalidade_id,
@@ -953,6 +998,95 @@ async function dysePreverFinanceiroProfessor(mes){
   return resultado ? resultado.linhas : [];
 }
 
+/* Mesma ideia de dysePreverFinanceiroProfessor, mas pra TODOS os meses que
+   os vínculos do professor tocam (não só um mês pedido) — alimenta
+   "Histórico de meses anteriores" em professora.html, que antes só
+   mostrava os meses em que a gestão já tinha aberto Pagamentos/Relatório
+   (dyseGerarMensalidadesDoMes gerando a linha real em "mensalidades") e
+   deixava buracos nos meses que ninguém tinha visitado ainda. O teto de
+   cada vínculo é o que vier primeiro entre: mês atual, fim do período
+   (data_fim) e a última parcela contratada (quantidade_parcelas). Sem
+   rateio entre professores aqui — sem chamada lançada não dá pra prever
+   divisão, então (igual dysePreverFinanceiroProfessor) cada mês fica só
+   com o período mais recente que o toca. */
+async function dyseListMinhaPrevisaoHistoricoFinanceiro(){
+  const session = await dyseGetSession();
+  if(!session) return [];
+
+  const [historico, modalidades, valores, alunos] = await Promise.all([
+    dyseListAlunoFinanceiroHistorico(), // RLS já restringe ao próprio professor
+    dyseListModalidades(),
+    dyseListModalidadeValores(),
+    dyseListProfilesByRole('student')
+  ]);
+
+  const meusPeriodos = historico.filter(h => (h.professor_id || null) === session.user.id && h.situacao === 'ativo');
+  if(!meusPeriodos.length) return [];
+
+  const modalidadeById = {};
+  modalidades.forEach(m => { modalidadeById[m.id] = m; });
+  const valoresPorModalidade = {};
+  valores.forEach(v => { (valoresPorModalidade[v.modalidade_id] = valoresPorModalidade[v.modalidade_id] || []).push(v); });
+  const nomeAlunoById = {};
+  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
+
+  function mesSeguinte(mes){
+    const [y, m] = mes.split('-').map(Number);
+    const mm = m === 12 ? 1 : m + 1;
+    const yy = m === 12 ? y + 1 : y;
+    return yy + '-' + String(mm).padStart(2, '0') + '-01';
+  }
+
+  const hoje = dyseMesCompetencia();
+  const mesesSet = new Set();
+  meusPeriodos.forEach(h => {
+    const inicioMes = h.data_inicio.slice(0, 7) + '-01';
+    const ultimoMesPago = dyseUltimoMesPago(h);
+    const fimMes = h.data_fim ? (h.data_fim.slice(0, 7) + '-01') : null;
+    // Teto do período: se tem parcelas contratadas, mostra o prazo INTEIRO
+    // (inclusive meses futuros ainda não vividos — "6 parcelas" precisa
+    // aparecer como 6 meses pra professora, não só os que já passaram).
+    // Um período encerrado (data_fim) nunca passa do mês em que foi
+    // fechado, mesmo que ainda sobrasse parcela. Sem parcela E sem
+    // data_fim (prazo indefinido) não dá pra saber quantos meses futuros
+    // existem, então fica só até o mês atual.
+    let teto = fimMes || ultimoMesPago || hoje;
+    if(fimMes && ultimoMesPago && ultimoMesPago < fimMes) teto = ultimoMesPago;
+    for(let cursor = inicioMes; cursor <= teto; cursor = mesSeguinte(cursor)) mesesSet.add(cursor);
+  });
+
+  const linhas = [];
+  mesesSet.forEach(mes => {
+    const fimDoMesStr = dyseFimDoMes(mes);
+    const porAluno = {};
+    meusPeriodos.forEach(h => {
+      if(h.data_inicio > fimDoMesStr) return;
+      if(h.data_fim && h.data_fim < mes) return;
+      const ultimoMesPago = dyseUltimoMesPago(h);
+      if(ultimoMesPago && mes > ultimoMesPago) return;
+      const atual = porAluno[h.aluno_id];
+      const ganha = !atual || h.data_inicio > atual.data_inicio || (h.data_inicio === atual.data_inicio && h.id > atual.id);
+      if(ganha) porAluno[h.aluno_id] = h;
+    });
+    Object.values(porAluno).forEach(h => {
+      const modalidade = modalidadeById[h.modalidade_id];
+      const valorProfessor = (modalidade && modalidade.is_custom_value)
+        ? Number(h.valor_professor_customizado || 0)
+        : (dyseValorVigente(valoresPorModalidade[h.modalidade_id], mes) || 0);
+      linhas.push({
+        aluno_id: h.aluno_id,
+        aluno_nome: nomeAlunoById[h.aluno_id] || null,
+        mes_competencia: mes,
+        professor_id: h.professor_id,
+        modalidade_id: h.modalidade_id,
+        valor_recebido: Number(h.valor_mensal_aluno || 0),
+        valor_pago_professor: valorProfessor
+      });
+    });
+  });
+  return linhas;
+}
+
 /* ======================================================================
    PRESENÇA (CHAMADA) — sessões de aula por turma+data+professor e
    presença por aluno dentro de cada sessão. Alimenta o rateio de
@@ -970,6 +1104,20 @@ async function dyseListSessoesTurma(turmaId, mes){
     .gte('data', mes)
     .lte('data', dyseFimDoMes(mes))
     .order('data', { ascending: false });
+  return error ? [] : data;
+}
+
+/* Sessões de aula dentro de um mês, em QUALQUER turma — usada pelo rateio
+   (dyseGerarMensalidadesDoMes) pra achar as aulas de cada professora
+   entitulada mesmo quando ela dá aula pra este aluno numa turma diferente
+   da cadastrada no perfil dele. "fimDoMesStr" já vem calculado de quem
+   chama, pra não recalcular por aluno dentro do mesmo laço. */
+async function dyseListSessoesDoMes(mes, fimDoMesStr){
+  const { data, error } = await sb
+    .from('turma_sessoes')
+    .select('*')
+    .gte('data', mes)
+    .lte('data', fimDoMesStr);
   return error ? [] : data;
 }
 
@@ -993,6 +1141,16 @@ async function dyseUpsertSessaoTurma(turmaId, data, observacao){
     .select('*')
     .maybeSingle();
   return { data: row, error };
+}
+
+/* Desfaz uma chamada já registrada (exclui a sessão de aula). As
+   presenças lançadas nela caem junto (sessao_presencas.sessao_id
+   referencia turma_sessoes com "on delete cascade"). Usado quando a
+   professora marcou a chamada errada (turma/data trocada, aula que não
+   rolou, etc.) e precisa registrar de novo do zero. */
+async function dyseExcluirSessaoTurma(sessaoId){
+  const { error } = await sb.from('turma_sessoes').delete().eq('id', sessaoId);
+  return { error };
 }
 
 /* Presenças já lançadas numa sessão (pra pré-marcar o checklist ao

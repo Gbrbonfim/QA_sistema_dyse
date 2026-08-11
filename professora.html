@@ -227,6 +227,9 @@ section.card{
 .btn-secondary:hover{background:var(--gamboge-dark); color:#fff;}
 .btn-ghost{background:transparent; color:var(--seal-soft); border:2px solid #e4d4c4;}
 .btn-ghost:hover{border-color:var(--amaranth); color:var(--amaranth);}
+.btn-danger{background:transparent; color:var(--bad); border:2px solid #f3c6c2;}
+.btn-danger:hover{background:#fbeceb;}
+.btn-xs{padding:5px 13px; font-size:.74rem;}
 .btn-audio{background:var(--seal-soft); color:#fff;}
 .btn-audio:hover{background:var(--seal);}
 .btn:disabled{opacity:.5; cursor:not-allowed;}
@@ -720,7 +723,7 @@ body.dyse-modal-open{overflow:hidden;}
       </div>
     </details>
     <div style="overflow-x:auto; margin-top:24px;">
-      <p style="font-size:.85rem; font-weight:700; color:var(--seal); margin-bottom:10px;">Histórico de meses anteriores</p>
+      <p style="font-size:.85rem; font-weight:700; color:var(--seal); margin-bottom:10px;">Todos os meses com valor lançado</p>
       <table class="dash-table" id="finProfHistoricoTable">
         <thead>
           <tr><th>Mês</th><th>Alunos</th><th>Total previsto</th><th>Total pago</th><th>Status</th><th>Data pagamento</th></tr>
@@ -728,18 +731,6 @@ body.dyse-modal-open{overflow:hidden;}
         <tbody id="finProfHistoricoBody"></tbody>
       </table>
     </div>
-    <details class="dyse-collapsible" style="margin-top:24px;">
-      <summary><span>Previsão dos próximos meses</span><span class="chevron">›</span></summary>
-      <div class="dyse-collapsible-body" style="overflow-x:auto;">
-        <p style="font-size:.78rem; color:var(--seal-soft); opacity:.8; margin:0 0 12px;">
-          Estimativa a partir do seu vínculo atual — calculada de uma vez, sem precisar trocar o mês acima um a um. Os valores oficiais só saem quando a gestão gerar cada mês.
-        </p>
-        <table class="dash-table" id="finProfPrevisaoTable">
-          <thead><tr><th>Mês</th><th>Alunos</th><th>Total previsto</th></tr></thead>
-          <tbody id="finProfPrevisaoBody"><tr><td colspan="3" style="text-align:center; opacity:.6;">Carregando...</td></tr></tbody>
-        </table>
-      </div>
-    </details>
   </div>
 
   <div id="panelTurmas" style="display:none;">
@@ -763,7 +754,7 @@ body.dyse-modal-open{overflow:hidden;}
     <div style="overflow-x:auto; margin-top:24px;">
       <p style="font-size:.85rem; font-weight:700; color:var(--seal); margin-bottom:10px;">Aulas registradas por você neste mês</p>
       <table class="dash-table" id="chamadaHistoricoTable">
-        <thead><tr><th>Data</th><th>Presentes</th></tr></thead>
+        <thead><tr><th>Data</th><th>Presentes</th><th>Ações</th></tr></thead>
         <tbody id="chamadaHistoricoBody"></tbody>
       </table>
     </div>
@@ -1248,11 +1239,24 @@ body.dyse-modal-open{overflow:hidden;}
     const linhas = await Promise.all(minhas.map(async s => {
       const presencas = await dyseListPresencasSessao(s.id);
       const presentes = presencas.filter(p => p.presente).length;
-      return '<tr><td>' + formatDateBR(s.data) + '</td><td>' + presentes + '/' + presencas.length + '</td></tr>';
+      return '<tr><td>' + formatDateBR(s.data) + '</td><td>' + presentes + '/' + presencas.length + '</td>' +
+        '<td><button type="button" class="btn btn-danger btn-xs" onclick="handleDesfazerChamada(' + s.id + ')">Desfazer</button></td></tr>';
     }));
     document.getElementById('chamadaHistoricoBody').innerHTML = linhas.length
       ? linhas.join('')
-      : '<tr><td colspan="2" style="text-align:center; opacity:.6;">Nenhuma aula registrada este mês.</td></tr>';
+      : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhuma aula registrada este mês.</td></tr>';
+  }
+
+  /* Desfaz uma chamada já salva (a professora marcou errado e quer
+     refazer do zero). Recarrega o dia atual também: se a sessão apagada
+     era a que estava carregada no checklist, os checkboxes voltam pro
+     padrão (sem chamada salva) em vez de continuar mostrando dado apagado. */
+  async function handleDesfazerChamada(sessaoId){
+    if(!confirm('Desfazer esta chamada? As presenças marcadas nela serão apagadas e não dá pra voltar atrás.')) return;
+    const { error } = await dyseExcluirSessaoTurma(sessaoId);
+    if(error){ alert('Não foi possível desfazer: ' + error.message); return; }
+    await loadChamadaDoDia();
+    await renderChamadaHistorico();
   }
 
   /* ======================================================================
@@ -1642,36 +1646,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('finProfPrevisaoNote').style.display = isPrevisao ? 'block' : 'none';
     renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes), isPrevisao);
     renderFinanceiroTabela(doMes, isPrevisao);
-    renderFinanceiroHistorico(todasMensalidades, pagamentos);
-    if(!FIN_PREVISAO_MESES_CARREGADA){
-      FIN_PREVISAO_MESES_CARREGADA = true;
-      loadFinanceiroPrevisaoMeses(); // roda em paralelo, não trava a tela principal
-    }
-  }
-
-  /* Lista de uma vez os próximos 6 meses (calculados em lote, sem repetir
-     consulta por mês) — evita ter que trocar o seletor de mês acima um a
-     um só pra ver a previsão de cada mês futuro. Carrega só uma vez por
-     visita ao painel (o vínculo financeiro não muda sozinho durante a
-     sessão). */
-  let FIN_PREVISAO_MESES_CARREGADA = false;
-  async function loadFinanceiroPrevisaoMeses(){
-    const [y, m] = dyseMesCompetencia().split('-').map(Number);
-    const proxMesNum = m === 12 ? 1 : m + 1;
-    const proxAno = m === 12 ? y + 1 : y;
-    const proximoMes = proxAno + '-' + String(proxMesNum).padStart(2,'0') + '-01';
-    const meses = await dysePreverFinanceiroProfessorMeses(proximoMes, 6);
-    renderFinanceiroPrevisaoMeses(meses);
-  }
-
-  function renderFinanceiroPrevisaoMeses(meses){
-    const comAlunos = meses.filter(m => m.linhas.length);
-    document.getElementById('finProfPrevisaoBody').innerHTML = comAlunos.length
-      ? comAlunos.map(m => {
-          const total = m.linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
-          return '<tr><td>' + formatMesLabel(m.mes) + '</td><td><span class="pill-count">' + m.linhas.length + '</span></td><td>' + formatMoney(total) + '</td></tr>';
-        }).join('')
-      : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhuma previsão pros próximos meses.</td></tr>';
+    await renderFinanceiroHistorico(todasMensalidades, pagamentos);
   }
 
   function renderFinanceiroKpis(linhas, pagamento, isPrevisao){
@@ -1709,14 +1684,30 @@ body.dyse-modal-open{overflow:hidden;}
     }).join('') : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhum aluno neste mês.</td></tr>';
   }
 
-  function renderFinanceiroHistorico(todasMensalidades, pagamentos){
-    const meses = [...new Set(todasMensalidades.map(m => m.mes_competencia))].sort((a,b) => b.localeCompare(a));
+  /* Mistura os meses com mensalidade REAL já gerada (mais confiável — pode
+     estar fechado/pago) com uma previsão calculada na hora pros meses que
+     os vínculos financeiros do professor cobrem mas que ainda ninguém
+     "visitou" em Pagamentos/Relatório (sem isso, um mês contratado ficava
+     simplesmente ausente da lista até a gestão abrir ele). Mês com dado
+     real nunca é substituído pela previsão. */
+  async function renderFinanceiroHistorico(todasMensalidades, pagamentos){
+    const mesesReais = new Set(todasMensalidades.map(m => m.mes_competencia));
+    const previsao = await dyseListMinhaPrevisaoHistoricoFinanceiro();
+    const linhasPorMes = {};
+    todasMensalidades.forEach(m => { (linhasPorMes[m.mes_competencia] = linhasPorMes[m.mes_competencia] || []).push(m); });
+    previsao.forEach(p => {
+      if(mesesReais.has(p.mes_competencia)) return;
+      (linhasPorMes[p.mes_competencia] = linhasPorMes[p.mes_competencia] || []).push(p);
+    });
+
+    const meses = Object.keys(linhasPorMes).sort((a,b) => b.localeCompare(a));
     document.getElementById('finProfHistoricoBody').innerHTML = meses.length ? meses.map(mes => {
-      const linhas = todasMensalidades.filter(m => m.mes_competencia === mes);
+      const linhas = linhasPorMes[mes];
+      const isPrevisaoDoMes = !mesesReais.has(mes);
       const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
       const pagamento = pagamentos.find(p => p.mes_competencia === mes);
       return '<tr>' +
-        '<td>' + formatMesLabel(mes) + '</td>' +
+        '<td>' + formatMesLabel(mes) + (isPrevisaoDoMes ? ' <span style="opacity:.55; font-size:.72rem;">(previsão)</span>' : '') + '</td>' +
         '<td><span class="pill-count">' + linhas.length + '</span></td>' +
         '<td>' + formatMoney(totalPrevisto) + '</td>' +
         '<td>' + (pagamento && pagamento.valor_pago != null ? formatMoney(pagamento.valor_pago) : '-') + '</td>' +

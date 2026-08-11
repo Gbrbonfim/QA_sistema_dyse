@@ -547,13 +547,16 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     if(!session) return;
 
     // Se por qualquer motivo uma professora ou a gestão acabar aqui (link
-    // antigo, sessão já aberta antes de ser promovida, etc.), manda pro painel certo.
+    // antigo, sessão já aberta antes de ser promovida, etc.), manda pro painel
+    // certo — a não ser que ela também seja aluna (also_student), caso em
+    // que faz sentido mesmo estar aqui.
     const profile = await dyseGetProfile(session);
-    if(dyseIsAdmin(profile)){
+    const alsoStudent = !!(profile && profile.also_student);
+    if(dyseIsAdmin(profile) && !alsoStudent){
       location.href = '/gestao.html';
       return;
     }
-    if(dyseIsTeacher(profile)){
+    if(dyseIsTeacher(profile) && !alsoStudent){
       location.href = '/professora.html';
       return;
     }
