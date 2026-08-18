@@ -1857,6 +1857,56 @@ create trigger trg_audit_report_cards
   after insert or update or delete on public.report_cards
   for each row execute procedure public.log_financeiro_auditoria();
 
+-- ----------------------------------------------------------------------
+-- 14) MATERIAL DIDÁTICO — link do PowerPoint/Slides de cada aula
+--     Cada aula de uma matéria-com-currículo (nivel_aulas) ganha um link
+--     externo (Google Slides/Drive) pro material usado em sala. A gestão
+--     cadastra o link (gestao.html, aba Matérias → botão "Material"); a
+--     professora consulta no Plano da Aula, dentro do Registro de Classe
+--     (professora.html); o aluno vê o link das aulas que já tiverem
+--     Registro de Classe lançado em nome dele — SEM enxergar o Registro de
+--     Classe em si (é anotação interna da professora, ver 14.1). A RLS
+--     abaixo cobre a LEITURA de nivel_aulas por aluno (mesma regra de
+--     acesso de turma_materias); o filtro "só aulas já dadas" fica na
+--     tela (area-do-aluno.html), usando a função de 14.1 pra saber quais
+--     aulas já foram registradas sem ler o conteúdo do registro.
+-- ----------------------------------------------------------------------
+alter table public.nivel_aulas add column if not exists material_url text;
+
+drop policy if exists "alunos veem aulas do nivel da propria turma" on public.nivel_aulas;
+create policy "alunos veem aulas do nivel da propria turma"
+  on public.nivel_aulas for select
+  using (
+    exists (
+      select 1 from public.profiles p
+      join public.turma_materias tm on tm.turma_id = p.turma_id
+      where p.id = auth.uid() and tm.materia_slug = public.nivel_aulas.materia_slug
+    )
+  );
+
+-- 14.1) Pré-requisito pra tela de Material filtrar "só aulas já dadas" —
+--       SEM abrir leitura de registros_classe pro aluno: aquela tabela é
+--       anotação INTERNA da professora (avaliações por eixo, observações),
+--       nunca deve ser lida pelo aluno, nem em parte. Por isso não existe
+--       (e não deve existir) uma policy de SELECT com aluno_id = auth.uid()
+--       nela — em vez disso, esta função "security definer" devolve só os
+--       IDs de aula já registrados pro aluno logado, sem expor nenhum
+--       outro campo da linha.
+create or replace function public.minhas_aulas_registradas(check_materia_slug text)
+returns table(nivel_aula_id uuid) -- "table(...)" (não "setof uuid") pra a resposta via API sair sempre como
+                                   -- [{"nivel_aula_id": "..."}], sem ambiguidade de formato de array escalar
+language sql
+stable
+security definer set search_path = public
+as $$
+  select rc.nivel_aula_id
+  from public.registros_classe rc
+  join public.nivel_aulas na on na.id = rc.nivel_aula_id
+  where rc.aluno_id = auth.uid() and na.materia_slug = check_materia_slug;
+$$;
+
+grant execute on function public.minhas_aulas_registradas(text) to authenticated;
+
 -- ======================================================================
 -- PRONTO! Depois de rodar este script:
 --

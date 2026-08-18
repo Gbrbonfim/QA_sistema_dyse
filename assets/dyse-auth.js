@@ -1208,6 +1208,24 @@ async function dyseListNivelAulas(materiaSlug){
   return error ? [] : data;
 }
 
+/* Link do material (Google Slides/Drive) de uma aula — só admin (RLS de
+   nivel_aulas já restringe update a is_admin()). */
+async function dyseUpdateNivelAulaMaterial(nivelAulaId, url){
+  const { error } = await sb.from('nivel_aulas').update({ material_url: (url || '').trim() || null }).eq('id', nivelAulaId);
+  return { error };
+}
+
+/* IDs de nivel_aula já registrados (registros_classe) pro ALUNO LOGADO,
+   numa matéria — via RPC "security definer", nunca lendo registros_classe
+   direto: aquela tabela é anotação interna da professora (avaliações,
+   observações), o aluno não pode ler nenhum campo dela, só saber "essa
+   aula já foi dada" pra tela de Material (área do aluno). */
+async function dyseListMinhasAulasRegistradas(materiaSlug){
+  if(!materiaSlug) return [];
+  const { data, error } = await sb.rpc('minhas_aulas_registradas', { check_materia_slug: materiaSlug });
+  return error ? [] : data.map(r => r.nivel_aula_id);
+}
+
 /* ---------- Registro de Classe (Bloco B — por aluno) ---------- */
 
 /* Histórico completo de um aluno, em qualquer turma/professor — a RLS

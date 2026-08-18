@@ -414,6 +414,18 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .course-folder-stats{font-size:.76rem; font-weight:700; color:var(--seal-soft); background:var(--antique-soft); display:inline-block; padding:3px 10px; border-radius:999px;}
 .course-folder-arrow{font-size:1.6rem; color:var(--gamboge); flex:none;}
 
+/* ---------- MATERIAL DAS AULAS (slides das aulas já dadas) ---------- */
+.material-nivel-title{font-family:var(--font-display); font-size:1.2rem; color:var(--amaranth); margin-bottom:8px;}
+.material-aula-link{
+  display:flex; align-items:center; gap:12px; background:#fff; border-radius:var(--radius-sm);
+  padding:12px 16px; margin-bottom:8px; text-decoration:none; color:var(--seal);
+  box-shadow:0 4px 14px rgba(58,29,16,.08); transition:.2s;
+}
+.material-aula-link:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(58,29,16,.14);}
+.material-aula-link .num{flex:none; font-weight:800; color:var(--seal-soft); font-size:.8rem;}
+.material-aula-link .topico{flex:1; min-width:0; font-size:.88rem;}
+.material-aula-link .arrow{flex:none; color:var(--gamboge);}
+
 /* ---------- LEVEL GROUPS (dentro de um curso) ---------- */
 .level-group{margin-bottom:36px;}
 .level-group-title{
@@ -514,6 +526,8 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 </div>
 
 <div class="wrap" style="margin-top:14px;" id="coursesWrap"></div>
+
+<div class="wrap" style="margin-top:14px;" id="materialWrap"></div>
 
 <div class="wrap" style="margin-top:14px;" id="reportCardsWrap"></div>
 
@@ -618,8 +632,46 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
           '</div>' +
         '</div>';
 
+    await renderMeuMaterial(allowedSlugs);
     await renderMeusReportCards(session.user.id);
   })();
+
+  /* ---------- Material das aulas (slides das aulas já dadas) ----------
+     "Já dada" é decidido pela função minhas_aulas_registradas (RPC
+     security definer) — NUNCA lendo registros_classe direto: aquela
+     tabela é anotação interna da professora (avaliações, observações), o
+     aluno não pode ler nenhum campo dela, só saber quais aulas já
+     aconteceram. */
+  async function renderMeuMaterial(allowedSlugs){
+    const wrap = document.getElementById('materialWrap');
+    const niveis = (await dyseListNiveis()).filter(n => allowedSlugs.has(n.slug));
+    if(!niveis.length){ wrap.innerHTML = ''; return; }
+
+    const [aulasPorNivel, aulaIdsRegistradosPorNivel] = await Promise.all([
+      Promise.all(niveis.map(n => dyseListNivelAulas(n.slug))),
+      Promise.all(niveis.map(n => dyseListMinhasAulasRegistradas(n.slug)))
+    ]);
+
+    const blocos = niveis.map((n, i) => {
+      const aulaIdsComRegistro = new Set(aulaIdsRegistradosPorNivel[i]);
+      const aulas = aulasPorNivel[i]
+        .filter(a => aulaIdsComRegistro.has(a.id) && a.material_url)
+        .sort((a, b) => a.numero - b.numero);
+      if(!aulas.length) return '';
+      return '<div style="margin-bottom:24px;">' +
+        '<p class="material-nivel-title">' + escapeHtmlLocal(n.name) + ' — Material das aulas</p>' +
+        aulas.map(a =>
+          '<a href="' + escapeHtmlLocal(a.material_url) + '" target="_blank" rel="noopener" class="material-aula-link">' +
+            '<span class="num">' + String(a.numero).padStart(2, '0') + '</span>' +
+            '<span class="topico">' + escapeHtmlLocal(a.topico) + '</span>' +
+            '<span class="arrow">↗</span>' +
+          '</a>'
+        ).join('') +
+      '</div>';
+    }).join('');
+
+    wrap.innerHTML = blocos;
+  }
 
   /* ---------- Report Cards liberados (visão somente leitura) ---------- */
   function escapeHtmlLocal(str){

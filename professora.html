@@ -1325,7 +1325,10 @@ body.dyse-modal-open{overflow:hidden;}
       ['Foco fonético — correção sugerida', c.foco_fonetico_correcao],
       ['Tarefa de casa', c.tarefa_de_casa]
     ].filter(([, v]) => v);
-    document.getElementById('registroClasseBlocoA').innerHTML = linhas.map(([label, val]) =>
+    const materialLink = aula.material_url
+      ? '<p style="margin:0 0 14px;"><a href="' + escapeHtmlLocal(aula.material_url) + '" target="_blank" rel="noopener" class="btn btn-ghost btn-xs">↗ Abrir slides desta aula</a></p>'
+      : '';
+    document.getElementById('registroClasseBlocoA').innerHTML = materialLink + linhas.map(([label, val]) =>
       '<p style="margin:0 0 10px;"><b style="color:var(--seal); font-size:.8rem; text-transform:uppercase; letter-spacing:.03em; display:block; margin-bottom:2px;">' + escapeHtmlLocal(label) + '</b><span style="font-size:.88rem;">' + escapeHtmlLocal(val) + '</span></p>'
     ).join('');
   }

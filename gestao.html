@@ -319,6 +319,16 @@ body.dyse-modal-open{overflow:hidden;}
 }
 /* o modal de atividades precisa de mais largura pra caber o preview */
 #materiaModal .report-modal-panel{width:min(900px, 94vw);}
+#curriculoModal .report-modal-panel{width:min(820px, 94vw);}
+.curriculo-row{display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #f0e3d2;}
+.curriculo-row:last-child{border-bottom:none;}
+.curriculo-num{flex:none; width:26px; font-weight:700; color:var(--seal-soft); font-size:.8rem;}
+.curriculo-topico{flex:1 1 220px; font-size:.85rem; min-width:0;}
+.curriculo-row input[type="url"]{
+  flex:1 1 240px; min-width:0; border:2px solid #eee0cf; border-radius:var(--radius-sm);
+  padding:7px 10px; font-family:var(--font-body); font-size:.8rem;
+}
+.curriculo-status{flex:none; font-size:.76rem; color:var(--ok); min-width:56px;}
 .report-modal-header{
   display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
   padding:22px 24px 16px; border-bottom:1px solid #f0e3d2; flex:none; background:#fff;
@@ -701,6 +711,18 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       <button type="button" class="report-modal-close" onclick="closeMateriaModal()" aria-label="Fechar">&times;</button>
     </div>
     <div class="report-modal-body" id="materiaModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de material (link do Google Slides/Drive) das aulas de um nível -->
+<div id="curriculoModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeCurriculoModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="curriculoModalTitle">
+    <div class="report-modal-header">
+      <h3 id="curriculoModalTitle"></h3>
+      <button type="button" class="report-modal-close" onclick="closeCurriculoModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="curriculoModalBody"></div>
   </div>
 </div>
 
@@ -1145,12 +1167,15 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       const activitiesBtn = activities
         ? '<button type="button" class="btn btn-ghost btn-sm" onclick="openMateriaModal(\'' + m.slug + '\')">Atividades (' + releasedCount + '/' + activities.length + ')</button>'
         : '';
+      const materialBtn = m.total_aulas
+        ? '<button type="button" class="btn btn-ghost btn-sm" onclick="openCurriculoModal(\'' + m.slug + '\')">Material (' + m.total_aulas + ' aulas)</button>'
+        : '';
       return '<tr>' +
         '<td><code>' + escapeHtmlLocal(m.slug) + '</code></td>' +
         '<td>' + escapeHtmlLocal(m.name) + '</td>' +
         '<td>' + escapeHtmlLocal(m.description || '-') + '</td>' +
         '<td><span class="pill-count">' + turmaCount + '</span></td>' +
-        '<td><div class="btn-row">' + activitiesBtn +
+        '<td><div class="btn-row">' + activitiesBtn + materialBtn +
           '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteMateria(\'' + m.slug + '\')">Excluir</button>' +
         '</div></td>' +
       '</tr>';
@@ -1210,6 +1235,58 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   function closeMateriaModal(){
     document.getElementById('materiaModal').classList.remove('open');
     document.getElementById('materiaModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+  }
+
+  /* ---------- Material (link do Google Slides/Drive) de um nível ---------- */
+  let CURRICULO_AULAS_CACHE = {}; // materia_slug -> aulas[]
+
+  async function openCurriculoModal(slug){
+    const m = MATERIAS.find(x => x.slug === slug);
+    if(!m) return;
+    document.getElementById('curriculoModalTitle').textContent = 'Material — ' + m.name;
+    document.getElementById('curriculoModalBody').innerHTML = '<p class="report-line">Carregando...</p>';
+    document.getElementById('curriculoModal').classList.add('open');
+    document.getElementById('curriculoModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+
+    if(!CURRICULO_AULAS_CACHE[slug]) CURRICULO_AULAS_CACHE[slug] = await dyseListNivelAulas(slug);
+    renderCurriculoModalBody(slug);
+  }
+
+  function renderCurriculoModalBody(slug){
+    const aulas = CURRICULO_AULAS_CACHE[slug] || [];
+    document.getElementById('curriculoModalBody').innerHTML =
+      '<p class="report-line" style="margin-bottom:14px;">Cole o link do Google Slides/Drive de cada aula — a professora vê no Plano da Aula (Registro de Classe) e o aluno vê depois que a aula for registrada em nome dele.</p>' +
+      (aulas.length
+        ? aulas.map(a =>
+            '<div class="curriculo-row">' +
+              '<span class="curriculo-num">' + String(a.numero).padStart(2, '0') + '</span>' +
+              '<span class="curriculo-topico">' + escapeHtmlLocal(a.topico) + '</span>' +
+              '<input type="url" placeholder="https://..." value="' + escapeHtmlLocal(a.material_url || '') + '" id="curriculo-url-' + a.id + '">' +
+              '<button type="button" class="btn btn-ghost btn-xs" onclick="salvarMaterialAula(\'' + slug + '\', \'' + a.id + '\')">Salvar</button>' +
+              '<span class="curriculo-status" id="curriculo-status-' + a.id + '"></span>' +
+            '</div>'
+          ).join('')
+        : '<p class="report-line" style="opacity:.6;">Nenhuma aula cadastrada pra essa matéria ainda.</p>');
+  }
+
+  async function salvarMaterialAula(slug, aulaId){
+    const input = document.getElementById('curriculo-url-' + aulaId);
+    const status = document.getElementById('curriculo-status-' + aulaId);
+    const url = input.value.trim();
+    const { error } = await dyseUpdateNivelAulaMaterial(aulaId, url);
+    if(error){ status.textContent = 'Erro ao salvar'; status.style.color = 'var(--bad)'; return; }
+    const aula = (CURRICULO_AULAS_CACHE[slug] || []).find(a => a.id === aulaId);
+    if(aula) aula.material_url = url || null;
+    status.style.color = '';
+    status.textContent = 'Salvo ✓';
+    setTimeout(() => { if(status) status.textContent = ''; }, 2000);
+  }
+
+  function closeCurriculoModal(){
+    document.getElementById('curriculoModal').classList.remove('open');
+    document.getElementById('curriculoModal').setAttribute('aria-hidden','true');
     document.body.classList.remove('dyse-modal-open');
   }
 
