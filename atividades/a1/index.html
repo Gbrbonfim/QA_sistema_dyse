@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Atividades Complementares</title>
+<meta name="description" content="Atividades complementares do curso A1. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/area-do-aluno.html">← Minhas atividades</a>
+    </div>
+    <span class="eyebrow-badge">Curso A1</span>
+    <h1 class="title">Atividades Complementares</h1>
+    <p class="subtitle">15 atividades por aula pra praticar o que você viu em sala — algumas com vídeo interativo. Escolha uma aula abaixo.</p>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">📚</div>
+      <div>
+        <div class="card-eyebrow">Aula 01</div>
+        <h2 class="card-title">Acolhimento — vocabulário de países, apresentação, pronúncia</h2>
+      </div>
+    </div>
+    <div class="dash-grid" id="aula1Grid"></div>
+  </section>
+
+  <section class="card" style="border-top-color:var(--seal-soft);">
+    <p class="card-instructions" style="margin:0;">As atividades das aulas 02 a 44 ainda estão sendo produzidas pela coordenação. Elas aparecem aqui assim que forem publicadas.</p>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script>
+const ATIVIDADES_AULA1 = [
+  { num:1, titulo:'Vocabulário — Países e Nacionalidades', tipo:'padrao' },
+  { num:2, titulo:'Complete o Diálogo de Apresentação', tipo:'padrao' },
+  { num:3, titulo:'Pronúncia — Linking', tipo:'padrao' },
+  { num:4, titulo:'Vídeo — Apresentações ao Redor do Mundo', tipo:'video' },
+  { num:5, titulo:'Meu Cartão de Apresentação', tipo:'padrao' },
+  { num:6, titulo:'De Onde Você É?', tipo:'padrao' },
+  { num:7, titulo:'Vídeo — Sotaques e Países', tipo:'video' },
+  { num:8, titulo:'Monte a Pergunta', tipo:'padrao' },
+  { num:9, titulo:'Pronúncia — o som de "TH"', tipo:'padrao' },
+  { num:10, titulo:'Vídeo — Role-play de Apresentação', tipo:'video' },
+  { num:11, titulo:'Speaking — Grave sua Apresentação', tipo:'padrao' },
+  { num:12, titulo:'Leitura — Primeiro Dia de Aula', tipo:'padrao' },
+  { num:13, titulo:'Vídeo — Erros Comuns de Pronúncia', tipo:'video' },
+  { num:14, titulo:'Revisão — Quiz Rápido', tipo:'padrao' },
+  { num:15, titulo:'Vídeo — Prática Final: Apresente-se!', tipo:'video' }
+];
+
+(async () => {
+  const session = await dyseRequireAuth();
+  if(!session) return;
+  dyseRenderAuthBar('authBar');
+
+  const [publishedSet, results, profile] = await Promise.all([
+    dyseGetPublishedSet('a1'),
+    dyseListMyResults('a1'),
+    dyseGetProfile(session)
+  ]);
+  const doneSet = new Set(results.map(r => r.activity_num));
+  const staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
+
+  const grid = document.getElementById('aula1Grid');
+  grid.innerHTML = ATIVIDADES_AULA1.map(a => {
+    const liberada = staff || publishedSet.has(a.num);
+    const feita = doneSet.has(a.num);
+    const badge = feita ? '<span class="dash-badge done">Feita</span>' : (a.tipo === 'video' ? '<span class="dash-badge video">Vídeo</span>' : '');
+    return liberada
+      ? '<a class="dash-card" href="/atividades/a1/atividade_' + a.num + '.html">' + badge +
+          '<div class="n">' + String(a.num).padStart(2, '0') + '</div>' +
+          '<div class="t">' + a.titulo + '</div>' +
+          '<div class="l">Atividade ' + a.num + '/15</div>' +
+        '</a>'
+      : '<div class="dash-card" style="opacity:.5; cursor:default;">' +
+          '<div class="n">' + String(a.num).padStart(2, '0') + '</div>' +
+          '<div class="t">' + a.titulo + '</div>' +
+          '<div class="l">🔒 Ainda não liberada</div>' +
+        '</div>';
+  }).join('');
+})();
+</script>
+</body>
+</html>

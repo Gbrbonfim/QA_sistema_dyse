@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 01 · Atividade 10 — Vídeo: Role-play de Apresentação</title>
+<meta name="description" content="Atividade complementar A1 — Aula 01 — vídeo interativo de role-play. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 01 · Vídeo</span>
+    <h1 class="title">Role-play de Apresentação</h1>
+    <p class="subtitle">O vídeo pausa em frases-chave pra você repetir em voz alta antes de continuar.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 10/15</span>
+      <span class="pill">Speaking</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">🎬</div>
+      <div>
+        <div class="card-eyebrow">Vídeo interativo</div>
+        <h2 class="card-title">Assista e repita</h2>
+      </div>
+    </div>
+    <p class="card-instructions">Quando o vídeo pausar, repita a frase em voz alta pelo menos uma vez antes de continuar.</p>
+
+    <div id="videoWrap"></div>
+    <div class="video-pause-card" id="pausaCard">
+      <div class="tag">Pausa pra repetir</div>
+      <p id="pausaFrase" style="font-size:1.1rem; font-weight:700;"></p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-audio" id="btnOuvirPausa">🔊 Ouvir de novo</button>
+        <button type="button" class="btn btn-secondary" id="btnRepeti">Já repeti — continuar</button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Assista e repita pra concluir</button>
+    </div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:1, numero:10, totalAula:15, titulo:'Vídeo — Role-play de Apresentação' };
+DyseAtividade.boot(ATIVIDADE);
+
+// Vídeo real, escolhido por busca (pesquisado no YouTube em 2026-08-18):
+// "How to introduce yourself: Easy English Conversations — Episode 1" —
+// diálogo de apresentação entre falantes reais. Sem acesso pra assistir o
+// vídeo inteiro nem checar a duração exata aqui — tempos de pausa abaixo
+// são estimativa conservadora, ajuste depois de assistir uma vez.
+const VIDEO_ID = "I_tRSrPru94";
+
+const PAUSAS = [
+  { tempo: 15, frase: "Hi! What's your name?" },
+  { tempo: 40, frase: "I'm from Brazil. Where are you from?" }
+];
+let pausasFeitas = 0;
+
+function mostrarPausa(frase, continuar){
+  document.getElementById('pausaFrase').textContent = frase;
+  document.getElementById('pausaCard').classList.add('show');
+  document.getElementById('btnOuvirPausa').onclick = () => DyseAtividade.speak(frase);
+  document.getElementById('btnRepeti').onclick = () => {
+    document.getElementById('pausaCard').classList.remove('show');
+    continuar();
+    verificarFim();
+  };
+  DyseAtividade.speak(frase);
+}
+
+function verificarFim(){
+  pausasFeitas++;
+  if(pausasFeitas >= PAUSAS.length){
+    const btn = document.getElementById('btnConcluir');
+    btn.disabled = false;
+    btn.textContent = 'Concluir atividade';
+  }
+}
+
+DyseAtividade.montarVideoComPausas('videoWrap', VIDEO_ID, PAUSAS.map(p => ({
+  tempo: p.tempo,
+  aoPausar: (continuar) => mostrarPausa(p.frase, continuar)
+})));
+if(!VIDEO_ID){
+  document.getElementById('btnConcluir').disabled = false;
+  document.getElementById('btnConcluir').textContent = 'Concluir atividade';
+}
+
+function finalizar(){
+  DyseAtividade.concluir(ATIVIDADE, 'Vídeo de role-play — praticou repetição em ' + pausasFeitas + '/' + PAUSAS.length + ' pausas.', { pausasFeitas: pausasFeitas, total: PAUSAS.length });
+}
+</script>
+</body>
+</html>

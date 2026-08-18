@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 01 · Atividade 13 — Vídeo: Erros Comuns de Pronúncia</title>
+<meta name="description" content="Atividade complementar A1 — Aula 01 — vídeo interativo sobre erros comuns de pronúncia. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 01 · Vídeo</span>
+    <h1 class="title">Erros Comuns de Pronúncia</h1>
+    <p class="subtitle">Vídeo com exemplos de erros que brasileiros costumam cometer ao se apresentar — e como corrigir.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 13/15</span>
+      <span class="pill">Foco fonético</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">🎬</div>
+      <div>
+        <div class="card-eyebrow">Vídeo interativo</div>
+        <h2 class="card-title">Identifique e corrija</h2>
+      </div>
+    </div>
+    <p class="card-instructions">O vídeo vai pausar sozinho — pratique o som em voz alta antes de continuar.</p>
+
+    <div id="videoWrap"></div>
+    <div class="video-pause-card" id="pausaCard">
+      <div class="tag">Pausa pra praticar</div>
+      <p id="pausaPergunta" style="font-size:1.05rem; font-weight:700;"></p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-secondary" id="btnContinuarPausa">Já pratiquei — continuar</button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Assista até o fim pra concluir</button>
+    </div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:1, numero:13, totalAula:15, titulo:'Vídeo — Erros Comuns de Pronúncia' };
+DyseAtividade.boot(ATIVIDADE);
+
+// Vídeo real, escolhido por busca (pesquisado no YouTube em 2026-08-18):
+// "How to Say the TH Sound | American English Pronunciation Lesson" —
+// aula de pronúncia focada exatamente no erro mapeado pra esta aula
+// (trocar o "th" por /t/ ou /f/). Sem acesso pra assistir o vídeo inteiro
+// nem checar a duração exata aqui — tempos de pausa abaixo são estimativa
+// conservadora, ajuste depois de assistir uma vez.
+const VIDEO_ID = "BBSU6A-CRx0";
+
+const PAUSAS = [
+  { tempo: 20, frase: 'Pause e repita: "thank you" — língua entre os dentes, sem virar "tank you" nem "fank you".' },
+  { tempo: 55, frase: 'Pause e repita: "three things" — repita bem devagar, sentindo a língua tocar os dentes.' }
+];
+let pausasFeitas = 0;
+
+function mostrarPausa(frase, continuar){
+  document.getElementById('pausaPergunta').textContent = frase;
+  document.getElementById('pausaCard').classList.add('show');
+  document.getElementById('btnContinuarPausa').onclick = () => {
+    document.getElementById('pausaCard').classList.remove('show');
+    continuar();
+    verificarFim();
+  };
+}
+
+function verificarFim(){
+  pausasFeitas++;
+  if(pausasFeitas >= PAUSAS.length){
+    const btn = document.getElementById('btnConcluir');
+    btn.disabled = false;
+    btn.textContent = 'Concluir atividade';
+  }
+}
+
+DyseAtividade.montarVideoComPausas('videoWrap', VIDEO_ID, PAUSAS.map(p => ({
+  tempo: p.tempo,
+  aoPausar: (continuar) => mostrarPausa(p.frase, continuar)
+})));
+if(!VIDEO_ID){
+  document.getElementById('btnConcluir').disabled = false;
+  document.getElementById('btnConcluir').textContent = 'Concluir atividade';
+}
+
+function finalizar(){
+  DyseAtividade.concluir(ATIVIDADE, 'Vídeo "How to Say the TH Sound" assistido, com ' + pausasFeitas + '/' + PAUSAS.length + ' pausas de prática feitas.', { pausasFeitas: pausasFeitas, total: PAUSAS.length });
+}
+</script>
+</body>
+</html>

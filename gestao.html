@@ -803,7 +803,11 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
      que ainda não tem curso no código (slug sem entrada aqui) não ganha o
      botão "Gerenciar atividades". */
   const MATERIA_ACTIVITY_NAMES = {
-    toefl: [{num:1, theme:'Rotina Diária'},{num:2, theme:'Viagens e Turismo'},{num:3, theme:'Alimentação e Saúde'},{num:4, theme:'Compras e Dinheiro'},{num:5, theme:'Meio Ambiente'},{num:6, theme:'Tecnologia'},{num:7, theme:'Educação'},{num:8, theme:'Trabalho e Carreira'},{num:9, theme:'Cultura e Mídia'},{num:10, theme:'Ciência'},{num:11, theme:'História'},{num:12, theme:'Psicologia'},{num:13, theme:'Negócios e Economia'},{num:14, theme:'Questões Globais'},{num:15, theme:'Artes e Literatura'},{num:16, theme:'Revisão Geral'}]
+    toefl: [{num:1, theme:'Rotina Diária'},{num:2, theme:'Viagens e Turismo'},{num:3, theme:'Alimentação e Saúde'},{num:4, theme:'Compras e Dinheiro'},{num:5, theme:'Meio Ambiente'},{num:6, theme:'Tecnologia'},{num:7, theme:'Educação'},{num:8, theme:'Trabalho e Carreira'},{num:9, theme:'Cultura e Mídia'},{num:10, theme:'Ciência'},{num:11, theme:'História'},{num:12, theme:'Psicologia'},{num:13, theme:'Negócios e Economia'},{num:14, theme:'Questões Globais'},{num:15, theme:'Artes e Literatura'},{num:16, theme:'Revisão Geral'}],
+    // Atividades complementares do A1 — só a Aula 01 (piloto) tem os 15
+    // arquivos prontos em /atividades/a1/ por enquanto; as aulas 02-44
+    // entram aqui conforme forem produzidas (num continua: aula 2 = 16-30 etc.).
+    a1: [{num:1, theme:'Aula 01 · Vocabulário — Países e Nacionalidades'},{num:2, theme:'Aula 01 · Complete o Diálogo de Apresentação'},{num:3, theme:'Aula 01 · Pronúncia — Linking'},{num:4, theme:'Aula 01 · Vídeo — Apresentações ao Redor do Mundo'},{num:5, theme:'Aula 01 · Meu Cartão de Apresentação'},{num:6, theme:'Aula 01 · De Onde Você É?'},{num:7, theme:'Aula 01 · Vídeo — Sotaques e Países'},{num:8, theme:'Aula 01 · Monte a Pergunta'},{num:9, theme:'Aula 01 · Pronúncia — o som de "TH"'},{num:10, theme:'Aula 01 · Vídeo — Role-play de Apresentação'},{num:11, theme:'Aula 01 · Speaking — Grave sua Apresentação'},{num:12, theme:'Aula 01 · Leitura — Primeiro Dia de Aula'},{num:13, theme:'Aula 01 · Vídeo — Erros Comuns de Pronúncia'},{num:14, theme:'Aula 01 · Revisão — Quiz Rápido'},{num:15, theme:'Aula 01 · Vídeo — Prática Final: Apresente-se!'}]
   };
 
   function showPanel(which){
