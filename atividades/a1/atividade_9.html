@@ -47,6 +47,8 @@
     <div class="btn-row">
       <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Responda todas pra concluir</button>
     </div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
     <div class="done-banner" id="doneBanner">
       <h2>Atividade concluída!</h2>
       <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
@@ -74,6 +76,7 @@ const PERGUNTAS = [
 ];
 let respondidas = 0;
 let acertos = 0;
+const detalhes = [];
 
 function renderQuiz(){
   const container = document.getElementById('quizContainer');
@@ -94,7 +97,9 @@ function responder(i, escolhida){
   document.getElementById('q' + i + 'o' + escolhida).classList.add(escolhida === p.certa ? 'correct' : 'wrong');
   if(escolhida !== p.certa) document.getElementById('q' + i + 'o' + p.certa).classList.add('correct');
   document.querySelectorAll('input[name="q' + i + '"]').forEach(el => el.disabled = true);
-  if(escolhida === p.certa) acertos++;
+  const acertou = escolhida === p.certa;
+  if(acertou) acertos++;
+  detalhes.push((i+1) + '. "' + p.audio + '" → ' + p.opcoes[escolhida] + (acertou ? ' ✅' : ' ❌ (correto: ' + p.opcoes[p.certa] + ')'));
   respondidas++;
   if(respondidas === PERGUNTAS.length){
     const msg = document.getElementById('scoreMsg');
@@ -107,7 +112,9 @@ function responder(i, escolhida){
 }
 
 function finalizar(){
-  DyseAtividade.concluir(ATIVIDADE, 'Discriminação do som TH: ' + acertos + '/' + PERGUNTAS.length + ' corretas.', { acertos: acertos, total: PERGUNTAS.length });
+  const resumo = acertos + '/' + PERGUNTAS.length + ' corretas (' + Math.round(acertos / PERGUNTAS.length * 100) + '%).';
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { acertos: acertos, total: PERGUNTAS.length });
 }
 
 renderQuiz();

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 31 · Atividade 15 — Speaking: Sua Casa Completa</title>
+<meta name="description" content="Atividade complementar A1 — Aula 31 — encerramento com prática oral completa sobre a casa. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 31</span>
+    <h1 class="title">Sua Casa Completa</h1>
+    <p class="subtitle">Última atividade da Aula 31! Junte tudo que você praticou numa descrição completa da casa.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 15/15</span>
+      <span class="pill">Speaking</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">🏁</div>
+      <div>
+        <div class="card-eyebrow">Encerramento da aula</div>
+        <h2 class="card-title">Ouça, repita e feche com chave de ouro</h2>
+      </div>
+    </div>
+    <p class="card-instructions" id="micNotice">Ouça cada frase, clique em "Falar" e repita em voz alta. Se seu navegador não suportar gravação, marque manualmente que praticou.</p>
+
+    <div id="frasesContainer"></div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Pratique as 3 frases pra concluir</button>
+    </div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Aula 31 concluída! 🎉</h2>
+      <p>Parabéns — você terminou todas as atividades complementares da Aula 31!</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:31, numero:15, totalAula:15, titulo:'Speaking — Sua Casa Completa' };
+DyseAtividade.boot(ATIVIDADE);
+
+const FRASES = [
+  { texto:"There's a living room and a kitchen." },
+  { texto:'There are two bedrooms.' },
+  { texto:"There isn't a garden, but there's a small balcony." }
+];
+const praticadas = new Set();
+const resultados = {};
+
+function renderFrases(){
+  document.getElementById('frasesContainer').innerHTML = FRASES.map((f, i) =>
+    '<div class="interview-block">' +
+      '<p style="font-weight:700; font-size:1.05rem; margin-bottom:10px;">' + f.texto + '</p>' +
+      '<div class="btn-row">' +
+        '<button type="button" class="btn btn-audio" onclick="DyseAtividade.speak(\'' + f.texto.replace(/'/g, "\\'") + '\')">🔊 Ouvir</button>' +
+        '<button type="button" class="btn btn-secondary" id="micBtn' + i + '" onclick="falar(' + i + ')">🎙️ Falar</button>' +
+      '</div>' +
+      '<p class="recog-feedback" id="feedback' + i + '"></p>' +
+      '<label style="display:flex; align-items:center; gap:8px; font-size:.86rem; font-weight:600; cursor:pointer; margin-top:10px;">' +
+        '<input type="checkbox" id="manual' + i + '" style="accent-color:var(--amaranth); width:18px; height:18px;" onchange="marcarManual(' + i + ', this.checked)"> Pratiquei essa frase' +
+      '</label>' +
+    '</div>'
+  ).join('');
+}
+
+function falar(i){
+  const btn = document.getElementById('micBtn' + i);
+  const feedback = document.getElementById('feedback' + i);
+  btn.disabled = true;
+  btn.textContent = '🎙️ Ouvindo...';
+  DyseAtividade.iniciarReconhecimento(FRASES[i].texto, {
+    onResult: (ouvido, similaridade) => {
+      btn.disabled = false;
+      btn.textContent = '🎙️ Falar de novo';
+      feedback.classList.add('show');
+      if(similaridade >= 50){
+        feedback.className = 'recog-feedback show ok';
+        feedback.textContent = '✅ Muito bem! (' + similaridade + '% parecido)';
+        resultados[i] = { modo: 'reconhecimento', ouvido: ouvido, similaridade: similaridade };
+        marcar(i, true);
+        document.getElementById('manual' + i).checked = true;
+      }else{
+        feedback.className = 'recog-feedback show bad';
+        feedback.textContent = '🔁 Quase lá — tente de novo. Entendi: "' + ouvido + '"';
+      }
+    },
+    onError: (erro) => {
+      btn.disabled = false;
+      btn.textContent = '🎙️ Falar';
+      feedback.className = 'recog-feedback show info';
+      feedback.textContent = erro === 'unsupported'
+        ? 'Seu navegador não suporta gravação de voz — sem problema, marque manualmente abaixo que praticou.'
+        : 'Não consegui ouvir. Tente de novo ou marque manualmente que praticou.';
+    }
+  });
+}
+
+function marcarManual(i, checked){
+  if(checked && !resultados[i]) resultados[i] = { modo: 'manual' };
+  if(!checked) delete resultados[i];
+  marcar(i, checked);
+}
+
+function marcar(i, praticado){
+  if(praticado) praticadas.add(i); else praticadas.delete(i);
+  const btn = document.getElementById('btnConcluir');
+  if(praticadas.size === FRASES.length){
+    btn.disabled = false;
+    btn.textContent = 'Concluir a Aula 31! 🎉';
+  }else{
+    btn.disabled = true;
+    btn.textContent = 'Pratique as ' + FRASES.length + ' frases pra concluir';
+  }
+}
+
+function finalizar(){
+  const resumo = 'Descrição completa da casa — praticou ' + praticadas.size + '/' + FRASES.length + ' frases. Aula 31 concluída!';
+  const detalhes = FRASES.map((f, i) => {
+    const r = resultados[i];
+    if(!r) return (i+1) + '. "' + f.texto + '" → não praticada';
+    if(r.modo === 'reconhecimento') return (i+1) + '. "' + f.texto + '" → reconhecido: "' + r.ouvido + '" (' + r.similaridade + '% parecido) ✅';
+    return (i+1) + '. "' + f.texto + '" → marcada manualmente (reconhecimento de voz indisponível)';
+  });
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { praticadas: praticadas.size, total: FRASES.length });
+}
+
+renderFrases();
+</script>
+</body>
+</html>

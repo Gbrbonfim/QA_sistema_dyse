@@ -54,6 +54,8 @@
       <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Responda todas pra concluir</button>
     </div>
     <p class="feedback" id="scoreMsg"></p>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
     <div class="done-banner" id="doneBanner">
       <h2>Atividade concluída!</h2>
       <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
@@ -73,14 +75,24 @@
 const ATIVIDADE = { course:'a1', aula:1, numero:2, totalAula:15, titulo:'Complete o Diálogo de Apresentação' };
 DyseAtividade.boot(ATIVIDADE);
 
+const LACUNAS = [
+  "Hi! What's your ___?",
+  'Where are you ___?',
+  "I'm ___ Brazil. And you?",
+  "I'm ___ Canada!"
+];
+
 function corrigir(){
   const inputs = document.querySelectorAll('.gap-input');
   let acertos = 0;
-  inputs.forEach(el => {
-    const ok = el.value.trim().toLowerCase() === el.dataset.answer;
+  const detalhes = [];
+  inputs.forEach((el, i) => {
+    const resposta = el.value.trim();
+    const ok = resposta.toLowerCase() === el.dataset.answer;
     el.classList.remove('correct', 'wrong');
     el.classList.add(ok ? 'correct' : 'wrong');
     if(ok) acertos++;
+    detalhes.push((i+1) + '. "' + LACUNAS[i] + '" → você escreveu "' + (resposta || '(em branco)') + '"' + (ok ? ' ✅' : ' ❌ (correto: "' + el.dataset.answer + '")'));
   });
   const msg = document.getElementById('scoreMsg');
   msg.textContent = 'Você acertou ' + acertos + ' de ' + inputs.length + '.';
@@ -89,10 +101,13 @@ function corrigir(){
   document.getElementById('btnConcluir').textContent = 'Concluir atividade';
   window.__acertos = acertos;
   window.__total = inputs.length;
+  window.__detalhes = detalhes;
 }
 
 function finalizar(){
-  DyseAtividade.concluir(ATIVIDADE, 'Chunks de apresentação: ' + (window.__acertos || 0) + '/' + (window.__total || 4) + ' corretas.', { acertos: window.__acertos, total: window.__total });
+  const resumo = (window.__acertos || 0) + '/' + (window.__total || 4) + ' corretas.';
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, window.__detalhes || []);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { acertos: window.__acertos, total: window.__total });
 }
 </script>
 </body>

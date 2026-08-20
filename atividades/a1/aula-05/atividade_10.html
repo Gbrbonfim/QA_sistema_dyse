@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 05 · Atividade 10 — Writing: Compare Duas Culturas</title>
+<meta name="description" content="Atividade complementar A1 — Aula 05 — produção escrita guiada comparando saudações. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 05</span>
+    <h1 class="title">Compare Duas Culturas</h1>
+    <p class="subtitle">Escreva comparando as saudações de dois países. Inclua os 3 itens abaixo.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 10/15</span>
+      <span class="pill">Writing</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">✉️</div>
+      <div>
+        <div class="card-eyebrow">Produção escrita</div>
+        <h2 class="card-title">Sua comparação</h2>
+      </div>
+    </div>
+    <p class="card-instructions">Escreva pelo menos 15 palavras, em inglês, incluindo os 3 itens da lista — eles vão sendo marcados sozinhos conforme você escreve.</p>
+
+    <div class="checklist" id="requisitos">
+      <label id="req-pais1"><span>☐</span> Cite o primeiro país</label>
+      <label id="req-pais2"><span>☐</span> Cite o segundo país</label>
+      <label id="req-tobe"><span>☐</span> Use is/isn't/are/aren't</label>
+    </div>
+
+    <textarea class="write-area" id="texto" placeholder="In Japan, a bow is..." oninput="atualizar()"></textarea>
+    <p class="word-count" id="contador">0 palavras (mínimo: 15)</p>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-ghost" onclick="verModelo()">Ver um exemplo</button>
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Complete os 3 itens pra concluir</button>
+    </div>
+    <div class="model-answer" id="modelo">In Japan, a bow is common. In Brazil, a bow isn't common — a hug is more common!</div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Sua comparação foi salva. Você pode voltar e editar quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:5, numero:10, totalAula:15, titulo:"Writing — Compare Duas Culturas" };
+DyseAtividade.boot(ATIVIDADE);
+
+const MIN_PALAVRAS = 15;
+const PAISES = ['japan','brazil','thailand','france','the united states','canada','mexico','portugal','spain','china'];
+
+function checarRequisitos(textoLower){
+  const paisesEncontrados = PAISES.filter(p => textoLower.includes(p));
+  return {
+    doisPaises: paisesEncontrados.length >= 2,
+    tobe: /\bisn't\b|\baren't\b|\bis\b|\bare\b/.test(textoLower),
+    completo: textoLower.trim().split(/\s+/).filter(Boolean).length >= MIN_PALAVRAS
+  };
+}
+
+function atualizar(){
+  const texto = document.getElementById('texto').value;
+  const palavras = texto.trim().split(/\s+/).filter(Boolean);
+  const contador = document.getElementById('contador');
+  contador.textContent = palavras.length + ' palavras (mínimo: ' + MIN_PALAVRAS + ')';
+  contador.classList.toggle('enough', palavras.length >= MIN_PALAVRAS);
+
+  const req = checarRequisitos(texto.toLowerCase());
+  document.getElementById('req-pais1').querySelector('span').textContent = req.doisPaises ? '✅' : '☐';
+  document.getElementById('req-pais2').querySelector('span').textContent = req.doisPaises ? '✅' : '☐';
+  document.getElementById('req-tobe').querySelector('span').textContent = req.tobe ? '✅' : '☐';
+
+  const completo = req.doisPaises && req.tobe && req.completo;
+  const btn = document.getElementById('btnConcluir');
+  btn.disabled = !completo;
+  btn.textContent = completo ? 'Concluir atividade' : 'Complete os 3 itens pra concluir';
+}
+
+function verModelo(){
+  document.getElementById('modelo').classList.toggle('show');
+}
+
+function finalizar(){
+  const texto = document.getElementById('texto').value.trim();
+  const req = checarRequisitos(texto.toLowerCase());
+  const detalhes = [
+    'Texto do aluno:', texto, '',
+    (req.doisPaises ? '✅' : '❌') + ' Dois países citados',
+    (req.tobe ? '✅' : '❌') + ' Uso do to be (is/isn’t/are/aren’t)',
+    (req.completo ? '✅' : '❌') + ' Mínimo de palavras atingido'
+  ];
+  const n = texto.split(/\s+/).filter(Boolean).length;
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, n + ' palavras, 3/3 itens obrigatórios.', detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { texto: texto });
+}
+</script>
+</body>
+</html>

@@ -52,6 +52,8 @@
     <div class="btn-row" style="margin-top:16px;">
       <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Acerte as duas pra concluir</button>
     </div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
     <div class="done-banner" id="doneBanner">
       <h2>Atividade concluída!</h2>
       <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
@@ -78,6 +80,7 @@ const EXERCICIOS = [
 let indiceAtual = 0;
 let montada = [];
 let acertosFinal = [false, false];
+let respostasDadas = ['', ''];
 
 function embaralhar(arr){
   const copia = arr.slice();
@@ -137,6 +140,7 @@ function corrigir(){
   const msg = document.getElementById('feedbackMsg');
   const ok = resposta === certa;
   acertosFinal[indiceAtual] = ok;
+  respostasDadas[indiceAtual] = resposta;
   msg.textContent = ok ? '✅ Certo! "' + certa + '"' : '❌ Quase — a ordem certa é: "' + certa + '"';
   msg.classList.add('show', ok ? 'ok' : 'bad');
 
@@ -151,7 +155,13 @@ function corrigir(){
 
 function finalizar(){
   const total = acertosFinal.filter(Boolean).length;
-  DyseAtividade.concluir(ATIVIDADE, 'Monte a pergunta: ' + total + '/' + EXERCICIOS.length + ' corretas.', { acertos: total, total: EXERCICIOS.length });
+  const resumo = total + '/' + EXERCICIOS.length + ' corretas.';
+  const detalhes = EXERCICIOS.map((ex, i) =>
+    (i+1) + '. Você montou: "' + (respostasDadas[i] || '(não respondida)') + '"' +
+    (acertosFinal[i] ? ' ✅' : ' ❌ (correto: "' + ex.correta.join(' ') + '")')
+  );
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { acertos: total, total: EXERCICIOS.length });
 }
 
 renderExercicio();

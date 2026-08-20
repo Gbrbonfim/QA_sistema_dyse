@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 37 · Atividade 08 — Monte a Frase</title>
+<meta name="description" content="Atividade complementar A1 — Aula 37 — montar frases com verbos irregulares. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 37</span>
+    <h1 class="title">Monte a Frase</h1>
+    <p class="subtitle">Clique nas palavras na ordem certa pra formar a frase com verbos irregulares.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 08/15</span>
+      <span class="pill">Estrutura</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">🧩</div>
+      <div>
+        <div class="card-eyebrow">Monte a frase</div>
+        <h2 class="card-title" id="tituloExercicio"></h2>
+      </div>
+    </div>
+
+    <div class="answer-strip" id="answerStrip"><span class="empty-hint">Clique nas palavras abaixo...</span></div>
+    <div class="chips-bank" id="chipsBank"></div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-ghost" onclick="limpar()">Limpar</button>
+      <button type="button" class="btn btn-secondary" onclick="corrigir()">Corrigir</button>
+    </div>
+    <p class="feedback" id="feedbackMsg"></p>
+
+    <div class="btn-row" style="margin-top:16px;">
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Acerte as duas pra concluir</button>
+    </div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:37, numero:8, totalAula:15, titulo:'Monte a Frase — Verbos Irregulares' };
+DyseAtividade.boot(ATIVIDADE);
+
+const EXERCICIOS = [
+  { titulo:'Frase 1 de 2', correta:["I", "found", "an", "old", "friend"] },
+  { titulo:'Frase 2 de 2', correta:["I", "ate", "a", "lot", "of", "cake"] }
+];
+let indiceAtual = 0;
+let montada = [];
+let acertosFinal = [false, false];
+let respostasDadas = ['', ''];
+
+function embaralhar(arr){
+  const copia = arr.slice();
+  for(let i = copia.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
+
+function renderExercicio(){
+  const ex = EXERCICIOS[indiceAtual];
+  document.getElementById('tituloExercicio').textContent = ex.titulo;
+  montada = [];
+  const chips = embaralhar(ex.correta);
+  document.getElementById('chipsBank').innerHTML = chips.map((palavra, i) =>
+    '<span class="chip" id="chip' + i + '" onclick="usarChip(' + i + ', \'' + palavra.replace(/'/g, "\\'") + '\')">' + palavra + '</span>'
+  ).join('');
+  document.getElementById('feedbackMsg').classList.remove('show', 'ok', 'bad');
+  renderStrip();
+}
+
+function usarChip(i, palavra){
+  const chipEl = document.getElementById('chip' + i);
+  if(chipEl.classList.contains('used')) return;
+  chipEl.classList.add('used');
+  montada.push({ i: i, palavra: palavra });
+  renderStrip();
+}
+
+function renderStrip(){
+  const strip = document.getElementById('answerStrip');
+  strip.innerHTML = montada.length
+    ? montada.map((m, pos) => '<span class="placed" onclick="removerDaFrase(' + pos + ')">' + m.palavra + '</span>').join('')
+    : '<span class="empty-hint">Clique nas palavras abaixo...</span>';
+}
+
+function removerDaFrase(pos){
+  const item = montada[pos];
+  document.getElementById('chip' + item.i).classList.remove('used');
+  montada.splice(pos, 1);
+  renderStrip();
+}
+
+function limpar(){
+  const chips = document.querySelectorAll('#chipsBank .chip');
+  chips.forEach(c => c.classList.remove('used'));
+  montada = [];
+  renderStrip();
+}
+
+function corrigir(){
+  const ex = EXERCICIOS[indiceAtual];
+  const resposta = montada.map(m => m.palavra).join(' ');
+  const certa = ex.correta.join(' ');
+  const msg = document.getElementById('feedbackMsg');
+  const ok = resposta === certa;
+  acertosFinal[indiceAtual] = ok;
+  respostasDadas[indiceAtual] = resposta;
+  msg.textContent = ok ? '✅ Certo! "' + certa + '"' : '❌ Quase — a ordem certa é: "' + certa + '"';
+  msg.classList.add('show', ok ? 'ok' : 'bad');
+
+  if(indiceAtual < EXERCICIOS.length - 1){
+    setTimeout(() => { indiceAtual++; renderExercicio(); }, 1600);
+  }else{
+    const btn = document.getElementById('btnConcluir');
+    btn.disabled = false;
+    btn.textContent = 'Concluir atividade';
+  }
+}
+
+function finalizar(){
+  const total = acertosFinal.filter(Boolean).length;
+  const resumo = total + '/' + EXERCICIOS.length + ' corretas.';
+  const detalhes = EXERCICIOS.map((ex, i) =>
+    (i+1) + '. Você montou: "' + (respostasDadas[i] || '(não respondida)') + '"' +
+    (acertosFinal[i] ? ' ✅' : ' ❌ (correto: "' + ex.correta.join(' ') + '")')
+  );
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { acertos: total, total: EXERCICIOS.length });
+}
+
+renderExercicio();
+</script>
+</body>
+</html>

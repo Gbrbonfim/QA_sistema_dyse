@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DYSE · A1 · Aula 01 · Atividade 11 — Speaking: Grave sua Apresentação</title>
-<meta name="description" content="Atividade complementar A1 — Aula 01 — prática oral de apresentação. Do You Speak English (DYSE).">
+<meta name="description" content="Atividade complementar A1 — Aula 01 — prática oral testada de apresentação. Do You Speak English (DYSE).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
     </div>
     <span class="eyebrow-badge">A1 · Aula 01</span>
     <h1 class="title">Grave sua Apresentação</h1>
-    <p class="subtitle">Pratique em voz alta a apresentação completa: nome, nacionalidade e de onde você é.</p>
+    <p class="subtitle">Ouça cada parte da apresentação, repita em voz alta e o app confere — não é só marcar que praticou, é testado de verdade.</p>
     <div class="hero-meta">
       <span class="pill">Atividade 11/15</span>
       <span class="pill">Speaking</span>
@@ -35,33 +35,25 @@
     <div class="card-head">
       <div class="icon-badge">🎙️</div>
       <div>
-        <div class="card-eyebrow">Prática oral</div>
-        <h2 class="card-title">Ouça o modelo e pratique</h2>
+        <div class="card-eyebrow">Prática oral testada</div>
+        <h2 class="card-title">Ouça, repita e seja avaliado</h2>
       </div>
     </div>
-    <p class="card-instructions">Ouça o modelo, depois pratique em voz alta (grave no celular se quiser comparar). Marque cada item quando fizer.</p>
+    <p class="card-instructions" id="micNotice">Use o Google Chrome pra melhor suporte de gravação. Se seu navegador não suportar, marque manualmente que praticou.</p>
 
-    <div class="interview-block">
-      <p style="font-weight:700; margin-bottom:10px;">"Hi! My name's Ana. I'm from Brazil, and I'm Brazilian. Nice to meet you!"</p>
-      <button type="button" class="btn btn-audio" onclick="ouvirModelo()">🔊 Ouvir o modelo</button>
-    </div>
+    <div id="frasesContainer"></div>
 
-    <div class="checklist" id="checklist">
-      <label><input type="checkbox" onchange="atualizar()"> Pratiquei minha própria apresentação em voz alta pelo menos 3 vezes.</label>
-      <label><input type="checkbox" onchange="atualizar()"> Usei o linking em "meet you" (sem pausar entre as palavras).</label>
-      <label><input type="checkbox" onchange="atualizar()"> Pronunciei o "th" de "thank you" com a língua entre os dentes.</label>
-      <label><input type="checkbox" onchange="atualizar()"> Me sinto confiante pra fazer essa apresentação na próxima aula.</label>
-    </div>
-
-    <label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:6px;">Anotações (opcional)</label>
+    <label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin:14px 0 6px;">Anotações (opcional)</label>
     <textarea class="write-area" id="notas" style="min-height:80px;" placeholder="O que foi mais difícil? O que quer perguntar pra professora?"></textarea>
 
     <div class="btn-row" style="margin-top:16px;">
-      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Marque todos os itens pra concluir</button>
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Pratique as 3 partes pra concluir</button>
     </div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
     <div class="done-banner" id="doneBanner">
       <h2>Atividade concluída!</h2>
-      <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
+      <p>Seu progresso foi salvo. Você pode voltar e praticar de novo quando quiser.</p>
     </div>
   </section>
 </div>
@@ -78,22 +70,99 @@
 const ATIVIDADE = { course:'a1', aula:1, numero:11, totalAula:15, titulo:'Speaking — Grave sua Apresentação' };
 DyseAtividade.boot(ATIVIDADE);
 
-function ouvirModelo(){
-  DyseAtividade.speak("Hi! My name's Ana. I'm from Brazil, and I'm Brazilian. Nice to meet you!");
+/* Mesma apresentação modelo das outras atividades da aula, quebrada em 3
+   partes curtas (Pré-A1) pra facilitar o reconhecimento de voz. */
+const FRASES = [
+  { texto:"Hi! My name's Ana." },
+  { texto:"I'm from Brazil, and I'm Brazilian." },
+  { texto:'Nice to meet you!' }
+];
+const praticadas = new Set();
+const resultados = {};
+
+function renderFrases(){
+  document.getElementById('frasesContainer').innerHTML = FRASES.map((f, i) =>
+    '<div class="interview-block">' +
+      '<p style="font-weight:700; font-size:1.05rem; margin-bottom:10px;">' + f.texto + '</p>' +
+      '<div class="btn-row">' +
+        '<button type="button" class="btn btn-audio" onclick="DyseAtividade.speak(\'' + f.texto.replace(/'/g, "\\'") + '\', null, 0.8)">🔊 Ouvir</button>' +
+        '<button type="button" class="btn btn-secondary" id="micBtn' + i + '" onclick="falar(' + i + ')">🎙️ Falar</button>' +
+      '</div>' +
+      '<p class="recog-feedback" id="feedback' + i + '"></p>' +
+      '<label style="display:flex; align-items:center; gap:8px; font-size:.86rem; font-weight:600; cursor:pointer; margin-top:10px;">' +
+        '<input type="checkbox" id="manual' + i + '" style="accent-color:var(--amaranth); width:18px; height:18px;" onchange="marcarManual(' + i + ', this.checked)"> Pratiquei essa parte' +
+      '</label>' +
+    '</div>'
+  ).join('');
 }
 
-function atualizar(){
-  const total = document.querySelectorAll('#checklist input').length;
-  const marcados = document.querySelectorAll('#checklist input:checked').length;
+function falar(i){
+  const btn = document.getElementById('micBtn' + i);
+  const feedback = document.getElementById('feedback' + i);
+  btn.disabled = true;
+  btn.textContent = '🎙️ Ouvindo...';
+  DyseAtividade.iniciarReconhecimento(FRASES[i].texto, {
+    onResult: (ouvido, similaridade) => {
+      btn.disabled = false;
+      btn.textContent = '🎙️ Falar de novo';
+      feedback.classList.add('show');
+      if(similaridade >= 50){
+        feedback.className = 'recog-feedback show ok';
+        feedback.textContent = '✅ Muito bem! (' + similaridade + '% parecido)';
+        resultados[i] = { modo:'reconhecimento', ouvido: ouvido, similaridade: similaridade };
+        marcar(i, true);
+        document.getElementById('manual' + i).checked = true;
+      }else{
+        feedback.className = 'recog-feedback show bad';
+        feedback.textContent = '🔁 Quase lá — tente de novo. Entendi: "' + ouvido + '"';
+      }
+    },
+    onError: (erro) => {
+      btn.disabled = false;
+      btn.textContent = '🎙️ Falar';
+      feedback.className = 'recog-feedback show info';
+      feedback.textContent = erro === 'unsupported'
+        ? 'Seu navegador não suporta gravação de voz — sem problema, marque manualmente abaixo que praticou.'
+        : 'Não consegui ouvir. Tente de novo ou marque manualmente que praticou.';
+    }
+  });
+}
+
+function marcarManual(i, checked){
+  if(checked && !resultados[i]) resultados[i] = { modo:'manual' };
+  if(!checked) delete resultados[i];
+  marcar(i, checked);
+}
+
+function marcar(i, praticado){
+  if(praticado) praticadas.add(i); else praticadas.delete(i);
   const btn = document.getElementById('btnConcluir');
-  btn.disabled = marcados < total;
-  btn.textContent = marcados < total ? 'Marque todos os itens pra concluir' : 'Concluir atividade';
+  if(praticadas.size === FRASES.length){
+    btn.disabled = false;
+    btn.textContent = 'Concluir atividade';
+  }else{
+    btn.disabled = true;
+    btn.textContent = 'Pratique as ' + FRASES.length + ' partes pra concluir';
+  }
 }
 
 function finalizar(){
   const notas = document.getElementById('notas').value.trim();
-  DyseAtividade.concluir(ATIVIDADE, 'Prática oral concluída. ' + (notas ? 'Anotações: ' + notas : 'Sem anotações.'), { notas: notas });
+  const resumo = 'Praticou ' + praticadas.size + '/' + FRASES.length + ' partes da apresentação.';
+  const detalhes = FRASES.map((f, i) => {
+    const r = resultados[i];
+    let linha;
+    if(!r) linha = (i+1) + '. "' + f.texto + '" → não praticada';
+    else if(r.modo === 'reconhecimento') linha = (i+1) + '. "' + f.texto + '" → reconhecido: "' + r.ouvido + '" (' + r.similaridade + '% parecido) ✅';
+    else linha = (i+1) + '. "' + f.texto + '" → marcada manualmente (reconhecimento de voz indisponível)';
+    return linha;
+  });
+  if(notas) detalhes.push('', 'Anotações do aluno: ' + notas);
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { praticadas: praticadas.size, total: FRASES.length, notas: notas });
 }
+
+renderFrases();
 </script>
 </body>
 </html>

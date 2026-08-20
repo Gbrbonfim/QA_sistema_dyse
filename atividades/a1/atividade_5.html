@@ -49,6 +49,8 @@
       <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Escreva pelo menos 12 palavras</button>
     </div>
     <div class="model-answer" id="modelo">Hi! My name's Lucas. I'm from Brazil, and I'm Brazilian. Nice to meet you!</div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
     <div class="done-banner" id="doneBanner">
       <h2>Atividade concluída!</h2>
       <p>Seu texto foi salvo. Você pode voltar e editar quando quiser.</p>
@@ -91,7 +93,9 @@ function verModelo(){
 
 function finalizar(){
   const texto = document.getElementById('texto').value.trim();
-  DyseAtividade.concluir(ATIVIDADE, texto, { texto: texto });
+  const n = texto.split(/\s+/).filter(Boolean).length;
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, n + ' palavras enviadas.', ['Texto do aluno:', texto]);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { texto: texto });
 }
 </script>
 </body>

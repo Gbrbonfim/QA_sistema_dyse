@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 43 · Atividade 10 — Writing: Sua Entrevista Escrita</title>
+<meta name="description" content="Atividade complementar A1 — Aula 43 — produção escrita guiada misturando to be, present simple e passado. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 43</span>
+    <h1 class="title">Sua Entrevista Escrita</h1>
+    <p class="subtitle">Escreva como se estivesse respondendo uma entrevista curta. Inclua os 3 itens abaixo.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 10/15</span>
+      <span class="pill">Writing</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">✉️</div>
+      <div>
+        <div class="card-eyebrow">Produção escrita</div>
+        <h2 class="card-title">Sua entrevista</h2>
+      </div>
+    </div>
+    <p class="card-instructions">Escreva pelo menos 20 palavras, em inglês, incluindo os 3 itens da lista — eles vão sendo marcados sozinhos conforme você escreve.</p>
+
+    <div class="checklist" id="requisitos">
+      <label id="req-quem"><span>☐</span> Diga quem você é (ex: "I am...")</label>
+      <label id="req-rotina"><span>☐</span> Descreva sua rotina (ex: "I work...", "I usually...")</label>
+      <label id="req-passado"><span>☐</span> Conte algo do passado (ex: "Last year, I traveled...")</label>
+    </div>
+
+    <textarea class="write-area" id="texto" placeholder="I am..." oninput="atualizar()"></textarea>
+    <p class="word-count" id="contador">0 palavras (mínimo: 20)</p>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-ghost" onclick="verModelo()">Ver um exemplo</button>
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Complete os 3 itens pra concluir</button>
+    </div>
+    <div class="model-answer" id="modelo">Hi! I'm Marcos. I work as a teacher. I usually wake up at 6 am. Last year, I traveled to Argentina and it was amazing!</div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Sua mensagem foi salva. Você pode voltar e editar quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:43, numero:10, totalAula:15, titulo:'Writing — Sua Entrevista Escrita' };
+DyseAtividade.boot(ATIVIDADE);
+
+const MIN_PALAVRAS = 20;
+
+function checarRequisitos(textoLower){
+  return {
+    quem: /\bi'?m\b|\bi am\b|\bmy name'?s\b/.test(textoLower),
+    rotina: /\bi work\b|\bi usually\b|\bevery day\b|\bi wake up\b|\bi study\b/.test(textoLower),
+    passado: /\blast year\b|\blast week\b|\byesterday\b|\btraveled\b|\bvisited\b|\bworked\b|\bwatched\b/.test(textoLower)
+  };
+}
+
+function atualizar(){
+  const texto = document.getElementById('texto').value;
+  const palavras = texto.trim().split(/\s+/).filter(Boolean);
+  const contador = document.getElementById('contador');
+  contador.textContent = palavras.length + ' palavras (mínimo: ' + MIN_PALAVRAS + ')';
+  contador.classList.toggle('enough', palavras.length >= MIN_PALAVRAS);
+
+  const req = checarRequisitos(texto.toLowerCase());
+  ['quem','rotina','passado'].forEach(key => {
+    const el = document.getElementById('req-' + key);
+    el.querySelector('span').textContent = req[key] ? '✅' : '☐';
+  });
+
+  const completo = palavras.length >= MIN_PALAVRAS && req.quem && req.rotina && req.passado;
+  const btn = document.getElementById('btnConcluir');
+  btn.disabled = !completo;
+  btn.textContent = completo ? 'Concluir atividade' : 'Complete os 3 itens pra concluir';
+}
+
+function verModelo(){
+  document.getElementById('modelo').classList.toggle('show');
+}
+
+function finalizar(){
+  const texto = document.getElementById('texto').value.trim();
+  const req = checarRequisitos(texto.toLowerCase());
+  const detalhes = [
+    'Texto do aluno:', texto, '',
+    (req.quem ? '✅' : '❌') + ' Quem é você incluído',
+    (req.rotina ? '✅' : '❌') + ' Rotina incluída',
+    (req.passado ? '✅' : '❌') + ' Algo do passado incluído'
+  ];
+  const n = texto.split(/\s+/).filter(Boolean).length;
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, n + ' palavras, 3/3 itens obrigatórios.', detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { texto: texto });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 41 · Atividade 12 — Leitura: Planos para o Fim de Semana</title>
+<meta name="description" content="Atividade complementar A1 — Aula 41 — leitura e compreensão de diálogo sobre planos combinados. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 41</span>
+    <h1 class="title">Planos para o Fim de Semana</h1>
+    <p class="subtitle">Leia o diálogo e responda as perguntas de compreensão.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 12/15</span>
+      <span class="pill">Reading</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">📖</div>
+      <div>
+        <div class="card-eyebrow">Leitura</div>
+        <h2 class="card-title">Making Plans</h2>
+      </div>
+    </div>
+
+    <div class="passage-box">
+      <div class="dialogue-line"><div class="dialogue-speaker">A</div><div class="dialogue-text">Hey! What are you doing this weekend?</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker b">B</div><div class="dialogue-text">I'm going to the gym on Saturday morning. What about you?</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker">A</div><div class="dialogue-text">I'm meeting my cousin for lunch on Saturday too. Are you free on Sunday?</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker b">B</div><div class="dialogue-text">Yes, I'm free on Sunday afternoon. Let's watch a movie!</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker">A</div><div class="dialogue-text">Great idea! I'm free after 4 pm.</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker b">B</div><div class="dialogue-text">Perfect, let's meet at the cinema at 4:30!</div></div>
+    </div>
+
+    <p class="card-instructions">Responda às perguntas sobre o diálogo.</p>
+    <div id="quizContainer"></div>
+
+    <p class="feedback" id="scoreMsg"></p>
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Responda todas pra concluir</button>
+    </div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:41, numero:12, totalAula:15, titulo:'Leitura — Planos para o Fim de Semana' };
+DyseAtividade.boot(ATIVIDADE);
+
+const PERGUNTAS = [
+  { pergunta:'What is B doing on Saturday morning?', opcoes:['Going to the gym','Meeting a cousin','Watching a movie'], certa:0 },
+  { pergunta:'Who is A meeting for lunch?', opcoes:['A friend','A cousin','A sister'], certa:1 },
+  { pergunta:'What are they doing on Sunday?', opcoes:['Having lunch','Watching a movie','Going to the gym'], certa:1 },
+  { pergunta:'What time are they meeting at the cinema?', opcoes:['4 pm','4:30 pm','7 pm'], certa:1 }
+];
+let respondidas = 0;
+let acertos = 0;
+const detalhes = [];
+
+function renderQuiz(){
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = PERGUNTAS.map((p, i) =>
+    '<div class="grammar-q">' +
+      '<div class="qtext">' + (i+1) + '. ' + p.pergunta + '</div>' +
+      '<div class="mcq-options">' +
+        p.opcoes.map((op, j) =>
+          '<label class="mcq-option" id="q' + i + 'o' + j + '"><input type="radio" name="q' + i + '" onclick="responder(' + i + ',' + j + ')">' + op + '</label>'
+        ).join('') +
+      '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function responder(i, escolhida){
+  const p = PERGUNTAS[i];
+  document.getElementById('q' + i + 'o' + escolhida).classList.add(escolhida === p.certa ? 'correct' : 'wrong');
+  if(escolhida !== p.certa) document.getElementById('q' + i + 'o' + p.certa).classList.add('correct');
+  document.querySelectorAll('input[name="q' + i + '"]').forEach(el => el.disabled = true);
+  const acertou = escolhida === p.certa;
+  if(acertou) acertos++;
+  detalhes.push((i+1) + '. ' + p.pergunta + ' → ' + p.opcoes[escolhida] + (acertou ? ' ✅' : ' ❌ (correto: ' + p.opcoes[p.certa] + ')'));
+  respondidas++;
+  if(respondidas === PERGUNTAS.length){
+    const msg = document.getElementById('scoreMsg');
+    msg.textContent = 'Você acertou ' + acertos + ' de ' + PERGUNTAS.length + '.';
+    msg.classList.add('show', acertos >= PERGUNTAS.length - 1 ? 'ok' : 'bad');
+    const btn = document.getElementById('btnConcluir');
+    btn.disabled = false;
+    btn.textContent = 'Concluir atividade';
+  }
+}
+
+function finalizar(){
+  const resumo = acertos + '/' + PERGUNTAS.length + ' corretas (' + Math.round(acertos / PERGUNTAS.length * 100) + '%).';
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { acertos: acertos, total: PERGUNTAS.length });
+}
+
+renderQuiz();
+</script>
+</body>
+</html>

@@ -217,8 +217,11 @@ function escapeHtml(s){
   return d.innerHTML;
 }
 
-/* ---------- Salvar resultado de uma atividade ---------- */
-async function dyseSaveResult(course, activityNum, activityTheme, reportText, meta){
+/* ---------- Salvar resultado de uma atividade ----------
+   "aula" é opcional (default 1) — o TOEFL nunca passa esse argumento e
+   continua gravando exatamente como antes (todas as linhas dele já ficam
+   com aula=1 desde a migration da seção 15 do schema). */
+async function dyseSaveResult(course, activityNum, activityTheme, reportText, meta, aula = 1){
   const session = await dyseGetSession();
   if(!session) return { error: 'not-authenticated' };
   const profile = await dyseGetProfile(session);
@@ -227,20 +230,90 @@ async function dyseSaveResult(course, activityNum, activityTheme, reportText, me
     student_name: (profile && profile.full_name) || session.user.user_metadata?.full_name || session.user.email,
     student_email: session.user.email,
     course: course,
+    aula: aula,
     activity_num: activityNum,
     activity_theme: activityTheme,
     report_text: reportText,
     meta: meta || {},
+    status: 'concluida',
     updated_at: new Date().toISOString()
   };
   const { error } = await sb
     .from('activity_results')
-    .upsert(payload, { onConflict: 'user_id,course,activity_num' });
+    .upsert(payload, { onConflict: 'user_id,course,aula,activity_num' });
+  return { error };
+}
+
+/* ---------- Salvar progresso PARCIAL (autosave), sem marcar como concluída ----------
+   Faz upsert preservando "status" como 'em_andamento' — usado por atividades
+   com autosave contínuo (ex: seções que salvam sozinhas antes do aluno
+   clicar em "Concluir"). Nunca sobrescreve um status 'concluida'/'pulada'
+   já gravado (ex: reabrir uma atividade já concluída pra revisar não deve
+   "voltar" o estado dela pra em_andamento). */
+async function dyseAutosaveParcial(course, activityNum, activityTheme, reportText, meta, aula = 1){
+  const existing = await dyseLoadResult(course, activityNum, aula);
+  if(existing && (existing.status === 'concluida' || existing.status === 'pulada')) return { error: null };
+  const session = await dyseGetSession();
+  if(!session) return { error: 'not-authenticated' };
+  const profile = await dyseGetProfile(session);
+  const payload = {
+    user_id: session.user.id,
+    student_name: (profile && profile.full_name) || session.user.user_metadata?.full_name || session.user.email,
+    student_email: session.user.email,
+    course: course,
+    aula: aula,
+    activity_num: activityNum,
+    activity_theme: activityTheme,
+    report_text: reportText,
+    meta: meta || {},
+    status: 'em_andamento',
+    updated_at: new Date().toISOString()
+  };
+  const { error } = await sb
+    .from('activity_results')
+    .upsert(payload, { onConflict: 'user_id,course,aula,activity_num' });
+  return { error };
+}
+
+/* ---------- Pular atividade ----------
+   Grava status='pulada' SEM apagar report_text/meta já existentes — por
+   isso é um UPDATE parcial quando já existe linha (nunca um upsert do
+   payload inteiro), e só insere uma linha mínima quando não existia nada
+   ainda. Passa pela trigger "enforce_activity_published" do banco (seção
+   15.4 do schema): pular uma atividade bloqueada é rejeitado igual a
+   concluir uma. */
+async function dyseSkipActivity(course, activityNum, aula = 1){
+  const session = await dyseGetSession();
+  if(!session) return { error: 'not-authenticated' };
+  const { data: existing } = await sb
+    .from('activity_results')
+    .select('id')
+    .eq('user_id', session.user.id).eq('course', course).eq('aula', aula).eq('activity_num', activityNum)
+    .maybeSingle();
+  if(existing){
+    const { error } = await sb
+      .from('activity_results')
+      .update({ status: 'pulada', skipped_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      .eq('id', existing.id);
+    return { error };
+  }
+  const profile = await dyseGetProfile(session);
+  const { error } = await sb.from('activity_results').insert({
+    user_id: session.user.id,
+    student_name: (profile && profile.full_name) || session.user.user_metadata?.full_name || session.user.email,
+    student_email: session.user.email,
+    course: course,
+    aula: aula,
+    activity_num: activityNum,
+    status: 'pulada',
+    skipped_at: new Date().toISOString(),
+    meta: {}
+  });
   return { error };
 }
 
 /* ---------- Buscar resultado salvo de UMA atividade (para retomar) ---------- */
-async function dyseLoadResult(course, activityNum){
+async function dyseLoadResult(course, activityNum, aula = 1){
   const session = await dyseGetSession();
   if(!session) return null;
   const { data, error } = await sb
@@ -248,6 +321,7 @@ async function dyseLoadResult(course, activityNum){
     .select('*')
     .eq('user_id', session.user.id)
     .eq('course', course)
+    .eq('aula', aula)
     .eq('activity_num', activityNum)
     .maybeSingle();
   if(error) return null;
@@ -255,15 +329,17 @@ async function dyseLoadResult(course, activityNum){
 }
 
 /* ---------- Listar TODOS os resultados do aluno logado (área do aluno) ----------
-   Se "course" for informado, filtra só aquele curso; senão, traz todos. */
-async function dyseListMyResults(course){
+   Se "course" for informado, filtra só aquele curso; se "aula" também for
+   informado, filtra também por aula (senão traz todas as aulas do curso). */
+async function dyseListMyResults(course, aula){
   const session = await dyseGetSession();
   if(!session) return [];
   let query = sb
     .from('activity_results')
-    .select('course, activity_num, activity_theme, updated_at, meta')
+    .select('course, aula, activity_num, activity_theme, status, updated_at, meta')
     .eq('user_id', session.user.id);
   if(course) query = query.eq('course', course);
+  if(aula !== undefined && aula !== null) query = query.eq('aula', aula);
   const { data, error } = await query;
   return error ? [] : data;
 }
@@ -279,49 +355,53 @@ async function dyseListAllResults(){
   return error ? [] : data;
 }
 
-/* ---------- Atividades liberadas (visíveis) por curso ----------
-   Retorna um Set com os números das atividades marcadas como liberadas. */
-async function dyseGetPublishedSet(course){
+/* ---------- Atividades liberadas (visíveis) por curso+aula ----------
+   Retorna um Set com os números das atividades marcadas como liberadas.
+   "aula" default 1 — o TOEFL (sem conceito de aula) nunca passa esse
+   argumento e continua funcionando exatamente como antes. */
+async function dyseGetPublishedSet(course, aula = 1){
   const { data, error } = await sb
     .from('published_activities')
     .select('activity_num, is_published')
-    .eq('course', course);
+    .eq('course', course)
+    .eq('aula', aula);
   if(error || !data) return new Set();
   return new Set(data.filter(r => r.is_published).map(r => r.activity_num));
 }
 
-/* ---------- [Professora] listar liberação de TODAS as atividades de um curso ----------
+/* ---------- [Professora] listar liberação de TODAS as atividades de uma aula de um curso ----------
    Retorna um Map activity_num -> true/false (mesmo as nunca tocadas voltam como false). */
-async function dyseGetPublishedMap(course){
+async function dyseGetPublishedMap(course, aula = 1){
   const { data, error } = await sb
     .from('published_activities')
     .select('activity_num, is_published')
-    .eq('course', course);
+    .eq('course', course)
+    .eq('aula', aula);
   const map = {};
   if(!error && data) data.forEach(r => map[r.activity_num] = r.is_published);
   return map;
 }
 
 /* ---------- [Professora] liberar ou ocultar uma atividade ---------- */
-async function dyseSetPublished(course, activityNum, isPublished){
+async function dyseSetPublished(course, activityNum, isPublished, aula = 1){
   const { error } = await sb
     .from('published_activities')
     .upsert(
-      { course, activity_num: activityNum, is_published: isPublished, updated_at: new Date().toISOString() },
-      { onConflict: 'course,activity_num' }
+      { course, aula, activity_num: activityNum, is_published: isPublished, updated_at: new Date().toISOString() },
+      { onConflict: 'course,aula,activity_num' }
     );
   return { error };
 }
 
 /* ---------- Bloqueia a página de atividade se ela não estiver liberada.
    Professoras sempre podem acessar (útil pra revisar/testar antes de liberar). */
-async function dyseRequirePublished(course, activityNum){
+async function dyseRequirePublished(course, activityNum, aula = 1){
   const session = await dyseGetSession();
   if(!session) return false;
   const profile = await dyseGetProfile(session);
   if(dyseIsTeacher(profile) || dyseIsAdmin(profile)) return true;
 
-  const published = await dyseGetPublishedSet(course);
+  const published = await dyseGetPublishedSet(course, aula);
   if(!published.has(activityNum)){
     location.href = '/area-do-aluno.html?notice=locked';
     return false;
@@ -453,9 +533,13 @@ async function dyseSetStudentTurma(studentId, turmaId){
   return { error };
 }
 
-/* ---------- Quais atividades de uma matéria a gestão libera pro professor ---------- */
-async function dyseListMateriaActivities(materiaSlug){
-  const { data, error } = await sb.from('materia_activities').select('*').eq('materia_slug', materiaSlug);
+/* ---------- Quais atividades de uma matéria a gestão libera pro professor ----------
+   Sem "aula", traz todas as aulas da matéria de uma vez (útil pra montar o
+   accordion inteiro com uma query só). */
+async function dyseListMateriaActivities(materiaSlug, aula){
+  let query = sb.from('materia_activities').select('*').eq('materia_slug', materiaSlug);
+  if(aula !== undefined && aula !== null) query = query.eq('aula', aula);
+  const { data, error } = await query;
   return error ? [] : data;
 }
 
@@ -464,14 +548,52 @@ async function dyseListAllMateriaActivities(){
   return error ? [] : data;
 }
 
-async function dyseSetMateriaActivityReleased(materiaSlug, activityNum, released){
+async function dyseSetMateriaActivityReleased(materiaSlug, activityNum, released, aula = 1){
   const { error } = await sb
     .from('materia_activities')
     .upsert(
-      { materia_slug: materiaSlug, activity_num: activityNum, released_to_teachers: released, updated_at: new Date().toISOString() },
-      { onConflict: 'materia_slug,activity_num' }
+      { materia_slug: materiaSlug, aula, activity_num: activityNum, released_to_teachers: released, updated_at: new Date().toISOString() },
+      { onConflict: 'materia_slug,aula,activity_num' }
     );
   return { error };
+}
+
+/* ---------- Catálogo de cursos (professora.html + area-do-aluno.html) ----------
+   Fonte única pras duas telas — antes cada uma tinha seu próprio array
+   "COURSES" hardcoded (e podiam divergir). "nivel_aulas" já tem a lista
+   real de aulas por matéria (numero/topico); o nome/descrição do curso em
+   si (que não muda por aula, não faz sentido morar no banco linha a linha)
+   fica num manifesto mínimo aqui do lado do código. */
+const DYSE_COURSE_META = {
+  toefl: { name: 'TOEFL iBT', description: 'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.' },
+  a1:    { name: 'A1 · Atividades Complementares', description: 'Atividades complementares por aula do curso A1.' }
+};
+async function dyseListCourseCatalog(){
+  const { data, error } = await sb.from('nivel_aulas').select('materia_slug, numero, topico').eq('ativo', true).order('numero', { ascending: true });
+  if(error || !data) return [];
+  const bySlug = {};
+  data.forEach(row => {
+    if(!DYSE_COURSE_META[row.materia_slug]) return; // só matérias que também são "curso de atividades" (TOEFL, A1...)
+    (bySlug[row.materia_slug] = bySlug[row.materia_slug] || []).push({ numero: row.numero, topico: row.topico });
+  });
+  return Object.keys(bySlug).map(slug => ({
+    id: slug,
+    name: DYSE_COURSE_META[slug].name,
+    description: DYSE_COURSE_META[slug].description,
+    aulas: bySlug[slug]
+  }));
+}
+
+/* ---------- [Gestão] adicionar uma nova aula a qualquer matéria com currículo ----------
+   Usado pelo botão "+ Adicionar aula" no modal de Material (gestao.html) —
+   genérico, funciona pra A1, TOEFL ou qualquer matéria futura. */
+async function dyseCreateNivelAula(materiaSlug, numero, topico, materialUrl){
+  const { data, error } = await sb
+    .from('nivel_aulas')
+    .insert({ materia_slug: materiaSlug, numero: numero, topico: topico, material_url: materialUrl || null })
+    .select('*')
+    .maybeSingle();
+  return { data, error };
 }
 
 /* ======================================================================
@@ -1202,9 +1324,16 @@ async function dyseListNiveis(){
   return error ? [] : data;
 }
 
-async function dyseListNivelAulas(materiaSlug){
+/* "incluirInativas" (default false) — telas de USO (professora escolhendo
+   aula pra registrar classe, aluno vendo Material, catálogo de cursos) só
+   devem oferecer aulas ativas. Telas de HISTÓRICO (Report Card, histórico
+   acadêmico do aluno) precisam ver TODAS, mesmo desativadas depois — senão
+   um registro_classe antigo perde a referência de número/tópico da aula. */
+async function dyseListNivelAulas(materiaSlug, incluirInativas){
   if(!materiaSlug) return [];
-  const { data, error } = await sb.from('nivel_aulas').select('*').eq('materia_slug', materiaSlug).order('numero', { ascending: true });
+  let query = sb.from('nivel_aulas').select('*').eq('materia_slug', materiaSlug).order('numero', { ascending: true });
+  if(!incluirInativas) query = query.eq('ativo', true);
+  const { data, error } = await query;
   return error ? [] : data;
 }
 
@@ -1212,6 +1341,22 @@ async function dyseListNivelAulas(materiaSlug){
    nivel_aulas já restringe update a is_admin()). */
 async function dyseUpdateNivelAulaMaterial(nivelAulaId, url){
   const { error } = await sb.from('nivel_aulas').update({ material_url: (url || '').trim() || null }).eq('id', nivelAulaId);
+  return { error };
+}
+
+/* ---------- [Gestão] ativar/desativar e excluir uma aula ----------
+   Desativar tira a aula das telas de uso (ver dyseListNivelAulas) sem
+   apagar nada. Excluir é bloqueado pelo próprio Postgres se já existir
+   registro_classe pra essa aula (nivel_aula_id ... on delete restrict) —
+   nesse caso "error" vem preenchido e a tela deve orientar a desativar
+   em vez de excluir. */
+async function dyseSetNivelAulaAtivo(nivelAulaId, ativo){
+  const { error } = await sb.from('nivel_aulas').update({ ativo: !!ativo }).eq('id', nivelAulaId);
+  return { error };
+}
+
+async function dyseDeleteNivelAula(nivelAulaId){
+  const { error } = await sb.from('nivel_aulas').delete().eq('id', nivelAulaId);
   return { error };
 }
 
@@ -1360,7 +1505,7 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
   }
 
   const [todasAulas, todosRegistros, alunos, materias] = await Promise.all([
-    dyseListNivelAulas(materiaSlug),
+    dyseListNivelAulas(materiaSlug, true), // true: relatório histórico precisa das aulas mesmo se desativadas depois
     dyseListRegistrosClasse(alunoId),
     dyseListProfilesByRole('student'),
     dyseListMaterias()

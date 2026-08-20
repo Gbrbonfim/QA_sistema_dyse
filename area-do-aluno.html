@@ -537,13 +537,14 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 </footer>
 
 <script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/manifest.js"></script>
 <script>
   const COURSES = [
     {id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]},
-    // Atividades complementares do A1 — só a Aula 01 (piloto) tem os 15
-    // arquivos prontos em /atividades/a1/ por enquanto; as aulas 02-44
-    // entram aqui conforme forem produzidas.
-    {id:'a1', name:'A1 · Atividades Complementares', description:'Atividades pra praticar o que você viu em cada aula — algumas com vídeo interativo.', activities:[{num:1, theme:'Vocabulário — Países e Nacionalidades'},{num:2, theme:'Complete o Diálogo de Apresentação'},{num:3, theme:'Pronúncia — Linking'},{num:4, theme:'Vídeo — Apresentações ao Redor do Mundo'},{num:5, theme:'Meu Cartão de Apresentação'},{num:6, theme:'De Onde Você É?'},{num:7, theme:'Vídeo — Sotaques e Países'},{num:8, theme:'Monte a Pergunta'},{num:9, theme:'Pronúncia — o som de "TH"'},{num:10, theme:'Vídeo — Role-play de Apresentação'},{num:11, theme:'Speaking — Grave sua Apresentação'},{num:12, theme:'Leitura — Primeiro Dia de Aula'},{num:13, theme:'Vídeo — Erros Comuns de Pronúncia'},{num:14, theme:'Revisão — Quiz Rápido'},{num:15, theme:'Vídeo — Prática Final: Apresente-se!'}]}
+    // A1 não tem "activities" aqui — 44 aulas × 15 não cabe numa lista flat.
+    // A contagem "X de Y liberadas" é somada por aula em runtime, usando
+    // AULAS_MANIFEST (só conta aulas cujo conteúdo já existe).
+    {id:'a1', name:'A1 · Atividades Complementares', description:'Atividades pra praticar o que você viu em cada aula.'}
   ];
 
   const NOTICE_MESSAGES = {
@@ -605,16 +606,31 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     );
 
     const results = await dyseListMyResults(); // todos os cursos do aluno
-    const doneMap = {}; // "course:num" -> resultado
-    results.forEach(r => doneMap[r.course + ':' + r.activity_num] = r);
+    const doneMap = {}; // "course:aula:num" -> resultado
+    results.forEach(r => doneMap[r.course + ':' + (r.aula || 1) + ':' + r.activity_num] = r);
 
     const cards = [];
     for(const course of COURSES){
       if(!allowedSlugs.has(course.id)) continue; // matéria não liberada pra turma do aluno
 
-      const publishedSet = await dyseGetPublishedSet(course.id);
-      const publishedCount = course.activities.filter(a => publishedSet.has(a.num)).length;
-      const doneCount = course.activities.filter(a => doneMap[course.id + ':' + a.num]).length;
+      let publishedCount, totalCount, doneCount;
+      if(course.id === 'a1'){
+        // 44 aulas × 15 — soma por aula, só contando aulas com conteúdo real
+        // (AULAS_MANIFEST); aulas "em produção" não entram no total ainda.
+        const aulas = (await dyseListNivelAulas('a1')).filter(a => AULAS_MANIFEST[a.numero]);
+        totalCount = aulas.length * 15;
+        publishedCount = 0; doneCount = 0;
+        for(const aula of aulas){
+          const publishedSet = await dyseGetPublishedSet('a1', aula.numero);
+          publishedCount += AULAS_MANIFEST[aula.numero].filter(a => publishedSet.has(a.num)).length;
+          doneCount += AULAS_MANIFEST[aula.numero].filter(a => doneMap['a1:' + aula.numero + ':' + a.num]).length;
+        }
+      }else{
+        const publishedSet = await dyseGetPublishedSet(course.id);
+        totalCount = course.activities.length;
+        publishedCount = course.activities.filter(a => publishedSet.has(a.num)).length;
+        doneCount = course.activities.filter(a => doneMap[course.id + ':1:' + a.num]).length;
+      }
 
       cards.push(
         '<a class="course-folder" href="/atividades/' + course.id + '/">' +
@@ -622,7 +638,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
           '<div class="course-folder-info">' +
             '<div class="course-folder-name">' + course.name + '</div>' +
             '<div class="course-folder-desc">' + course.description + '</div>' +
-            '<div class="course-folder-stats">' + publishedCount + ' de ' + course.activities.length + ' atividades liberadas &middot; ' + doneCount + ' enviadas</div>' +
+            '<div class="course-folder-stats">' + publishedCount + ' de ' + totalCount + ' atividades liberadas &middot; ' + doneCount + ' enviadas</div>' +
           '</div>' +
           '<div class="course-folder-arrow">&#8594;</div>' +
         '</a>'

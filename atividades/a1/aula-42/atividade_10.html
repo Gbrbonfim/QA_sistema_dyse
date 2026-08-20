@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 42 · Atividade 10 — Writing: Conte sua Viagem</title>
+<meta name="description" content="Atividade complementar A1 — Aula 42 — produção escrita guiada sobre planos de viagem. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 42</span>
+    <h1 class="title">Conte sua Viagem</h1>
+    <p class="subtitle">Escreva uma mensagem curta pra um amigo contando sobre sua viagem combinada. Inclua os 3 itens abaixo.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 10/15</span>
+      <span class="pill">Writing</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">✉️</div>
+      <div>
+        <div class="card-eyebrow">Produção escrita</div>
+        <h2 class="card-title">Sua mensagem sobre a viagem</h2>
+      </div>
+    </div>
+    <p class="card-instructions">Escreva pelo menos 15 palavras, em inglês, incluindo os 3 itens da lista — eles vão sendo marcados sozinhos conforme você escreve.</p>
+
+    <div class="checklist" id="requisitos">
+      <label id="req-destino"><span>☐</span> Diga o destino (ex: "Italy", "Portugal")</label>
+      <label id="req-quando"><span>☐</span> Diga quando (ex: "next month", "next summer")</label>
+      <label id="req-atividade"><span>☐</span> Diga uma atividade que vai fazer (ex: "visiting", "eating")</label>
+    </div>
+
+    <textarea class="write-area" id="texto" placeholder="I'm traveling to..." oninput="atualizar()"></textarea>
+    <p class="word-count" id="contador">0 palavras (mínimo: 15)</p>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-ghost" onclick="verModelo()">Ver um exemplo</button>
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Complete os 3 itens pra concluir</button>
+    </div>
+    <div class="model-answer" id="modelo">Hi! I'm traveling to Italy next summer. I'm flying on July 10th. I'm visiting Rome and eating a lot of pizza!</div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Sua mensagem foi salva. Você pode voltar e editar quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:42, numero:10, totalAula:15, titulo:'Writing — Conte sua Viagem' };
+DyseAtividade.boot(ATIVIDADE);
+
+const MIN_PALAVRAS = 15;
+
+function checarRequisitos(textoLower){
+  return {
+    destino: /\b(italy|portugal|spain|japan|france|brazil|mexico|canada|england|london|paris|rome|tokyo|lisbon)\b/.test(textoLower),
+    quando: /\bnext month\b|\bnext summer\b|\bnext year\b|\bnext week\b|\bin (january|february|march|april|may|june|july|august|september|october|november|december)\b/.test(textoLower),
+    atividade: /\b(visiting|eating|flying|packing|booking|exchanging|traveling)\b/.test(textoLower)
+  };
+}
+
+function atualizar(){
+  const texto = document.getElementById('texto').value;
+  const palavras = texto.trim().split(/\s+/).filter(Boolean);
+  const contador = document.getElementById('contador');
+  contador.textContent = palavras.length + ' palavras (mínimo: ' + MIN_PALAVRAS + ')';
+  contador.classList.toggle('enough', palavras.length >= MIN_PALAVRAS);
+
+  const req = checarRequisitos(texto.toLowerCase());
+  ['destino','quando','atividade'].forEach(key => {
+    const el = document.getElementById('req-' + key);
+    el.querySelector('span').textContent = req[key] ? '✅' : '☐';
+  });
+
+  const completo = palavras.length >= MIN_PALAVRAS && req.destino && req.quando && req.atividade;
+  const btn = document.getElementById('btnConcluir');
+  btn.disabled = !completo;
+  btn.textContent = completo ? 'Concluir atividade' : 'Complete os 3 itens pra concluir';
+}
+
+function verModelo(){
+  document.getElementById('modelo').classList.toggle('show');
+}
+
+function finalizar(){
+  const texto = document.getElementById('texto').value.trim();
+  const req = checarRequisitos(texto.toLowerCase());
+  const detalhes = [
+    'Texto do aluno:', texto, '',
+    (req.destino ? '✅' : '❌') + ' Destino incluído',
+    (req.quando ? '✅' : '❌') + ' Quando incluído',
+    (req.atividade ? '✅' : '❌') + ' Atividade incluída'
+  ];
+  const n = texto.split(/\s+/).filter(Boolean).length;
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, n + ' palavras, 3/3 itens obrigatórios.', detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { texto: texto });
+}
+</script>
+</body>
+</html>

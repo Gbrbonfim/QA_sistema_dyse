@@ -154,10 +154,36 @@ section.card{
 .mcq-option.correct{border-color:var(--ok); background:#eaf7ee;}
 .mcq-option.wrong{border-color:var(--bad); background:#fbeceb;}
 
+/* ---------- Diálogo (leitura/listening) ---------- */
+.dialogue-line{display:flex; gap:10px; align-items:flex-start; margin-bottom:10px;}
+.dialogue-line:last-child{margin-bottom:0;}
+.dialogue-speaker{
+  flex:none; width:32px; height:32px; border-radius:50%; background:var(--amaranth); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.85rem;
+}
+.dialogue-speaker.b{background:var(--gamboge); color:var(--seal);}
+.dialogue-text{padding-top:5px; font-size:.95rem;}
+
+/* ---------- Bloco de pergunta (quiz de gramática/estrutura) ---------- */
+.grammar-q{margin-bottom:18px;}
+.grammar-q:last-child{margin-bottom:0;}
+.grammar-q .qtext{font-weight:700; margin-bottom:10px; font-size:.95rem;}
+
+/* ---------- Bloco de prática oral (Speaking) ---------- */
+.interview-block{
+  background:var(--antique-soft); border-radius:var(--radius-md); padding:16px 18px; margin-bottom:14px;
+}
+.recog-feedback{margin-top:10px; font-weight:700; font-size:.88rem; display:none;}
+.recog-feedback.show{display:block;}
+.recog-feedback.ok{color:var(--ok);}
+.recog-feedback.bad{color:var(--bad);}
+.recog-feedback.info{color:var(--seal-soft);}
+
 .btn{
   font-family:var(--font-body); font-weight:700; font-size:.86rem; letter-spacing:.01em;
   border:none; border-radius:999px; padding:10px 20px; cursor:pointer; transition:.2s;
-  display:inline-flex; align-items:center; gap:8px;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  min-height:44px; /* alvo de toque mobile — Responder/Confirmar/Continuar/Pular */
 }
 .btn-primary{background:var(--amaranth); color:#fff;}
 .btn-primary:hover{background:var(--amaranth-dark);}
@@ -165,6 +191,9 @@ section.card{
 .btn-secondary:hover{background:var(--gamboge-dark); color:#fff;}
 .btn-ghost{background:transparent; color:var(--seal-soft); border:2px solid #e4d4c4;}
 .btn-ghost:hover{border-color:var(--amaranth); color:var(--amaranth);}
+.btn-skip{margin-left:auto;}
+#doneBannerNext{margin-top:14px; text-align:center;}
+#skipBtnSlot:empty, #doneBannerNext:empty{display:none;}
 .btn-audio{background:var(--seal-soft); color:#fff;}
 .btn-audio:hover{background:var(--seal);}
 .btn:disabled{opacity:.5; cursor:not-allowed;}
@@ -285,6 +314,19 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 }
 .dash-badge.done{background:#eaf7ee; color:var(--ok);}
 .dash-badge.video{background:#fdf0dd; color:#a06a2e;}
+
+/* ---------- Accordion por aula (mesmo padrão visual de gestao.html/professora.html) ---------- */
+details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
+details.dyse-collapsible > summary{
+  list-style:none; cursor:pointer; padding:14px 18px; display:flex; align-items:center; justify-content:space-between;
+  gap:10px; font-weight:700; color:var(--seal); font-size:.92rem; min-height:44px;
+}
+details.dyse-collapsible > summary::-webkit-details-marker{display:none;}
+details.dyse-collapsible > summary:hover{background:var(--antique-soft);}
+details.dyse-collapsible > summary .chevron{transition:transform .2s; opacity:.55; flex:none; font-size:1rem;}
+details.dyse-collapsible[open] > summary .chevron{transform:rotate(90deg);}
+details.dyse-collapsible > summary .summary-left{display:flex; align-items:center; gap:10px; min-width:0;}
+details.dyse-collapsible .dyse-collapsible-body{padding:4px 18px 18px;}
 
 @media (max-width:640px){
   section.card{padding:22px 16px;}

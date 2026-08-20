@@ -454,6 +454,10 @@ details.dyse-collapsible > summary:hover{background:var(--antique-soft);}
 details.dyse-collapsible > summary .chevron{transition:transform .2s; opacity:.55; flex:none; font-size:1rem;}
 details.dyse-collapsible[open] > summary .chevron{transform:rotate(90deg);}
 details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
+details.dyse-collapsible.dyse-collapsible-nested{box-shadow:none; border:1px solid #f0e3d2; margin-bottom:8px;}
+details.dyse-collapsible.dyse-collapsible-nested > summary{padding:10px 14px; font-size:.82rem;}
+details.dyse-collapsible.dyse-collapsible-nested .manage-course-body{padding:0 14px 12px;}
+details.dyse-collapsible.dyse-collapsible-nested:last-child{margin-bottom:0;}
 
 /* Bloco de curso em "Gerenciar atividades" também vira <details> — reaproveita
    o mesmo visual de caixa branca que já tinha, só ganha o cabeçalho clicável. */
@@ -841,6 +845,7 @@ body.dyse-modal-open{overflow:hidden;}
 </footer>
 
 <script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/manifest.js"></script>
 <script>
   let ALL_RESULTS = [];
   let TURMA_NAME_BY_USER = {}; // user_id -> nome da turma (ou "-" se sem turma)
@@ -1721,10 +1726,10 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   const COURSES = [
-    {id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]},
-    // Atividades complementares do A1 — só a Aula 01 (piloto) tem os 15
-    // arquivos prontos em /atividades/a1/ por enquanto.
-    {id:'a1', name:'A1 · Atividades Complementares', description:'Atividades complementares por aula do curso A1 — algumas com vídeo interativo.', activities:[{num:1, theme:'Vocabulário — Países e Nacionalidades', level:'Aula 01'},{num:2, theme:'Complete o Diálogo de Apresentação', level:'Aula 01'},{num:3, theme:'Pronúncia — Linking', level:'Aula 01'},{num:4, theme:'Vídeo — Apresentações ao Redor do Mundo', level:'Aula 01'},{num:5, theme:'Meu Cartão de Apresentação', level:'Aula 01'},{num:6, theme:'De Onde Você É?', level:'Aula 01'},{num:7, theme:'Vídeo — Sotaques e Países', level:'Aula 01'},{num:8, theme:'Monte a Pergunta', level:'Aula 01'},{num:9, theme:'Pronúncia — o som de "TH"', level:'Aula 01'},{num:10, theme:'Vídeo — Role-play de Apresentação', level:'Aula 01'},{num:11, theme:'Speaking — Grave sua Apresentação', level:'Aula 01'},{num:12, theme:'Leitura — Primeiro Dia de Aula', level:'Aula 01'},{num:13, theme:'Vídeo — Erros Comuns de Pronúncia', level:'Aula 01'},{num:14, theme:'Revisão — Quiz Rápido', level:'Aula 01'},{num:15, theme:'Vídeo — Prática Final: Apresente-se!', level:'Aula 01'}]}
+    {id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]}
+    // A1 não entra aqui — tem 44 aulas × 15 atividades, é montado à parte em
+    // renderA1ManageBlock() a partir de nivel_aulas + AULAS_MANIFEST (accordion
+    // por aula, carregado sob demanda pra não travar a tela com 660 linhas).
   ];
 
   async function loadManagePanel(){
@@ -1767,11 +1772,73 @@ body.dyse-modal-open{overflow:hidden;}
         '</details>'
       );
     }
+    blocks.push(await renderA1ManageBlock());
     container.innerHTML = blocks.join('');
   }
 
   async function togglePublish(courseId, activityNum, isChecked){
     await dyseSetPublished(courseId, activityNum, isChecked);
+  }
+
+  /* ---------- A1 · Atividades Complementares — accordion por aula ----------
+     44 aulas × 15 atividades não cabe numa lista flat como o TOEFL. Cada
+     aula vira um <details> aninhado que só busca published_activities/
+     materia_activities daquela aula específica na primeira vez que abre
+     (lazy) — evita 660 linhas montadas de uma vez (mobile/performance). */
+  async function renderA1ManageBlock(){
+    const aulas = await dyseListNivelAulas('a1');
+    const rowsHtml = aulas.map(aula => {
+      const temConteudo = !!AULAS_MANIFEST[aula.numero];
+      return '<details class="dyse-collapsible dyse-collapsible-nested" id="a1AulaDet' + aula.numero + '">' +
+        '<summary onclick="setTimeout(() => carregarA1Aula(' + aula.numero + '), 0)"><span>Aula ' + String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlLocal(aula.topico) + '</span><span class="chevron">›</span></summary>' +
+        '<div class="manage-course-body" id="a1AulaBody' + aula.numero + '">' +
+          (temConteudo ? '' : '<p style="opacity:.6; font-size:.82rem; margin:0;">Atividades ainda em produção pela coordenação.</p>') +
+        '</div>' +
+      '</details>';
+    }).join('');
+    return '<details class="dyse-collapsible manage-course-block" open>' +
+      '<summary class="manage-course-title"><span>A1 · Atividades Complementares <span class="pill-count">' + aulas.length + ' aulas</span></span><span class="chevron">›</span></summary>' +
+      '<div class="manage-course-body">' + (rowsHtml || '<p style="opacity:.6;">Nenhuma aula cadastrada ainda.</p>') + '</div>' +
+    '</details>';
+  }
+
+  window.carregarA1Aula = async function(numeroAula){
+    const body = document.getElementById('a1AulaBody' + numeroAula);
+    const manifesto = AULAS_MANIFEST[numeroAula];
+    if(!body || body.dataset.loaded || !manifesto) return;
+    body.dataset.loaded = '1';
+
+    const [publishedMap, materiaActivities] = await Promise.all([
+      dyseGetPublishedMap('a1', numeroAula),
+      dyseListMateriaActivities('a1', numeroAula)
+    ]);
+    const releasedMap = {};
+    materiaActivities.forEach(ma => releasedMap[ma.activity_num] = ma.released_to_teachers);
+
+    body.innerHTML = manifesto.map(a => {
+      const isOn = !!publishedMap[a.num];
+      const isReleased = releasedMap[a.num] !== undefined ? releasedMap[a.num] : true;
+      if(!isReleased){
+        return '<div class="manage-row">' +
+          '<div class="info"><b>' + String(a.num).padStart(2,'0') + '.</b> ' + escapeHtmlLocal(a.titulo) + '</div>' +
+          '<div class="manage-row-actions"><span style="font-size:.76rem; color:var(--seal-soft); opacity:.75;">🔒 Aguardando liberação da gestão</span></div>' +
+        '</div>';
+      }
+      return '<div class="manage-row">' +
+        '<div class="info"><b>' + String(a.num).padStart(2,'0') + '.</b> ' + escapeHtmlLocal(a.titulo) + '</div>' +
+        '<div class="manage-row-actions">' +
+          '<a class="btn btn-preview" href="' + dyseUrlAtividadeA1(numeroAula, a.num) + '" target="_blank" rel="noopener">👁 Visualizar</a>' +
+          '<label class="dyse-toggle">' +
+            '<input type="checkbox" ' + (isOn ? 'checked' : '') + ' onchange="togglePublishA1(' + numeroAula + ', ' + a.num + ', this.checked)">' +
+            '<span class="slider"></span>' +
+          '</label>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  };
+
+  async function togglePublishA1(aula, activityNum, isChecked){
+    await dyseSetPublished('a1', activityNum, isChecked, aula);
   }
 
   (async () => {

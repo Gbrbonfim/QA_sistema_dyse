@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 06 · Atividade 14 — Revisão: Quiz Rápido</title>
+<meta name="description" content="Atividade complementar A1 — Aula 06 — quiz de revisão geral. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 06</span>
+    <h1 class="title">Revisão — Quiz Rápido</h1>
+    <p class="subtitle">Um mix rápido de tudo que você praticou na Aula 06: check-in, alfabeto e vocabulário de hotel.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 14/15</span>
+      <span class="pill">Revisão</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">⭐</div>
+      <div>
+        <div class="card-eyebrow">Quiz de revisão</div>
+        <h2 class="card-title">5 perguntas rápidas</h2>
+      </div>
+    </div>
+
+    <div id="quizContainer"></div>
+
+    <p class="feedback" id="scoreMsg"></p>
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Responda todas pra concluir</button>
+    </div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:6, numero:14, totalAula:15, titulo:"Revisão — Quiz Rápido" };
+DyseAtividade.boot(ATIVIDADE);
+
+const PERGUNTAS = [
+  { pergunta:'The person who works at the front desk is the...', opcoes:['guest','receptionist','driver','manager'], certa:1 },
+  { pergunta:'You use it to open your hotel room door.', opcoes:['passport','ticket','key','reservation'], certa:2 },
+  { pergunta:'Which is correct?', opcoes:["What's your name?","Your name what's?"], certa:0 },
+  { pergunta:'How do you say the letter "G" in English?', opcoes:['"gee"','"guh"','"jee"','"gay"'], certa:0 },
+  { pergunta:'How do you say the letter "W" in English?', opcoes:['"vee"','"double-u"','"wuh"','"oo"'], certa:1 }
+];
+let respondidas = 0;
+let acertos = 0;
+const detalhes = [];
+
+function renderQuiz(){
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = PERGUNTAS.map((p, i) =>
+    '<div class="grammar-q">' +
+      '<div class="qtext">' + (i+1) + '. ' + p.pergunta + '</div>' +
+      '<div class="mcq-options">' +
+        p.opcoes.map((op, j) =>
+          '<label class="mcq-option" id="q' + i + 'o' + j + '"><input type="radio" name="q' + i + '" onclick="responder(' + i + ',' + j + ')">' + op + '</label>'
+        ).join('') +
+      '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function responder(i, escolhida){
+  const p = PERGUNTAS[i];
+  document.getElementById('q' + i + 'o' + escolhida).classList.add(escolhida === p.certa ? 'correct' : 'wrong');
+  if(escolhida !== p.certa) document.getElementById('q' + i + 'o' + p.certa).classList.add('correct');
+  document.querySelectorAll('input[name="q' + i + '"]').forEach(el => el.disabled = true);
+  const acertou = escolhida === p.certa;
+  if(acertou) acertos++;
+  detalhes.push((i+1) + '. ' + p.pergunta + ' → ' + p.opcoes[escolhida] + (acertou ? ' ✅' : ' ❌ (correto: ' + p.opcoes[p.certa] + ')'));
+  respondidas++;
+  if(respondidas === PERGUNTAS.length){
+    const msg = document.getElementById('scoreMsg');
+    msg.textContent = 'Você acertou ' + acertos + ' de ' + PERGUNTAS.length + '.';
+    msg.classList.add('show', acertos >= PERGUNTAS.length - 1 ? 'ok' : 'bad');
+    const btn = document.getElementById('btnConcluir');
+    btn.disabled = false;
+    btn.textContent = 'Concluir atividade';
+  }
+}
+
+function finalizar(){
+  const resumo = acertos + '/' + PERGUNTAS.length + ' corretas (' + Math.round(acertos / PERGUNTAS.length * 100) + '%).';
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { acertos: acertos, total: PERGUNTAS.length });
+}
+
+renderQuiz();
+</script>
+</body>
+</html>

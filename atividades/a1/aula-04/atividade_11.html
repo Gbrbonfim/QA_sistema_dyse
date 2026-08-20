@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 04 · Atividade 11 — Speaking: Pergunta e Resposta</title>
+<meta name="description" content="Atividade complementar A1 — Aula 04 — prática oral testada de perguntas com to be interrogativo. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 04</span>
+    <h1 class="title">Pergunta e Resposta</h1>
+    <p class="subtitle">Ouça a pergunta modelo, depois ouça e repita a resposta curta em voz alta — o app confere sua resposta.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 11/15</span>
+      <span class="pill">Speaking</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">🎙️</div>
+      <div>
+        <div class="card-eyebrow">Prática oral testada</div>
+        <h2 class="card-title">Responda como no exemplo</h2>
+      </div>
+    </div>
+    <p class="card-instructions" id="micNotice">Use o Google Chrome pra melhor suporte de gravação. Se seu navegador não suportar, marque manualmente que praticou.</p>
+
+    <div id="frasesContainer"></div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Pratique as 3 respostas pra concluir</button>
+    </div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Seu progresso foi salvo. Você pode voltar e praticar de novo quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:4, numero:11, totalAula:15, titulo:"Speaking — Pergunta e Resposta" };
+DyseAtividade.boot(ATIVIDADE);
+
+const ITENS = [
+  { pergunta:'Are you from Brazil?', resposta:"Yes, I am. I'm from Brazil." },
+  { pergunta:'Is she a teacher?', resposta:"No, she isn't. She's a student." },
+  { pergunta:'Are they students?', resposta:"Yes, they are. They're students." }
+];
+const praticadas = new Set();
+const resultados = {};
+
+function renderFrases(){
+  document.getElementById('frasesContainer').innerHTML = ITENS.map((f, i) =>
+    '<div class="interview-block">' +
+      '<p style="font-size:.85rem; color:var(--seal-soft); margin-bottom:4px;">❓ ' + f.pergunta + '</p>' +
+      '<div class="btn-row">' +
+        '<button type="button" class="btn btn-audio" onclick="DyseAtividade.speak(\'' + f.pergunta.replace(/'/g, "\\'") + '\', null, 0.8)">🔊 Ouvir pergunta</button>' +
+      '</div>' +
+      '<p style="font-weight:700; font-size:1.05rem; margin:12px 0 4px;">Sua resposta: "' + f.resposta + '"</p>' +
+      '<div class="btn-row">' +
+        '<button type="button" class="btn btn-audio" onclick="DyseAtividade.speak(\'' + f.resposta.replace(/'/g, "\\'") + '\', null, 0.8)">🔊 Ouvir resposta</button>' +
+        '<button type="button" class="btn btn-secondary" id="micBtn' + i + '" onclick="falar(' + i + ')">🎙️ Falar</button>' +
+      '</div>' +
+      '<p class="recog-feedback" id="feedback' + i + '"></p>' +
+      '<label style="display:flex; align-items:center; gap:8px; font-size:.86rem; font-weight:600; cursor:pointer; margin-top:10px;">' +
+        '<input type="checkbox" id="manual' + i + '" style="accent-color:var(--amaranth); width:18px; height:18px;" onchange="marcarManual(' + i + ', this.checked)"> Pratiquei essa resposta' +
+      '</label>' +
+    '</div>'
+  ).join('');
+}
+
+function falar(i){
+  const btn = document.getElementById('micBtn' + i);
+  const feedback = document.getElementById('feedback' + i);
+  btn.disabled = true;
+  btn.textContent = '🎙️ Ouvindo...';
+  DyseAtividade.iniciarReconhecimento(ITENS[i].resposta, {
+    onResult: (ouvido, similaridade) => {
+      btn.disabled = false;
+      btn.textContent = '🎙️ Falar de novo';
+      feedback.classList.add('show');
+      if(similaridade >= 50){
+        feedback.className = 'recog-feedback show ok';
+        feedback.textContent = '✅ Muito bem! (' + similaridade + '% parecido)';
+        resultados[i] = { modo:'reconhecimento', ouvido: ouvido, similaridade: similaridade };
+        marcar(i, true);
+        document.getElementById('manual' + i).checked = true;
+      }else{
+        feedback.className = 'recog-feedback show bad';
+        feedback.textContent = '🔁 Quase lá — tente de novo. Entendi: "' + ouvido + '"';
+      }
+    },
+    onError: (erro) => {
+      btn.disabled = false;
+      btn.textContent = '🎙️ Falar';
+      feedback.className = 'recog-feedback show info';
+      feedback.textContent = erro === 'unsupported'
+        ? 'Seu navegador não suporta gravação de voz — sem problema, marque manualmente abaixo que praticou.'
+        : 'Não consegui ouvir. Tente de novo ou marque manualmente que praticou.';
+    }
+  });
+}
+
+function marcarManual(i, checked){
+  if(checked && !resultados[i]) resultados[i] = { modo:'manual' };
+  if(!checked) delete resultados[i];
+  marcar(i, checked);
+}
+
+function marcar(i, praticado){
+  if(praticado) praticadas.add(i); else praticadas.delete(i);
+  const btn = document.getElementById('btnConcluir');
+  if(praticadas.size === ITENS.length){
+    btn.disabled = false;
+    btn.textContent = 'Concluir atividade';
+  }else{
+    btn.disabled = true;
+    btn.textContent = 'Pratique as ' + ITENS.length + ' respostas pra concluir';
+  }
+}
+
+function finalizar(){
+  const resumo = 'Praticou ' + praticadas.size + '/' + ITENS.length + ' respostas.';
+  const detalhes = ITENS.map((f, i) => {
+    const r = resultados[i];
+    if(!r) return (i+1) + '. "' + f.pergunta + '" → resposta "' + f.resposta + '" não praticada';
+    if(r.modo === 'reconhecimento') return (i+1) + '. "' + f.pergunta + '" → resposta reconhecida: "' + r.ouvido + '" (' + r.similaridade + '% parecido) ✅';
+    return (i+1) + '. "' + f.pergunta + '" → resposta marcada manualmente (reconhecimento de voz indisponível)';
+  });
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { praticadas: praticadas.size, total: ITENS.length });
+}
+
+renderFrases();
+</script>
+</body>
+</html>

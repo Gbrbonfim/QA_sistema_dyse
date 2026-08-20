@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DYSE · A1 · Aula 01 · Atividade 13 — Vídeo: Erros Comuns de Pronúncia</title>
-<meta name="description" content="Atividade complementar A1 — Aula 01 — vídeo interativo sobre erros comuns de pronúncia. Do You Speak English (DYSE).">
+<title>DYSE · A1 · Aula 01 · Atividade 13 — Speaking: Ouça e Repita</title>
+<meta name="description" content="Atividade complementar A1 — Aula 01 — prática oral com reconhecimento de voz. Do You Speak English (DYSE).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
@@ -19,12 +19,12 @@
       <span class="mark">👁 dyse</span>
       <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
     </div>
-    <span class="eyebrow-badge">A1 · Aula 01 · Vídeo</span>
-    <h1 class="title">Erros Comuns de Pronúncia</h1>
-    <p class="subtitle">Vídeo com exemplos de erros que brasileiros costumam cometer ao se apresentar — e como corrigir.</p>
+    <span class="eyebrow-badge">A1 · Aula 01</span>
+    <h1 class="title">Ouça e Repita</h1>
+    <p class="subtitle">Ouça cada frase, depois clique em "Falar" e repita em voz alta. O app te dá um feedback na hora.</p>
     <div class="hero-meta">
       <span class="pill">Atividade 13/15</span>
-      <span class="pill">Foco fonético</span>
+      <span class="pill">Speaking</span>
     </div>
     <div class="dyse-auth-bar" id="authBar"></div>
   </div>
@@ -33,29 +33,24 @@
 <div class="wrap" style="margin-top:26px;">
   <section class="card">
     <div class="card-head">
-      <div class="icon-badge">🎬</div>
+      <div class="icon-badge">🎙️</div>
       <div>
-        <div class="card-eyebrow">Vídeo interativo</div>
-        <h2 class="card-title">Identifique e corrija</h2>
+        <div class="card-eyebrow">Ouça e repita</div>
+        <h2 class="card-title">3 frases curtas</h2>
       </div>
     </div>
-    <p class="card-instructions">O vídeo vai pausar sozinho — pratique o som em voz alta antes de continuar.</p>
+    <p class="card-instructions" id="micNotice">Use o Google Chrome no computador ou celular pra gravar sua voz. Se seu navegador não suportar, você ainda pode marcar manualmente que praticou.</p>
 
-    <div id="videoWrap"></div>
-    <div class="video-pause-card" id="pausaCard">
-      <div class="tag">Pausa pra praticar</div>
-      <p id="pausaPergunta" style="font-size:1.05rem; font-weight:700;"></p>
-      <div class="btn-row">
-        <button type="button" class="btn btn-secondary" id="btnContinuarPausa">Já pratiquei — continuar</button>
-      </div>
-    </div>
+    <div id="frasesContainer"></div>
 
     <div class="btn-row">
-      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Assista até o fim pra concluir</button>
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Pratique as 3 frases pra concluir</button>
     </div>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
     <div class="done-banner" id="doneBanner">
       <h2>Atividade concluída!</h2>
-      <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
+      <p>Seu progresso foi salvo. Você pode voltar e praticar de novo quando quiser.</p>
     </div>
   </section>
 </div>
@@ -69,54 +64,97 @@
 <script src="/assets/dyse-auth.js"></script>
 <script src="/atividades/a1/engine.js"></script>
 <script>
-const ATIVIDADE = { course:'a1', aula:1, numero:13, totalAula:15, titulo:'Vídeo — Erros Comuns de Pronúncia' };
+const ATIVIDADE = { course:'a1', aula:1, numero:13, totalAula:15, titulo:'Speaking — Ouça e Repita' };
 DyseAtividade.boot(ATIVIDADE);
 
-// Vídeo real, escolhido por busca (pesquisado no YouTube em 2026-08-18):
-// "How to Say the TH Sound | American English Pronunciation Lesson" —
-// aula de pronúncia focada exatamente no erro mapeado pra esta aula
-// (trocar o "th" por /t/ ou /f/). Sem acesso pra assistir o vídeo inteiro
-// nem checar a duração exata aqui — tempos de pausa abaixo são estimativa
-// conservadora, ajuste depois de assistir uma vez.
-const VIDEO_ID = "BBSU6A-CRx0";
-
-const PAUSAS = [
-  { tempo: 20, frase: 'Pause e repita: "thank you" — língua entre os dentes, sem virar "tank you" nem "fank you".' },
-  { tempo: 55, frase: 'Pause e repita: "three things" — repita bem devagar, sentindo a língua tocar os dentes.' }
+/* Pré-A1: frases de 3-5 palavras, já praticadas na aula inteira. */
+const FRASES = [
+  { texto:'Hi! Nice to meet you.' },
+  { texto:"I'm from Brazil." },
+  { texto:'Thank you very much.' }
 ];
-let pausasFeitas = 0;
+const praticadas = new Set();
+const resultados = {};
 
-function mostrarPausa(frase, continuar){
-  document.getElementById('pausaPergunta').textContent = frase;
-  document.getElementById('pausaCard').classList.add('show');
-  document.getElementById('btnContinuarPausa').onclick = () => {
-    document.getElementById('pausaCard').classList.remove('show');
-    continuar();
-    verificarFim();
-  };
+function renderFrases(){
+  document.getElementById('frasesContainer').innerHTML = FRASES.map((f, i) =>
+    '<div class="interview-block">' +
+      '<p style="font-weight:700; font-size:1.05rem; margin-bottom:10px;">' + f.texto + '</p>' +
+      '<div class="btn-row">' +
+        '<button type="button" class="btn btn-audio" onclick="DyseAtividade.speak(\'' + f.texto.replace(/'/g, "\\'") + '\', null, 0.8)">🔊 Ouvir</button>' +
+        '<button type="button" class="btn btn-secondary" id="micBtn' + i + '" onclick="falar(' + i + ')">🎙️ Falar</button>' +
+      '</div>' +
+      '<p class="recog-feedback" id="feedback' + i + '"></p>' +
+      '<label style="display:flex; align-items:center; gap:8px; font-size:.86rem; font-weight:600; cursor:pointer; margin-top:10px;">' +
+        '<input type="checkbox" id="manual' + i + '" style="accent-color:var(--amaranth); width:18px; height:18px;" onchange="marcarManual(' + i + ', this.checked)"> Pratiquei essa frase' +
+      '</label>' +
+    '</div>'
+  ).join('');
 }
 
-function verificarFim(){
-  pausasFeitas++;
-  if(pausasFeitas >= PAUSAS.length){
-    const btn = document.getElementById('btnConcluir');
+function falar(i){
+  const btn = document.getElementById('micBtn' + i);
+  const feedback = document.getElementById('feedback' + i);
+  btn.disabled = true;
+  btn.textContent = '🎙️ Ouvindo...';
+  DyseAtividade.iniciarReconhecimento(FRASES[i].texto, {
+    onResult: (ouvido, similaridade) => {
+      btn.disabled = false;
+      btn.textContent = '🎙️ Falar de novo';
+      feedback.classList.add('show');
+      if(similaridade >= 50){
+        feedback.className = 'recog-feedback show ok';
+        feedback.textContent = '✅ Muito bem! (' + similaridade + '% parecido)';
+        resultados[i] = { modo: 'reconhecimento', ouvido: ouvido, similaridade: similaridade };
+        marcar(i, true);
+        document.getElementById('manual' + i).checked = true;
+      }else{
+        feedback.className = 'recog-feedback show bad';
+        feedback.textContent = '🔁 Quase lá — tente de novo. Entendi: "' + ouvido + '"';
+      }
+    },
+    onError: (erro) => {
+      btn.disabled = false;
+      btn.textContent = '🎙️ Falar';
+      feedback.className = 'recog-feedback show info';
+      feedback.textContent = erro === 'unsupported'
+        ? 'Seu navegador não suporta gravação de voz — sem problema, marque manualmente abaixo que praticou.'
+        : 'Não consegui ouvir. Tente de novo ou marque manualmente que praticou.';
+    }
+  });
+}
+
+function marcarManual(i, checked){
+  if(checked && !resultados[i]) resultados[i] = { modo: 'manual' };
+  if(!checked) delete resultados[i];
+  marcar(i, checked);
+}
+
+function marcar(i, praticado){
+  if(praticado) praticadas.add(i); else praticadas.delete(i);
+  const btn = document.getElementById('btnConcluir');
+  if(praticadas.size === FRASES.length){
     btn.disabled = false;
     btn.textContent = 'Concluir atividade';
+  }else{
+    btn.disabled = true;
+    btn.textContent = 'Pratique as ' + FRASES.length + ' frases pra concluir';
   }
 }
 
-DyseAtividade.montarVideoComPausas('videoWrap', VIDEO_ID, PAUSAS.map(p => ({
-  tempo: p.tempo,
-  aoPausar: (continuar) => mostrarPausa(p.frase, continuar)
-})));
-if(!VIDEO_ID){
-  document.getElementById('btnConcluir').disabled = false;
-  document.getElementById('btnConcluir').textContent = 'Concluir atividade';
+function finalizar(){
+  const resumo = 'Praticou ' + praticadas.size + '/' + FRASES.length + ' frases.';
+  const detalhes = FRASES.map((f, i) => {
+    const r = resultados[i];
+    if(!r) return (i+1) + '. "' + f.texto + '" → não praticada';
+    if(r.modo === 'reconhecimento') return (i+1) + '. "' + f.texto + '" → reconhecido: "' + r.ouvido + '" (' + r.similaridade + '% parecido) ✅';
+    return (i+1) + '. "' + f.texto + '" → marcada manualmente (reconhecimento de voz indisponível)';
+  });
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, detalhes);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { praticadas: praticadas.size, total: FRASES.length });
 }
 
-function finalizar(){
-  DyseAtividade.concluir(ATIVIDADE, 'Vídeo "How to Say the TH Sound" assistido, com ' + pausasFeitas + '/' + PAUSAS.length + ' pausas de prática feitas.', { pausasFeitas: pausasFeitas, total: PAUSAS.length });
-}
+renderFrases();
 </script>
 </body>
 </html>

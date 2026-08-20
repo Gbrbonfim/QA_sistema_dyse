@@ -1907,6 +1907,150 @@ $$;
 
 grant execute on function public.minhas_aulas_registradas(text) to authenticated;
 
+-- ----------------------------------------------------------------------
+-- 15) ATIVIDADES POR AULA — rework do módulo de atividades complementares
+--     (piloto A1). Até aqui, "published_activities"/"materia_activities"/
+--     "activity_results" identificavam uma atividade só por
+--     (course, activity_num) — funcionava enquanto só existia a Aula 01 do
+--     A1, mas colide assim que a Aula 02 é cadastrada (ambas teriam uma
+--     "activity_num=1", "activity_num=2"...). A coluna "aula" abaixo
+--     resolve isso; "default 1" faz o backfill sozinho (linhas existentes
+--     do A1 são todas da Aula 01; o TOEFL não tem conceito de aula — fica
+--     fixo em aula=1 pra sempre, é uma trilha linear de 16 atividades).
+-- ----------------------------------------------------------------------
+
+-- 15.1) published_activities — liberação visível pro aluno
+alter table public.published_activities add column if not exists aula int not null default 1;
+alter table public.published_activities drop constraint if exists published_activities_course_activity_num_key;
+alter table public.published_activities add constraint published_activities_course_aula_activity_num_key
+  unique (course, aula, activity_num);
+create index if not exists idx_published_activities_course_aula on public.published_activities (course, aula);
+
+-- 15.2) materia_activities — liberação gestão→professor (mesmo problema, mesma solução)
+alter table public.materia_activities add column if not exists aula int not null default 1;
+alter table public.materia_activities drop constraint if exists materia_activities_pkey;
+alter table public.materia_activities add constraint materia_activities_pkey primary key (materia_slug, aula, activity_num);
+
+-- Atualiza a função de checagem (usada pela policy de published_activities
+-- logo abaixo) pra levar "aula" em conta. "check_aula int default 1" evita
+-- quebrar qualquer chamada antiga que ainda não passe esse argumento.
+create or replace function public.activity_released_to_teachers(check_course text, check_activity_num int, check_aula int default 1)
+returns boolean
+language sql
+stable
+security definer set search_path = public
+as $$
+  select coalesce(
+    (select released_to_teachers from public.materia_activities
+     where materia_slug = check_course and activity_num = check_activity_num and aula = check_aula),
+    true
+  );
+$$;
+
+drop policy if exists "professoras podem liberar/ocultar atividades" on public.published_activities;
+create policy "professoras podem liberar/ocultar atividades"
+  on public.published_activities for all
+  using (public.is_teacher())
+  with check (public.is_teacher() and public.activity_released_to_teachers(course, activity_num, aula));
+
+-- 15.3) activity_results — mesma coluna "aula" + modelo de progresso de 5 estados.
+--       "Bloqueada"/"Disponível" nunca são gravados aqui — são sempre calculados
+--       no cliente comparando published_activities com a ausência/presença de
+--       linha nesta tabela (evita uma segunda fonte de verdade que poderia
+--       desincronizar). Só os 3 estados que dependem de uma AÇÃO do aluno
+--       viram uma linha de verdade: em_andamento (autosave parcial),
+--       concluida (clicou "Concluir") e pulada (clicou "Pular atividade").
+alter table public.activity_results add column if not exists aula int not null default 1;
+alter table public.activity_results drop constraint if exists activity_results_user_course_activity_key;
+alter table public.activity_results add constraint activity_results_user_course_aula_activity_key
+  unique (user_id, course, aula, activity_num);
+create index if not exists idx_activity_results_course_aula on public.activity_results (course, aula);
+
+alter table public.activity_results add column if not exists status text not null default 'em_andamento';
+alter table public.activity_results drop constraint if exists activity_results_status_check;
+alter table public.activity_results add constraint activity_results_status_check
+  check (status in ('em_andamento','concluida','pulada'));
+alter table public.activity_results add column if not exists skipped_at timestamptz;
+
+-- Backfill: linhas que já existiam antes desta coluna existir e já
+-- representam uma atividade CONCLUÍDA (não só iniciada) — inferido do
+-- formato de "meta" que cada engine já gravava. Sem isso, todo progresso
+-- salvo antes de hoje apareceria como "em andamento" na nova tela.
+update public.activity_results set status = 'concluida'
+where status = 'em_andamento' and (
+  (meta ? 'acertos') -- padrão A1 (quiz simples: {acertos, total})
+  or (
+    meta->'progress' is not null
+    and coalesce((meta->'progress'->>'reading')::boolean, false)
+    and coalesce((meta->'progress'->>'listening')::boolean, false)
+    and coalesce((meta->'progress'->>'writing')::boolean, false)
+    and coalesce((meta->'progress'->>'speaking')::boolean, false)
+    and coalesce((meta->'progress'->>'grammar')::boolean, false)
+  )
+);
+
+-- 15.4) Segurança na gravação — reforço no banco (não só na tela): mesmo
+--       que alguém chame a API do Supabase direto pelo console do
+--       navegador tentando gravar progresso numa atividade que a
+--       professora não liberou, o Postgres rejeita. Professora/gestão
+--       continuam sem essa trava (mesma lógica de "revisar antes de
+--       liberar" que já existe em dyseRequirePublished).
+create or replace function public.enforce_activity_published()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if public.is_teacher() or public.is_admin() then
+    return new;
+  end if;
+  if not exists (
+    select 1 from public.published_activities pa
+    where pa.course = new.course and pa.aula = new.aula
+      and pa.activity_num = new.activity_num and pa.is_published = true
+  ) then
+    raise exception 'Atividade não liberada para este aluno.';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_enforce_activity_published on public.activity_results;
+create trigger trg_enforce_activity_published
+  before insert or update on public.activity_results
+  for each row execute procedure public.enforce_activity_published();
+
+-- 15.5) Currículo do TOEFL — só o suficiente pra ele aparecer como opção
+--       no Registro de Classe (mesma trava de "total_aulas preenchido"
+--       usada pelo A1, seção 12.1). 3 linhas de exemplo: a gestão adiciona
+--       o resto pela tela (botão "+ Adicionar aula" no modal de Material,
+--       gestao.html — funciona pra qualquer matéria, não só o TOEFL).
+update public.materias
+set total_aulas = coalesce(total_aulas, 3),
+    eixos_avaliacao = coalesce(eixos_avaliacao, '["Reading","Listening","Writing","Speaking","Grammar"]'::jsonb)
+where slug = 'toefl';
+
+insert into public.nivel_aulas (materia_slug, numero, topico, conteudo)
+values
+  ('toefl', 1, 'Rotina Diária (A2)', '{}'::jsonb),
+  ('toefl', 2, 'Viagens e Turismo (A2)', '{}'::jsonb),
+  ('toefl', 3, 'Alimentação e Saúde (B1)', '{}'::jsonb)
+on conflict (materia_slug, numero) do nothing;
+
+-- ----------------------------------------------------------------------
+-- 16) Ativar/desativar e excluir aula (modal de Material, gestao.html).
+--     "ativo=false" tira a aula das telas de USO (professora escolhendo
+--     aula pra registrar classe, aluno vendo o Material, catálogo de
+--     cursos) sem apagar nada — histórico (registros_classe, report cards)
+--     continua enxergando a aula normalmente, porque essas duas telas
+--     pedem "incluir inativas" explicitamente (ver dyseListNivelAulas).
+--     Excluir de verdade é bloqueado pelo próprio banco quando já existe
+--     registro_classe pra essa aula (nivel_aula_id ... on delete restrict,
+--     seção 12.4) — a tela mostra uma mensagem amigável nesse caso, em vez
+--     de deixar a exclusão "sumir" com histórico.
+-- ----------------------------------------------------------------------
+alter table public.nivel_aulas add column if not exists ativo boolean not null default true;
+
 -- ======================================================================
 -- PRONTO! Depois de rodar este script:
 --

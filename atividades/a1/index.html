@@ -21,7 +21,7 @@
     </div>
     <span class="eyebrow-badge">Curso A1</span>
     <h1 class="title">Atividades Complementares</h1>
-    <p class="subtitle">15 atividades por aula pra praticar o que você viu em sala — algumas com vídeo interativo. Escolha uma aula abaixo.</p>
+    <p class="subtitle">15 atividades por aula pra praticar o que você viu em sala — Reading, Listening, Writing, Speaking e Revisão. Clique numa aula pra abrir.</p>
     <div class="dyse-auth-bar" id="authBar"></div>
   </div>
 </div>
@@ -31,15 +31,11 @@
     <div class="card-head">
       <div class="icon-badge">📚</div>
       <div>
-        <div class="card-eyebrow">Aula 01</div>
-        <h2 class="card-title">Acolhimento — vocabulário de países, apresentação, pronúncia</h2>
+        <div class="card-eyebrow">Suas aulas</div>
+        <h2 class="card-title">Escolha uma aula</h2>
       </div>
     </div>
-    <div class="dash-grid" id="aula1Grid"></div>
-  </section>
-
-  <section class="card" style="border-top-color:var(--seal-soft);">
-    <p class="card-instructions" style="margin:0;">As atividades das aulas 02 a 44 ainda estão sendo produzidas pela coordenação. Elas aparecem aqui assim que forem publicadas.</p>
+    <div id="aulasAccordion"><p class="card-instructions" style="opacity:.6;">Carregando...</p></div>
   </section>
 </div>
 
@@ -50,55 +46,88 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/manifest.js"></script>
 <script>
-const ATIVIDADES_AULA1 = [
-  { num:1, titulo:'Vocabulário — Países e Nacionalidades', tipo:'padrao' },
-  { num:2, titulo:'Complete o Diálogo de Apresentação', tipo:'padrao' },
-  { num:3, titulo:'Pronúncia — Linking', tipo:'padrao' },
-  { num:4, titulo:'Vídeo — Apresentações ao Redor do Mundo', tipo:'video' },
-  { num:5, titulo:'Meu Cartão de Apresentação', tipo:'padrao' },
-  { num:6, titulo:'De Onde Você É?', tipo:'padrao' },
-  { num:7, titulo:'Vídeo — Sotaques e Países', tipo:'video' },
-  { num:8, titulo:'Monte a Pergunta', tipo:'padrao' },
-  { num:9, titulo:'Pronúncia — o som de "TH"', tipo:'padrao' },
-  { num:10, titulo:'Vídeo — Role-play de Apresentação', tipo:'video' },
-  { num:11, titulo:'Speaking — Grave sua Apresentação', tipo:'padrao' },
-  { num:12, titulo:'Leitura — Primeiro Dia de Aula', tipo:'padrao' },
-  { num:13, titulo:'Vídeo — Erros Comuns de Pronúncia', tipo:'video' },
-  { num:14, titulo:'Revisão — Quiz Rápido', tipo:'padrao' },
-  { num:15, titulo:'Vídeo — Prática Final: Apresente-se!', tipo:'video' }
-];
-
 (async () => {
   const session = await dyseRequireAuth();
   if(!session) return;
   dyseRenderAuthBar('authBar');
 
-  const [publishedSet, results, profile] = await Promise.all([
-    dyseGetPublishedSet('a1'),
+  const [aulas, publicadasRows, resultados, profile] = await Promise.all([
+    dyseListNivelAulas('a1'),
+    sb.from('published_activities').select('aula, activity_num, is_published').eq('course', 'a1').then(r => r.data || []),
     dyseListMyResults('a1'),
     dyseGetProfile(session)
   ]);
-  const doneSet = new Set(results.map(r => r.activity_num));
   const staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
 
-  const grid = document.getElementById('aula1Grid');
-  grid.innerHTML = ATIVIDADES_AULA1.map(a => {
-    const liberada = staff || publishedSet.has(a.num);
-    const feita = doneSet.has(a.num);
-    const badge = feita ? '<span class="dash-badge done">Feita</span>' : (a.tipo === 'video' ? '<span class="dash-badge video">Vídeo</span>' : '');
-    return liberada
-      ? '<a class="dash-card" href="/atividades/a1/atividade_' + a.num + '.html">' + badge +
-          '<div class="n">' + String(a.num).padStart(2, '0') + '</div>' +
-          '<div class="t">' + a.titulo + '</div>' +
-          '<div class="l">Atividade ' + a.num + '/15</div>' +
-        '</a>'
-      : '<div class="dash-card" style="opacity:.5; cursor:default;">' +
-          '<div class="n">' + String(a.num).padStart(2, '0') + '</div>' +
-          '<div class="t">' + a.titulo + '</div>' +
-          '<div class="l">🔒 Ainda não liberada</div>' +
-        '</div>';
+  const publicadasPorAula = {};
+  publicadasRows.forEach(r => {
+    if(!r.is_published) return;
+    (publicadasPorAula[r.aula] = publicadasPorAula[r.aula] || new Set()).add(r.activity_num);
+  });
+  const resultadoPorAula = {};
+  resultados.forEach(r => {
+    (resultadoPorAula[r.aula] = resultadoPorAula[r.aula] || {})[r.activity_num] = r.status || 'em_andamento';
+  });
+
+  const accordion = document.getElementById('aulasAccordion');
+  if(!aulas.length){
+    accordion.innerHTML = '<p class="card-instructions" style="opacity:.6;">Nenhuma aula cadastrada ainda.</p>';
+    return;
+  }
+
+  accordion.innerHTML = aulas.map((aula, i) => {
+    const publicadasSet = publicadasPorAula[aula.numero] || new Set();
+    const liberadas = publicadasSet.size;
+    return '<details class="dyse-collapsible" id="aulaDet' + aula.numero + '"' + (i === 0 ? ' open' : '') + '>' +
+      '<summary onclick="setTimeout(() => carregarAula(' + aula.numero + '), 0)">' +
+        '<span class="summary-left"><span class="chevron">▸</span>Aula ' + String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlIndex(aula.topico) + '</span>' +
+        '<span class="dash-badge" style="background:var(--antique-soft); color:var(--seal-soft);">' + liberadas + '/15 liberadas</span>' +
+      '</summary>' +
+      '<div class="dyse-collapsible-body" id="aulaBody' + aula.numero + '"></div>' +
+    '</details>';
   }).join('');
+
+  function escapeHtmlIndex(s){
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  window.carregarAula = function(numeroAula){
+    const body = document.getElementById('aulaBody' + numeroAula);
+    if(!body || body.dataset.loaded) return;
+    body.dataset.loaded = '1';
+
+    const manifesto = AULAS_MANIFEST[numeroAula];
+    if(!manifesto){
+      body.innerHTML = '<p class="card-instructions" style="margin:0;">As atividades desta aula ainda estão sendo produzidas pela coordenação. Elas aparecem aqui assim que forem publicadas.</p>';
+      return;
+    }
+    const publicadasSet = publicadasPorAula[numeroAula] || new Set();
+    const statusPorNum = resultadoPorAula[numeroAula] || {};
+
+    body.innerHTML = '<div class="dash-grid">' + manifesto.map(a => {
+      const liberada = staff || publicadasSet.has(a.num);
+      const status = statusPorNum[a.num];
+      const badge = status === 'concluida' ? '<span class="dash-badge done">Feita</span>' : status === 'pulada' ? '<span class="dash-badge video">Pulada</span>' : '';
+      return liberada
+        ? '<a class="dash-card" href="' + dyseUrlAtividadeA1(numeroAula, a.num) + '">' + badge +
+            '<div class="n">' + String(a.num).padStart(2, '0') + '</div>' +
+            '<div class="t">' + a.titulo + '</div>' +
+            '<div class="l">Atividade ' + a.num + '/15</div>' +
+          '</a>'
+        : '<div class="dash-card" style="opacity:.5; cursor:default;">' +
+            '<div class="n">' + String(a.num).padStart(2, '0') + '</div>' +
+            '<div class="t">' + a.titulo + '</div>' +
+            '<div class="l">🔒 Ainda não liberada</div>' +
+          '</div>';
+    }).join('') + '</div>';
+  };
+
+  // Aula aberta por padrão (a primeira) já carrega direto, sem esperar o clique.
+  if(aulas[0]) carregarAula(aulas[0].numero);
 })();
 </script>
 </body>

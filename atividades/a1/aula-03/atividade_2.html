@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 03 · Atividade 02 — Complete o Diálogo: Isso Não É Verdade!</title>
+<meta name="description" content="Atividade complementar A1 — Aula 03 — to be negativo num diálogo de correção. Do You Speak English (DYSE).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/a1/estilo.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="brand-row">
+      <span class="mark">👁 dyse</span>
+      <a class="top-link" href="/atividades/a1/">← Voltar pras atividades</a>
+    </div>
+    <span class="eyebrow-badge">A1 · Aula 03</span>
+    <h1 class="title">Complete o Diálogo: Isso Não É Verdade!</h1>
+    <p class="subtitle">Preencha as lacunas com "isn't" ou "aren't" pra corrigir a informação errada.</p>
+    <div class="hero-meta">
+      <span class="pill">Atividade 02/15</span>
+      <span class="pill">Gramática</span>
+    </div>
+    <div class="dyse-auth-bar" id="authBar"></div>
+  </div>
+</div>
+
+<div class="wrap" style="margin-top:26px;">
+  <section class="card">
+    <div class="card-head">
+      <div class="icon-badge">💬</div>
+      <div>
+        <div class="card-eyebrow">Diálogo</div>
+        <h2 class="card-title">Fixing the facts</h2>
+      </div>
+    </div>
+    <p class="card-instructions">Escreva "isn't" ou "aren't" em cada lacuna. As respostas não diferenciam maiúscula/minúscula.</p>
+
+    <div class="passage-box">
+      <div class="dialogue-line"><div class="dialogue-speaker">A</div><div class="dialogue-text">Selena Gomez is Mexican, right?</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker b">B</div><div class="dialogue-text">No, she <input class="gap-input" style="width:80px;" id="g1" data-answer="isn't"> Mexican. She's American.</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker">A</div><div class="dialogue-text">Oh! And Messi and Ronaldo are Brazilian, right?</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker b">B</div><div class="dialogue-text">No, they <input class="gap-input" style="width:80px;" id="g2" data-answer="aren't"> Brazilian. Messi is Argentinian, and Ronaldo is Portuguese.</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker">A</div><div class="dialogue-text">And you? Are you Canadian?</div></div>
+      <div class="dialogue-line"><div class="dialogue-speaker b">B</div><div class="dialogue-text">No, I <input class="gap-input" style="width:110px;" id="g3" data-answer="'m not"> Canadian. I'm American.</div></div>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-secondary" onclick="corrigir()">Corrigir</button>
+      <button type="button" class="btn btn-primary" id="btnConcluir" onclick="finalizar()" disabled>Responda todas pra concluir</button>
+    </div>
+    <p class="feedback" id="scoreMsg"></p>
+    <div id="skipBtnSlot"></div>
+    <div id="doneBannerNext"></div>
+    <div class="done-banner" id="doneBanner">
+      <h2>Atividade concluída!</h2>
+      <p>Seu progresso foi salvo. Você pode voltar e refazer quando quiser.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="fmark">dyse</div>
+  <p>Do You Speak English? · Atividades Complementares A1</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/engine.js"></script>
+<script>
+const ATIVIDADE = { course:'a1', aula:3, numero:2, totalAula:15, titulo:'Complete o Diálogo — Isso Não É Verdade!' };
+DyseAtividade.boot(ATIVIDADE);
+
+const LACUNAS = [
+  "She ___ Mexican. She's American.",
+  "They ___ Brazilian.",
+  "I ___ Canadian."
+];
+
+function corrigir(){
+  const inputs = document.querySelectorAll('.gap-input');
+  let acertos = 0;
+  const detalhes = [];
+  inputs.forEach((el, i) => {
+    const resposta = el.value.trim();
+    const ok = resposta.toLowerCase() === el.dataset.answer;
+    el.classList.remove('correct', 'wrong');
+    el.classList.add(ok ? 'correct' : 'wrong');
+    if(ok) acertos++;
+    detalhes.push((i+1) + '. "' + LACUNAS[i] + '" → você escreveu "' + (resposta || '(em branco)') + '"' + (ok ? ' ✅' : ' ❌ (correto: "' + el.dataset.answer + '")'));
+  });
+  const msg = document.getElementById('scoreMsg');
+  msg.textContent = 'Você acertou ' + acertos + ' de ' + inputs.length + '.';
+  msg.classList.add('show', acertos === inputs.length ? 'ok' : 'bad');
+  document.getElementById('btnConcluir').disabled = false;
+  document.getElementById('btnConcluir').textContent = 'Concluir atividade';
+  window.__acertos = acertos;
+  window.__total = inputs.length;
+  window.__detalhes = detalhes;
+}
+
+function finalizar(){
+  const resumo = (window.__acertos || 0) + '/' + (window.__total || 3) + ' corretas.';
+  const relatorio = DyseAtividade.montarRelatorio(ATIVIDADE, resumo, window.__detalhes || []);
+  DyseAtividade.concluir(ATIVIDADE, relatorio, { acertos: window.__acertos, total: window.__total });
+}
+</script>
+</body>
+</html>
