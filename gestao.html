@@ -424,8 +424,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   <!-- ---------- TURMAS ---------- -->
   <div id="panelTurmas">
     <div class="dash-filter">
-      <input type="text" id="filterTurmaBusca" placeholder="Filtrar por nome da turma, descrição ou professor..." oninput="renderTurmasTable()">
       <button type="button" class="btn btn-primary" onclick="openTurmaCreateModal()">+ Criar turma</button>
+    </div>
+    <div class="dash-filter">
+      <input type="text" id="filterTurmaBusca" placeholder="Filtrar por nome da turma, descrição ou professor..." oninput="renderTurmasTable()">
     </div>
     <div id="turmasList"></div>
   </div>
@@ -481,18 +483,6 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       <span class="fin-only">O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui, pelo botão "Editar financeiro" de cada aluno.</span>
     </p>
     <div class="dash-filter">
-      <input type="text" id="filterAlunoName" placeholder="Filtrar por nome ou e-mail..." oninput="renderAlunosTable()">
-      <select id="filterAlunoTurma" onchange="renderAlunosTable()"><option value="">Todas as turmas</option></select>
-      <select id="filterAlunoModalidade" class="fin-only" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
-      <select id="filterAlunoProfessor" class="fin-only" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
-      <select id="filterAlunoSituacao" class="fin-only" onchange="renderAlunosTable()">
-        <option value="">Todas as situações</option>
-        <option value="ativo">Ativo</option>
-        <option value="pausado">Pausado</option>
-        <option value="cancelado">Cancelado</option>
-        <option value="encerrado">Encerrado</option>
-        <option value="sem-vinculo">Sem vínculo financeiro</option>
-      </select>
       <button type="button" class="btn btn-primary" onclick="openStudentCreateModal()">+ Cadastrar aluno</button>
       <button type="button" class="btn btn-primary" onclick="openCsvImportModal()">Importar CSV</button>
       <span class="info-tip" tabindex="0" aria-label="Como montar o CSV de importação">ⓘ
@@ -505,6 +495,20 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
           Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.
         </span>
       </span>
+    </div>
+    <div class="dash-filter">
+      <input type="text" id="filterAlunoName" placeholder="Filtrar por nome ou e-mail..." oninput="renderAlunosTable()">
+      <select id="filterAlunoTurma" onchange="renderAlunosTable()"><option value="">Todas as turmas</option></select>
+      <select id="filterAlunoModalidade" class="fin-only" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
+      <select id="filterAlunoProfessor" class="fin-only" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
+      <select id="filterAlunoSituacao" class="fin-only" onchange="renderAlunosTable()">
+        <option value="">Todas as situações</option>
+        <option value="ativo">Ativo</option>
+        <option value="pausado">Pausado</option>
+        <option value="cancelado">Cancelado</option>
+        <option value="encerrado">Encerrado</option>
+        <option value="sem-vinculo">Sem vínculo financeiro</option>
+      </select>
     </div>
     <div id="alunosTableWrap"></div>
   </div>
