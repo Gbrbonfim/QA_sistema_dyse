@@ -1719,7 +1719,8 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     }
 
     // Com acesso financeiro: agrupa em caixa suspensa por "Professor responsável".
-    // Quem não tem professor vinculado fica FORA das caixas, direto na tela.
+    // Quem não tem professor vinculado também fica numa caixa suspensa própria,
+    // fechada por padrão, mesmo padrão dos grupos por professor.
     const semProfessor = rows.filter(({ professor }) => !professor);
     const porProfessorId = {};
     rows.forEach(item => {
@@ -1730,7 +1731,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
     let html = '';
     if(semProfessor.length){
-      html += '<div class="report-section-head">Sem professor responsável (' + semProfessor.length + ')</div>' + renderAlunosTableHtml(semProfessor);
+      html += '<details class="dyse-collapsible">' +
+        '<summary><span class="summary-left">Sem professor responsável<span class="pill-count">' + semProfessor.length + '</span></span><span class="chevron">›</span></summary>' +
+        '<div class="dyse-collapsible-body">' + renderAlunosTableHtml(semProfessor) + '</div>' +
+      '</details>';
     }
     html += grupos.map(({ professor, itens }) =>
       '<details class="dyse-collapsible">' +
@@ -1790,7 +1794,12 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         ? turmasDoProf.map(t => {
             const alunosDaTurma = STUDENTS.filter(s => s.turma_id === t.id);
             const alunosHtml = alunosDaTurma.length
-              ? alunosDaTurma.map(s => '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.email || '') + '</span></div>').join('')
+              ? '<details class="dyse-collapsible dyse-collapsible-nested">' +
+                  '<summary><span class="summary-left">Alunos<span class="pill-count">' + alunosDaTurma.length + '</span></span><span class="chevron">›</span></summary>' +
+                  '<div class="dyse-collapsible-body">' +
+                    alunosDaTurma.map(s => '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.email || '') + '</span></div>').join('') +
+                  '</div>' +
+                '</details>'
               : '<p class="report-line" style="opacity:.6;">Nenhum aluno nesta turma.</p>';
             return '<details class="dyse-collapsible dyse-collapsible-nested">' +
               '<summary><span class="summary-left">' + escapeHtmlLocal(t.name) + '<span class="pill-count">' + alunosDaTurma.length + '</span></span><span class="chevron">›</span></summary>' +
