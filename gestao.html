@@ -67,7 +67,7 @@ body::before{
 .hero{
   background:var(--amaranth);
   color:var(--antique-soft);
-  padding:20px;
+  padding:20px 20px 30px;
   position:relative;
   overflow:hidden;
   border-bottom:6px solid var(--gamboge);
@@ -85,13 +85,12 @@ body::before{
   line-height:1;
 }
 .hero-inner{max-width:1280px; margin:0 auto; position:relative; z-index:2;}
-.brand-row{display:flex; align-items:center; margin-bottom:14px;}
+.brand-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 20px; margin-bottom:10px;}
 .brand-row .brand-logo{height:30px; width:auto; display:block;}
 
-.dyse-topline{display:flex; align-items:center; flex-wrap:wrap; gap:10px 20px;}
 .dyse-tagline{
   font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
-  opacity:.85; white-space:nowrap;
+  opacity:.85; margin-bottom:14px;
 }
 
 /* ---------- AUTH GATE / AUTH BAR ---------- */
@@ -406,11 +405,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   <div class="hero-inner">
     <div class="brand-row">
       <img src="assets/images/brand/dyse-logo-white.png" alt="DYSE" class="brand-logo">
-    </div>
-    <div class="dyse-topline">
-      <span class="dyse-tagline">Do You Speak English? &middot; Painel da Gestão</span>
       <div class="dyse-auth-bar" id="authBar"></div>
     </div>
+    <div class="dyse-tagline">Do You Speak English? &middot; Painel da Gestão</div>
     <div class="auth-tabs">
       <button type="button" class="auth-tab active" id="tabTurmas" onclick="showPanel('turmas')">Turmas</button>
       <button type="button" class="auth-tab" id="tabMaterias" onclick="showPanel('materias')">Matérias</button>
