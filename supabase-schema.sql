@@ -312,6 +312,11 @@ create table if not exists public.turmas (
   created_at timestamptz default now()
 );
 
+-- Capacidade máxima de alunos da turma — opcional (null = sem limite
+-- definido). Usada em gestao.html só pra calcular "X vagas"/"Sem vagas";
+-- não é reforçada no banco, é informativa mesmo.
+alter table public.turmas add column if not exists capacidade int;
+
 alter table public.turmas enable row level security;
 
 drop policy if exists "qualquer usuario logado ve as turmas" on public.turmas;

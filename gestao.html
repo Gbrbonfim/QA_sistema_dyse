@@ -311,6 +311,7 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
 }
 .filter-menu.open{display:block;}
 .filter-menu label{display:block; font-weight:700; font-size:.76rem; color:var(--seal); margin-bottom:6px;}
+.filter-menu label:not(:first-child){margin-top:12px;}
 .filter-menu select{
   width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:8px 10px;
   font-family:var(--font-body); font-size:.85rem;
@@ -330,38 +331,29 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
 .turma-main{flex:1 1 200px; min-width:0;}
 .turma-main .name{font-weight:700; color:var(--seal); font-size:.95rem;}
 .turma-main .meta{font-size:.8rem; color:var(--seal-soft); opacity:.75;}
-.turma-prof{display:flex; align-items:center; gap:10px; flex:1 1 200px; min-width:0;}
-.turma-prof-avatar{
-  flex:none; width:32px; height:32px; border-radius:50%; background:var(--antique-soft); color:var(--amaranth);
-  display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.72rem;
-}
-.turma-prof-name{font-size:.85rem; font-weight:600; color:var(--seal); line-height:1.2;}
-.turma-prof-role{font-size:.74rem; color:var(--seal-soft); opacity:.75;}
-.turma-count{
-  display:flex; align-items:center; gap:6px; font-size:.82rem; color:var(--seal-soft); flex:none;
-}
-.turma-count svg{width:16px; height:16px; opacity:.7;}
 .turma-badge{
   flex:none; font-size:.76rem; font-weight:800; padding:4px 12px; border-radius:999px;
 }
-.turma-kebab{position:relative; flex:none;}
-.turma-kebab-btn{
-  width:32px; height:32px; border-radius:50%; border:none; background:transparent; color:var(--seal-soft);
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
+.turma-badges{display:flex; align-items:center; gap:6px; flex-wrap:wrap; flex:none;}
+.turma-pill{
+  flex:none; font-size:.74rem; font-weight:700; padding:4px 11px; border-radius:999px;
+  background:var(--antique-soft); color:var(--seal-soft);
 }
-.turma-kebab-btn:hover{background:var(--antique-soft);}
-.turma-kebab-btn svg{width:18px; height:18px;}
-.turma-kebab-menu{
-  display:none; position:absolute; right:0; top:calc(100% + 4px); background:#fff; border-radius:var(--radius-sm);
-  box-shadow:var(--shadow-card); min-width:140px; z-index:15; overflow:hidden;
+.turma-students{flex:1 1 190px; min-width:0; font-size:.82rem; color:var(--seal-soft); display:flex; flex-direction:column; gap:4px;}
+.turma-students .empty{opacity:.65; font-style:italic;}
+.turma-student-chip{display:flex; align-items:center; gap:6px; min-width:0;}
+.turma-student-chip .avatar{
+  flex:none; width:22px; height:22px; border-radius:50%; background:var(--antique-soft); color:var(--amaranth);
+  display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:800;
 }
-.turma-kebab-menu.open{display:block;}
-.turma-kebab-menu button{
-  display:block; width:100%; text-align:left; padding:10px 16px; border:none; background:none; cursor:pointer;
-  font-family:var(--font-body); font-size:.85rem; font-weight:600; color:var(--seal);
+.turma-student-chip span:last-child{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.turma-actions{display:flex; align-items:center; gap:8px; flex:none;}
+.turma-group-avatar{
+  flex:none; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:.8rem;
 }
-.turma-kebab-menu button:hover{background:var(--antique-soft);}
-.turma-kebab-menu button.danger{color:var(--bad);}
+.turma-group-name{font-size:1rem; font-weight:700; color:var(--seal);}
+.turma-group-body{box-shadow:none; border:1px solid #f0e3d2;}
 
 /* ---------- ÍCONE DE INFORMAÇÃO COM TOOLTIP NO HOVER/FOCO ---------- */
 .info-tip{
@@ -624,6 +616,12 @@ body.dyse-modal-open{overflow:hidden;}
             <div class="filter-menu" id="turmaFilterMenu">
               <label>Nível</label>
               <select id="filterTurmaNivel" onchange="renderTurmasTable()"><option value="">Todos os níveis</option></select>
+              <label>Vagas</label>
+              <select id="filterTurmaVagas" onchange="renderTurmasTable()">
+                <option value="">Todas</option>
+                <option value="com-vagas">Com vagas</option>
+                <option value="sem-vagas">Sem vagas</option>
+              </select>
             </div>
           </div>
         </div>
@@ -831,6 +829,7 @@ body.dyse-modal-open{overflow:hidden;}
       <form class="gestao-form gestao-form-col" onsubmit="return handleCreateTurma(event)">
         <div class="gestao-field"><label>Nome da turma</label><input type="text" id="newTurmaName" placeholder="Ex: Turma A — Manhã" required></div>
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="newTurmaDesc" placeholder="Ex: Alunos do 3º ano, período da manhã"></div>
+        <div class="gestao-field"><label>Capacidade (opcional)</label><input type="number" id="newTurmaCapacidade" min="0" placeholder="Ex: 4"></div>
         <button type="submit" class="btn btn-primary">+ Criar turma</button>
       </form>
       <div class="auth-msg" id="turmaMsg"></div>
@@ -850,6 +849,7 @@ body.dyse-modal-open{overflow:hidden;}
       <form class="gestao-form gestao-form-col" onsubmit="return handleSaveTurmaEdit(event)">
         <div class="gestao-field"><label>Nome da turma</label><input type="text" id="turmaEditName" required></div>
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="turmaEditDesc"></div>
+        <div class="gestao-field"><label>Capacidade (opcional)</label><input type="number" id="turmaEditCapacidade" min="0" placeholder="Ex: 4"></div>
         <button type="submit" class="btn btn-primary">Salvar</button>
       </form>
       <div id="turmaModalBody" style="margin-top:22px;"></div>
@@ -1155,21 +1155,35 @@ body.dyse-modal-open{overflow:hidden;}
     sel.value = cur;
   }
 
+  /* ---------- TURMAS ----------
+     Agrupadas por professor responsável (mesmo padrão de caixa suspensa do
+     menu Professores) — dentro de cada grupo, cada turma aparece como uma
+     linha com nível/matérias/alunos e os botões Editar/Excluir sempre
+     visíveis (não escondidos atrás de menu). */
   function renderTurmasTable(){
     populateTurmaNivelFilter();
     const busca = (document.getElementById('filterTurmaBusca').value || '').trim().toLowerCase();
     const nivelFiltro = document.getElementById('filterTurmaNivel').value;
+    const vagasFiltro = document.getElementById('filterTurmaVagas').value;
 
     const enriquecidas = TURMAS.map(t => {
       const professoresDaTurma = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id)
         .map(tt => TEACHERS.find(p => p.id === tt.teacher_id))
         .filter(Boolean);
       const nivel = NIVEIS.find(n => TURMA_MATERIAS.some(tm => tm.turma_id === t.id && tm.materia_slug === n.slug));
-      return { t, professoresDaTurma, nivel };
+      const materiasCount = TURMA_MATERIAS.filter(tm => tm.turma_id === t.id).length;
+      const alunosDaTurma = STUDENTS.filter(s => s.turma_id === t.id);
+      // vagas só existe quando a turma tem capacidade definida — sem isso
+      // não dá pra saber se tem vaga ou não (ver campo "Capacidade" no
+      // criar/editar turma).
+      const vagas = (t.capacidade === null || t.capacidade === undefined) ? null : Math.max(0, t.capacidade - alunosDaTurma.length);
+      return { t, professoresDaTurma, nivel, materiasCount, alunosDaTurma, vagas };
     });
 
-    const turmasFiltradas = enriquecidas.filter(({ t, professoresDaTurma, nivel }) => {
+    const turmasFiltradas = enriquecidas.filter(({ t, professoresDaTurma, nivel, vagas }) => {
       if(nivelFiltro && (!nivel || nivel.slug !== nivelFiltro)) return false;
+      if(vagasFiltro === 'com-vagas' && !(vagas !== null && vagas > 0)) return false;
+      if(vagasFiltro === 'sem-vagas' && !(vagas !== null && vagas <= 0)) return false;
       if(!busca) return true;
       const alvo = [t.name, t.description, ...professoresDaTurma.map(p => p.full_name)].filter(Boolean).join(' ').toLowerCase();
       return alvo.includes(busca);
@@ -1181,54 +1195,76 @@ body.dyse-modal-open{overflow:hidden;}
     const container = document.getElementById('turmasList');
     if(!turmasFiltradas.length){
       container.innerHTML = '<div class="turmas-card-list"><p style="text-align:center; opacity:.6; padding:24px;">' +
-        (busca || nivelFiltro ? 'Nenhuma turma encontrada com esse filtro.' : 'Nenhuma turma criada ainda.') + '</p></div>';
+        (busca || nivelFiltro || vagasFiltro ? 'Nenhuma turma encontrada com esse filtro.' : 'Nenhuma turma criada ainda.') + '</p></div>';
       return;
     }
 
-    container.innerHTML = '<div class="turmas-card-list">' + turmasFiltradas.map(({ t, professoresDaTurma, nivel }) => {
-      const alunosDaTurma = STUDENTS.filter(s => s.turma_id === t.id);
-      const avatarColor = dyseColorForSlug(t.id, TURMA_AVATAR_COLORS);
-      const professor = professoresDaTurma[0];
-      const profExtra = professoresDaTurma.length > 1 ? ' +' + (professoresDaTurma.length - 1) : '';
-      const profInitials = professor
-        ? (professor.full_name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase()
-        : '—';
+    const semProfessor = turmasFiltradas.filter(x => !x.professoresDaTurma.length);
+    const porProfessorId = {};
+    turmasFiltradas.forEach(item => {
+      const professor = item.professoresDaTurma[0];
+      if(!professor) return;
+      (porProfessorId[professor.id] = porProfessorId[professor.id] || { professor, itens: [] }).itens.push(item);
+    });
+    const grupos = Object.values(porProfessorId).sort((a, b) => (a.professor.full_name || '').localeCompare(b.professor.full_name || ''));
+
+    let html = '';
+    if(semProfessor.length) html += renderTurmaGroupHtml(null, semProfessor);
+    html += grupos.map(({ professor, itens }) => renderTurmaGroupHtml(professor, itens)).join('');
+
+    container.innerHTML = html;
+  }
+
+  function renderTurmaGroupHtml(professor, itens){
+    const totalAlunos = itens.reduce((sum, x) => sum + x.alunosDaTurma.length, 0);
+    const avatarColor = professor ? dyseColorForSlug(professor.id, TURMA_AVATAR_COLORS) : { bg:'#e4d4c4', fg:'#6b5a45' };
+    const initials = professor
+      ? (professor.full_name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase()
+      : '—';
+
+    const rowsHtml = itens.map(({ t, nivel, materiasCount, alunosDaTurma, vagas }) => {
+      const avatarColorTurma = dyseColorForSlug(t.id, TURMA_AVATAR_COLORS);
       const nivelBadge = nivel ? dyseColorForSlug(nivel.slug, NIVEL_BADGE_COLORS) : null;
+      const vagasBadge = vagas === null ? '' :
+        (vagas > 0
+          ? '<span class="turma-badge" style="background:#eaf7ee; color:var(--ok);">' + vagas + ' vaga' + (vagas === 1 ? '' : 's') + '</span>'
+          : '<span class="turma-badge" style="background:#fbeceb; color:var(--bad);">Sem vagas</span>');
+      const studentsHtml = alunosDaTurma.length
+        ? alunosDaTurma.map(s => {
+            const si = (s.full_name || s.email || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || '?';
+            return '<div class="turma-student-chip"><span class="avatar">' + escapeHtmlLocal(si) + '</span><span>' + escapeHtmlLocal(s.full_name || s.email || '') + '</span></div>';
+          }).join('')
+        : '<span class="empty">Nenhum aluno nesta turma.</span>';
 
       return '<div class="turma-row">' +
-        '<div class="turma-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + TURMA_USERS_ICON + '</div>' +
+        '<div class="turma-avatar" style="background:' + avatarColorTurma.bg + '; color:' + avatarColorTurma.fg + ';">' + TURMA_USERS_ICON + '</div>' +
         '<div class="turma-main">' +
           '<div class="name">' + escapeHtmlLocal(t.name) + '</div>' +
           '<div class="meta">' + (t.description ? escapeHtmlLocal(t.description) : 'Sem descrição') + '</div>' +
         '</div>' +
-        '<div class="turma-prof">' +
-          '<div class="turma-prof-avatar">' + escapeHtmlLocal(profInitials) + '</div>' +
-          '<div>' +
-            '<div class="turma-prof-name">' + (professor ? escapeHtmlLocal(professor.full_name || '') + profExtra : 'Sem professor') + '</div>' +
-            (professor ? '<div class="turma-prof-role">Professor(a)</div>' : '') +
-          '</div>' +
+        '<div class="turma-badges">' +
+          '<span class="turma-pill">' + materiasCount + ' matéria' + (materiasCount === 1 ? '' : 's') + '</span>' +
+          '<span class="turma-pill">' + alunosDaTurma.length + ' aluno' + (alunosDaTurma.length === 1 ? '' : 's') + '</span>' +
+          (nivel ? '<span class="turma-badge" style="background:' + nivelBadge.bg + '; color:' + nivelBadge.fg + ';">' + escapeHtmlLocal(nivel.name) + '</span>' : '') +
+          vagasBadge +
         '</div>' +
-        '<div class="turma-count">' + TURMA_USERS_ICON + alunosDaTurma.length + ' aluno' + (alunosDaTurma.length === 1 ? '' : 's') + '</div>' +
-        (nivel ? '<span class="turma-badge" style="background:' + nivelBadge.bg + '; color:' + nivelBadge.fg + ';">' + escapeHtmlLocal(nivel.name) + '</span>' : '') +
-        '<div class="turma-kebab">' +
-          '<button type="button" class="turma-kebab-btn" onclick="toggleTurmaKebab(event, \'' + t.id + '\')">' +
-            '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>' +
-          '</button>' +
-          '<div class="turma-kebab-menu" id="turmaKebab-' + t.id + '">' +
-            '<button type="button" onclick="openTurmaEditModal(\'' + t.id + '\')">Editar</button>' +
-            '<button type="button" class="danger" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
-          '</div>' +
+        '<div class="turma-students">' + studentsHtml + '</div>' +
+        '<div class="turma-actions">' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="openTurmaEditModal(\'' + t.id + '\')">Editar</button>' +
+          '<button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
         '</div>' +
       '</div>';
-    }).join('') + '</div>';
-  }
+    }).join('');
 
-  function toggleTurmaKebab(event, turmaId){
-    event.stopPropagation();
-    const menu = document.getElementById('turmaKebab-' + turmaId);
-    const wasOpen = menu.classList.contains('open');
-    document.querySelectorAll('.turma-kebab-menu.open').forEach(m => m.classList.remove('open'));
-    if(!wasOpen) menu.classList.add('open');
+    return '<details class="dyse-collapsible">' +
+      '<summary><span class="summary-left">' +
+        '<span class="turma-group-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</span>' +
+        '<span class="turma-group-name">' + (professor ? escapeHtmlLocal(professor.full_name || '(sem nome)') : 'Sem professor responsável') + '</span>' +
+        '<span class="pill-count">' + itens.length + ' turma' + (itens.length === 1 ? '' : 's') + '</span>' +
+        '<span class="pill-count">' + totalAlunos + ' aluno' + (totalAlunos === 1 ? '' : 's') + '</span>' +
+      '</span><span class="chevron">›</span></summary>' +
+      '<div class="dyse-collapsible-body"><div class="turmas-card-list turma-group-body">' + rowsHtml + '</div></div>' +
+    '</details>';
   }
 
   let CURRENT_TURMA_EDIT_ID = null;
@@ -1240,6 +1276,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('turmaEditModalTitle').textContent = t.name;
     document.getElementById('turmaEditName').value = t.name || '';
     document.getElementById('turmaEditDesc').value = t.description || '';
+    document.getElementById('turmaEditCapacidade').value = (t.capacidade === null || t.capacidade === undefined) ? '' : t.capacidade;
     renderTurmaModalDetails(turmaId);
     document.getElementById('turmaEditModal').classList.add('open');
     document.getElementById('turmaEditModal').setAttribute('aria-hidden','false');
@@ -1258,8 +1295,10 @@ body.dyse-modal-open{overflow:hidden;}
     e.preventDefault();
     const name = document.getElementById('turmaEditName').value.trim();
     const description = document.getElementById('turmaEditDesc').value.trim();
+    const capacidadeRaw = document.getElementById('turmaEditCapacidade').value;
+    const capacidade = capacidadeRaw === '' ? null : parseInt(capacidadeRaw, 10);
     if(!name || !CURRENT_TURMA_EDIT_ID) return false;
-    const { error } = await dyseUpdateTurma(CURRENT_TURMA_EDIT_ID, { name, description: description || null });
+    const { error } = await dyseUpdateTurma(CURRENT_TURMA_EDIT_ID, { name, description: description || null, capacidade });
     if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
     TURMAS = await dyseListTurmas();
     renderTurmasTable();
@@ -1272,6 +1311,7 @@ body.dyse-modal-open{overflow:hidden;}
   function openTurmaCreateModal(){
     document.getElementById('newTurmaName').value = '';
     document.getElementById('newTurmaDesc').value = '';
+    document.getElementById('newTurmaCapacidade').value = '';
     document.getElementById('turmaMsg').className = 'auth-msg';
     document.getElementById('turmaMsg').textContent = '';
     document.getElementById('turmaCreateModal').classList.add('open');
@@ -1289,8 +1329,10 @@ body.dyse-modal-open{overflow:hidden;}
     e.preventDefault();
     const name = document.getElementById('newTurmaName').value.trim();
     const description = document.getElementById('newTurmaDesc').value.trim();
+    const capacidadeRaw = document.getElementById('newTurmaCapacidade').value;
+    const capacidade = capacidadeRaw === '' ? null : parseInt(capacidadeRaw, 10);
     if(!name) return false;
-    const { error } = await dyseCreateTurma(name, description || null);
+    const { error } = await dyseCreateTurma(name, description || null, capacidade);
     if(error){ flashMsg('turmaMsg', 'Não foi possível criar a turma: ' + error.message, false); return false; }
     TURMAS = await dyseListTurmas();
     renderTurmasTable();
@@ -3134,7 +3176,6 @@ body.dyse-modal-open{overflow:hidden;}
   document.addEventListener('click', () => {
     const menu = document.getElementById('turmaFilterMenu');
     if(menu) menu.classList.remove('open');
-    document.querySelectorAll('.turma-kebab-menu.open').forEach(m => m.classList.remove('open'));
   });
 
   (async () => {

@@ -420,8 +420,8 @@ async function dyseListTurmas(){
   return error ? [] : data;
 }
 
-async function dyseCreateTurma(name, description){
-  const { data, error } = await sb.from('turmas').insert({ name, description }).select('*').maybeSingle();
+async function dyseCreateTurma(name, description, capacidade){
+  const { data, error } = await sb.from('turmas').insert({ name, description, capacidade: capacidade || null }).select('*').maybeSingle();
   return { data, error };
 }
 
