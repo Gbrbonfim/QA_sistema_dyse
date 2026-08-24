@@ -399,24 +399,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   <!-- ---------- TURMAS ---------- -->
   <div id="panelTurmas">
-    <div class="gestao-card">
-      <div class="gestao-card-title">Nova turma</div>
-      <form class="gestao-form" onsubmit="return handleCreateTurma(event)">
-        <div class="gestao-field" style="flex:1 1 220px;">
-          <label>Nome da turma</label>
-          <input type="text" id="newTurmaName" placeholder="Ex: Turma A — Manhã" required>
-        </div>
-        <div class="gestao-field" style="flex:2 1 260px;">
-          <label>Descrição (opcional)</label>
-          <input type="text" id="newTurmaDesc" placeholder="Ex: Alunos do 3º ano, período da manhã">
-        </div>
-        <button type="submit" class="btn btn-primary">+ Criar turma</button>
-      </form>
-      <div class="auth-msg" id="turmaMsg"></div>
-    </div>
-
     <div class="dash-filter">
       <input type="text" id="filterTurmaBusca" placeholder="Filtrar por nome da turma, descrição ou professor..." oninput="renderTurmasTable()">
+      <button type="button" class="btn btn-primary" onclick="openTurmaCreateModal()">+ Criar turma</button>
     </div>
     <div id="turmasList"></div>
   </div>
@@ -657,6 +642,25 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     </div>
   </div>
 
+</div>
+
+<!-- Modal de criação de turma -->
+<div id="turmaCreateModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeTurmaCreateModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="turmaCreateModalTitle">
+    <div class="report-modal-header">
+      <h3 id="turmaCreateModalTitle">Nova turma</h3>
+      <button type="button" class="report-modal-close" onclick="closeTurmaCreateModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body">
+      <form class="gestao-form gestao-form-col" onsubmit="return handleCreateTurma(event)">
+        <div class="gestao-field"><label>Nome da turma</label><input type="text" id="newTurmaName" placeholder="Ex: Turma A — Manhã" required></div>
+        <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="newTurmaDesc" placeholder="Ex: Alunos do 3º ano, período da manhã"></div>
+        <button type="submit" class="btn btn-primary">+ Criar turma</button>
+      </form>
+      <div class="auth-msg" id="turmaMsg"></div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal de edição da turma (dados + matérias/professores/alunos) -->
@@ -996,6 +1000,22 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     return false;
   }
 
+  function openTurmaCreateModal(){
+    document.getElementById('newTurmaName').value = '';
+    document.getElementById('newTurmaDesc').value = '';
+    document.getElementById('turmaMsg').className = 'auth-msg';
+    document.getElementById('turmaMsg').textContent = '';
+    document.getElementById('turmaCreateModal').classList.add('open');
+    document.getElementById('turmaCreateModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeTurmaCreateModal(){
+    document.getElementById('turmaCreateModal').classList.remove('open');
+    document.getElementById('turmaCreateModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+  }
+
   async function handleCreateTurma(e){
     e.preventDefault();
     const name = document.getElementById('newTurmaName').value.trim();
@@ -1003,11 +1023,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     if(!name) return false;
     const { error } = await dyseCreateTurma(name, description || null);
     if(error){ flashMsg('turmaMsg', 'Não foi possível criar a turma: ' + error.message, false); return false; }
-    document.getElementById('newTurmaName').value = '';
-    document.getElementById('newTurmaDesc').value = '';
-    flashMsg('turmaMsg', 'Turma criada!', true);
     TURMAS = await dyseListTurmas();
     renderTurmasTable();
+    closeTurmaCreateModal();
     return false;
   }
 
@@ -2728,7 +2746,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   document.addEventListener('keydown', e => {
     if(e.key === 'Escape'){
-      closeTurmaEditModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal();
+      closeTurmaCreateModal(); closeTurmaEditModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal();
     }
   });
 
