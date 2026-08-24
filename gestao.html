@@ -318,6 +318,17 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
 }
 .result-count{font-size:.82rem; color:var(--seal-soft); opacity:.8; margin:0 0 12px;}
 
+.turma-status-chips{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
+.turma-status-chip{
+  display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:999px; border:2px solid #eee0cf;
+  background:#fff; font-weight:700; font-size:.85rem; color:var(--seal-soft); cursor:pointer; font-family:var(--font-body);
+}
+.turma-status-chip .count{
+  background:var(--antique-soft); color:var(--seal-soft); font-size:.74rem; font-weight:800; padding:2px 9px; border-radius:999px;
+}
+.turma-status-chip.active{background:var(--amaranth); border-color:var(--amaranth); color:#fff;}
+.turma-status-chip.active .count{background:rgba(255,255,255,.25); color:#fff;}
+
 /* ---------- LISTA DE TURMAS (cards) ---------- */
 .turmas-card-list{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); overflow:hidden;}
 .turma-row{
@@ -354,6 +365,29 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
 }
 .turma-group-name{font-size:1rem; font-weight:700; color:var(--seal);}
 .turma-group-body{box-shadow:none; border:1px solid #f0e3d2;}
+
+/* ---------- LISTA DE MATÉRIAS (cards) ---------- */
+.materias-card-list{display:flex; flex-direction:column; gap:14px;}
+.materia-card{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:20px 22px;}
+.materia-card-top{display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;}
+.materia-icon{
+  flex:none; width:56px; height:56px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center;
+}
+.materia-icon svg{width:26px; height:26px;}
+.materia-info{flex:1 1 220px; min-width:0;}
+.materia-slug-label{font-size:.66rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--seal-soft); opacity:.65; margin-right:6px;}
+.materia-name{font-size:1.2rem; font-weight:800; color:var(--seal); margin:4px 0 6px;}
+.materia-desc-label{font-size:.64rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--seal-soft); opacity:.55;}
+.materia-desc{font-size:.85rem; color:var(--seal-soft);}
+.materia-stats{display:flex; gap:12px; flex-wrap:wrap; flex:none;}
+.materia-stat-box{background:var(--antique-soft); border-radius:var(--radius-sm); padding:12px 16px; min-width:130px;}
+.materia-stat-box .top{display:flex; align-items:center; gap:8px; color:var(--seal-soft);}
+.materia-stat-box .top svg{width:16px; height:16px; flex:none;}
+.materia-stat-box b{display:block; font-size:1.05rem; color:var(--seal); font-weight:800; margin-top:2px;}
+.materia-stat-box .label{font-size:.72rem; color:var(--seal-soft); opacity:.85;}
+.materia-stat-bar{height:5px; border-radius:999px; background:#e9d9c5; overflow:hidden; margin-top:6px;}
+.materia-stat-bar span{display:block; height:100%; background:var(--amaranth);}
+.materia-card-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; padding-top:16px; border-top:1px solid #f6ece0;}
 
 /* ---------- ÍCONE DE INFORMAÇÃO COM TOOLTIP NO HOVER/FOCO ---------- */
 .info-tip{
@@ -616,33 +650,24 @@ body.dyse-modal-open{overflow:hidden;}
             <div class="filter-menu" id="turmaFilterMenu">
               <label>Nível</label>
               <select id="filterTurmaNivel" onchange="renderTurmasTable()"><option value="">Todos os níveis</option></select>
-              <label>Vagas</label>
-              <select id="filterTurmaVagas" onchange="renderTurmasTable()">
-                <option value="">Todas</option>
-                <option value="com-vagas">Com vagas</option>
-                <option value="sem-vagas">Sem vagas</option>
-              </select>
             </div>
           </div>
         </div>
+        <div class="turma-status-chips" id="turmaStatusChips"></div>
         <p class="result-count" id="turmasCount"></p>
         <div id="turmasList"></div>
       </div>
 
   <!-- ---------- MATÉRIAS ---------- -->
   <div id="panelMaterias" style="display:none;">
-    <table class="dash-table dash-table-stacked" id="materiasTable">
-      <thead>
-        <tr>
-          <th>Slug</th>
-          <th>Nome</th>
-          <th>Descrição</th>
-          <th>Turmas usando</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="materiasBody"></tbody>
-    </table>
+    <div class="search-filter-bar">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="filterMateriaBusca" placeholder="Buscar por matéria, slug ou descrição..." oninput="renderMateriasTable()">
+      </div>
+    </div>
+    <p class="result-count" id="materiasCount"></p>
+    <div id="materiasList"></div>
   </div>
 
   <!-- ---------- ALUNOS ---------- -->
@@ -1160,11 +1185,39 @@ body.dyse-modal-open{overflow:hidden;}
      menu Professores) — dentro de cada grupo, cada turma aparece como uma
      linha com nível/matérias/alunos e os botões Editar/Excluir sempre
      visíveis (não escondidos atrás de menu). */
+  let TURMA_STATUS_FILTER = 'todos'; // todos | ativos | com-vagas | sem-vagas
+
+  function setTurmaStatusFilter(v){
+    TURMA_STATUS_FILTER = v;
+    renderTurmasTable();
+  }
+
+  function renderTurmaStatusChips(enriquecidas){
+    // Contadores sempre calculados sobre TODAS as turmas (ignora busca/nível),
+    // pra funcionar como estatística rápida fixa, não como resultado do filtro atual.
+    const contagens = {
+      todos: enriquecidas.length,
+      ativos: enriquecidas.filter(x => x.alunosDaTurma.length > 0).length,
+      'com-vagas': enriquecidas.filter(x => x.vagas !== null && x.vagas > 0).length,
+      'sem-vagas': enriquecidas.filter(x => x.vagas !== null && x.vagas <= 0).length
+    };
+    const chips = [
+      { key:'todos', label:'Todos' },
+      { key:'ativos', label:'Ativos' },
+      { key:'com-vagas', label:'Com vagas' },
+      { key:'sem-vagas', label:'Sem vagas' }
+    ];
+    document.getElementById('turmaStatusChips').innerHTML = chips.map(c =>
+      '<button type="button" class="turma-status-chip' + (TURMA_STATUS_FILTER === c.key ? ' active' : '') + '" onclick="setTurmaStatusFilter(\'' + c.key + '\')">' +
+        c.label + '<span class="count">' + contagens[c.key] + '</span>' +
+      '</button>'
+    ).join('');
+  }
+
   function renderTurmasTable(){
     populateTurmaNivelFilter();
     const busca = (document.getElementById('filterTurmaBusca').value || '').trim().toLowerCase();
     const nivelFiltro = document.getElementById('filterTurmaNivel').value;
-    const vagasFiltro = document.getElementById('filterTurmaVagas').value;
 
     const enriquecidas = TURMAS.map(t => {
       const professoresDaTurma = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id)
@@ -1180,10 +1233,13 @@ body.dyse-modal-open{overflow:hidden;}
       return { t, professoresDaTurma, nivel, materiasCount, alunosDaTurma, vagas };
     });
 
-    const turmasFiltradas = enriquecidas.filter(({ t, professoresDaTurma, nivel, vagas }) => {
+    renderTurmaStatusChips(enriquecidas);
+
+    const turmasFiltradas = enriquecidas.filter(({ t, professoresDaTurma, nivel, vagas, alunosDaTurma }) => {
       if(nivelFiltro && (!nivel || nivel.slug !== nivelFiltro)) return false;
-      if(vagasFiltro === 'com-vagas' && !(vagas !== null && vagas > 0)) return false;
-      if(vagasFiltro === 'sem-vagas' && !(vagas !== null && vagas <= 0)) return false;
+      if(TURMA_STATUS_FILTER === 'ativos' && !(alunosDaTurma.length > 0)) return false;
+      if(TURMA_STATUS_FILTER === 'com-vagas' && !(vagas !== null && vagas > 0)) return false;
+      if(TURMA_STATUS_FILTER === 'sem-vagas' && !(vagas !== null && vagas <= 0)) return false;
       if(!busca) return true;
       const alvo = [t.name, t.description, ...professoresDaTurma.map(p => p.full_name)].filter(Boolean).join(' ').toLowerCase();
       return alvo.includes(busca);
@@ -1195,7 +1251,7 @@ body.dyse-modal-open{overflow:hidden;}
     const container = document.getElementById('turmasList');
     if(!turmasFiltradas.length){
       container.innerHTML = '<div class="turmas-card-list"><p style="text-align:center; opacity:.6; padding:24px;">' +
-        (busca || nivelFiltro || vagasFiltro ? 'Nenhuma turma encontrada com esse filtro.' : 'Nenhuma turma criada ainda.') + '</p></div>';
+        (busca || nivelFiltro || TURMA_STATUS_FILTER !== 'todos' ? 'Nenhuma turma encontrada com esse filtro.' : 'Nenhuma turma criada ainda.') + '</p></div>';
       return;
     }
 
@@ -1505,29 +1561,83 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   /* ---------- MATÉRIAS ---------- */
-  function renderMateriasTable(){
-    document.getElementById('materiasBody').innerHTML = MATERIAS.map(m => {
+  const MATERIA_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+  const MATERIA_TURMAS_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+  const MATERIA_ATIVIDADES_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>';
+
+  function materiaStatBox(icon, value, label, barPct){
+    return '<div class="materia-stat-box">' +
+      '<div class="top">' + icon + '<span>' + label + '</span></div>' +
+      '<b>' + value + '</b>' +
+      (barPct === null ? '' : '<div class="materia-stat-bar"><span style="width:' + Math.max(0, Math.min(100, barPct)) + '%;"></span></div>') +
+    '</div>';
+  }
+
+  async function renderMateriasTable(){
+    // Pra mostrar "X aulas com material cadastrado" real (não inventado),
+    // reaproveita o mesmo cache de nivel_aulas usado no Histórico acadêmico.
+    await garantirNivelAulasCache();
+
+    const busca = (document.getElementById('filterMateriaBusca').value || '').trim().toLowerCase();
+    const materiasFiltradas = MATERIAS.filter(m => {
+      if(!busca) return true;
+      const alvo = [m.slug, m.name, m.description].filter(Boolean).join(' ').toLowerCase();
+      return alvo.includes(busca);
+    });
+
+    document.getElementById('materiasCount').textContent =
+      materiasFiltradas.length + ' matéria' + (materiasFiltradas.length === 1 ? '' : 's') + ' encontrada' + (materiasFiltradas.length === 1 ? '' : 's');
+
+    const container = document.getElementById('materiasList');
+    if(!materiasFiltradas.length){
+      container.innerHTML = '<div class="materias-card-list"><p style="text-align:center; opacity:.6; padding:24px;">' +
+        (busca ? 'Nenhuma matéria encontrada com esse filtro.' : 'Nenhuma matéria cadastrada ainda.') + '</p></div>';
+      return;
+    }
+
+    container.innerHTML = '<div class="materias-card-list">' + materiasFiltradas.map(m => {
+      const avatarColor = dyseColorForSlug(m.slug, TURMA_AVATAR_COLORS);
       const turmaCount = TURMA_MATERIAS.filter(tm => tm.materia_slug === m.slug).length;
       const activities = MATERIA_ACTIVITY_NAMES[m.slug];
       const releasedCount = activities
         ? MATERIA_ACTIVITIES_DB.filter(ma => ma.materia_slug === m.slug && ma.released_to_teachers).length
         : 0;
+
+      const statsHtml =
+        materiaStatBox(MATERIA_TURMAS_ICON_SVG, turmaCount, 'turmas usando', null) +
+        (activities
+          ? materiaStatBox(MATERIA_ATIVIDADES_ICON_SVG, releasedCount + '/' + activities.length, 'atividades', (releasedCount / activities.length) * 100)
+          : '') +
+        (m.total_aulas
+          ? (() => {
+              const aulasComMaterial = Object.values(NIVEL_AULAS_POR_ID).filter(a => a.materia_slug === m.slug && a.material_url).length;
+              return materiaStatBox(MATERIA_ICON_SVG, aulasComMaterial + '/' + m.total_aulas, 'aulas com material', (aulasComMaterial / m.total_aulas) * 100);
+            })()
+          : '');
+
       const activitiesBtn = activities
-        ? '<button type="button" class="btn btn-ghost btn-sm btn-fixed" onclick="openMateriaModal(\'' + m.slug + '\')">Atividades (' + releasedCount + '/' + activities.length + ')</button>'
+        ? '<button type="button" class="btn btn-primary btn-sm" onclick="openMateriaModal(\'' + m.slug + '\')">Atividades →</button>'
         : '';
       const materialBtn = m.total_aulas
-        ? '<button type="button" class="btn btn-ghost btn-sm btn-fixed" onclick="openCurriculoModal(\'' + m.slug + '\')">Material (' + m.total_aulas + ' aulas)</button>'
+        ? '<button type="button" class="btn btn-ghost btn-sm" onclick="openCurriculoModal(\'' + m.slug + '\')">Material →</button>'
         : '';
-      return '<tr>' +
-        '<td data-label="Slug"><code>' + escapeHtmlLocal(m.slug) + '</code></td>' +
-        '<td data-label="Nome">' + escapeHtmlLocal(m.name) + '</td>' +
-        '<td data-label="Descrição">' + escapeHtmlLocal(m.description || '-') + '</td>' +
-        '<td data-label="Turmas usando"><span class="pill-count">' + turmaCount + '</span></td>' +
-        '<td data-label="Ações"><div class="btn-row">' + activitiesBtn + materialBtn +
-          '<button type="button" class="btn btn-danger btn-sm btn-fixed" onclick="handleDeleteMateria(\'' + m.slug + '\')">Excluir</button>' +
-        '</div></td>' +
-      '</tr>';
-    }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma matéria cadastrada ainda.</td></tr>';
+
+      return '<div class="materia-card">' +
+        '<div class="materia-card-top">' +
+          '<div class="materia-icon" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + MATERIA_ICON_SVG + '</div>' +
+          '<div class="materia-info">' +
+            '<span class="materia-slug-label">SLUG</span><span class="turma-pill">' + escapeHtmlLocal(m.slug) + '</span>' +
+            '<div class="materia-name">' + escapeHtmlLocal(m.name) + '</div>' +
+            '<div class="materia-desc-label">DESCRIÇÃO</div>' +
+            '<div class="materia-desc">' + (m.description ? escapeHtmlLocal(m.description) : '-') + '</div>' +
+          '</div>' +
+          '<div class="materia-stats">' + statsHtml + '</div>' +
+        '</div>' +
+        '<div class="materia-card-actions">' + activitiesBtn + materialBtn +
+          '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteMateria(\'' + m.slug + '\')">Excluir</button>' +
+        '</div>' +
+      '</div>';
+    }).join('') + '</div>';
   }
 
   const ACTIVITY_URL_TEMPLATE = '/atividades/{course}/atividade_{num}.html';
