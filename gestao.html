@@ -418,20 +418,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     <div class="dash-filter">
       <input type="text" id="filterTurmaBusca" placeholder="Filtrar por nome da turma, descrição ou professor..." oninput="renderTurmasTable()">
     </div>
-    <div style="overflow-x:auto;">
-      <table class="dash-table" id="turmasTable">
-        <thead>
-          <tr>
-            <th>Turma</th>
-            <th>Matérias liberadas</th>
-            <th>Professores</th>
-            <th>Alunos</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="turmasBody"></tbody>
-      </table>
-    </div>
+    <div id="turmasList"></div>
   </div>
 
   <!-- ---------- MATÉRIAS ---------- -->
@@ -672,19 +659,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
 </div>
 
-<!-- Modal de detalhe da turma -->
-<div id="turmaModal" class="report-modal" aria-hidden="true">
-  <div class="report-modal-backdrop" onclick="closeTurmaModal()"></div>
-  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="turmaModalTitle">
-    <div class="report-modal-header">
-      <h3 id="turmaModalTitle"></h3>
-      <button type="button" class="report-modal-close" onclick="closeTurmaModal()" aria-label="Fechar">&times;</button>
-    </div>
-    <div class="report-modal-body" id="turmaModalBody"></div>
-  </div>
-</div>
-
-<!-- Modal de edição de nome/descrição da turma -->
+<!-- Modal de edição da turma (dados + matérias/professores/alunos) -->
 <div id="turmaEditModal" class="report-modal" aria-hidden="true">
   <div class="report-modal-backdrop" onclick="closeTurmaEditModal()"></div>
   <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="turmaEditModalTitle">
@@ -698,6 +673,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="turmaEditDesc"></div>
         <button type="submit" class="btn btn-primary">Salvar</button>
       </form>
+      <div id="turmaModalBody" style="margin-top:22px;"></div>
     </div>
   </div>
 </div>
@@ -907,33 +883,79 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         .filter(Boolean).join(' ').toLowerCase();
       return alvo.includes(busca);
     });
-    document.getElementById('turmasBody').innerHTML = turmasFiltradas.map(t => {
-      const materiaCount = TURMA_MATERIAS.filter(tm => tm.turma_id === t.id).length;
+
+    const container = document.getElementById('turmasList');
+    if(!turmasFiltradas.length){
+      container.innerHTML = '<p style="text-align:center; opacity:.6;">' +
+        (busca ? 'Nenhuma turma encontrada com esse filtro.' : 'Nenhuma turma criada ainda.') + '</p>';
+      return;
+    }
+
+    // Agrupa por professor em caixa suspensa, fechada por padrão — mesmo
+    // padrão visual da aba Professores. Turma com mais de um professor
+    // aparece numa caixa pra cada um deles; sem professor vinculado, cai
+    // numa caixa própria "Sem professor".
+    const porProfessorId = {};
+    const semProfessor = [];
+    turmasFiltradas.forEach(t => {
       const professoresDaTurma = TEACHER_TURMAS.filter(tt => tt.turma_id === t.id)
         .map(tt => TEACHERS.find(p => p.id === tt.teacher_id))
         .filter(Boolean);
+      if(!professoresDaTurma.length){ semProfessor.push(t); return; }
+      professoresDaTurma.forEach(p => {
+        (porProfessorId[p.id] = porProfessorId[p.id] || { professor: p, turmas: [] }).turmas.push(t);
+      });
+    });
+    const grupos = Object.values(porProfessorId).sort((a, b) => (a.professor.full_name || '').localeCompare(b.professor.full_name || ''));
+
+    const contagemLabel = (n, singular, plural) => n + ' ' + (n === 1 ? singular : plural);
+
+    let html = grupos.map(({ professor, turmas }) => {
+      const totalAlunos = turmas.reduce((sum, t) => sum + STUDENTS.filter(s => s.turma_id === t.id).length, 0);
+      return '<details class="dyse-collapsible">' +
+        '<summary><span class="summary-left">' + escapeHtmlLocal(professor.full_name || '(sem nome)') +
+          '<span class="pill-count">' + contagemLabel(turmas.length, 'turma', 'turmas') + '</span>' +
+          '<span class="pill-count">' + contagemLabel(totalAlunos, 'aluno', 'alunos') + '</span>' +
+        '</span><span class="chevron">›</span></summary>' +
+        '<div class="dyse-collapsible-body">' + renderTurmasTableHtml(turmas) + '</div>' +
+      '</details>';
+    }).join('');
+
+    if(semProfessor.length){
+      const totalAlunosSemProf = semProfessor.reduce((sum, t) => sum + STUDENTS.filter(s => s.turma_id === t.id).length, 0);
+      html += '<details class="dyse-collapsible">' +
+        '<summary><span class="summary-left">Sem professor' +
+          '<span class="pill-count">' + contagemLabel(semProfessor.length, 'turma', 'turmas') + '</span>' +
+          '<span class="pill-count">' + contagemLabel(totalAlunosSemProf, 'aluno', 'alunos') + '</span>' +
+        '</span><span class="chevron">›</span></summary>' +
+        '<div class="dyse-collapsible-body">' + renderTurmasTableHtml(semProfessor) + '</div>' +
+      '</details>';
+    }
+
+    container.innerHTML = html;
+  }
+
+  function renderTurmasTableHtml(turmas){
+    const rows = turmas.map(t => {
+      const materiaCount = TURMA_MATERIAS.filter(tm => tm.turma_id === t.id).length;
       const studentCount = STUDENTS.filter(s => s.turma_id === t.id).length;
-      const professoresTexto = professoresDaTurma.length
-        ? professoresDaTurma.map(p => escapeHtmlLocal(p.full_name || '')).join(', ')
-        : 'Sem professor';
       const nivel = NIVEIS.find(n => TURMA_MATERIAS.some(tm => tm.turma_id === t.id && tm.materia_slug === n.slug));
       return '<tr>' +
-        '<td><b>' + escapeHtmlLocal(t.name) + '</b>' +
+        '<td data-label="Turma"><b>' + escapeHtmlLocal(t.name) + '</b>' +
           (nivel ? ' <span class="pill-count">' + escapeHtmlLocal(nivel.name) + '</span>' : '') +
           (t.description ? '<div style="opacity:.65; font-size:.78rem;">' + escapeHtmlLocal(t.description) + '</div>' : '') +
-          '<div style="opacity:.65; font-size:.78rem;">' + professoresTexto + '</div>' +
         '</td>' +
-        '<td><span class="pill-count">' + materiaCount + '</span></td>' +
-        '<td><span class="pill-count">' + professoresDaTurma.length + '</span></td>' +
-        '<td><span class="pill-count">' + studentCount + '</span></td>' +
-        '<td><div class="btn-row">' +
+        '<td data-label="Matérias liberadas"><span class="pill-count">' + materiaCount + '</span></td>' +
+        '<td data-label="Alunos"><span class="pill-count">' + studentCount + '</span></td>' +
+        '<td data-label="Ações"><div class="btn-row">' +
           '<button type="button" class="btn btn-ghost btn-sm" onclick="openTurmaEditModal(\'' + t.id + '\')">Editar</button>' +
-          '<button type="button" class="btn btn-ghost btn-sm" onclick="openTurmaModal(\'' + t.id + '\')">Gerenciar</button>' +
           '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
         '</div></td>' +
       '</tr>';
-    }).join('') || ('<tr><td colspan="5" style="text-align:center; opacity:.6;">' +
-      (busca ? 'Nenhuma turma encontrada com esse filtro.' : 'Nenhuma turma criada ainda.') + '</td></tr>');
+    }).join('');
+    return '<div style="overflow-x:auto;"><table class="dash-table dash-table-responsive">' +
+      '<thead><tr><th>Turma</th><th>Matérias liberadas</th><th>Alunos</th><th>Ações</th></tr></thead>' +
+      '<tbody>' + rows + '</tbody></table></div>';
   }
 
   let CURRENT_TURMA_EDIT_ID = null;
@@ -942,8 +964,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     const t = TURMAS.find(x => x.id === turmaId);
     if(!t) return;
     CURRENT_TURMA_EDIT_ID = turmaId;
+    document.getElementById('turmaEditModalTitle').textContent = t.name;
     document.getElementById('turmaEditName').value = t.name || '';
     document.getElementById('turmaEditDesc').value = t.description || '';
+    renderTurmaModalDetails(turmaId);
     document.getElementById('turmaEditModal').classList.add('open');
     document.getElementById('turmaEditModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
@@ -954,6 +978,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     document.getElementById('turmaEditModal').setAttribute('aria-hidden','true');
     document.body.classList.remove('dyse-modal-open');
     CURRENT_TURMA_EDIT_ID = null;
+    CURRENT_TURMA_MODAL_ID = null;
   }
 
   async function handleSaveTurmaEdit(e){
@@ -965,7 +990,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
     TURMAS = await dyseListTurmas();
     renderTurmasTable();
-    closeTurmaEditModal();
+    // Mantém o modal aberto — quem editou o nome normalmente segue direto
+    // pra ajustar matérias/professores/alunos da mesma turma.
+    document.getElementById('turmaEditModalTitle').textContent = name;
     return false;
   }
 
@@ -993,11 +1020,10 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   let CURRENT_TURMA_MODAL_ID = null;
 
-  function openTurmaModal(turmaId){
+  function renderTurmaModalDetails(turmaId){
     const t = TURMAS.find(x => x.id === turmaId);
     if(!t) return;
     CURRENT_TURMA_MODAL_ID = turmaId;
-    document.getElementById('turmaModalTitle').textContent = t.name;
 
     const materiasHtml = MATERIAS.length
       ? '<div class="chip-toggle-list">' + MATERIAS.map(m => {
@@ -1024,17 +1050,6 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     renderTurmaTeachersList();
     renderTurmaStudentSearch();
     renderTurmaStudentsList();
-
-    document.getElementById('turmaModal').classList.add('open');
-    document.getElementById('turmaModal').setAttribute('aria-hidden','false');
-    document.body.classList.add('dyse-modal-open');
-  }
-
-  function closeTurmaModal(){
-    document.getElementById('turmaModal').classList.remove('open');
-    document.getElementById('turmaModal').setAttribute('aria-hidden','true');
-    document.body.classList.remove('dyse-modal-open');
-    CURRENT_TURMA_MODAL_ID = null;
   }
 
   function renderTurmaTeachersList(){
@@ -2713,7 +2728,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   document.addEventListener('keydown', e => {
     if(e.key === 'Escape'){
-      closeTurmaModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal();
+      closeTurmaEditModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal();
     }
   });
 
