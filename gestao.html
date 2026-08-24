@@ -218,6 +218,24 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
 }
 .no-turma{color:var(--bad); font-weight:700;}
 
+/* ---------- ÍCONE DE INFORMAÇÃO COM TOOLTIP NO HOVER/FOCO ---------- */
+.info-tip{
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  width:26px; height:26px; border-radius:50%; background:var(--antique-soft); color:var(--seal-soft);
+  font-size:.9rem; font-weight:700; cursor:help; flex:none; line-height:1;
+}
+.info-tip-bubble{
+  position:absolute; top:calc(100% + 8px); left:0; width:min(360px, 80vw);
+  background:var(--seal); color:#fff; font-weight:400; font-size:.78rem; line-height:1.55;
+  text-align:left; padding:12px 14px; border-radius:var(--radius-sm); box-shadow:var(--shadow-card);
+  opacity:0; visibility:hidden; transform:translateY(4px); transition:opacity .15s, transform .15s;
+  z-index:20;
+}
+.info-tip-bubble code{background:rgba(255,255,255,.18); padding:1px 4px; border-radius:4px;}
+.info-tip:hover .info-tip-bubble, .info-tip:focus .info-tip-bubble, .info-tip:focus-within .info-tip-bubble{
+  opacity:1; visibility:visible; transform:translateY(0);
+}
+
 /* ---------- CAIXA SUSPENSA (details/summary nativo — sem JS) ---------- */
 details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
 details.dyse-collapsible > summary{
@@ -451,50 +469,8 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   <!-- ---------- ALUNOS ---------- -->
   <div id="panelAlunos" style="display:none;">
-    <div class="gestao-card">
-      <div class="gestao-card-title">Cadastrar novo aluno</div>
-      <form class="gestao-form" onsubmit="return handleCreateStudent(event)">
-        <div class="gestao-field" style="flex:1 1 220px;">
-          <label>Nome completo</label>
-          <input type="text" id="newStudentName" required>
-        </div>
-        <div class="gestao-field" style="flex:1 1 220px;">
-          <label>E-mail</label>
-          <input type="email" id="newStudentEmail" required>
-        </div>
-        <button type="submit" class="btn btn-primary">+ Cadastrar aluno</button>
-      </form>
-      <label style="display:flex; align-items:center; gap:8px; font-size:.82rem; margin-top:10px; cursor:pointer;">
-        <input type="checkbox" id="newStudentSkipEmail" style="width:auto;">
-        Não enviar e-mail agora (só cadastrar — libero o acesso depois com "Reenviar acesso")
-      </label>
-      <p class="gestao-hint">Por padrão o aluno recebe um e-mail do sistema com o link pra definir a senha e acessar. Marque a opção acima pra só criar a conta agora, sem avisar o aluno ainda. Depois de cadastrado, vincule turma (aba Turmas) e dados financeiros (botão "Editar financeiro" abaixo) normalmente.</p>
-      <div class="auth-msg" id="newStudentMsg"></div>
-    </div>
-
-    <div class="gestao-card">
-      <div class="gestao-card-title">Importar alunos via CSV</div>
-      <p class="gestao-hint" style="margin-bottom:12px;">
-        Primeira linha = cabeçalho, com estas colunas (nesta ordem ou por nome — só <code>nome</code> e <code>email</code> são obrigatórios):<br>
-        <code>nome,email,modalidade,professor_email,valor_mensal,valor_professor,data_inicio,parcelas</code><br>
-        <code>modalidade</code>: slug (vip / grupo / dupla / intensivo) · <code>professor_email</code>: precisa bater com o e-mail de um professor já cadastrado ·
-        <code>valor_professor</code>: só usado se a modalidade for personalizada (Intensivo) · <code>data_inicio</code>: AAAA-MM-DD (padrão: hoje) ·
-        <code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido).
-        Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.
-      </p>
-      <form onsubmit="return handleImportarCSV(event)" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-        <input type="file" id="csvAlunosFile" accept=".csv,text/csv" required>
-        <button type="submit" class="btn btn-primary" id="btnImportarCSV">Importar CSV</button>
-      </form>
-      <label style="display:flex; align-items:center; gap:8px; font-size:.82rem; margin-top:10px; cursor:pointer;">
-        <input type="checkbox" id="csvSkipEmail" style="width:auto;">
-        Não enviar e-mail agora (só cadastrar todos — libero o acesso de cada um depois com "Reenviar acesso")
-      </label>
-      <div id="csvImportResults" style="margin-top:14px; display:flex; flex-direction:column; gap:4px; max-height:260px; overflow-y:auto;"></div>
-    </div>
-
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
-      Pra colocar ou tirar um aluno de uma turma (acesso a conteúdo), vá na aba <b>Turmas</b> → <b>Gerenciar</b>
+      Pra colocar ou tirar um aluno de uma turma (acesso a conteúdo), vá na aba <b>Turmas</b> → <b>Editar</b>
       da turma desejada.
       <span class="fin-only">O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui, pelo botão "Editar financeiro" de cada aluno.</span>
     </p>
@@ -511,6 +487,18 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         <option value="encerrado">Encerrado</option>
         <option value="sem-vinculo">Sem vínculo financeiro</option>
       </select>
+      <button type="button" class="btn btn-primary" onclick="openStudentCreateModal()">+ Cadastrar aluno</button>
+      <button type="button" class="btn btn-primary" onclick="openCsvImportModal()">Importar CSV</button>
+      <span class="info-tip" tabindex="0" aria-label="Como montar o CSV de importação">ⓘ
+        <span class="info-tip-bubble">
+          Primeira linha = cabeçalho, com estas colunas (nesta ordem ou por nome — só <code>nome</code> e <code>email</code> são obrigatórios):<br>
+          <code>nome,email,modalidade,professor_email,valor_mensal,valor_professor,data_inicio,parcelas</code><br><br>
+          <code>modalidade</code>: slug (vip / grupo / dupla / intensivo) · <code>professor_email</code>: precisa bater com o e-mail de um professor já cadastrado ·
+          <code>valor_professor</code>: só usado se a modalidade for personalizada (Intensivo) · <code>data_inicio</code>: AAAA-MM-DD (padrão: hoje) ·
+          <code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido).<br><br>
+          Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.
+        </span>
+      </span>
     </div>
     <div id="alunosTableWrap"></div>
   </div>
@@ -520,7 +508,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
       Clique num professor pra ver as turmas vinculadas a ele(a), e numa turma pra ver os alunos
       dela. Pra ativar/desativar o acesso de um professor a uma turma, vá na aba <b>Turmas</b> →
-      <b>Gerenciar</b> da turma desejada.
+      <b>Editar</b> da turma desejada.
     </p>
     <div id="professoresList"></div>
   </div>
@@ -678,6 +666,52 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         <button type="submit" class="btn btn-primary">Salvar</button>
       </form>
       <div id="turmaModalBody" style="margin-top:22px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de cadastro de aluno -->
+<div id="studentCreateModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeStudentCreateModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="studentCreateModalTitle">
+    <div class="report-modal-header">
+      <h3 id="studentCreateModalTitle">Cadastrar novo aluno</h3>
+      <button type="button" class="report-modal-close" onclick="closeStudentCreateModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body">
+      <form class="gestao-form gestao-form-col" onsubmit="return handleCreateStudent(event)">
+        <div class="gestao-field"><label>Nome completo</label><input type="text" id="newStudentName" required></div>
+        <div class="gestao-field"><label>E-mail</label><input type="email" id="newStudentEmail" required></div>
+        <button type="submit" class="btn btn-primary">+ Cadastrar aluno</button>
+      </form>
+      <label style="display:flex; align-items:center; gap:8px; font-size:.82rem; margin-top:10px; cursor:pointer;">
+        <input type="checkbox" id="newStudentSkipEmail" style="width:auto;">
+        Não enviar e-mail agora (só cadastrar — libero o acesso depois com "Reenviar acesso")
+      </label>
+      <p class="gestao-hint">Por padrão o aluno recebe um e-mail do sistema com o link pra definir a senha e acessar. Marque a opção acima pra só criar a conta agora, sem avisar o aluno ainda. Depois de cadastrado, vincule turma (aba Turmas) e dados financeiros (botão "Editar financeiro" abaixo) normalmente.</p>
+      <div class="auth-msg" id="newStudentMsg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de importação de alunos via CSV -->
+<div id="csvImportModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeCsvImportModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="csvImportModalTitle">
+    <div class="report-modal-header">
+      <h3 id="csvImportModalTitle">Importar alunos via CSV</h3>
+      <button type="button" class="report-modal-close" onclick="closeCsvImportModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body">
+      <form onsubmit="return handleImportarCSV(event)" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <input type="file" id="csvAlunosFile" accept=".csv,text/csv" required>
+        <button type="submit" class="btn btn-primary" id="btnImportarCSV">Importar CSV</button>
+      </form>
+      <label style="display:flex; align-items:center; gap:8px; font-size:.82rem; margin-top:10px; cursor:pointer;">
+        <input type="checkbox" id="csvSkipEmail" style="width:auto;">
+        Não enviar e-mail agora (só cadastrar todos — libero o acesso de cada um depois com "Reenviar acesso")
+      </label>
+      <div id="csvImportResults" style="margin-top:14px; display:flex; flex-direction:column; gap:4px; max-height:260px; overflow-y:auto;"></div>
     </div>
   </div>
 </div>
@@ -1426,6 +1460,38 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   }
 
   /* ---------- ALUNOS ---------- */
+  function openStudentCreateModal(){
+    document.getElementById('newStudentName').value = '';
+    document.getElementById('newStudentEmail').value = '';
+    document.getElementById('newStudentSkipEmail').checked = false;
+    document.getElementById('newStudentMsg').className = 'auth-msg';
+    document.getElementById('newStudentMsg').textContent = '';
+    document.getElementById('studentCreateModal').classList.add('open');
+    document.getElementById('studentCreateModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeStudentCreateModal(){
+    document.getElementById('studentCreateModal').classList.remove('open');
+    document.getElementById('studentCreateModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+  }
+
+  function openCsvImportModal(){
+    document.getElementById('csvAlunosFile').value = '';
+    document.getElementById('csvSkipEmail').checked = false;
+    document.getElementById('csvImportResults').innerHTML = '';
+    document.getElementById('csvImportModal').classList.add('open');
+    document.getElementById('csvImportModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeCsvImportModal(){
+    document.getElementById('csvImportModal').classList.remove('open');
+    document.getElementById('csvImportModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+  }
+
   async function handleCreateStudent(e){
     e.preventDefault();
     const full_name = document.getElementById('newStudentName').value.trim();
@@ -1698,7 +1764,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
      3 níveis de caixa suspensa: professor → turmas associadas a ele(a) →
      alunos de cada turma. Só mostra as turmas JÁ associadas (não é mais
      daqui que se ativa/desativa acesso — isso já é feito na aba Turmas →
-     Gerenciar → "Professores com acesso", que também deixa buscar e
+     Editar → "Professores com acesso", que também deixa buscar e
      adicionar; duplicar o controle aqui só deixava a lista enorme). */
   function renderProfessoresList(){
     const container = document.getElementById('professoresList');
@@ -1721,7 +1787,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
               '<div class="dyse-collapsible-body">' + alunosHtml + '</div>' +
             '</details>';
           }).join('')
-        : '<p class="report-line" style="opacity:.6;">Nenhuma turma vinculada ainda — use a aba Turmas → Gerenciar pra vincular.</p>';
+        : '<p class="report-line" style="opacity:.6;">Nenhuma turma vinculada ainda — use a aba Turmas → Editar pra vincular.</p>';
 
       return '<details class="dyse-collapsible">' +
         '<summary><span class="summary-left">' +
@@ -2746,7 +2812,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   document.addEventListener('keydown', e => {
     if(e.key === 'Escape'){
-      closeTurmaCreateModal(); closeTurmaEditModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal();
+      closeTurmaCreateModal(); closeTurmaEditModal(); closeStudentCreateModal(); closeCsvImportModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal();
     }
   });
 
