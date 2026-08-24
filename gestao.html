@@ -74,12 +74,16 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 @keyframes dyse-spin{to{transform:rotate(360deg);}}
 #dyseAuthGate p{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
 
-/* ---------- APP SHELL: sidebar + topbar ---------- */
-.app-shell{display:flex; align-items:stretch; min-height:100vh; position:relative; z-index:1;}
+/* ---------- APP SHELL: sidebar + topbar ----------
+   Cada painel (sidebar e área principal) rola por conta própria, dentro
+   de uma casca do tamanho exato da tela — em vez de position:sticky (que
+   dependia do documento inteiro rolar, e conflitava com o overflow-x:
+   hidden que já existia em html/body). A sidebar nunca se move; só a
+   área principal (topbar + conteúdo) rola. */
+.app-shell{display:flex; align-items:stretch; height:100vh; overflow:hidden; position:relative; z-index:1;}
 .sidebar{
-  flex:none; width:250px; background:var(--amaranth); color:var(--antique-soft);
-  display:flex; flex-direction:column; padding:24px 18px;
-  position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto;
+  flex:none; width:250px; height:100%; background:var(--amaranth); color:var(--antique-soft);
+  display:flex; flex-direction:column; padding:24px 18px; overflow-y:auto;
 }
 .sidebar-brand{margin-bottom:26px;}
 .sidebar-logo{height:32px; width:auto; display:block; margin-bottom:10px;}
@@ -121,7 +125,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .sidebar-logout:hover{opacity:1; text-decoration:underline;}
 .sidebar-logout svg{width:16px; height:16px;}
 
-.main-area{flex:1 1 auto; min-width:0; display:flex; flex-direction:column;}
+.main-area{flex:1 1 auto; min-width:0; height:100%; overflow-y:auto; display:flex; flex-direction:column;}
 .topbar{
   display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
   background:#fff; padding:20px 32px; border-bottom:1px solid #f0e3d2;
@@ -159,9 +163,12 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .content-footer .fmark{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); display:block; margin-bottom:4px;}
 
 @media (max-width:900px){
-  .app-shell{flex-direction:column;}
+  /* No celular a sidebar não fica mais numa casca de 100vh com rolagem
+     própria — ela vira uma barra normal no topo, e a página inteira
+     rola do jeito de sempre (sem painéis com rolagem independente). */
+  .app-shell{flex-direction:column; height:auto; overflow:visible;}
   .sidebar{
-    width:100%; height:auto; position:relative; top:auto; padding:16px 16px 14px;
+    width:100%; height:auto; overflow-y:visible; padding:16px 16px 14px;
   }
   .sidebar-brand{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
   .sidebar-tagline{display:none;}
@@ -170,6 +177,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   .sidebar-footer{flex-direction:row; flex-wrap:wrap; margin-top:14px;}
   .sidebar-help{flex:1 1 200px;}
   .sidebar-user{flex:1 1 160px;}
+  .main-area{height:auto; overflow-y:visible;}
   .topbar{padding:16px 20px;}
   .content{padding:20px 16px 48px;}
 }
