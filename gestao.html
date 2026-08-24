@@ -67,7 +67,7 @@ body::before{
 .hero{
   background:var(--amaranth);
   color:var(--antique-soft);
-  padding:16px 20px;
+  padding:20px;
   position:relative;
   overflow:hidden;
   border-bottom:6px solid var(--gamboge);
@@ -85,14 +85,13 @@ body::before{
   line-height:1;
 }
 .hero-inner{max-width:1280px; margin:0 auto; position:relative; z-index:2;}
-.brand-row{
-  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+.brand-row{display:flex; align-items:center; margin-bottom:14px;}
+.brand-row .brand-logo{height:30px; width:auto; display:block;}
+
+.dyse-topline{display:flex; align-items:center; flex-wrap:wrap; gap:10px 20px;}
+.dyse-tagline{
   font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
-  opacity:.85; min-width:0;
-}
-.brand-row .mark{
-  display:inline-flex; align-items:center; gap:8px; font-family:var(--font-display);
-  font-size:1.35rem; letter-spacing:0; text-transform:none; color:var(--antique);
+  opacity:.85; white-space:nowrap;
 }
 
 /* ---------- AUTH GATE / AUTH BAR ---------- */
@@ -109,8 +108,8 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 #dyseAuthGate p{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
 
 .dyse-auth-bar{
-  display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
-  font-size:.85rem; font-weight:600; margin-top:10px; color:var(--antique);
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  font-size:.85rem; font-weight:600; color:var(--antique);
 }
 .dyse-auth-name{opacity:.95;}
 .dyse-auth-link{color:var(--gamboge); text-decoration:underline; text-underline-offset:3px;}
@@ -122,7 +121,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .dyse-auth-logout:hover{background:rgba(255,255,255,.3);}
 
 /* ---------- TABS ---------- */
-.auth-tabs{display:flex; background:var(--antique-soft); border-radius:999px; padding:4px; margin-bottom:22px; flex-wrap:wrap;}
+.auth-tabs{display:flex; background:var(--antique-soft); border-radius:999px; padding:4px; margin-top:20px; flex-wrap:wrap;}
 .auth-tab{flex:1; text-align:center; padding:9px; border-radius:999px; font-weight:700; font-size:.85rem; cursor:pointer; color:var(--seal-soft); border:none; background:transparent; white-space:nowrap;}
 .auth-tab.active{background:var(--amaranth); color:#fff;}
 
@@ -406,23 +405,24 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 <div class="hero">
   <div class="hero-inner">
     <div class="brand-row">
-      <span class="mark">👁 dyse</span>
-      <span>Do You Speak English? &middot; Painel da Gestão</span>
+      <img src="assets/images/brand/dyse-logo-white.png" alt="DYSE" class="brand-logo">
     </div>
-    <div class="dyse-auth-bar" id="authBar"></div>
+    <div class="dyse-topline">
+      <span class="dyse-tagline">Do You Speak English? &middot; Painel da Gestão</span>
+      <div class="dyse-auth-bar" id="authBar"></div>
+    </div>
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" id="tabTurmas" onclick="showPanel('turmas')">Turmas</button>
+      <button type="button" class="auth-tab" id="tabMaterias" onclick="showPanel('materias')">Matérias</button>
+      <button type="button" class="auth-tab" id="tabAlunos" onclick="showPanel('alunos')">Alunos</button>
+      <button type="button" class="auth-tab" id="tabProfessores" onclick="showPanel('professores')">Professores</button>
+      <button type="button" class="auth-tab" id="tabContas" onclick="showPanel('contas')">Contas</button>
+      <button type="button" class="auth-tab fin-only" id="tabFinanceiro" onclick="showPanel('financeiro')">Financeiro</button>
+    </div>
   </div>
 </div>
 
 <div class="wrap" style="margin-top:24px;">
-
-  <div class="auth-tabs">
-    <button type="button" class="auth-tab active" id="tabTurmas" onclick="showPanel('turmas')">Turmas</button>
-    <button type="button" class="auth-tab" id="tabMaterias" onclick="showPanel('materias')">Matérias</button>
-    <button type="button" class="auth-tab" id="tabAlunos" onclick="showPanel('alunos')">Alunos</button>
-    <button type="button" class="auth-tab" id="tabProfessores" onclick="showPanel('professores')">Professores</button>
-    <button type="button" class="auth-tab" id="tabContas" onclick="showPanel('contas')">Contas</button>
-    <button type="button" class="auth-tab fin-only" id="tabFinanceiro" onclick="showPanel('financeiro')">Financeiro</button>
-  </div>
 
   <!-- ---------- TURMAS ---------- -->
   <div id="panelTurmas">
