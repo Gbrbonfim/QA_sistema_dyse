@@ -387,6 +387,19 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   .dash-filter input, .dash-filter select{width:100%;}
   .gestao-form{flex-direction:column; align-items:stretch;}
   .gestao-form .gestao-field{flex:1 1 auto;}
+
+  /* Cabeçalho: nome + Sair numa linha só, links de painel logo abaixo —
+     em vez de tudo quebrando linha no meio de qualquer jeito. */
+  .dyse-auth-name{order:1;}
+  .dyse-auth-logout{order:2; margin-left:auto;}
+  .dyse-auth-link{order:3;}
+  .dyse-auth-link:first-of-type{flex-basis:100%;}
+  .dyse-tagline{margin-bottom:28px;}
+
+  /* Menu de abas: grade 3x2 uniforme, em vez de quebrar torto (5 numa
+     linha + 1 sobrando na outra) dentro do mesmo pill arredondado. */
+  .auth-tabs{display:grid; grid-template-columns:repeat(3, 1fr); gap:4px; padding:4px; border-radius:var(--radius-md);}
+  .auth-tab{font-size:.74rem; padding:9px 4px;}
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -435,20 +448,18 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
 
   <!-- ---------- MATÉRIAS ---------- -->
   <div id="panelMaterias" style="display:none;">
-    <div style="overflow-x:auto;">
-      <table class="dash-table" id="materiasTable">
-        <thead>
-          <tr>
-            <th>Slug</th>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Turmas usando</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="materiasBody"></tbody>
-      </table>
-    </div>
+    <table class="dash-table dash-table-stacked" id="materiasTable">
+      <thead>
+        <tr>
+          <th>Slug</th>
+          <th>Nome</th>
+          <th>Descrição</th>
+          <th>Turmas usando</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="materiasBody"></tbody>
+    </table>
   </div>
 
   <!-- ---------- ALUNOS ---------- -->
@@ -1231,11 +1242,11 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         ? '<button type="button" class="btn btn-ghost btn-sm btn-fixed" onclick="openCurriculoModal(\'' + m.slug + '\')">Material (' + m.total_aulas + ' aulas)</button>'
         : '';
       return '<tr>' +
-        '<td><code>' + escapeHtmlLocal(m.slug) + '</code></td>' +
-        '<td>' + escapeHtmlLocal(m.name) + '</td>' +
-        '<td>' + escapeHtmlLocal(m.description || '-') + '</td>' +
-        '<td><span class="pill-count">' + turmaCount + '</span></td>' +
-        '<td><div class="btn-row">' + activitiesBtn + materialBtn +
+        '<td data-label="Slug"><code>' + escapeHtmlLocal(m.slug) + '</code></td>' +
+        '<td data-label="Nome">' + escapeHtmlLocal(m.name) + '</td>' +
+        '<td data-label="Descrição">' + escapeHtmlLocal(m.description || '-') + '</td>' +
+        '<td data-label="Turmas usando"><span class="pill-count">' + turmaCount + '</span></td>' +
+        '<td data-label="Ações"><div class="btn-row">' + activitiesBtn + materialBtn +
           '<button type="button" class="btn btn-danger btn-sm btn-fixed" onclick="handleDeleteMateria(\'' + m.slug + '\')">Excluir</button>' +
         '</div></td>' +
       '</tr>';
