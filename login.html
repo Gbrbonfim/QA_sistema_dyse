@@ -347,31 +347,83 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 }
 .dyse-auth-logout:hover{background:rgba(255,255,255,.3);}
 
-/* ---------- AUTH FORM (login / signup pages) ---------- */
-.auth-shell{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
-.auth-card{
-  background:#fff; border-radius:var(--radius-lg); padding:40px clamp(24px,5vw,44px); max-width:440px; width:100%;
-  box-shadow:var(--shadow-card); border-top:8px solid var(--amaranth);
+/* ---------- LOGIN PAGE ---------- */
+.login-shell{min-height:100vh; display:flex; flex-direction:column; position:relative; overflow:hidden;}
+.login-corner{
+  position:absolute; top:0; left:0; z-index:0; width:min(48vw, 600px); min-height:280px;
+  padding:34px clamp(24px,4vw,56px) 76px; background:var(--amaranth); color:#fff;
+  border-radius:0 0 260px 0;
 }
-.auth-logo{font-family:var(--font-display); font-size:2rem; color:var(--amaranth); text-align:center; margin-bottom:4px;}
-.auth-tag{text-align:center; font-size:.8rem; color:var(--seal-soft); margin-bottom:26px; opacity:.8;}
-.auth-tabs{display:flex; background:var(--antique-soft); border-radius:999px; padding:4px; margin-bottom:22px;}
-.auth-tab{flex:1; text-align:center; padding:9px; border-radius:999px; font-weight:700; font-size:.85rem; cursor:pointer; color:var(--seal-soft); border:none; background:transparent;}
-.auth-tab.active{background:var(--amaranth); color:#fff;}
-.auth-field{margin-bottom:16px;}
-.auth-field label{display:block; font-weight:700; font-size:.85rem; margin-bottom:6px; color:var(--seal);}
-.auth-field input{
-  width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:11px 14px;
+.login-corner-logo{height:34px; width:auto; display:block; margin-bottom:12px;}
+.login-corner-tagline{font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; opacity:.9; line-height:1.6;}
+.login-watermark{
+  position:absolute; z-index:0; right:-3%; top:32%; transform:translateY(-50%);
+  font-family:var(--font-display); font-size:min(18vw, 220px); color:rgba(208,59,85,0.07);
+  white-space:nowrap; line-height:1; pointer-events:none;
+}
+.login-wave{
+  position:absolute; z-index:0; right:0; bottom:0; width:min(56vw, 760px); height:min(38vh, 380px);
+  background:radial-gradient(ellipse at bottom right, rgba(208,59,85,0.09), transparent 70%);
+  pointer-events:none;
+}
+.login-card-wrap{position:relative; z-index:1; flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px;}
+.login-card{
+  background:#fff; border-radius:var(--radius-lg); padding:44px clamp(24px,4vw,48px); max-width:460px; width:100%;
+  box-shadow:var(--shadow-card);
+}
+.login-card-logo{font-family:var(--font-display); font-size:2.1rem; color:var(--amaranth); text-align:center; margin-bottom:18px;}
+.login-card-title{font-size:1.3rem; font-weight:800; text-align:center; margin:0 0 6px; color:var(--seal);}
+.login-card-subtitle{font-size:.88rem; color:var(--seal-soft); text-align:center; margin:0 0 30px; opacity:.85;}
+.login-field{margin-bottom:18px;}
+.login-field label{display:block; font-weight:700; font-size:.85rem; margin-bottom:6px; color:var(--seal);}
+.login-input-wrap{position:relative; display:flex; align-items:center;}
+.login-input-icon{position:absolute; left:14px; width:18px; height:18px; color:var(--amaranth); opacity:.65; pointer-events:none; flex:none;}
+.login-input-wrap input{
+  width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:12px 14px 12px 42px;
   font-family:var(--font-body); font-size:.95rem; color:var(--seal);
 }
-.auth-field input:focus{outline:none; border-color:var(--amaranth);}
-.auth-submit{width:100%; justify-content:center; margin-top:6px; font-size:.95rem; padding:13px;}
-.auth-msg{margin-top:16px; padding:11px 14px; border-radius:var(--radius-sm); font-size:.85rem; font-weight:600; display:none;}
-.auth-msg.show{display:block;}
-.auth-msg.ok{background:#eaf7ee; color:var(--ok);}
-.auth-msg.bad{background:#fbeceb; color:var(--bad);}
-.auth-foot{text-align:center; margin-top:22px; font-size:.78rem; color:var(--seal-soft);}
-.auth-foot a{color:var(--amaranth); font-weight:700;}
+.login-input-wrap input.has-toggle{padding-right:42px;}
+.login-input-wrap input:focus{outline:none; border-color:var(--amaranth);}
+.login-eye-toggle{
+  position:absolute; right:8px; background:none; border:none; cursor:pointer; color:var(--seal-soft);
+  padding:8px; display:flex; align-items:center; opacity:.65;
+}
+.login-eye-toggle svg{width:18px; height:18px;}
+.login-eye-toggle:hover{opacity:1; color:var(--amaranth);}
+.login-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin:2px 0 24px; font-size:.82rem;}
+.login-checkbox{display:flex; align-items:center; gap:8px; font-weight:500; color:var(--seal-soft); cursor:pointer;}
+.login-checkbox input{accent-color:var(--amaranth); width:16px; height:16px;}
+.login-row a{color:var(--amaranth); font-weight:700; text-decoration:none;}
+.login-row a:hover{text-decoration:underline;}
+.login-submit{width:100%; justify-content:center; font-size:.95rem; padding:14px;}
+.login-msg{margin-top:16px; padding:11px 14px; border-radius:var(--radius-sm); font-size:.85rem; font-weight:600; display:none;}
+.login-msg.show{display:block;}
+.login-msg.ok{background:#eaf7ee; color:var(--ok);}
+.login-msg.bad{background:#fbeceb; color:var(--bad);}
+.login-divider{display:flex; align-items:center; gap:12px; margin:28px 0 16px; font-size:.78rem; color:var(--seal-soft); opacity:.8;}
+.login-divider::before, .login-divider::after{content:""; flex:1; height:1px; background:#eee0cf;}
+.login-help-card{
+  display:flex; align-items:center; gap:14px; background:var(--antique-soft); border-radius:var(--radius-md);
+  padding:14px 16px; text-decoration:none; color:var(--seal); transition:.15s;
+}
+.login-help-card:hover{background:var(--cherry);}
+.login-help-icon{
+  flex:none; width:38px; height:38px; border-radius:50%; background:#fff; color:var(--amaranth);
+  display:flex; align-items:center; justify-content:center;
+}
+.login-help-icon svg{width:18px; height:18px;}
+.login-help-text{min-width:0; flex:1 1 auto;}
+.login-help-text b{display:block; font-size:.88rem;}
+.login-help-text span{font-size:.78rem; color:var(--seal-soft); opacity:.85;}
+.login-help-arrow{margin-left:auto; color:var(--seal-soft); opacity:.6; flex:none; width:18px; height:18px;}
+.login-footer{position:relative; z-index:1; text-align:center; font-size:.76rem; color:var(--seal-soft); opacity:.6; padding:0 20px 30px;}
+
+@media (max-width:900px){
+  .login-corner{position:relative; width:100%; min-height:auto; border-radius:0 0 90px 0; padding:26px 22px 50px;}
+  .login-card-wrap{margin-top:-40px; padding:0 16px 36px;}
+  .login-watermark{display:none;}
+  .login-wave{display:none;}
+}
 
 /* ---------- DASHBOARD (área do aluno / professora) ---------- */
 .dash-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:16px; margin-top:24px;}
@@ -488,82 +540,86 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 </style>
 </head>
 <body>
-<div class="auth-shell">
-  <div class="auth-card">
-    <div class="auth-logo">dyse</div>
-    <div class="auth-tag">Do You Speak English? &middot; Área do Aluno</div>
-
-    <div class="auth-tabs">
-      <button type="button" class="auth-tab active" id="tabLogin" onclick="showTab('login')">Entrar</button>
-      <button type="button" class="auth-tab" id="tabSignup" onclick="showTab('signup')">Criar conta</button>
-    </div>
-
-    <form id="formLogin" onsubmit="return handleLogin(event)">
-      <div class="auth-field">
-        <label for="loginEmail">E-mail</label>
-        <input type="email" id="loginEmail" required autocomplete="email" placeholder="seuemail@exemplo.com">
-      </div>
-      <div class="auth-field">
-        <label for="loginPassword">Senha</label>
-        <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••">
-      </div>
-      <div class="checklist" style="margin:0 0 6px;">
-        <label><input type="checkbox" id="lembrarDeMim" checked> Lembrar de mim neste dispositivo</label>
-      </div>
-      <button type="submit" class="btn btn-primary auth-submit">Entrar</button>
-      <div style="text-align:right; margin-top:10px;">
-        <a href="#" onclick="return toggleRecuperar(true)" style="font-size:.78rem; color:var(--amaranth); font-weight:700; text-decoration:none;">Esqueci minha senha</a>
-      </div>
-    </form>
-
-    <form id="formRecuperar" onsubmit="return handleRecuperarSenha(event)" style="display:none;">
-      <p style="font-size:.85rem; color:var(--seal-soft); margin-bottom:16px;">Informe seu e-mail cadastrado. Vamos te mandar um link pra você definir uma senha nova.</p>
-      <div class="auth-field">
-        <label for="recuperarEmail">E-mail</label>
-        <input type="email" id="recuperarEmail" required autocomplete="email" placeholder="seuemail@exemplo.com">
-      </div>
-      <button type="submit" class="btn btn-primary auth-submit">Enviar link de recuperação</button>
-      <button type="button" class="btn btn-ghost auth-submit" style="margin-top:8px;" onclick="return toggleRecuperar(false)">Voltar para o login</button>
-    </form>
-
-    <form id="formSignup" onsubmit="return handleSignup(event)" style="display:none;">
-      <div class="auth-field">
-        <label for="signupName">Nome completo</label>
-        <input type="text" id="signupName" required autocomplete="name" placeholder="Seu nome completo">
-      </div>
-      <div class="auth-field">
-        <label for="signupEmail">E-mail</label>
-        <input type="email" id="signupEmail" required autocomplete="email" placeholder="seuemail@exemplo.com">
-      </div>
-      <div class="auth-field">
-        <label for="signupPassword">Senha</label>
-        <input type="password" id="signupPassword" required autocomplete="new-password" minlength="6" placeholder="Mínimo 6 caracteres">
-      </div>
-      <button type="submit" class="btn btn-primary auth-submit">Criar minha conta</button>
-    </form>
-
-    <div class="auth-msg" id="authMsg"></div>
-
-    <div class="auth-foot">Precisa de ajuda? Fale com a DYSE pelo WhatsApp.</div>
+<div class="login-shell">
+  <div class="login-corner">
+    <img src="assets/images/brand/dyse-logo-white.png" alt="DYSE" class="login-corner-logo">
+    <div class="login-corner-tagline">Do You Speak English?*<br>Acesse sua conta</div>
   </div>
+  <div class="login-watermark">dyse</div>
+  <div class="login-wave"></div>
+
+  <div class="login-card-wrap">
+    <div class="login-card">
+      <div class="login-card-logo">dyse</div>
+      <h1 class="login-card-title">Bem-vindo(a)! 👋</h1>
+      <p class="login-card-subtitle">Faça login para acessar sua conta e continuar seus estudos.</p>
+
+      <form id="formLogin" onsubmit="return handleLogin(event)">
+        <div class="login-field">
+          <label for="loginEmail">E-mail</label>
+          <div class="login-input-wrap">
+            <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Z"/><path d="m22 6-10 7L2 6"/></svg>
+            <input type="email" id="loginEmail" required autocomplete="email" placeholder="Digite seu e-mail">
+          </div>
+        </div>
+        <div class="login-field">
+          <label for="loginPassword">Senha</label>
+          <div class="login-input-wrap">
+            <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="loginPassword" class="has-toggle" required autocomplete="current-password" placeholder="Digite sua senha">
+            <button type="button" class="login-eye-toggle" onclick="togglePasswordVisibility('loginPassword', this)" aria-label="Mostrar senha">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="login-row">
+          <label class="login-checkbox"><input type="checkbox" id="lembrarDeMim" checked> Lembrar de mim</label>
+          <a href="#" onclick="return toggleRecuperar(true)">Esqueci minha senha</a>
+        </div>
+        <button type="submit" class="btn btn-primary login-submit">Entrar</button>
+      </form>
+
+      <form id="formRecuperar" onsubmit="return handleRecuperarSenha(event)" style="display:none;">
+        <p style="font-size:.85rem; color:var(--seal-soft); margin-bottom:16px;">Informe seu e-mail cadastrado. Vamos te mandar um link pra você definir uma senha nova.</p>
+        <div class="login-field">
+          <label for="recuperarEmail">E-mail</label>
+          <div class="login-input-wrap">
+            <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Z"/><path d="m22 6-10 7L2 6"/></svg>
+            <input type="email" id="recuperarEmail" required autocomplete="email" placeholder="Digite seu e-mail">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary login-submit">Enviar link de recuperação</button>
+        <button type="button" class="btn btn-ghost login-submit" style="margin-top:8px;" onclick="return toggleRecuperar(false)">Voltar para o login</button>
+      </form>
+
+      <div class="login-msg" id="authMsg"></div>
+
+      <div class="login-divider"><span>Precisa de ajuda?</span></div>
+      <a class="login-help-card" href="https://wa.me/554187355010?text=Ol%C3%A1!%20Preciso%20de%20ajuda%20para%20acessar%20minha%20conta%20DYSE." target="_blank" rel="noopener">
+        <span class="login-help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg></span>
+        <span class="login-help-text"><b>Fale com a DYSE</b><span>Atendimento rápido pelo WhatsApp</span></span>
+        <svg class="login-help-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <p class="login-footer">© <span id="loginYear"></span> DYSE &middot; Do You Speak English? Todos os direitos reservados.</p>
 </div>
 
 <script src="/assets/dyse-auth.js"></script>
 <script>
-  function showTab(which){
-    document.getElementById('tabLogin').classList.toggle('active', which==='login');
-    document.getElementById('tabSignup').classList.toggle('active', which==='signup');
-    document.getElementById('formLogin').style.display = which==='login' ? 'block' : 'none';
-    document.getElementById('formSignup').style.display = which==='signup' ? 'block' : 'none';
-    document.getElementById('formRecuperar').style.display = 'none';
-    document.getElementById('authMsg').classList.remove('show');
+  document.getElementById('loginYear').textContent = new Date().getFullYear();
+
+  function togglePasswordVisibility(inputId, btn){
+    const input = document.getElementById(inputId);
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
   }
 
-  /* "Esqueci minha senha" não é uma aba (Entrar/Criar conta) — só troca o
-     formulário visível, sem mexer no estado ativo das abas. */
+  /* "Esqueci minha senha" só troca o formulário visível dentro do card. */
   function toggleRecuperar(show){
-    document.getElementById('formLogin').style.display = show ? 'none' : (document.getElementById('tabLogin').classList.contains('active') ? 'block' : 'none');
-    document.getElementById('formSignup').style.display = show ? 'none' : (document.getElementById('tabSignup').classList.contains('active') ? 'block' : 'none');
+    document.getElementById('formLogin').style.display = show ? 'none' : 'block';
     document.getElementById('formRecuperar').style.display = show ? 'block' : 'none';
     document.getElementById('authMsg').classList.remove('show');
     return false;
@@ -659,33 +715,6 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     }catch(err){
       console.error(err);
       showMsg('Algo deu errado ao entrar. Verifique sua internet e tente novamente.', false);
-    }
-    return false;
-  }
-
-  async function handleSignup(e){
-    e.preventDefault();
-    const full_name = document.getElementById('signupName').value.trim();
-    const email = document.getElementById('signupEmail').value.trim();
-    const password = document.getElementById('signupPassword').value;
-    showMsg('Criando conta...', true);
-    try{
-      const { data, error } = await sb.auth.signUp({
-        email, password,
-        options: { data: { full_name } }
-      });
-      if(error){
-        showMsg('Não foi possível criar a conta: ' + translateError(error.message), false);
-        return false;
-      }
-      if(data.session){
-        location.href = await getPostLoginUrl(data.session); // conta nova sempre entra como 'student', então vai pra área do aluno
-      } else {
-        showMsg('Conta criada! Verifique seu e-mail para confirmar antes de entrar.', true);
-      }
-    }catch(err){
-      console.error(err);
-      showMsg('Algo deu errado ao criar a conta. Verifique sua internet e tente novamente.', false);
     }
     return false;
   }

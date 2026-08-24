@@ -79,56 +79,105 @@ body::before{
 .btn-ghost.light{background:transparent; color:var(--antique); border:2px solid rgba(255,255,255,0.35);}
 .btn-ghost.light:hover{border-color:var(--gamboge); color:var(--gamboge);}
 
-/* ---------- HERO / HEADER ---------- */
-.hero{
-  background:var(--amaranth);
-  color:var(--antique-soft);
-  padding:38px 20px 64px;
-  position:relative;
-  overflow:hidden;
-  border-bottom:6px solid var(--gamboge);
+/* ---------- APP SHELL: sidebar + topbar ----------
+   Mesmo padrão do painel da gestão (gestao.html): sidebar fixa, só a
+   área principal (topbar + conteúdo) rola. */
+.app-shell{display:flex; align-items:stretch; height:100vh; overflow:hidden; position:relative; z-index:1;}
+.sidebar{
+  flex:none; width:250px; height:100%; background:var(--amaranth); color:var(--antique-soft);
+  display:flex; flex-direction:column; padding:24px 18px; overflow-y:auto;
 }
-.hero::after{
-  content:"dyse";
-  position:absolute;
-  font-family:var(--font-display);
-  font-size:15vw;
-  right:-4%;
-  top:-8%;
-  color:rgba(255,255,255,0.05);
-  white-space:nowrap;
-  pointer-events:none;
-  line-height:1;
-}
-.hero-inner{max-width:920px; margin:0 auto; position:relative; z-index:2;}
-.brand-row{
-  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
-  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
-  opacity:.85; margin-bottom:26px; min-width:0;
-}
-.brand-row .mark{
-  display:inline-flex; align-items:center; gap:8px; font-family:var(--font-display);
-  font-size:1.35rem; letter-spacing:0; text-transform:none; color:var(--antique);
-}
-.brand-row .mark svg{width:26px; height:26px; flex:none;}
+.sidebar-brand{margin-bottom:26px;}
+.sidebar-logo{height:32px; width:auto; display:block; margin-bottom:10px;}
+.sidebar-tagline{font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; opacity:.85; line-height:1.5;}
 
-.eyebrow-badge{
-  display:inline-block; background:var(--gamboge); color:var(--seal);
-  font-weight:700; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
-  padding:6px 14px; border-radius:999px; margin-bottom:14px;
+.sidebar-nav{display:flex; flex-direction:column; gap:4px; flex:1 1 auto;}
+.sidebar-item{
+  display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm);
+  color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none;
+  cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none;
 }
-h1.title{
-  font-family:var(--font-display);
-  font-size:clamp(2.1rem, 6vw, 3.4rem);
-  margin:0 0 10px;
-  color:var(--antique);
-  line-height:1.05;
+.sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
+.sidebar-item:hover{background:rgba(255,255,255,.12);}
+.sidebar-item.active{background:#fff; color:var(--amaranth);}
+.sidebar-item.active svg{opacity:1;}
+
+.sidebar-footer{margin-top:20px; display:flex; flex-direction:column; gap:10px;}
+.sidebar-help{
+  display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.12); border-radius:var(--radius-sm);
+  padding:12px 14px; color:var(--antique-soft); text-decoration:none; font-size:.78rem; line-height:1.4;
 }
-.subtitle{font-size:1.02rem; max-width:56ch; color:var(--antique-soft); opacity:.95;}
-.hero-meta{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;}
-.pill{
-  background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.35);
-  color:var(--antique); padding:7px 14px; border-radius:999px; font-size:.82rem; font-weight:600;
+.sidebar-help-icon{font-size:1.2rem; flex:none;}
+.sidebar-help b{display:block; font-size:.82rem;}
+.sidebar-help .arrow{opacity:.8;}
+.sidebar-user{
+  display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.08); border-radius:var(--radius-sm);
+  padding:10px 12px; font-size:.82rem; min-width:0;
+}
+.sidebar-user-avatar{
+  flex:none; width:34px; height:34px; border-radius:50%; background:#fff; color:var(--amaranth);
+  display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.8rem;
+}
+.sidebar-user-name{font-weight:700; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.sidebar-user-role{font-size:.72rem; opacity:.8;}
+.sidebar-logout{
+  display:flex; align-items:center; gap:8px; background:transparent; border:none; color:var(--antique-soft);
+  font-weight:600; font-size:.85rem; padding:8px 12px; cursor:pointer; opacity:.9;
+}
+.sidebar-logout:hover{opacity:1; text-decoration:underline;}
+.sidebar-logout svg{width:16px; height:16px;}
+
+.main-area{flex:1 1 auto; min-width:0; height:100%; overflow-y:auto; display:flex; flex-direction:column;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  background:#fff; padding:20px 32px; border-bottom:1px solid #f0e3d2;
+}
+.topbar-greeting h1{font-size:1.4rem; font-weight:800; color:var(--seal); margin:0 0 2px;}
+.topbar-greeting p{font-size:.85rem; color:var(--seal-soft); margin:0;}
+.topbar-right{display:flex; align-items:center; gap:26px; flex-wrap:wrap; flex:none; margin-left:auto;}
+.topbar-links{display:flex; align-items:center; gap:22px; flex-wrap:wrap;}
+.topbar-link{
+  display:flex; align-items:center; gap:6px; font-size:.85rem; font-weight:600; color:var(--seal-soft);
+  text-decoration:none; white-space:nowrap;
+}
+.topbar-link svg{width:16px; height:16px; flex:none;}
+.topbar-link.active{color:var(--amaranth);}
+.topbar-bell{
+  flex:none; width:38px; height:38px; border-radius:50%; border:1px solid #eee0cf; background:#fff;
+  color:var(--seal-soft); cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.topbar-bell svg{width:18px; height:18px;}
+.topbar-bell:hover{border-color:var(--amaranth); color:var(--amaranth);}
+
+.content{flex:1 1 auto; padding:28px 32px 60px; width:100%;}
+
+.page-header{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:22px;}
+.page-header-icon{
+  flex:none; width:52px; height:52px; border-radius:50%; background:var(--amaranth); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+}
+.page-header-icon svg{width:24px; height:24px;}
+.page-header-text{flex:1 1 240px; min-width:0;}
+.page-header-text h2{font-size:1.4rem; margin:0 0 2px; color:var(--seal);}
+.page-header-text p{font-size:.86rem; color:var(--seal-soft); margin:0;}
+.page-header-action{flex:none;}
+
+.content-footer{text-align:center; padding:40px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
+.content-footer .fmark{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); display:block; margin-bottom:4px;}
+
+@media (max-width:900px){
+  .app-shell{flex-direction:column; height:auto; overflow:visible;}
+  .sidebar{width:100%; height:auto; overflow-y:visible; padding:16px 16px 14px;}
+  .sidebar-brand{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .sidebar-tagline{display:none;}
+  .sidebar-nav{display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;}
+  .sidebar-item{flex-direction:column; text-align:center; font-size:.68rem; padding:10px 4px; gap:4px;}
+  .sidebar-footer{flex-direction:row; flex-wrap:wrap; margin-top:14px;}
+  .sidebar-help{flex:1 1 200px;}
+  .sidebar-user{flex:1 1 160px;}
+  .main-area{height:auto; overflow-y:visible;}
+  .topbar{padding:16px 20px;}
+  .content{padding:20px 16px 48px;}
 }
 
 /* ---------- STEPPER ---------- */
@@ -333,19 +382,6 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 @keyframes dyse-spin{to{transform:rotate(360deg);}}
 #dyseAuthGate p{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
 
-/* ---------- AUTH BAR (logged-in user strip) ---------- */
-.dyse-auth-bar{
-  display:flex; align-items:center; justify-content:flex-end; gap:14px; flex-wrap:wrap;
-  font-size:.82rem; font-weight:600; margin-top:14px; color:var(--antique);
-}
-.dyse-auth-name{opacity:.95;}
-.dyse-auth-link{color:var(--gamboge); text-decoration:underline; text-underline-offset:3px;}
-.dyse-auth-link:hover{color:#fff;}
-.dyse-auth-logout{
-  background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35); color:var(--antique);
-  padding:5px 14px; border-radius:999px; font-size:.78rem; font-weight:700; cursor:pointer;
-}
-.dyse-auth-logout:hover{background:rgba(255,255,255,.3);}
 
 /* ---------- AUTH FORM (login / signup pages) ---------- */
 .auth-shell{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
@@ -522,7 +558,6 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
 @media (max-width:380px){
   .wrap{padding:0 14px 60px;}
-  .hero{padding:32px 14px 56px;}
   .card-eyebrow{font-size:.66rem;}
   .card-title{font-size:1.4rem;}
 }
@@ -540,36 +575,71 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   <p>dyse</p>
 </div>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div class="brand-row">
-      <span class="mark">👁 dyse</span>
-      <span>Do You Speak English? &middot; Área do Aluno</span>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/images/brand/dyse-logo-white.png" alt="DYSE" class="sidebar-logo">
+      <div class="sidebar-tagline">Do You Speak English?*<br>Área do Aluno</div>
     </div>
-    <span class="eyebrow-badge">Meus cursos</span>
-    <h1 class="title">Seus cursos</h1>
-    <p class="subtitle">Escolha um curso para ver as atividades liberadas pela professora.</p>
-    <div class="dyse-auth-bar" id="authBar"></div>
+    <nav class="sidebar-nav">
+      <a href="/area-do-aluno.html" class="sidebar-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span>Minhas atividades</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a class="sidebar-help" href="mailto:contato@doyouspeakenglish.com.br">
+        <span class="sidebar-help-icon">🎧</span>
+        <span><b>Precisa de ajuda?</b>Fale com o suporte <span class="arrow">→</span></span>
+      </a>
+      <div class="sidebar-user" id="sidebarUser"></div>
+      <button type="button" class="sidebar-logout" onclick="dyseLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="topbar-greeting">
+        <h1 id="topbarGreeting">Olá! 👋</h1>
+        <p>Escolha um curso para ver as atividades liberadas pela professora.</p>
+      </div>
+      <div class="topbar-right">
+        <nav class="topbar-links" id="topbarLinks"></nav>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="page-header">
+        <div class="page-header-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </div>
+        <div class="page-header-text">
+          <h2>Seus cursos</h2>
+          <p>Escolha um curso para ver as atividades liberadas pela professora.</p>
+        </div>
+      </div>
+
+      <div id="pageNotice" style="display:none;" class="feedback bad">
+        <span id="pageNoticeText"></span>
+        <button type="button" onclick="document.getElementById('pageNotice').style.display='none'" style="float:right; background:none; border:none; font-weight:800; cursor:pointer; color:inherit;">×</button>
+      </div>
+
+      <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="coursesWrap"></div>
+
+      <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="materialWrap"></div>
+
+      <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="reportCardsWrap"></div>
+
+      <footer class="content-footer">
+        <span class="fmark">dyse</span>
+        Do You Speak English?* &middot; Área do Aluno
+      </footer>
+    </div>
   </div>
 </div>
-
-<div class="wrap" style="margin-top:26px;">
-  <div id="pageNotice" style="display:none;" class="feedback bad">
-    <span id="pageNoticeText"></span>
-    <button type="button" onclick="document.getElementById('pageNotice').style.display='none'" style="float:right; background:none; border:none; font-weight:800; cursor:pointer; color:inherit;">×</button>
-  </div>
-</div>
-
-<div class="wrap" style="margin-top:14px;" id="coursesWrap"></div>
-
-<div class="wrap" style="margin-top:14px;" id="materialWrap"></div>
-
-<div class="wrap" style="margin-top:14px;" id="reportCardsWrap"></div>
-
-<footer class="site-footer">
-  <div class="fmark">dyse</div>
-  <p>Do You Speak English? &middot; Área do Aluno</p>
-</footer>
 
 <script src="/assets/dyse-auth.js"></script>
 <script src="/atividades/a1/manifest.js"></script>
@@ -598,6 +668,35 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     }
   })();
 
+  /* ---------- Cabeçalho (sidebar + topbar) ----------
+     Mesmo padrão local do gestao.html/professora.html — não usa
+     dyseRenderAuthBar porque nome/Sair vão pro rodapé da sidebar e os
+     links de painel pro topo. */
+  function renderAlunoChrome(session, profile){
+    const meta = session.user.user_metadata || {};
+    const fullName = meta.full_name || session.user.email;
+    const firstName = (fullName || '').trim().split(/\s+/)[0] || 'Aluno(a)';
+    document.getElementById('topbarGreeting').textContent = 'Olá, ' + firstName + '! 👋';
+
+    const userIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    const listIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>';
+    const links = [];
+    if(dyseIsAdmin(profile)) links.push({ href:'/gestao.html', label:'Painel da gestão', icon:userIcon, active:false });
+    if(dyseIsTeacher(profile)) links.push({ href:'/professora.html', label:'Painel do professor', icon:userIcon, active:false });
+    links.push({ href:'/area-do-aluno.html', label:'Minhas atividades', icon:listIcon, active:true });
+    document.getElementById('topbarLinks').innerHTML = links.map(l =>
+      '<a href="' + l.href + '" class="topbar-link' + (l.active ? ' active' : '') + '">' + l.icon + '<span>' + l.label + '</span></a>'
+    ).join('');
+
+    const initials = (fullName || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'U';
+    document.getElementById('sidebarUser').innerHTML =
+      '<div class="sidebar-user-avatar">' + escapeHtmlLocal(initials) + '</div>' +
+      '<div style="min-width:0;">' +
+        '<div class="sidebar-user-name">' + escapeHtmlLocal(fullName) + '</div>' +
+        '<div class="sidebar-user-role">Aluno(a)</div>' +
+      '</div>';
+  }
+
   (async () => {
     const session = await dyseRequireAuth();
     if(!session) return;
@@ -617,7 +716,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       return;
     }
 
-    dyseRenderAuthBar('authBar');
+    renderAlunoChrome(session, profile);
 
     const wrap = document.getElementById('coursesWrap');
 
