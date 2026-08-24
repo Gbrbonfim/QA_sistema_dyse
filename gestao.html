@@ -120,7 +120,8 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .dyse-auth-logout:hover{background:rgba(255,255,255,.3);}
 
 /* ---------- TABS ---------- */
-.auth-tabs{display:flex; background:var(--antique-soft); border-radius:999px; padding:4px; margin-top:20px; flex-wrap:wrap;}
+.auth-tabs{display:flex; background:var(--antique-soft); border-radius:999px; padding:4px; flex-wrap:wrap;}
+.hero .auth-tabs{margin-top:20px;}
 .auth-tab{flex:1; text-align:center; padding:9px; border-radius:999px; font-weight:700; font-size:.85rem; cursor:pointer; color:var(--seal-soft); border:none; background:transparent; white-space:nowrap;}
 .auth-tab.active{background:var(--amaranth); color:#fff;}
 
@@ -286,7 +287,7 @@ tr.pag-detalhe-row .dash-table th{background:transparent; color:var(--seal-soft)
 .kpi-value{font-family:var(--font-display); color:var(--amaranth); font-size:1.4rem; line-height:1.1;}
 .kpi-label{font-size:.74rem; color:var(--seal-soft); opacity:.8; margin-top:4px; text-transform:uppercase; letter-spacing:.03em;}
 .chart-wrap{background:#fff; border-radius:var(--radius-md); padding:18px; box-shadow:var(--shadow-card); margin-bottom:24px;}
-.fin-subtabs{max-width:640px;}
+.fin-subtabs{max-width:640px; margin-bottom:22px;}
 
 /* ---------- TOGGLE / CHIP LIST (matérias e turmas por professor) ---------- */
 .dyse-toggle{position:relative; display:inline-block; width:40px; height:22px; flex:none;}
@@ -984,26 +985,27 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
   }
 
   function renderTurmasTableHtml(turmas){
-    const rows = turmas.map(t => {
+    return turmas.map(t => {
       const materiaCount = TURMA_MATERIAS.filter(tm => tm.turma_id === t.id).length;
       const studentCount = STUDENTS.filter(s => s.turma_id === t.id).length;
       const nivel = NIVEIS.find(n => TURMA_MATERIAS.some(tm => tm.turma_id === t.id && tm.materia_slug === n.slug));
-      return '<tr>' +
-        '<td data-label="Turma"><b>' + escapeHtmlLocal(t.name) + '</b>' +
-          (nivel ? ' <span class="pill-count">' + escapeHtmlLocal(nivel.name) + '</span>' : '') +
-          (t.description ? '<div style="opacity:.65; font-size:.78rem;">' + escapeHtmlLocal(t.description) + '</div>' : '') +
-        '</td>' +
-        '<td data-label="Matérias liberadas"><span class="pill-count">' + materiaCount + '</span></td>' +
-        '<td data-label="Alunos"><span class="pill-count">' + studentCount + '</span></td>' +
-        '<td data-label="Ações"><div class="btn-row">' +
-          '<button type="button" class="btn btn-ghost btn-sm" onclick="openTurmaEditModal(\'' + t.id + '\')">Editar</button>' +
-          '<button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
-        '</div></td>' +
-      '</tr>';
+      return '<details class="dyse-collapsible dyse-collapsible-nested">' +
+        '<summary><span class="summary-left">' +
+          '<div><div style="font-weight:700; color:var(--seal);">' + escapeHtmlLocal(t.name) +
+            (nivel ? ' <span class="pill-count">' + escapeHtmlLocal(nivel.name) + '</span>' : '') + '</div>' +
+          (t.description ? '<span style="font-size:.78rem; opacity:.7; font-weight:400;">' + escapeHtmlLocal(t.description) + '</span>' : '') +
+          '</div>' +
+          '<span class="pill-count">' + materiaCount + ' matéria' + (materiaCount === 1 ? '' : 's') + '</span>' +
+          '<span class="pill-count">' + studentCount + ' aluno' + (studentCount === 1 ? '' : 's') + '</span>' +
+        '</span><span class="chevron">›</span></summary>' +
+        '<div class="dyse-collapsible-body">' +
+          '<div class="btn-row" style="justify-content:flex-end;">' +
+            '<button type="button" class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openTurmaEditModal(\'' + t.id + '\')">Editar</button>' +
+            '<button type="button" class="btn btn-danger btn-sm" onclick="event.stopPropagation(); handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
+          '</div>' +
+        '</div>' +
+      '</details>';
     }).join('');
-    return '<table class="dash-table dash-table-stacked">' +
-      '<thead><tr><th>Turma</th><th>Matérias liberadas</th><th>Alunos</th><th>Ações</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table>';
   }
 
   let CURRENT_TURMA_EDIT_ID = null;
@@ -1884,7 +1886,7 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '<option value="' + t.id + '"' + (p.turma_id === t.id ? ' selected' : '') + '>' + escapeHtmlLocal(t.name) + '</option>'
       ).join('');
       const header = '<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">' +
-        '<div><div class="gestao-card-title" style="font-size:1.1rem; margin-bottom:2px;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' +
+        '<div><div style="font-size:1.05rem; font-weight:700; color:var(--seal); margin-bottom:2px;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' +
         '<span style="font-size:.78rem; opacity:.7;">' + escapeHtmlLocal(p.email || '') + ' · ' + (ROLE_LABELS[role] || capitalize(role)) + '</span></div>' +
       '</div>';
       const toggles = '<div class="chip-toggle-row"><span class="name">Também dá aula</span>' +
