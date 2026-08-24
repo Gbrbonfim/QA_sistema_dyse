@@ -1810,6 +1810,49 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
       const turmasDoProf = TEACHER_TURMAS.filter(tt => tt.teacher_id === p.id)
         .map(tt => TURMAS.find(t => t.id === tt.turma_id))
         .filter(Boolean);
+      const turmaIdsDoProf = new Set(turmasDoProf.map(t => t.id));
+
+      // Alunos que geram cobrança financeira pra este professor (período
+      // aberto com professor_id = p.id), mas cuja turma atual não é uma das
+      // que ele(a) tem acesso — ou nem tem turma. Sinal de que o vínculo
+      // financeiro e o de acesso à turma (Turmas → Editar → Professores
+      // com acesso) desalinharam: o professor cobra pelo aluno, mas não
+      // necessariamente tem acesso ao Registro de Classe da turma dele.
+      const financeiroAlunosDoProf = STUDENTS.filter(s => {
+        const periodo = dyseFindPeriodoAberto(ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === s.id));
+        return periodo && periodo.professor_id === p.id;
+      });
+      const alunosParaVerificar = financeiroAlunosDoProf.filter(s => !s.turma_id || !turmaIdsDoProf.has(s.turma_id));
+
+      const alertaHtml = alunosParaVerificar.length
+        ? '<div class="fin-only">' +
+            '<div class="report-line" style="background:#fbeceb; color:var(--bad); font-weight:700; border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:12px;">' +
+              '⚠️ Existem ' + alunosParaVerificar.length + ' aluno' + (alunosParaVerificar.length === 1 ? '' : 's') +
+              ' cadastrado' + (alunosParaVerificar.length === 1 ? '' : 's') + ' no financeiro pra ' +
+              escapeHtmlLocal(p.full_name || 'esta professora') + ', verificar.' +
+            '</div>' +
+            '<details class="dyse-collapsible dyse-collapsible-nested">' +
+              '<summary><span class="summary-left">Alunos a verificar<span class="pill-count">' + alunosParaVerificar.length + '</span></span><span class="chevron">›</span></summary>' +
+              '<div class="dyse-collapsible-body">' +
+                '<table class="dash-table dash-table-stacked"><thead><tr><th>Aluno</th><th>E-mail</th><th>Turma atual</th><th>Alocar turma</th></tr></thead><tbody>' +
+                alunosParaVerificar.map(s => {
+                  const turmaOptions = '<option value="">Sem turma</option>' + TURMAS.map(t =>
+                    '<option value="' + t.id + '"' + (s.turma_id === t.id ? ' selected' : '') + '>' + escapeHtmlLocal(t.name) + '</option>'
+                  ).join('');
+                  const turmaAtual = s.turma_id ? TURMAS.find(t => t.id === s.turma_id) : null;
+                  return '<tr>' +
+                    '<td data-label="Aluno">' + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
+                    '<td data-label="E-mail">' + escapeHtmlLocal(s.email || '-') + '</td>' +
+                    '<td data-label="Turma atual">' + (turmaAtual ? escapeHtmlLocal(turmaAtual.name) : '<span class="no-turma">Sem turma</span>') + '</td>' +
+                    '<td data-label="Alocar turma"><select onchange="handleContaTurmaChange(\'' + s.id + '\', this.value)">' + turmaOptions + '</select></td>' +
+                  '</tr>';
+                }).join('') +
+                '</tbody></table>' +
+              '</div>' +
+            '</details>' +
+          '</div>'
+        : '';
+
       const turmasHtml = turmasDoProf.length
         ? turmasDoProf.map(t => {
             const alunosDaTurma = STUDENTS.filter(s => s.turma_id === t.id);
@@ -1833,12 +1876,14 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
           '<div><div style="font-size:1rem; font-weight:700; color:var(--seal); margin-bottom:2px;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' +
           '<span style="font-size:.78rem; opacity:.7; font-weight:400;">' + escapeHtmlLocal(p.email || '') + '</span></div>' +
           '<span class="pill-count">' + turmasDoProf.length + '</span>' +
+          (alunosParaVerificar.length ? '<span class="pill-count fin-only" style="background:#fbeceb; color:var(--bad);" title="Alunos cadastrados no financeiro fora das turmas que ele(a) tem acesso">⚠ ' + alunosParaVerificar.length + '</span>' : '') +
         '</span><span class="chevron">›</span></summary>' +
         '<div class="dyse-collapsible-body">' +
           '<div class="btn-row" style="justify-content:flex-end; margin:2px 0 12px;">' +
             '<button type="button" class="btn btn-ghost btn-xs" onclick="event.stopPropagation(); handleReenviarAcesso(\'' + escapeHtmlLocal(p.email || '') + '\')"' + (p.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
             '<button type="button" class="btn btn-ghost btn-xs" onclick="event.stopPropagation(); handleDefinirSenhaTemporaria(\'' + p.id + '\')">Definir senha temporária</button>' +
           '</div>' +
+          alertaHtml +
           turmasHtml +
         '</div>' +
       '</details>';
