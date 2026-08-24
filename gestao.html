@@ -218,6 +218,26 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
   }
 }
 
+/* Mesma conversão em card empilhado acima, só que sempre ativa (não só no
+   celular) — pra tabelas com muitos botões de ação por linha (ex: Alunos),
+   onde nem em tela larga cabe tudo numa linha só sem estourar a largura e
+   forçar rolagem horizontal. Nunca deve aparecer barra de rolagem lateral
+   nessas tabelas, em nenhum tamanho de tela. */
+.dash-table-stacked thead{ display:none; }
+.dash-table-stacked, .dash-table-stacked tbody, .dash-table-stacked tr, .dash-table-stacked td{ display:block; width:100%; }
+.dash-table-stacked{ background:transparent; box-shadow:none; border-radius:0; }
+.dash-table-stacked tr{
+  background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card);
+  margin-bottom:14px; padding:14px 16px; border:1px solid #f0e3d2;
+}
+.dash-table-stacked td{ padding:8px 0; border-bottom:1px solid #f6ece0; overflow-wrap:anywhere; }
+.dash-table-stacked td:last-child{ border-bottom:none; padding-bottom:0; }
+.dash-table-stacked td:empty{ display:none; }
+.dash-table-stacked td::before{
+  content:attr(data-label); display:block; font-weight:700; font-size:.68rem; text-transform:uppercase;
+  letter-spacing:.04em; color:var(--seal-soft); opacity:.65; margin-bottom:3px;
+}
+
 .dash-filter{display:flex; gap:10px; flex-wrap:wrap; margin:0 0 16px;}
 .dash-filter input, .dash-filter select{
   border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
@@ -1001,9 +1021,9 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '</div></td>' +
       '</tr>';
     }).join('');
-    return '<div style="overflow-x:auto;"><table class="dash-table dash-table-responsive">' +
+    return '<table class="dash-table dash-table-stacked">' +
       '<thead><tr><th>Turma</th><th>Matérias liberadas</th><th>Alunos</th><th>Ações</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table></div>';
+      '<tbody>' + rows + '</tbody></table>';
   }
 
   let CURRENT_TURMA_EDIT_ID = null;
@@ -1764,14 +1784,14 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '</div></td>' +
       '</tr>';
     }).join('') || '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
-    return '<div style="overflow-x:auto;"><table class="dash-table dash-table-responsive">' +
+    return '<table class="dash-table dash-table-stacked">' +
       '<thead><tr>' +
         '<th>Aluno</th><th>E-mail</th><th>Turma</th>' +
         '<th class="fin-only">Modalidade</th><th class="fin-only">Professor responsável</th><th class="fin-only">Situação</th><th class="fin-only">Financeiro</th>' +
         '<th>Acesso</th>' +
       '</tr></thead>' +
       '<tbody>' + bodyHtml + '</tbody>' +
-    '</table></div>';
+    '</table>';
   }
 
   /* ---------- PROFESSORES ----------
