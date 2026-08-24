@@ -176,7 +176,13 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
    mesma grade de 8px entre botões em todo lugar, em vez de padding solto. */
 .btn-sm{padding:7px 16px; font-size:.78rem;}
 .btn-xs{padding:5px 13px; font-size:.74rem;}
-.btn-row{display:inline-flex; align-items:center; gap:8px; flex-wrap:nowrap;}
+.btn-row{display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;}
+
+/* Botões de ação de uma linha de tabela (ex: coluna Financeiro/Acesso dos
+   Alunos) com a mesma largura, pra não ficar uma fileira de pílulas com
+   tamanhos diferentes de acordo com o texto — e quebrando linha (em vez
+   de forçar rolagem horizontal) quando não cabem todos lado a lado. */
+.btn-fixed{width:190px; justify-content:center; text-align:center;}
 
 .auth-msg{margin-top:14px; padding:11px 14px; border-radius:var(--radius-sm); font-size:.85rem; font-weight:600; display:none;}
 .auth-msg.show{display:block;}
@@ -1741,12 +1747,12 @@ footer.site-footer .fmark{font-family:var(--font-display); font-size:1.1rem; col
         '<td class="fin-only" data-label="Modalidade">' + (modalidade ? escapeHtmlLocal(modalidade.name) : '<span class="no-turma">Sem modalidade</span>') + '</td>' +
         '<td class="fin-only" data-label="Professor responsável">' + (professor ? escapeHtmlLocal(professor.full_name || '') : '<span class="no-turma">Sem professor</span>') + '</td>' +
         '<td class="fin-only" data-label="Situação">' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
-        '<td class="fin-only" data-label="Financeiro"><button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
+        '<td class="fin-only" data-label="Financeiro"><button type="button" class="btn btn-ghost btn-xs btn-fixed" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
         '<td data-label="Acesso"><div class="btn-row">' +
-          '<button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoHistoricoModal(\'' + s.id + '\')">Histórico</button>' +
-          '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
-          '<button type="button" class="btn btn-ghost btn-xs" onclick="handleDefinirSenhaTemporaria(\'' + s.id + '\')">Definir senha temporária</button>' +
-          '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
+          '<button type="button" class="btn btn-ghost btn-xs btn-fixed" onclick="openAlunoHistoricoModal(\'' + s.id + '\')">Registro de classe</button>' +
+          '<button type="button" class="btn btn-ghost btn-xs btn-fixed" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
+          '<button type="button" class="btn btn-ghost btn-xs btn-fixed" onclick="handleDefinirSenhaTemporaria(\'' + s.id + '\')">Definir senha temporária</button>' +
+          '<button type="button" class="btn btn-danger btn-xs btn-fixed" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
         '</div></td>' +
       '</tr>';
     }).join('') || '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
