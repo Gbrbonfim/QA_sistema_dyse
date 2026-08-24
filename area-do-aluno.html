@@ -436,7 +436,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .dash-card.locked:hover{transform:none; box-shadow:var(--shadow-card);}
 
 /* ---------- COURSE FOLDER (área do aluno) ---------- */
-.course-folder-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:18px;}
+.course-folder-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(360px,1fr)); gap:18px;}
 .course-folder{
   display:flex; align-items:center; gap:16px; background:#fff; border-radius:var(--radius-lg);
   padding:24px; box-shadow:var(--shadow-card); text-decoration:none; color:var(--seal);
@@ -449,6 +449,42 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .course-folder-desc{font-size:.85rem; color:var(--seal-soft); margin:2px 0 8px;}
 .course-folder-stats{font-size:.76rem; font-weight:700; color:var(--seal-soft); background:var(--antique-soft); display:inline-block; padding:3px 10px; border-radius:999px;}
 .course-folder-arrow{font-size:1.6rem; color:var(--gamboge); flex:none;}
+
+/* ---------- KPIs do topo (área do aluno) ---------- */
+.aluno-kpi-row{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px;}
+.aluno-kpi-card{
+  background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:18px 22px;
+  display:flex; align-items:center; gap:16px; flex:1 1 220px; min-width:220px;
+}
+.aluno-kpi-icon{flex:none; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center;}
+.aluno-kpi-icon svg{width:24px; height:24px;}
+.aluno-kpi-value{font-size:1.6rem; font-weight:800; color:var(--seal); line-height:1.1;}
+.aluno-kpi-label{font-size:.92rem; font-weight:700; color:var(--seal);}
+.aluno-kpi-sub{font-size:.78rem; color:var(--seal-soft); opacity:.8;}
+.aluno-divider{border:none; border-top:1px solid #f0e3d2; margin:0 0 24px;}
+
+/* ---------- CARDS DE CURSO (área do aluno) ---------- */
+.course-card{
+  background:#fff; border-radius:var(--radius-lg); padding:24px; box-shadow:var(--shadow-card);
+  border-left:8px solid var(--amaranth); display:flex; flex-direction:column; gap:16px;
+}
+.course-card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:14px;}
+.course-card-name{font-family:var(--font-display); font-size:1.4rem; color:var(--amaranth); margin:0;}
+.course-card-desc{font-size:.85rem; color:var(--seal-soft); margin-top:4px;}
+.course-card-icon{flex:none; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;}
+.course-card-icon svg{width:26px; height:26px;}
+.course-card-stats{display:flex; align-items:center; gap:12px; background:var(--antique-soft); border-radius:var(--radius-sm); padding:12px 16px;}
+.course-card-stats-icon{
+  flex:none; width:32px; height:32px; border-radius:50%; background:#fff; display:flex; align-items:center;
+  justify-content:center; color:var(--seal-soft);
+}
+.course-card-stats-icon svg{width:15px; height:15px;}
+.course-card-stats-text{flex:1 1 auto; min-width:0;}
+.course-card-stats-text span{font-size:.8rem; color:var(--seal-soft); font-weight:600;}
+.course-card-bar{height:6px; border-radius:999px; background:#e9d9c5; overflow:hidden; margin-top:6px;}
+.course-card-bar span{display:block; height:100%; background:var(--amaranth);}
+.course-card-pct{flex:none; font-size:.78rem; font-weight:800; color:var(--seal-soft);}
+.course-card-cta{width:100%; justify-content:center; text-decoration:none;}
 
 /* ---------- MATERIAL DAS AULAS (slides das aulas já dadas) ---------- */
 .material-nivel-title{font-family:var(--font-display); font-size:1.2rem; color:var(--amaranth); margin-bottom:8px;}
@@ -612,19 +648,23 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     </header>
 
     <div class="content">
+      <div id="pageNotice" style="display:none;" class="feedback bad">
+        <span id="pageNoticeText"></span>
+        <button type="button" onclick="document.getElementById('pageNotice').style.display='none'" style="float:right; background:none; border:none; font-weight:800; cursor:pointer; color:inherit;">×</button>
+      </div>
+
+      <div class="aluno-kpi-row" id="alunoKpiRow"></div>
+
+      <hr class="aluno-divider">
+
       <div class="page-header">
         <div class="page-header-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
         </div>
         <div class="page-header-text">
           <h2>Seus cursos</h2>
           <p>Escolha um curso para ver as atividades liberadas pela professora.</p>
         </div>
-      </div>
-
-      <div id="pageNotice" style="display:none;" class="feedback bad">
-        <span id="pageNoticeText"></span>
-        <button type="button" onclick="document.getElementById('pageNotice').style.display='none'" style="float:right; background:none; border:none; font-weight:800; cursor:pointer; color:inherit;">×</button>
       </div>
 
       <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="coursesWrap"></div>
@@ -743,7 +783,19 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const doneMap = {}; // "course:aula:num" -> resultado
     results.forEach(r => doneMap[r.course + ':' + (r.aula || 1) + ':' + r.activity_num] = r);
 
+    // Paleta/ícone por curso — alterna pela posição, mesma ideia do
+    // dyseColorForSlug usado em gestao.html, só que sem depender dele aqui.
+    const COURSE_ACCENTS = [
+      { border:'var(--amaranth)', text:'var(--amaranth)', bg:'#FCE4E9', fg:'#D03B55' },
+      { border:'var(--gamboge)', text:'var(--gamboge-dark)', bg:'#FDF0DD', fg:'#CE8613' },
+      { border:'var(--orangered)', text:'var(--orangered)', bg:'#FCE0D3', fg:'#B84F19' },
+      { border:'var(--seal-soft)', text:'var(--seal-soft)', bg:'#EFE2D2', fg:'#6b5a45' }
+    ];
+    const COURSE_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>';
+    const STATS_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>';
+
     const cards = [];
+    let kpiAtividadesLiberadas = 0;
     for(const course of COURSES){
       if(!allowedSlugs.has(course.id)) continue; // matéria não liberada pra turma do aluno
 
@@ -766,18 +818,42 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         doneCount = course.activities.filter(a => doneMap[course.id + ':1:' + a.num]).length;
       }
 
+      kpiAtividadesLiberadas += publishedCount;
+      const accent = COURSE_ACCENTS[cards.length % COURSE_ACCENTS.length];
+      const pct = totalCount ? Math.round((publishedCount / totalCount) * 100) : 0;
+
       cards.push(
-        '<a class="course-folder" href="/atividades/' + course.id + '/">' +
-          '<div class="course-folder-icon">📁</div>' +
-          '<div class="course-folder-info">' +
-            '<div class="course-folder-name">' + course.name + '</div>' +
-            '<div class="course-folder-desc">' + course.description + '</div>' +
-            '<div class="course-folder-stats">' + publishedCount + ' de ' + totalCount + ' atividades liberadas &middot; ' + doneCount + ' enviadas</div>' +
+        '<div class="course-card" style="border-left-color:' + accent.border + ';">' +
+          '<div class="course-card-top">' +
+            '<div>' +
+              '<h3 class="course-card-name" style="color:' + accent.text + ';">' + course.name + '</h3>' +
+              '<p class="course-card-desc">' + course.description + '</p>' +
+            '</div>' +
+            '<div class="course-card-icon" style="background:' + accent.bg + '; color:' + accent.fg + ';">' + COURSE_ICON_SVG + '</div>' +
           '</div>' +
-          '<div class="course-folder-arrow">&#8594;</div>' +
-        '</a>'
+          '<div class="course-card-stats">' +
+            '<div class="course-card-stats-icon">' + STATS_ICON_SVG + '</div>' +
+            '<div class="course-card-stats-text">' +
+              '<span>' + publishedCount + ' de ' + totalCount + ' atividades liberadas &middot; ' + doneCount + ' enviadas</span>' +
+              '<div class="course-card-bar"><span style="width:' + pct + '%;"></span></div>' +
+            '</div>' +
+            '<div class="course-card-pct">' + pct + '%</div>' +
+          '</div>' +
+          '<a class="btn btn-primary course-card-cta" href="/atividades/' + course.id + '/">Acessar atividades →</a>' +
+        '</div>'
       );
     }
+
+    document.getElementById('alunoKpiRow').innerHTML =
+      '<div class="aluno-kpi-card">' +
+        '<div class="aluno-kpi-icon" style="background:#FCE4E9; color:#D03B55;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg></div>' +
+        '<div><div class="aluno-kpi-value">' + cards.length + '</div><div class="aluno-kpi-label">Curso' + (cards.length === 1 ? '' : 's') + ' ativo' + (cards.length === 1 ? '' : 's') + '</div><div class="aluno-kpi-sub">Continue aprendendo!</div></div>' +
+      '</div>' +
+      '<div class="aluno-kpi-card">' +
+        '<div class="aluno-kpi-icon" style="background:#FDF0DD; color:#CE8613;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-3"/><rect x="9" y="3" width="6" height="6" rx="1"/></svg></div>' +
+        '<div><div class="aluno-kpi-value">' + kpiAtividadesLiberadas + '</div><div class="aluno-kpi-label">Atividade' + (kpiAtividadesLiberadas === 1 ? '' : 's') + ' liberada' + (kpiAtividadesLiberadas === 1 ? '' : 's') + '</div><div class="aluno-kpi-sub">Em todos os cursos</div></div>' +
+      '</div>';
+
     wrap.innerHTML = cards.length
       ? '<div class="course-folder-grid">' + cards.join('') + '</div>'
       : '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
