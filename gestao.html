@@ -2320,6 +2320,7 @@ body.dyse-modal-open{overflow:hidden;}
           '<div class="btn-row" style="justify-content:flex-end; margin:2px 0 12px;">' +
             '<button type="button" class="btn btn-ghost btn-xs" onclick="event.stopPropagation(); handleReenviarAcesso(\'' + escapeHtmlLocal(p.email || '') + '\')"' + (p.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
             '<button type="button" class="btn btn-ghost btn-xs" onclick="event.stopPropagation(); handleDefinirSenhaTemporaria(\'' + p.id + '\')">Definir senha temporária</button>' +
+            '<button type="button" class="btn btn-danger btn-xs" onclick="event.stopPropagation(); handleExcluirProfessor(\'' + p.id + '\')">Excluir</button>' +
           '</div>' +
           alertaHtml +
           turmasHtml +
@@ -2441,6 +2442,30 @@ body.dyse-modal-open{overflow:hidden;}
       ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
       populateAlunosFiltros();
       renderAlunosTable();
+    }catch(err){
+      alert('Erro de conexão com o servidor: ' + err.message);
+    }
+  }
+
+  async function handleExcluirProfessor(id){
+    const professor = TEACHERS.find(p => p.id === id);
+    const nome = professor ? (professor.full_name || professor.email || '') : id;
+    if(!confirm('Excluir definitivamente "' + nome + '"? Isso remove a conta de login dele(a) (não só o cadastro) e não pode ser desfeito.')) return;
+
+    const session = await dyseGetSession();
+    try{
+      // Mesmo endpoint usado pra excluir aluno — a exclusão é feita direto
+      // no Supabase Auth (auth.admin.deleteUser) e não depende da role de
+      // quem está sendo excluído.
+      const resp = await fetch('/api/delete-student', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ user_id: id })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if(!resp.ok){ alert('Não foi possível excluir: ' + (result.error || resp.statusText)); return; }
+      TEACHERS = await dyseListProfilesByRole('teacher');
+      renderProfessoresList();
     }catch(err){
       alert('Erro de conexão com o servidor: ' + err.message);
     }
