@@ -198,6 +198,13 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 }
 .gestao-field input:focus, .gestao-field select:focus, .gestao-field textarea:focus{outline:none; border-color:var(--amaranth);}
 .gestao-hint{font-size:.74rem; color:var(--seal-soft); opacity:.75; margin-top:4px;}
+.dias-semana-row{display:flex; flex-wrap:wrap; gap:8px;}
+.dias-semana-row label{
+  display:flex; align-items:center; gap:6px; font-size:.82rem; font-weight:700; color:var(--seal-soft);
+  background:var(--antique-soft); border-radius:999px; padding:7px 13px; cursor:pointer;
+}
+.dias-semana-row input{width:auto; margin:0;}
+.turma-schedule{color:var(--amaranth); font-weight:600;}
 
 /* Módulo Financeiro é exclusivo da role "financeiro" (acima de "admin") —
    a trava de verdade é a RLS no banco, isto aqui só evita mostrar pra
@@ -847,6 +854,8 @@ body.dyse-modal-open{overflow:hidden;}
         <div class="gestao-field"><label>Nome da turma</label><input type="text" id="newTurmaName" placeholder="Ex: Turma A — Manhã" required></div>
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="newTurmaDesc" placeholder="Ex: Alunos do 3º ano, período da manhã"></div>
         <div class="gestao-field"><label>Capacidade (opcional)</label><input type="number" id="newTurmaCapacidade" min="0" placeholder="Ex: 4"></div>
+        <div class="gestao-field"><label>Dia(s) da semana (opcional)</label><div id="newTurmaDiasSemana"></div></div>
+        <div class="gestao-field"><label>Horário (opcional)</label><input type="text" id="newTurmaHorario" placeholder="Ex: 21h"></div>
         <button type="submit" class="btn btn-primary">+ Criar turma</button>
       </form>
       <div class="auth-msg" id="turmaMsg"></div>
@@ -867,6 +876,8 @@ body.dyse-modal-open{overflow:hidden;}
         <div class="gestao-field"><label>Nome da turma</label><input type="text" id="turmaEditName" required></div>
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="turmaEditDesc"></div>
         <div class="gestao-field"><label>Capacidade (opcional)</label><input type="number" id="turmaEditCapacidade" min="0" placeholder="Ex: 4"></div>
+        <div class="gestao-field"><label>Dia(s) da semana (opcional)</label><div id="turmaEditDiasSemana"></div></div>
+        <div class="gestao-field"><label>Horário (opcional)</label><input type="text" id="turmaEditHorario" placeholder="Ex: 21h"></div>
         <div class="btn-row">
           <button type="submit" class="btn btn-primary">Salvar</button>
           <button type="button" class="btn btn-danger" onclick="handleDeleteTurmaFromEditModal()">Excluir turma</button>
@@ -1203,6 +1214,37 @@ body.dyse-modal-open{overflow:hidden;}
     return palette[hash % palette.length];
   }
   const TURMA_USERS_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+  const DIAS_SEMANA = [
+    { slug:'seg', label:'Seg', nome:'Segunda' },
+    { slug:'ter', label:'Ter', nome:'Terça' },
+    { slug:'qua', label:'Qua', nome:'Quarta' },
+    { slug:'qui', label:'Qui', nome:'Quinta' },
+    { slug:'sex', label:'Sex', nome:'Sexta' },
+    { slug:'sab', label:'Sáb', nome:'Sábado' },
+    { slug:'dom', label:'Dom', nome:'Domingo' }
+  ];
+  function diasSemanaChecksHtml(idPrefix, selecionados){
+    const sel = new Set(selecionados || []);
+    return '<div class="dias-semana-row">' + DIAS_SEMANA.map(d =>
+      '<label><input type="checkbox" id="' + idPrefix + '_' + d.slug + '" value="' + d.slug + '"' + (sel.has(d.slug) ? ' checked' : '') + '> ' + d.label + '</label>'
+    ).join('') + '</div>';
+  }
+  function lerDiasSemanaChecks(idPrefix){
+    return DIAS_SEMANA.filter(d => {
+      const el = document.getElementById(idPrefix + '_' + d.slug);
+      return el && el.checked;
+    }).map(d => d.slug);
+  }
+  function formatDiasHorario(diasSemana, horario){
+    const nomes = (diasSemana || []).map(slug => {
+      const d = DIAS_SEMANA.find(x => x.slug === slug);
+      return d ? d.nome : slug;
+    });
+    if(!nomes.length && !horario) return '';
+    let texto = nomes.join(', ');
+    if(horario) texto += (texto ? ' às ' : 'Às ') + horario;
+    return texto;
+  }
 
   function populateTurmaNivelFilter(){
     const sel = document.getElementById('filterTurmaNivel');
@@ -1325,11 +1367,14 @@ body.dyse-modal-open{overflow:hidden;}
           }).join('')
         : '<span class="empty">Nenhum aluno nesta turma.</span>';
 
+      const schedule = formatDiasHorario(t.dias_semana, t.horario);
       return '<div class="turma-row">' +
         '<div class="turma-avatar" style="background:' + avatarColorTurma.bg + '; color:' + avatarColorTurma.fg + ';">' + TURMA_USERS_ICON + '</div>' +
         '<div class="turma-main">' +
           '<div class="name">' + escapeHtmlLocal(t.name) + '</div>' +
-          '<div class="meta">' + (t.description ? escapeHtmlLocal(t.description) : 'Sem descrição') + '</div>' +
+          '<div class="meta">' + (t.description ? escapeHtmlLocal(t.description) : 'Sem descrição') +
+            (schedule ? ' <span class="turma-schedule">· ' + escapeHtmlLocal(schedule) + '</span>' : '') +
+          '</div>' +
         '</div>' +
         '<div class="turma-badges">' +
           '<span class="turma-pill">' + materiasCount + ' matéria' + (materiasCount === 1 ? '' : 's') + '</span>' +
@@ -1366,6 +1411,8 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('turmaEditName').value = t.name || '';
     document.getElementById('turmaEditDesc').value = t.description || '';
     document.getElementById('turmaEditCapacidade').value = (t.capacidade === null || t.capacidade === undefined) ? '' : t.capacidade;
+    document.getElementById('turmaEditDiasSemana').innerHTML = diasSemanaChecksHtml('turmaEditDia', t.dias_semana);
+    document.getElementById('turmaEditHorario').value = t.horario || '';
     renderTurmaModalDetails(turmaId);
     document.getElementById('turmaEditModal').classList.add('open');
     document.getElementById('turmaEditModal').setAttribute('aria-hidden','false');
@@ -1386,8 +1433,10 @@ body.dyse-modal-open{overflow:hidden;}
     const description = document.getElementById('turmaEditDesc').value.trim();
     const capacidadeRaw = document.getElementById('turmaEditCapacidade').value;
     const capacidade = capacidadeRaw === '' ? null : parseInt(capacidadeRaw, 10);
+    const dias_semana = lerDiasSemanaChecks('turmaEditDia');
+    const horario = document.getElementById('turmaEditHorario').value.trim() || null;
     if(!name || !CURRENT_TURMA_EDIT_ID) return false;
-    const { error } = await dyseUpdateTurma(CURRENT_TURMA_EDIT_ID, { name, description: description || null, capacidade });
+    const { error } = await dyseUpdateTurma(CURRENT_TURMA_EDIT_ID, { name, description: description || null, capacidade, dias_semana, horario });
     if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
     TURMAS = await dyseListTurmas();
     renderTurmasTable();
@@ -1401,6 +1450,8 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('newTurmaName').value = '';
     document.getElementById('newTurmaDesc').value = '';
     document.getElementById('newTurmaCapacidade').value = '';
+    document.getElementById('newTurmaDiasSemana').innerHTML = diasSemanaChecksHtml('newTurmaDia', []);
+    document.getElementById('newTurmaHorario').value = '';
     document.getElementById('turmaMsg').className = 'auth-msg';
     document.getElementById('turmaMsg').textContent = '';
     document.getElementById('turmaCreateModal').classList.add('open');
@@ -1420,8 +1471,10 @@ body.dyse-modal-open{overflow:hidden;}
     const description = document.getElementById('newTurmaDesc').value.trim();
     const capacidadeRaw = document.getElementById('newTurmaCapacidade').value;
     const capacidade = capacidadeRaw === '' ? null : parseInt(capacidadeRaw, 10);
+    const dias_semana = lerDiasSemanaChecks('newTurmaDia');
+    const horario = document.getElementById('newTurmaHorario').value.trim() || null;
     if(!name) return false;
-    const { data, error } = await dyseCreateTurma(name, description || null, capacidade);
+    const { data, error } = await dyseCreateTurma(name, description || null, capacidade, dias_semana, horario);
     if(error){ flashMsg('turmaMsg', 'Não foi possível criar a turma: ' + error.message, false); return false; }
     TURMAS = await dyseListTurmas();
     renderTurmasTable();

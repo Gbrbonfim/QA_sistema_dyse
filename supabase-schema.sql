@@ -325,6 +325,12 @@ create table if not exists public.turmas (
 -- não é reforçada no banco, é informativa mesmo.
 alter table public.turmas add column if not exists capacidade int;
 
+-- Dia(s) da semana e horário em que a turma se encontra — só informativo,
+-- pra aparecer na lista de turmas (gestao.html); não afeta agendamento ou
+-- disponibilidade de ninguém. dias_semana guarda os slugs 'seg'..'dom'.
+alter table public.turmas add column if not exists dias_semana text[] not null default '{}';
+alter table public.turmas add column if not exists horario text;
+
 alter table public.turmas enable row level security;
 
 drop policy if exists "qualquer usuario logado ve as turmas" on public.turmas;
