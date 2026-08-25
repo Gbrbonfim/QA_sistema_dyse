@@ -334,6 +334,29 @@ alter table public.turmas add column if not exists capacidade int;
 alter table public.turmas add column if not exists dias_semana text[] not null default '{}';
 alter table public.turmas add column if not exists horario text;
 
+-- Normalização (idempotente): turmas criadas ANTES de "horario" virar um
+-- <select> de horário fixo têm texto livre digitado à mão ("21hrs",
+-- "14h30min", "09HRS"...), que não bate com o formato canônico "HH:MM"
+-- usado por professor_disponibilidade — sem isso, a turma nunca aparece
+-- como "ocupada" na agenda do professor, mesmo já tendo dia/horário
+-- cadastrados. Só converte padrões CLAROS de um horário só; não mexe em
+-- quem já está em "HH:MM" nem em texto que não reconhece (ex: intervalo
+-- "13h30 - 16h30" — nesse caso normalmente a turma dá aula em dias com
+-- horários DIFERENTES, algo que o campo único "horario" não representa;
+-- fica de fora de propósito, pra revisão manual pela tela de edição).
+update public.turmas
+set horario = case
+    when horario ~* '^\d{1,2}h\d{2}min$' then
+      lpad(split_part(horario, 'h', 1), 2, '0') || ':' || substring(horario from 'h(\d{2})min')
+    when horario ~* '^\d{1,2}h\d{2}$' then
+      lpad(split_part(horario, 'h', 1), 2, '0') || ':' || split_part(horario, 'h', 2)
+    when horario ~* '^\d{1,2}\s*hrs?$' then
+      lpad(regexp_replace(horario, '\D', '', 'g'), 2, '0') || ':00'
+    else horario
+  end
+where horario is not null
+  and horario !~ '^([01]\d|2[0-3]):(00|30)$';
+
 alter table public.turmas enable row level security;
 
 drop policy if exists "qualquer usuario logado ve as turmas" on public.turmas;
