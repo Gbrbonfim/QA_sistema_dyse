@@ -2039,6 +2039,13 @@ on conflict (materia_slug, aula, activity_num) do nothing;
 -- Atualiza a função de checagem (usada pela policy de published_activities
 -- logo abaixo) pra levar "aula" em conta. "check_aula int default 1" evita
 -- quebrar qualquer chamada antiga que ainda não passe esse argumento.
+--
+-- "create or replace" não basta aqui: como a assinatura muda (2 → 3
+-- parâmetros), o Postgres trata como uma função NOVA em vez de substituir
+-- a de cima (seção 8.2.1) — ficam as duas ao mesmo tempo, e qualquer
+-- chamada com 2 argumentos vira ambígua entre elas ("function ... is not
+-- unique"). Por isso precisa apagar a versão antiga primeiro.
+drop function if exists public.activity_released_to_teachers(text, int);
 create or replace function public.activity_released_to_teachers(check_course text, check_activity_num int, check_aula int default 1)
 returns boolean
 language sql
