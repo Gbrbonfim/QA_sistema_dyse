@@ -867,7 +867,10 @@ body.dyse-modal-open{overflow:hidden;}
         <div class="gestao-field"><label>Nome da turma</label><input type="text" id="turmaEditName" required></div>
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="turmaEditDesc"></div>
         <div class="gestao-field"><label>Capacidade (opcional)</label><input type="number" id="turmaEditCapacidade" min="0" placeholder="Ex: 4"></div>
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-danger" onclick="handleDeleteTurmaFromEditModal()">Excluir turma</button>
+        </div>
       </form>
       <div id="turmaModalBody" style="margin-top:22px;"></div>
     </div>
@@ -1432,9 +1435,16 @@ body.dyse-modal-open{overflow:hidden;}
 
   async function handleDeleteTurma(turmaId){
     const t = TURMAS.find(x => x.id === turmaId);
-    if(!confirm('Excluir a turma "' + (t ? t.name : '') + '"? Os alunos dela ficam sem turma.')) return;
+    if(!confirm('Excluir a turma "' + (t ? t.name : '') + '"? Os alunos dela ficam sem turma.')) return false;
     await dyseDeleteTurma(turmaId);
     await loadAll();
+    return true;
+  }
+
+  async function handleDeleteTurmaFromEditModal(){
+    if(!CURRENT_TURMA_EDIT_ID) return;
+    const deleted = await handleDeleteTurma(CURRENT_TURMA_EDIT_ID);
+    if(deleted) closeTurmaEditModal();
   }
 
   let CURRENT_TURMA_MODAL_ID = null;
