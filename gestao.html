@@ -159,6 +159,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .page-header-text h2{font-size:1.4rem; margin:0 0 2px; color:var(--seal);}
 .page-header-text p{font-size:.86rem; color:var(--seal-soft); margin:0;}
 .page-header-action{flex:none;}
+.page-header-action-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
 
 .content-footer{text-align:center; padding:40px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
 .content-footer .fmark{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); display:block; margin-bottom:4px;}
@@ -553,6 +554,7 @@ body.dyse-modal-open{overflow:hidden;}
   .turma-row{padding:14px 16px; gap:10px;}
   .turma-badges, .turma-students, .turma-actions{flex:1 1 100%;}
   .turma-actions .btn{flex:1 1 auto; justify-content:center;}
+  .alunos-hint{display:none;}
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -675,24 +677,11 @@ body.dyse-modal-open{overflow:hidden;}
 
   <!-- ---------- ALUNOS ---------- -->
   <div id="panelAlunos" style="display:none;">
-    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
+    <p class="alunos-hint" style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
       Pra colocar ou tirar um aluno de uma turma (acesso a conteúdo), vá na aba <b>Turmas</b> → <b>Editar</b>
       da turma desejada.
       <span class="fin-only">O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui, pelo botão "Editar financeiro" de cada aluno.</span>
     </p>
-    <div class="dash-filter">
-      <button type="button" class="btn btn-primary" onclick="openCsvImportModal()">Importar CSV</button>
-      <span class="info-tip" tabindex="0" aria-label="Como montar o CSV de importação">ⓘ
-        <span class="info-tip-bubble">
-          Primeira linha = cabeçalho, com estas colunas (nesta ordem ou por nome — só <code>nome</code> e <code>email</code> são obrigatórios):<br>
-          <code>nome,email,modalidade,professor_email,valor_mensal,valor_professor,data_inicio,parcelas</code><br><br>
-          <code>modalidade</code>: slug (vip / grupo / dupla / intensivo) · <code>professor_email</code>: precisa bater com o e-mail de um professor já cadastrado ·
-          <code>valor_professor</code>: só usado se a modalidade for personalizada (Intensivo) · <code>data_inicio</code>: AAAA-MM-DD (padrão: hoje) ·
-          <code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido).<br><br>
-          Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.
-        </span>
-      </span>
-    </div>
     <div class="dash-filter">
       <input type="text" id="filterAlunoName" placeholder="Filtrar por nome ou e-mail..." oninput="renderAlunosTable()">
       <select id="filterAlunoTurma" onchange="renderAlunosTable()"><option value="">Todas as turmas</option></select>
@@ -1046,7 +1035,20 @@ body.dyse-modal-open{overflow:hidden;}
     alunos: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
       title: 'Alunos', subtitle: 'Cadastre, acompanhe e gerencie os alunos da escola.',
-      action: '<button type="button" class="btn btn-primary" onclick="openStudentCreateModal()">+ Cadastrar aluno</button>'
+      action: '<div class="page-header-action-row">' +
+        '<button type="button" class="btn btn-primary" onclick="openStudentCreateModal()">+ Cadastrar aluno</button>' +
+        '<button type="button" class="btn btn-primary" onclick="openCsvImportModal()">Importar CSV</button>' +
+        '<span class="info-tip" tabindex="0" aria-label="Como montar o CSV de importação">ⓘ' +
+          '<span class="info-tip-bubble">' +
+            'Primeira linha = cabeçalho, com estas colunas (nesta ordem ou por nome — só <code>nome</code> e <code>email</code> são obrigatórios):<br>' +
+            '<code>nome,email,modalidade,professor_email,valor_mensal,valor_professor,data_inicio,parcelas</code><br><br>' +
+            '<code>modalidade</code>: slug (vip / grupo / dupla / intensivo) · <code>professor_email</code>: precisa bater com o e-mail de um professor já cadastrado · ' +
+            '<code>valor_professor</code>: só usado se a modalidade for personalizada (Intensivo) · <code>data_inicio</code>: AAAA-MM-DD (padrão: hoje) · ' +
+            '<code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido).<br><br>' +
+            'Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.' +
+          '</span>' +
+        '</span>' +
+      '</div>'
     },
     professores: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
