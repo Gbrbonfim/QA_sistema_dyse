@@ -76,9 +76,12 @@ module.exports = async function handler(req, res){
     return;
   }
 
+  const diasSugerido = sugestao.dias_semana_sugerido || [];
+  const encontros = diasSugerido.map((dia) => ({ dia, horario: sugestao.horario_sugerido }));
   const { error: turmaError } = await admin.from('turmas').update({
-    dias_semana: sugestao.dias_semana_sugerido,
-    horario: sugestao.horario_sugerido
+    dias_semana: diasSugerido,
+    horario: sugestao.horario_sugerido,
+    encontros
   }).eq('id', sugestao.turma_id);
   if(turmaError){
     res.status(400).json({ error: turmaError.message });

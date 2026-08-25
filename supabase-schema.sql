@@ -357,6 +357,30 @@ set horario = case
 where horario is not null
   and horario !~ '^([01]\d|2[0-3]):(00|30)$';
 
+-- "dias_semana"/"horario" (acima) só representam UM horário compartilhado
+-- por todos os dias da turma — não dá conta do caso real de uma turma
+-- (normalmente VIP/individual) que dá aula em dias DIFERENTES com
+-- horários DIFERENTES (ex: terça às 13:30 e quinta às 16:30). "encontros"
+-- guarda um array de {"dia":"ter","horario":"13:30"} — um item por
+-- encontro semanal — e passa a ser a fonte de verdade usada pela agenda
+-- de disponibilidade (professorTurmasOcupadas/minhasOcupacoes, em
+-- gestao.html/professora.html); "dias_semana"/"horario" continuam
+-- existindo só como resumo legado (útil se algo ainda ler só eles).
+alter table public.turmas add column if not exists encontros jsonb not null default '[]'::jsonb;
+
+-- Migração idempotente: preenche "encontros" a partir de dias_semana +
+-- horario pra quem já está no formato canônico HH:MM (turmas com horário
+-- ainda não normalizado, ver bloco acima, ficam de fora até serem
+-- corrigidas manualmente pela tela — mesmo critério de "revisão manual").
+update public.turmas
+set encontros = (
+  select coalesce(jsonb_agg(jsonb_build_object('dia', d, 'horario', turmas.horario)), '[]'::jsonb)
+  from unnest(turmas.dias_semana) as d
+)
+where jsonb_array_length(encontros) = 0
+  and horario ~ '^([01]\d|2[0-3]):(00|30)$'
+  and dias_semana is not null and array_length(dias_semana, 1) > 0;
+
 alter table public.turmas enable row level security;
 
 drop policy if exists "qualquer usuario logado ve as turmas" on public.turmas;

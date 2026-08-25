@@ -420,10 +420,17 @@ async function dyseListTurmas(){
   return error ? [] : data;
 }
 
-async function dyseCreateTurma(name, description, capacidade, diasSemana, horario){
+/* "encontros" é a fonte de verdade da agenda da turma — um item por
+   encontro semanal ({dia, horario}), pra suportar dias com horários
+   DIFERENTES entre si (turma VIP terça 13:30 + quinta 16:30, por
+   exemplo). dias_semana/horario são derivados aqui só como resumo legado
+   (dias_semana = todos os dias; horario = o do primeiro encontro). */
+async function dyseCreateTurma(name, description, capacidade, encontros){
+  const diasSemana = [...new Set((encontros || []).map(en => en.dia))];
+  const horario = (encontros && encontros[0]) ? encontros[0].horario : null;
   const { data, error } = await sb.from('turmas').insert({
     name, description, capacidade: capacidade || null,
-    dias_semana: diasSemana || [], horario: horario || null
+    dias_semana: diasSemana, horario, encontros: encontros || []
   }).select('*').maybeSingle();
   return { data, error };
 }
@@ -557,8 +564,10 @@ async function dyseResponderSugestao(id, fields){
 /* Gestão aceitando uma contraproposta do professor — ela já tem permissão
    direta em "turmas" e "horario_sugestoes", não precisa de service_role. */
 async function dyseAceitarContraproposta(sugestao){
+  const diasResposta = sugestao.dias_semana_resposta || [];
+  const encontros = diasResposta.map(dia => ({ dia, horario: sugestao.horario_resposta }));
   const { error: turmaError } = await dyseUpdateTurma(sugestao.turma_id, {
-    dias_semana: sugestao.dias_semana_resposta, horario: sugestao.horario_resposta
+    dias_semana: diasResposta, horario: sugestao.horario_resposta, encontros
   });
   if(turmaError) return { error: turmaError };
   const { error } = await sb.from('horario_sugestoes').update({ status: 'aceito', respondido_at: new Date().toISOString() }).eq('id', sugestao.id);

@@ -205,6 +205,15 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 }
 .dias-semana-row input{width:auto; margin:0;}
 .turma-schedule{color:var(--amaranth); font-weight:600;}
+.encontros-picker{display:flex; flex-direction:column; gap:6px;}
+.encontro-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.encontro-row label{
+  display:flex; align-items:center; gap:6px; font-size:.82rem; font-weight:700; color:var(--seal-soft);
+  background:var(--antique-soft); border-radius:999px; padding:7px 13px; cursor:pointer; flex:none; width:118px;
+}
+.encontro-row input{width:auto; margin:0;}
+.encontro-row select{flex:1 1 160px; min-width:150px;}
+.encontro-row select:disabled{opacity:.45; cursor:not-allowed;}
 
 /* ---------- PROFESSORES: Horários / Disponibilidade ---------- */
 .schedule-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;}
@@ -933,8 +942,7 @@ body.dyse-modal-open{overflow:hidden;}
         <div class="gestao-field"><label>Nome da turma</label><input type="text" id="newTurmaName" placeholder="Ex: Turma A — Manhã" required></div>
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="newTurmaDesc" placeholder="Ex: Alunos do 3º ano, período da manhã"></div>
         <div class="gestao-field"><label>Capacidade (opcional)</label><input type="number" id="newTurmaCapacidade" min="0" placeholder="Ex: 4"></div>
-        <div class="gestao-field"><label>Dia(s) da semana (opcional)</label><div id="newTurmaDiasSemana"></div></div>
-        <div class="gestao-field"><label>Horário (opcional)</label><select id="newTurmaHorario"></select></div>
+        <div class="gestao-field"><label>Dias e horários (opcional)</label><div id="newTurmaEncontros"></div></div>
         <button type="submit" class="btn btn-primary">+ Criar turma</button>
       </form>
       <div class="auth-msg" id="turmaMsg"></div>
@@ -955,8 +963,7 @@ body.dyse-modal-open{overflow:hidden;}
         <div class="gestao-field"><label>Nome da turma</label><input type="text" id="turmaEditName" required></div>
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="turmaEditDesc"></div>
         <div class="gestao-field"><label>Capacidade (opcional)</label><input type="number" id="turmaEditCapacidade" min="0" placeholder="Ex: 4"></div>
-        <div class="gestao-field"><label>Dia(s) da semana (opcional)</label><div id="turmaEditDiasSemana"></div></div>
-        <div class="gestao-field"><label>Horário (opcional)</label><select id="turmaEditHorario"></select></div>
+        <div class="gestao-field"><label>Dias e horários (opcional)</label><div id="turmaEditEncontros"></div></div>
         <div class="btn-row">
           <button type="submit" class="btn btn-primary">Salvar</button>
           <button type="button" class="btn btn-danger" onclick="handleDeleteTurmaFromEditModal()">Excluir turma</button>
@@ -1353,6 +1360,43 @@ body.dyse-modal-open{overflow:hidden;}
     return texto;
   }
 
+  /* Todo (dia, horário) semanal de uma turma — a partir de "encontros"
+     (fonte de verdade, suporta dias com horários diferentes entre si) ou,
+     pra turma antiga ainda não migrada, do par dias_semana + horario
+     único (mesmo horário repetido em todos os dias). */
+  function turmaOcupacoes(t){
+    if(t.encontros && t.encontros.length) return t.encontros;
+    if(t.horario && (t.dias_semana || []).length) return t.dias_semana.map(dia => ({ dia, horario: t.horario }));
+    return [];
+  }
+
+  /* Exibição de "encontros": agrupa os dias que caem no MESMO horário
+     ("Segunda, Quarta às 09:00"); quando os horários são diferentes entre
+     si, cada grupo vira um bloco separado ("Terça às 13:30 · Quinta às
+     16:30") — é exatamente o caso que o par único dias_semana/horario não
+     representa (ex: turma VIP individual com 2 aulas em dias/horários
+     diferentes). */
+  function formatEncontros(encontros){
+    if(!encontros || !encontros.length) return '';
+    const porHorario = {};
+    encontros.forEach(en => {
+      if(!porHorario[en.horario]) porHorario[en.horario] = [];
+      porHorario[en.horario].push(en.dia);
+    });
+    return Object.keys(porHorario).sort().map(horario => {
+      const nomes = porHorario[horario].map(slug => {
+        const d = DIAS_SEMANA.find(x => x.slug === slug);
+        return d ? d.nome : slug;
+      });
+      return nomes.join(', ') + ' às ' + horario;
+    }).join(' · ');
+  }
+
+  function formatTurmaSchedule(t){
+    if(t.encontros && t.encontros.length) return formatEncontros(t.encontros);
+    return formatDiasHorario(t.dias_semana, t.horario);
+  }
+
   /* Ordem Dom→Sáb, pra bater com a grade de disponibilidade (o mockup usa
      essa ordem nas colunas — DIAS_SEMANA acima é Seg→Dom, usado nos
      checkboxes de dia da turma). */
@@ -1379,6 +1423,44 @@ body.dyse-modal-open{overflow:hidden;}
     return '<option value="">Selecione...</option>' + HORARIO_SLOTS.map(h =>
       '<option value="' + h + '"' + (h === selected ? ' selected' : '') + '>' + h + ' – ' + horarioSlotFim(h) + '</option>'
     ).join('');
+  }
+
+  /* Widget de criar/editar turma: um horário PRÓPRIO por dia marcado (não
+     um horário só pra todos os dias) — pra dar conta de turma que dá aula
+     em dias com horários diferentes entre si (ex: VIP terça 13:30 e
+     quinta 16:30). Cada linha é um dia com checkbox + <select> de
+     horário, habilitado só quando o dia está marcado. */
+  function encontrosPickerHtml(idPrefix, encontros){
+    const porDia = {};
+    (encontros || []).forEach(en => { porDia[en.dia] = en.horario; });
+    return '<div class="encontros-picker">' + DIAS_SEMANA.map(d => {
+      const marcado = Object.prototype.hasOwnProperty.call(porDia, d.slug);
+      return '<div class="encontro-row">' +
+        '<label><input type="checkbox" id="' + idPrefix + '_dia_' + d.slug + '" value="' + d.slug + '"' + (marcado ? ' checked' : '') + ' onchange="toggleEncontroRow(\'' + idPrefix + '\',\'' + d.slug + '\')"> ' + d.nome + '</label>' +
+        '<select id="' + idPrefix + '_horario_' + d.slug + '"' + (marcado ? '' : ' disabled') + '>' + horarioSelectOptionsHtml(porDia[d.slug] || '') + '</select>' +
+      '</div>';
+    }).join('') + '</div>';
+  }
+  function toggleEncontroRow(idPrefix, diaSlug){
+    const checkbox = document.getElementById(idPrefix + '_dia_' + diaSlug);
+    const select = document.getElementById(idPrefix + '_horario_' + diaSlug);
+    if(select) select.disabled = !checkbox.checked;
+  }
+  /* Retorna null (em vez de []) quando algum dia marcado ficou sem
+     horário escolhido — usado pra barrar o submit com uma mensagem clara
+     em vez de salvar a turma com um encontro incompleto. */
+  function lerEncontrosPicker(idPrefix){
+    const encontros = [];
+    for(const d of DIAS_SEMANA){
+      const checkbox = document.getElementById(idPrefix + '_dia_' + d.slug);
+      if(checkbox && checkbox.checked){
+        const select = document.getElementById(idPrefix + '_horario_' + d.slug);
+        const horario = select ? select.value : '';
+        if(!horario) return null;
+        encontros.push({ dia: d.slug, horario });
+      }
+    }
+    return encontros;
   }
 
   function populateTurmaNivelFilter(){
@@ -1502,7 +1584,7 @@ body.dyse-modal-open{overflow:hidden;}
           }).join('')
         : '<span class="empty">Nenhum aluno nesta turma.</span>';
 
-      const schedule = formatDiasHorario(t.dias_semana, t.horario);
+      const schedule = formatTurmaSchedule(t);
       return '<div class="turma-row">' +
         '<div class="turma-avatar" style="background:' + avatarColorTurma.bg + '; color:' + avatarColorTurma.fg + ';">' + TURMA_USERS_ICON + '</div>' +
         '<div class="turma-main">' +
@@ -1546,8 +1628,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('turmaEditName').value = t.name || '';
     document.getElementById('turmaEditDesc').value = t.description || '';
     document.getElementById('turmaEditCapacidade').value = (t.capacidade === null || t.capacidade === undefined) ? '' : t.capacidade;
-    document.getElementById('turmaEditDiasSemana').innerHTML = diasSemanaChecksHtml('turmaEditDia', t.dias_semana);
-    document.getElementById('turmaEditHorario').innerHTML = horarioSelectOptionsHtml(t.horario || '');
+    document.getElementById('turmaEditEncontros').innerHTML = encontrosPickerHtml('turmaEditEnc', turmaOcupacoes(t));
     renderTurmaModalDetails(turmaId);
     document.getElementById('turmaEditModal').classList.add('open');
     document.getElementById('turmaEditModal').setAttribute('aria-hidden','false');
@@ -1568,10 +1649,12 @@ body.dyse-modal-open{overflow:hidden;}
     const description = document.getElementById('turmaEditDesc').value.trim();
     const capacidadeRaw = document.getElementById('turmaEditCapacidade').value;
     const capacidade = capacidadeRaw === '' ? null : parseInt(capacidadeRaw, 10);
-    const dias_semana = lerDiasSemanaChecks('turmaEditDia');
-    const horario = document.getElementById('turmaEditHorario').value.trim() || null;
+    const encontros = lerEncontrosPicker('turmaEditEnc');
     if(!name || !CURRENT_TURMA_EDIT_ID) return false;
-    const { error } = await dyseUpdateTurma(CURRENT_TURMA_EDIT_ID, { name, description: description || null, capacidade, dias_semana, horario });
+    if(encontros === null){ alert('Escolha um horário para cada dia marcado.'); return false; }
+    const dias_semana = [...new Set(encontros.map(en => en.dia))];
+    const horario = encontros[0] ? encontros[0].horario : null;
+    const { error } = await dyseUpdateTurma(CURRENT_TURMA_EDIT_ID, { name, description: description || null, capacidade, dias_semana, horario, encontros });
     if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
     TURMAS = await dyseListTurmas();
     renderTurmasTable();
@@ -1585,8 +1668,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('newTurmaName').value = '';
     document.getElementById('newTurmaDesc').value = '';
     document.getElementById('newTurmaCapacidade').value = '';
-    document.getElementById('newTurmaDiasSemana').innerHTML = diasSemanaChecksHtml('newTurmaDia', []);
-    document.getElementById('newTurmaHorario').innerHTML = horarioSelectOptionsHtml('');
+    document.getElementById('newTurmaEncontros').innerHTML = encontrosPickerHtml('newTurmaEnc', []);
     document.getElementById('turmaMsg').className = 'auth-msg';
     document.getElementById('turmaMsg').textContent = '';
     document.getElementById('turmaCreateModal').classList.add('open');
@@ -1606,10 +1688,10 @@ body.dyse-modal-open{overflow:hidden;}
     const description = document.getElementById('newTurmaDesc').value.trim();
     const capacidadeRaw = document.getElementById('newTurmaCapacidade').value;
     const capacidade = capacidadeRaw === '' ? null : parseInt(capacidadeRaw, 10);
-    const dias_semana = lerDiasSemanaChecks('newTurmaDia');
-    const horario = document.getElementById('newTurmaHorario').value.trim() || null;
+    const encontros = lerEncontrosPicker('newTurmaEnc');
     if(!name) return false;
-    const { data, error } = await dyseCreateTurma(name, description || null, capacidade, dias_semana, horario);
+    if(encontros === null){ flashMsg('turmaMsg', 'Escolha um horário para cada dia marcado.', false); return false; }
+    const { data, error } = await dyseCreateTurma(name, description || null, capacidade, encontros);
     if(error){ flashMsg('turmaMsg', 'Não foi possível criar a turma: ' + error.message, false); return false; }
     TURMAS = await dyseListTurmas();
     renderTurmasTable();
@@ -2447,8 +2529,8 @@ body.dyse-modal-open{overflow:hidden;}
     const turmaIds = new Set(TEACHER_TURMAS.filter(tt => tt.teacher_id === teacherId).map(tt => tt.turma_id));
     const ocupados = [];
     TURMAS.forEach(t => {
-      if(!turmaIds.has(t.id) || !t.horario || !(t.dias_semana || []).length) return;
-      t.dias_semana.forEach(dia => ocupados.push({ turma: t, dia, horario: t.horario }));
+      if(!turmaIds.has(t.id)) return;
+      turmaOcupacoes(t).forEach(en => ocupados.push({ turma: t, dia: en.dia, horario: en.horario }));
     });
     return ocupados;
   }

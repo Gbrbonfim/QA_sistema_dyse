@@ -1664,6 +1664,32 @@ body.dyse-modal-open{overflow:hidden;}
     return texto;
   }
 
+  /* Mesma lógica de gestao.html (arquivos não compartilham JS): "encontros"
+     é a fonte de verdade da agenda da turma (um horário por dia, pra dar
+     conta de turma com horários diferentes entre os dias); dias_semana +
+     horario único é só o formato legado, usado como fallback. */
+  function turmaOcupacoes(t){
+    if(t.encontros && t.encontros.length) return t.encontros;
+    if(t.horario && (t.dias_semana || []).length) return t.dias_semana.map(dia => ({ dia, horario: t.horario }));
+    return [];
+  }
+  function formatEncontros(encontros){
+    if(!encontros || !encontros.length) return '';
+    const porHorario = {};
+    encontros.forEach(en => {
+      if(!porHorario[en.horario]) porHorario[en.horario] = [];
+      porHorario[en.horario].push(en.dia);
+    });
+    return Object.keys(porHorario).sort().map(horario => {
+      const nomes = porHorario[horario].map(slug => (DIAS_SEMANA.find(x => x.slug === slug) || {}).nome || slug);
+      return nomes.join(', ') + ' às ' + horario;
+    }).join(' · ');
+  }
+  function formatTurmaSchedule(t){
+    if(t.encontros && t.encontros.length) return formatEncontros(t.encontros);
+    return formatDiasHorario(t.dias_semana, t.horario);
+  }
+
   async function loadPanelDisponibilidade(){
     const [minhaDisp, myLinks, allTurmas] = await Promise.all([
       dyseListMyDisponibilidade(), dyseListMyTurmas(), dyseListTurmas()
@@ -1679,8 +1705,7 @@ body.dyse-modal-open{overflow:hidden;}
   function minhasOcupacoes(){
     const ocupados = {};
     MINHAS_TURMAS_DISP.forEach(t => {
-      if(!t.horario || !(t.dias_semana || []).length) return;
-      t.dias_semana.forEach(dia => { ocupados[dia + '_' + t.horario] = t; });
+      turmaOcupacoes(t).forEach(en => { ocupados[en.dia + '_' + en.horario] = t; });
     });
     return ocupados;
   }
@@ -1731,7 +1756,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(!sugestoes.length){ box.innerHTML = ''; return; }
     box.innerHTML = sugestoes.map(s => {
       const turma = MINHAS_TURMAS_DISP.find(t => t.id === s.turma_id);
-      const atual = turma ? formatDiasHorario(turma.dias_semana, turma.horario) : '';
+      const atual = turma ? formatTurmaSchedule(turma) : '';
       return '<div class="sugestao-card" id="sugestaoCard_' + s.id + '">' +
         '<div class="titulo">Sugestão de troca de horário — ' + escapeHtmlLocal(turma ? turma.name : '(turma)') + '</div>' +
         '<div class="msg">Atual: ' + escapeHtmlLocal(atual || '-') + ' → Sugerido: ' + escapeHtmlLocal(formatDiasHorario(s.dias_semana_sugerido, s.horario_sugerido)) +
