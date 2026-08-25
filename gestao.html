@@ -1388,11 +1388,15 @@ body.dyse-modal-open{overflow:hidden;}
     const capacidadeRaw = document.getElementById('newTurmaCapacidade').value;
     const capacidade = capacidadeRaw === '' ? null : parseInt(capacidadeRaw, 10);
     if(!name) return false;
-    const { error } = await dyseCreateTurma(name, description || null, capacidade);
+    const { data, error } = await dyseCreateTurma(name, description || null, capacidade);
     if(error){ flashMsg('turmaMsg', 'Não foi possível criar a turma: ' + error.message, false); return false; }
     TURMAS = await dyseListTurmas();
     renderTurmasTable();
     closeTurmaCreateModal();
+    // Depois de criar, já abre a turma no modal de edição — mesmo modal
+    // usado pra editar turmas existentes, com as seções de matérias,
+    // professores e alunos prontas pra configurar na hora.
+    if(data && data.id) openTurmaEditModal(data.id);
     return false;
   }
 
