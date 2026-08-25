@@ -898,6 +898,30 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 </div>
 
+<!-- Modal de cadastro de professor(a) -->
+<div id="teacherCreateModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeTeacherCreateModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="teacherCreateModalTitle">
+    <div class="report-modal-header">
+      <h3 id="teacherCreateModalTitle">Cadastrar novo professor(a)</h3>
+      <button type="button" class="report-modal-close" onclick="closeTeacherCreateModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body">
+      <form class="gestao-form gestao-form-col" onsubmit="return handleCreateTeacher(event)">
+        <div class="gestao-field"><label>Nome completo</label><input type="text" id="newTeacherName" required></div>
+        <div class="gestao-field"><label>E-mail</label><input type="email" id="newTeacherEmail" required></div>
+        <button type="submit" class="btn btn-primary">+ Cadastrar professor(a)</button>
+      </form>
+      <label style="display:flex; align-items:center; gap:8px; font-size:.82rem; margin-top:10px; cursor:pointer;">
+        <input type="checkbox" id="newTeacherSkipEmail" style="width:auto;">
+        Não enviar e-mail agora (só cadastrar — libero o acesso depois com "Reenviar acesso")
+      </label>
+      <p class="gestao-hint">Por padrão o(a) professor(a) recebe um e-mail do sistema com o link pra definir a senha e acessar. Marque a opção acima pra só criar a conta agora, sem avisar ainda. Depois de cadastrado(a), vincule as turmas dele(a) na aba Turmas → Editar → "Professores com acesso".</p>
+      <div class="auth-msg" id="newTeacherMsg"></div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal de importação de alunos via CSV -->
 <div id="csvImportModal" class="report-modal" aria-hidden="true">
   <div class="report-modal-backdrop" onclick="closeCsvImportModal()"></div>
@@ -1052,7 +1076,8 @@ body.dyse-modal-open{overflow:hidden;}
     },
     professores: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
-      title: 'Professores', subtitle: 'Veja as turmas e alunos vinculados a cada professor(a).', action: ''
+      title: 'Professores', subtitle: 'Veja as turmas e alunos vinculados a cada professor(a).',
+      action: '<button type="button" class="btn btn-primary" onclick="openTeacherCreateModal()">+ Cadastrar professor(a)</button>'
     },
     contas: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h5l2 2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>',
@@ -1899,6 +1924,57 @@ body.dyse-modal-open{overflow:hidden;}
       renderAlunosTable();
     }catch(err){
       flashMsg('newStudentMsg', 'Erro de conexão com o servidor: ' + err.message, false);
+    }finally{
+      btn.disabled = false;
+    }
+    return false;
+  }
+
+  function openTeacherCreateModal(){
+    document.getElementById('newTeacherName').value = '';
+    document.getElementById('newTeacherEmail').value = '';
+    document.getElementById('newTeacherSkipEmail').checked = false;
+    document.getElementById('newTeacherMsg').className = 'auth-msg';
+    document.getElementById('newTeacherMsg').textContent = '';
+    document.getElementById('teacherCreateModal').classList.add('open');
+    document.getElementById('teacherCreateModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+
+  function closeTeacherCreateModal(){
+    document.getElementById('teacherCreateModal').classList.remove('open');
+    document.getElementById('teacherCreateModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+  }
+
+  async function handleCreateTeacher(e){
+    e.preventDefault();
+    const full_name = document.getElementById('newTeacherName').value.trim();
+    const email = document.getElementById('newTeacherEmail').value.trim();
+    if(!full_name || !email) return false;
+
+    const session = await dyseGetSession();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    const skipEmail = document.getElementById('newTeacherSkipEmail').checked;
+    try{
+      const resp = await fetch('/api/create-teacher', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ full_name, email, send_email: !skipEmail })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if(!resp.ok){
+        flashMsg('newTeacherMsg', 'Não foi possível cadastrar: ' + (result.error || resp.statusText), false);
+        return false;
+      }
+      document.getElementById('newTeacherName').value = '';
+      document.getElementById('newTeacherEmail').value = '';
+      flashMsg('newTeacherMsg', result.email_sent ? 'Professor(a) cadastrado(a)! Já recebeu o e-mail de acesso.' : 'Professor(a) cadastrado(a), sem enviar e-mail. Use "Reenviar acesso" quando quiser liberar o acesso.', true);
+      TEACHERS = await dyseListProfilesByRole('teacher');
+      renderProfessoresList();
+    }catch(err){
+      flashMsg('newTeacherMsg', 'Erro de conexão com o servidor: ' + err.message, false);
     }finally{
       btn.disabled = false;
     }
