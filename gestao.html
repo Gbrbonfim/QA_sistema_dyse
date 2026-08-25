@@ -2072,15 +2072,20 @@ body.dyse-modal-open{overflow:hidden;}
     const wrap = document.getElementById('alunosTableWrap');
     const isFin = document.body.classList.contains('dyse-can-financeiro');
 
-    if(!isFin){
-      // Sem acesso financeiro, professor não é um dado visível — tabela única, sem agrupar.
-      wrap.innerHTML = renderAlunosTableHtml(rows);
+    if(!rows.length){
+      wrap.innerHTML = '<div class="turmas-card-list"><p style="text-align:center; opacity:.6; padding:24px;">Nenhum aluno encontrado.</p></div>';
       return;
     }
 
-    // Com acesso financeiro: agrupa em caixa suspensa por "Professor responsável".
-    // Quem não tem professor vinculado também fica numa caixa suspensa própria,
-    // fechada por padrão, mesmo padrão dos grupos por professor.
+    if(!isFin){
+      // Sem acesso financeiro, professor não é um dado visível — lista única, sem agrupar.
+      wrap.innerHTML = '<div class="turmas-card-list">' + rows.map(item => renderAlunoRowHtml(item, false)).join('') + '</div>';
+      return;
+    }
+
+    // Com acesso financeiro: agrupa em caixa suspensa por "Professor responsável",
+    // mesmo padrão visual da lista de Turmas. Quem não tem professor vinculado
+    // também fica numa caixa suspensa própria.
     const semProfessor = rows.filter(({ professor }) => !professor);
     const porProfessorId = {};
     rows.forEach(item => {
@@ -2090,48 +2095,56 @@ body.dyse-modal-open{overflow:hidden;}
     const grupos = Object.values(porProfessorId).sort((a, b) => (a.professor.full_name || '').localeCompare(b.professor.full_name || ''));
 
     let html = '';
-    if(semProfessor.length){
-      html += '<details class="dyse-collapsible">' +
-        '<summary><span class="summary-left">Sem professor responsável<span class="pill-count">' + semProfessor.length + '</span></span><span class="chevron">›</span></summary>' +
-        '<div class="dyse-collapsible-body">' + renderAlunosTableHtml(semProfessor) + '</div>' +
-      '</details>';
-    }
-    html += grupos.map(({ professor, itens }) =>
-      '<details class="dyse-collapsible">' +
-        '<summary><span class="summary-left">' + escapeHtmlLocal(professor.full_name || '(sem nome)') + '<span class="pill-count">' + itens.length + '</span></span><span class="chevron">›</span></summary>' +
-        '<div class="dyse-collapsible-body">' + renderAlunosTableHtml(itens) + '</div>' +
-      '</details>'
-    ).join('');
+    if(semProfessor.length) html += renderAlunoGroupHtml(null, semProfessor);
+    html += grupos.map(({ professor, itens }) => renderAlunoGroupHtml(professor, itens)).join('');
 
-    wrap.innerHTML = html || '<p style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</p>';
+    wrap.innerHTML = html;
   }
 
-  function renderAlunosTableHtml(itens){
-    const bodyHtml = itens.map(({ s, turma, periodo, modalidade, professor }) => {
-      return '<tr>' +
-        '<td data-label="Aluno">' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
-        '<td data-label="E-mail">' + escapeHtmlLocal(s.email || '-') + '</td>' +
-        '<td data-label="Turma">' + (turma ? escapeHtmlLocal(turma.name) : '<span class="no-turma">Sem turma</span>') + '</td>' +
-        '<td class="fin-only" data-label="Modalidade">' + (modalidade ? escapeHtmlLocal(modalidade.name) : '<span class="no-turma">Sem modalidade</span>') + '</td>' +
-        '<td class="fin-only" data-label="Professor responsável">' + (professor ? escapeHtmlLocal(professor.full_name || '') : '<span class="no-turma">Sem professor</span>') + '</td>' +
-        '<td class="fin-only" data-label="Situação">' + (periodo ? escapeHtmlLocal(capitalize(periodo.situacao)) : '-') + '</td>' +
-        '<td class="fin-only" data-label="Financeiro"><button type="button" class="btn btn-ghost btn-xs btn-fixed" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button></td>' +
-        '<td data-label="Acesso"><div class="btn-row">' +
-          '<button type="button" class="btn btn-ghost btn-xs btn-fixed" onclick="openAlunoHistoricoModal(\'' + s.id + '\')">Registro de classe</button>' +
-          '<button type="button" class="btn btn-ghost btn-xs btn-fixed" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
-          '<button type="button" class="btn btn-ghost btn-xs btn-fixed" onclick="handleDefinirSenhaTemporaria(\'' + s.id + '\')">Definir senha temporária</button>' +
-          '<button type="button" class="btn btn-danger btn-xs btn-fixed" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
-        '</div></td>' +
-      '</tr>';
-    }).join('') || '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno encontrado.</td></tr>';
-    return '<table class="dash-table dash-table-stacked">' +
-      '<thead><tr>' +
-        '<th>Aluno</th><th>E-mail</th><th>Turma</th>' +
-        '<th class="fin-only">Modalidade</th><th class="fin-only">Professor responsável</th><th class="fin-only">Situação</th><th class="fin-only">Financeiro</th>' +
-        '<th>Acesso</th>' +
-      '</tr></thead>' +
-      '<tbody>' + bodyHtml + '</tbody>' +
-    '</table>';
+  function renderAlunoGroupHtml(professor, itens){
+    const avatarColor = professor ? dyseColorForSlug(professor.id, TURMA_AVATAR_COLORS) : { bg:'#e4d4c4', fg:'#6b5a45' };
+    const initials = professor
+      ? (professor.full_name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase()
+      : '—';
+    const rowsHtml = itens.map(item => renderAlunoRowHtml(item, true)).join('');
+    return '<details class="dyse-collapsible">' +
+      '<summary><span class="summary-left">' +
+        '<span class="turma-group-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</span>' +
+        '<span class="turma-group-name">' + (professor ? escapeHtmlLocal(professor.full_name || '(sem nome)') : 'Sem professor responsável') + '</span>' +
+        '<span class="pill-count">' + itens.length + ' aluno' + (itens.length === 1 ? '' : 's') + '</span>' +
+      '</span><span class="chevron">›</span></summary>' +
+      '<div class="dyse-collapsible-body"><div class="turmas-card-list turma-group-body">' + rowsHtml + '</div></div>' +
+    '</details>';
+  }
+
+  function renderAlunoRowHtml({ s, turma, periodo, modalidade, professor }, groupedByProfessor){
+    const avatarColor = dyseColorForSlug(s.id, TURMA_AVATAR_COLORS);
+    const initials = (s.full_name || s.email || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || '?';
+    const turmaBadge = turma
+      ? '<span class="turma-pill">' + escapeHtmlLocal(turma.name) + '</span>'
+      : '<span class="turma-badge" style="background:#fbeceb; color:var(--bad);">Sem turma</span>';
+    const modalidadeBadge = modalidade ? '<span class="turma-pill fin-only">' + escapeHtmlLocal(modalidade.name) + '</span>' : '';
+    const professorBadge = (!groupedByProfessor && professor)
+      ? '<span class="turma-pill fin-only">' + escapeHtmlLocal(professor.full_name || '') + '</span>' : '';
+    const situacaoBadge = periodo
+      ? '<span class="turma-badge fin-only" style="background:' + (periodo.situacao === 'ativo' ? '#eaf7ee' : '#fbeceb') + '; color:' + (periodo.situacao === 'ativo' ? 'var(--ok)' : 'var(--bad)') + ';">' + escapeHtmlLocal(capitalize(periodo.situacao)) + '</span>'
+      : '';
+
+    return '<div class="turma-row">' +
+      '<div class="turma-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</div>' +
+      '<div class="turma-main">' +
+        '<div class="name">' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</div>' +
+        '<div class="meta">' + escapeHtmlLocal(s.email || '-') + '</div>' +
+      '</div>' +
+      '<div class="turma-badges">' + turmaBadge + modalidadeBadge + professorBadge + situacaoBadge + '</div>' +
+      '<div class="turma-actions">' +
+        '<button type="button" class="btn btn-ghost btn-xs fin-only" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button>' +
+        '<button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoHistoricoModal(\'' + s.id + '\')">Registro de classe</button>' +
+        '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
+        '<button type="button" class="btn btn-ghost btn-xs" onclick="handleDefinirSenhaTemporaria(\'' + s.id + '\')">Definir senha temporária</button>' +
+        '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
+      '</div>' +
+    '</div>';
   }
 
   /* ---------- PROFESSORES ----------
