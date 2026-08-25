@@ -562,7 +562,8 @@
     max-width:860px; margin:0 auto; border:2px solid var(--amaranth); border-radius:var(--radius);
     overflow:hidden; box-shadow:var(--shadow); aspect-ratio:16/9; background:#fff;
   }
-  .video-embed iframe, .video-embed #dyseVideoPlayer{ width:100%; height:100%; display:block; border:none; }
+  .video-embed iframe, .video-embed #dyseVideoPlayer{ position:relative; width:100%; height:100%; display:block; border:none; }
+  .video-poster{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .video-embed-placeholder{
     width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;
     color:var(--amaranth); font-weight:700; font-size:16px;
@@ -685,7 +686,11 @@
     </div>
     <div class="video-embed">
       <!-- Vídeo de exemplo (temporário) — quando o vídeo definitivo estiver
-           pronto, troque só o videoId lá no script no fim da página. -->
+           pronto, troque só o videoId lá no script no fim da página (e a
+           imagem abaixo, que é a capa real do vídeo mostrada enquanto o
+           player do YouTube carrega — ou como alternativa, se o navegador
+           bloquear o script da API). -->
+      <img class="video-poster" src="https://i.ytimg.com/vi/5wFqeDi5vck/hqdefault.jpg" alt="Prévia do vídeo de boas-vindas da DYSE" loading="lazy">
       <div id="dyseVideoPlayer"></div>
     </div>
     <div class="video-cta-wrap">
