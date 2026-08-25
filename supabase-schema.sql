@@ -237,6 +237,14 @@ create index if not exists idx_activity_results_course on public.activity_result
 --    Este gatilho bloqueia qualquer tentativa disso: só uma conta que
 --    JÁ é 'teacher'/'admin' (promovida por você, manualmente, no Table
 --    Editor) pode alterar a role de alguém.
+--
+--    Exceção: quando auth.uid() é nulo, a alteração NÃO veio de uma sessão
+--    de usuário comum (aluno/professor logado pelo app) — só chega assim
+--    quando é feita com a service_role key, do lado do servidor (ver
+--    api/create-teacher.js). Como essas rotas já checam "quem chamou é
+--    admin/financeiro" antes de mexer no banco, é seguro deixar passar;
+--    sem essa exceção, o próprio cadastro de professor pela gestão ficava
+--    bloqueado (a role voltava pra "student" sozinha, silenciosamente).
 -- ----------------------------------------------------------------------
 create or replace function public.prevent_role_self_escalation()
 returns trigger
@@ -245,7 +253,7 @@ security definer set search_path = public
 as $$
 begin
   if new.role is distinct from old.role then
-    if not (public.is_teacher() or public.is_admin()) then
+    if auth.uid() is not null and not (public.is_teacher() or public.is_admin()) then
       new.role := old.role; -- ignora a tentativa de mudança
     end if;
   end if;
@@ -290,11 +298,11 @@ create policy "professoras podem liberar/ocultar atividades"
 --    este script. Como usa "on conflict do nothing", rodar de novo NÃO
 --    sobrescreve escolhas que você já tenha feito manualmente pelo
 --    painel da professora (se você desligou alguma, continua desligada).
+--    O INSERT em si fica lá na seção 15.1 — depois que a coluna "aula"
+--    existe e a chave única já é (course, aula, activity_num), pra não
+--    quebrar num "on conflict" que não bate mais com a constraint atual
+--    numa segunda execução deste script (ver comentário na seção 15).
 -- ----------------------------------------------------------------------
-insert into public.published_activities (course, activity_num, is_published)
-select 'toefl', n, true
-from generate_series(1, 16) as n
-on conflict (course, activity_num) do nothing;
 
 -- ----------------------------------------------------------------------
 -- 8) GESTÃO: papel "admin", turmas, matérias e permissões de professor
@@ -387,11 +395,9 @@ create policy "admins gerenciam liberacao de atividades por materia"
 -- Libera as 16 atividades do TOEFL de cara, pra não "sumir" nada do que já
 -- estava disponível pro professor antes dessa trava existir. "on conflict
 -- do nothing" garante que rodar de novo não desfaz uma escolha que a
--- gestão já tenha feito pela tela.
-insert into public.materia_activities (materia_slug, activity_num, released_to_teachers)
-select 'toefl', n, true
-from generate_series(1, 16) as n
-on conflict (materia_slug, activity_num) do nothing;
+-- gestão já tenha feito pela tela. O INSERT em si fica na seção 15.2, pelo
+-- mesmo motivo do comentário na seção 7 (chave única muda de 2 pra 3
+-- colunas quando a coluna "aula" é criada).
 
 -- "security definer": usada dentro da política de "published_activities"
 -- pra bloquear, também no banco (não só na tela), o professor publicar uma
@@ -1931,10 +1937,25 @@ alter table public.published_activities add constraint published_activities_cour
   unique (course, aula, activity_num);
 create index if not exists idx_published_activities_course_aula on public.published_activities (course, aula);
 
+-- Seed da seção 7 (movido pra cá — ver comentário lá): libera as 16
+-- atividades do TOEFL (aula=1, sua única aula) de uma vez, sem "sumir"
+-- com escolha manual já feita. Só roda depois da chave única (course,
+-- aula, activity_num) acima existir, senão o "on conflict" não bate.
+insert into public.published_activities (course, aula, activity_num, is_published)
+select 'toefl', 1, n, true
+from generate_series(1, 16) as n
+on conflict (course, aula, activity_num) do nothing;
+
 -- 15.2) materia_activities — liberação gestão→professor (mesmo problema, mesma solução)
 alter table public.materia_activities add column if not exists aula int not null default 1;
 alter table public.materia_activities drop constraint if exists materia_activities_pkey;
 alter table public.materia_activities add constraint materia_activities_pkey primary key (materia_slug, aula, activity_num);
+
+-- Seed da seção 8.2.1 (movido pra cá — mesmo motivo do de cima).
+insert into public.materia_activities (materia_slug, aula, activity_num, released_to_teachers)
+select 'toefl', 1, n, true
+from generate_series(1, 16) as n
+on conflict (materia_slug, aula, activity_num) do nothing;
 
 -- Atualiza a função de checagem (usada pela policy de published_activities
 -- logo abaixo) pra levar "aula" em conta. "check_aula int default 1" evita
