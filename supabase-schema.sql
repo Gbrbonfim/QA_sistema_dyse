@@ -325,9 +325,12 @@ create table if not exists public.turmas (
 -- não é reforçada no banco, é informativa mesmo.
 alter table public.turmas add column if not exists capacidade int;
 
--- Dia(s) da semana e horário em que a turma se encontra — só informativo,
--- pra aparecer na lista de turmas (gestao.html); não afeta agendamento ou
--- disponibilidade de ninguém. dias_semana guarda os slugs 'seg'..'dom'.
+-- Dia(s) da semana e horário em que a turma se encontra. dias_semana guarda
+-- os slugs 'seg'..'dom'; horario é sempre um dos 31 horários cheios de
+-- 07:00 a 22:00 (passo de 30min, sempre 1h de duração — ver HORARIO_SLOTS
+-- em gestao.html/professora.html), pra poder cruzar com
+-- professor_disponibilidade abaixo e pintar a agenda do professor de
+-- vermelho nos horários ocupados por uma turma dele(a).
 alter table public.turmas add column if not exists dias_semana text[] not null default '{}';
 alter table public.turmas add column if not exists horario text;
 
@@ -341,6 +344,76 @@ create policy "qualquer usuario logado ve as turmas"
 drop policy if exists "admins gerenciam turmas" on public.turmas;
 create policy "admins gerenciam turmas"
   on public.turmas for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- 8.1.1) Disponibilidade dos professores (agenda de horários livres) +
+--        sugestões de troca de horário de turma
+--    Cada professor(a) marca, no próprio painel, os horários da semana em
+--    que está livre pra dar aula (dom-sáb, sempre slots de 1h cheia,
+--    começando em hora cheia ou meia — 07:00 a 22:00). A gestão enxerga
+--    essa agenda cruzada com as turmas (dias_semana/horario, acima): um
+--    horário marcado como livre que bate com uma turma do professor fica
+--    "ocupado" na tela — isso é calculado na hora, não fica guardado aqui.
+create table if not exists public.professor_disponibilidade (
+  id bigint generated always as identity primary key,
+  teacher_id uuid references auth.users(id) on delete cascade not null,
+  dia_semana text not null check (dia_semana in ('dom','seg','ter','qua','qui','sex','sab')),
+  horario text not null,
+  created_at timestamptz default now(),
+  unique (teacher_id, dia_semana, horario)
+);
+alter table public.professor_disponibilidade enable row level security;
+
+drop policy if exists "professor gerencia a propria disponibilidade" on public.professor_disponibilidade;
+create policy "professor gerencia a propria disponibilidade"
+  on public.professor_disponibilidade for all
+  using (teacher_id = auth.uid())
+  with check (teacher_id = auth.uid());
+
+drop policy if exists "gestao ve toda a disponibilidade" on public.professor_disponibilidade;
+create policy "gestao ve toda a disponibilidade"
+  on public.professor_disponibilidade for select
+  using (public.is_admin());
+
+-- Quando a gestão precisa remanejar uma turma pra outro horário, em vez de
+-- editar direto, ela "sugere" (linha aqui com status 'pendente') e o
+-- professor responde no próprio painel: aceita (a turma muda de verdade —
+-- ver api/aceitar-horario-sugestao.js, que precisa de service_role porque
+-- professor não tem permissão de UPDATE em "turmas"), rejeita (só marca
+-- 'rejeitado', turma não muda), ou contrapropõe outro horário (marca
+-- 'contraproposta' e preenche os campos "_resposta" — aí quem decide
+-- aceitar ou não é a gestão, que já tem permissão direta em "turmas").
+create table if not exists public.horario_sugestoes (
+  id uuid primary key default gen_random_uuid(),
+  turma_id uuid references public.turmas(id) on delete cascade not null,
+  teacher_id uuid references auth.users(id) on delete cascade not null,
+  criado_por uuid references auth.users(id) not null,
+  dias_semana_sugerido text[] not null,
+  horario_sugerido text not null,
+  mensagem text,
+  status text not null default 'pendente' check (status in ('pendente','aceito','rejeitado','contraproposta')),
+  dias_semana_resposta text[],
+  horario_resposta text,
+  resposta_mensagem text,
+  created_at timestamptz default now(),
+  respondido_at timestamptz
+);
+alter table public.horario_sugestoes enable row level security;
+
+drop policy if exists "professor ve as proprias sugestoes" on public.horario_sugestoes;
+create policy "professor ve as proprias sugestoes"
+  on public.horario_sugestoes for select
+  using (teacher_id = auth.uid());
+
+drop policy if exists "professor responde as proprias sugestoes" on public.horario_sugestoes;
+create policy "professor responde as proprias sugestoes"
+  on public.horario_sugestoes for update
+  using (teacher_id = auth.uid());
+
+drop policy if exists "gestao gerencia sugestoes" on public.horario_sugestoes;
+create policy "gestao gerencia sugestoes"
+  on public.horario_sugestoes for all
   using (public.is_admin())
   with check (public.is_admin());
 

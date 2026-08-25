@@ -553,6 +553,41 @@ details.manage-course-block .manage-course-body{padding:0 24px 20px;}
 .dyse-toggle input:checked + .slider{background:var(--ok);}
 .dyse-toggle input:checked + .slider::before{transform:translateX(20px);}
 
+/* ---------- DISPONIBILIDADE (agenda de horários livres) ---------- */
+.disp-stats{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;}
+.disp-pill{font-size:.82rem; font-weight:800; padding:7px 16px; border-radius:999px;}
+.disp-pill.pill-vago{background:#eaf7ee; color:var(--ok);}
+.disp-pill.pill-ocupado{background:#fbeceb; color:var(--bad);}
+.disp-grid-wrap{overflow-x:auto; border:1px solid #f0e3d2; border-radius:var(--radius-sm); background:#fff;}
+.disp-grid{width:100%; border-collapse:collapse; font-size:.76rem;}
+.disp-grid th{background:var(--antique-soft); color:var(--seal-soft); font-weight:800; padding:8px 6px; text-align:center; white-space:nowrap; position:sticky; top:0;}
+.disp-grid .slot-hora{font-weight:700; color:var(--seal-soft); white-space:nowrap; padding:6px 10px; background:#fbf6ee;}
+.disp-cell{text-align:center; padding:6px 4px; border:1px solid #f6ece0; white-space:nowrap; min-width:78px; cursor:pointer;}
+.disp-cell.disp-vago{background:#eaf7ee; color:var(--ok); font-weight:700;}
+.disp-cell.disp-vago:hover{background:#d9f0e0;}
+.disp-cell.disp-ocupado{background:#fbeceb; color:var(--bad); font-weight:700; cursor:default;}
+.disp-cell.disp-indisponivel{color:var(--seal-soft); opacity:.4;}
+.disp-cell.disp-indisponivel:hover{background:var(--antique-soft);}
+.disp-turma-name{font-size:.68rem; font-weight:800; white-space:normal; margin-top:2px;}
+.disp-legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:.78rem; color:var(--seal-soft);}
+.disp-legend .dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px;}
+.disp-legend .dot.vago{background:var(--ok);}
+.disp-legend .dot.ocupado{background:var(--bad);}
+.disp-legend .dot.indisponivel{background:#c9bda9;}
+.sugestao-card{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:16px 18px; margin-bottom:14px;}
+.sugestao-card .titulo{font-weight:700; color:var(--seal); font-size:.92rem; margin-bottom:4px;}
+.sugestao-card .msg{font-size:.82rem; color:var(--seal-soft); opacity:.85; margin-bottom:10px;}
+.sugestao-form-field{margin-top:10px;}
+.sugestao-form-field label{display:block; font-weight:700; font-size:.78rem; margin-bottom:6px; color:var(--seal);}
+.sugestao-form-field textarea{width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;}
+.sugestao-form-field select{border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;}
+.dias-semana-row{display:flex; flex-wrap:wrap; gap:8px;}
+.dias-semana-row label{
+  display:flex; align-items:center; gap:6px; font-size:.82rem; font-weight:700; color:var(--seal-soft);
+  background:var(--antique-soft); border-radius:999px; padding:7px 13px; cursor:pointer;
+}
+.dias-semana-row input{width:auto; margin:0;}
+
 .manage-row-actions{display:flex; align-items:center; gap:12px; flex:none;}
 .btn-preview{
   background:var(--antique-soft); color:var(--seal-soft); border:2px solid #eee0cf;
@@ -718,6 +753,10 @@ body.dyse-modal-open{overflow:hidden;}
       <button type="button" class="sidebar-item" id="tabReportCards" onclick="showPanel('reportcards')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
         <span>Report Cards</span>
+      </button>
+      <button type="button" class="sidebar-item" id="tabDisponibilidade" onclick="showPanel('disponibilidade')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Disponibilidade</span>
       </button>
     </nav>
     <div class="sidebar-footer">
@@ -898,6 +937,22 @@ body.dyse-modal-open{overflow:hidden;}
       Report Cards liberados pela gestão pra você revisar/completar. Depois de revisar, use "Liberar para Aluno" — só a partir daí ele fica visível no painel do aluno.
     </p>
     <div id="reportCardsListaProfessora"></div>
+  </div>
+
+  <div id="panelDisponibilidade" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
+      Marque os horários da semana em que você está livre pra dar aula — clique numa célula pra
+      marcar/desmarcar. Células vermelhas já têm uma turma sua vinculada e não podem ser mexidas
+      por aqui.
+    </p>
+    <div id="disponibilidadeSugestoesBox"></div>
+    <div class="disp-stats" id="dispStats"></div>
+    <div class="disp-grid-wrap" id="dispGridWrap"></div>
+    <div class="disp-legend">
+      <span><i class="dot vago"></i>Disponível</span>
+      <span><i class="dot ocupado"></i>Ocupado (turma sua)</span>
+      <span><i class="dot indisponivel"></i>Indisponível</span>
+    </div>
   </div>
 
       <footer class="content-footer">
@@ -1256,6 +1311,10 @@ body.dyse-modal-open{overflow:hidden;}
     reportcards:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>',
       title:'Report Cards', subtitle:'Revise e libere os Report Cards gerados pela gestão.'
+    },
+    disponibilidade:{
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+      title:'Disponibilidade', subtitle:'Marque os horários da semana em que você está livre pra dar aula.'
     }
   };
 
@@ -1265,11 +1324,13 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('tabFinanceiro').classList.toggle('active', which==='financeiro');
     document.getElementById('tabTurmas').classList.toggle('active', which==='turmas');
     document.getElementById('tabReportCards').classList.toggle('active', which==='reportcards');
+    document.getElementById('tabDisponibilidade').classList.toggle('active', which==='disponibilidade');
     document.getElementById('panelResults').style.display = which==='results' ? 'block' : 'none';
     document.getElementById('panelManage').style.display = which==='manage' ? 'block' : 'none';
     document.getElementById('panelFinanceiro').style.display = which==='financeiro' ? 'block' : 'none';
     document.getElementById('panelTurmas').style.display = which==='turmas' ? 'block' : 'none';
     document.getElementById('panelReportCards').style.display = which==='reportcards' ? 'block' : 'none';
+    document.getElementById('panelDisponibilidade').style.display = which==='disponibilidade' ? 'block' : 'none';
     const meta = PANEL_META[which];
     document.getElementById('pageHeaderIcon').innerHTML = meta.icon;
     document.getElementById('pageHeaderTitle').textContent = meta.title;
@@ -1285,6 +1346,10 @@ body.dyse-modal-open{overflow:hidden;}
     if(which === 'reportcards' && !REPORT_CARDS_LOADED){
       REPORT_CARDS_LOADED = true;
       loadPanelReportCards();
+    }
+    if(which === 'disponibilidade' && !DISPONIBILIDADE_LOADED){
+      DISPONIBILIDADE_LOADED = true;
+      loadPanelDisponibilidade();
     }
   }
 
@@ -1533,6 +1598,203 @@ body.dyse-modal-open{overflow:hidden;}
     if(erroAluno || erroSessao){ msg.textContent = 'Erro ao salvar: ' + ((erroAluno && erroAluno.error.message) || erroSessao.message); return; }
     msg.textContent = 'Registro de classe salvo!';
     await carregarRegistroClasseDaTurma(); // atualiza os indicadores ✓/⚠️ do seletor de aula
+  }
+
+  /* ======================================================================
+     DISPONIBILIDADE — agenda semanal de horários livres (07:00-22:00,
+     dom-sáb, slots de 1h cheia começando em hora cheia ou meia). Clicar
+     numa célula marca/desmarca; células ocupadas por turma da própria
+     professora aparecem em vermelho e não são clicáveis. Também mostra as
+     sugestões de troca de horário enviadas pela gestão, com os 3 caminhos:
+     aceitar, rejeitar ou contrapropor outro horário.
+     ====================================================================== */
+  let DISPONIBILIDADE_LOADED = false;
+  let MINHA_DISPONIBILIDADE = [];
+  let MINHAS_TURMAS_DISP = [];
+
+  const DIAS_SEMANA = [
+    { slug:'dom', label:'Dom', nome:'Domingo' },
+    { slug:'seg', label:'Seg', nome:'Segunda' },
+    { slug:'ter', label:'Ter', nome:'Terça' },
+    { slug:'qua', label:'Qua', nome:'Quarta' },
+    { slug:'qui', label:'Qui', nome:'Quinta' },
+    { slug:'sex', label:'Sex', nome:'Sexta' },
+    { slug:'sab', label:'Sáb', nome:'Sábado' }
+  ];
+  const HORARIO_SLOTS = (function(){
+    const slots = [];
+    for(let h = 7; h <= 22; h++){
+      slots.push(String(h).padStart(2,'0') + ':00');
+      if(h < 22) slots.push(String(h).padStart(2,'0') + ':30');
+    }
+    return slots;
+  })();
+  function horarioSlotFim(horarioInicio){
+    const [h, m] = horarioInicio.split(':').map(Number);
+    return String((h + 1) % 24).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+  }
+  function horarioSelectOptionsHtml(selected){
+    return '<option value="">Selecione...</option>' + HORARIO_SLOTS.map(h =>
+      '<option value="' + h + '"' + (h === selected ? ' selected' : '') + '>' + h + ' – ' + horarioSlotFim(h) + '</option>'
+    ).join('');
+  }
+  function diasSemanaChecksHtml(idPrefix, selecionados){
+    const sel = new Set(selecionados || []);
+    return '<div class="dias-semana-row">' + DIAS_SEMANA.map(d =>
+      '<label><input type="checkbox" id="' + idPrefix + '_' + d.slug + '" value="' + d.slug + '"' + (sel.has(d.slug) ? ' checked' : '') + '> ' + d.label + '</label>'
+    ).join('') + '</div>';
+  }
+  function lerDiasSemanaChecks(idPrefix){
+    return DIAS_SEMANA.filter(d => {
+      const el = document.getElementById(idPrefix + '_' + d.slug);
+      return el && el.checked;
+    }).map(d => d.slug);
+  }
+  function formatDiasHorario(diasSemana, horario){
+    const nomes = (diasSemana || []).map(slug => (DIAS_SEMANA.find(x => x.slug === slug) || {}).nome || slug);
+    if(!nomes.length && !horario) return '';
+    let texto = nomes.join(', ');
+    if(horario) texto += (texto ? ' às ' : 'Às ') + horario;
+    return texto;
+  }
+
+  async function loadPanelDisponibilidade(){
+    const [minhaDisp, myLinks, allTurmas] = await Promise.all([
+      dyseListMyDisponibilidade(), dyseListMyTurmas(), dyseListTurmas()
+    ]);
+    MINHA_DISPONIBILIDADE = minhaDisp;
+    const myIds = new Set(myLinks.map(l => l.turma_id));
+    MINHAS_TURMAS_DISP = allTurmas.filter(t => myIds.has(t.id));
+    renderDisponibilidadeGrid();
+    await renderSugestoesPendentesBox();
+  }
+
+  /* Todo (dia, horário) em que uma turma minha cai. */
+  function minhasOcupacoes(){
+    const ocupados = {};
+    MINHAS_TURMAS_DISP.forEach(t => {
+      if(!t.horario || !(t.dias_semana || []).length) return;
+      t.dias_semana.forEach(dia => { ocupados[dia + '_' + t.horario] = t; });
+    });
+    return ocupados;
+  }
+
+  function renderDisponibilidadeGrid(){
+    const ocupadoMap = minhasOcupacoes();
+    const disponivel = new Set(MINHA_DISPONIBILIDADE.map(d => d.dia_semana + '_' + d.horario));
+    let vagos = 0, ocupados = 0;
+
+    const gridRowsHtml = HORARIO_SLOTS.map(horario => {
+      const cellsHtml = DIAS_SEMANA.map(dia => {
+        const key = dia.slug + '_' + horario;
+        const turma = ocupadoMap[key];
+        if(turma){
+          ocupados++;
+          return '<td class="disp-cell disp-ocupado" title="Ocupado por ' + escapeHtmlLocal(turma.name) + '">' +
+            horario + '–' + horarioSlotFim(horario) +
+            '<div class="disp-turma-name">' + escapeHtmlLocal(turma.name) + '</div>' +
+          '</td>';
+        }
+        const isVago = disponivel.has(key);
+        if(isVago) vagos++;
+        return '<td class="disp-cell ' + (isVago ? 'disp-vago' : 'disp-indisponivel') + '" onclick="toggleDisponibilidade(\'' + dia.slug + '\',\'' + horario + '\',' + (isVago ? 'false' : 'true') + ')">' +
+          (isVago ? horario + '–' + horarioSlotFim(horario) : '–') +
+        '</td>';
+      }).join('');
+      return '<tr><td class="slot-hora">' + horario + ' – ' + horarioSlotFim(horario) + '</td>' + cellsHtml + '</tr>';
+    }).join('');
+
+    document.getElementById('dispStats').innerHTML =
+      '<span class="disp-pill pill-vago">' + vagos + ' vago' + (vagos === 1 ? '' : 's') + '</span>' +
+      '<span class="disp-pill pill-ocupado">' + ocupados + ' ocupado' + (ocupados === 1 ? '' : 's') + '</span>';
+    document.getElementById('dispGridWrap').innerHTML =
+      '<table class="disp-grid"><thead><tr><th>Horário</th>' + DIAS_SEMANA.map(d => '<th>' + d.label + '</th>').join('') + '</tr></thead><tbody>' + gridRowsHtml + '</tbody></table>';
+  }
+
+  async function toggleDisponibilidade(diaSemana, horario, disponivel){
+    const { error } = await dyseSetDisponibilidade(diaSemana, horario, disponivel);
+    if(error){ alert('Não foi possível salvar: ' + error.message); return; }
+    MINHA_DISPONIBILIDADE = await dyseListMyDisponibilidade();
+    renderDisponibilidadeGrid();
+  }
+
+  async function renderSugestoesPendentesBox(){
+    const box = document.getElementById('disponibilidadeSugestoesBox');
+    const sugestoes = await dyseListMinhasSugestoesPendentes();
+    if(!sugestoes.length){ box.innerHTML = ''; return; }
+    box.innerHTML = sugestoes.map(s => {
+      const turma = MINHAS_TURMAS_DISP.find(t => t.id === s.turma_id);
+      const atual = turma ? formatDiasHorario(turma.dias_semana, turma.horario) : '';
+      return '<div class="sugestao-card" id="sugestaoCard_' + s.id + '">' +
+        '<div class="titulo">Sugestão de troca de horário — ' + escapeHtmlLocal(turma ? turma.name : '(turma)') + '</div>' +
+        '<div class="msg">Atual: ' + escapeHtmlLocal(atual || '-') + ' → Sugerido: ' + escapeHtmlLocal(formatDiasHorario(s.dias_semana_sugerido, s.horario_sugerido)) +
+          (s.mensagem ? '<br>"' + escapeHtmlLocal(s.mensagem) + '"' : '') +
+        '</div>' +
+        '<div class="btn-row">' +
+          '<button type="button" class="btn btn-primary" onclick="handleAceitarSugestao(\'' + s.id + '\')">Aceitar</button>' +
+          '<button type="button" class="btn btn-ghost" onclick="handleRejeitarSugestao(\'' + s.id + '\')">Rejeitar</button>' +
+          '<button type="button" class="btn btn-ghost" onclick="toggleContrapropostaForm(\'' + s.id + '\')">Sugerir outro horário</button>' +
+        '</div>' +
+        '<div id="contrapropostaForm_' + s.id + '" style="display:none;"></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  async function handleAceitarSugestao(sugestaoId){
+    if(!confirm('Aceitar essa mudança de horário?')) return;
+    const session = await dyseGetSession();
+    try{
+      const resp = await fetch('/api/aceitar-horario-sugestao', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ sugestao_id: sugestaoId })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if(!resp.ok){ alert('Não foi possível aceitar: ' + (result.error || resp.statusText)); return; }
+      await loadPanelDisponibilidade();
+    }catch(err){
+      alert('Erro de conexão com o servidor: ' + err.message);
+    }
+  }
+
+  async function handleRejeitarSugestao(sugestaoId){
+    if(!confirm('Rejeitar essa sugestão de troca de horário?')) return;
+    const { error } = await dyseResponderSugestao(sugestaoId, { status: 'rejeitado' });
+    if(error){ alert('Não foi possível rejeitar: ' + error.message); return; }
+    await renderSugestoesPendentesBox();
+  }
+
+  function toggleContrapropostaForm(sugestaoId){
+    const box = document.getElementById('contrapropostaForm_' + sugestaoId);
+    if(box.style.display !== 'none'){ box.style.display = 'none'; return; }
+    box.style.display = 'block';
+    box.innerHTML =
+      '<div class="sugestao-form-field"><label>Novo(s) dia(s) da semana</label>' + diasSemanaChecksHtml('contraDia_' + sugestaoId, []) + '</div>' +
+      '<div class="sugestao-form-field"><label>Novo horário</label><select id="contraHorario_' + sugestaoId + '">' + horarioSelectOptionsHtml('') + '</select></div>' +
+      '<div class="sugestao-form-field"><label>Mensagem (opcional)</label><textarea id="contraMensagem_' + sugestaoId + '" rows="2"></textarea></div>' +
+      '<button type="button" class="btn btn-primary" style="margin-top:10px;" onclick="handleEnviarContraproposta(\'' + sugestaoId + '\')">Enviar contraproposta</button>' +
+      '<div class="auth-msg" id="contraMsg_' + sugestaoId + '"></div>';
+  }
+
+  async function handleEnviarContraproposta(sugestaoId){
+    const dias = lerDiasSemanaChecks('contraDia_' + sugestaoId);
+    const horario = document.getElementById('contraHorario_' + sugestaoId).value;
+    const mensagem = document.getElementById('contraMensagem_' + sugestaoId).value.trim();
+    const msgEl = document.getElementById('contraMsg_' + sugestaoId);
+    if(!dias.length || !horario){
+      msgEl.textContent = 'Escolha pelo menos um dia e um horário.';
+      msgEl.className = 'auth-msg show bad';
+      return;
+    }
+    const { error } = await dyseResponderSugestao(sugestaoId, {
+      status: 'contraproposta', dias_semana_resposta: dias, horario_resposta: horario, resposta_mensagem: mensagem || null
+    });
+    if(error){
+      msgEl.textContent = 'Não foi possível enviar: ' + error.message;
+      msgEl.className = 'auth-msg show bad';
+      return;
+    }
+    await renderSugestoesPendentesBox();
   }
 
   /* ======================================================================

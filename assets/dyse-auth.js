@@ -492,6 +492,79 @@ async function dyseSetTeacherTurma(teacherId, turmaId, enabled){
   return { error };
 }
 
+/* ---------- Disponibilidade do professor (agenda de horários livres) ---------- */
+async function dyseListMyDisponibilidade(){
+  const session = await dyseGetSession();
+  if(!session) return [];
+  const { data, error } = await sb.from('professor_disponibilidade').select('*').eq('teacher_id', session.user.id);
+  return error ? [] : data;
+}
+
+/* Todas as linhas, de todos os professores — usado na aba Professores da gestão. */
+async function dyseListAllDisponibilidade(){
+  const { data, error } = await sb.from('professor_disponibilidade').select('*');
+  return error ? [] : data;
+}
+
+async function dyseSetDisponibilidade(diaSemana, horario, disponivel){
+  const session = await dyseGetSession();
+  if(!session) return { error: new Error('Sem sessão.') };
+  if(disponivel){
+    const { error } = await sb.from('professor_disponibilidade').insert({ teacher_id: session.user.id, dia_semana: diaSemana, horario });
+    return { error };
+  }
+  const { error } = await sb.from('professor_disponibilidade').delete()
+    .eq('teacher_id', session.user.id).eq('dia_semana', diaSemana).eq('horario', horario);
+  return { error };
+}
+
+/* ---------- Sugestões de troca de horário de turma ---------- */
+async function dyseCreateHorarioSugestao({ turma_id, teacher_id, dias_semana_sugerido, horario_sugerido, mensagem }){
+  const session = await dyseGetSession();
+  if(!session) return { error: new Error('Sem sessão.') };
+  const { data, error } = await sb.from('horario_sugestoes').insert({
+    turma_id, teacher_id, criado_por: session.user.id,
+    dias_semana_sugerido, horario_sugerido, mensagem: mensagem || null
+  }).select('*').maybeSingle();
+  return { data, error };
+}
+
+/* Sugestões pendentes do professor logado — usado no painel da professora. */
+async function dyseListMinhasSugestoesPendentes(){
+  const session = await dyseGetSession();
+  if(!session) return [];
+  const { data, error } = await sb.from('horario_sugestoes').select('*')
+    .eq('teacher_id', session.user.id).eq('status', 'pendente')
+    .order('created_at', { ascending: true });
+  return error ? [] : data;
+}
+
+/* Todas as sugestões de um professor (pendente + contraproposta + histórico) — gestão. */
+async function dyseListSugestoesDoProfessor(teacherId){
+  const { data, error } = await sb.from('horario_sugestoes').select('*')
+    .eq('teacher_id', teacherId).order('created_at', { ascending: false });
+  return error ? [] : data;
+}
+
+/* Rejeitar ou contrapropor — o professor é dono da linha, RLS permite o
+   update direto (só "aceitar" a sugestão original precisa de service_role,
+   ver api/aceitar-horario-sugestao.js, porque isso também muda "turmas"). */
+async function dyseResponderSugestao(id, fields){
+  const { error } = await sb.from('horario_sugestoes').update({ ...fields, respondido_at: new Date().toISOString() }).eq('id', id);
+  return { error };
+}
+
+/* Gestão aceitando uma contraproposta do professor — ela já tem permissão
+   direta em "turmas" e "horario_sugestoes", não precisa de service_role. */
+async function dyseAceitarContraproposta(sugestao){
+  const { error: turmaError } = await dyseUpdateTurma(sugestao.turma_id, {
+    dias_semana: sugestao.dias_semana_resposta, horario: sugestao.horario_resposta
+  });
+  if(turmaError) return { error: turmaError };
+  const { error } = await sb.from('horario_sugestoes').update({ status: 'aceito', respondido_at: new Date().toISOString() }).eq('id', sugestao.id);
+  return { error };
+}
+
 /* ---------- Perfis por papel (alunos / professoras) ---------- */
 /* Comparação tolerante a maiúsculas/espaço extra (mesmo motivo do
    dyseIsTeacher/dyseIsAdmin): um ".eq('role', role)" exato deixaria de fora

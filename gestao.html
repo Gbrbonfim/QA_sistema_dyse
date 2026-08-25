@@ -206,6 +206,73 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .dias-semana-row input{width:auto; margin:0;}
 .turma-schedule{color:var(--amaranth); font-weight:600;}
 
+/* ---------- PROFESSORES: Horários / Disponibilidade ---------- */
+.schedule-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;}
+.schedule-stat-card{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:16px 18px; border-left:4px solid var(--antique-soft);}
+.schedule-stat-card b{display:block; font-size:1.6rem; color:var(--seal);}
+.schedule-stat-card span{display:block; font-size:.82rem; font-weight:700; color:var(--seal); margin-top:2px;}
+.schedule-stat-card small{display:block; font-size:.72rem; color:var(--seal-soft); opacity:.75; margin-top:2px;}
+.schedule-stat-card.stat-vago{border-left-color:var(--ok);}
+.schedule-stat-card.stat-vago b{color:var(--ok);}
+.schedule-stat-card.stat-ocupado{border-left-color:var(--bad);}
+.schedule-stat-card.stat-ocupado b{color:var(--bad);}
+.schedule-stat-card.stat-ativos b{color:var(--gamboge);}
+.schedule-stat-card.stat-total b{color:var(--amaranth);}
+
+.schedule-layout{display:grid; grid-template-columns:1fr 320px; gap:20px; align-items:start;}
+.schedule-sidebar{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:18px;}
+.schedule-sidebar h3{font-size:1rem; color:var(--seal); margin-bottom:12px;}
+.schedule-sidebar-list{display:flex; flex-direction:column;}
+#professoresSidebarList{margin-top:12px; display:flex; flex-direction:column; gap:4px; max-height:520px; overflow-y:auto;}
+.schedule-sidebar-item{
+  display:flex; align-items:center; gap:10px; padding:9px 8px; border-radius:var(--radius-sm); cursor:pointer;
+}
+.schedule-sidebar-item:hover{background:var(--antique-soft);}
+.schedule-sidebar-item.active{background:#fbeceb;}
+.schedule-sidebar-avatar{
+  flex:none; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:.72rem;
+}
+.schedule-sidebar-name{flex:1 1 auto; min-width:0; font-size:.85rem; font-weight:700; color:var(--seal); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.schedule-sidebar-count{flex:none; display:flex; align-items:center; gap:5px; font-size:.76rem; font-weight:700; color:var(--ok);}
+.schedule-sidebar-count .dot{width:7px; height:7px; border-radius:50%; background:var(--ok);}
+
+.schedule-detail-head{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px;}
+.schedule-avatar{
+  flex:none; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:1rem;
+}
+.schedule-detail-info{flex:1 1 160px; min-width:0;}
+.schedule-detail-info .name{font-size:1.05rem; font-weight:700; color:var(--seal);}
+.schedule-detail-info .email{font-size:.78rem; color:var(--seal-soft); opacity:.8;}
+.schedule-pill{flex:none; font-size:.78rem; font-weight:800; padding:6px 13px; border-radius:999px; display:flex; align-items:center; gap:6px;}
+.schedule-pill.pill-vago{background:#eaf7ee; color:var(--ok);}
+.schedule-pill.pill-ocupado{background:#fbeceb; color:var(--bad);}
+.schedule-pill.pill-total{background:var(--antique-soft); color:var(--seal-soft);}
+
+.schedule-grid-wrap{overflow-x:auto; border:1px solid #f0e3d2; border-radius:var(--radius-sm);}
+.schedule-grid{width:100%; border-collapse:collapse; font-size:.76rem;}
+.schedule-grid th{background:var(--antique-soft); color:var(--seal-soft); font-weight:800; padding:8px 6px; text-align:center; white-space:nowrap; position:sticky; top:0;}
+.schedule-grid .slot-hora{font-weight:700; color:var(--seal-soft); white-space:nowrap; padding:6px 10px; background:#fbf6ee;}
+.slot-cell{text-align:center; padding:6px 4px; border:1px solid #f6ece0; white-space:nowrap; min-width:78px;}
+.slot-cell.slot-vago{background:#eaf7ee; color:var(--ok); font-weight:700;}
+.slot-cell.slot-ocupado{background:#fbeceb; color:var(--bad); font-weight:700; cursor:pointer;}
+.slot-cell.slot-ocupado:hover{background:#f7dbd9;}
+.slot-cell.slot-indisponivel{color:var(--seal-soft); opacity:.4;}
+.slot-turma-name{font-size:.68rem; font-weight:800; white-space:normal; margin-top:2px;}
+.slot-turma-alunos{font-size:.66rem; opacity:.85; font-weight:600;}
+.schedule-legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:.78rem; color:var(--seal-soft);}
+.schedule-legend .dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px;}
+.schedule-legend .dot.vago{background:var(--ok);}
+.schedule-legend .dot.ocupado{background:var(--bad);}
+.schedule-legend .dot.indisponivel{background:#c9bda9;}
+
+@media (max-width:1080px){
+  .schedule-layout{grid-template-columns:1fr;}
+  .schedule-sidebar{order:-1;}
+  .schedule-stats{grid-template-columns:repeat(2,1fr);}
+}
+
 /* Módulo Financeiro é exclusivo da role "financeiro" (acima de "admin") —
    a trava de verdade é a RLS no banco, isto aqui só evita mostrar pra
    quem não tem acesso uma tela que ia dar erro de permissão. */
@@ -706,14 +773,26 @@ body.dyse-modal-open{overflow:hidden;}
     <div id="alunosTableWrap"></div>
   </div>
 
-  <!-- ---------- PROFESSORES ---------- -->
+  <!-- ---------- PROFESSORES (Horários / Disponibilidade) ---------- -->
   <div id="panelProfessores" style="display:none;">
-    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
-      Clique num professor pra ver as turmas vinculadas a ele(a), e numa turma pra ver os alunos
-      dela. Pra ativar/desativar o acesso de um professor a uma turma, vá na aba <b>Turmas</b> →
-      <b>Editar</b> da turma desejada.
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
+      A disponibilidade de cada professor(a) é cadastrada por ele(a) mesmo, no próprio painel. Aqui
+      dá pra ver a agenda de cada um cruzada com as turmas — o que está livre (verde) e o que já
+      está ocupado por uma turma (vermelho). Pra ativar/desativar o acesso de um professor a uma
+      turma, vá na aba <b>Turmas</b> → <b>Editar</b> da turma desejada.
     </p>
-    <div id="professoresList"></div>
+    <div class="schedule-stats" id="scheduleStats"></div>
+    <div class="schedule-layout">
+      <div class="schedule-main" id="scheduleMain"></div>
+      <div class="schedule-sidebar">
+        <h3>Professores</h3>
+        <div class="search-input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="filterProfessorBusca" placeholder="Buscar professor..." oninput="renderProfessoresSidebar()">
+        </div>
+        <div id="professoresSidebarList"></div>
+      </div>
+    </div>
   </div>
 
   <!-- ---------- CONTAS ---------- -->
@@ -855,7 +934,7 @@ body.dyse-modal-open{overflow:hidden;}
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="newTurmaDesc" placeholder="Ex: Alunos do 3º ano, período da manhã"></div>
         <div class="gestao-field"><label>Capacidade (opcional)</label><input type="number" id="newTurmaCapacidade" min="0" placeholder="Ex: 4"></div>
         <div class="gestao-field"><label>Dia(s) da semana (opcional)</label><div id="newTurmaDiasSemana"></div></div>
-        <div class="gestao-field"><label>Horário (opcional)</label><input type="text" id="newTurmaHorario" placeholder="Ex: 21h"></div>
+        <div class="gestao-field"><label>Horário (opcional)</label><select id="newTurmaHorario"></select></div>
         <button type="submit" class="btn btn-primary">+ Criar turma</button>
       </form>
       <div class="auth-msg" id="turmaMsg"></div>
@@ -877,7 +956,7 @@ body.dyse-modal-open{overflow:hidden;}
         <div class="gestao-field"><label>Descrição (opcional)</label><input type="text" id="turmaEditDesc"></div>
         <div class="gestao-field"><label>Capacidade (opcional)</label><input type="number" id="turmaEditCapacidade" min="0" placeholder="Ex: 4"></div>
         <div class="gestao-field"><label>Dia(s) da semana (opcional)</label><div id="turmaEditDiasSemana"></div></div>
-        <div class="gestao-field"><label>Horário (opcional)</label><input type="text" id="turmaEditHorario" placeholder="Ex: 21h"></div>
+        <div class="gestao-field"><label>Horário (opcional)</label><select id="turmaEditHorario"></select></div>
         <div class="btn-row">
           <button type="submit" class="btn btn-primary">Salvar</button>
           <button type="button" class="btn btn-danger" onclick="handleDeleteTurmaFromEditModal()">Excluir turma</button>
@@ -933,6 +1012,30 @@ body.dyse-modal-open{overflow:hidden;}
       <p class="gestao-hint">Por padrão o(a) professor(a) recebe um e-mail do sistema com o link pra definir a senha e acessar. Marque a opção acima pra só criar a conta agora, sem avisar ainda. Depois de cadastrado(a), vincule as turmas dele(a) na aba Turmas → Editar → "Professores com acesso".</p>
       <div class="auth-msg" id="newTeacherMsg"></div>
     </div>
+  </div>
+</div>
+
+<!-- Modal de horário ocupado (clicar numa célula vermelha da agenda) -->
+<div id="turmaSlotModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeTurmaSlotModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="turmaSlotModalTitle">
+    <div class="report-modal-header">
+      <h3 id="turmaSlotModalTitle"></h3>
+      <button type="button" class="report-modal-close" onclick="closeTurmaSlotModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="turmaSlotModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de horários vagos, todos os professores -->
+<div id="horariosVagosModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeHorariosVagosModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="horariosVagosModalTitle">
+    <div class="report-modal-header">
+      <h3 id="horariosVagosModalTitle">Horários vagos (geral)</h3>
+      <button type="button" class="report-modal-close" onclick="closeHorariosVagosModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="horariosVagosModalBody"></div>
   </div>
 </div>
 
@@ -1044,7 +1147,7 @@ body.dyse-modal-open{overflow:hidden;}
 
 <script src="/assets/dyse-auth.js"></script>
 <script>
-  let TURMAS = [], MATERIAS = [], STUDENTS = [], TEACHERS = [], TURMA_MATERIAS = [], TEACHER_TURMAS = [], MATERIA_ACTIVITIES_DB = [];
+  let TURMAS = [], MATERIAS = [], STUDENTS = [], TEACHERS = [], TURMA_MATERIAS = [], TEACHER_TURMAS = [], MATERIA_ACTIVITIES_DB = [], DISPONIBILIDADE = [];
   let MODALIDADES = [], MODALIDADE_VALORES = [], ALUNO_FIN_HISTORICO = [], NIVEIS = [], CONTAS = [];
 
   /* Atividades de cada matéria — mesma lista fixa usada em professora.html e
@@ -1090,8 +1193,11 @@ body.dyse-modal-open{overflow:hidden;}
     },
     professores: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
-      title: 'Professores', subtitle: 'Veja as turmas e alunos vinculados a cada professor(a).',
-      action: '<button type="button" class="btn btn-primary" onclick="openTeacherCreateModal()">+ Cadastrar professor(a)</button>'
+      title: 'Horários / Disponibilidade', subtitle: 'Confira a disponibilidade dos professores e os horários ocupados pelas turmas.',
+      action: '<div class="page-header-action-row">' +
+        '<button type="button" class="btn btn-ghost" onclick="openHorariosVagosModal()">Ver horários vagos (geral)</button>' +
+        '<button type="button" class="btn btn-primary" onclick="openTeacherCreateModal()">+ Cadastrar professor(a)</button>' +
+      '</div>'
     },
     contas: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h5l2 2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>',
@@ -1163,7 +1269,7 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   async function loadAll(){
-    [TURMAS, MATERIAS, STUDENTS, TEACHERS, TURMA_MATERIAS, TEACHER_TURMAS, MATERIA_ACTIVITIES_DB, MODALIDADES, MODALIDADE_VALORES, ALUNO_FIN_HISTORICO, CONTAS] = await Promise.all([
+    [TURMAS, MATERIAS, STUDENTS, TEACHERS, TURMA_MATERIAS, TEACHER_TURMAS, MATERIA_ACTIVITIES_DB, MODALIDADES, MODALIDADE_VALORES, ALUNO_FIN_HISTORICO, CONTAS, DISPONIBILIDADE] = await Promise.all([
       dyseListTurmas(),
       dyseListMaterias(),
       dyseListProfilesByRole('student'),
@@ -1174,7 +1280,8 @@ body.dyse-modal-open{overflow:hidden;}
       dyseListModalidades(),
       dyseListModalidadeValores(),
       dyseListAlunoFinanceiroHistorico(),
-      dyseListGestaoAccounts()
+      dyseListGestaoAccounts(),
+      dyseListAllDisponibilidade()
     ]);
     // "Nível" (A1, A2...) é uma matéria com currículo — reconhecida por ter
     // total_aulas preenchido (matérias comuns, tipo TOEFL, ficam sem isso).
@@ -1183,7 +1290,7 @@ body.dyse-modal-open{overflow:hidden;}
     renderMateriasTable();
     populateAlunosFiltros();
     renderAlunosTable();
-    renderProfessoresList();
+    renderProfessoresPanel();
     renderContasList();
     renderModalidadesTable();
 
@@ -1244,6 +1351,34 @@ body.dyse-modal-open{overflow:hidden;}
     let texto = nomes.join(', ');
     if(horario) texto += (texto ? ' às ' : 'Às ') + horario;
     return texto;
+  }
+
+  /* Ordem Dom→Sáb, pra bater com a grade de disponibilidade (o mockup usa
+     essa ordem nas colunas — DIAS_SEMANA acima é Seg→Dom, usado nos
+     checkboxes de dia da turma). */
+  const DIAS_SEMANA_GRID = ['dom','seg','ter','qua','qui','sex','sab'].map(slug => DIAS_SEMANA.find(d => d.slug === slug));
+
+  /* Horários "cheios" permitidos em toda a agenda: sempre 1h de duração,
+     começando em hora cheia ou meia, 07:00 até 22:00 (última aula termina
+     23:00) — 31 opções. Usado tanto no <select> de horário da turma quanto
+     nas linhas da grade de disponibilidade. */
+  const HORARIO_SLOTS = (function(){
+    const slots = [];
+    for(let h = 7; h <= 22; h++){
+      slots.push(String(h).padStart(2,'0') + ':00');
+      if(h < 22) slots.push(String(h).padStart(2,'0') + ':30');
+    }
+    return slots;
+  })();
+  function horarioSlotFim(horarioInicio){
+    const [h, m] = horarioInicio.split(':').map(Number);
+    const fimH = (h + 1) % 24;
+    return String(fimH).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+  }
+  function horarioSelectOptionsHtml(selected){
+    return '<option value="">Selecione...</option>' + HORARIO_SLOTS.map(h =>
+      '<option value="' + h + '"' + (h === selected ? ' selected' : '') + '>' + h + ' – ' + horarioSlotFim(h) + '</option>'
+    ).join('');
   }
 
   function populateTurmaNivelFilter(){
@@ -1412,7 +1547,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('turmaEditDesc').value = t.description || '';
     document.getElementById('turmaEditCapacidade').value = (t.capacidade === null || t.capacidade === undefined) ? '' : t.capacidade;
     document.getElementById('turmaEditDiasSemana').innerHTML = diasSemanaChecksHtml('turmaEditDia', t.dias_semana);
-    document.getElementById('turmaEditHorario').value = t.horario || '';
+    document.getElementById('turmaEditHorario').innerHTML = horarioSelectOptionsHtml(t.horario || '');
     renderTurmaModalDetails(turmaId);
     document.getElementById('turmaEditModal').classList.add('open');
     document.getElementById('turmaEditModal').setAttribute('aria-hidden','false');
@@ -1451,7 +1586,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('newTurmaDesc').value = '';
     document.getElementById('newTurmaCapacidade').value = '';
     document.getElementById('newTurmaDiasSemana').innerHTML = diasSemanaChecksHtml('newTurmaDia', []);
-    document.getElementById('newTurmaHorario').value = '';
+    document.getElementById('newTurmaHorario').innerHTML = horarioSelectOptionsHtml('');
     document.getElementById('turmaMsg').className = 'auth-msg';
     document.getElementById('turmaMsg').textContent = '';
     document.getElementById('turmaCreateModal').classList.add('open');
@@ -2035,7 +2170,7 @@ body.dyse-modal-open{overflow:hidden;}
       document.getElementById('newTeacherEmail').value = '';
       flashMsg('newTeacherMsg', result.email_sent ? 'Professor(a) cadastrado(a)! Já recebeu o e-mail de acesso.' : 'Professor(a) cadastrado(a), sem enviar e-mail. Use "Reenviar acesso" quando quiser liberar o acesso.', true);
       TEACHERS = await dyseListProfilesByRole('teacher');
-      renderProfessoresList();
+      renderProfessoresPanel();
     }catch(err){
       flashMsg('newTeacherMsg', 'Erro de conexão com o servidor: ' + err.message, false);
     }finally{
@@ -2301,95 +2436,331 @@ body.dyse-modal-open{overflow:hidden;}
      daqui que se ativa/desativa acesso — isso já é feito na aba Turmas →
      Editar → "Professores com acesso", que também deixa buscar e
      adicionar; duplicar o controle aqui só deixava a lista enorme). */
-  function renderProfessoresList(){
-    const container = document.getElementById('professoresList');
-    if(!TEACHERS.length){
-      container.innerHTML = '<p style="opacity:.6;">Nenhum professor cadastrado ainda.</p>';
+  /* ---------- PROFESSORES: Horários / Disponibilidade ---------- */
+  let SELECTED_PROFESSOR_ID = null;
+  let CURRENT_PROFESSOR_SUGESTOES = [];
+  let CURRENT_SLOT_TURMA_ID = null, CURRENT_SLOT_DIA = null, CURRENT_SLOT_HORARIO = null;
+
+  /* Todo slot (dia, horário) em que uma turma desse professor cai — uma
+     turma com vários dias_semana gera um slot ocupado por dia. */
+  function professorTurmasOcupadas(teacherId){
+    const turmaIds = new Set(TEACHER_TURMAS.filter(tt => tt.teacher_id === teacherId).map(tt => tt.turma_id));
+    const ocupados = [];
+    TURMAS.forEach(t => {
+      if(!turmaIds.has(t.id) || !t.horario || !(t.dias_semana || []).length) return;
+      t.dias_semana.forEach(dia => ocupados.push({ turma: t, dia, horario: t.horario }));
+    });
+    return ocupados;
+  }
+
+  /* Estado de cada célula da agenda de um professor: 'ocupado' (turma
+     dele(a) nesse dia/horário — sempre vence, mesmo se nunca foi marcado
+     como disponível), 'vago' (marcado como disponível e livre) ou
+     'indisponivel' (nunca marcado). "total" = vagos + ocupados. */
+  function professorScheduleGrid(teacherId){
+    const ocupadoMap = {};
+    professorTurmasOcupadas(teacherId).forEach(o => { ocupadoMap[o.dia + '_' + o.horario] = o.turma; });
+    const disponivel = new Set(DISPONIBILIDADE.filter(d => d.teacher_id === teacherId).map(d => d.dia_semana + '_' + d.horario));
+    const cells = {};
+    let vagos = 0, ocupados = 0;
+    DIAS_SEMANA_GRID.forEach(dia => {
+      HORARIO_SLOTS.forEach(horario => {
+        const key = dia.slug + '_' + horario;
+        const turma = ocupadoMap[key];
+        if(turma){ cells[key] = { state:'ocupado', turma }; ocupados++; }
+        else if(disponivel.has(key)){ cells[key] = { state:'vago' }; vagos++; }
+        else cells[key] = { state:'indisponivel' };
+      });
+    });
+    return { cells, vagos, ocupados, total: vagos + ocupados };
+  }
+
+  function computeScheduleStatsGlobal(){
+    let vagos = 0, ocupados = 0, totalCadastrado = 0;
+    TEACHERS.forEach(p => {
+      const g = professorScheduleGrid(p.id);
+      vagos += g.vagos; ocupados += g.ocupados; totalCadastrado += g.total;
+    });
+    const ativos = new Set(TEACHER_TURMAS.map(tt => tt.teacher_id)).size;
+    return { vagos, ocupados, ativos, totalCadastrado };
+  }
+
+  function renderProfessoresPanel(){
+    if(!TEACHERS.find(p => p.id === SELECTED_PROFESSOR_ID)){
+      const ordenados = TEACHERS.slice().sort((a, b) => (a.full_name || '').localeCompare(b.full_name || ''));
+      SELECTED_PROFESSOR_ID = ordenados.length ? ordenados[0].id : null;
+    }
+    renderScheduleStats();
+    renderProfessoresSidebar();
+    renderScheduleMain();
+  }
+
+  function renderScheduleStats(){
+    const el = document.getElementById('scheduleStats');
+    const s = computeScheduleStatsGlobal();
+    el.innerHTML =
+      '<div class="schedule-stat-card stat-vago"><b>' + s.vagos + '</b><span>Horários vagos</span><small>Disponíveis para novas turmas</small></div>' +
+      '<div class="schedule-stat-card stat-ocupado"><b>' + s.ocupados + '</b><span>Horários ocupados</span><small>Já possuem turmas</small></div>' +
+      '<div class="schedule-stat-card stat-ativos"><b>' + s.ativos + '</b><span>Professores ativos</span><small>Com turmas vinculadas</small></div>' +
+      '<div class="schedule-stat-card stat-total"><b>' + s.totalCadastrado + '</b><span>Total de horários cadastrados</span><small>Disponibilidades informadas</small></div>';
+  }
+
+  function renderProfessoresSidebar(){
+    const el = document.getElementById('professoresSidebarList');
+    const buscaEl = document.getElementById('filterProfessorBusca');
+    const busca = (buscaEl && buscaEl.value || '').trim().toLowerCase();
+    const lista = TEACHERS.filter(p => !busca || (p.full_name || '').toLowerCase().includes(busca) || (p.email || '').toLowerCase().includes(busca))
+      .slice().sort((a, b) => (a.full_name || '').localeCompare(b.full_name || ''));
+    if(!lista.length){ el.innerHTML = '<p style="opacity:.6; padding:10px 0;">Nenhum professor encontrado.</p>'; return; }
+    el.innerHTML = lista.map(p => {
+      const g = professorScheduleGrid(p.id);
+      const avatarColor = dyseColorForSlug(p.id, TURMA_AVATAR_COLORS);
+      const initials = (p.full_name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || '?';
+      return '<div class="schedule-sidebar-item' + (p.id === SELECTED_PROFESSOR_ID ? ' active' : '') + '" onclick="selectProfessor(\'' + p.id + '\')">' +
+        '<span class="schedule-sidebar-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</span>' +
+        '<span class="schedule-sidebar-name">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</span>' +
+        '<span class="schedule-sidebar-count"><span class="dot"></span>' + g.vagos + ' vago' + (g.vagos === 1 ? '' : 's') + '</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  function selectProfessor(teacherId){
+    SELECTED_PROFESSOR_ID = teacherId;
+    renderProfessoresSidebar();
+    renderScheduleMain();
+  }
+
+  async function renderScheduleMain(){
+    const el = document.getElementById('scheduleMain');
+    const p = TEACHERS.find(x => x.id === SELECTED_PROFESSOR_ID);
+    if(!p){
+      el.innerHTML = '<div class="gestao-card"><p style="opacity:.6; text-align:center; padding:20px;">Nenhum professor cadastrado ainda.</p></div>';
       return;
     }
-    container.innerHTML = TEACHERS.map(p => {
-      const turmasDoProf = TEACHER_TURMAS.filter(tt => tt.teacher_id === p.id)
-        .map(tt => TURMAS.find(t => t.id === tt.turma_id))
-        .filter(Boolean);
-      const turmaIdsDoProf = new Set(turmasDoProf.map(t => t.id));
+    const g = professorScheduleGrid(p.id);
+    const avatarColor = dyseColorForSlug(p.id, TURMA_AVATAR_COLORS);
+    const initials = (p.full_name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || '?';
 
-      // Alunos que geram cobrança financeira pra este professor (período
-      // aberto com professor_id = p.id), mas cuja turma atual não é uma das
-      // que ele(a) tem acesso — ou nem tem turma. Sinal de que o vínculo
-      // financeiro e o de acesso à turma (Turmas → Editar → Professores
-      // com acesso) desalinharam: o professor cobra pelo aluno, mas não
-      // necessariamente tem acesso ao Registro de Classe da turma dele.
-      const financeiroAlunosDoProf = STUDENTS.filter(s => {
-        const periodo = dyseFindPeriodoAberto(ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === s.id));
-        return periodo && periodo.professor_id === p.id;
-      });
-      const alunosParaVerificar = financeiroAlunosDoProf.filter(s => !s.turma_id || !turmaIdsDoProf.has(s.turma_id));
+    const turmasDoProf = TEACHER_TURMAS.filter(tt => tt.teacher_id === p.id).map(tt => TURMAS.find(t => t.id === tt.turma_id)).filter(Boolean);
+    const turmaIdsDoProf = new Set(turmasDoProf.map(t => t.id));
+    // Mesmo alerta que já existia: aluno cobrado no financeiro pra este
+    // professor, mas fora das turmas que ele(a) tem acesso (ou sem turma).
+    const financeiroAlunosDoProf = STUDENTS.filter(s => {
+      const periodo = dyseFindPeriodoAberto(ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === s.id));
+      return periodo && periodo.professor_id === p.id;
+    });
+    const alunosParaVerificar = financeiroAlunosDoProf.filter(s => !s.turma_id || !turmaIdsDoProf.has(s.turma_id));
 
-      const alertaHtml = alunosParaVerificar.length
-        ? '<div class="fin-only">' +
-            '<div class="report-line" style="background:#fbeceb; color:var(--bad); font-weight:700; border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:12px;">' +
-              '⚠️ Existem ' + alunosParaVerificar.length + ' aluno' + (alunosParaVerificar.length === 1 ? '' : 's') +
-              ' cadastrado' + (alunosParaVerificar.length === 1 ? '' : 's') + ' no financeiro pra ' +
-              escapeHtmlLocal(p.full_name || 'esta professora') + ', verificar.' +
-            '</div>' +
-            '<details class="dyse-collapsible dyse-collapsible-nested">' +
-              '<summary><span class="summary-left">Alunos a verificar<span class="pill-count">' + alunosParaVerificar.length + '</span></span><span class="chevron">›</span></summary>' +
-              '<div class="dyse-collapsible-body">' +
-                '<table class="dash-table dash-table-stacked"><thead><tr><th>Aluno</th><th>E-mail</th><th>Turma atual</th><th>Alocar turma</th></tr></thead><tbody>' +
-                alunosParaVerificar.map(s => {
-                  const turmaOptions = '<option value="">Sem turma</option>' + TURMAS.map(t =>
-                    '<option value="' + t.id + '"' + (s.turma_id === t.id ? ' selected' : '') + '>' + escapeHtmlLocal(t.name) + '</option>'
-                  ).join('');
-                  const turmaAtual = s.turma_id ? TURMAS.find(t => t.id === s.turma_id) : null;
-                  return '<tr>' +
-                    '<td data-label="Aluno">' + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
-                    '<td data-label="E-mail">' + escapeHtmlLocal(s.email || '-') + '</td>' +
-                    '<td data-label="Turma atual">' + (turmaAtual ? escapeHtmlLocal(turmaAtual.name) : '<span class="no-turma">Sem turma</span>') + '</td>' +
-                    '<td data-label="Alocar turma"><select onchange="handleContaTurmaChange(\'' + s.id + '\', this.value)">' + turmaOptions + '</select></td>' +
-                  '</tr>';
-                }).join('') +
-                '</tbody></table>' +
-              '</div>' +
-            '</details>' +
-          '</div>'
-        : '';
-
-      const turmasHtml = turmasDoProf.length
-        ? turmasDoProf.map(t => {
-            const alunosDaTurma = STUDENTS.filter(s => s.turma_id === t.id);
-            const alunosHtml = alunosDaTurma.length
-              ? '<details class="dyse-collapsible dyse-collapsible-nested">' +
-                  '<summary><span class="summary-left">Alunos<span class="pill-count">' + alunosDaTurma.length + '</span></span><span class="chevron">›</span></summary>' +
-                  '<div class="dyse-collapsible-body">' +
-                    alunosDaTurma.map(s => '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.email || '') + '</span></div>').join('') +
-                  '</div>' +
-                '</details>'
-              : '<p class="report-line" style="opacity:.6;">Nenhum aluno nesta turma.</p>';
-            return '<details class="dyse-collapsible dyse-collapsible-nested">' +
-              '<summary><span class="summary-left">' + escapeHtmlLocal(t.name) + '<span class="pill-count">' + alunosDaTurma.length + '</span></span><span class="chevron">›</span></summary>' +
-              '<div class="dyse-collapsible-body">' + alunosHtml + '</div>' +
-            '</details>';
-          }).join('')
-        : '<p class="report-line" style="opacity:.6;">Nenhuma turma vinculada ainda — use a aba Turmas → Editar pra vincular.</p>';
-
-      return '<details class="dyse-collapsible">' +
-        '<summary><span class="summary-left">' +
-          '<div><div style="font-size:1rem; font-weight:700; color:var(--seal); margin-bottom:2px;">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div>' +
-          '<span style="font-size:.78rem; opacity:.7; font-weight:400;">' + escapeHtmlLocal(p.email || '') + '</span></div>' +
-          '<span class="pill-count">' + turmasDoProf.length + '</span>' +
-          (alunosParaVerificar.length ? '<span class="pill-count fin-only" style="background:#fbeceb; color:var(--bad);" title="Alunos cadastrados no financeiro fora das turmas que ele(a) tem acesso">⚠ ' + alunosParaVerificar.length + '</span>' : '') +
-        '</span><span class="chevron">›</span></summary>' +
-        '<div class="dyse-collapsible-body">' +
-          '<div class="btn-row" style="justify-content:flex-end; margin:2px 0 12px;">' +
-            '<button type="button" class="btn btn-ghost btn-xs" onclick="event.stopPropagation(); handleReenviarAcesso(\'' + escapeHtmlLocal(p.email || '') + '\')"' + (p.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
-            '<button type="button" class="btn btn-ghost btn-xs" onclick="event.stopPropagation(); handleDefinirSenhaTemporaria(\'' + p.id + '\')">Definir senha temporária</button>' +
-            '<button type="button" class="btn btn-danger btn-xs" onclick="event.stopPropagation(); handleExcluirProfessor(\'' + p.id + '\')">Excluir</button>' +
-          '</div>' +
-          alertaHtml +
-          turmasHtml +
-        '</div>' +
-      '</details>';
+    const gridRowsHtml = HORARIO_SLOTS.map(horario => {
+      const cellsHtml = DIAS_SEMANA_GRID.map(dia => {
+        const cell = g.cells[dia.slug + '_' + horario];
+        if(cell.state === 'ocupado'){
+          const alunosCount = STUDENTS.filter(s => s.turma_id === cell.turma.id).length;
+          return '<td class="slot-cell slot-ocupado" onclick="openTurmaSlotModal(\'' + cell.turma.id + '\',\'' + dia.slug + '\',\'' + horario + '\')">' +
+            horario + '–' + horarioSlotFim(horario) +
+            '<div class="slot-turma-name">' + escapeHtmlLocal(cell.turma.name) + '</div>' +
+            '<div class="slot-turma-alunos">👤 ' + alunosCount + '</div>' +
+          '</td>';
+        }
+        if(cell.state === 'vago') return '<td class="slot-cell slot-vago">' + horario + '–' + horarioSlotFim(horario) + '</td>';
+        return '<td class="slot-cell slot-indisponivel">–</td>';
+      }).join('');
+      return '<tr><td class="slot-hora">' + horario + ' – ' + horarioSlotFim(horario) + '</td>' + cellsHtml + '</tr>';
     }).join('');
+
+    el.innerHTML =
+      '<div class="gestao-card">' +
+        '<div class="schedule-detail-head">' +
+          '<span class="schedule-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</span>' +
+          '<div class="schedule-detail-info"><div class="name">' + escapeHtmlLocal(p.full_name || '(sem nome)') + '</div><div class="email">' + escapeHtmlLocal(p.email || '') + '</div></div>' +
+          '<span class="schedule-pill pill-vago">' + g.vagos + ' Vagos</span>' +
+          '<span class="schedule-pill pill-ocupado">' + g.ocupados + ' Ocupados</span>' +
+          '<span class="schedule-pill pill-total">' + g.total + ' Total cadastrado</span>' +
+        '</div>' +
+        '<div class="btn-row" style="justify-content:flex-end; margin-bottom:14px;">' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(p.email || '') + '\')"' + (p.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="handleDefinirSenhaTemporaria(\'' + p.id + '\')">Definir senha temporária</button>' +
+          '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirProfessor(\'' + p.id + '\')">Excluir</button>' +
+        '</div>' +
+        '<div class="schedule-grid-wrap"><table class="schedule-grid"><thead><tr><th>Horário</th>' +
+          DIAS_SEMANA_GRID.map(d => '<th>' + d.label + '</th>').join('') +
+        '</tr></thead><tbody>' + gridRowsHtml + '</tbody></table></div>' +
+        '<div class="schedule-legend">' +
+          '<span><i class="dot vago"></i>Disponível (vago)</span>' +
+          '<span><i class="dot ocupado"></i>Ocupado (turma)</span>' +
+          '<span><i class="dot indisponivel"></i>Indisponível</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="gestao-card" id="scheduleSugestoesBox"><p style="opacity:.6;">Carregando sugestões...</p></div>' +
+      (alunosParaVerificar.length ? renderAlunosParaVerificarBox(p, alunosParaVerificar) : '') +
+      renderTurmasDoProfessorBox(turmasDoProf);
+
+    const sugestoes = await dyseListSugestoesDoProfessor(p.id);
+    if(SELECTED_PROFESSOR_ID !== p.id) return; // trocou de professor enquanto isso carregava
+    CURRENT_PROFESSOR_SUGESTOES = sugestoes;
+    const box = document.getElementById('scheduleSugestoesBox');
+    if(box) box.outerHTML = renderSugestoesBox(sugestoes);
+  }
+
+  function renderAlunosParaVerificarBox(p, alunosParaVerificar){
+    return '<div class="gestao-card fin-only">' +
+      '<div class="report-line" style="background:#fbeceb; color:var(--bad); font-weight:700; border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:12px;">' +
+        '⚠️ Existem ' + alunosParaVerificar.length + ' aluno' + (alunosParaVerificar.length === 1 ? '' : 's') +
+        ' cadastrado' + (alunosParaVerificar.length === 1 ? '' : 's') + ' no financeiro pra ' +
+        escapeHtmlLocal(p.full_name || 'esta professora') + ', verificar.' +
+      '</div>' +
+      '<table class="dash-table dash-table-stacked"><thead><tr><th>Aluno</th><th>E-mail</th><th>Turma atual</th><th>Alocar turma</th></tr></thead><tbody>' +
+      alunosParaVerificar.map(s => {
+        const turmaOptions = '<option value="">Sem turma</option>' + TURMAS.map(t =>
+          '<option value="' + t.id + '"' + (s.turma_id === t.id ? ' selected' : '') + '>' + escapeHtmlLocal(t.name) + '</option>'
+        ).join('');
+        const turmaAtual = s.turma_id ? TURMAS.find(t => t.id === s.turma_id) : null;
+        return '<tr>' +
+          '<td data-label="Aluno">' + escapeHtmlLocal(s.full_name || '(sem nome)') + '</td>' +
+          '<td data-label="E-mail">' + escapeHtmlLocal(s.email || '-') + '</td>' +
+          '<td data-label="Turma atual">' + (turmaAtual ? escapeHtmlLocal(turmaAtual.name) : '<span class="no-turma">Sem turma</span>') + '</td>' +
+          '<td data-label="Alocar turma"><select onchange="handleContaTurmaChange(\'' + s.id + '\', this.value)">' + turmaOptions + '</select></td>' +
+        '</tr>';
+      }).join('') +
+      '</tbody></table>' +
+    '</div>';
+  }
+
+  function renderTurmasDoProfessorBox(turmasDoProf){
+    const turmasHtml = turmasDoProf.length
+      ? turmasDoProf.map(t => {
+          const alunosDaTurma = STUDENTS.filter(s => s.turma_id === t.id);
+          const alunosHtml = alunosDaTurma.length
+            ? alunosDaTurma.map(s => '<div class="chip-toggle-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.email || '') + '</span></div>').join('')
+            : '<p class="report-line" style="opacity:.6;">Nenhum aluno nesta turma.</p>';
+          return '<details class="dyse-collapsible dyse-collapsible-nested">' +
+            '<summary><span class="summary-left">' + escapeHtmlLocal(t.name) + '<span class="pill-count">' + alunosDaTurma.length + '</span></span><span class="chevron">›</span></summary>' +
+            '<div class="dyse-collapsible-body">' + alunosHtml + '</div>' +
+          '</details>';
+        }).join('')
+      : '<p style="opacity:.6;">Nenhuma turma vinculada ainda — use a aba Turmas → Editar pra vincular.</p>';
+    return '<div class="gestao-card"><h3 class="gestao-card-title" style="font-size:1.05rem;">Turmas vinculadas</h3>' + turmasHtml + '</div>';
+  }
+
+  function renderSugestoesBox(sugestoes){
+    const relevantes = sugestoes.filter(s => s.status === 'pendente' || s.status === 'contraproposta');
+    if(!relevantes.length){
+      return '<div class="gestao-card" id="scheduleSugestoesBox"><h3 class="gestao-card-title" style="font-size:1.05rem;">Sugestões</h3><p style="opacity:.6;">Nenhuma sugestão de troca de horário pendente.</p></div>';
+    }
+    return '<div class="gestao-card" id="scheduleSugestoesBox"><h3 class="gestao-card-title" style="font-size:1.05rem;">Sugestões</h3>' +
+      relevantes.map(s => {
+        const turma = TURMAS.find(t => t.id === s.turma_id);
+        if(s.status === 'pendente'){
+          return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:6px;">' +
+            '<span class="name">' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + ' — sugerido: ' + escapeHtmlLocal(formatDiasHorario(s.dias_semana_sugerido, s.horario_sugerido)) + '</span>' +
+            '<span style="font-size:.78rem; opacity:.7;">Aguardando resposta do professor' + (s.mensagem ? ' · "' + escapeHtmlLocal(s.mensagem) + '"' : '') + '</span>' +
+          '</div>';
+        }
+        return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:6px;">' +
+          '<span class="name">' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + ' — contraproposta do professor: ' + escapeHtmlLocal(formatDiasHorario(s.dias_semana_resposta, s.horario_resposta)) + '</span>' +
+          (s.resposta_mensagem ? '<span style="font-size:.78rem; opacity:.7;">"' + escapeHtmlLocal(s.resposta_mensagem) + '"</span>' : '') +
+          '<div class="btn-row"><button type="button" class="btn btn-primary btn-xs" onclick="handleAceitarContraproposta(\'' + s.id + '\')">Aceitar contraproposta</button></div>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+  }
+
+  async function handleAceitarContraproposta(sugestaoId){
+    const s = CURRENT_PROFESSOR_SUGESTOES.find(x => x.id === sugestaoId);
+    if(!s) return;
+    if(!confirm('Aceitar a contraproposta e mudar o horário da turma?')) return;
+    const { error } = await dyseAceitarContraproposta(s);
+    if(error){ alert('Não foi possível aceitar: ' + error.message); return; }
+    await loadAll();
+  }
+
+  /* ---------- Modal: horário ocupado (clicar numa célula vermelha) ---------- */
+  function openTurmaSlotModal(turmaId, dia, horario){
+    const t = TURMAS.find(x => x.id === turmaId);
+    if(!t) return;
+    CURRENT_SLOT_TURMA_ID = turmaId; CURRENT_SLOT_DIA = dia; CURRENT_SLOT_HORARIO = horario;
+    const alunosCount = STUDENTS.filter(s => s.turma_id === t.id).length;
+    const diaNome = (DIAS_SEMANA.find(d => d.slug === dia) || {}).nome || dia;
+    document.getElementById('turmaSlotModalTitle').textContent = t.name;
+    document.getElementById('turmaSlotModalBody').innerHTML =
+      '<p><b>Turma:</b> ' + escapeHtmlLocal(t.name) + '</p>' +
+      '<p><b>Horário:</b> ' + escapeHtmlLocal(diaNome) + ', ' + horario + ' – ' + horarioSlotFim(horario) + '</p>' +
+      '<p><b>Alunos:</b> ' + alunosCount + '</p>' +
+      (t.description ? '<p><b>Descrição:</b> ' + escapeHtmlLocal(t.description) + '</p>' : '') +
+      '<div class="btn-row" style="margin-top:14px;">' +
+        '<button type="button" class="btn btn-ghost btn-xs" onclick="handleVerTurmaFromSlot()">Ver turma →</button>' +
+        '<button type="button" class="btn btn-primary btn-xs" onclick="toggleSugerirHorarioForm()">Sugerir novo horário</button>' +
+      '</div>' +
+      '<div id="sugerirHorarioForm" style="display:none; margin-top:16px; padding-top:16px; border-top:1px solid #f0e3d2;"></div>';
+    document.getElementById('turmaSlotModal').classList.add('open');
+    document.getElementById('turmaSlotModal').setAttribute('aria-hidden', 'false');
+    document.body.classList.add('dyse-modal-open');
+  }
+  function closeTurmaSlotModal(){
+    document.getElementById('turmaSlotModal').classList.remove('open');
+    document.getElementById('turmaSlotModal').setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('dyse-modal-open');
+  }
+  function handleVerTurmaFromSlot(){
+    const turmaId = CURRENT_SLOT_TURMA_ID;
+    closeTurmaSlotModal();
+    showPanel('turmas');
+    openTurmaEditModal(turmaId);
+  }
+  function toggleSugerirHorarioForm(){
+    const box = document.getElementById('sugerirHorarioForm');
+    if(box.style.display !== 'none'){ box.style.display = 'none'; return; }
+    box.style.display = 'block';
+    box.innerHTML =
+      '<div class="gestao-field"><label>Novo(s) dia(s) da semana</label>' + diasSemanaChecksHtml('sugestaoDia', []) + '</div>' +
+      '<div class="gestao-field" style="margin-top:10px;"><label>Novo horário</label><select id="sugestaoHorario">' + horarioSelectOptionsHtml('') + '</select></div>' +
+      '<div class="gestao-field" style="margin-top:10px;"><label>Mensagem (opcional)</label><textarea id="sugestaoMensagem" rows="2" placeholder="Ex: precisamos liberar esse horário pra outra turma"></textarea></div>' +
+      '<button type="button" class="btn btn-primary btn-xs" style="margin-top:10px;" onclick="handleEnviarSugestao()">Enviar sugestão</button>' +
+      '<div class="auth-msg" id="sugestaoMsg"></div>';
+  }
+  async function handleEnviarSugestao(){
+    const diasSugerido = lerDiasSemanaChecks('sugestaoDia');
+    const horarioSugerido = document.getElementById('sugestaoHorario').value;
+    const mensagem = document.getElementById('sugestaoMensagem').value.trim();
+    if(!diasSugerido.length || !horarioSugerido){
+      flashMsg('sugestaoMsg', 'Escolha pelo menos um dia e um horário.', false);
+      return;
+    }
+    const { error } = await dyseCreateHorarioSugestao({
+      turma_id: CURRENT_SLOT_TURMA_ID, teacher_id: SELECTED_PROFESSOR_ID,
+      dias_semana_sugerido: diasSugerido, horario_sugerido: horarioSugerido, mensagem: mensagem || null
+    });
+    if(error){ flashMsg('sugestaoMsg', 'Não foi possível enviar: ' + error.message, false); return; }
+    closeTurmaSlotModal();
+    renderScheduleMain();
+  }
+
+  /* ---------- Modal: horários vagos, todos os professores ---------- */
+  function openHorariosVagosModal(){
+    const rows = [];
+    DIAS_SEMANA_GRID.forEach(dia => {
+      HORARIO_SLOTS.forEach(horario => {
+        const livres = TEACHERS.filter(p => {
+          const cell = professorScheduleGrid(p.id).cells[dia.slug + '_' + horario];
+          return cell && cell.state === 'vago';
+        });
+        if(livres.length) rows.push({ dia, horario, livres });
+      });
+    });
+    document.getElementById('horariosVagosModalBody').innerHTML = rows.length
+      ? '<table class="dash-table dash-table-stacked"><thead><tr><th>Dia</th><th>Horário</th><th>Professores vagos</th></tr></thead><tbody>' +
+          rows.map(r => '<tr><td data-label="Dia">' + r.dia.nome + '</td><td data-label="Horário">' + r.horario + ' – ' + horarioSlotFim(r.horario) + '</td><td data-label="Professores vagos">' +
+            r.livres.map(p => escapeHtmlLocal(p.full_name || p.email || '')).join(', ') + '</td></tr>').join('') +
+        '</tbody></table>'
+      : '<p style="opacity:.6;">Nenhum horário livre cadastrado ainda.</p>';
+    document.getElementById('horariosVagosModal').classList.add('open');
+    document.getElementById('horariosVagosModal').setAttribute('aria-hidden', 'false');
+    document.body.classList.add('dyse-modal-open');
+  }
+  function closeHorariosVagosModal(){
+    document.getElementById('horariosVagosModal').classList.remove('open');
+    document.getElementById('horariosVagosModal').setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('dyse-modal-open');
   }
 
   /* ---------- CONTAS ---------- */
@@ -2528,7 +2899,7 @@ body.dyse-modal-open{overflow:hidden;}
       const result = await resp.json().catch(() => ({}));
       if(!resp.ok){ alert('Não foi possível excluir: ' + (result.error || resp.statusText)); return; }
       TEACHERS = await dyseListProfilesByRole('teacher');
-      renderProfessoresList();
+      renderProfessoresPanel();
     }catch(err){
       alert('Erro de conexão com o servidor: ' + err.message);
     }
