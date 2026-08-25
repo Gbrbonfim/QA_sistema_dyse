@@ -358,7 +358,7 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
   display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:800;
 }
 .turma-student-chip span:last-child{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-.turma-actions{display:flex; align-items:center; gap:8px; flex:none;}
+.turma-actions{display:flex; align-items:center; gap:8px; flex:none; flex-wrap:wrap;}
 .turma-group-avatar{
   flex:none; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
   font-weight:800; font-size:.8rem;
@@ -550,6 +550,9 @@ body.dyse-modal-open{overflow:hidden;}
   .dash-filter input, .dash-filter select{width:100%;}
   .gestao-form{flex-direction:column; align-items:stretch;}
   .gestao-form .gestao-field{flex:1 1 auto;}
+  .turma-row{padding:14px 16px; gap:10px;}
+  .turma-badges, .turma-students, .turma-actions{flex:1 1 100%;}
+  .turma-actions .btn{flex:1 1 auto; justify-content:center;}
 }
 
 @media (prefers-reduced-motion: reduce){
