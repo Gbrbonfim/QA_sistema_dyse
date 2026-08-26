@@ -189,7 +189,8 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .gestao-card-title{font-family:var(--font-display); color:var(--amaranth); font-size:1.3rem; margin-bottom:14px;}
 .gestao-form{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;}
 .gestao-field{flex:1 1 180px; min-width:0;}
-.gestao-form-col{flex-direction:column; align-items:stretch; gap:14px;}
+.gestao-form-col{flex-direction:column; align-items:flex-start; gap:14px;}
+.gestao-form-col > *{width:100%;}
 .gestao-form-col .gestao-field{flex:0 0 auto;}
 .gestao-field label{display:block; font-weight:700; font-size:.78rem; margin-bottom:6px; color:var(--seal);}
 .gestao-field input, .gestao-field select, .gestao-field textarea{
@@ -629,10 +630,10 @@ body.dyse-modal-open{overflow:hidden;}
 .report-line{font-size:.85rem; color:var(--seal-soft);}
 
 @media (max-width:640px){
-  .report-modal-panel{margin:0; width:100%; max-width:100%; height:100dvh; max-height:100dvh; border-radius:0;}
+  .report-modal-panel{margin:0; width:100%; max-width:100%; max-height:100dvh; border-radius:0;}
   section.gestao-card{padding:20px 16px;}
   .dash-filter input, .dash-filter select{width:100%;}
-  .gestao-form{flex-direction:column; align-items:stretch;}
+  .gestao-form:not(.gestao-form-col){flex-direction:column; align-items:stretch;}
   .gestao-form .gestao-field{flex:1 1 auto;}
   .turma-row{padding:14px 16px; gap:10px;}
   .turma-badges, .turma-students, .turma-actions{flex:1 1 100%;}
