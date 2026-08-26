@@ -900,6 +900,40 @@ create policy "admins gerenciam pagamentos de professores"
   using (public.is_financeiro())
   with check (public.is_financeiro());
 
+-- 9.6.1) Histórico de pagamentos — "pagamentos_professores" guarda só o
+--        ESTADO ATUAL (upsert por professor+mês, cada "Salvar pagamento"
+--        sobrescreve o anterior — é o que alimenta a coluna "Total Pago" e
+--        o status da tela Pagamentos). Esta tabela é um LOG somente-inserção
+--        de cada vez que "Salvar pagamento" foi clicado, pra dar pra ver
+--        pagamentos feitos em parcelas dentro do mesmo mês (ex: metade
+--        agora, resto depois) sem perder o registro do que já foi pago.
+create table if not exists public.pagamentos_professores_historico (
+  id bigint generated always as identity primary key,
+  professor_id uuid not null references auth.users(id) on delete cascade,
+  mes_competencia date not null,
+  status text not null,
+  valor_pago numeric(10,2),
+  data_pagamento date,
+  observacoes text,
+  registrado_por uuid references auth.users(id),
+  registrado_em timestamptz default now()
+);
+
+create index if not exists idx_pagamentos_historico_prof_mes on public.pagamentos_professores_historico (professor_id, mes_competencia, registrado_em desc);
+
+alter table public.pagamentos_professores_historico enable row level security;
+
+drop policy if exists "professor ve o proprio historico de pagamentos" on public.pagamentos_professores_historico;
+create policy "professor ve o proprio historico de pagamentos"
+  on public.pagamentos_professores_historico for select
+  using (professor_id = auth.uid());
+
+drop policy if exists "admins gerenciam historico de pagamentos" on public.pagamentos_professores_historico;
+create policy "admins gerenciam historico de pagamentos"
+  on public.pagamentos_professores_historico for all
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
+
 -- 9.7) Gastos personalizados — por aluno + mês. "valor" pode ser negativo
 --      (estorno/desconto). Quando forma_calculo = 'percentual', "valor" é
 --      a taxa em % (ex: 10.00 = 10%) calculada sobre mensalidades.valor_recebido

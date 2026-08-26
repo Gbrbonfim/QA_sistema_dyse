@@ -1927,6 +1927,7 @@ async function dyseListMyPagamentos(){
 
 async function dyseRegistrarPagamentoProfessor(professorId, mes, campos){
   const session = await dyseGetSession();
+  const userId = session ? session.user.id : null;
   const { data, error } = await sb
     .from('pagamentos_professores')
     .upsert({
@@ -1936,12 +1937,37 @@ async function dyseRegistrarPagamentoProfessor(professorId, mes, campos){
       valor_pago: campos.valor_pago ?? null,
       data_pagamento: campos.data_pagamento || null,
       observacoes: campos.observacoes || null,
-      atualizado_por: session ? session.user.id : null,
+      atualizado_por: userId,
       atualizado_em: new Date().toISOString()
     }, { onConflict: 'professor_id,mes_competencia' })
     .select('*')
     .maybeSingle();
+  if(error) return { data, error };
+
+  // Log somente-inserção de cada "Salvar pagamento" — a linha acima é só o
+  // estado atual (sobrescrita a cada save); esta guarda o histórico de
+  // pagamentos feitos em parcelas dentro do mesmo mês.
+  await sb.from('pagamentos_professores_historico').insert({
+    professor_id: professorId,
+    mes_competencia: mes,
+    status: campos.status,
+    valor_pago: campos.valor_pago ?? null,
+    data_pagamento: campos.data_pagamento || null,
+    observacoes: campos.observacoes || null,
+    registrado_por: userId
+  });
+
   return { data, error };
+}
+
+async function dyseListPagamentoProfessorHistorico(professorId, mes){
+  const { data, error } = await sb
+    .from('pagamentos_professores_historico')
+    .select('*')
+    .eq('professor_id', professorId)
+    .eq('mes_competencia', mes)
+    .order('registrado_em', { ascending: false });
+  return error ? [] : data;
 }
 
 /* ---------- Fechamento mensal ---------- */

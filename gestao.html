@@ -3704,25 +3704,46 @@ body.dyse-modal-open{overflow:hidden;}
 
   let CURRENT_PAGAMENTO_PROF_ID = null;
 
-  function openPagamentoModal(profId){
+  const PAGAMENTO_STATUS_LABELS = { pendente:'Pendente', pago:'Pago', pago_parcial:'Pago parcialmente', cancelado:'Cancelado' };
+
+  async function openPagamentoModal(profId){
     CURRENT_PAGAMENTO_PROF_ID = profId;
     const professor = TEACHERS.find(t => t.id === profId);
     const pagamento = PAGAMENTOS_CACHE.find(p => p.professor_id === profId);
     document.getElementById('pagamentoModalTitle').textContent = 'Pagamento — ' + (professor ? professor.full_name : '');
-    const statusLabels = { pendente:'Pendente', pago:'Pago', pago_parcial:'Pago parcialmente', cancelado:'Cancelado' };
     document.getElementById('pagamentoModalBody').innerHTML =
       '<form class="gestao-form gestao-form-col" onsubmit="return handleRegistrarPagamento(event)">' +
         '<div class="gestao-field"><label>Status</label><select id="pgStatus">' +
-          Object.keys(statusLabels).map(s => '<option value="' + s + '"' + (pagamento && pagamento.status === s ? ' selected' : '') + '>' + statusLabels[s] + '</option>').join('') +
+          Object.keys(PAGAMENTO_STATUS_LABELS).map(s => '<option value="' + s + '"' + (pagamento && pagamento.status === s ? ' selected' : '') + '>' + PAGAMENTO_STATUS_LABELS[s] + '</option>').join('') +
         '</select></div>' +
         '<div class="gestao-field"><label>Valor efetivamente pago (R$)</label><input type="number" step="0.01" min="0" id="pgValorPago" value="' + (pagamento && pagamento.valor_pago != null ? pagamento.valor_pago : '') + '"></div>' +
         '<div class="gestao-field"><label>Data do pagamento</label><input type="date" id="pgDataPagamento" value="' + (pagamento ? (pagamento.data_pagamento || '') : '') + '"></div>' +
         '<div class="gestao-field"><label>Observações</label><input type="text" id="pgObservacoes" value="' + escapeHtmlLocal(pagamento ? (pagamento.observacoes || '') : '') + '"></div>' +
         '<button type="submit" class="btn btn-primary">Salvar pagamento</button>' +
-      '</form>';
+      '</form>' +
+      '<div class="report-section-head">Histórico de pagamentos registrados neste mês</div>' +
+      '<div id="pagamentoHistoricoList"><p class="report-line" style="opacity:.6;">Carregando...</p></div>';
     document.getElementById('pagamentoModal').classList.add('open');
     document.getElementById('pagamentoModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
+    await renderPagamentoHistoricoList();
+  }
+
+  async function renderPagamentoHistoricoList(){
+    const historico = await dyseListPagamentoProfessorHistorico(CURRENT_PAGAMENTO_PROF_ID, PAGAMENTOS_MES_ATUAL);
+    const el = document.getElementById('pagamentoHistoricoList');
+    if(!el) return; // modal já foi fechado antes da resposta chegar
+    el.innerHTML = historico.length
+      ? historico.map(h => {
+          const valorTexto = h.valor_pago != null ? 'R$ ' + Number(h.valor_pago).toFixed(2).replace('.', ',') : 'sem valor';
+          const quando = new Date(h.registrado_em).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+          return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:2px;">' +
+            '<span class="name">' + (PAGAMENTO_STATUS_LABELS[h.status] || h.status) + ' · ' + valorTexto + (h.data_pagamento ? ' · pago em ' + formatDateBR(h.data_pagamento) : '') + '</span>' +
+            (h.observacoes ? '<span style="font-size:.82rem; opacity:.85;">' + escapeHtmlLocal(h.observacoes) + '</span>' : '') +
+            '<span style="font-size:.74rem; opacity:.6;">registrado em ' + quando + '</span>' +
+          '</div>';
+        }).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhum pagamento registrado ainda neste mês.</p>';
   }
 
   function closePagamentoModal(){
@@ -3742,8 +3763,9 @@ body.dyse-modal-open{overflow:hidden;}
     };
     const { error } = await dyseRegistrarPagamentoProfessor(CURRENT_PAGAMENTO_PROF_ID, PAGAMENTOS_MES_ATUAL, campos);
     if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
-    closePagamentoModal();
     await loadPagamentosMes();
+    await renderPagamentoHistoricoList();
+    document.getElementById('pgObservacoes').value = '';
     return false;
   }
 
