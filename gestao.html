@@ -443,7 +443,33 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
   display:flex; align-items:center; justify-content:center; font-size:.62rem; font-weight:800;
 }
 .turma-student-chip span:last-child{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-.turma-actions{display:flex; align-items:center; gap:8px; flex:none; flex-wrap:wrap;}
+.turma-actions{display:flex; align-items:center; justify-content:flex-end; gap:8px; flex:none; flex-wrap:wrap;}
+
+/* ---------- MENU DE AÇÕES DA LINHA (botão "..." / kebab) ----------
+   Um único menu "portal" no final do <body> (não um por linha) posicionado
+   via JS com position:fixed — assim ele nunca fica cortado pelo
+   overflow:hidden de containers como .turmas-card-list (cantos
+   arredondados), que cortaria um dropdown posicionado dentro da própria
+   linha. */
+.btn-kebab{
+  flex:none; width:34px; height:34px; border-radius:50%; border:1px solid #eee0cf; background:#fff;
+  color:var(--seal-soft); cursor:pointer; font-size:1.2rem; font-weight:800; line-height:1;
+  display:flex; align-items:center; justify-content:center; transition:.2s;
+}
+.btn-kebab:hover{border-color:var(--amaranth); color:var(--amaranth);}
+.row-menu-dropdown{
+  display:none; flex-direction:column; gap:2px; position:fixed;
+  background:#fff; border-radius:var(--radius-sm); box-shadow:var(--shadow-card); padding:6px; min-width:210px; z-index:1000;
+}
+.row-menu-dropdown.open{display:flex;}
+.row-menu-dropdown button{
+  width:100%; text-align:left; padding:9px 12px; border-radius:8px; background:transparent; border:none;
+  cursor:pointer; font-family:var(--font-body); font-size:.85rem; font-weight:600; color:var(--seal);
+}
+.row-menu-dropdown button:hover{background:var(--antique-soft);}
+.row-menu-dropdown button:disabled{opacity:.5; cursor:not-allowed;}
+.row-menu-dropdown button.danger{color:var(--bad);}
+.row-menu-dropdown button.danger:hover{background:#fbeceb;}
 .turma-group-avatar{
   flex:none; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
   font-weight:800; font-size:.8rem;
@@ -999,6 +1025,26 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 </div>
 
+<!-- Modal de editar dados (nome/e-mail) de um aluno -->
+<div id="alunoEditModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeAlunoEditModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="alunoEditModalTitle">
+    <div class="report-modal-header">
+      <h3 id="alunoEditModalTitle">Editar dados do aluno</h3>
+      <button type="button" class="report-modal-close" onclick="closeAlunoEditModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body">
+      <form class="gestao-form gestao-form-col" onsubmit="return handleSaveAlunoEdit(event)">
+        <div class="gestao-field"><label>Nome completo</label><input type="text" id="alunoEditName" required></div>
+        <div class="gestao-field"><label>E-mail</label><input type="email" id="alunoEditEmail" required></div>
+        <p class="gestao-hint">Mudar o e-mail também muda o e-mail de login do aluno — ele passa a entrar com o novo e-mail imediatamente.</p>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+      <div class="auth-msg" id="alunoEditMsg"></div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal de cadastro de professor(a) -->
 <div id="teacherCreateModal" class="report-modal" aria-hidden="true">
   <div class="report-modal-backdrop" onclick="closeTeacherCreateModal()"></div>
@@ -1152,6 +1198,8 @@ body.dyse-modal-open{overflow:hidden;}
     <div class="report-modal-body" id="pagamentoModalBody"></div>
   </div>
 </div>
+
+<div id="globalRowMenu" class="row-menu-dropdown"></div>
 
 <script src="/assets/dyse-auth.js"></script>
 <script>
@@ -2504,11 +2552,7 @@ body.dyse-modal-open{overflow:hidden;}
       '</div>' +
       '<div class="turma-badges">' + turmaBadge + modalidadeBadge + professorBadge + situacaoBadge + '</div>' +
       '<div class="turma-actions">' +
-        '<button type="button" class="btn btn-ghost btn-xs fin-only" onclick="openAlunoFinModal(\'' + s.id + '\')">Editar financeiro</button>' +
-        '<button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoHistoricoModal(\'' + s.id + '\')">Registro de classe</button>' +
-        '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
-        '<button type="button" class="btn btn-ghost btn-xs" onclick="handleDefinirSenhaTemporaria(\'' + s.id + '\')">Definir senha temporária</button>' +
-        '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirAluno(\'' + s.id + '\')">Excluir</button>' +
+        '<button type="button" class="btn-kebab" onclick="openAlunoActionsMenu(event, \'' + s.id + '\')" aria-label="Mais ações">⋯</button>' +
       '</div>' +
     '</div>';
   }
@@ -2898,6 +2942,53 @@ body.dyse-modal-open{overflow:hidden;}
     const { error } = await dyseSetStudentTurma(profileId, turmaId || null);
     if(error){ alert('Não foi possível salvar a turma: ' + error.message); return; }
     await loadAll();
+  }
+
+  /* ---------- Editar dados (nome/e-mail) de um aluno ----------
+     E-mail é o de LOGIN de verdade (auth.users), não só a cópia salva em
+     "profiles" — por isso passa pela função serverless (service_role),
+     igual criação/exclusão de conta. */
+  let CURRENT_ALUNO_EDIT_ID = null;
+  function openAlunoEditModal(id){
+    const s = STUDENTS.find(x => x.id === id);
+    if(!s) return;
+    CURRENT_ALUNO_EDIT_ID = id;
+    document.getElementById('alunoEditModalTitle').textContent = 'Editar dados de ' + (s.full_name || 'aluno');
+    document.getElementById('alunoEditName').value = s.full_name || '';
+    document.getElementById('alunoEditEmail').value = s.email || '';
+    document.getElementById('alunoEditMsg').classList.remove('show');
+    document.getElementById('alunoEditModal').classList.add('open');
+    document.getElementById('alunoEditModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+  }
+  function closeAlunoEditModal(){
+    document.getElementById('alunoEditModal').classList.remove('open');
+    document.getElementById('alunoEditModal').setAttribute('aria-hidden','true');
+    document.body.classList.remove('dyse-modal-open');
+    CURRENT_ALUNO_EDIT_ID = null;
+  }
+  async function handleSaveAlunoEdit(e){
+    e.preventDefault();
+    const full_name = document.getElementById('alunoEditName').value.trim();
+    const email = document.getElementById('alunoEditEmail').value.trim();
+    if(!full_name || !email || !CURRENT_ALUNO_EDIT_ID) return false;
+
+    const session = await dyseGetSession();
+    try{
+      const resp = await fetch('/api/update-student', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ user_id: CURRENT_ALUNO_EDIT_ID, full_name, email })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if(!resp.ok){ flashMsg('alunoEditMsg', 'Não foi possível salvar: ' + (result.error || resp.statusText), false); return false; }
+      STUDENTS = await dyseListProfilesByRole('student');
+      renderAlunosTable();
+      closeAlunoEditModal();
+    }catch(err){
+      flashMsg('alunoEditMsg', 'Erro de conexão com o servidor: ' + err.message, false);
+    }
+    return false;
   }
 
   /* ---------- Reenviar acesso (aluno ou professor) ---------- */
@@ -3927,6 +4018,54 @@ body.dyse-modal-open{overflow:hidden;}
     const menu = document.getElementById('turmaFilterMenu');
     if(menu && !menu.contains(event.target)) menu.classList.remove('open');
   });
+
+  /* ---------- Menu de ações "..." de uma linha (aluno, etc.) ----------
+     Um único elemento #globalRowMenu (fixed) reaproveitado por qualquer
+     linha — o conteúdo é montado na hora pela função específica (ex:
+     openAlunoActionsMenu) e passado pra toggleRowMenu, que só cuida de
+     abrir/fechar/posicionar. */
+  function closeRowMenu(){
+    const menu = document.getElementById('globalRowMenu');
+    menu.classList.remove('open');
+    menu._ownerBtn = null;
+  }
+  function toggleRowMenu(event, html){
+    event.stopPropagation();
+    const btn = event.currentTarget;
+    const menu = document.getElementById('globalRowMenu');
+    if(menu.classList.contains('open') && menu._ownerBtn === btn){ closeRowMenu(); return; }
+    menu.innerHTML = html;
+    menu.classList.add('open');
+    menu._ownerBtn = btn;
+    const rect = btn.getBoundingClientRect();
+    const menuWidth = menu.offsetWidth || 210;
+    const menuHeight = menu.offsetHeight || 0;
+    let left = Math.max(8, Math.min(rect.right - menuWidth, window.innerWidth - menuWidth - 8));
+    let top = rect.bottom + 6;
+    if(top + menuHeight > window.innerHeight - 8) top = Math.max(8, rect.top - menuHeight - 6);
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+  }
+  document.addEventListener('click', (event) => {
+    const menu = document.getElementById('globalRowMenu');
+    if(!menu.classList.contains('open')) return;
+    const btn = menu._ownerBtn;
+    if(!menu.contains(event.target) && !(btn && btn.contains(event.target))) closeRowMenu();
+  });
+  document.addEventListener('scroll', () => closeRowMenu(), true);
+
+  function openAlunoActionsMenu(event, id){
+    const s = STUDENTS.find(x => x.id === id);
+    if(!s) return;
+    const html =
+      '<button type="button" onclick="closeRowMenu(); openAlunoEditModal(\'' + id + '\')">Editar dados</button>' +
+      '<button type="button" class="fin-only" onclick="closeRowMenu(); openAlunoFinModal(\'' + id + '\')">Editar financeiro</button>' +
+      '<button type="button" onclick="closeRowMenu(); openAlunoHistoricoModal(\'' + id + '\')">Registro de classe</button>' +
+      '<button type="button" onclick="closeRowMenu(); handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
+      '<button type="button" onclick="closeRowMenu(); handleDefinirSenhaTemporaria(\'' + id + '\')">Definir senha temporária</button>' +
+      '<button type="button" class="danger" onclick="closeRowMenu(); handleExcluirAluno(\'' + id + '\')">Excluir</button>';
+    toggleRowMenu(event, html);
+  }
 
   (async () => {
     const session = await dyseRequireAdmin();
