@@ -939,7 +939,11 @@ async function dyseGerarMensalidadesDoMes(mes){
     (valoresPorModalidade[v.modalidade_id] = valoresPorModalidade[v.modalidade_id] || []).push(v);
   });
   const nomeAlunoById = {};
-  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
+  const turmaIdPorAluno = {};
+  alunos.forEach(a => {
+    nomeAlunoById[a.id] = a.full_name || a.email || '';
+    turmaIdPorAluno[a.id] = a.turma_id || null;
+  });
 
   const fimDoMesStr = dyseFimDoMes(mes);
 
@@ -948,6 +952,30 @@ async function dyseGerarMensalidadesDoMes(mes){
     return (modalidade && modalidade.is_custom_value)
       ? Number(h.valor_professor_customizado || 0)
       : (dyseValorVigente(valoresPorModalidade[h.modalidade_id], mes) || 0);
+  }
+
+  /* Fração do valor cheio do professor quando o vínculo NÃO cobre o mês
+     inteiro (aluno entrou ou saiu no meio do mês) — ex: aluna matriculada
+     em 20/08 com só 2 aulas dadas na turma depois disso, de um total de 4
+     no mês inteiro, paga 2/4 do valor cheio ao professor. Usa as aulas já
+     registradas (turma_sessoes) da turma ATUAL do aluno como referência —
+     sem chamada lançada ainda (mês futuro, ou chamada não feita), cai no
+     valor cheio (mesmo fallback já usado no rateio de troca de professor,
+     abaixo: garante que a geração nunca fica vazia por falta de presença). */
+  async function fatorProporcionalPeriodo(h){
+    const cobreMesInteiro = h.data_inicio <= mes && (!h.data_fim || h.data_fim >= fimDoMesStr);
+    if(cobreMesInteiro) return 1;
+
+    const turmaId = turmaIdPorAluno[h.aluno_id];
+    if(!turmaId) return 1;
+
+    const sessoesDaTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
+    if(!sessoesDaTurma.length) return 1;
+
+    const inicioJanela = h.data_inicio > mes ? h.data_inicio : mes;
+    const fimJanela = (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr;
+    const dentroDaJanela = sessoesDaTurma.filter(s => s.data >= inicioJanela && s.data <= fimJanela).length;
+    return dentroDaJanela / sessoesDaTurma.length;
   }
 
   // Agrupa TODOS os períodos elegíveis (ativo + dentro das parcelas
@@ -984,11 +1012,12 @@ async function dyseGerarMensalidadesDoMes(mes){
 
     if(periodos.length === 1){
       const h = periodos[0];
+      const fator = await fatorProporcionalPeriodo(h);
       linhas.push({
         aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
         professor_id: h.professor_id, modalidade_id: h.modalidade_id,
         valor_recebido: Number(h.valor_mensal_aluno || 0),
-        valor_pago_professor: valorProfessorDoPeriodo(h),
+        valor_pago_professor: Math.round(valorProfessorDoPeriodo(h) * fator * 100) / 100,
         atualizado_em: new Date().toISOString()
       });
       continue;
