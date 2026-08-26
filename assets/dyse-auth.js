@@ -813,11 +813,14 @@ function dyseFindPeriodoAberto(historicoDoAluno){
   return (historicoDoAluno || []).find(h => !h.data_fim) || null;
 }
 
-/* Cria/edita o vínculo financeiro do aluno. Trocar professor ou modalidade
-   fecha o período aberto atual (data_fim = ontem) e abre um novo a partir
-   de hoje — preserva o histórico. Editar valor/situação/data de início/
-   parcelas/observação no período aberto atual atualiza a própria linha,
-   sem gerar uma versão nova a cada pequena edição. */
+/* Cria/edita o vínculo financeiro do aluno. Trocar professor, modalidade OU
+   situação fecha o período aberto atual (data_fim = ontem) e abre um novo a
+   partir de hoje — preserva o histórico (ex: um aluno cancelado e depois
+   reativado fica com um período "cancelado de X a Y" registrado pra
+   sempre, em vez de a reativação apagar esse intervalo). Editar só
+   valor/data de início/parcelas/observação/contrato no período aberto
+   atual (sem trocar situação) atualiza a própria linha, sem gerar uma
+   versão nova a cada pequena edição. */
 async function dyseSetAlunoFinanceiro(alunoId, campos){
   const session = await dyseGetSession();
   const userId = session ? session.user.id : null;
@@ -825,18 +828,19 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
   const aberto = dyseFindPeriodoAberto(historico);
 
   const professorNovo = campos.professor_id || null;
-  const mudouVinculo = aberto && (
+  const situacaoNova = campos.situacao || 'ativo';
+  const abreNovoPeriodo = aberto && (
     (aberto.professor_id || null) !== professorNovo ||
-    aberto.modalidade_id !== campos.modalidade_id
+    aberto.modalidade_id !== campos.modalidade_id ||
+    aberto.situacao !== situacaoNova
   );
 
-  if(aberto && !mudouVinculo){
+  if(aberto && !abreNovoPeriodo){
     const { error } = await sb
       .from('aluno_financeiro_historico')
       .update({
         valor_mensal_aluno: campos.valor_mensal_aluno,
         valor_professor_customizado: campos.valor_professor_customizado ?? null,
-        situacao: campos.situacao,
         data_inicio: campos.data_inicio || aberto.data_inicio,
         quantidade_parcelas: campos.quantidade_parcelas ?? null,
         observacao: campos.observacao || null,
@@ -847,7 +851,7 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
     return { error };
   }
 
-  if(aberto && mudouVinculo){
+  if(aberto && abreNovoPeriodo){
     const ontem = new Date();
     ontem.setDate(ontem.getDate() - 1);
     const { error: closeError } = await sb
