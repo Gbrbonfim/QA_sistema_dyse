@@ -1069,38 +1069,44 @@ async function dyseGerarMensalidadesDoMes(mes){
     });
   }
 
-  if(!linhas.length) return { count: 0 };
+  // Apaga linhas "órfãs" — tanto aluno que SUMIU inteiramente do cálculo do
+  // mês (situação deixou de ser "ativo", contrato cancelado, ou a "Data de
+  // início com o professor" foi editada pra depois deste mês) quanto
+  // professor sobrando de uma recontagem com menos professores que a
+  // rodada anterior (ex: mês tinha 2 professores rateados, recontagem agora
+  // só acha 1) — upsert sozinho nunca remove o que não está mais no
+  // cálculo. Roda sempre (mesmo com linhas.length === 0, o caso extremo de
+  // ninguém mais qualificar no mês) — depois de um bug real em que editar
+  // o vínculo de um aluno pra começar num mês futuro deixava a mensalidade
+  // antiga dele intacta pra sempre no mês anterior.
+  const chavesVivas = new Set(linhas.map(l => l.aluno_id + '|' + (l.professor_id || '')));
+  const existentes = await dyseListMensalidades(mes);
+  const idsParaApagar = existentes.filter(m => !chavesVivas.has(m.aluno_id + '|' + (m.professor_id || ''))).map(m => m.id);
+  if(idsParaApagar.length) await sb.from('mensalidades').delete().in('id', idsParaApagar);
 
-  // Apaga linhas "órfãs" de professor que sobraram de uma geração anterior
-  // (ex: mês tinha 2 professores rateados, recontagem agora só acha 1) —
-  // upsert sozinho não remove o que não está mais no cálculo. Só vale a
-  // consulta extra abaixo quando pelo menos um aluno teve mais de um
-  // período tocando o mês (troca de professor) — no caso comum (todo mundo
-  // com 1 período só), pula direto pro upsert. Sem essa checagem, TODA
-  // geração (troca de mês em Pagamentos, todo salvamento de vínculo
-  // financeiro, toda validação de fechamento) pagava um round-trip a mais
-  // no banco à toa.
-  const houveTrocaDeProfessorNoMes = Object.values(periodosPorAluno).some(periodos => periodos.length > 1);
-  if(houveTrocaDeProfessorNoMes){
-    const alunosProcessados = Object.keys(periodosPorAluno);
-    const chavesVivas = new Set(linhas.map(l => l.aluno_id + '|' + (l.professor_id || '')));
-    const existentes = (await dyseListMensalidades(mes)).filter(m => alunosProcessados.includes(m.aluno_id));
-    const idsParaApagar = existentes.filter(m => !chavesVivas.has(m.aluno_id + '|' + (m.professor_id || ''))).map(m => m.id);
-    if(idsParaApagar.length) await sb.from('mensalidades').delete().in('id', idsParaApagar);
-  }
+  // Mesma limpeza, agora pros gastos automáticos (Flexge etc., identificados
+  // por ter gasto_padrao_id preenchido — gasto lançado manualmente nunca
+  // entra aqui): aluno que saiu do cálculo do mês não pode continuar com o
+  // gasto automático de um mês em que ele nem é mais contabilizado.
+  const alunoIdsUnicos = [...new Set(linhas.map(l => l.aluno_id))];
+  const { data: gastosAutoExistentes } = await sb
+    .from('gastos_personalizados')
+    .select('id, aluno_id')
+    .eq('mes_competencia', mes)
+    .not('gasto_padrao_id', 'is', null);
+  const gastosOrfaosIds = (gastosAutoExistentes || []).filter(g => !alunoIdsUnicos.includes(g.aluno_id)).map(g => g.id);
+  if(gastosOrfaosIds.length) await sb.from('gastos_personalizados').delete().in('id', gastosOrfaosIds);
+
+  if(!linhas.length) return { count: 0 };
 
   const { error } = await sb.from('mensalidades').upsert(linhas, { onConflict: 'aluno_id,mes_competencia,professor_id' });
 
   // Materializa os gastos padrão (ex: Flexge) como um gasto normal por aluno
   // ativo neste mês — upsert por (aluno, mês, gasto_padrao_id) garante que
   // rodar de novo não duplica, e gastos lançados manualmente (gasto_padrao_id
-  // nulo) nunca são tocados aqui. Dedupe por aluno_id ANTES de montar o
-  // upsert: com o rateio, um aluno pode gerar 2+ "linhas" de mensalidade no
-  // mesmo mês — sem isso, a mesma chave (aluno, mês, gasto_padrao_id) seria
-  // enviada duas vezes no mesmo upsert e o Postgres rejeita.
+  // nulo) nunca são tocados aqui.
   const gastosPadrao = (await dyseListGastosPadrao()).filter(g => g.ativo);
   if(gastosPadrao.length){
-    const alunoIdsUnicos = [...new Set(linhas.map(l => l.aluno_id))];
     const gastosLinhas = [];
     alunoIdsUnicos.forEach(alunoId => {
       gastosPadrao.forEach(gp => {
