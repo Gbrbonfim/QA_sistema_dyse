@@ -805,6 +805,12 @@ body.dyse-modal-open{overflow:hidden;}
         <option value="encerrado">Encerrado</option>
         <option value="sem-vinculo">Sem vínculo financeiro</option>
       </select>
+      <select id="filterAlunoContrato" class="fin-only" onchange="renderAlunosTable()">
+        <option value="">Todos os contratos</option>
+        <option value="vencendo">Vencendo em 30 dias</option>
+        <option value="vencido">Vencido</option>
+        <option value="sem-data">Sem data de fim definida</option>
+      </select>
     </div>
     <div id="alunosTableWrap"></div>
   </div>
@@ -2454,12 +2460,31 @@ body.dyse-modal-open{overflow:hidden;}
     selProf.value = curProf;
   }
 
+  /* "Vencendo em 30 dias" = contrato_fim entre hoje e hoje+30 (inclusive);
+     "Vencido" = contrato_fim no passado; "Sem data de fim definida" = sem
+     contrato_fim cadastrado (inclui aluno sem vínculo financeiro nenhum). */
+  function dyseContratoPassaNoFiltro(periodo, filtro){
+    const fim = periodo ? periodo.contrato_fim : null;
+    if(filtro === 'sem-data') return !fim;
+    if(!fim) return false;
+    const hoje = dyseHoje();
+    if(filtro === 'vencido') return fim < hoje;
+    if(filtro === 'vencendo'){
+      const em30 = new Date();
+      em30.setDate(em30.getDate() + 30);
+      const em30Str = em30.toISOString().slice(0, 10);
+      return fim >= hoje && fim <= em30Str;
+    }
+    return true;
+  }
+
   function renderAlunosTable(){
     const filter = (document.getElementById('filterAlunoName').value || '').trim().toLowerCase();
     const turmaFiltro = document.getElementById('filterAlunoTurma').value;
     const modFiltro = document.getElementById('filterAlunoModalidade').value;
     const profFiltro = document.getElementById('filterAlunoProfessor').value;
     const situacaoFiltro = document.getElementById('filterAlunoSituacao').value;
+    const contratoFiltro = document.getElementById('filterAlunoContrato').value;
 
     const enriquecidos = STUDENTS.map(s => {
       const turma = TURMAS.find(t => t.id === s.turma_id);
@@ -2480,6 +2505,7 @@ body.dyse-modal-open{overflow:hidden;}
       if(profFiltro && profFiltro !== 'sem-professor' && (!professor || professor.id !== profFiltro)) return false;
       if(situacaoFiltro === 'sem-vinculo' && periodo) return false;
       if(situacaoFiltro && situacaoFiltro !== 'sem-vinculo' && (!periodo || periodo.situacao !== situacaoFiltro)) return false;
+      if(contratoFiltro && !dyseContratoPassaNoFiltro(periodo, contratoFiltro)) return false;
       return true;
     });
 
@@ -2543,6 +2569,11 @@ body.dyse-modal-open{overflow:hidden;}
     const situacaoBadge = periodo
       ? '<span class="turma-badge fin-only" style="background:' + (periodo.situacao === 'ativo' ? '#eaf7ee' : '#fbeceb') + '; color:' + (periodo.situacao === 'ativo' ? 'var(--ok)' : 'var(--bad)') + ';">' + escapeHtmlLocal(capitalize(periodo.situacao)) + '</span>'
       : '';
+    const contratoBadge = dyseContratoPassaNoFiltro(periodo, 'vencido')
+      ? '<span class="turma-badge fin-only" style="background:#fbeceb; color:var(--bad);">Contrato vencido</span>'
+      : (dyseContratoPassaNoFiltro(periodo, 'vencendo')
+        ? '<span class="turma-badge fin-only" style="background:#fff3d6; color:var(--gamboge-dark);">Contrato vencendo</span>'
+        : '');
 
     return '<div class="turma-row">' +
       '<div class="turma-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</div>' +
@@ -2550,7 +2581,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<div class="name">' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</div>' +
         '<div class="meta">' + escapeHtmlLocal(s.email || '-') + '</div>' +
       '</div>' +
-      '<div class="turma-badges">' + turmaBadge + modalidadeBadge + professorBadge + situacaoBadge + '</div>' +
+      '<div class="turma-badges">' + turmaBadge + modalidadeBadge + professorBadge + situacaoBadge + contratoBadge + '</div>' +
       '<div class="turma-actions">' +
         '<button type="button" class="btn-kebab" onclick="openAlunoActionsMenu(event, \'' + s.id + '\')" aria-label="Mais ações">⋯</button>' +
       '</div>' +
@@ -3510,6 +3541,8 @@ body.dyse-modal-open{overflow:hidden;}
         '<div class="gestao-field"><label>Data de início com o professor</label><input type="date" id="finDataInicio" value="' + (aberto ? aberto.data_inicio : dyseHoje()) + '" oninput="onFinParcelasChange()"></div>' +
         '<div class="gestao-field"><label>Quantidade de parcelas (meses que o professor recebe)</label><input type="number" step="1" min="1" id="finParcelas" placeholder="Deixe em branco pra sem prazo definido" value="' + (aberto && aberto.quantidade_parcelas ? aberto.quantidade_parcelas : '') + '" oninput="onFinParcelasChange()"></div>' +
         '<p class="gestao-hint" id="finParcelasHint">' + finParcelasHintTexto(aberto) + '</p>' +
+        '<div class="gestao-field"><label>Contrato — início (opcional)</label><input type="date" id="finContratoInicio" value="' + (aberto && aberto.contrato_inicio ? aberto.contrato_inicio : '') + '"></div>' +
+        '<div class="gestao-field"><label>Contrato — fim (opcional)</label><input type="date" id="finContratoFim" value="' + (aberto && aberto.contrato_fim ? aberto.contrato_fim : '') + '"></div>' +
         '<div class="gestao-field"><label>Observação</label><input type="text" id="finObservacao" value="' + escapeHtmlLocal(aberto ? (aberto.observacao || '') : '') + '"></div>' +
         '<p class="gestao-hint">Trocar de professor ou de modalidade encerra o período atual automaticamente e abre um novo a partir de hoje — o histórico anterior fica preservado e os meses já calculados não mudam.</p>' +
         '<button type="submit" class="btn btn-primary">Salvar</button>' +
@@ -3520,7 +3553,10 @@ body.dyse-modal-open{overflow:hidden;}
           const mod = MODALIDADES.find(m => m.id === h.modalidade_id);
           const prof = TEACHERS.find(t => t.id === h.professor_id);
           const parcelasTexto = h.quantidade_parcelas ? (' · ' + h.quantidade_parcelas + 'x até ' + formatMesLabel(dyseUltimoMesPago(h))) : ' · sem prazo';
-          return '<div class="chip-toggle-row"><span class="name">' + (mod ? escapeHtmlLocal(mod.name) : '-') + ' · ' + (prof ? escapeHtmlLocal(prof.full_name || '') : 'sem professor') + escapeHtmlLocal(parcelasTexto) + '</span>' +
+          const contratoTexto = (h.contrato_inicio || h.contrato_fim)
+            ? (' · contrato ' + (h.contrato_inicio ? formatDateBR(h.contrato_inicio) : '?') + ' – ' + (h.contrato_fim ? formatDateBR(h.contrato_fim) : '?'))
+            : '';
+          return '<div class="chip-toggle-row"><span class="name">' + (mod ? escapeHtmlLocal(mod.name) : '-') + ' · ' + (prof ? escapeHtmlLocal(prof.full_name || '') : 'sem professor') + escapeHtmlLocal(parcelasTexto) + escapeHtmlLocal(contratoTexto) + '</span>' +
             '<span style="opacity:.65; font-size:.78rem;">' + formatDateBR(h.data_inicio) + ' — ' + (h.data_fim ? formatDateBR(h.data_fim) : 'atual') + '</span></div>';
         }).join('')
       : '<p class="report-line" style="opacity:.6;">Nenhum vínculo financeiro cadastrado ainda.</p>';
@@ -3556,18 +3592,31 @@ body.dyse-modal-open{overflow:hidden;}
 
   async function handleSetAlunoFinanceiro(e){
     e.preventDefault();
+    const situacao = document.getElementById('finSituacao').value;
     const campos = {
       modalidade_id: document.getElementById('finModalidade').value,
       professor_id: document.getElementById('finProfessor').value || null,
       valor_mensal_aluno: parseFloat(document.getElementById('finValorAluno').value || '0'),
       valor_professor_customizado: document.getElementById('finValorProfessorCustom').value ? parseFloat(document.getElementById('finValorProfessorCustom').value) : null,
-      situacao: document.getElementById('finSituacao').value,
+      situacao: situacao,
       data_inicio: document.getElementById('finDataInicio').value || dyseHoje(),
       quantidade_parcelas: parseInt(document.getElementById('finParcelas').value, 10) || null,
+      contrato_inicio: document.getElementById('finContratoInicio').value || null,
+      contrato_fim: document.getElementById('finContratoFim').value || null,
       observacao: document.getElementById('finObservacao').value.trim() || null
     };
     const { error } = await dyseSetAlunoFinanceiro(CURRENT_ALUNO_FIN_ID, campos);
     if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+
+    // Cancelado/encerrado: tira o aluno da turma automaticamente (deixa de
+    // aparecer pro professor, e dyseGerarMensalidadesDoMes já ignora
+    // qualquer situação != "ativo" na geração do pagamento do professor).
+    if(situacao === 'cancelado' || situacao === 'encerrado'){
+      const aluno = STUDENTS.find(s => s.id === CURRENT_ALUNO_FIN_ID);
+      if(aluno && aluno.turma_id) await dyseSetStudentTurma(CURRENT_ALUNO_FIN_ID, null);
+    }
+
+    STUDENTS = await dyseListProfilesByRole('student');
     ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
     await dyseGerarMensalidadesDoMes(dyseMesCompetencia()); // reflete o vínculo novo no mês corrente na hora, sem esperar a gestão abrir Pagamentos/Relatório
     renderAlunoFinModalBody();

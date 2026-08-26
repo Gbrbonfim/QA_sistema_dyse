@@ -839,7 +839,9 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
         situacao: campos.situacao,
         data_inicio: campos.data_inicio || aberto.data_inicio,
         quantidade_parcelas: campos.quantidade_parcelas ?? null,
-        observacao: campos.observacao || null
+        observacao: campos.observacao || null,
+        contrato_inicio: campos.contrato_inicio || null,
+        contrato_fim: campos.contrato_fim || null
       })
       .eq('id', aberto.id);
     return { error };
@@ -867,11 +869,32 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
       data_inicio: campos.data_inicio || dyseHoje(),
       quantidade_parcelas: campos.quantidade_parcelas ?? null,
       observacao: campos.observacao || null,
+      contrato_inicio: campos.contrato_inicio || null,
+      contrato_fim: campos.contrato_fim || null,
       criado_por: userId
     })
     .select('*')
     .maybeSingle();
   return { data, error };
+}
+
+/* Situação financeira do próprio aluno logado (período aberto) — usada pra
+   bloquear o painel do aluno quando "pausado" (existem débitos). A RLS
+   "aluno ve o proprio historico financeiro" (supabase-schema.sql) permite
+   ler só a própria linha. */
+async function dyseGetMinhaSituacaoFinanceira(){
+  const session = await dyseGetSession();
+  if(!session) return null;
+  const { data, error } = await sb
+    .from('aluno_financeiro_historico')
+    .select('situacao')
+    .eq('aluno_id', session.user.id)
+    .is('data_fim', null)
+    .order('data_inicio', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if(error || !data) return null;
+  return data.situacao;
 }
 
 /* ---------- Mensalidades (razão mensal por aluno) ---------- */

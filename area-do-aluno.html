@@ -382,6 +382,20 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 @keyframes dyse-spin{to{transform:rotate(360deg);}}
 #dyseAuthGate p{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
 
+/* ---------- BLOQUEIO POR SITUAÇÃO FINANCEIRA (situação = "pausado") ---------- */
+#dyseBlockedGate{
+  display:none; position:fixed; inset:0; z-index:9998; background:var(--antique);
+  align-items:center; justify-content:center; padding:24px;
+}
+#dyseBlockedGate.show{display:flex;}
+.dyse-blocked-card{
+  background:#fff; border-radius:var(--radius-lg); box-shadow:var(--shadow-card);
+  padding:40px clamp(24px,5vw,44px); max-width:440px; width:100%; text-align:center;
+}
+.dyse-blocked-icon{font-size:2.6rem; margin-bottom:10px;}
+.dyse-blocked-card h2{font-family:var(--font-display); color:var(--bad); font-size:1.5rem; margin:0 0 10px;}
+.dyse-blocked-card p{color:var(--seal-soft); font-size:.95rem; line-height:1.5; margin:0 0 22px;}
+
 
 /* ---------- AUTH FORM (login / signup pages) ---------- */
 .auth-shell{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
@@ -611,6 +625,15 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   <p>dyse</p>
 </div>
 
+<div id="dyseBlockedGate">
+  <div class="dyse-blocked-card">
+    <div class="dyse-blocked-icon">⚠️</div>
+    <h2>Acesso pausado</h2>
+    <p>Existem débitos, favor procurar o administrativo.</p>
+    <button type="button" class="btn btn-primary" onclick="dyseLogout()">Sair</button>
+  </div>
+</div>
+
 <div class="app-shell">
   <aside class="sidebar">
     <div class="sidebar-brand">
@@ -753,6 +776,14 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     }
     if(dyseIsTeacher(profile) && !alsoStudent){
       location.href = '/professora.html';
+      return;
+    }
+
+    // Situação "pausado" (existem débitos) bloqueia o painel inteiro —
+    // substitui todo o conteúdo pela mensagem, sem sidebar nem atividades.
+    const situacaoFinanceira = await dyseGetMinhaSituacaoFinanceira();
+    if(situacaoFinanceira === 'pausado'){
+      document.getElementById('dyseBlockedGate').classList.add('show');
       return;
     }
 

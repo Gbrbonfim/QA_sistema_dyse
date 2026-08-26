@@ -764,6 +764,11 @@ create table if not exists public.aluno_financeiro_historico (
   criado_em timestamptz default now()
 );
 alter table public.aluno_financeiro_historico add column if not exists quantidade_parcelas int;
+-- Datas do contrato (distintas de data_inicio/data_fim, que controlam o
+-- PERÍODO do vínculo financeiro atual — contrato_fim alimenta o filtro de
+-- "contratos vencendo" em gestao.html, sem fechar/reabrir período nenhum.
+alter table public.aluno_financeiro_historico add column if not exists contrato_inicio date;
+alter table public.aluno_financeiro_historico add column if not exists contrato_fim date;
 
 create index if not exists idx_aluno_financeiro_aluno on public.aluno_financeiro_historico (aluno_id, data_inicio desc);
 create index if not exists idx_aluno_financeiro_professor on public.aluno_financeiro_historico (professor_id);
@@ -780,6 +785,13 @@ create policy "admins gerenciam historico financeiro dos alunos"
   on public.aluno_financeiro_historico for all
   using (public.is_financeiro())
   with check (public.is_financeiro());
+
+-- Aluno lê a própria situação (só leitura) — usado pra bloquear o painel do
+-- aluno quando a situação vira "pausado" (existem débitos).
+drop policy if exists "aluno ve o proprio historico financeiro" on public.aluno_financeiro_historico;
+create policy "aluno ve o proprio historico financeiro"
+  on public.aluno_financeiro_historico for select
+  using (aluno_id = auth.uid());
 
 -- 9.4) Fechamento mensal (controle de qual mês de competência está
 --      travado para alteração).
