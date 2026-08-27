@@ -1108,11 +1108,22 @@ body.dyse-modal-open{overflow:hidden;}
       <button type="button" class="report-modal-close" onclick="closeCsvImportModal()" aria-label="Fechar">&times;</button>
     </div>
     <div class="report-modal-body">
+      <div style="display:flex; gap:18px; flex-wrap:wrap; margin-bottom:12px; font-size:.85rem;">
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="radio" name="csvModo" value="criar" checked onchange="onCsvModoChange()" style="width:auto;">
+          Cadastrar alunos novos
+        </label>
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="radio" name="csvModo" value="atualizar" onchange="onCsvModoChange()" style="width:auto;">
+          Atualizar alunos existentes (só preenche campos vazios)
+        </label>
+      </div>
+      <p class="gestao-hint" id="csvModoHint" style="margin-top:0;"></p>
       <form onsubmit="return handleImportarCSV(event)" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
         <input type="file" id="csvAlunosFile" accept=".csv,text/csv" required>
         <button type="submit" class="btn btn-primary" id="btnImportarCSV">Importar CSV</button>
       </form>
-      <label style="display:flex; align-items:center; gap:8px; font-size:.82rem; margin-top:10px; cursor:pointer;">
+      <label id="csvSkipEmailWrap" style="display:flex; align-items:center; gap:8px; font-size:.82rem; margin-top:10px; cursor:pointer;">
         <input type="checkbox" id="csvSkipEmail" style="width:auto;">
         Não enviar e-mail agora (só cadastrar todos — libero o acesso de cada um depois com "Reenviar acesso")
       </label>
@@ -1249,7 +1260,8 @@ body.dyse-modal-open{overflow:hidden;}
             '<code>valor_professor</code>: só usado se a modalidade for personalizada (Intensivo) · <code>data_inicio</code>: AAAA-MM-DD (padrão: hoje) · ' +
             '<code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido) · ' +
             '<code>contrato_inicio</code> / <code>contrato_fim</code>: AAAA-MM-DD, datas do contrato do aluno (opcionais — alimentam o filtro/badge de "Contrato vencendo/vencido").<br><br>' +
-            'Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.' +
+            'Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.<br><br>' +
+            'O modal tem dois modos: <b>Cadastrar novos</b> (cria conta pra cada linha) e <b>Atualizar existentes</b> (casa pelo e-mail e só preenche campo que está vazio — valor_mensal zerado, contrato/parcelas em branco —, nunca sobrescreve). O mesmo arquivo serve pros dois.' +
           '</span>' +
         '</span>' +
       '</div>'
@@ -2221,9 +2233,26 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('csvAlunosFile').value = '';
     document.getElementById('csvSkipEmail').checked = false;
     document.getElementById('csvImportResults').innerHTML = '';
+    const radioCriar = document.querySelector('input[name="csvModo"][value="criar"]');
+    if(radioCriar) radioCriar.checked = true;
+    onCsvModoChange();
     document.getElementById('csvImportModal').classList.add('open');
     document.getElementById('csvImportModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
+  }
+
+  function csvModoAtual(){
+    const sel = document.querySelector('input[name="csvModo"]:checked');
+    return sel ? sel.value : 'criar';
+  }
+
+  function onCsvModoChange(){
+    const modo = csvModoAtual();
+    document.getElementById('csvSkipEmailWrap').style.display = (modo === 'criar') ? 'flex' : 'none';
+    document.getElementById('btnImportarCSV').textContent = (modo === 'criar') ? 'Importar CSV' : 'Atualizar do CSV';
+    document.getElementById('csvModoHint').textContent = (modo === 'criar')
+      ? 'Cria uma conta nova pra cada linha. Aluno cujo e-mail já existe dá erro e não é tocado.'
+      : 'Casa cada linha pelo e-mail com um aluno já cadastrado. Só grava onde o campo está vazio (valor_mensal zerado, contrato/parcelas em branco) — nunca sobrescreve valor que já existe. Aluno sem vínculo financeiro ganha um vínculo se a linha tiver ao menos "modalidade".';
   }
 
   function closeCsvImportModal(){
@@ -2362,12 +2391,93 @@ body.dyse-modal-open{overflow:hidden;}
     if(el) el.innerHTML = texto;
   }
 
+  /* Converte um número escrito por humano (Excel pt-BR) em Number.
+     Aceita "R$ 1.760,00", "548,00", "300", "300.50", "1,234.56" — usa o
+     último separador como decimal. Vazio/inválido => null. */
+  function csvNum(v){
+    if(v == null) return null;
+    let s = String(v).replace(/[^\d,.\-]/g, '').trim();
+    if(!s) return null;
+    const lastComma = s.lastIndexOf(','), lastDot = s.lastIndexOf('.');
+    s = (lastComma > lastDot) ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, '');
+    const n = parseFloat(s);
+    return isNaN(n) ? null : n;
+  }
+
+  function csvInt(v){
+    const n = csvNum(v);
+    return n == null ? null : Math.trunc(n);
+  }
+
+  /* Monta os campos do vínculo financeiro a partir de uma linha do CSV, pra
+     modo "criar" (sem base) ou "atualizar" (base = período aberto atual;
+     só sobrescreve campo que estiver vazio na base). Devolve
+     { campos, preenchidos, erro } — preenchidos lista o que veio do CSV. */
+  function csvMontaFinanceiro(linha, base){
+    const modalidadeSlug = (linha['modalidade'] || '').toLowerCase();
+    const professorEmail = (linha['professor_email'] || '').toLowerCase();
+    const professor = professorEmail ? TEACHERS.find(t => (t.email||'').toLowerCase() === professorEmail) : null;
+    const csvValMensal = csvNum(linha['valor_mensal']);
+    const csvValProf   = csvNum(linha['valor_professor']);
+    const csvParcelas  = csvInt(linha['parcelas']);
+    const csvCtrIni    = linha['contrato_inicio'] || null;
+    const csvCtrFim    = linha['contrato_fim'] || null;
+    const csvDataIni   = linha['data_inicio'] || null;
+
+    const preenchidos = [];
+    const vazio = (x) => x == null || x === '' || Number(x) === 0;
+    // Só usado no modo atualizar: pega o valor do CSV apenas se a base estiver
+    // vazia naquele campo; senão mantém o que já existe.
+    const pick = (nome, csvVal, baseVal, baseVazio) => {
+      const temCsv = csvVal != null && csvVal !== '';
+      if(temCsv && baseVazio){ preenchidos.push(nome); return csvVal; }
+      return baseVal;
+    };
+
+    if(base){
+      // Modo atualizar: mantém modalidade/professor/situação/data do período
+      // aberto (mexer nisso abriria um período novo — não é "preencher vazio").
+      const campos = {
+        modalidade_id: base.modalidade_id,
+        professor_id: base.professor_id,
+        situacao: base.situacao,
+        data_inicio: base.data_inicio,
+        observacao: base.observacao,
+        valor_mensal_aluno: pick('valor_mensal', csvValMensal, base.valor_mensal_aluno, vazio(base.valor_mensal_aluno)),
+        valor_professor_customizado: pick('valor_professor', csvValProf, base.valor_professor_customizado, base.valor_professor_customizado == null),
+        quantidade_parcelas: pick('parcelas', csvParcelas, base.quantidade_parcelas, base.quantidade_parcelas == null),
+        contrato_inicio: pick('contrato_inicio', csvCtrIni, base.contrato_inicio, !base.contrato_inicio),
+        contrato_fim: pick('contrato_fim', csvCtrFim, base.contrato_fim, !base.contrato_fim)
+      };
+      return { campos, preenchidos, erro: null };
+    }
+
+    // Modo criar (ou "atualizar" mas aluno ainda sem vínculo): precisa de modalidade.
+    if(!modalidadeSlug) return { campos: null, preenchidos, erro: 'sem-modalidade' };
+    const modalidade = MODALIDADES.find(m => m.slug === modalidadeSlug);
+    if(!modalidade) return { campos: null, preenchidos, erro: 'modalidade "' + linha['modalidade'] + '" não encontrada' };
+    const campos = {
+      modalidade_id: modalidade.id,
+      professor_id: professor ? professor.id : null,
+      valor_mensal_aluno: csvValMensal || 0,
+      valor_professor_customizado: csvValProf,
+      situacao: 'ativo',
+      data_inicio: csvDataIni || dyseHoje(),
+      quantidade_parcelas: csvParcelas,
+      contrato_inicio: csvCtrIni,
+      contrato_fim: csvCtrFim,
+      observacao: 'Importado via CSV'
+    };
+    return { campos, preenchidos, erro: null };
+  }
+
   /* Processa uma linha por vez (não em paralelo) — se for disparar e-mail
      de convite de verdade, evita sobrecarregar/tomar rate limit do
      Supabase, e deixa o resultado de cada aluno claro na tela de qualquer
      forma. */
   async function handleImportarCSV(e){
     e.preventDefault();
+    const modo = csvModoAtual();
     const fileInput = document.getElementById('csvAlunosFile');
     const file = fileInput.files[0];
     if(!file) return false;
@@ -2389,16 +2499,50 @@ body.dyse-modal-open{overflow:hidden;}
     for(let i = 0; i < linhas.length; i++){
       const linha = linhas[i];
       const nome = linha['nome'] || '';
-      const email = linha['email'] || '';
+      const email = (linha['email'] || '').trim();
       const rowId = 'csv-row-' + i;
-      resultsEl.insertAdjacentHTML('beforeend', '<div class="report-line" id="' + rowId + '">⏳ ' + escapeHtmlLocal(nome || '(sem nome)') + ' (' + escapeHtmlLocal(email || 'sem e-mail') + ') — processando...</div>');
+      resultsEl.insertAdjacentHTML('beforeend', '<div class="report-line" id="' + rowId + '">⏳ ' + escapeHtmlLocal(nome || email || '(sem nome)') + ' — processando...</div>');
 
-      if(!nome || !email){
-        csvResultLine(rowId, '❌ Linha ' + (i+2) + ': nome e e-mail são obrigatórios.');
+      if(!email || (modo === 'criar' && !nome)){
+        csvResultLine(rowId, '❌ Linha ' + (i+2) + ': ' + (modo === 'criar' ? 'nome e e-mail são obrigatórios.' : 'e-mail é obrigatório.'));
         continue;
       }
 
       try{
+        if(modo === 'atualizar'){
+          const aluno = STUDENTS.find(s => (s.email||'').toLowerCase() === email.toLowerCase());
+          if(!aluno){
+            csvResultLine(rowId, '❌ ' + escapeHtmlLocal(email) + ' — nenhum aluno com esse e-mail (use o modo "Cadastrar alunos novos").');
+            continue;
+          }
+          const rotulo = escapeHtmlLocal(aluno.full_name || email);
+          const hist = await dyseListAlunoFinanceiroHistorico(aluno.id);
+          const aberto = dyseFindPeriodoAberto(hist);
+          const { campos, preenchidos, erro } = csvMontaFinanceiro(linha, aberto);
+          if(!aberto && erro === 'sem-modalidade'){
+            csvResultLine(rowId, '⚠️ ' + rotulo + ' — sem vínculo financeiro e a linha não tem "modalidade"; nada foi criado.');
+            continue;
+          }
+          if(erro){
+            csvResultLine(rowId, '❌ ' + rotulo + ' — ' + escapeHtmlLocal(erro));
+            continue;
+          }
+          if(aberto && !preenchidos.length){
+            csvResultLine(rowId, '✅ ' + rotulo + ' — nada a preencher (todos os campos da linha já tinham valor).');
+            continue;
+          }
+          const { error: finError } = await dyseSetAlunoFinanceiro(aluno.id, campos);
+          if(finError){
+            csvResultLine(rowId, '❌ ' + rotulo + ' — financeiro: ' + escapeHtmlLocal(finError.message));
+          } else if(aberto){
+            csvResultLine(rowId, '✅ ' + rotulo + ' — preenchido: ' + preenchidos.join(', '));
+          } else {
+            csvResultLine(rowId, '✅ ' + rotulo + ' — vínculo financeiro criado' + (preenchidos.length ? ' (' + preenchidos.join(', ') + ')' : ''));
+          }
+          continue;
+        }
+
+        // modo === 'criar'
         const resp = await fetch('/api/create-student', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
@@ -2412,32 +2556,18 @@ body.dyse-modal-open{overflow:hidden;}
 
         const userId = result.user_id;
         let extra = '';
-        const modalidadeSlug = (linha['modalidade'] || '').toLowerCase();
-        if(modalidadeSlug){
-          const modalidade = MODALIDADES.find(m => m.slug === modalidadeSlug);
-          if(!modalidade){
-            extra = ' — modalidade "' + escapeHtmlLocal(linha['modalidade']) + '" não encontrada, financeiro não vinculado';
+        if((linha['modalidade'] || '').trim()){
+          const { campos, erro } = csvMontaFinanceiro(linha, null);
+          if(erro){
+            extra = ' — ' + (erro === 'sem-modalidade' ? 'financeiro não vinculado' : erro + ', financeiro não vinculado');
           } else {
-            const professorEmail = (linha['professor_email'] || '').toLowerCase();
-            const professor = professorEmail ? TEACHERS.find(t => (t.email||'').toLowerCase() === professorEmail) : null;
-            const { error: finError } = await dyseSetAlunoFinanceiro(userId, {
-              modalidade_id: modalidade.id,
-              professor_id: professor ? professor.id : null,
-              valor_mensal_aluno: parseFloat(linha['valor_mensal'] || '0') || 0,
-              valor_professor_customizado: linha['valor_professor'] ? parseFloat(linha['valor_professor']) : null,
-              situacao: 'ativo',
-              data_inicio: linha['data_inicio'] || dyseHoje(),
-              quantidade_parcelas: linha['parcelas'] ? parseInt(linha['parcelas'], 10) : null,
-              contrato_inicio: linha['contrato_inicio'] || null,
-              contrato_fim: linha['contrato_fim'] || null,
-              observacao: 'Importado via CSV'
-            });
+            const { error: finError } = await dyseSetAlunoFinanceiro(userId, campos);
             extra = finError ? (' — financeiro: erro (' + finError.message + ')') : ' — financeiro vinculado';
           }
         }
         csvResultLine(rowId, '✅ ' + escapeHtmlLocal(nome) + ' cadastrado' + (result.email_sent ? ' (e-mail enviado)' : ' (sem e-mail)') + extra);
       }catch(err){
-        csvResultLine(rowId, '❌ ' + escapeHtmlLocal(nome) + ' — erro de conexão: ' + err.message);
+        csvResultLine(rowId, '❌ ' + escapeHtmlLocal(nome || email) + ' — erro de conexão: ' + err.message);
       }
     }
 
