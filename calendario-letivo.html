@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Calendário Letivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{
+  --amaranth:#D03B55; --amaranth-dark:#B22C44; --gamboge:#F0A224; --gamboge-dark:#CE8613;
+  --cherry:#FCABAF; --orangered:#EB6424; --seal:#3A1D10; --seal-soft:#562915;
+  --antique:#FFEAD6; --antique-soft:#FFF3E6; --white:#FFFFFF; --ok:#2E8B57; --bad:#C0392B;
+  --radius-lg:28px; --radius-md:18px; --radius-sm:10px;
+  --shadow-card:0 10px 30px rgba(58,29,16,0.12);
+  --font-display:'Lobster', cursive; --font-body:'Poppins', sans-serif;
+
+  --tipo-recesso:#EB6424;
+  --tipo-feriado:#F0A224;
+  --tipo-reposicao:#D03B55;
+  --tipo-retorno_conversacao:#FCABAF;
+  --tipo-inicio_semestre:#3A1D10;
+}
+*{box-sizing:border-box;}
+html, body{max-width:100%; overflow-x:hidden;}
+body{margin:0; font-family:var(--font-body); background:var(--antique); color:var(--seal); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-wrap:break-word;}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(circle at 8% 10%, rgba(240,162,36,0.10) 0, transparent 45%),
+    radial-gradient(circle at 92% 18%, rgba(208,59,85,0.10) 0, transparent 40%),
+    radial-gradient(circle at 50% 95%, rgba(235,100,36,0.08) 0, transparent 45%);
+}
+html:not(.dyse-auth-ready) body{visibility:hidden;}
+
+.app-shell{display:flex; align-items:stretch; height:100vh; overflow:hidden; position:relative; z-index:1;}
+.sidebar{flex:none; width:250px; height:100%; background:var(--amaranth); color:var(--antique-soft); display:flex; flex-direction:column; padding:24px 18px; overflow-y:auto;}
+.sidebar-brand{margin-bottom:26px;}
+.sidebar-logo{height:32px; width:auto; display:block; margin-bottom:10px;}
+.sidebar-tagline{font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; opacity:.85; line-height:1.5;}
+.sidebar-nav{display:flex; flex-direction:column; gap:4px; flex:1 1 auto;}
+.sidebar-item{display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm); color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none; cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none;}
+.sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
+.sidebar-item:hover{background:rgba(255,255,255,.12);}
+.sidebar-item.active{background:#fff; color:var(--amaranth);}
+.sidebar-item.active svg{opacity:1;}
+.sidebar-footer{margin-top:20px; display:flex; flex-direction:column; gap:10px;}
+.sidebar-help{display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.12); border-radius:var(--radius-sm); padding:12px 14px; color:var(--antique-soft); text-decoration:none; font-size:.78rem; line-height:1.4;}
+.sidebar-help-icon{font-size:1.2rem; flex:none;}
+.sidebar-help b{display:block; font-size:.82rem;}
+.sidebar-user{display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.08); border-radius:var(--radius-sm); padding:10px 12px; font-size:.82rem; min-width:0;}
+.sidebar-user-avatar{flex:none; width:34px; height:34px; border-radius:50%; background:#fff; color:var(--amaranth); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.8rem;}
+.sidebar-user-name{font-weight:700; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.sidebar-user-role{font-size:.72rem; opacity:.8;}
+.sidebar-logout{display:flex; align-items:center; gap:8px; background:transparent; border:none; color:var(--antique-soft); font-weight:600; font-size:.85rem; padding:8px 12px; cursor:pointer; opacity:.9;}
+.sidebar-logout:hover{opacity:1; text-decoration:underline;}
+.sidebar-logout svg{width:16px; height:16px;}
+
+.main-area{flex:1 1 auto; min-width:0; height:100%; overflow-y:auto; display:flex; flex-direction:column;}
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; background:#fff; padding:20px 32px; border-bottom:1px solid #f0e3d2;}
+.topbar-greeting h1{font-size:1.4rem; font-weight:800; color:var(--seal); margin:0 0 2px;}
+.topbar-greeting p{font-size:.85rem; color:var(--seal-soft); margin:0;}
+.topbar-right{display:flex; align-items:center; gap:22px; flex-wrap:wrap; flex:none; margin-left:auto;}
+.topbar-links{display:flex; align-items:center; gap:22px; flex-wrap:wrap;}
+.topbar-link{display:flex; align-items:center; gap:6px; font-size:.85rem; font-weight:600; color:var(--seal-soft); text-decoration:none; white-space:nowrap;}
+.topbar-link svg{width:16px; height:16px; flex:none;}
+.topbar-link.active{color:var(--amaranth);}
+
+.content{flex:1 1 auto; padding:28px 32px 60px; width:100%;}
+.page-title{font-family:var(--font-display); font-size:2.2rem; color:var(--seal); margin:0 0 2px;}
+.page-sub{font-size:.9rem; color:var(--seal-soft); margin:0 0 22px;}
+
+.cal-toolbar{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:22px;}
+.cal-toolbar .spacer{flex:1 1 auto;}
+select, input[type=text], input[type=date]{
+  font-family:var(--font-body); font-size:.92rem; color:var(--seal);
+  border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 12px; background:#fff;
+}
+select:focus, input:focus{outline:none; border-color:var(--amaranth);}
+.btn{display:inline-flex; align-items:center; gap:8px; border:none; border-radius:var(--radius-sm); padding:10px 18px; font-family:var(--font-body); font-weight:700; font-size:.9rem; cursor:pointer; transition:.15s; text-decoration:none;}
+.btn-primary{background:var(--amaranth); color:#fff;}
+.btn-primary:hover{background:var(--amaranth-dark);}
+.btn-ghost{background:#fff; color:var(--seal); border:2px solid #eee0cf;}
+.btn-ghost:hover{border-color:var(--amaranth); color:var(--amaranth);}
+.btn:disabled{opacity:.5; cursor:not-allowed;}
+
+.pub-pill{display:inline-flex; align-items:center; gap:8px; font-size:.82rem; font-weight:700; padding:7px 14px; border-radius:999px;}
+.pub-pill.on{background:#eaf7ee; color:var(--ok);}
+.pub-pill.off{background:#fbeceb; color:var(--bad);}
+
+.cal-layout{display:grid; grid-template-columns:280px 1fr; gap:24px; align-items:start;}
+@media (max-width:1100px){ .cal-layout{grid-template-columns:1fr;} }
+
+.side-card{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:20px; margin-bottom:20px;}
+.side-card h3{margin:0 0 14px; font-size:1rem; color:var(--seal);}
+.legend-row{display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:.85rem;}
+.legend-dot{width:16px; height:16px; border-radius:5px; flex:none;}
+.info-row{display:flex; flex-direction:column; gap:2px; margin-bottom:12px;}
+.info-row label{font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--seal-soft);}
+.info-row .val{font-size:.95rem; font-weight:600;}
+.info-row input{width:100%;}
+.info-note{font-size:.76rem; color:var(--seal-soft); opacity:.8; margin-top:6px;}
+
+.months-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:18px;}
+@media (max-width:1400px){ .months-grid{grid-template-columns:repeat(2, 1fr);} }
+@media (max-width:720px){ .months-grid{grid-template-columns:1fr;} }
+
+.month{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:14px 14px 12px;}
+.month h4{margin:0 0 8px; text-align:center; font-size:.9rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--amaranth);}
+.dow{display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:3px;}
+.dow span{text-align:center; font-size:.66rem; font-weight:700; color:var(--seal-soft); opacity:.7;}
+.days{display:grid; grid-template-columns:repeat(7,1fr); gap:3px;}
+.cal-day{
+  aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative;
+  border:none; background:transparent; font-family:var(--font-body); font-size:.78rem; font-weight:600;
+  color:var(--seal); border-radius:7px; padding:0;
+}
+.cal-day.empty{visibility:hidden;}
+button.cal-day{cursor:pointer;}
+button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px;}
+.cal-day.marked{color:#fff; font-weight:700;}
+.cal-day.tipo-recesso{background:var(--tipo-recesso);}
+.cal-day.tipo-feriado{background:var(--tipo-feriado);}
+.cal-day.tipo-reposicao{background:var(--tipo-reposicao);}
+.cal-day.tipo-retorno_conversacao{background:var(--tipo-retorno_conversacao); color:var(--seal);}
+.cal-day.tipo-inicio_semestre{background:var(--tipo-inicio_semestre);}
+.cal-day.today::after{content:""; position:absolute; inset:2px; border:2px dashed var(--amaranth); border-radius:6px;}
+.cal-day.marked.has-note::before{content:"•"; position:absolute; top:0; right:3px; font-size:.7rem; line-height:1;}
+
+.month-notes{margin-top:8px; border-top:1px solid #f0e3d2; padding-top:6px; font-size:.72rem; color:var(--seal-soft); line-height:1.45;}
+.month-notes div{margin-bottom:1px;}
+
+.locked-box, .empty-box{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:40px 28px; text-align:center; color:var(--seal-soft);}
+.locked-box strong{display:block; font-size:1.05rem; color:var(--seal); margin-bottom:6px;}
+
+/* popover de edição de dia */
+.day-pop{
+  position:fixed; z-index:50; width:250px; background:#fff; border-radius:var(--radius-md);
+  box-shadow:0 18px 44px rgba(58,29,16,0.28); padding:16px; display:none;
+}
+.day-pop.open{display:block;}
+.day-pop h5{margin:0 0 10px; font-size:.9rem; color:var(--seal);}
+.day-pop label{display:block; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--seal-soft); margin:10px 0 3px;}
+.day-pop select, .day-pop input{width:100%;}
+.day-pop-actions{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;}
+.day-pop-actions .btn{padding:8px 12px; font-size:.82rem;}
+.pop-backdrop{position:fixed; inset:0; z-index:40; display:none;}
+.pop-backdrop.open{display:block;}
+
+.msg{font-size:.85rem; font-weight:600; margin-left:6px;}
+.msg.ok{color:var(--ok);}
+.msg.bad{color:var(--bad);}
+
+@media (max-width:900px){
+  .app-shell{flex-direction:column; height:auto; overflow:visible;}
+  .sidebar{width:100%; height:auto; overflow-y:visible; padding:16px;}
+  .sidebar-tagline{display:none;}
+  .sidebar-nav{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
+  .sidebar-item{flex-direction:column; text-align:center; font-size:.68rem; padding:10px 4px; gap:4px;}
+  .sidebar-footer{flex-direction:row; flex-wrap:wrap; margin-top:14px;}
+  .sidebar-help{flex:1 1 200px;}
+  .sidebar-user{flex:1 1 160px;}
+  .main-area{height:auto; overflow-y:visible;}
+  .topbar{padding:16px 20px;}
+  .content{padding:20px 16px 48px;}
+}
+
+@media print{
+  body::before{display:none;}
+  .sidebar, .topbar, .cal-toolbar, .day-pop, .pop-backdrop, .info-note, .no-print{display:none !important;}
+  .app-shell, .main-area, .content{display:block; height:auto; overflow:visible; padding:0;}
+  .cal-layout{display:block;}
+  .months-grid{grid-template-columns:repeat(4,1fr); gap:8px;}
+  .month, .side-card{box-shadow:none; border:1px solid #ddd;}
+  .side-card{page-break-inside:avoid;}
+  .page-title{font-size:1.6rem;}
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="assets/images/brand/dyse-logo-white.png" alt="DYSE" class="sidebar-logo">
+      <div class="sidebar-tagline">Do You Speak English?*<br>Calendário Letivo</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/calendario-letivo.html" class="sidebar-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Calendário Letivo</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a class="sidebar-help" href="mailto:contato@doyouspeakenglish.com.br">
+        <span class="sidebar-help-icon">🎧</span>
+        <span><b>Precisa de ajuda?</b>Fale com o suporte <span class="arrow">→</span></span>
+      </a>
+      <div class="sidebar-user" id="sidebarUser"></div>
+      <button type="button" class="sidebar-logout" onclick="dyseLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="topbar-greeting">
+        <h1 id="topbarGreeting">Calendário Letivo</h1>
+        <p id="topbarSub">Calendário anual da escola.</p>
+      </div>
+      <div class="topbar-right">
+        <nav class="topbar-links" id="topbarLinks"></nav>
+      </div>
+    </header>
+
+    <div class="content">
+      <h2 class="page-title">Calendário Letivo</h2>
+      <p class="page-sub" id="pageSub">Visualize o calendário anual da escola.</p>
+
+      <div class="cal-toolbar">
+        <label for="anoSelect" style="font-weight:700; font-size:.85rem;">Ano letivo</label>
+        <select id="anoSelect" onchange="onAnoChange()"></select>
+        <span id="pubControl" class="no-print"></span>
+        <span id="toolbarMsg" class="msg"></span>
+        <span class="spacer"></span>
+        <button type="button" class="btn btn-ghost no-print" onclick="window.print()">🖨 Imprimir</button>
+      </div>
+
+      <div id="calBody"></div>
+    </div>
+  </div>
+</div>
+
+<div class="pop-backdrop" id="popBackdrop" onclick="closeDayPop()"></div>
+<div class="day-pop" id="dayPop">
+  <h5 id="dayPopTitle">Dia</h5>
+  <label>Tipo</label>
+  <select id="dayPopTipo">
+    <option value="">— nenhum (dia normal) —</option>
+    <option value="feriado">Feriado</option>
+    <option value="recesso">Recesso / férias</option>
+    <option value="reposicao">Reposição de aulas</option>
+    <option value="retorno_conversacao">Retorno das aulas de conversação</option>
+    <option value="inicio_semestre">Início do semestre</option>
+  </select>
+  <label>Texto (opcional)</label>
+  <input type="text" id="dayPopTitulo" placeholder="ex: Carnaval, Tiradentes...">
+  <label>Repetir até (opcional)</label>
+  <input type="date" id="dayPopAte">
+  <div class="day-pop-actions">
+    <button type="button" class="btn btn-primary" onclick="salvarDia()">Salvar</button>
+    <button type="button" class="btn btn-ghost" onclick="limparDia()">Limpar dia</button>
+    <button type="button" class="btn btn-ghost" onclick="closeDayPop()">Cancelar</button>
+  </div>
+</div>
+
+<script src="/assets/dyse-auth.js"></script>
+<script>
+  function escapeHtmlLocal(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const DOW = ['D','S','T','Q','Q','S','S'];
+  const TIPOS = {
+    feriado: 'Feriado',
+    recesso: 'Recesso / férias',
+    reposicao: 'Reposição de aulas',
+    retorno_conversacao: 'Retorno das aulas de conversação',
+    inicio_semestre: 'Início do semestre'
+  };
+
+  let CAN_EDIT = false;
+  let ANO = new Date().getFullYear();
+  let CONFIG = null;
+  let DIAS = {};          // 'YYYY-MM-DD' -> { tipo, titulo }
+  let POP_DATE = null;
+
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function iso(y, m, d){ return y + '-' + pad(m + 1) + '-' + pad(d); }
+  function hojeIso(){ const t = new Date(); return iso(t.getFullYear(), t.getMonth(), t.getDate()); }
+
+  function renderChrome(session, profile){
+    const meta = session.user.user_metadata || {};
+    const fullName = meta.full_name || session.user.email;
+    const userIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    const listIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>';
+    const links = [];
+    if(dyseIsAdmin(profile)) links.push({ href:'/gestao.html', label:'Painel da gestão', icon:userIcon });
+    if(dyseIsTeacher(profile)) links.push({ href:'/professora.html', label:'Painel do professor', icon:userIcon });
+    if(dyseIsStudent(profile)) links.push({ href:'/area-do-aluno.html', label:'Minhas atividades', icon:listIcon });
+    document.getElementById('topbarLinks').innerHTML = links.map(l =>
+      '<a href="' + l.href + '" class="topbar-link">' + l.icon + '<span>' + l.label + '</span></a>'
+    ).join('');
+
+    const initials = (fullName || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'U';
+    const roleLabel = dyseIsAdmin(profile) ? 'Gestão' : (dyseIsTeacher(profile) ? 'Professor(a)' : 'Aluno(a)');
+    document.getElementById('sidebarUser').innerHTML =
+      '<div class="sidebar-user-avatar">' + escapeHtmlLocal(initials) + '</div>' +
+      '<div style="min-width:0;">' +
+        '<div class="sidebar-user-name">' + escapeHtmlLocal(fullName) + '</div>' +
+        '<div class="sidebar-user-role">' + roleLabel + '</div>' +
+      '</div>';
+  }
+
+  function buildAnoSelect(){
+    const atual = new Date().getFullYear();
+    const anos = [];
+    for(let y = atual - 1; y <= atual + 2; y++) anos.push(y);
+    if(!anos.includes(ANO)) anos.push(ANO);
+    anos.sort((a, b) => a - b);
+    document.getElementById('anoSelect').innerHTML = anos.map(y =>
+      '<option value="' + y + '"' + (y === ANO ? ' selected' : '') + '>' + y + '</option>'
+    ).join('');
+  }
+
+  function flashMsg(texto, ok){
+    const el = document.getElementById('toolbarMsg');
+    el.textContent = texto;
+    el.className = 'msg ' + (ok ? 'ok' : 'bad');
+    if(texto) setTimeout(() => { if(el.textContent === texto){ el.textContent = ''; el.className = 'msg'; } }, 4000);
+  }
+
+  async function onAnoChange(){
+    ANO = parseInt(document.getElementById('anoSelect').value, 10);
+    await loadAno();
+  }
+
+  async function loadAno(){
+    if(CAN_EDIT) await dyseEnsureCalendarioAno(ANO);
+    CONFIG = await dyseGetCalendarioConfig(ANO);
+    const dias = await dyseListCalendarioDias(ANO);
+    DIAS = {};
+    dias.forEach(d => { DIAS[d.data] = { tipo: d.tipo, titulo: d.titulo || '' }; });
+    render();
+  }
+
+  function pubControlHtml(){
+    if(!CAN_EDIT) return '';
+    const on = CONFIG && CONFIG.publicado;
+    return '<span class="pub-pill ' + (on ? 'on' : 'off') + '">' + (on ? '● Liberado para alunos e professores' : '○ Não liberado (só a gestão vê)') + '</span>' +
+      '<button type="button" class="btn ' + (on ? 'btn-ghost' : 'btn-primary') + '" style="padding:8px 14px; margin-left:8px;" onclick="togglePublicado()">' +
+        (on ? 'Despublicar' : 'Liberar ' + ANO) + '</button>';
+  }
+
+  async function togglePublicado(){
+    const novo = !(CONFIG && CONFIG.publicado);
+    if(novo && !confirm('Liberar o calendário de ' + ANO + ' para todos os alunos e professores?')) return;
+    const { error } = await dyseSetCalendarioPublicado(ANO, novo);
+    if(error){ flashMsg('Erro: ' + error.message, false); return; }
+    CONFIG = await dyseGetCalendarioConfig(ANO);
+    render();
+    flashMsg(novo ? 'Calendário liberado.' : 'Calendário despublicado.', true);
+  }
+
+  function render(){
+    document.getElementById('pubControl').innerHTML = pubControlHtml();
+    const body = document.getElementById('calBody');
+
+    if(!CAN_EDIT && (!CONFIG || !CONFIG.publicado)){
+      body.innerHTML = '<div class="locked-box"><strong>Calendário de ' + ANO + ' ainda não foi liberado</strong>' +
+        'Assim que a gestão publicar, ele aparece aqui.</div>';
+      return;
+    }
+
+    body.innerHTML =
+      '<div class="cal-layout">' +
+        '<div>' + legendHtml() + infoHtml() + '</div>' +
+        '<div class="months-grid">' + MESES.map((_, m) => monthHtml(m)).join('') + '</div>' +
+      '</div>';
+  }
+
+  function legendHtml(){
+    return '<div class="side-card"><h3>Legenda</h3>' +
+      Object.keys(TIPOS).map(t =>
+        '<div class="legend-row"><span class="legend-dot" style="background:var(--tipo-' + t + ');"></span>' + TIPOS[t] + '</div>'
+      ).join('') +
+    '</div>';
+  }
+
+  function infoHtml(){
+    const c = CONFIG || {};
+    if(CAN_EDIT){
+      return '<div class="side-card"><h3>Informações importantes</h3>' +
+        infoInput('inicio_ano', 'Início do ano letivo', c.inicio_ano) +
+        infoInput('fim_ano', 'Término do ano letivo', c.fim_ano) +
+        infoInput('total_dias_letivos', 'Total de dias letivos', c.total_dias_letivos) +
+        infoInput('total_semanas_letivas', 'Total de semanas letivas', c.total_semanas_letivas) +
+        infoInput('observacao', 'Observação', c.observacao) +
+        '<button type="button" class="btn btn-primary" style="width:100%; margin-top:6px;" onclick="salvarInfo()">Salvar informações</button>' +
+        '<div class="info-note">Este quadro é preenchido à mão. As datas marcadas nos meses não recalculam esses totais automaticamente.</div>' +
+      '</div>';
+    }
+    const linhas = [
+      ['Início do ano letivo', c.inicio_ano],
+      ['Término do ano letivo', c.fim_ano],
+      ['Total de dias letivos', c.total_dias_letivos],
+      ['Total de semanas letivas', c.total_semanas_letivas],
+      ['Observação', c.observacao]
+    ].filter(l => l[1]);
+    if(!linhas.length) return '';
+    return '<div class="side-card"><h3>Informações importantes</h3>' +
+      linhas.map(l => '<div class="info-row"><label>' + l[0] + '</label><span class="val">' + escapeHtmlLocal(l[1]) + '</span></div>').join('') +
+    '</div>';
+  }
+
+  function infoInput(campo, label, valor){
+    return '<div class="info-row"><label>' + label + '</label>' +
+      '<input type="text" id="info_' + campo + '" value="' + escapeHtmlLocal(valor || '') + '"></div>';
+  }
+
+  async function salvarInfo(){
+    const campos = {};
+    ['inicio_ano','fim_ano','total_dias_letivos','total_semanas_letivas','observacao'].forEach(c => {
+      campos[c] = document.getElementById('info_' + c).value.trim();
+    });
+    const { error } = await dyseSaveCalendarioConfig(ANO, campos);
+    if(error){ flashMsg('Erro: ' + error.message, false); return; }
+    CONFIG = await dyseGetCalendarioConfig(ANO);
+    flashMsg('Informações salvas.', true);
+  }
+
+  function monthHtml(m){
+    const primeiroDiaSemana = new Date(ANO, m, 1).getDay();
+    const diasNoMes = new Date(ANO, m + 1, 0).getDate();
+    const hoje = hojeIso();
+
+    let cells = '';
+    for(let i = 0; i < primeiroDiaSemana; i++) cells += '<div class="cal-day empty"></div>';
+    for(let d = 1; d <= diasNoMes; d++){
+      const key = iso(ANO, m, d);
+      const mark = DIAS[key];
+      const cls = ['cal-day'];
+      if(mark){ cls.push('marked', 'tipo-' + mark.tipo); if(mark.titulo) cls.push('has-note'); }
+      if(key === hoje) cls.push('today');
+      const tag = CAN_EDIT ? 'button' : 'div';
+      const titleAttr = mark ? ' title="' + escapeHtmlLocal(mark.titulo || TIPOS[mark.tipo]) + '"' : '';
+      const onclick = CAN_EDIT ? ' onclick="openDayPop(event, \'' + key + '\')"' : '';
+      cells += '<' + tag + ' class="' + cls.join(' ') + '" data-date="' + key + '"' + titleAttr + onclick + '>' + d + '</' + tag + '>';
+    }
+
+    // notas: agrupa dias consecutivos com mesmo tipo+texto ("4 a 31 — recesso")
+    const notas = [];
+    let run = null;
+    const flush = () => {
+      if(!run) return;
+      const label = run.titulo || TIPOS[run.tipo];
+      const dias = run.ini === run.fim ? ('' + run.ini) : (run.ini + ' a ' + run.fim);
+      notas.push('<div>' + dias + ' — ' + escapeHtmlLocal(label) + '</div>');
+      run = null;
+    };
+    for(let d = 1; d <= diasNoMes; d++){
+      const mk = DIAS[iso(ANO, m, d)];
+      if(mk && run && mk.tipo === run.tipo && (mk.titulo || '') === run.titulo){ run.fim = d; continue; }
+      flush();
+      if(mk) run = { tipo: mk.tipo, titulo: mk.titulo || '', ini: d, fim: d };
+    }
+    flush();
+
+    return '<div class="month"><h4>' + MESES[m] + '</h4>' +
+      '<div class="dow">' + DOW.map(x => '<span>' + x + '</span>').join('') + '</div>' +
+      '<div class="days">' + cells + '</div>' +
+      (notas.length ? '<div class="month-notes">' + notas.join('') + '</div>' : '') +
+    '</div>';
+  }
+
+  /* ---------- popover de edição ---------- */
+  function openDayPop(evt, key){
+    POP_DATE = key;
+    const [y, mo, d] = key.split('-');
+    document.getElementById('dayPopTitle').textContent = 'Dia ' + d + '/' + mo + '/' + y;
+    const mark = DIAS[key] || { tipo: '', titulo: '' };
+    document.getElementById('dayPopTipo').value = mark.tipo || '';
+    document.getElementById('dayPopTitulo').value = mark.titulo || '';
+    document.getElementById('dayPopAte').value = '';
+    document.getElementById('dayPopAte').min = key;
+    document.getElementById('dayPopAte').max = ANO + '-12-31';
+
+    const pop = document.getElementById('dayPop');
+    document.getElementById('popBackdrop').classList.add('open');
+    pop.classList.add('open');
+    // position:fixed => coordenadas relativas à viewport (getBoundingClientRect)
+    const r = evt.currentTarget.getBoundingClientRect();
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+    const popH = pop.offsetHeight || 320;
+    let left = Math.min(r.left, vw - 262);
+    left = Math.max(8, left);
+    let top = r.bottom + 6;
+    if(top + popH > vh - 8) top = Math.max(8, r.top - popH - 6);
+    pop.style.left = left + 'px';
+    pop.style.top = top + 'px';
+  }
+
+  function closeDayPop(){
+    document.getElementById('dayPop').classList.remove('open');
+    document.getElementById('popBackdrop').classList.remove('open');
+    POP_DATE = null;
+  }
+
+  async function salvarDia(){
+    if(!POP_DATE) return;
+    const tipo = document.getElementById('dayPopTipo').value;
+    const titulo = document.getElementById('dayPopTitulo').value.trim();
+    let ate = document.getElementById('dayPopAte').value;
+    if(ate && ate > ANO + '-12-31') ate = ANO + '-12-31';
+    if(!tipo){ flashMsg('Escolha um tipo (ou use "Limpar dia").', false); return; }
+
+    let error;
+    if(ate && ate > POP_DATE){
+      ({ error } = await dyseSetCalendarioIntervalo(ANO, POP_DATE, ate, tipo, titulo));
+    } else {
+      ({ error } = await dyseSetCalendarioDia(ANO, POP_DATE, tipo, titulo));
+    }
+    if(error){ flashMsg('Erro: ' + error.message, false); return; }
+    closeDayPop();
+    await loadAno();
+    flashMsg('Dia marcado.', true);
+  }
+
+  async function limparDia(){
+    if(!POP_DATE) return;
+    const { error } = await dyseSetCalendarioDia(ANO, POP_DATE, null, null);
+    if(error){ flashMsg('Erro: ' + error.message, false); return; }
+    closeDayPop();
+    await loadAno();
+    flashMsg('Marcação removida.', true);
+  }
+
+  (async () => {
+    const session = await dyseRequireAuth();
+    if(!session) return;
+    const profile = await dyseGetProfile(session);
+    CAN_EDIT = dyseIsAdmin(profile);
+
+    document.getElementById('pageSub').textContent = CAN_EDIT
+      ? 'Clique em qualquer dia para marcar feriado, recesso, reposição etc. Libere o ano quando quiser que alunos e professores vejam.'
+      : 'Calendário anual da escola.';
+    document.getElementById('topbarSub').textContent = CAN_EDIT ? 'Configure e libere o calendário anual.' : 'Calendário anual da escola.';
+
+    renderChrome(session, profile);
+    buildAnoSelect();
+    await loadAno();
+  })();
+</script>
+</body>
+</html>

@@ -2281,6 +2281,73 @@ on conflict (materia_slug, numero) do nothing;
 -- ----------------------------------------------------------------------
 alter table public.nivel_aulas add column if not exists ativo boolean not null default true;
 
+-- ----------------------------------------------------------------------
+-- 17) CALENDÁRIO LETIVO
+--     Calendário anual da escola. A gestão (is_admin() — inclui
+--     "financeiro") marca cada dia clicando nele em /calendario-letivo.html
+--     (feriado, recesso/férias, reposição de aulas, retorno das aulas de
+--     conversação, início de semestre) e preenche à mão o quadro de
+--     "informações importantes" (início/fim do ano letivo, total de dias e
+--     de semanas letivas). Aluno e professor abrem a MESMA página, só
+--     leitura, e só enxergam um ano depois que a gestão marca
+--     calendario_letivo.publicado = true pra aquele ano.
+-- ----------------------------------------------------------------------
+create table if not exists public.calendario_letivo (
+  ano_letivo int primary key,
+  publicado boolean not null default false,
+  inicio_ano text,
+  fim_ano text,
+  total_dias_letivos text,
+  total_semanas_letivas text,
+  observacao text,
+  atualizado_por uuid references auth.users(id),
+  atualizado_em timestamptz default now()
+);
+
+alter table public.calendario_letivo enable row level security;
+
+drop policy if exists "calendario: leitura do ano publicado" on public.calendario_letivo;
+create policy "calendario: leitura do ano publicado"
+  on public.calendario_letivo for select
+  using (publicado or public.is_admin());
+
+drop policy if exists "calendario: gestao gerencia" on public.calendario_letivo;
+create policy "calendario: gestao gerencia"
+  on public.calendario_letivo for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create table if not exists public.calendario_letivo_dias (
+  id bigint generated always as identity primary key,
+  ano_letivo int not null references public.calendario_letivo(ano_letivo) on delete cascade,
+  data date not null unique,
+  tipo text not null check (tipo in ('recesso','feriado','reposicao','retorno_conversacao','inicio_semestre')),
+  titulo text,
+  atualizado_por uuid references auth.users(id),
+  atualizado_em timestamptz default now()
+);
+
+create index if not exists idx_calendario_dias_ano on public.calendario_letivo_dias (ano_letivo, data);
+
+alter table public.calendario_letivo_dias enable row level security;
+
+drop policy if exists "calendario dias: leitura do ano publicado" on public.calendario_letivo_dias;
+create policy "calendario dias: leitura do ano publicado"
+  on public.calendario_letivo_dias for select
+  using (
+    public.is_admin()
+    or exists (
+      select 1 from public.calendario_letivo c
+      where c.ano_letivo = calendario_letivo_dias.ano_letivo and c.publicado
+    )
+  );
+
+drop policy if exists "calendario dias: gestao gerencia" on public.calendario_letivo_dias;
+create policy "calendario dias: gestao gerencia"
+  on public.calendario_letivo_dias for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
 -- ======================================================================
 -- PRONTO! Depois de rodar este script:
 --

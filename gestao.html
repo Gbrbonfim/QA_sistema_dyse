@@ -93,7 +93,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .sidebar-item{
   display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm);
   color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none;
-  cursor:pointer; text-align:left; width:100%; transition:.15s;
+  cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none;
 }
 .sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
 .sidebar-item:hover{background:rgba(255,255,255,.12);}
@@ -711,6 +711,10 @@ body.dyse-modal-open{overflow:hidden;}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Z"/><path d="M16 7V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2"/><path d="M18 14h.01"/></svg>
         <span>Financeiro</span>
       </button>
+      <a class="sidebar-item" href="/calendario-letivo.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Calendário Letivo</span>
+      </a>
     </nav>
     <div class="sidebar-footer">
       <a class="sidebar-help" href="mailto:contato@doyouspeakenglish.com.br">
@@ -2375,13 +2379,23 @@ body.dyse-modal-open{overflow:hidden;}
     // Aceita quebra de linha Windows (\r\n), Unix (\n) e Mac antigo (\r sozinho).
     const lines = text.split(/\r\n|\r|\n/).filter(l => l.trim().length);
     if(lines.length < 2) return [];
-    // Excel em locale pt-BR salva CSV com ";" — detecta pelo cabeçalho.
-    const sep = (lines[0].indexOf(';') !== -1 && lines[0].indexOf(',') === -1) ? ';' : ',';
-    const headers = parseCsvLine(lines[0], sep).map(h => h.trim().toLowerCase());
+    // Separador: testa ";" (Excel pt-BR), "," e tab — usa o que dá mais
+    // colunas no cabeçalho.
+    const sep = [';', ',', '\t'].reduce((melhor, cand) =>
+      parseCsvLine(lines[0], cand).length > parseCsvLine(lines[0], melhor).length ? cand : melhor, ',');
+    let headers = parseCsvLine(lines[0], sep).map(h => h.trim().toLowerCase());
+    while(headers.length && headers[headers.length - 1] === '') headers.pop(); // tira colunas fantasma do "a,b,c,,,"
     return lines.slice(1).map(line => {
       const cols = parseCsvLine(line, sep);
+      // Ignora campos vazios sobrando no fim (trailing sep), mas acusa se
+      // faltou/sobrou coluna "de verdade" (ex: vírgula dentro de "R$ 425,00").
+      let n = cols.length;
+      while(n > headers.length && (cols[n - 1] || '').trim() === '') n--;
       const row = {};
       headers.forEach((h, i) => { row[h] = (cols[i] || '').trim(); });
+      // Só acusa coluna SOBRANDO (vírgula dentro de um valor) — coluna
+      // faltando = usuário não preencheu o fim da linha, tratado como vazio.
+      if(n > headers.length) row.__colErro = { got: n, want: headers.length };
       return row;
     });
   }
@@ -2538,6 +2552,12 @@ body.dyse-modal-open{overflow:hidden;}
       const email = (linha['email'] || '').trim();
       const rowId = 'csv-row-' + i;
       resultsEl.insertAdjacentHTML('beforeend', '<div class="report-line" id="' + rowId + '">⏳ ' + escapeHtmlLocal(nome || email || '(sem nome)') + ' — processando...</div>');
+
+      if(linha.__colErro){
+        csvResultLine(rowId, '❌ Linha ' + (i+2) + ': ' + linha.__colErro.got + ' colunas, esperado ' + linha.__colErro.want +
+          ' — provável vírgula dentro de um valor (ex: "R$ 425,00"). Use número puro: <code>425</code>.');
+        continue;
+      }
 
       const faltaCampo = (modo === 'criar') ? (!email || !nome) : (!email && !nome);
       if(faltaCampo){

@@ -2106,3 +2106,102 @@ async function dyseReabrirMes(mes, motivo){
   await dyseGerarMensalidadesDoMes(mes); // recalcula na hora — reabrir sozinho só destrava, não atualiza os dados
   return { error: null };
 }
+
+/* ---------- Calendário letivo ----------
+   calendario_letivo = 1 linha por ano (config + flag "publicado");
+   calendario_letivo_dias = 1 linha por dia marcado. A RLS deixa aluno/
+   professor lerem só ano publicado; escrita é só is_admin(). */
+async function dyseGetCalendarioConfig(ano){
+  const { data, error } = await sb
+    .from('calendario_letivo')
+    .select('*')
+    .eq('ano_letivo', ano)
+    .maybeSingle();
+  return error ? null : data;
+}
+
+async function dyseListCalendarioDias(ano){
+  const { data, error } = await sb
+    .from('calendario_letivo_dias')
+    .select('*')
+    .eq('ano_letivo', ano)
+    .order('data', { ascending: true });
+  return error ? [] : data;
+}
+
+/* Garante que a linha do ano existe (FK de calendario_letivo_dias) sem
+   sobrescrever config/publicado se já existir. */
+async function dyseEnsureCalendarioAno(ano){
+  return sb.from('calendario_letivo')
+    .upsert({ ano_letivo: ano }, { onConflict: 'ano_letivo', ignoreDuplicates: true });
+}
+
+async function dyseSaveCalendarioConfig(ano, campos){
+  const session = await dyseGetSession();
+  const { error } = await sb.from('calendario_letivo').upsert({
+    ano_letivo: ano,
+    inicio_ano: campos.inicio_ano || null,
+    fim_ano: campos.fim_ano || null,
+    total_dias_letivos: campos.total_dias_letivos || null,
+    total_semanas_letivas: campos.total_semanas_letivas || null,
+    observacao: campos.observacao || null,
+    atualizado_por: session ? session.user.id : null,
+    atualizado_em: new Date().toISOString()
+  }, { onConflict: 'ano_letivo' });
+  return { error };
+}
+
+async function dyseSetCalendarioPublicado(ano, publicado){
+  const session = await dyseGetSession();
+  await dyseEnsureCalendarioAno(ano);
+  const { error } = await sb.from('calendario_letivo')
+    .update({ publicado: !!publicado, atualizado_por: session ? session.user.id : null, atualizado_em: new Date().toISOString() })
+    .eq('ano_letivo', ano);
+  return { error };
+}
+
+/* Marca um dia (upsert por data). tipo null/'' apaga a marcação do dia. */
+async function dyseSetCalendarioDia(ano, dataISO, tipo, titulo){
+  const session = await dyseGetSession();
+  if(!tipo){
+    const { error } = await sb.from('calendario_letivo_dias').delete().eq('data', dataISO);
+    return { error };
+  }
+  const ensure = await dyseEnsureCalendarioAno(ano);
+  if(ensure.error) return { error: ensure.error };
+  const { error } = await sb.from('calendario_letivo_dias').upsert({
+    ano_letivo: ano,
+    data: dataISO,
+    tipo: tipo,
+    titulo: titulo || null,
+    atualizado_por: session ? session.user.id : null,
+    atualizado_em: new Date().toISOString()
+  }, { onConflict: 'data' });
+  return { error };
+}
+
+/* Marca todos os dias de iniISO até fimISO (inclusive) com o mesmo tipo/
+   título — usado pelo "repetir até" do popover. */
+async function dyseSetCalendarioIntervalo(ano, iniISO, fimISO, tipo, titulo){
+  const session = await dyseGetSession();
+  const ensure = await dyseEnsureCalendarioAno(ano);
+  if(ensure.error) return { error: ensure.error };
+  const linhas = [];
+  const pad2 = n => (n < 10 ? '0' : '') + n;
+  const d = new Date(iniISO + 'T00:00:00');
+  const fim = new Date(fimISO + 'T00:00:00');
+  while(d <= fim){
+    linhas.push({
+      ano_letivo: ano,
+      data: d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()),
+      tipo: tipo,
+      titulo: titulo || null,
+      atualizado_por: session ? session.user.id : null,
+      atualizado_em: new Date().toISOString()
+    });
+    d.setDate(d.getDate() + 1);
+  }
+  if(!linhas.length) return { error: null };
+  const { error } = await sb.from('calendario_letivo_dias').upsert(linhas, { onConflict: 'data' });
+  return { error };
+}
