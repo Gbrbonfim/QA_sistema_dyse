@@ -793,6 +793,31 @@ create policy "aluno ve o proprio historico financeiro"
   on public.aluno_financeiro_historico for select
   using (aluno_id = auth.uid());
 
+-- 9.3.1) Histórico de observações do vínculo financeiro — a coluna
+--        "observacao" em aluno_financeiro_historico guarda só a observação
+--        ATUAL do período (sobrescrita a cada "Salvar" no modal Financeiro).
+--        Esta tabela é um LOG somente-inserção: cada vez que a gestão salva o
+--        vínculo com uma observação nova, entra uma linha datada aqui, pra não
+--        perder o registro de por que cada ajuste foi feito.
+create table if not exists public.aluno_financeiro_observacoes (
+  id bigint generated always as identity primary key,
+  aluno_id uuid not null references auth.users(id) on delete cascade,
+  periodo_id bigint references public.aluno_financeiro_historico(id) on delete set null,
+  observacao text not null,
+  registrado_por uuid references auth.users(id),
+  registrado_em timestamptz default now()
+);
+
+create index if not exists idx_aluno_fin_obs_aluno on public.aluno_financeiro_observacoes (aluno_id, registrado_em desc);
+
+alter table public.aluno_financeiro_observacoes enable row level security;
+
+drop policy if exists "admins gerenciam observacoes do vinculo financeiro" on public.aluno_financeiro_observacoes;
+create policy "admins gerenciam observacoes do vinculo financeiro"
+  on public.aluno_financeiro_observacoes for all
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
+
 -- 9.4) Fechamento mensal (controle de qual mês de competência está
 --      travado para alteração).
 create table if not exists public.fechamentos_mensais (

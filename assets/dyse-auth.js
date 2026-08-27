@@ -848,6 +848,7 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
         contrato_fim: campos.contrato_fim || null
       })
       .eq('id', aberto.id);
+    if(!error) await dyseLogAlunoFinanceiroObservacao(alunoId, aberto.id, campos.observacao, aberto.observacao, userId);
     return { error };
   }
 
@@ -879,7 +880,33 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
     })
     .select('*')
     .maybeSingle();
+  if(!error) await dyseLogAlunoFinanceiroObservacao(alunoId, data ? data.id : null, campos.observacao, aberto ? aberto.observacao : null, userId);
   return { data, error };
+}
+
+/* Log somente-inserção da observação a cada "Salvar" no modal Financeiro.
+   Só grava quando o texto está preenchido E é diferente da observação que já
+   estava no período (evita duplicar a mesma nota quando o save foi só pra
+   mudar valor/contrato). observacaoAnterior = null força o registro (período
+   novo). */
+async function dyseLogAlunoFinanceiroObservacao(alunoId, periodoId, observacao, observacaoAnterior, userId){
+  const texto = (observacao || '').trim();
+  if(!texto || texto === (observacaoAnterior || '').trim()) return;
+  await sb.from('aluno_financeiro_observacoes').insert({
+    aluno_id: alunoId,
+    periodo_id: periodoId || null,
+    observacao: texto,
+    registrado_por: userId || null
+  });
+}
+
+async function dyseListAlunoFinanceiroObservacoes(alunoId){
+  const { data, error } = await sb
+    .from('aluno_financeiro_observacoes')
+    .select('*')
+    .eq('aluno_id', alunoId)
+    .order('registrado_em', { ascending: false });
+  return error ? [] : data;
 }
 
 /* Situação financeira do próprio aluno logado (período aberto) — usada pra

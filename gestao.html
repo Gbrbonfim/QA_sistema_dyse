@@ -3238,6 +3238,7 @@ body.dyse-modal-open{overflow:hidden;}
     CURRENT_ALUNO_FIN_ID = alunoId;
     document.getElementById('alunoFinModalTitle').textContent = 'Financeiro — ' + (s.full_name || s.email || '');
     renderAlunoFinModalBody();
+    renderAlunoFinObsList();
     document.getElementById('alunoFinModal').classList.add('open');
     document.getElementById('alunoFinModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
@@ -3571,7 +3572,28 @@ body.dyse-modal-open{overflow:hidden;}
 
     document.getElementById('alunoFinModalBody').innerHTML =
       '<div class="report-section-head">Vínculo atual</div>' + formHtml +
-      '<div class="report-section-head">Histórico de períodos</div>' + historicoHtml;
+      '<div class="report-section-head">Histórico de períodos</div>' + historicoHtml +
+      '<div class="report-section-head">Histórico de observações</div>' +
+      '<div id="alunoFinObsList"><p class="report-line" style="opacity:.6;">Carregando...</p></div>';
+  }
+
+  /* Log datado das observações digitadas a cada "Salvar" (tabela
+     aluno_financeiro_observacoes) — separado do "Histórico de períodos", que
+     só guarda a observação atual de cada período. */
+  async function renderAlunoFinObsList(){
+    const alunoId = CURRENT_ALUNO_FIN_ID;
+    const obs = await dyseListAlunoFinanceiroObservacoes(alunoId);
+    const el = document.getElementById('alunoFinObsList');
+    if(!el || alunoId !== CURRENT_ALUNO_FIN_ID) return; // modal fechou/trocou antes da resposta
+    el.innerHTML = obs.length
+      ? obs.map(o => {
+          const quando = new Date(o.registrado_em).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+          return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:2px;">' +
+            '<span class="name">' + escapeHtmlLocal(o.observacao) + '</span>' +
+            '<span style="font-size:.74rem; opacity:.6;">' + quando + '</span>' +
+          '</div>';
+        }).join('')
+      : '<p class="report-line" style="opacity:.6;">Nenhuma observação registrada ainda.</p>';
   }
 
   function onFinModalidadeChange(){
@@ -3628,6 +3650,7 @@ body.dyse-modal-open{overflow:hidden;}
     ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
     await dyseGerarMensalidadesDoMes(dyseMesCompetencia()); // reflete o vínculo novo no mês corrente na hora, sem esperar a gestão abrir Pagamentos/Relatório
     renderAlunoFinModalBody();
+    renderAlunoFinObsList();
     renderAlunosTable();
     return false;
   }
