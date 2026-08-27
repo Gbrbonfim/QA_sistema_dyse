@@ -103,34 +103,36 @@ select:focus, input:focus{outline:none; border-color:var(--amaranth);}
 .info-row input{width:100%;}
 .info-note{font-size:.76rem; color:var(--seal-soft); opacity:.8; margin-top:6px;}
 
-.months-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:12px;}
-@media (max-width:1500px){ .months-grid{grid-template-columns:repeat(3, 1fr);} }
-@media (max-width:1000px){ .months-grid{grid-template-columns:repeat(2, 1fr);} }
+.months-grid{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:22px 20px;}
+@media (max-width:1400px){ .months-grid{grid-template-columns:repeat(3, minmax(0,1fr));} }
+@media (max-width:1000px){ .months-grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
 @media (max-width:560px){ .months-grid{grid-template-columns:1fr;} }
 
-.month{background:#fff; border-radius:var(--radius-sm); box-shadow:var(--shadow-card); padding:10px 10px 8px;}
-.month h4{margin:0 0 6px; text-align:center; font-size:.78rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--amaranth);}
-.dow{display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:2px;}
-.dow span{text-align:center; font-size:.58rem; font-weight:700; color:var(--seal-soft); opacity:.7;}
-.days{display:grid; grid-template-columns:repeat(7,1fr); gap:2px;}
+.month{background:transparent; max-width:230px; width:100%; margin-inline:auto;}
+.month h4{margin:0 0 5px; text-align:center; font-size:.72rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--seal);}
+.dow{display:grid; grid-template-columns:repeat(7,1fr);}
+.dow span{text-align:center; font-size:.55rem; font-weight:700; color:var(--amaranth); padding:2px 0;}
+.dow span:first-child, .dow span:last-child{background:#fbe4e7;}
+.days{display:grid; grid-template-columns:repeat(7,1fr);}
 .cal-day{
   aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative;
-  border:none; background:transparent; font-family:var(--font-body); font-size:.68rem; font-weight:600;
-  color:var(--seal); border-radius:5px; padding:0;
+  border:none; background:transparent; font-family:var(--font-body); font-size:.6rem; font-weight:600;
+  color:var(--seal); border-radius:0; padding:0;
 }
+.days > :nth-child(7n+1), .days > :nth-child(7n){background:#fbe4e7;}
 .cal-day.empty{visibility:hidden;}
 button.cal-day{cursor:pointer;}
-button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px;}
+button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-index:1;}
 .cal-day.marked{color:#fff; font-weight:700;}
 .cal-day.tipo-recesso{background:var(--tipo-recesso);}
 .cal-day.tipo-feriado{background:var(--tipo-feriado);}
 .cal-day.tipo-reposicao{background:var(--tipo-reposicao);}
 .cal-day.tipo-retorno_conversacao{background:var(--tipo-retorno_conversacao); color:var(--seal);}
 .cal-day.tipo-inicio_semestre{background:var(--tipo-inicio_semestre);}
-.cal-day.today::after{content:""; position:absolute; inset:2px; border:2px dashed var(--amaranth); border-radius:5px;}
-.cal-day.marked.has-note::before{content:"•"; position:absolute; top:-1px; right:2px; font-size:.6rem; line-height:1;}
+.cal-day.today{outline:1.5px dashed var(--amaranth); outline-offset:-2px;}
+.cal-day.marked.has-note::before{content:"•"; position:absolute; top:-2px; right:1px; font-size:.55rem; line-height:1;}
 
-.month-notes{margin-top:6px; border-top:1px solid #f0e3d2; padding-top:5px; font-size:.64rem; color:var(--seal-soft); line-height:1.4;}
+.month-notes{margin-top:5px; font-size:.6rem; color:var(--seal-soft); line-height:1.4;}
 .month-notes div{margin-bottom:1px;}
 
 .locked-box, .empty-box{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:40px 28px; text-align:center; color:var(--seal-soft);}
@@ -187,12 +189,7 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px;}
       <img src="assets/images/brand/dyse-logo-white.png" alt="DYSE" class="sidebar-logo">
       <div class="sidebar-tagline">Do You Speak English?*<br>Calendário Letivo</div>
     </div>
-    <nav class="sidebar-nav">
-      <a href="/calendario-letivo.html" class="sidebar-item active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span>Calendário Letivo</span>
-      </a>
-    </nav>
+    <nav class="sidebar-nav" id="sidebarNav"></nav>
     <div class="sidebar-footer">
       <a class="sidebar-help" href="mailto:contato@doyouspeakenglish.com.br">
         <span class="sidebar-help-icon">🎧</span>
@@ -284,18 +281,53 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px;}
   function iso(y, m, d){ return y + '-' + pad(m + 1) + '-' + pad(d); }
   function hojeIso(){ const t = new Date(); return iso(t.getFullYear(), t.getMonth(), t.getDate()); }
 
+  const SVG = {
+    users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+    user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    briefcase: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+    folder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h5l2 2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>',
+    card: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Z"/><path d="M16 7V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2"/><path d="M18 14h.01"/></svg>',
+    list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+    barchart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>',
+    report: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>',
+    calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    calCheck: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>'
+  };
+
+  /* Menu lateral: mostra os itens do painel de origem (gestão/professor/aluno)
+     como links pra a página não parecer "fora" do sistema. */
+  function navSetPara(profile){
+    if(dyseIsAdmin(profile)){
+      const itens = [
+        ['turmas','Turmas',SVG.users], ['materias','Matérias',SVG.book],
+        ['alunos','Alunos',SVG.user], ['professores','Professores',SVG.briefcase],
+        ['contas','Contas',SVG.folder]
+      ];
+      if(dyseIsFinanceiro(profile)) itens.push(['financeiro','Financeiro',SVG.card]);
+      return { base:'/gestao.html', itens };
+    }
+    if(dyseIsTeacher(profile)){
+      return { base:'/professora.html', itens:[
+        ['results','Resultados',SVG.list], ['manage','Gerenciar atividades',SVG.barchart],
+        ['financeiro','Financeiro',SVG.card], ['turmas','Turmas',SVG.users],
+        ['reportcards','Report Cards',SVG.report], ['disponibilidade','Disponibilidade',SVG.calendar]
+      ]};
+    }
+    return { base:'/area-do-aluno.html', itens:[['','Minhas atividades',SVG.list]] };
+  }
+
   function renderChrome(session, profile){
     const meta = session.user.user_metadata || {};
     const fullName = meta.full_name || session.user.email;
-    const userIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
-    const listIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>';
-    const links = [];
-    if(dyseIsAdmin(profile)) links.push({ href:'/gestao.html', label:'Painel da gestão', icon:userIcon });
-    if(dyseIsTeacher(profile)) links.push({ href:'/professora.html', label:'Painel do professor', icon:userIcon });
-    if(dyseIsStudent(profile)) links.push({ href:'/area-do-aluno.html', label:'Minhas atividades', icon:listIcon });
-    document.getElementById('topbarLinks').innerHTML = links.map(l =>
-      '<a href="' + l.href + '" class="topbar-link">' + l.icon + '<span>' + l.label + '</span></a>'
-    ).join('');
+
+    const ns = navSetPara(profile);
+    const navHtml = ns.itens.map(([key, label, icon]) =>
+      '<a href="' + ns.base + (key ? '#' + key : '') + '" class="sidebar-item">' + icon + '<span>' + label + '</span></a>'
+    ).join('') +
+      '<a href="/calendario-letivo.html" class="sidebar-item active">' + SVG.calCheck + '<span>Calendário Letivo</span></a>';
+    document.getElementById('sidebarNav').innerHTML = navHtml;
+    document.getElementById('topbarLinks').innerHTML = '';
 
     const initials = (fullName || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'U';
     const roleLabel = dyseIsAdmin(profile) ? 'Gestão' : (dyseIsTeacher(profile) ? 'Professor(a)' : 'Aluno(a)');

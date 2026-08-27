@@ -1329,6 +1329,7 @@ body.dyse-modal-open{overflow:hidden;}
   };
 
   function showPanel(which){
+    if(location.hash.slice(1) !== which) history.replaceState(null, '', '#' + which);
     document.getElementById('tabResults').classList.toggle('active', which==='results');
     document.getElementById('tabManage').classList.toggle('active', which==='manage');
     document.getElementById('tabFinanceiro').classList.toggle('active', which==='financeiro');
@@ -2328,7 +2329,8 @@ body.dyse-modal-open{overflow:hidden;}
     if(!session) return;
     const profile = await dyseGetProfile(session);
     renderProfessoraChrome(session, profile);
-    showPanel('results');
+    const hashPanel = location.hash.slice(1);
+    showPanel(['results','manage','financeiro','turmas','reportcards','disponibilidade'].includes(hashPanel) ? hashPanel : 'results');
 
     ALL_RESULTS = await dyseListAllResults();
     await loadMyTurmasInfo();

@@ -1293,6 +1293,7 @@ body.dyse-modal-open{overflow:hidden;}
     // showPanel('financeiro') pelo console, sem a role "financeiro" a aba
     // fica bloqueada e cai em "alunos".
     if(which === 'financeiro' && !document.body.classList.contains('dyse-can-financeiro')) which = 'alunos';
+    if(location.hash.slice(1) !== which) history.replaceState(null, '', '#' + which);
     ['turmas','materias','alunos','professores','contas','financeiro'].forEach(p => {
       document.getElementById('tab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('panel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
@@ -4372,7 +4373,8 @@ body.dyse-modal-open{overflow:hidden;}
     const profile = await dyseGetProfile(session);
     document.body.classList.toggle('dyse-can-financeiro', dyseIsFinanceiro(profile));
     renderGestaoChrome(session, profile);
-    showPanel('turmas');
+    const hashPanel = location.hash.slice(1);
+    showPanel(['turmas','materias','alunos','professores','contas','financeiro'].includes(hashPanel) ? hashPanel : 'turmas');
     await loadAll();
   })();
 </script>
