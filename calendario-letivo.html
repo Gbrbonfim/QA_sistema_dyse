@@ -103,23 +103,23 @@ select:focus, input:focus{outline:none; border-color:var(--amaranth);}
 .info-row input{width:100%;}
 .info-note{font-size:.76rem; color:var(--seal-soft); opacity:.8; margin-top:6px;}
 
-.months-grid{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:22px 20px;}
+.months-grid{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:26px 24px;}
 @media (max-width:1400px){ .months-grid{grid-template-columns:repeat(3, minmax(0,1fr));} }
 @media (max-width:1000px){ .months-grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
 @media (max-width:560px){ .months-grid{grid-template-columns:1fr;} }
 
-.month{background:transparent; max-width:230px; width:100%; margin-inline:auto;}
-.month h4{margin:0 0 5px; text-align:center; font-size:.72rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--seal);}
+.month{background:transparent; max-width:210px; width:100%; margin-inline:auto;}
+.month h4{margin:0 0 6px; text-align:center; font-size:.7rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--seal);}
 .dow{display:grid; grid-template-columns:repeat(7,1fr);}
-.dow span{text-align:center; font-size:.55rem; font-weight:700; color:var(--amaranth); padding:2px 0;}
-.dow span:first-child, .dow span:last-child{background:#fbe4e7;}
-.days{display:grid; grid-template-columns:repeat(7,1fr);}
+.dow span{text-align:center; font-size:.54rem; font-weight:700; color:var(--amaranth); padding:2px 0;}
+.dow span:first-child, .dow span:last-child{background:#fdf1f3;}
+.days{display:grid; grid-template-columns:repeat(7,1fr); border:1px solid #f2e6da;}
 .cal-day{
   aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative;
-  border:none; background:transparent; font-family:var(--font-body); font-size:.6rem; font-weight:600;
+  border:none; background:transparent; font-family:var(--font-body); font-size:.62rem; font-weight:500;
   color:var(--seal); border-radius:0; padding:0;
 }
-.days > :nth-child(7n+1), .days > :nth-child(7n){background:#fbe4e7;}
+.days > .cal-day:not(.empty):nth-child(7n+1), .days > .cal-day:not(.empty):nth-child(7n){background:#fdf1f3;}
 .cal-day.empty{visibility:hidden;}
 button.cal-day{cursor:pointer;}
 button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-index:1;}
@@ -132,7 +132,7 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
 .cal-day.today{outline:1.5px dashed var(--amaranth); outline-offset:-2px;}
 .cal-day.marked.has-note::before{content:"•"; position:absolute; top:-2px; right:1px; font-size:.55rem; line-height:1;}
 
-.month-notes{margin-top:5px; font-size:.6rem; color:var(--seal-soft); line-height:1.4;}
+.month-notes{margin-top:6px; font-size:.58rem; color:var(--seal-soft); line-height:1.45;}
 .month-notes div{margin-bottom:1px;}
 
 .locked-box, .empty-box{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:40px 28px; text-align:center; color:var(--seal-soft);}
