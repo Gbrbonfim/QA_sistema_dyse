@@ -1855,6 +1855,14 @@ async function dyseLiberarReportCardAluno(id){
   return { data, error };
 }
 
+/* Exclui um Report Card de vez (só gestão — RLS "admins gerenciam todos os
+   report cards"). Usado pra limpar um Report Card gerado por engano; o
+   Registro de Classe que o originou não é tocado. */
+async function dyseExcluirReportCard(id){
+  const { error } = await sb.from('report_cards').delete().eq('id', id);
+  return { error };
+}
+
 /* ---------- Gastos personalizados (por aluno + mês) ---------- */
 async function dyseListGastos(alunoId, mes){
   let query = sb.from('gastos_personalizados').select('*');

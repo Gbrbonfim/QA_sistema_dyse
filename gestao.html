@@ -3678,12 +3678,29 @@ body.dyse-modal-open{overflow:hidden;}
         : '<span class="pill-count pill-ok">Já liberado pro aluno</span>';
     }
 
+    // Só a gestão exclui — e o botão fica separado, à direita, pra não
+    // clicar sem querer no lugar do "Salvar".
+    const botaoExcluir = CURRENT_REPORT_CARD_CONTEXTO === 'gestao'
+      ? '<button type="button" class="btn btn-ghost" style="margin-left:auto; color:var(--bad); border-color:var(--bad);" onclick="handleExcluirReportCard()">Excluir Report Card</button>'
+      : '';
+
     document.getElementById('reportCardModalBody').innerHTML =
       '<p class="report-line"><b>Turma/nível:</b> ' + escapeHtmlLocal(nivel ? nivel.name : rc.materia_slug) + ' · ' + rc.semestre + 'º semestre (aulas ' + rc.aula_inicio + '-' + rc.aula_fim + ')</p>' +
       '<p class="report-line"><b>Status:</b> ' + reportCardStatusBadge(rc.status) + '</p>' +
       blocoFrequencia + blocoEixos + blocoRevisoes + blocoFinal + blocoAlertas + blocoRestante +
-      '<div class="btn-row" style="margin-top:16px;"><button type="button" class="btn btn-ghost" onclick="handleSalvarReportCard()">Salvar</button>' + botoesTransicao + '</div>' +
+      '<div class="btn-row" style="margin-top:16px; display:flex; align-items:center; gap:8px;"><button type="button" class="btn btn-ghost" onclick="handleSalvarReportCard()">Salvar</button>' + botoesTransicao + botaoExcluir + '</div>' +
       '<p class="auth-msg" id="rcModalMsg"></p>';
+  }
+
+  async function handleExcluirReportCard(){
+    const rc = CURRENT_REPORT_CARD;
+    if(!rc) return;
+    const aluno = STUDENTS.find(s => s.id === rc.aluno_id);
+    if(!confirm('Excluir definitivamente este Report Card' + (aluno ? ' de ' + (aluno.full_name || aluno.email) : '') + '?\n\nO Registro de Classe que o originou não é afetado — dá pra gerar de novo depois.')) return;
+    const { error } = await dyseExcluirReportCard(rc.id);
+    if(error){ flashMsg('rcModalMsg', 'Não foi possível excluir: ' + error.message, false); return; }
+    closeReportCardModal();
+    if(CURRENT_ALUNO_HISTORICO_ID) await renderAlunoReportCardsList(CURRENT_ALUNO_HISTORICO_ID);
   }
 
   function coletarDadosReportCardDoFormulario(){
