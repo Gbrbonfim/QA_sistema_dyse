@@ -90,8 +90,8 @@ select:focus, input:focus{outline:none; border-color:var(--amaranth);}
 .pub-pill.on{background:#eaf7ee; color:var(--ok);}
 .pub-pill.off{background:#fbeceb; color:var(--bad);}
 
-.cal-layout{display:grid; grid-template-columns:280px 1fr; gap:24px; align-items:start;}
-@media (max-width:1100px){ .cal-layout{grid-template-columns:1fr;} }
+.cal-layout{display:grid; grid-template-columns:230px 1fr; gap:20px; align-items:start;}
+@media (max-width:1000px){ .cal-layout{grid-template-columns:1fr;} }
 
 .side-card{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:20px; margin-bottom:20px;}
 .side-card h3{margin:0 0 14px; font-size:1rem; color:var(--seal);}
@@ -103,19 +103,20 @@ select:focus, input:focus{outline:none; border-color:var(--amaranth);}
 .info-row input{width:100%;}
 .info-note{font-size:.76rem; color:var(--seal-soft); opacity:.8; margin-top:6px;}
 
-.months-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:18px;}
-@media (max-width:1400px){ .months-grid{grid-template-columns:repeat(2, 1fr);} }
-@media (max-width:720px){ .months-grid{grid-template-columns:1fr;} }
+.months-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:12px;}
+@media (max-width:1500px){ .months-grid{grid-template-columns:repeat(3, 1fr);} }
+@media (max-width:1000px){ .months-grid{grid-template-columns:repeat(2, 1fr);} }
+@media (max-width:560px){ .months-grid{grid-template-columns:1fr;} }
 
-.month{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:14px 14px 12px;}
-.month h4{margin:0 0 8px; text-align:center; font-size:.9rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--amaranth);}
-.dow{display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:3px;}
-.dow span{text-align:center; font-size:.66rem; font-weight:700; color:var(--seal-soft); opacity:.7;}
-.days{display:grid; grid-template-columns:repeat(7,1fr); gap:3px;}
+.month{background:#fff; border-radius:var(--radius-sm); box-shadow:var(--shadow-card); padding:10px 10px 8px;}
+.month h4{margin:0 0 6px; text-align:center; font-size:.78rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--amaranth);}
+.dow{display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:2px;}
+.dow span{text-align:center; font-size:.58rem; font-weight:700; color:var(--seal-soft); opacity:.7;}
+.days{display:grid; grid-template-columns:repeat(7,1fr); gap:2px;}
 .cal-day{
   aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative;
-  border:none; background:transparent; font-family:var(--font-body); font-size:.78rem; font-weight:600;
-  color:var(--seal); border-radius:7px; padding:0;
+  border:none; background:transparent; font-family:var(--font-body); font-size:.68rem; font-weight:600;
+  color:var(--seal); border-radius:5px; padding:0;
 }
 .cal-day.empty{visibility:hidden;}
 button.cal-day{cursor:pointer;}
@@ -126,10 +127,10 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px;}
 .cal-day.tipo-reposicao{background:var(--tipo-reposicao);}
 .cal-day.tipo-retorno_conversacao{background:var(--tipo-retorno_conversacao); color:var(--seal);}
 .cal-day.tipo-inicio_semestre{background:var(--tipo-inicio_semestre);}
-.cal-day.today::after{content:""; position:absolute; inset:2px; border:2px dashed var(--amaranth); border-radius:6px;}
-.cal-day.marked.has-note::before{content:"•"; position:absolute; top:0; right:3px; font-size:.7rem; line-height:1;}
+.cal-day.today::after{content:""; position:absolute; inset:2px; border:2px dashed var(--amaranth); border-radius:5px;}
+.cal-day.marked.has-note::before{content:"•"; position:absolute; top:-1px; right:2px; font-size:.6rem; line-height:1;}
 
-.month-notes{margin-top:8px; border-top:1px solid #f0e3d2; padding-top:6px; font-size:.72rem; color:var(--seal-soft); line-height:1.45;}
+.month-notes{margin-top:6px; border-top:1px solid #f0e3d2; padding-top:5px; font-size:.64rem; color:var(--seal-soft); line-height:1.4;}
 .month-notes div{margin-bottom:1px;}
 
 .locked-box, .empty-box{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:40px 28px; text-align:center; color:var(--seal-soft);}
