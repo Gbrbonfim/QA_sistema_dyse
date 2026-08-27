@@ -2320,7 +2320,8 @@ body.dyse-modal-open{overflow:hidden;}
   /* ---------- Importação de alunos via CSV ---------- */
   /* Parser simples de uma linha CSV, com suporte a campos entre aspas
      (pra caber vírgula dentro de algum valor, ex: observação). */
-  function parseCsvLine(line){
+  function parseCsvLine(line, sep){
+    sep = sep || ',';
     const result = [];
     let cur = '', inQuotes = false;
     for(let i = 0; i < line.length; i++){
@@ -2332,7 +2333,7 @@ body.dyse-modal-open{overflow:hidden;}
         } else cur += c;
       } else {
         if(c === '"') inQuotes = true;
-        else if(c === ','){ result.push(cur); cur = ''; }
+        else if(c === sep){ result.push(cur); cur = ''; }
         else cur += c;
       }
     }
@@ -2341,11 +2342,15 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   function parseCSV(text){
-    const lines = text.split(/\r?\n/).filter(l => l.trim().length);
-    if(!lines.length) return [];
-    const headers = parseCsvLine(lines[0]).map(h => h.trim().toLowerCase());
+    if(text.charCodeAt(0) === 0xFEFF) text = text.slice(1); // tira BOM do Excel
+    // Aceita quebra de linha Windows (\r\n), Unix (\n) e Mac antigo (\r sozinho).
+    const lines = text.split(/\r\n|\r|\n/).filter(l => l.trim().length);
+    if(lines.length < 2) return [];
+    // Excel em locale pt-BR salva CSV com ";" — detecta pelo cabeçalho.
+    const sep = (lines[0].indexOf(';') !== -1 && lines[0].indexOf(',') === -1) ? ';' : ',';
+    const headers = parseCsvLine(lines[0], sep).map(h => h.trim().toLowerCase());
     return lines.slice(1).map(line => {
-      const cols = parseCsvLine(line);
+      const cols = parseCsvLine(line, sep);
       const row = {};
       headers.forEach((h, i) => { row[h] = (cols[i] || '').trim(); });
       return row;
