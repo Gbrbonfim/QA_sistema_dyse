@@ -1115,7 +1115,7 @@ body.dyse-modal-open{overflow:hidden;}
         </label>
         <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
           <input type="radio" name="csvModo" value="atualizar" onchange="onCsvModoChange()" style="width:auto;">
-          Atualizar alunos existentes (só preenche campos vazios)
+          Atualizar alunos existentes (preenche e sobrescreve, com registro)
         </label>
       </div>
       <p class="gestao-hint" id="csvModoHint" style="margin-top:0;"></p>
@@ -1261,7 +1261,7 @@ body.dyse-modal-open{overflow:hidden;}
             '<code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido) · ' +
             '<code>contrato_inicio</code> / <code>contrato_fim</code>: AAAA-MM-DD, datas do contrato do aluno (opcionais — alimentam o filtro/badge de "Contrato vencendo/vencido").<br><br>' +
             'Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.<br><br>' +
-            'O modal tem dois modos: <b>Cadastrar novos</b> (cria conta pra cada linha) e <b>Atualizar existentes</b> (casa pelo e-mail e só preenche campo que está vazio — valor_mensal zerado, contrato/parcelas em branco —, nunca sobrescreve). O mesmo arquivo serve pros dois.' +
+            'O modal tem dois modos: <b>Cadastrar novos</b> (cria conta pra cada linha) e <b>Atualizar existentes</b> (casa pelo e-mail, ou pelo nome exato se a linha não tiver e-mail; preenche campo vazio e sobrescreve campo já preenchido com o valor novo, registrando a troca no "Histórico de observações" do aluno). Só as colunas presentes no arquivo são tocadas.' +
           '</span>' +
         '</span>' +
       '</div>'
@@ -2252,7 +2252,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('btnImportarCSV').textContent = (modo === 'criar') ? 'Importar CSV' : 'Atualizar do CSV';
     document.getElementById('csvModoHint').textContent = (modo === 'criar')
       ? 'Cria uma conta nova pra cada linha. Aluno cujo e-mail já existe dá erro e não é tocado.'
-      : 'Casa cada linha pelo e-mail com um aluno já cadastrado. Só grava onde o campo está vazio (valor_mensal zerado, contrato/parcelas em branco) — nunca sobrescreve valor que já existe. Aluno sem vínculo financeiro ganha um vínculo se a linha tiver ao menos "modalidade".';
+      : 'Casa cada linha com um aluno já cadastrado pelo e-mail (ou, se a linha não tiver e-mail, pelo nome exato — nome repetido pede e-mail pra desambiguar). Campo vazio no sistema recebe o valor da planilha; campo que já tinha valor é atualizado pelo valor novo e a troca fica registrada no "Histórico de observações" do aluno. Só entram as colunas presentes na planilha. Aluno sem vínculo financeiro ganha um se a linha tiver ao menos "modalidade".';
   }
 
   function closeCsvImportModal(){
@@ -2409,10 +2409,36 @@ body.dyse-modal-open{overflow:hidden;}
     return n == null ? null : Math.trunc(n);
   }
 
+  /* Normaliza nome pra casar linha do CSV com aluno: sem acento, sem
+     espaço duplo, minúsculo. */
+  function csvNormalizaNome(s){
+    return (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  /* Acha o aluno de uma linha do CSV (modo atualizar): pelo e-mail se houver,
+     senão pelo nome exato (após normalizar). Nome ambíguo => erro pedindo
+     e-mail. Devolve { aluno } ou { erro }. */
+  function csvAcharAluno(linha){
+    const email = (linha['email'] || '').trim().toLowerCase();
+    if(email){
+      const s = STUDENTS.find(x => (x.email||'').toLowerCase() === email);
+      return s ? { aluno: s } : { erro: 'nenhum aluno com o e-mail ' + email };
+    }
+    const nomeBruto = (linha['nome'] || '').trim();
+    const nome = csvNormalizaNome(nomeBruto);
+    if(!nome) return { erro: 'linha sem e-mail e sem nome' };
+    const matches = STUDENTS.filter(x => csvNormalizaNome(x.full_name) === nome);
+    if(!matches.length) return { erro: 'nenhum aluno com o nome "' + nomeBruto + '"' };
+    if(matches.length > 1) return { erro: matches.length + ' alunos com o nome "' + nomeBruto + '" — ponha o e-mail nessa linha pra desambiguar' };
+    return { aluno: matches[0] };
+  }
+
   /* Monta os campos do vínculo financeiro a partir de uma linha do CSV, pra
      modo "criar" (sem base) ou "atualizar" (base = período aberto atual;
-     só sobrescreve campo que estiver vazio na base). Devolve
-     { campos, preenchidos, erro } — preenchidos lista o que veio do CSV. */
+     no modo atualizar, campo vazio na base recebe o valor do CSV, e campo
+     já preenchido é sobrescrito pelo valor novo do CSV — a diferença fica
+     em "alterados" pra virar observação). Devolve
+     { campos, preenchidos, alterados, erro }. */
   function csvMontaFinanceiro(linha, base){
     const modalidadeSlug = (linha['modalidade'] || '').toLowerCase();
     const professorEmail = (linha['professor_email'] || '').toLowerCase();
@@ -2424,38 +2450,48 @@ body.dyse-modal-open{overflow:hidden;}
     const csvCtrFim    = linha['contrato_fim'] || null;
     const csvDataIni   = linha['data_inicio'] || null;
 
-    const preenchidos = [];
-    const vazio = (x) => x == null || x === '' || Number(x) === 0;
-    // Só usado no modo atualizar: pega o valor do CSV apenas se a base estiver
-    // vazia naquele campo; senão mantém o que já existe.
-    const pick = (nome, csvVal, baseVal, baseVazio) => {
-      const temCsv = csvVal != null && csvVal !== '';
-      if(temCsv && baseVazio){ preenchidos.push(nome); return csvVal; }
-      return baseVal;
-    };
+    const preenchidos = [], alterados = [];
 
     if(base){
       // Modo atualizar: mantém modalidade/professor/situação/data do período
-      // aberto (mexer nisso abriria um período novo — não é "preencher vazio").
+      // aberto (mexer nisso abriria um período novo). Nos campos de valor/
+      // contrato/parcelas, o CSV manda: preenche o que falta e troca o que
+      // veio diferente (registrando a troca em "alterados").
+      const aplicaNum = (nome, csvVal, baseVal) => {
+        if(csvVal == null) return baseVal;
+        const b = (baseVal == null || baseVal === '') ? null : Number(baseVal);
+        if(b != null && b === csvVal) return baseVal;
+        if(b == null || b === 0) preenchidos.push(nome);
+        else alterados.push(nome + ' ' + b + '→' + csvVal);
+        return csvVal;
+      };
+      const aplicaData = (nome, csvVal, baseVal) => {
+        if(!csvVal) return baseVal;
+        const b = baseVal || null;
+        if(b === csvVal) return baseVal;
+        if(!b) preenchidos.push(nome);
+        else alterados.push(nome + ' ' + b + '→' + csvVal);
+        return csvVal;
+      };
       const campos = {
         modalidade_id: base.modalidade_id,
         professor_id: base.professor_id,
         situacao: base.situacao,
         data_inicio: base.data_inicio,
         observacao: base.observacao,
-        valor_mensal_aluno: pick('valor_mensal', csvValMensal, base.valor_mensal_aluno, vazio(base.valor_mensal_aluno)),
-        valor_professor_customizado: pick('valor_professor', csvValProf, base.valor_professor_customizado, base.valor_professor_customizado == null),
-        quantidade_parcelas: pick('parcelas', csvParcelas, base.quantidade_parcelas, base.quantidade_parcelas == null),
-        contrato_inicio: pick('contrato_inicio', csvCtrIni, base.contrato_inicio, !base.contrato_inicio),
-        contrato_fim: pick('contrato_fim', csvCtrFim, base.contrato_fim, !base.contrato_fim)
+        valor_mensal_aluno: aplicaNum('valor_mensal', csvValMensal, base.valor_mensal_aluno),
+        valor_professor_customizado: aplicaNum('valor_professor', csvValProf, base.valor_professor_customizado),
+        quantidade_parcelas: aplicaNum('parcelas', csvParcelas, base.quantidade_parcelas),
+        contrato_inicio: aplicaData('contrato_inicio', csvCtrIni, base.contrato_inicio),
+        contrato_fim: aplicaData('contrato_fim', csvCtrFim, base.contrato_fim)
       };
-      return { campos, preenchidos, erro: null };
+      return { campos, preenchidos, alterados, erro: null };
     }
 
     // Modo criar (ou "atualizar" mas aluno ainda sem vínculo): precisa de modalidade.
-    if(!modalidadeSlug) return { campos: null, preenchidos, erro: 'sem-modalidade' };
+    if(!modalidadeSlug) return { campos: null, preenchidos, alterados, erro: 'sem-modalidade' };
     const modalidade = MODALIDADES.find(m => m.slug === modalidadeSlug);
-    if(!modalidade) return { campos: null, preenchidos, erro: 'modalidade "' + linha['modalidade'] + '" não encontrada' };
+    if(!modalidade) return { campos: null, preenchidos, alterados, erro: 'modalidade "' + linha['modalidade'] + '" não encontrada' };
     const campos = {
       modalidade_id: modalidade.id,
       professor_id: professor ? professor.id : null,
@@ -2468,7 +2504,7 @@ body.dyse-modal-open{overflow:hidden;}
       contrato_fim: csvCtrFim,
       observacao: 'Importado via CSV'
     };
-    return { campos, preenchidos, erro: null };
+    return { campos, preenchidos, alterados, erro: null };
   }
 
   /* Processa uma linha por vez (não em paralelo) — se for disparar e-mail
@@ -2503,22 +2539,23 @@ body.dyse-modal-open{overflow:hidden;}
       const rowId = 'csv-row-' + i;
       resultsEl.insertAdjacentHTML('beforeend', '<div class="report-line" id="' + rowId + '">⏳ ' + escapeHtmlLocal(nome || email || '(sem nome)') + ' — processando...</div>');
 
-      if(!email || (modo === 'criar' && !nome)){
-        csvResultLine(rowId, '❌ Linha ' + (i+2) + ': ' + (modo === 'criar' ? 'nome e e-mail são obrigatórios.' : 'e-mail é obrigatório.'));
+      const faltaCampo = (modo === 'criar') ? (!email || !nome) : (!email && !nome);
+      if(faltaCampo){
+        csvResultLine(rowId, '❌ Linha ' + (i+2) + ': ' + (modo === 'criar' ? 'nome e e-mail são obrigatórios.' : 'informe e-mail ou nome.'));
         continue;
       }
 
       try{
         if(modo === 'atualizar'){
-          const aluno = STUDENTS.find(s => (s.email||'').toLowerCase() === email.toLowerCase());
+          const { aluno, erro: erroBusca } = csvAcharAluno(linha);
           if(!aluno){
-            csvResultLine(rowId, '❌ ' + escapeHtmlLocal(email) + ' — nenhum aluno com esse e-mail (use o modo "Cadastrar alunos novos").');
+            csvResultLine(rowId, '❌ ' + escapeHtmlLocal(nome || email) + ' — ' + escapeHtmlLocal(erroBusca) + ' (ou use o modo "Cadastrar alunos novos").');
             continue;
           }
-          const rotulo = escapeHtmlLocal(aluno.full_name || email);
+          const rotulo = escapeHtmlLocal(aluno.full_name || aluno.email || nome);
           const hist = await dyseListAlunoFinanceiroHistorico(aluno.id);
           const aberto = dyseFindPeriodoAberto(hist);
-          const { campos, preenchidos, erro } = csvMontaFinanceiro(linha, aberto);
+          const { campos, preenchidos, alterados, erro } = csvMontaFinanceiro(linha, aberto);
           if(!aberto && erro === 'sem-modalidade'){
             csvResultLine(rowId, '⚠️ ' + rotulo + ' — sem vínculo financeiro e a linha não tem "modalidade"; nada foi criado.');
             continue;
@@ -2527,15 +2564,25 @@ body.dyse-modal-open{overflow:hidden;}
             csvResultLine(rowId, '❌ ' + rotulo + ' — ' + escapeHtmlLocal(erro));
             continue;
           }
-          if(aberto && !preenchidos.length){
-            csvResultLine(rowId, '✅ ' + rotulo + ' — nada a preencher (todos os campos da linha já tinham valor).');
+          if(aberto && !preenchidos.length && !alterados.length){
+            csvResultLine(rowId, '✅ ' + rotulo + ' — nada a mudar (a planilha não trouxe nada diferente do que já está no sistema).');
             continue;
           }
           const { error: finError } = await dyseSetAlunoFinanceiro(aluno.id, campos);
           if(finError){
             csvResultLine(rowId, '❌ ' + rotulo + ' — financeiro: ' + escapeHtmlLocal(finError.message));
-          } else if(aberto){
-            csvResultLine(rowId, '✅ ' + rotulo + ' — preenchido: ' + preenchidos.join(', '));
+            continue;
+          }
+          // Sobrescrita de valor que já existia => registra a troca no
+          // "Histórico de observações" do aluno.
+          if(aberto && alterados.length){
+            await dyseLogAlunoFinanceiroObservacao(aluno.id, aberto.id, 'Atualização via CSV — ' + alterados.join('; '), null, session ? session.user.id : null);
+          }
+          const partes = [];
+          if(preenchidos.length) partes.push('preenchido: ' + preenchidos.join(', '));
+          if(alterados.length) partes.push('alterado: ' + alterados.join('; '));
+          if(aberto){
+            csvResultLine(rowId, '✅ ' + rotulo + ' — ' + partes.join(' · '));
           } else {
             csvResultLine(rowId, '✅ ' + rotulo + ' — vínculo financeiro criado' + (preenchidos.length ? ' (' + preenchidos.join(', ') + ')' : ''));
           }
