@@ -22,17 +22,16 @@
   --tipo-reposicao:#D03B55;
   --tipo-retorno_conversacao:#FCABAF;
   --tipo-inicio_semestre:#3A1D10;
+
+  /* tons mais escuros pra usar como cor de TEXTO do número do dia (legível no branco) */
+  --ink-recesso:#D94E12;
+  --ink-feriado:#C07E12;
+  --ink-reposicao:#C42E48;
+  --ink-retorno_conversacao:#D2637D;
 }
 *{box-sizing:border-box;}
 html, body{max-width:100%; overflow-x:hidden;}
-body{margin:0; font-family:var(--font-body); background:var(--antique); color:var(--seal); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-wrap:break-word;}
-body::before{
-  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background:
-    radial-gradient(circle at 8% 10%, rgba(240,162,36,0.10) 0, transparent 45%),
-    radial-gradient(circle at 92% 18%, rgba(208,59,85,0.10) 0, transparent 40%),
-    radial-gradient(circle at 50% 95%, rgba(235,100,36,0.08) 0, transparent 45%);
-}
+body{margin:0; font-family:var(--font-body); background:#fff; color:var(--seal); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-wrap:break-word;}
 html:not(.dyse-auth-ready) body{visibility:hidden;}
 
 .app-shell{display:flex; align-items:stretch; height:100vh; overflow:hidden; position:relative; z-index:1;}
@@ -58,7 +57,7 @@ html:not(.dyse-auth-ready) body{visibility:hidden;}
 .sidebar-logout:hover{opacity:1; text-decoration:underline;}
 .sidebar-logout svg{width:16px; height:16px;}
 
-.main-area{flex:1 1 auto; min-width:0; height:100%; overflow-y:auto; display:flex; flex-direction:column; background:#FFFBF5;}
+.main-area{flex:1 1 auto; min-width:0; height:100%; overflow-y:auto; display:flex; flex-direction:column; background:#fff;}
 .topbar{display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; background:#fff; padding:20px 32px; border-bottom:1px solid #f0e3d2;}
 .topbar-greeting h1{font-size:1.4rem; font-weight:800; color:var(--seal); margin:0 0 2px;}
 .topbar-greeting p{font-size:.85rem; color:var(--seal-soft); margin:0;}
@@ -108,29 +107,31 @@ select:focus, input:focus{outline:none; border-color:var(--amaranth);}
 @media (max-width:1000px){ .months-grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
 @media (max-width:560px){ .months-grid{grid-template-columns:1fr;} }
 
+.cal-panel{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:22px 20px;}
 .month{background:transparent; max-width:210px; width:100%; margin-inline:auto;}
 .month h4{margin:0 0 6px; text-align:center; font-size:.7rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--seal);}
 .dow{display:grid; grid-template-columns:repeat(7,1fr);}
 .dow span{text-align:center; font-size:.54rem; font-weight:700; color:var(--amaranth); padding:2px 0;}
-.dow span:first-child, .dow span:last-child{background:#fdf1f3;}
-.days{display:grid; grid-template-columns:repeat(7,1fr); border:1px solid #f2e6da;}
+.dow span:first-child, .dow span:last-child{background:#fdf2f4;}
+.days{display:grid; grid-template-columns:repeat(7,1fr);}
 .cal-day{
   aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative;
-  border:none; background:transparent; font-family:var(--font-body); font-size:.62rem; font-weight:500;
+  border:none; background:transparent; font-family:var(--font-body); font-size:.64rem; font-weight:500;
   color:var(--seal); border-radius:0; padding:0;
 }
-.days > .cal-day:not(.empty):nth-child(7n+1), .days > .cal-day:not(.empty):nth-child(7n){background:#fdf1f3;}
+.days > .cal-day:not(.empty):nth-child(7n+1), .days > .cal-day:not(.empty):nth-child(7n){background:#fdf2f4;}
 .cal-day.empty{visibility:hidden;}
 button.cal-day{cursor:pointer;}
 button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-index:1;}
-.cal-day.marked{color:#fff; font-weight:700;}
-.cal-day.tipo-recesso{background:var(--tipo-recesso);}
-.cal-day.tipo-feriado{background:var(--tipo-feriado);}
-.cal-day.tipo-reposicao{background:var(--tipo-reposicao);}
-.cal-day.tipo-retorno_conversacao{background:var(--tipo-retorno_conversacao); color:var(--seal);}
-.cal-day.tipo-inicio_semestre{background:var(--tipo-inicio_semestre);}
+/* dias marcados = número colorido em negrito (estilo do calendário impresso) */
+.cal-day.tipo-recesso{color:var(--ink-recesso); font-weight:800;}
+.cal-day.tipo-feriado{color:var(--ink-feriado); font-weight:800;}
+.cal-day.tipo-reposicao{color:var(--ink-reposicao); font-weight:800;}
+.cal-day.tipo-retorno_conversacao{color:var(--ink-retorno_conversacao); font-weight:800;}
+/* início de semestre = quadradinho escuro preenchido */
+.cal-day.tipo-inicio_semestre{background:var(--tipo-inicio_semestre); color:#fff; font-weight:800; border-radius:4px;}
 .cal-day.today{outline:1.5px dashed var(--amaranth); outline-offset:-2px;}
-.cal-day.marked.has-note::before{content:"•"; position:absolute; top:-2px; right:1px; font-size:.55rem; line-height:1;}
+.cal-day.has-note::after{content:"*"; position:absolute; top:0; right:2px; font-size:.6rem; line-height:1;}
 
 .month-notes{margin-top:6px; font-size:.58rem; color:var(--seal-soft); line-height:1.45;}
 .month-notes div{margin-bottom:1px;}
@@ -175,9 +176,9 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
   .sidebar, .topbar, .cal-toolbar, .day-pop, .pop-backdrop, .info-note, .no-print{display:none !important;}
   .app-shell, .main-area, .content{display:block; height:auto; overflow:visible; padding:0;}
   .cal-layout{display:block;}
-  .months-grid{grid-template-columns:repeat(4,1fr); gap:8px;}
-  .month, .side-card{box-shadow:none; border:1px solid #ddd;}
-  .side-card{page-break-inside:avoid;}
+  .months-grid{grid-template-columns:repeat(4,1fr); gap:14px;}
+  .cal-panel{box-shadow:none; padding:0;}
+  .side-card{box-shadow:none; border:1px solid #ddd; page-break-inside:avoid;}
   .page-title{font-size:1.6rem;}
 }
 </style>
@@ -402,7 +403,7 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
     body.innerHTML =
       '<div class="cal-layout">' +
         '<div>' + legendHtml() + infoHtml() + '</div>' +
-        '<div class="months-grid">' + MESES.map((_, m) => monthHtml(m)).join('') + '</div>' +
+        '<div class="cal-panel"><div class="months-grid">' + MESES.map((_, m) => monthHtml(m)).join('') + '</div></div>' +
       '</div>';
   }
 
