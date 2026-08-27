@@ -1244,10 +1244,11 @@ body.dyse-modal-open{overflow:hidden;}
         '<span class="info-tip" tabindex="0" aria-label="Como montar o CSV de importação">ⓘ' +
           '<span class="info-tip-bubble">' +
             'Primeira linha = cabeçalho, com estas colunas (nesta ordem ou por nome — só <code>nome</code> e <code>email</code> são obrigatórios):<br>' +
-            '<code>nome,email,modalidade,professor_email,valor_mensal,valor_professor,data_inicio,parcelas</code><br><br>' +
+            '<code>nome,email,modalidade,professor_email,valor_mensal,valor_professor,data_inicio,parcelas,contrato_inicio,contrato_fim</code><br><br>' +
             '<code>modalidade</code>: slug (vip / grupo / dupla / intensivo) · <code>professor_email</code>: precisa bater com o e-mail de um professor já cadastrado · ' +
             '<code>valor_professor</code>: só usado se a modalidade for personalizada (Intensivo) · <code>data_inicio</code>: AAAA-MM-DD (padrão: hoje) · ' +
-            '<code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido).<br><br>' +
+            '<code>parcelas</code>: quantos meses o professor recebe por esse aluno (em branco = sem prazo definido) · ' +
+            '<code>contrato_inicio</code> / <code>contrato_fim</code>: AAAA-MM-DD, datas do contrato do aluno (opcionais — alimentam o filtro/badge de "Contrato vencendo/vencido").<br><br>' +
             'Se modalidade/professor/valor não forem preenchidos, o aluno é só cadastrado — dá pra vincular o financeiro depois, um a um.' +
           '</span>' +
         '</span>' +
@@ -2422,6 +2423,8 @@ body.dyse-modal-open{overflow:hidden;}
               situacao: 'ativo',
               data_inicio: linha['data_inicio'] || dyseHoje(),
               quantidade_parcelas: linha['parcelas'] ? parseInt(linha['parcelas'], 10) : null,
+              contrato_inicio: linha['contrato_inicio'] || null,
+              contrato_fim: linha['contrato_fim'] || null,
               observacao: 'Importado via CSV'
             });
             extra = finError ? (' — financeiro: erro (' + finError.message + ')') : ' — financeiro vinculado';
