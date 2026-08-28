@@ -1948,7 +1948,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<div class="report-section-head">C · Análise de desenvolvimento (IA — revise e edite)</div>' +
         '<p class="report-line" style="opacity:.75;">Gerado por IA a partir dos registros de classe do aluno cruzados com o plano de cada aula. Cobertura: ' +
           (ia.cobertura ? ia.cobertura.aulas_com_registro + ' de ' + ia.cobertura.aulas_periodo + ' aulas (' + ia.cobertura.percentual + '%)' : '—') + '.</p>' +
-        pfCampo('Resumo geral', '<textarea id="iaResumoGeral" style="' + iaTextareaStyle + '">' + escapeHtmlLocal(ia.resumo_geral || '') + '</textarea>') +
+        pfCampo('Resumo (a carta que o aluno lê)', '<textarea id="iaResumoGeral" style="' + iaTextareaStyle + ' min-height:150px;">' + escapeHtmlLocal(ia.resumo_geral || '') + '</textarea>') +
         (ia.por_eixo || []).map((e, i) =>
           pfCampo(escapeHtmlLocal(e.eixo), '<textarea data-ia-eixo="' + i + '" style="' + iaTextareaStyle + '">' + escapeHtmlLocal(e.texto || '') + '</textarea>')
         ).join('') +

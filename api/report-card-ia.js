@@ -19,6 +19,18 @@ const SUPABASE_URL = "https://vnpjsjrqghttsagbssxx.supabase.co";
 const MODEL = process.env.REPORT_CARD_IA_MODEL || 'claude-sonnet-5';
 const AVAL_LABEL = { sim: 'foi bem', parcial: 'precisou de apoio', nao: 'teve dificuldade', nao_participou: 'não participou dessa parte' };
 
+// Rede de segurança: a escola não quer travessão/hífen como pontuação no
+// texto do aluno. Troca por vírgula e limpa a pontuação resultante.
+function semTraco(s){
+  return String(s == null ? '' : s)
+    .replace(/\s*[—–]\s*/g, ', ')
+    .replace(/(\S) - (\S)/g, '$1, $2')
+    .replace(/\s+,/g, ',')
+    .replace(/,\s*,+/g, ',')
+    .replace(/,\s*([.!?])/g, '$1')
+    .trim();
+}
+
 async function run(req, res){
   if(req.method !== 'POST'){ res.status(405).json({ error: 'Método não permitido.' }); return; }
 
@@ -111,27 +123,35 @@ async function run(req, res){
   const coberturaPct = aulas.length ? Math.round((comRegistro / aulas.length) * 1000) / 10 : 0;
   const listaEixos = eixos.length ? eixos.join(', ') : 'Reading, Writing, Speaking, Listening, Gramática';
 
-  const primeiroNome = String(nomeAluno).trim().split(/\s+/)[0] || 'você';
+  const primeiroNome = String(nomeAluno).trim().split(/\s+/)[0] || '';
   const system =
-    'Você é um(a) professor(a) da DYSE, escola de inglês, escrevendo o texto do Report Card de fim de semestre que o ALUNO e a família vão ler. Escreva em português do Brasil.\n\n' +
-    'VOZ: fale DIRETAMENTE com o aluno, em segunda pessoa ("você"), pelo primeiro nome (' + primeiroNome + '). Tom caloroso, próximo e encorajador, como um professor que acompanhou de perto e torce por ele — não um relatório técnico.\n\n' +
-    'REGRAS:\n' +
-    '- Comece sempre reconhecendo algo concreto e verdadeiro que o aluno fez bem.\n' +
-    '- Fale das dificuldades com acolhimento: enquadre como "o que a gente vai trabalhar / reforçar no próximo semestre", nunca como falha, nota baixa ou veredito. Mostre que faz parte do processo e que já dá pra ver esforço.\n' +
-    '- NÃO use números, porcentagens, contagem de aulas ou de eixos, nem termos técnicos de avaliação ("parcial", "PP/P/R", "cobertura", "amostras", "eixo"). Os dados abaixo são só pra você saber O QUE dizer — não os cite.\n' +
-    '- Seja honesto e específico: não esconda os pontos a melhorar e não invente qualidades sem base nos dados. Baseie tudo no que o professor registrou e no que as aulas trabalharam.\n' +
-    '- Frases claras e diretas, sem jargão pedagógico. Pode citar naturalmente conteúdos concretos ("o som do TH", "o verbo to be", "se apresentar") quando ajudar o aluno a entender.\n\n' +
-    'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código):\n' +
-    '{"resumo_geral": "3-5 frases falando com o aluno sobre como foi o semestre dele — o que foi bem primeiro, depois o que vão reforçar, sempre motivando", ' +
-    '"por_eixo": [{"eixo": "<nome exato do eixo>", "texto": "2-3 frases dirigidas ao aluno sobre essa habilidade — o que ele já faz bem e/ou o próximo passo, de forma encorajadora"}], ' +
-    '"pontos_fortes": "1-3 frases celebrando de forma específica o que o aluno mais mandou bem", ' +
-    '"pontos_desenvolvimento": "1-3 frases acolhedoras sobre o que vão trabalhar juntos no próximo semestre", ' +
-    '"recomendacoes": "1-2 frases de incentivo prático pro aluno pro próximo semestre"}\n' +
-    'O array "por_eixo" deve ter exatamente um item para cada um destes eixos, nesta ordem: ' + listaEixos + '.';
+    'Você escreve, em nome da DYSE (escola de inglês), o texto do Report Card de fim de semestre que o ALUNO e a família vão ler. Português do Brasil.\n\n' +
+    '# REGRA OBRIGATÓRIA: FALE DIRETAMENTE COM O ALUNO\n' +
+    'Todo o texto, do início ao fim, é escrito DIRETAMENTE PARA O ALUNO, em segunda pessoa ("você"). O aluno deve sentir que a DYSE está conversando com ele, não que está lendo uma ficha escrita sobre ele.\n' +
+    'Use "nós" pela escola: "Percebemos que você...", "Notamos uma evolução...", "Durante nossas aulas, você...", "Vamos continuar trabalhando...", "Nosso próximo objetivo será...", "Queremos ajudar você a...", "Estamos felizes em acompanhar a sua evolução".\n' +
+    'NUNCA escreva sobre o aluno em terceira pessoa. Proibido: "' + (primeiroNome || 'O aluno') + ' apresentou...", "a aluna demonstra...", "o aluno conseguiu...", "ele ainda precisa...". Se qualquer trecho falar SOBRE o aluno, reescreva para falar COM o aluno.\n' +
+    (primeiroNome ? 'Pode chamar pelo primeiro nome (' + primeiroNome + ') no começo, com carinho.\n' : '') +
+    '\n# TOM\n' +
+    'Caloroso, de parceria e acompanhamento. Comece sempre reconhecendo algo concreto e verdadeiro que você viu de bom. Fale das dificuldades com acolhimento, sempre como "o que vamos desenvolver juntos no próximo semestre", nunca como falha, nota baixa ou veredito. Pode encerrar com uma frase de incentivo e o emoji 💙.\n\n' +
+    '# PROIBIÇÕES\n' +
+    '- NÃO use travessão nem hífen como pontuação (—, –, -). Ligue as ideias com vírgula, ponto e conectivos ("e", "mas", "porque", "por isso").\n' +
+    '- NÃO use números, porcentagens, contagem de aulas ou de habilidades, nem termos técnicos de avaliação ("parcial", "PP", "P", "R", "cobertura", "amostras", "eixo", "critério"). Os dados abaixo são só pra você saber O QUE dizer, não para citar.\n' +
+    '- NÃO invente qualidades, episódios ou notas que não estejam nos dados. Seja honesto e específico, sem esconder o que precisa melhorar.\n' +
+    '- Pode citar conteúdos concretos de forma natural ("o som do TH", "o verbo to be", "se apresentar em inglês") quando ajudar o aluno a entender.\n\n' +
+    '# FORMATO DA RESPOSTA\n' +
+    'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código). Todos os campos falam COM o aluno, em "você", sem travessão/hífen:\n' +
+    '{"resumo_geral": "2 a 4 parágrafos curtos, como uma carta da escola pra você: primeiro o que foi bem neste semestre, depois com acolhimento o que vamos desenvolver juntos, fechando com incentivo pro próximo semestre (pode usar 💙)", ' +
+    '"por_eixo": [{"eixo": "<nome exato da habilidade>", "texto": "2 a 3 frases dirigidas a você sobre essa habilidade: o que você já faz bem e/ou qual vai ser o nosso próximo passo, de forma encorajadora"}], ' +
+    '"pontos_fortes": "1 a 3 frases celebrando de forma específica o que você mais mandou bem", ' +
+    '"pontos_desenvolvimento": "1 a 3 frases acolhedoras sobre o que vamos trabalhar juntos no próximo semestre", ' +
+    '"recomendacoes": "1 a 2 frases de incentivo prático pra você no próximo semestre"}\n' +
+    'O array "por_eixo" deve ter exatamente um item para cada uma destas habilidades, nesta ordem: ' + listaEixos + '.\n\n' +
+    '# REVISÃO FINAL\n' +
+    'Antes de responder, releia cada campo e confirme: "Estou conversando diretamente com este aluno, ou falando sobre ele?" e "Tem algum travessão ou hífen?". Corrija o que estiver fora dessas regras.';
 
   const userMsg =
     'Aluno: ' + nomeAluno + ' · ' + nomeNivel + ' · ' + semestre + 'º semestre\n\n' +
-    'DADOS DO PERÍODO (uso interno — não cite números nem termos técnicos):\n' +
+    'DADOS DO PERÍODO (uso interno, não cite números nem termos técnicos):\n' +
     'Registros lançados pelo professor: ' + comRegistro + ' de ' + aulas.length + ' aulas do período.\n\n' +
     'Aula por aula (o que a aula trabalhou + como o aluno foi):\n\n' + aulasTexto;
 
@@ -162,11 +182,11 @@ async function run(req, res){
       gerado_em: new Date().toISOString(),
       modelo: MODEL,
       cobertura: { aulas_com_registro: comRegistro, aulas_periodo: aulas.length, percentual: coberturaPct },
-      resumo_geral: parsed.resumo_geral || '',
-      por_eixo: Array.isArray(parsed.por_eixo) ? parsed.por_eixo : [],
-      pontos_fortes: parsed.pontos_fortes || '',
-      pontos_desenvolvimento: parsed.pontos_desenvolvimento || '',
-      recomendacoes: parsed.recomendacoes || ''
+      resumo_geral: semTraco(parsed.resumo_geral),
+      por_eixo: (Array.isArray(parsed.por_eixo) ? parsed.por_eixo : []).map(e => ({ eixo: e.eixo, texto: semTraco(e.texto) })),
+      pontos_fortes: semTraco(parsed.pontos_fortes),
+      pontos_desenvolvimento: semTraco(parsed.pontos_desenvolvimento),
+      recomendacoes: semTraco(parsed.recomendacoes)
     }
   });
 }

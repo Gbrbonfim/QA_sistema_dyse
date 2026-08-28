@@ -969,11 +969,11 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     let eixosHtml;
     if(ia){
       eixosHtml =
-        (ia.resumo_geral ? '<p style="margin:0 0 12px;">' + escapeHtmlLocal(ia.resumo_geral) + '</p>' : '') +
+        (ia.resumo_geral ? '<p style="margin:0 0 12px; white-space:pre-line;">' + escapeHtmlLocal(ia.resumo_geral) + '</p>' : '') +
         (ia.por_eixo || []).map(e =>
           '<div style="padding:8px 0; border-bottom:1px solid #f0e3d2;">' +
             '<b style="color:var(--seal);">' + escapeHtmlLocal(e.eixo) + '</b>' +
-            '<p style="font-size:.88rem; margin:3px 0 0;">' + escapeHtmlLocal(e.texto || '') + '</p>' +
+            '<p style="font-size:.88rem; margin:3px 0 0; white-space:pre-line;">' + escapeHtmlLocal(e.texto || '') + '</p>' +
           '</div>'
         ).join('');
     } else {

@@ -3678,7 +3678,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<p class="gestao-hint">Gerado por IA a partir dos registros de classe do aluno cruzados com o plano de cada aula. Cobertura: ' +
           (ia.cobertura ? ia.cobertura.aulas_com_registro + ' de ' + ia.cobertura.aulas_periodo + ' aulas do período (' + ia.cobertura.percentual + '%)' : '—') +
           ' · modelo ' + escapeHtmlLocal(ia.modelo || '') + '.</p>' +
-        '<div class="gestao-field"><label>Resumo geral</label><textarea id="iaResumoGeral" style="' + iaTextareaStyle + '">' + escapeHtmlLocal(ia.resumo_geral || '') + '</textarea></div>' +
+        '<div class="gestao-field"><label>Resumo (a carta que o aluno lê)</label><textarea id="iaResumoGeral" style="' + iaTextareaStyle + ' min-height:150px;">' + escapeHtmlLocal(ia.resumo_geral || '') + '</textarea></div>' +
         (ia.por_eixo || []).map((e, i) =>
           '<div class="gestao-field"><label>' + escapeHtmlLocal(e.eixo) + '</label>' +
           '<textarea data-ia-eixo="' + i + '" style="' + iaTextareaStyle + '">' + escapeHtmlLocal(e.texto || '') + '</textarea></div>'
