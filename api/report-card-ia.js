@@ -141,7 +141,7 @@ async function run(req, res){
     '# FORMATO DA RESPOSTA\n' +
     'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código). Todos os campos falam COM o aluno, em "você", sem travessão/hífen:\n' +
     '{"resumo_geral": "2 a 4 parágrafos curtos, como uma carta da escola pra você: primeiro o que foi bem neste semestre, depois com acolhimento o que vamos desenvolver juntos, fechando com incentivo pro próximo semestre (pode usar 💙)", ' +
-    '"por_eixo": [{"eixo": "<nome exato da habilidade>", "texto": "2 a 3 frases dirigidas a você sobre essa habilidade: o que você já faz bem e/ou qual vai ser o nosso próximo passo, de forma encorajadora"}], ' +
+    '"por_eixo": [{"eixo": "<nome exato da habilidade>", "nivel": "forte" quando essa habilidade já é um ponto forte seu no período, ou "desenvolvimento" quando ainda é algo que vamos trabalhar juntos, "texto": "2 a 3 frases dirigidas a você sobre essa habilidade: o que você já faz bem e/ou qual vai ser o nosso próximo passo, de forma encorajadora"}], ' +
     '"pontos_fortes": "1 a 3 frases celebrando de forma específica o que você mais mandou bem", ' +
     '"pontos_desenvolvimento": "1 a 3 frases acolhedoras sobre o que vamos trabalhar juntos no próximo semestre", ' +
     '"recomendacoes": "1 a 2 frases de incentivo prático pra você no próximo semestre"}\n' +
@@ -183,7 +183,7 @@ async function run(req, res){
       modelo: MODEL,
       cobertura: { aulas_com_registro: comRegistro, aulas_periodo: aulas.length, percentual: coberturaPct },
       resumo_geral: semTraco(parsed.resumo_geral),
-      por_eixo: (Array.isArray(parsed.por_eixo) ? parsed.por_eixo : []).map(e => ({ eixo: e.eixo, texto: semTraco(e.texto) })),
+      por_eixo: (Array.isArray(parsed.por_eixo) ? parsed.por_eixo : []).map(e => ({ eixo: e.eixo, nivel: (String(e.nivel || '').toLowerCase() === 'forte' ? 'forte' : 'desenvolvimento'), texto: semTraco(e.texto) })),
       pontos_fortes: semTraco(parsed.pontos_fortes),
       pontos_desenvolvimento: semTraco(parsed.pontos_desenvolvimento),
       recomendacoes: semTraco(parsed.recomendacoes)

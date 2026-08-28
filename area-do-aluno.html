@@ -617,6 +617,120 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   *{transition:none !important;}
 }
 
+/* ============ REPORT CARD DO ALUNO (visão apresentação + PDF) ============ */
+.rc-shell{margin-top:6px;}
+.rc-toolbar{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px;
+}
+.rc-toolbar h3{font-family:var(--font-display); font-size:1.9rem; color:var(--amaranth); margin:0; line-height:1.1;}
+.rc-toolbar h3 .spark{color:var(--gamboge);}
+.rc-toolbar p{font-size:.86rem; color:var(--seal-soft); margin:2px 0 0;}
+.rc-toolbar-right{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.rc-select{
+  border:2px solid #eee0cf; border-radius:999px; padding:9px 16px; font-family:var(--font-body);
+  font-weight:700; font-size:.82rem; color:var(--seal); background:#fff; cursor:pointer; max-width:100%;
+}
+.rc-select:focus{outline:none; border-color:var(--amaranth);}
+.rc-pdf-btn{
+  display:inline-flex; align-items:center; gap:7px; background:var(--amaranth); color:#fff; border:none;
+  border-radius:999px; padding:10px 18px; font-family:var(--font-body); font-weight:700; font-size:.82rem;
+  cursor:pointer; transition:.15s;
+}
+.rc-pdf-btn:hover{background:var(--amaranth-dark);}
+.rc-pdf-btn svg{width:15px; height:15px;}
+
+.rc-doc{
+  display:none; background:#fff; border-radius:var(--radius-lg); box-shadow:var(--shadow-card);
+  padding:clamp(20px,4vw,38px); border-top:8px solid var(--amaranth);
+}
+.rc-doc.is-active{display:block;}
+.rc-doc-title{font-family:var(--font-display); font-size:1.7rem; color:var(--amaranth); margin:0;}
+.rc-doc-title .spark{color:var(--gamboge);}
+.rc-doc-sub{font-size:.85rem; color:var(--seal-soft); margin:2px 0 22px;}
+
+.rc-freq{
+  display:flex; align-items:center; gap:16px; background:var(--antique-soft); border-radius:var(--radius-md);
+  padding:16px 20px; margin-bottom:26px; position:relative; overflow:hidden;
+}
+.rc-freq-icon{
+  flex:none; width:44px; height:44px; border-radius:50%; background:var(--gamboge); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+}
+.rc-freq b{display:block; color:var(--seal); font-size:.98rem;}
+.rc-freq span{font-size:.85rem; color:var(--seal-soft);}
+
+.rc-section{margin-bottom:26px;}
+.rc-h{
+  font-family:var(--font-display); font-size:1.25rem; color:var(--amaranth); margin:0 0 12px;
+  display:flex; align-items:center; gap:8px;
+}
+.rc-h::before{content:""; width:22px; height:3px; border-radius:3px; background:var(--gamboge); flex:none;}
+.rc-prose{font-size:.95rem; color:var(--seal); white-space:pre-line; line-height:1.7;}
+.rc-prose.empty, .rc-plain.empty{color:var(--seal-soft); font-style:italic;}
+
+.rc-skills{display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:14px;}
+.rc-skill{
+  border:1px solid #f0e3d2; border-radius:var(--radius-md); padding:16px; display:flex; gap:13px;
+  align-items:flex-start;
+}
+.rc-skill-ic{
+  flex:none; width:40px; height:40px; border-radius:12px; display:flex; align-items:center;
+  justify-content:center; font-size:1.15rem; background:#FCE4E9; color:var(--amaranth);
+}
+.rc-skill-body{min-width:0; flex:1 1 auto;}
+.rc-skill-top{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;}
+.rc-skill-name{font-weight:800; color:var(--seal); font-size:.95rem;}
+.rc-skill-text{font-size:.86rem; color:var(--seal-soft); line-height:1.55; white-space:pre-line;}
+.rc-badge{
+  font-size:.66rem; font-weight:800; letter-spacing:.02em; padding:3px 10px; border-radius:999px; white-space:nowrap;
+}
+.rc-badge.forte{background:#eaf7ee; color:var(--ok);}
+.rc-badge.dev{background:#fdf0dd; color:#a06a2e;}
+
+.rc-two-col{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:26px;}
+@media (max-width:620px){ .rc-two-col{grid-template-columns:1fr;} }
+
+.rc-teacher{
+  display:flex; align-items:center; gap:16px; background:var(--antique-soft); border-radius:var(--radius-md);
+  padding:18px 20px; border-left:4px solid var(--gamboge);
+}
+.rc-teacher-ic{flex:none; width:40px; height:40px; border-radius:50%; background:var(--amaranth); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.15rem;}
+.rc-teacher b{display:block; color:var(--seal); margin-bottom:3px; font-size:.95rem;}
+.rc-teacher p{margin:0; font-size:.88rem; color:var(--seal-soft); white-space:pre-line;}
+.rc-teacher .yougotthis{margin-left:auto; font-family:var(--font-display); color:var(--amaranth); font-size:1.15rem; flex:none; text-align:center; line-height:1.1;}
+
+.rc-empty{
+  background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:26px;
+  text-align:center; color:var(--seal-soft);
+}
+
+/* ---- impressão / salvar em PDF ---- */
+@media print{
+  @page{margin:14mm;}
+  body.rc-printing::before{display:none;}
+  body.rc-printing .sidebar,
+  body.rc-printing .topbar,
+  body.rc-printing #pageNotice,
+  body.rc-printing .aluno-kpi-row,
+  body.rc-printing .aluno-divider,
+  body.rc-printing .page-header,
+  body.rc-printing #coursesWrap,
+  body.rc-printing #materialWrap,
+  body.rc-printing .content-footer,
+  body.rc-printing .rc-toolbar{display:none !important;}
+  body.rc-printing .app-shell,
+  body.rc-printing .main-area,
+  body.rc-printing .content{display:block; height:auto; overflow:visible;}
+  body.rc-printing .content{padding:0;}
+  body.rc-printing .rc-doc{
+    display:none; box-shadow:none; border-top:none; padding:0; border-radius:0;
+  }
+  body.rc-printing .rc-doc.is-active{display:block;}
+  body.rc-printing .rc-skills{grid-template-columns:1fr 1fr;}
+  body.rc-printing .rc-skill, body.rc-printing .rc-freq, body.rc-printing .rc-teacher{break-inside:avoid;}
+  body.rc-printing .rc-section{break-inside:avoid;}
+}
+
 </style>
 </head>
 <body>
@@ -946,8 +1060,38 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     div.textContent = str == null ? '' : String(str);
     return div.innerHTML;
   }
-  function formatPPRLabel(v){ return { PP: 'PP — Atingiu plenamente', P: 'P — Atingiu parcialmente', R: 'R — Precisa de reforço' }[v] || '[Preenchimento necessário]'; }
-  const ENCAMINHAMENTO_LABELS = { sem_ressalvas: 'Segue para o próximo período sem ressalvas', reforco: 'Reforço pontual', protocolo: 'Protocolo 6.5.1 acionado (Coordenação)' };
+  const RC_SKILL_ICONS = [
+    { re: /speak|fal|oral|convers/i, ic: '💬' },
+    { re: /writ|escri|redaç/i, ic: '✏️' },
+    { re: /listen|escut|áudio|audi|ouvir/i, ic: '👂' },
+    { re: /read|leitura/i, ic: '📖' },
+    { re: /gram|estrutur|structure/i, ic: '🔤' },
+    { re: /vocab|léxic|lexic|palavr/i, ic: '🗂️' },
+    { re: /pronun|fon[eé]tic|\bsom\b/i, ic: '🗣️' }
+  ];
+  function rcSkillIcon(name){
+    const hit = RC_SKILL_ICONS.find(s => s.re.test(name || ''));
+    return hit ? hit.ic : '✦';
+  }
+
+  // troca de report card no seletor
+  function rcSwitch(idx){
+    document.querySelectorAll('#reportCardsWrap .rc-doc').forEach((el, i) => {
+      el.classList.toggle('is-active', String(i) === String(idx));
+    });
+  }
+
+  // "Baixar PDF" = diálogo de impressão do navegador (Salvar como PDF),
+  // com só o report card ativo visível.
+  function rcBaixarPdf(){
+    document.body.classList.add('rc-printing');
+    const cleanup = () => {
+      document.body.classList.remove('rc-printing');
+      window.removeEventListener('afterprint', cleanup);
+    };
+    window.addEventListener('afterprint', cleanup);
+    setTimeout(() => { window.print(); setTimeout(cleanup, 1200); }, 40);
+  }
 
   async function renderMeusReportCards(alunoId){
     const wrap = document.getElementById('reportCardsWrap');
@@ -957,60 +1101,140 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     ]);
     if(!cards.length){ wrap.innerHTML = ''; return; }
 
-    wrap.innerHTML = '<p style="font-family:var(--font-display); font-size:1.5rem; color:var(--seal); margin-bottom:14px;">Meus Report Cards</p>' +
-      cards.map(rc => renderReportCardReadOnly(rc, materias)).join('');
+    // mais recente primeiro
+    const lista = cards.slice().sort((a, b) =>
+      (b.semestre - a.semestre) || String(b.materia_slug).localeCompare(String(a.materia_slug))
+    );
+    const nomeNivel = rc => {
+      const n = materias.find(m => m.slug === rc.materia_slug);
+      return (n ? n.name : rc.materia_slug) + ' — ' + rc.semestre + 'º semestre (aulas ' + rc.aula_inicio + '-' + rc.aula_fim + ')';
+    };
+
+    const seletor = lista.length > 1
+      ? '<select class="rc-select" id="rcSelect" onchange="rcSwitch(this.value)">' +
+          lista.map((rc, i) => '<option value="' + i + '">' + escapeHtmlLocal(nomeNivel(rc)) + '</option>').join('') +
+        '</select>'
+      : '';
+
+    wrap.innerHTML =
+      '<div class="rc-shell">' +
+        '<div class="rc-toolbar">' +
+          '<div>' +
+            '<h3>Report Card <span class="spark">✦</span></h3>' +
+            '<p>Seu progresso, suas conquistas e os próximos passos.</p>' +
+          '</div>' +
+          '<div class="rc-toolbar-right">' + seletor +
+            '<button type="button" class="rc-pdf-btn" onclick="rcBaixarPdf()">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
+              'Baixar PDF' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+        lista.map((rc, i) => renderReportCardReadOnly(rc, materias, i === 0)).join('') +
+      '</div>';
   }
 
-  function renderReportCardReadOnly(rc, materias){
+  function renderReportCardReadOnly(rc, materias, active){
     const d = rc.dados || {};
     const nivel = materias.find(m => m.slug === rc.materia_slug);
+    const nivelNome = nivel ? nivel.name : rc.materia_slug;
     const freq = d.frequencia || {};
     const ia = d.analise_ia;
-    let eixosHtml;
-    if(ia){
-      eixosHtml =
-        (ia.resumo_geral ? '<p style="margin:0 0 12px; white-space:pre-line;">' + escapeHtmlLocal(ia.resumo_geral) + '</p>' : '') +
-        (ia.por_eixo || []).map(e =>
-          '<div style="padding:8px 0; border-bottom:1px solid #f0e3d2;">' +
-            '<b style="color:var(--seal);">' + escapeHtmlLocal(e.eixo) + '</b>' +
-            '<p style="font-size:.88rem; margin:3px 0 0; white-space:pre-line;">' + escapeHtmlLocal(e.texto || '') + '</p>' +
-          '</div>'
-        ).join('');
+
+    const freqPct = (freq.percentual != null && freq.percentual !== '')
+      ? Number(freq.percentual)
+      : (freq.aulas_previstas ? Math.round((Number(freq.aulas_presentes || 0) / Number(freq.aulas_previstas)) * 100) : null);
+    const freqLinha = 'Frequência: ' + (freq.aulas_presentes ?? '-') + ' de ' + (freq.aulas_previstas ?? '-') + ' aulas' +
+      (freqPct != null && !isNaN(freqPct) ? ' (' + freqPct + '%)' : '');
+    const freqMsg = (freqPct != null && !isNaN(freqPct) && freqPct >= 75)
+      ? 'Parabéns pela sua presença e dedicação!'
+      : 'Cada aula conta, vamos manter o ritmo juntos.';
+
+    // Desenvolvimento no semestre
+    const resumo = (ia && ia.resumo_geral) ? ia.resumo_geral : (d.pontos_fortes || '');
+    const devHtml = resumo
+      ? '<div class="rc-prose">' + escapeHtmlLocal(resumo) + '</div>'
+      : '<div class="rc-prose empty">Assim que a professora finalizar a sua avaliação, o resumo do seu semestre aparece aqui.</div>';
+
+    // Resumo por habilidade
+    let skillsHtml;
+    if(ia && (ia.por_eixo || []).length){
+      skillsHtml = '<div class="rc-skills">' + ia.por_eixo.map(e => {
+        const forte = e.nivel === 'forte';
+        return '<div class="rc-skill">' +
+          '<div class="rc-skill-ic">' + rcSkillIcon(e.eixo) + '</div>' +
+          '<div class="rc-skill-body">' +
+            '<div class="rc-skill-top">' +
+              '<span class="rc-skill-name">' + escapeHtmlLocal(e.eixo || '') + '</span>' +
+              '<span class="rc-badge ' + (forte ? 'forte' : 'dev') + '">' + (forte ? 'Ponto forte' : 'Em desenvolvimento') + '</span>' +
+            '</div>' +
+            '<div class="rc-skill-text">' + escapeHtmlLocal(e.texto || '') + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('') + '</div>';
     } else {
       const eixos = d.avaliacao_eixos || {};
-      eixosHtml = Object.keys(eixos).map(eixo => {
-        const info = eixos[eixo];
-        return '<div style="display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid #f0e3d2;">' +
-          '<span>' + escapeHtmlLocal(eixo) + '</span><b style="color:var(--seal);">' + formatPPRLabel(info.nivel) + '</b></div>' +
-          (info.observacoes ? '<p style="font-size:.8rem; color:var(--seal-soft); margin:2px 0 8px;">' + escapeHtmlLocal(info.observacoes) + '</p>' : '');
-      }).join('');
+      const keys = Object.keys(eixos);
+      skillsHtml = keys.length
+        ? '<div class="rc-skills">' + keys.map(eixo => {
+            const info = eixos[eixo] || {};
+            const forte = info.nivel === 'PP';
+            return '<div class="rc-skill">' +
+              '<div class="rc-skill-ic">' + rcSkillIcon(eixo) + '</div>' +
+              '<div class="rc-skill-body">' +
+                '<div class="rc-skill-top">' +
+                  '<span class="rc-skill-name">' + escapeHtmlLocal(eixo) + '</span>' +
+                  '<span class="rc-badge ' + (forte ? 'forte' : 'dev') + '">' + (forte ? 'Ponto forte' : 'Em desenvolvimento') + '</span>' +
+                '</div>' +
+                (info.observacoes ? '<div class="rc-skill-text">' + escapeHtmlLocal(info.observacoes) + '</div>' : '') +
+              '</div>' +
+            '</div>';
+          }).join('') + '</div>'
+        : '<div class="rc-prose empty">A sua avaliação por habilidade ainda está sendo preparada.</div>';
     }
 
-    const revisoes = d.revisoes_teste || [];
-    const revisoesHtml = revisoes.length ? '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Revisões-teste</p>' +
-      revisoes.map(rv => '<p style="font-size:.85rem; color:var(--seal-soft); margin-bottom:4px;">Aula ' + rv.aula_numero + ' — ' + escapeHtmlLocal(rv.aula_topico || '') + ': fluência oral ' + formatPPRLabel(rv.fluencia_oral) + '</p>').join('') : '';
+    const fortes = (ia && ia.pontos_fortes) || d.pontos_fortes || '';
+    const proximos = (ia && (ia.pontos_desenvolvimento || ia.recomendacoes)) || d.pontos_desenvolvimento || '';
+    const consid = d.consideracoes_professor || (ia && ia.recomendacoes) || '';
 
     const af = d.apresentacao_final;
-    const apresentacaoHtml = af ? '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Apresentação Final de Nível (Aula ' + af.aula_numero + ')</p>' +
-      Object.keys(af.eixos).map(eixo => '<p style="font-size:.85rem; color:var(--seal-soft); margin-bottom:4px;">' + escapeHtmlLocal(eixo) + ': ' + formatPPRLabel(af.eixos[eixo].nivel) + '</p>').join('') +
-      '<p style="font-size:.85rem; margin-top:6px;"><b>Resultado:</b> ' + (af.resultado === 'aprovado' ? 'Aprovado' : (af.resultado === 'protocolo' ? 'Encaminhado para protocolo 6.5.1' : '[Preenchimento necessário]')) + '</p>' : '';
+    const resultadoHtml = (af && af.resultado === 'aprovado')
+      ? '<div class="rc-section"><h4 class="rc-h">Resultado do nível</h4>' +
+        '<div class="rc-prose">Você concluiu este nível. Parabéns pela dedicação, seguimos juntos para o próximo passo. 💙</div></div>'
+      : '';
 
-    const enc = d.encaminhamento || {};
+    return '<article class="rc-doc' + (active ? ' is-active' : '') + '">' +
+      '<h4 class="rc-doc-title">Report Card <span class="spark">✦</span></h4>' +
+      '<p class="rc-doc-sub">' + escapeHtmlLocal(nivelNome + ' — ' + rc.semestre + 'º semestre · aulas ' + rc.aula_inicio + ' a ' + rc.aula_fim) + '</p>' +
 
-    return '<details class="dyse-collapsible">' +
-      '<summary><span class="summary-left">' +
-        escapeHtmlLocal(nivel ? nivel.name : rc.materia_slug) + ' — ' + rc.semestre + 'º semestre (aulas ' + rc.aula_inicio + '-' + rc.aula_fim + ')' +
-      '</span><span class="chevron">›</span></summary>' +
-      '<div class="dyse-collapsible-body" style="color:var(--seal-soft); font-size:.9rem;">' +
-        '<p><b style="color:var(--seal);">Frequência:</b> ' + (freq.aulas_presentes ?? '-') + ' de ' + (freq.aulas_previstas ?? '-') + ' aulas (' + (freq.percentual ?? '-') + '%)</p>' +
-        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">' + (ia ? 'Desenvolvimento no período' : 'Avaliação por eixo') + '</p>' + eixosHtml +
-        revisoesHtml + apresentacaoHtml +
-        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Pontos fortes</p><p>' + (d.pontos_fortes ? escapeHtmlLocal(d.pontos_fortes) : '[Preenchimento necessário]') + '</p>' +
-        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Pontos de desenvolvimento</p><p>' + (d.pontos_desenvolvimento ? escapeHtmlLocal(d.pontos_desenvolvimento) : '[Preenchimento necessário]') + '</p>' +
-        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Considerações da professora</p><p>' + (d.consideracoes_professor ? escapeHtmlLocal(d.consideracoes_professor) : '[Preenchimento necessário]') + '</p>' +
-        '<p style="font-weight:700; color:var(--seal); margin:16px 0 6px;">Encaminhamento</p><p>' + (enc.tipo ? escapeHtmlLocal(ENCAMINHAMENTO_LABELS[enc.tipo] || enc.tipo) : '[Preenchimento necessário]') + (enc.motivo ? ' — ' + escapeHtmlLocal(enc.motivo) : '') + '</p>' +
+      '<div class="rc-freq">' +
+        '<div class="rc-freq-icon">★</div>' +
+        '<div><b>' + escapeHtmlLocal(freqLinha) + '</b><span>' + freqMsg + '</span></div>' +
       '</div>' +
-    '</details>';
+
+      '<div class="rc-section"><h4 class="rc-h">Desenvolvimento no semestre</h4>' + devHtml + '</div>' +
+
+      '<div class="rc-section"><h4 class="rc-h">Resumo por habilidade</h4>' + skillsHtml + '</div>' +
+
+      resultadoHtml +
+
+      '<div class="rc-two-col">' +
+        '<div><h4 class="rc-h">Pontos fortes</h4>' +
+          (fortes ? '<div class="rc-prose">' + escapeHtmlLocal(fortes) + '</div>' : '<div class="rc-prose empty">Em breve.</div>') +
+        '</div>' +
+        '<div><h4 class="rc-h">Próximos passos</h4>' +
+          (proximos ? '<div class="rc-prose">' + escapeHtmlLocal(proximos) + '</div>' : '<div class="rc-prose empty">Em breve.</div>') +
+        '</div>' +
+      '</div>' +
+
+      (consid
+        ? '<div class="rc-teacher">' +
+            '<div class="rc-teacher-ic">💬</div>' +
+            '<div><b>Considerações da professora</b><p>' + escapeHtmlLocal(consid) + '</p></div>' +
+            '<div class="yougotthis">You got<br>this!</div>' +
+          '</div>'
+        : '') +
+    '</article>';
   }
 </script>
 </body>
