@@ -3652,9 +3652,9 @@ body.dyse-modal-open{overflow:hidden;}
         '<div class="btn-row" style="margin-top:6px;"><button type="button" class="btn btn-ghost btn-xs" onclick="handleRefazerAnaliseIA()">↻ Refazer análise (IA)</button></div>';
     } else {
       blocoEixos =
-        '<div class="report-section-head">C · Análise de desenvolvimento</div>' +
-        '<p class="gestao-hint">Este Report Card ainda não tem a análise da IA.</p>' +
-        '<button type="button" class="btn btn-primary" onclick="handleRefazerAnaliseIA()">Gerar análise com IA</button>';
+        '<div class="report-section-head">C · Análise de desenvolvimento (IA)</div>' +
+        '<p class="gestao-hint">A análise por IA não foi gerada nesta vez (veja a mensagem ao gerar o Report Card). ' +
+        '<a href="#" onclick="handleRefazerAnaliseIA(); return false;">Tentar gerar agora</a>.</p>';
     }
 
     const revisoes = d.revisoes_teste || [];

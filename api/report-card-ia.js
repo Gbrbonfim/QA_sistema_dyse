@@ -143,10 +143,14 @@ async function handler(req, res){
     const response = await anthropic.messages.create({
       model: MODEL,
       max_tokens: 8000,
-      output_config: { effort: 'medium' },
       system: system,
       messages: [{ role: 'user', content: userMsg }]
     });
+
+    if(response.stop_reason === 'refusal'){
+      res.status(502).json({ error: 'O modelo recusou a solicitação. Tente "Refazer análise".' });
+      return;
+    }
 
     const texto = (response.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
     let parsed;

@@ -1837,9 +1837,11 @@ async function dyseGerarAnaliseReportCardIA(reportCard){
 
   const dados = JSON.parse(JSON.stringify(reportCard.dados || {}));
   dados.analise_ia = result.analise;
-  if(!dados.pontos_fortes) dados.pontos_fortes = result.analise.pontos_fortes || '';
-  if(!dados.pontos_desenvolvimento) dados.pontos_desenvolvimento = result.analise.pontos_desenvolvimento || '';
-  if(!dados.consideracoes_professor) dados.consideracoes_professor = result.analise.recomendacoes || '';
+  // Blocos F/G também vêm da IA (o professor edita depois). "Refazer análise"
+  // regenera tudo — quem já ajustou à mão não deve clicar em refazer.
+  dados.pontos_fortes = result.analise.pontos_fortes || '';
+  dados.pontos_desenvolvimento = result.analise.pontos_desenvolvimento || '';
+  dados.consideracoes_professor = result.analise.recomendacoes || '';
 
   return dyseUpdateReportCard(reportCard.id, dados);
 }
