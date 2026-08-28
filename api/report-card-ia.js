@@ -18,8 +18,13 @@
    ====================================================================== */
 
 const { createClient } = require('@supabase/supabase-js');
-const anthropicPkg = require('@anthropic-ai/sdk');
-const Anthropic = anthropicPkg.Anthropic || anthropicPkg.default || anthropicPkg;
+
+// require preguiçoso: se o pacote não instalou no build, devolve erro JSON
+// legível em vez de derrubar a função inteira com 500 genérico.
+function loadAnthropic(){
+  const pkg = require('@anthropic-ai/sdk');
+  return pkg.Anthropic || pkg.default || pkg;
+}
 
 const SUPABASE_URL = "https://vnpjsjrqghttsagbssxx.supabase.co";
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -109,7 +114,13 @@ async function handler(req, res){
 
     const coberturaPct = aulas.length ? Math.round((comRegistro / aulas.length) * 1000) / 10 : 0;
 
-    const anthropic = new Anthropic();
+    let anthropic;
+    try{
+      anthropic = new (loadAnthropic())();
+    }catch(e){
+      res.status(500).json({ error: 'Pacote @anthropic-ai/sdk não disponível no servidor (build da Vercel). Detalhe: ' + (e && e.message ? e.message : e) });
+      return;
+    }
     const listaEixos = eixos.length ? eixos.join(', ') : 'Reading, Writing, Speaking, Listening, Gramática';
 
     const system =
