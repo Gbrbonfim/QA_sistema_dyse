@@ -17,7 +17,7 @@
 
 const SUPABASE_URL = "https://vnpjsjrqghttsagbssxx.supabase.co";
 const MODEL = process.env.REPORT_CARD_IA_MODEL || 'claude-sonnet-5';
-const AVAL_LABEL = { sim: 'foi bem', parcial: 'parcial', nao: 'não foi bem', nao_participou: 'não participou' };
+const AVAL_LABEL = { sim: 'foi bem', parcial: 'precisou de apoio', nao: 'teve dificuldade', nao_participou: 'não participou dessa parte' };
 
 async function run(req, res){
   if(req.method !== 'POST'){ res.status(405).json({ error: 'Método não permitido.' }); return; }
@@ -111,22 +111,29 @@ async function run(req, res){
   const coberturaPct = aulas.length ? Math.round((comRegistro / aulas.length) * 1000) / 10 : 0;
   const listaEixos = eixos.length ? eixos.join(', ') : 'Reading, Writing, Speaking, Listening, Gramática';
 
+  const primeiroNome = String(nomeAluno).trim().split(/\s+/)[0] || 'você';
   const system =
-    'Você é coordenador(a) pedagógico(a) da DYSE, uma escola de inglês. Escreve a análise de desenvolvimento de um aluno para o Report Card do semestre, em português do Brasil, para a família e o próprio aluno lerem. ' +
-    'Tom profissional, específico e construtivo — nada de elogio vazio nem jargão. Fundamente TUDO nos dados fornecidos (avaliações por eixo, observações do professor e o plano de cada aula). Não invente fatos, notas nem episódios que não estejam nos dados. ' +
-    'Regra de cobertura: só ' + comRegistro + ' de ' + aulas.length + ' aulas do período (' + coberturaPct + '%) têm registro do aluno. Se a cobertura for baixa, diga explicitamente que a análise é parcial. ' +
-    'Para cada eixo, cruze o desempenho registrado com o que o plano das aulas pedia: aponte onde o aluno correspondeu ao objetivo, onde ficou parcial e o que precisa de atenção. Um eixo em que o aluno "foi bem" em pelo menos 70% das aulas com registro é um ponto forte. ' +
-    'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código), nesta forma exata:\n' +
-    '{"resumo_geral": "2-4 frases sobre como foi o desenvolvimento geral no período", ' +
-    '"por_eixo": [{"eixo": "<nome do eixo>", "texto": "2-4 frases cruzando registro x plano, dizendo onde foi bem / atenção"}], ' +
-    '"pontos_fortes": "texto corrido", "pontos_desenvolvimento": "texto corrido", "recomendacoes": "1-3 frases de recomendação prática para o próximo período"}\n' +
+    'Você é um(a) professor(a) da DYSE, escola de inglês, escrevendo o texto do Report Card de fim de semestre que o ALUNO e a família vão ler. Escreva em português do Brasil.\n\n' +
+    'VOZ: fale DIRETAMENTE com o aluno, em segunda pessoa ("você"), pelo primeiro nome (' + primeiroNome + '). Tom caloroso, próximo e encorajador, como um professor que acompanhou de perto e torce por ele — não um relatório técnico.\n\n' +
+    'REGRAS:\n' +
+    '- Comece sempre reconhecendo algo concreto e verdadeiro que o aluno fez bem.\n' +
+    '- Fale das dificuldades com acolhimento: enquadre como "o que a gente vai trabalhar / reforçar no próximo semestre", nunca como falha, nota baixa ou veredito. Mostre que faz parte do processo e que já dá pra ver esforço.\n' +
+    '- NÃO use números, porcentagens, contagem de aulas ou de eixos, nem termos técnicos de avaliação ("parcial", "PP/P/R", "cobertura", "amostras", "eixo"). Os dados abaixo são só pra você saber O QUE dizer — não os cite.\n' +
+    '- Seja honesto e específico: não esconda os pontos a melhorar e não invente qualidades sem base nos dados. Baseie tudo no que o professor registrou e no que as aulas trabalharam.\n' +
+    '- Frases claras e diretas, sem jargão pedagógico. Pode citar naturalmente conteúdos concretos ("o som do TH", "o verbo to be", "se apresentar") quando ajudar o aluno a entender.\n\n' +
+    'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código):\n' +
+    '{"resumo_geral": "3-5 frases falando com o aluno sobre como foi o semestre dele — o que foi bem primeiro, depois o que vão reforçar, sempre motivando", ' +
+    '"por_eixo": [{"eixo": "<nome exato do eixo>", "texto": "2-3 frases dirigidas ao aluno sobre essa habilidade — o que ele já faz bem e/ou o próximo passo, de forma encorajadora"}], ' +
+    '"pontos_fortes": "1-3 frases celebrando de forma específica o que o aluno mais mandou bem", ' +
+    '"pontos_desenvolvimento": "1-3 frases acolhedoras sobre o que vão trabalhar juntos no próximo semestre", ' +
+    '"recomendacoes": "1-2 frases de incentivo prático pro aluno pro próximo semestre"}\n' +
     'O array "por_eixo" deve ter exatamente um item para cada um destes eixos, nesta ordem: ' + listaEixos + '.';
 
   const userMsg =
-    'Aluno: ' + nomeAluno + '\n' +
-    'Nível: ' + nomeNivel + ' · ' + semestre + 'º semestre · aulas ' + aulaInicio + ' a ' + aulaFim + ' (nível tem ' + totalAulasNivel + ' aulas no total)\n' +
-    'Cobertura de registros: ' + comRegistro + '/' + aulas.length + ' aulas (' + coberturaPct + '%)\n\n' +
-    'AULAS DO PERÍODO (plano da coordenação + registro do aluno):\n\n' + aulasTexto;
+    'Aluno: ' + nomeAluno + ' · ' + nomeNivel + ' · ' + semestre + 'º semestre\n\n' +
+    'DADOS DO PERÍODO (uso interno — não cite números nem termos técnicos):\n' +
+    'Registros lançados pelo professor: ' + comRegistro + ' de ' + aulas.length + ' aulas do período.\n\n' +
+    'Aula por aula (o que a aula trabalhou + como o aluno foi):\n\n' + aulasTexto;
 
   const anthropic = new Anthropic();
   const response = await anthropic.messages.create({
