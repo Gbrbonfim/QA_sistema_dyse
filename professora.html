@@ -388,6 +388,17 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   animation:dyse-spin 0.8s linear infinite;
 }
 @keyframes dyse-spin{to{transform:rotate(360deg);}}
+.ia-overlay{position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center; background:rgba(58,29,16,.45); padding:20px;}
+.ia-overlay.open{display:flex;}
+.ia-overlay-card{background:#fff; border-radius:18px; padding:26px 30px; max-width:380px; text-align:center; box-shadow:0 20px 50px rgba(58,29,16,.35);}
+.ia-overlay-card .dyse-spinner{margin:0 auto 14px;}
+.ia-overlay-card .ia-err-icon{display:none; font-size:2rem; margin-bottom:6px;}
+.ia-overlay-card p{margin:0; font-size:.92rem; color:var(--seal); line-height:1.5; white-space:pre-line;}
+.ia-overlay-card .ia-overlay-close{display:none; margin-top:16px;}
+.ia-overlay-card.err .dyse-spinner{display:none;}
+.ia-overlay-card.err .ia-err-icon{display:block;}
+.ia-overlay-card.err p{color:var(--bad);}
+.ia-overlay-card.err .ia-overlay-close{display:inline-flex;}
 #dyseAuthGate p{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
 
 
@@ -1003,6 +1014,14 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 </div>
 
+<div id="iaOverlay" class="ia-overlay">
+  <div class="ia-overlay-card" id="iaOverlayCard">
+    <div class="dyse-spinner"></div>
+    <span class="ia-err-icon">⚠️</span>
+    <p id="iaOverlayMsg">Gerando a análise com IA…</p>
+    <button type="button" class="btn btn-ghost ia-overlay-close" onclick="iaOverlayHide()">Fechar</button>
+  </div>
+</div>
 
 <script src="/assets/dyse-auth.js"></script>
 <script src="/atividades/a1/manifest.js"></script>
@@ -2039,15 +2058,27 @@ body.dyse-modal-open{overflow:hidden;}
     msg.textContent = 'Salvo!';
   }
 
+  function iaOverlayShow(msg){
+    document.getElementById('iaOverlayCard').classList.remove('err');
+    document.getElementById('iaOverlayMsg').textContent = msg || 'Gerando a análise com IA…';
+    document.getElementById('iaOverlay').classList.add('open');
+  }
+  function iaOverlayError(msg){
+    document.getElementById('iaOverlayCard').classList.add('err');
+    document.getElementById('iaOverlayMsg').textContent = msg || 'Não foi possível gerar a análise.';
+    document.getElementById('iaOverlay').classList.add('open');
+  }
+  function iaOverlayHide(){ document.getElementById('iaOverlay').classList.remove('open'); }
+
   async function handleRefazerAnaliseIA(){
     if(CURRENT_REPORT_CARD && CURRENT_REPORT_CARD.dados){
       const { data: salvo } = await dyseUpdateReportCard(CURRENT_REPORT_CARD.id, coletarDadosReportCardDoFormulario());
       if(salvo) CURRENT_REPORT_CARD = salvo;
     }
-    const msg = document.getElementById('rcModalMsg');
-    if(msg) msg.textContent = 'Gerando a análise com IA (pode levar até 1 minuto)...';
+    iaOverlayShow('Gerando a análise com IA — pode levar até 1 minuto…');
     const { data, error } = await dyseGerarAnaliseReportCardIA(CURRENT_REPORT_CARD);
-    if(error){ if(msg) msg.textContent = 'A análise da IA falhou: ' + error.message; return; }
+    if(error){ iaOverlayError('A análise da IA falhou:\n\n' + error.message); return; }
+    iaOverlayHide();
     CURRENT_REPORT_CARD = data;
     renderReportCardModalBody();
     const m2 = document.getElementById('rcModalMsg');

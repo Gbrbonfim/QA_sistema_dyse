@@ -6,38 +6,34 @@
    aula do intervalo (referência da coordenação) + o que o professor lançou
    no Registro de Classe daquele aluno (avaliações por eixo + observações) +
    a frequência, e pede pro Claude escrever a análise de desenvolvimento do
-   aluno no período (resumo geral, análise por eixo, pontos fortes/de
-   desenvolvimento). A resposta volta pro navegador, que grava em
+   aluno no período. A resposta volta pro navegador, que grava em
    report_cards.dados.analise_ia (via dyseGerarAnaliseReportCardIA).
 
-   Variáveis de ambiente necessárias na Vercel (QA e produção):
+   Variáveis de ambiente necessárias na Vercel:
      SUPABASE_SERVICE_ROLE_KEY  (já usada pelas outras funções)
      ANTHROPIC_API_KEY          (console.anthropic.com → API keys)
-
-   maxDuration 60s: a chamada ao modelo pode levar 15-40s.
+     REPORT_CARD_IA_MODEL       (opcional; padrão claude-sonnet-5)
    ====================================================================== */
 
-const { createClient } = require('@supabase/supabase-js');
-
-// require preguiçoso: se o pacote não instalou no build, devolve erro JSON
-// legível em vez de derrubar a função inteira com 500 genérico.
-function loadAnthropic(){
-  const pkg = require('@anthropic-ai/sdk');
-  return pkg.Anthropic || pkg.default || pkg;
-}
-
 const SUPABASE_URL = "https://vnpjsjrqghttsagbssxx.supabase.co";
-const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-// Modelo configurável pela variável de ambiente REPORT_CARD_IA_MODEL
-// (ex: "claude-haiku-4-5" pra testar mais rápido/barato). Padrão: Sonnet 5.
 const MODEL = process.env.REPORT_CARD_IA_MODEL || 'claude-sonnet-5';
-
 const AVAL_LABEL = { sim: 'foi bem', parcial: 'parcial', nao: 'não foi bem', nao_participou: 'não participou' };
 
-async function handler(req, res){
+async function run(req, res){
   if(req.method !== 'POST'){ res.status(405).json({ error: 'Método não permitido.' }); return; }
-  if(!SERVICE_ROLE_KEY){ res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY não configurada.' }); return; }
-  if(!process.env.ANTHROPIC_API_KEY){ res.status(500).json({ error: 'ANTHROPIC_API_KEY não configurada neste ambiente (Vercel → Settings → Environment Variables).' }); return; }
+
+  const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if(!SERVICE_ROLE_KEY){ res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY não configurada na Vercel.' }); return; }
+  if(!process.env.ANTHROPIC_API_KEY){ res.status(500).json({ error: 'ANTHROPIC_API_KEY não configurada na Vercel (Settings → Environment Variables → Redeploy).' }); return; }
+
+  let createClient, Anthropic;
+  try{
+    createClient = require('@supabase/supabase-js').createClient;
+  }catch(e){ res.status(500).json({ error: '@supabase/supabase-js não instalou no build: ' + (e && e.message || e) }); return; }
+  try{
+    const pkg = require('@anthropic-ai/sdk');
+    Anthropic = pkg.Anthropic || pkg.default || pkg;
+  }catch(e){ res.status(500).json({ error: '@anthropic-ai/sdk não instalou no build da Vercel: ' + (e && e.message || e) }); return; }
 
   const authHeader = req.headers.authorization || '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
@@ -55,7 +51,8 @@ async function handler(req, res){
     return;
   }
 
-  const body = req.body || {};
+  let body = req.body || {};
+  if(typeof body === 'string'){ try{ body = JSON.parse(body); }catch(e){ body = {}; } }
   const alunoId = body.aluno_id;
   const materiaSlug = body.materia_slug;
   const semestre = body.semestre;
@@ -66,116 +63,114 @@ async function handler(req, res){
     return;
   }
 
+  const [aulasResp, materiaResp, alunoResp] = await Promise.all([
+    admin.from('nivel_aulas').select('id, numero, topico, conteudo').eq('materia_slug', materiaSlug)
+      .gte('numero', aulaInicio).lte('numero', aulaFim).order('numero', { ascending: true }),
+    admin.from('materias').select('name, eixos_avaliacao, total_aulas').eq('slug', materiaSlug).maybeSingle(),
+    admin.from('profiles').select('full_name').eq('id', alunoId).maybeSingle()
+  ]);
+  if(aulasResp.error){ res.status(500).json({ error: 'Erro lendo nivel_aulas: ' + aulasResp.error.message }); return; }
+  const aulas = aulasResp.data || [];
+  if(!aulas.length){ res.status(400).json({ error: 'Nenhuma aula cadastrada no intervalo ' + aulaInicio + '-' + aulaFim + ' para "' + materiaSlug + '".' }); return; }
+
+  const aulaIds = aulas.map(a => a.id);
+  const { data: registros } = await admin.from('registros_classe')
+    .select('nivel_aula_id, avaliacoes, observacoes')
+    .eq('aluno_id', alunoId).in('nivel_aula_id', aulaIds);
+  const regPorAula = {};
+  (registros || []).forEach(r => { regPorAula[r.nivel_aula_id] = r; });
+
+  const eixos = (materiaResp.data && materiaResp.data.eixos_avaliacao) || [];
+  const nomeNivel = (materiaResp.data && materiaResp.data.name) || materiaSlug;
+  const nomeAluno = (alunoResp.data && alunoResp.data.full_name) || 'o aluno';
+  const totalAulasNivel = (materiaResp.data && materiaResp.data.total_aulas) || aulas.length;
+
+  let comRegistro = 0;
+  const aulasTexto = aulas.map(a => {
+    const c = a.conteudo || {};
+    const reg = regPorAula[a.id];
+    const participou = reg && Object.values(reg.avaliacoes || {}).some(v => v && v !== 'nao_participou');
+    if(participou) comRegistro++;
+    const plano = [
+      c.habilidades && c.habilidades.length ? 'Habilidades foco: ' + c.habilidades.join(', ') : null,
+      c.tarefa_comunicativa ? 'Tarefa comunicativa: ' + c.tarefa_comunicativa : null,
+      c.estrutura_gramatical ? 'Gramática: ' + c.estrutura_gramatical : null,
+      c.foco_fonetico_som ? 'Foco fonético: ' + c.foco_fonetico_som : null,
+      (c.pontos_atencao && c.pontos_atencao.length) ? 'Pontos de atenção do plano: ' + c.pontos_atencao.join(' | ') : null
+    ].filter(Boolean).join('\n    ');
+    let registroTexto;
+    if(!reg){
+      registroTexto = '(sem registro lançado para este aluno)';
+    } else {
+      const avals = Object.entries(reg.avaliacoes || {}).map(([eixo, v]) => eixo + ': ' + (AVAL_LABEL[v] || v)).join('; ');
+      registroTexto = (avals || '(sem avaliação por eixo)') + (reg.observacoes ? '\n    Observações do professor: ' + reg.observacoes : '');
+    }
+    return 'Aula ' + a.numero + ' — ' + a.topico + '\n    ' + (plano || '(plano não detalhado)') + '\n    REGISTRO DO ALUNO: ' + registroTexto;
+  }).join('\n\n');
+
+  const coberturaPct = aulas.length ? Math.round((comRegistro / aulas.length) * 1000) / 10 : 0;
+  const listaEixos = eixos.length ? eixos.join(', ') : 'Reading, Writing, Speaking, Listening, Gramática';
+
+  const system =
+    'Você é coordenador(a) pedagógico(a) da DYSE, uma escola de inglês. Escreve a análise de desenvolvimento de um aluno para o Report Card do semestre, em português do Brasil, para a família e o próprio aluno lerem. ' +
+    'Tom profissional, específico e construtivo — nada de elogio vazio nem jargão. Fundamente TUDO nos dados fornecidos (avaliações por eixo, observações do professor e o plano de cada aula). Não invente fatos, notas nem episódios que não estejam nos dados. ' +
+    'Regra de cobertura: só ' + comRegistro + ' de ' + aulas.length + ' aulas do período (' + coberturaPct + '%) têm registro do aluno. Se a cobertura for baixa, diga explicitamente que a análise é parcial. ' +
+    'Para cada eixo, cruze o desempenho registrado com o que o plano das aulas pedia: aponte onde o aluno correspondeu ao objetivo, onde ficou parcial e o que precisa de atenção. Um eixo em que o aluno "foi bem" em pelo menos 70% das aulas com registro é um ponto forte. ' +
+    'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código), nesta forma exata:\n' +
+    '{"resumo_geral": "2-4 frases sobre como foi o desenvolvimento geral no período", ' +
+    '"por_eixo": [{"eixo": "<nome do eixo>", "texto": "2-4 frases cruzando registro x plano, dizendo onde foi bem / atenção"}], ' +
+    '"pontos_fortes": "texto corrido", "pontos_desenvolvimento": "texto corrido", "recomendacoes": "1-3 frases de recomendação prática para o próximo período"}\n' +
+    'O array "por_eixo" deve ter exatamente um item para cada um destes eixos, nesta ordem: ' + listaEixos + '.';
+
+  const userMsg =
+    'Aluno: ' + nomeAluno + '\n' +
+    'Nível: ' + nomeNivel + ' · ' + semestre + 'º semestre · aulas ' + aulaInicio + ' a ' + aulaFim + ' (nível tem ' + totalAulasNivel + ' aulas no total)\n' +
+    'Cobertura de registros: ' + comRegistro + '/' + aulas.length + ' aulas (' + coberturaPct + '%)\n\n' +
+    'AULAS DO PERÍODO (plano da coordenação + registro do aluno):\n\n' + aulasTexto;
+
+  const anthropic = new Anthropic();
+  const response = await anthropic.messages.create({
+    model: MODEL,
+    max_tokens: 8000,
+    system: system,
+    messages: [{ role: 'user', content: userMsg }]
+  });
+
+  if(response.stop_reason === 'refusal'){
+    res.status(502).json({ error: 'O modelo recusou a solicitação. Tente novamente.' });
+    return;
+  }
+
+  const texto = (response.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
+  let parsed;
   try{
-    const [aulasResp, materiaResp, alunoResp] = await Promise.all([
-      admin.from('nivel_aulas').select('id, numero, topico, conteudo').eq('materia_slug', materiaSlug)
-        .gte('numero', aulaInicio).lte('numero', aulaFim).order('numero', { ascending: true }),
-      admin.from('materias').select('name, eixos_avaliacao, total_aulas').eq('slug', materiaSlug).maybeSingle(),
-      admin.from('profiles').select('full_name').eq('id', alunoId).maybeSingle()
-    ]);
-    const aulas = aulasResp.data || [];
-    if(!aulas.length){ res.status(400).json({ error: 'Nenhuma aula cadastrada nesse intervalo.' }); return; }
+    parsed = JSON.parse(texto.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim());
+  }catch(e){
+    res.status(502).json({ error: 'A IA respondeu num formato inesperado. Tente de novo.', raw: texto.slice(0, 400) });
+    return;
+  }
 
-    const aulaIds = aulas.map(a => a.id);
-    const { data: registros } = await admin.from('registros_classe')
-      .select('nivel_aula_id, avaliacoes, observacoes')
-      .eq('aluno_id', alunoId).in('nivel_aula_id', aulaIds);
-    const regPorAula = {};
-    (registros || []).forEach(r => { regPorAula[r.nivel_aula_id] = r; });
-
-    const eixos = (materiaResp.data && materiaResp.data.eixos_avaliacao) || [];
-    const nomeNivel = (materiaResp.data && materiaResp.data.name) || materiaSlug;
-    const nomeAluno = (alunoResp.data && alunoResp.data.full_name) || 'o aluno';
-    const totalAulasNivel = (materiaResp.data && materiaResp.data.total_aulas) || aulas.length;
-
-    // Cobertura: aulas do intervalo em que o aluno tem registro com participação.
-    let comRegistro = 0;
-    const aulasTexto = aulas.map(a => {
-      const c = a.conteudo || {};
-      const reg = regPorAula[a.id];
-      const participou = reg && Object.values(reg.avaliacoes || {}).some(v => v && v !== 'nao_participou');
-      if(participou) comRegistro++;
-      const plano = [
-        c.habilidades && c.habilidades.length ? 'Habilidades foco: ' + c.habilidades.join(', ') : null,
-        c.tarefa_comunicativa ? 'Tarefa comunicativa: ' + c.tarefa_comunicativa : null,
-        c.estrutura_gramatical ? 'Gramática: ' + c.estrutura_gramatical : null,
-        c.foco_fonetico_som ? 'Foco fonético: ' + c.foco_fonetico_som : null,
-        (c.pontos_atencao && c.pontos_atencao.length) ? 'Pontos de atenção do plano: ' + c.pontos_atencao.join(' | ') : null
-      ].filter(Boolean).join('\n    ');
-      let registroTexto;
-      if(!reg){
-        registroTexto = '(sem registro lançado para este aluno)';
-      } else {
-        const avals = Object.entries(reg.avaliacoes || {}).map(([eixo, v]) => eixo + ': ' + (AVAL_LABEL[v] || v)).join('; ');
-        registroTexto = (avals || '(sem avaliação por eixo)') + (reg.observacoes ? '\n    Observações do professor: ' + reg.observacoes : '');
-      }
-      return 'Aula ' + a.numero + ' — ' + a.topico + '\n    ' + (plano || '(plano não detalhado)') + '\n    REGISTRO DO ALUNO: ' + registroTexto;
-    }).join('\n\n');
-
-    const coberturaPct = aulas.length ? Math.round((comRegistro / aulas.length) * 1000) / 10 : 0;
-
-    let anthropic;
-    try{
-      anthropic = new (loadAnthropic())();
-    }catch(e){
-      res.status(500).json({ error: 'Pacote @anthropic-ai/sdk não disponível no servidor (build da Vercel). Detalhe: ' + (e && e.message ? e.message : e) });
-      return;
+  res.status(200).json({
+    analise: {
+      gerado_em: new Date().toISOString(),
+      modelo: MODEL,
+      cobertura: { aulas_com_registro: comRegistro, aulas_periodo: aulas.length, percentual: coberturaPct },
+      resumo_geral: parsed.resumo_geral || '',
+      por_eixo: Array.isArray(parsed.por_eixo) ? parsed.por_eixo : [],
+      pontos_fortes: parsed.pontos_fortes || '',
+      pontos_desenvolvimento: parsed.pontos_desenvolvimento || '',
+      recomendacoes: parsed.recomendacoes || ''
     }
-    const listaEixos = eixos.length ? eixos.join(', ') : 'Reading, Writing, Speaking, Listening, Gramática';
+  });
+}
 
-    const system =
-      'Você é coordenador(a) pedagógico(a) da DYSE, uma escola de inglês. Escreve a análise de desenvolvimento de um aluno para o Report Card do semestre, em português do Brasil, para a família e o próprio aluno lerem. ' +
-      'Tom profissional, específico e construtivo — nada de elogio vazio nem jargão. Fundamente TUDO nos dados fornecidos (avaliações por eixo, observações do professor e o plano de cada aula). Não invente fatos, notas nem episódios que não estejam nos dados. ' +
-      'Regra de cobertura: só ' + comRegistro + ' de ' + aulas.length + ' aulas do período (' + coberturaPct + '%) têm registro do aluno. Se a cobertura for baixa, diga explicitamente que a análise é parcial. ' +
-      'Para cada eixo, cruze o desempenho registrado com o que o plano das aulas pedia: aponte onde o aluno correspondeu ao objetivo, onde ficou parcial e o que precisa de atenção. Um eixo em que o aluno "foi bem" em pelo menos 70% das aulas com registro é um ponto forte. ' +
-      'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código), nesta forma exata:\n' +
-      '{"resumo_geral": "2-4 frases sobre como foi o desenvolvimento geral no período", ' +
-      '"por_eixo": [{"eixo": "<nome do eixo>", "texto": "2-4 frases cruzando registro x plano, dizendo onde foi bem / atenção"}], ' +
-      '"pontos_fortes": "texto corrido", "pontos_desenvolvimento": "texto corrido", "recomendacoes": "1-3 frases de recomendação prática para o próximo período"}\n' +
-      'O array "por_eixo" deve ter exatamente um item para cada um destes eixos, nesta ordem: ' + listaEixos + '.';
-
-    const userMsg =
-      'Aluno: ' + nomeAluno + '\n' +
-      'Nível: ' + nomeNivel + ' · ' + semestre + 'º semestre · aulas ' + aulaInicio + ' a ' + aulaFim + ' (nível tem ' + totalAulasNivel + ' aulas no total)\n' +
-      'Cobertura de registros: ' + comRegistro + '/' + aulas.length + ' aulas (' + coberturaPct + '%)\n\n' +
-      'AULAS DO PERÍODO (plano da coordenação + registro do aluno):\n\n' + aulasTexto;
-
-    const response = await anthropic.messages.create({
-      model: MODEL,
-      max_tokens: 8000,
-      system: system,
-      messages: [{ role: 'user', content: userMsg }]
-    });
-
-    if(response.stop_reason === 'refusal'){
-      res.status(502).json({ error: 'O modelo recusou a solicitação. Tente "Refazer análise".' });
-      return;
-    }
-
-    const texto = (response.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
-    let parsed;
-    try{
-      parsed = JSON.parse(texto.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim());
-    }catch(e){
-      res.status(502).json({ error: 'A IA respondeu num formato inesperado. Tente "Refazer análise".', raw: texto.slice(0, 500) });
-      return;
-    }
-
-    res.status(200).json({
-      analise: {
-        gerado_em: new Date().toISOString(),
-        modelo: MODEL,
-        cobertura: { aulas_com_registro: comRegistro, aulas_periodo: aulas.length, percentual: coberturaPct },
-        resumo_geral: parsed.resumo_geral || '',
-        por_eixo: Array.isArray(parsed.por_eixo) ? parsed.por_eixo : [],
-        pontos_fortes: parsed.pontos_fortes || '',
-        pontos_desenvolvimento: parsed.pontos_desenvolvimento || '',
-        recomendacoes: parsed.recomendacoes || ''
-      }
-    });
+async function handler(req, res){
+  try{
+    await run(req, res);
   }catch(err){
     const msg = err && err.message ? err.message : String(err);
-    res.status(500).json({ error: 'Erro ao gerar a análise: ' + msg });
+    const stack = err && err.stack ? String(err.stack).split('\n').slice(1, 4).map(s => s.trim()).join(' | ') : '';
+    if(!res.headersSent) res.status(500).json({ error: 'Falha na função report-card-ia: ' + msg, stack });
   }
 }
 
