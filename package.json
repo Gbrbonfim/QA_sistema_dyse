@@ -4,6 +4,7 @@
   "private": true,
   "description": "Site e paineis da DYSE (estatico) + funcoes serverless na Vercel para acoes que exigem a chave service_role do Supabase (nunca exposta no navegador).",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.122.0",
     "@supabase/supabase-js": "^2.45.4"
   }
 }

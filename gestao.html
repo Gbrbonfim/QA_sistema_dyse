@@ -3562,9 +3562,31 @@ body.dyse-modal-open{overflow:hidden;}
     if(!alunoId || !materiaSlug || !aulaInicio || !aulaFim){ flashMsg('rcGerarMsg', 'Preencha nível, semestre e o intervalo de aulas.', false); return; }
     const { data, error } = await dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, aulaFim);
     if(error){ flashMsg('rcGerarMsg', error.message, false); return; }
-    flashMsg('rcGerarMsg', 'Report Card gerado!', true);
+
+    flashMsg('rcGerarMsg', 'Report Card gerado. Gerando a análise de desenvolvimento com IA (pode levar até 1 minuto)...', true);
+    const { data: comIA, error: iaError } = await dyseGerarAnaliseReportCardIA(data);
+    if(iaError){
+      flashMsg('rcGerarMsg', 'Report Card gerado, mas a análise da IA falhou (' + iaError.message + '). Abra o Report Card e clique em "Refazer análise".', false);
+    } else {
+      flashMsg('rcGerarMsg', 'Report Card + análise da IA prontos!', true);
+    }
     await renderAlunoReportCardsList(alunoId);
-    openReportCardModal(data.id, 'gestao');
+    openReportCardModal((comIA || data).id, 'gestao');
+  }
+
+  async function handleRefazerAnaliseIA(){
+    // salva o que o professor já editou (F/G/H etc.) antes de regenerar
+    if(CURRENT_REPORT_CARD && CURRENT_REPORT_CARD.dados){
+      const { data: salvo } = await dyseUpdateReportCard(CURRENT_REPORT_CARD.id, coletarDadosReportCardDoFormulario());
+      if(salvo) CURRENT_REPORT_CARD = salvo;
+    }
+    const msgEl = document.getElementById('rcModalMsg');
+    if(msgEl){ msgEl.className = 'auth-msg'; msgEl.textContent = 'Gerando a análise com IA (pode levar até 1 minuto)...'; }
+    const { data, error } = await dyseGerarAnaliseReportCardIA(CURRENT_REPORT_CARD);
+    if(error){ flashMsg('rcModalMsg', 'A análise da IA falhou: ' + error.message, false); return; }
+    CURRENT_REPORT_CARD = data;
+    renderReportCardModalBody();
+    flashMsg('rcModalMsg', 'Análise atualizada.', true);
   }
 
   /* ---------- Modal do Report Card (visão A-I, edição + transição de status) ----------
@@ -3612,16 +3634,28 @@ body.dyse-modal-open{overflow:hidden;}
       (freq.criterio_atingido ? '<b style="color:var(--ok);">Atingido</b>' : '<b style="color:var(--bad);">Não atingido</b>') + '</p>' +
       (freq.aulas_sem_registro ? '<p class="gestao-hint">⚠️ ' + freq.aulas_sem_registro + ' aula(s) do período ainda sem Registro de Classe lançado.</p>' : '');
 
-    const eixos = d.avaliacao_eixos || {};
-    const blocoEixos = '<div class="report-section-head">C · Avaliação Qualitativa por Eixo</div>' +
-      Object.keys(eixos).map(eixo => {
-        const info = eixos[eixo];
-        return '<div class="gestao-form gestao-form-col" style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #f0e3d2;">' +
-          '<b>' + escapeHtmlLocal(eixo) + '</b> <span style="opacity:.6; font-size:.78rem;">(' + info.amostras + ' amostra(s) no período)</span>' +
-          '<div class="gestao-field">' + selectPPR('data-rc-eixo="' + escapeHtmlLocal(eixo) + '"', info.nivel) + '</div>' +
-          '<div class="gestao-field"><input type="text" placeholder="Observações (padrão de erro / aula específica)" data-rc-eixo-obs="' + escapeHtmlLocal(eixo) + '" value="' + escapeHtmlLocal(info.observacoes || '') + '"></div>' +
-        '</div>';
-      }).join('');
+    // Bloco C — análise de desenvolvimento por IA (substitui os selects PP/P/R).
+    const ia = d.analise_ia;
+    const iaTextareaStyle = 'width:100%; min-height:64px; font-family:var(--font-body); font-size:.9rem; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 12px; color:var(--seal);';
+    let blocoEixos;
+    if(ia){
+      blocoEixos =
+        '<div class="report-section-head">C · Análise de desenvolvimento (IA — revise e edite)</div>' +
+        '<p class="gestao-hint">Gerado por IA a partir dos registros de classe do aluno cruzados com o plano de cada aula. Cobertura: ' +
+          (ia.cobertura ? ia.cobertura.aulas_com_registro + ' de ' + ia.cobertura.aulas_periodo + ' aulas do período (' + ia.cobertura.percentual + '%)' : '—') +
+          ' · modelo ' + escapeHtmlLocal(ia.modelo || '') + '.</p>' +
+        '<div class="gestao-field"><label>Resumo geral</label><textarea id="iaResumoGeral" style="' + iaTextareaStyle + '">' + escapeHtmlLocal(ia.resumo_geral || '') + '</textarea></div>' +
+        (ia.por_eixo || []).map((e, i) =>
+          '<div class="gestao-field"><label>' + escapeHtmlLocal(e.eixo) + '</label>' +
+          '<textarea data-ia-eixo="' + i + '" style="' + iaTextareaStyle + '">' + escapeHtmlLocal(e.texto || '') + '</textarea></div>'
+        ).join('') +
+        '<div class="btn-row" style="margin-top:6px;"><button type="button" class="btn btn-ghost btn-xs" onclick="handleRefazerAnaliseIA()">↻ Refazer análise (IA)</button></div>';
+    } else {
+      blocoEixos =
+        '<div class="report-section-head">C · Análise de desenvolvimento</div>' +
+        '<p class="gestao-hint">Este Report Card ainda não tem a análise da IA.</p>' +
+        '<button type="button" class="btn btn-primary" onclick="handleRefazerAnaliseIA()">Gerar análise com IA</button>';
+    }
 
     const revisoes = d.revisoes_teste || [];
     const blocoRevisoes = revisoes.length ? '<div class="report-section-head">D · Desempenho nas Revisões-Teste</div>' +
@@ -3707,6 +3741,14 @@ body.dyse-modal-open{overflow:hidden;}
     const d = JSON.parse(JSON.stringify(CURRENT_REPORT_CARD.dados || {})); // clona — preserva frequencia/alertas_planner/amostras
     document.querySelectorAll('[data-rc-eixo]').forEach(el => { d.avaliacao_eixos[el.dataset.rcEixo].nivel = el.value || null; });
     document.querySelectorAll('[data-rc-eixo-obs]').forEach(el => { d.avaliacao_eixos[el.dataset.rcEixoObs].observacoes = el.value.trim(); });
+    if(d.analise_ia){
+      const rg = document.getElementById('iaResumoGeral');
+      if(rg) d.analise_ia.resumo_geral = rg.value.trim();
+      document.querySelectorAll('[data-ia-eixo]').forEach(el => {
+        const idx = Number(el.dataset.iaEixo);
+        if(d.analise_ia.por_eixo && d.analise_ia.por_eixo[idx]) d.analise_ia.por_eixo[idx].texto = el.value.trim();
+      });
+    }
     document.querySelectorAll('[data-rc-rev-nota]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevNota)].nota_forms = el.value.trim() || null; });
     document.querySelectorAll('[data-rc-rev-fluencia]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevFluencia)].fluencia_oral = el.value || null; });
     document.querySelectorAll('[data-rc-rev-validade]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevValidade)].validade_oficial = el.value || null; });

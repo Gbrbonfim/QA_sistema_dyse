@@ -1920,16 +1920,26 @@ body.dyse-modal-open{overflow:hidden;}
       (freq.criterio_atingido ? '<b style="color:var(--ok);">Atingido</b>' : '<b style="color:var(--bad);">Não atingido</b>') + '</p>' +
       (freq.aulas_sem_registro ? '<p class="report-line">⚠️ ' + freq.aulas_sem_registro + ' aula(s) do período ainda sem Registro de Classe lançado.</p>' : '');
 
-    const eixos = d.avaliacao_eixos || {};
-    const blocoEixos = '<div class="report-section-head">C · Avaliação Qualitativa por Eixo</div>' +
-      Object.keys(eixos).map(eixo => {
-        const info = eixos[eixo];
-        return '<div style="margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid #f0e3d2;">' +
-          '<b>' + escapeHtmlLocal(eixo) + '</b> <span style="opacity:.6; font-size:.78rem;">(' + info.amostras + ' amostra(s) no período)</span>' +
-          pfCampo('Nível', selectPPR('data-rc-eixo="' + escapeHtmlLocal(eixo) + '"', info.nivel)) +
-          pfCampo('Observações', pfInput('data-rc-eixo-obs="' + escapeHtmlLocal(eixo) + '"', info.observacoes, 'Padrão de erro / aula específica')) +
-        '</div>';
-      }).join('');
+    // Bloco C — análise de desenvolvimento por IA (substitui os selects PP/P/R).
+    const ia = d.analise_ia;
+    const iaTextareaStyle = 'width:100%; min-height:64px; font-family:var(--font-body); font-size:.9rem; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 12px; color:var(--seal); box-sizing:border-box;';
+    let blocoEixos;
+    if(ia){
+      blocoEixos =
+        '<div class="report-section-head">C · Análise de desenvolvimento (IA — revise e edite)</div>' +
+        '<p class="report-line" style="opacity:.75;">Gerado por IA a partir dos registros de classe do aluno cruzados com o plano de cada aula. Cobertura: ' +
+          (ia.cobertura ? ia.cobertura.aulas_com_registro + ' de ' + ia.cobertura.aulas_periodo + ' aulas (' + ia.cobertura.percentual + '%)' : '—') + '.</p>' +
+        pfCampo('Resumo geral', '<textarea id="iaResumoGeral" style="' + iaTextareaStyle + '">' + escapeHtmlLocal(ia.resumo_geral || '') + '</textarea>') +
+        (ia.por_eixo || []).map((e, i) =>
+          pfCampo(escapeHtmlLocal(e.eixo), '<textarea data-ia-eixo="' + i + '" style="' + iaTextareaStyle + '">' + escapeHtmlLocal(e.texto || '') + '</textarea>')
+        ).join('') +
+        '<div class="btn-row" style="margin-top:6px;"><button type="button" class="btn btn-ghost btn-xs" onclick="handleRefazerAnaliseIA()">↻ Refazer análise (IA)</button></div>';
+    } else {
+      blocoEixos =
+        '<div class="report-section-head">C · Análise de desenvolvimento</div>' +
+        '<p class="report-line">Este Report Card ainda não tem a análise da IA.</p>' +
+        '<button type="button" class="btn btn-primary" onclick="handleRefazerAnaliseIA()">Gerar análise com IA</button>';
+    }
 
     const revisoes = d.revisoes_teste || [];
     const blocoRevisoes = revisoes.length ? '<div class="report-section-head">D · Desempenho nas Revisões-Teste</div>' +
@@ -1993,6 +2003,14 @@ body.dyse-modal-open{overflow:hidden;}
     const d = JSON.parse(JSON.stringify(CURRENT_REPORT_CARD.dados || {}));
     document.querySelectorAll('[data-rc-eixo]').forEach(el => { d.avaliacao_eixos[el.dataset.rcEixo].nivel = el.value || null; });
     document.querySelectorAll('[data-rc-eixo-obs]').forEach(el => { d.avaliacao_eixos[el.dataset.rcEixoObs].observacoes = el.value.trim(); });
+    if(d.analise_ia){
+      const rg = document.getElementById('iaResumoGeral');
+      if(rg) d.analise_ia.resumo_geral = rg.value.trim();
+      document.querySelectorAll('[data-ia-eixo]').forEach(el => {
+        const idx = Number(el.dataset.iaEixo);
+        if(d.analise_ia.por_eixo && d.analise_ia.por_eixo[idx]) d.analise_ia.por_eixo[idx].texto = el.value.trim();
+      });
+    }
     document.querySelectorAll('[data-rc-rev-nota]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevNota)].nota_forms = el.value.trim() || null; });
     document.querySelectorAll('[data-rc-rev-fluencia]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevFluencia)].fluencia_oral = el.value || null; });
     document.querySelectorAll('[data-rc-rev-validade]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevValidade)].validade_oficial = el.value || null; });
@@ -2019,6 +2037,21 @@ body.dyse-modal-open{overflow:hidden;}
     CURRENT_REPORT_CARD = data;
     await dyseMarcarReportCardRevisado(CURRENT_REPORT_CARD.id);
     msg.textContent = 'Salvo!';
+  }
+
+  async function handleRefazerAnaliseIA(){
+    if(CURRENT_REPORT_CARD && CURRENT_REPORT_CARD.dados){
+      const { data: salvo } = await dyseUpdateReportCard(CURRENT_REPORT_CARD.id, coletarDadosReportCardDoFormulario());
+      if(salvo) CURRENT_REPORT_CARD = salvo;
+    }
+    const msg = document.getElementById('rcModalMsg');
+    if(msg) msg.textContent = 'Gerando a análise com IA (pode levar até 1 minuto)...';
+    const { data, error } = await dyseGerarAnaliseReportCardIA(CURRENT_REPORT_CARD);
+    if(error){ if(msg) msg.textContent = 'A análise da IA falhou: ' + error.message; return; }
+    CURRENT_REPORT_CARD = data;
+    renderReportCardModalBody();
+    const m2 = document.getElementById('rcModalMsg');
+    if(m2) m2.textContent = 'Análise atualizada.';
   }
 
   async function handleLiberarReportCardAluno(){

@@ -1809,6 +1809,41 @@ async function dyseListReportCards(alunoId){
   return error ? [] : data;
 }
 
+/* Gera a análise de desenvolvimento do aluno por IA (função serverless
+   /api/report-card-ia → Claude) e grava em dados.analise_ia do Report Card.
+   Na 1ª geração também pré-preenche pontos fortes / de desenvolvimento /
+   considerações se ainda estiverem vazios (o professor edita depois). */
+async function dyseGerarAnaliseReportCardIA(reportCard){
+  const session = await dyseGetSession();
+  if(!session) return { error: { message: 'Sessão expirada.' } };
+  let resp;
+  try{
+    resp = await fetch('/api/report-card-ia', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+      body: JSON.stringify({
+        aluno_id: reportCard.aluno_id,
+        materia_slug: reportCard.materia_slug,
+        semestre: reportCard.semestre,
+        aula_inicio: reportCard.aula_inicio,
+        aula_fim: reportCard.aula_fim
+      })
+    });
+  }catch(err){
+    return { error: { message: 'Erro de conexão com a função de IA: ' + err.message } };
+  }
+  const result = await resp.json().catch(() => ({}));
+  if(!resp.ok) return { error: { message: result.error || resp.statusText } };
+
+  const dados = JSON.parse(JSON.stringify(reportCard.dados || {}));
+  dados.analise_ia = result.analise;
+  if(!dados.pontos_fortes) dados.pontos_fortes = result.analise.pontos_fortes || '';
+  if(!dados.pontos_desenvolvimento) dados.pontos_desenvolvimento = result.analise.pontos_desenvolvimento || '';
+  if(!dados.consideracoes_professor) dados.consideracoes_professor = result.analise.recomendacoes || '';
+
+  return dyseUpdateReportCard(reportCard.id, dados);
+}
+
 async function dyseUpdateReportCard(id, dados){
   const { data, error } = await sb
     .from('report_cards')
