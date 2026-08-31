@@ -135,6 +135,36 @@ body::before{
   align-items:center; justify-content:center; line-height:1; border:2px solid #fff;
 }
 
+/* dropdown de avisos do sino */
+.avisos-wrap{position:relative; flex:none;}
+.avisos-panel{
+  position:absolute; top:46px; right:0; width:min(360px,86vw); background:#fff; border:1px solid #eee0cf;
+  border-radius:14px; box-shadow:0 18px 44px rgba(58,29,16,.20); z-index:60; overflow:hidden; display:none;
+}
+.avisos-panel.open{display:block;}
+.avisos-panel-head{
+  display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px;
+  border-bottom:1px solid #f0e3d2; font-weight:800; font-size:.9rem; color:var(--seal);
+}
+.avisos-panel-head button{background:none; border:none; color:var(--amaranth); font-weight:700; font-size:.76rem; cursor:pointer;}
+.avisos-list{max-height:min(60vh,420px); overflow-y:auto;}
+.aviso-item{padding:11px 14px; border-bottom:1px solid #f6ece0;}
+.aviso-item:last-child{border-bottom:none;}
+.aviso-item.nao-lido{background:#fff7f8; cursor:pointer;}
+.aviso-item.nao-lido .aviso-titulo::before{
+  content:""; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--amaranth);
+  margin-right:7px; vertical-align:middle;
+}
+.aviso-titulo{font-weight:700; font-size:.85rem; color:var(--seal);}
+.aviso-corpo{font-size:.8rem; color:var(--seal-soft); margin-top:2px; line-height:1.45;}
+.aviso-quando{font-size:.7rem; color:var(--seal-soft); opacity:.65; margin-top:4px;}
+.avisos-vazio{padding:22px 14px; text-align:center; font-size:.82rem; color:var(--seal-soft); opacity:.7;}
+.avisos-link-row{
+  padding:11px 14px; border-bottom:1px solid #f6ece0; font-size:.82rem; font-weight:700;
+  color:var(--amaranth); cursor:pointer;
+}
+.avisos-link-row:hover{background:var(--antique-soft);}
+
 .content{flex:1 1 auto; padding:28px 32px 60px; width:100%;}
 
 .page-header{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:22px;}
@@ -800,10 +830,19 @@ body.dyse-modal-open{overflow:hidden;}
       </div>
       <div class="topbar-right">
         <nav class="topbar-links" id="topbarLinks"></nav>
-        <button type="button" class="topbar-bell" onclick="dyseNotificationsStub()" title="Notificações">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-          <span class="topbar-bell-badge" id="topbarBellBadge"></span>
-        </button>
+        <div class="avisos-wrap">
+          <button type="button" class="topbar-bell" onclick="toggleAvisosPanel(event)" title="Avisos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="topbar-bell-badge" id="topbarBellBadge"></span>
+          </button>
+          <div class="avisos-panel" id="avisosPanel">
+            <div class="avisos-panel-head">
+              <span>Avisos</span>
+              <button type="button" onclick="marcarTodosAvisosLidos()">Marcar todas como lidas</button>
+            </div>
+            <div class="avisos-list" id="avisosList"><div class="avisos-vazio">Carregando...</div></div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -1392,6 +1431,12 @@ body.dyse-modal-open{overflow:hidden;}
   let CHAMADA_MY_TURMAS = [];
   let CHAMADA_STUDENTS = [];
 
+  // Aluno com situação financeira "pausado" (existem débitos): continua na
+  // turma, mas a professora não faz chamada nem registro de classe dele até a
+  // coordenação reativar. O flag vem espelhado em profiles.situacao_financeira.
+  function alunoPausado(s){ return s && s.situacao_financeira === 'pausado'; }
+  const TAG_PAUSADO = ' <span class="pill-count pill-bad" title="Situação financeira pausada — fale com a coordenação">pausado</span>';
+
   async function loadPanelTurmas(){
     const [myLinks, allTurmas] = await Promise.all([dyseListMyTurmas(), dyseListTurmas()]);
     const myIds = new Set(myLinks.map(l => l.turma_id));
@@ -1428,8 +1473,13 @@ body.dyse-modal-open{overflow:hidden;}
 
     document.getElementById('chamadaBody').innerHTML = CHAMADA_STUDENTS.length
       ? CHAMADA_STUDENTS.map(s => {
+          const nome = escapeHtmlLocal(s.full_name || s.email || '');
+          if(alunoPausado(s)){
+            return '<tr class="linha-pausada" style="opacity:.6;"><td>' + nome + TAG_PAUSADO + '</td>' +
+              '<td style="font-size:.78rem; color:var(--seal-soft);">chamada bloqueada</td></tr>';
+          }
           const presente = presenteById[s.id] !== undefined ? presenteById[s.id] : true;
-          return '<tr><td>' + escapeHtmlLocal(s.full_name || s.email || '') + '</td><td>' +
+          return '<tr><td>' + nome + '</td><td>' +
             '<label class="dyse-toggle"><input type="checkbox" data-aluno="' + s.id + '" ' + (presente ? 'checked' : '') + '><span class="slider"></span></label>' +
           '</td></tr>';
         }).join('')
@@ -1524,11 +1574,12 @@ body.dyse-modal-open{overflow:hidden;}
     const registrosPorAula = {};
     registrosPorAluno.flat().forEach(r => { (registrosPorAula[r.nivel_aula_id] = registrosPorAula[r.nivel_aula_id] || 0); registrosPorAula[r.nivel_aula_id]++; });
 
+    const totalRegistravel = CHAMADA_STUDENTS.filter(s => !alunoPausado(s)).length;
     const sel = document.getElementById('registroClasseAulaSelect');
     const valorAnterior = sel.value;
     sel.innerHTML = REGISTRO_AULAS_DA_TURMA.map(a => {
       const feitos = registrosPorAula[a.id] || 0;
-      const status = !feitos ? '' : (feitos >= CHAMADA_STUDENTS.length ? ' ✓' : ' ⚠️');
+      const status = !feitos ? '' : (feitos >= totalRegistravel ? ' ✓' : ' ⚠️');
       return '<option value="' + a.id + '">' + String(a.numero).padStart(2,'0') + '. ' + escapeHtmlLocal(a.topico) + status + '</option>';
     }).join('');
     if(REGISTRO_AULAS_DA_TURMA.some(a => a.id === valorAnterior)) sel.value = valorAnterior;
@@ -1571,6 +1622,11 @@ body.dyse-modal-open{overflow:hidden;}
 
     document.getElementById('registroClasseBody').innerHTML = CHAMADA_STUDENTS.length
       ? CHAMADA_STUDENTS.map(s => {
+          const nome = escapeHtmlLocal(s.full_name || s.email || '');
+          if(alunoPausado(s)){
+            return '<tr class="linha-pausada" style="opacity:.6;"><td data-label="Aluno">' + nome + TAG_PAUSADO + '</td>' +
+              '<td colspan="' + (REGISTRO_EIXOS.length + 1) + '" style="font-size:.78rem; color:var(--seal-soft);">registro bloqueado enquanto a situação financeira estiver pausada</td></tr>';
+          }
           const reg = existentePorAluno[s.id];
           const avaliacoes = (reg && reg.avaliacoes) || {};
           const selects = REGISTRO_EIXOS.map(eixo => {
@@ -1580,7 +1636,7 @@ body.dyse-modal-open{overflow:hidden;}
             ).join('');
             return '<td><select data-aluno="' + s.id + '" data-eixo="' + escapeHtmlLocal(eixo) + '">' + opts + '</select></td>';
           }).join('');
-          return '<tr><td data-label="Aluno">' + escapeHtmlLocal(s.full_name || s.email || '') + '</td>' + selects +
+          return '<tr><td data-label="Aluno">' + nome + '</td>' + selects +
             '<td><input type="text" data-obs="' + s.id + '" value="' + escapeHtmlLocal(reg ? (reg.observacoes || '') : '') + '" style="width:100%; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem;"></td></tr>';
         }).join('')
       : '<tr><td colspan="' + (REGISTRO_EIXOS.length + 2) + '" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
@@ -1600,16 +1656,17 @@ body.dyse-modal-open{overflow:hidden;}
     const msg = document.getElementById('registroClasseMsg');
     if(!turmaId || !aulaId){ msg.textContent = 'Escolha a turma e a aula.'; return; }
 
+    const alunosRegistraveis = CHAMADA_STUDENTS.filter(s => !alunoPausado(s));
     const porAluno = {};
-    CHAMADA_STUDENTS.forEach(s => { porAluno[s.id] = { avaliacoes: {}, observacoes: '' }; });
+    alunosRegistraveis.forEach(s => { porAluno[s.id] = { avaliacoes: {}, observacoes: '' }; });
     document.querySelectorAll('#registroClasseBody select[data-aluno]').forEach(el => {
-      if(el.value) porAluno[el.dataset.aluno].avaliacoes[el.dataset.eixo] = el.value;
+      if(el.value && porAluno[el.dataset.aluno]) porAluno[el.dataset.aluno].avaliacoes[el.dataset.eixo] = el.value;
     });
     document.querySelectorAll('#registroClasseBody input[data-obs]').forEach(el => {
-      porAluno[el.dataset.obs].observacoes = el.value.trim();
+      if(porAluno[el.dataset.obs]) porAluno[el.dataset.obs].observacoes = el.value.trim();
     });
 
-    const resultados = await Promise.all(CHAMADA_STUDENTS.map(s =>
+    const resultados = await Promise.all(alunosRegistraveis.map(s =>
       dyseUpsertRegistroClasse(s.id, aulaId, {
         turma_id: turmaId,
         avaliacoes: porAluno[s.id].avaliacoes,
@@ -1776,7 +1833,8 @@ body.dyse-modal-open{overflow:hidden;}
   async function renderSugestoesPendentesBox(){
     const box = document.getElementById('disponibilidadeSugestoesBox');
     const sugestoes = await dyseListMinhasSugestoesPendentes();
-    updateBellBadge(sugestoes.length);
+    SUGESTOES_PENDENTES_COUNT = sugestoes.length;
+    updateBellBadge();
     if(!sugestoes.length){ box.innerHTML = ''; return; }
     box.innerHTML = sugestoes.map(s => {
       const turma = MINHAS_TURMAS_DISP.find(t => t.id === s.turma_id);
@@ -2360,13 +2418,14 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   let SUGESTOES_PENDENTES_COUNT = 0;
+  let AVISOS_CACHE = [];
 
-  function updateBellBadge(count){
-    SUGESTOES_PENDENTES_COUNT = count;
+  function updateBellBadge(){
+    const naoLidos = AVISOS_CACHE.filter(a => !a.lido).length + SUGESTOES_PENDENTES_COUNT;
     const badge = document.getElementById('topbarBellBadge');
     if(!badge) return;
-    if(count > 0){
-      badge.textContent = count > 9 ? '9+' : String(count);
+    if(naoLidos > 0){
+      badge.textContent = naoLidos > 9 ? '9+' : String(naoLidos);
       badge.style.display = 'flex';
     }else{
       badge.style.display = 'none';
@@ -2375,18 +2434,68 @@ body.dyse-modal-open{overflow:hidden;}
 
   async function refreshNotificationsBell(){
     try{
-      const sugestoes = await dyseListMinhasSugestoesPendentes();
-      updateBellBadge(sugestoes.length);
+      const [sugestoes, avisos] = await Promise.all([
+        dyseListMinhasSugestoesPendentes().catch(() => []),
+        dyseListAvisos(50).catch(() => [])
+      ]);
+      SUGESTOES_PENDENTES_COUNT = sugestoes.length;
+      AVISOS_CACHE = avisos;
+      updateBellBadge();
+      if(document.getElementById('avisosPanel').classList.contains('open')) renderAvisosList();
     }catch(err){ /* não trava o resto da tela por causa do sino */ }
   }
 
-  function dyseNotificationsStub(){
+  function renderAvisosList(){
+    const el = document.getElementById('avisosList');
+    let html = '';
     if(SUGESTOES_PENDENTES_COUNT > 0){
-      showPanel('disponibilidade');
-      return;
+      html += '<div class="avisos-link-row" onclick="document.getElementById(\'avisosPanel\').classList.remove(\'open\'); showPanel(\'disponibilidade\');">' +
+        SUGESTOES_PENDENTES_COUNT + ' sugestão(ões) de horário aguardando você →</div>';
     }
-    alert('Nenhuma notificação por enquanto.');
+    if(AVISOS_CACHE.length){
+      html += AVISOS_CACHE.map(a => {
+        const quando = new Date(a.criado_em).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+        return '<div class="aviso-item' + (a.lido ? '' : ' nao-lido') + '"' + (a.lido ? '' : ' onclick="abrirAviso(' + a.id + ')"') + '>' +
+          '<div class="aviso-titulo">' + escapeHtmlLocal(a.titulo) + '</div>' +
+          (a.corpo ? '<div class="aviso-corpo">' + escapeHtmlLocal(a.corpo) + '</div>' : '') +
+          '<div class="aviso-quando">' + quando + '</div>' +
+        '</div>';
+      }).join('');
+    }
+    el.innerHTML = html || '<div class="avisos-vazio">Nenhum aviso por enquanto.</div>';
   }
+
+  function toggleAvisosPanel(event){
+    if(event) event.stopPropagation();
+    const panel = document.getElementById('avisosPanel');
+    const abrindo = !panel.classList.contains('open');
+    panel.classList.toggle('open', abrindo);
+    if(abrindo) renderAvisosList();
+  }
+
+  async function abrirAviso(id){
+    const aviso = AVISOS_CACHE.find(a => a.id === id);
+    if(aviso && !aviso.lido){
+      aviso.lido = true;
+      updateBellBadge();
+      renderAvisosList();
+      await dyseMarcarAvisoLido(id);
+    }
+  }
+
+  async function marcarTodosAvisosLidos(){
+    const ids = AVISOS_CACHE.filter(a => !a.lido).map(a => a.id);
+    if(!ids.length) return;
+    AVISOS_CACHE.forEach(a => a.lido = true);
+    updateBellBadge();
+    renderAvisosList();
+    await dyseMarcarTodosAvisosLidos(ids);
+  }
+
+  document.addEventListener('click', (event) => {
+    const wrap = document.querySelector('.avisos-wrap');
+    if(wrap && !wrap.contains(event.target)) document.getElementById('avisosPanel').classList.remove('open');
+  });
 
   (async () => {
     const session = await dyseRequireTeacher();

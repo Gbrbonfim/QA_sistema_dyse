@@ -813,6 +813,13 @@ function dyseFindPeriodoAberto(historicoDoAluno){
   return (historicoDoAluno || []).find(h => !h.data_fim) || null;
 }
 
+/* Situações que continuam gerando mensalidade: "ativo" e "pausado" (pausado
+   = mensalidade atrasada, a cobrança NÃO some, só bloqueia o acesso do aluno).
+   "cancelado" e "encerrado" param de gerar. */
+function dyseSituacaoGeraMensalidade(situacao){
+  return situacao === 'ativo' || situacao === 'pausado';
+}
+
 /* Cria/edita o vínculo financeiro do aluno. Trocar professor, modalidade OU
    situação fecha o período aberto atual (data_fim = ontem) e abre um novo a
    partir de hoje — preserva o histórico (ex: um aluno cancelado e depois
@@ -850,7 +857,7 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
       .eq('id', aberto.id);
     if(!error){
       await dyseLogAlunoFinanceiroObservacao(alunoId, aberto.id, campos.observacao, aberto.observacao, userId);
-      await dyseDesvincularTurmaSeInativo(alunoId, situacaoNova);
+      await dyseAplicarSituacaoNoPerfil(alunoId, situacaoNova);
     }
     return { error };
   }
@@ -885,15 +892,26 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
     .maybeSingle();
   if(!error){
     await dyseLogAlunoFinanceiroObservacao(alunoId, data ? data.id : null, campos.observacao, aberto ? aberto.observacao : null, userId);
-    if(aberto && (aberto.situacao || 'ativo') !== situacaoNova){
+    const situacaoAnterior = aberto ? (aberto.situacao || 'ativo') : 'ativo';
+    if(situacaoAnterior !== situacaoNova){
       await dyseLogAlunoFinanceiroEvento(
         alunoId,
         data ? data.id : null,
-        'Situação alterada de "' + (aberto.situacao || 'ativo') + '" para "' + situacaoNova + '".',
+        'Situação alterada de "' + situacaoAnterior + '" para "' + situacaoNova + '".',
         userId
       );
+      if(situacaoNova === 'pausado'){
+        const { data: perfilAluno } = await sb.from('profiles').select('full_name').eq('id', alunoId).maybeSingle();
+        const nome = (perfilAluno && perfilAluno.full_name) || 'O aluno';
+        await dyseCriarAviso({
+          tipo: 'aluno_pausado',
+          titulo: 'Aluno pausado (mensalidade atrasada)',
+          corpo: nome + ' foi pausado por mensalidade atrasada. O acesso ao painel do aluno fica bloqueado e a professora não faz a chamada dele até regularizar. A cobrança da mensalidade continua sendo gerada normalmente.',
+          aluno_id: alunoId
+        }, userId);
+      }
     }
-    await dyseDesvincularTurmaSeInativo(alunoId, situacaoNova);
+    await dyseAplicarSituacaoNoPerfil(alunoId, situacaoNova);
   }
   return { data, error };
 }
@@ -911,15 +929,58 @@ async function dyseLogAlunoFinanceiroEvento(alunoId, periodoId, texto, userId){
   });
 }
 
-/* Aluno cancelado/encerrado sai da turma automaticamente (deixa de aparecer
-   pro professor e o rateio já ignora situação != "ativo"). Escreve direto no
-   banco (não depende do cache do cliente), e só quando ainda há turma. */
-async function dyseDesvincularTurmaSeInativo(alunoId, situacao){
-  if(situacao !== 'cancelado' && situacao !== 'encerrado') return;
-  const { data: perfil } = await sb.from('profiles').select('turma_id').eq('id', alunoId).maybeSingle();
-  if(perfil && perfil.turma_id){
-    await sb.from('profiles').update({ turma_id: null }).eq('id', alunoId);
-  }
+/* Espelha a situação do período aberto no profiles (profiles.situacao_financeira)
+   e, se for cancelado/encerrado, tira o aluno da turma. Escreve direto no banco
+   (não depende do cache do cliente). O espelho existe pra a professora ver
+   "(pausado)" na chamada sem precisar ler aluno_financeiro_historico. */
+async function dyseAplicarSituacaoNoPerfil(alunoId, situacao){
+  const sit = situacao || 'ativo';
+  const { data: perfil } = await sb.from('profiles').select('turma_id, situacao_financeira').eq('id', alunoId).maybeSingle();
+  const patch = {};
+  if(!perfil || perfil.situacao_financeira !== sit) patch.situacao_financeira = sit;
+  if((sit === 'cancelado' || sit === 'encerrado') && perfil && perfil.turma_id) patch.turma_id = null;
+  if(Object.keys(patch).length) await sb.from('profiles').update(patch).eq('id', alunoId);
+}
+
+/* Cria um aviso no mural da coordenação (tabela avisos). */
+async function dyseCriarAviso(aviso, userId){
+  if(!aviso || !aviso.tipo || !aviso.titulo) return;
+  await sb.from('avisos').insert({
+    tipo: aviso.tipo,
+    titulo: aviso.titulo,
+    corpo: aviso.corpo || null,
+    aluno_id: aviso.aluno_id || null,
+    criado_por: userId || null
+  });
+}
+
+/* Lista os avisos da coordenação (mais recentes primeiro) já marcando quais o
+   usuário logado leu. Só admin/financeiro conseguem ler (RLS). */
+async function dyseListAvisos(limite){
+  const session = await dyseGetSession();
+  const uid = session ? session.user.id : null;
+  const [avisosResp, lidosResp] = await Promise.all([
+    sb.from('avisos').select('*').order('criado_em', { ascending: false }).limit(limite || 50),
+    uid ? sb.from('avisos_lidos').select('aviso_id').eq('user_id', uid) : Promise.resolve({ data: [] })
+  ]);
+  if(avisosResp.error) return [];
+  const lidoSet = new Set((lidosResp.data || []).map(l => l.aviso_id));
+  return (avisosResp.data || []).map(a => ({ ...a, lido: lidoSet.has(a.id) }));
+}
+
+async function dyseMarcarAvisoLido(avisoId){
+  const session = await dyseGetSession();
+  if(!session) return;
+  await sb.from('avisos_lidos').upsert({ aviso_id: avisoId, user_id: session.user.id }, { onConflict: 'aviso_id,user_id' });
+}
+
+async function dyseMarcarTodosAvisosLidos(avisoIds){
+  const session = await dyseGetSession();
+  if(!session || !avisoIds || !avisoIds.length) return;
+  await sb.from('avisos_lidos').upsert(
+    avisoIds.map(id => ({ aviso_id: id, user_id: session.user.id })),
+    { onConflict: 'aviso_id,user_id' }
+  );
 }
 
 /* Log somente-inserção da observação a cada "Salvar" no modal Financeiro.
@@ -1051,7 +1112,7 @@ async function dyseGerarMensalidadesDoMes(mes){
   historico.forEach(h => {
     if(h.data_inicio > fimDoMesStr) return;
     if(h.data_fim && h.data_fim < mes) return;
-    if(h.situacao !== 'ativo') return;
+    if(!dyseSituacaoGeraMensalidade(h.situacao)) return; // cancelado/encerrado param; pausado continua
     const ultimoMesPago = dyseUltimoMesPago(h);
     if(ultimoMesPago && mes > ultimoMesPago) return; // fora das parcelas contratadas
     (periodosPorAluno[h.aluno_id] = periodosPorAluno[h.aluno_id] || []).push(h);
@@ -1295,7 +1356,7 @@ async function dysePreverFinanceiroProfessorMeses(mesInicial, qtdMeses){
     const fimDoMesStr = dyseFimDoMes(mes);
     const porAluno = {};
     meuHistorico.forEach(h => {
-      if(h.situacao !== 'ativo') return;
+      if(!dyseSituacaoGeraMensalidade(h.situacao)) return;
       if(h.data_inicio > fimDoMesStr) return;
       if(h.data_fim && h.data_fim < mes) return;
       const ultimoMesPago = dyseUltimoMesPago(h);
@@ -1354,7 +1415,7 @@ async function dyseListMinhaPrevisaoHistoricoFinanceiro(){
     dyseListProfilesByRole('student')
   ]);
 
-  const meusPeriodos = historico.filter(h => (h.professor_id || null) === session.user.id && h.situacao === 'ativo');
+  const meusPeriodos = historico.filter(h => (h.professor_id || null) === session.user.id && dyseSituacaoGeraMensalidade(h.situacao));
   if(!meusPeriodos.length) return [];
 
   const modalidadeById = {};

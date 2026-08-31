@@ -2348,6 +2348,71 @@ create policy "calendario dias: gestao gerencia"
   using (public.is_admin())
   with check (public.is_admin());
 
+-- ----------------------------------------------------------------------
+-- 18) AVISOS DA COORDENAÇÃO + espelho da situação financeira no perfil
+--
+--     18.1) profiles.situacao_financeira — cópia da situação do período
+--     financeiro ABERTO do aluno ('ativo'|'pausado'|'cancelado'|
+--     'encerrado'), escrita por dyseSetAlunoFinanceiro. Existe só pra que
+--     o PROFESSOR (que não enxerga aluno_financeiro_historico de aluno de
+--     quem ele não é o responsável) consiga ver "(pausado)" na chamada e
+--     bloquear a presença. A verdade continua sendo o histórico.
+alter table public.profiles add column if not exists situacao_financeira text not null default 'ativo';
+
+--     18.2) avisos — mural da coordenação (admin + financeiro). Hoje só o
+--     evento "aluno pausado" cria aviso; a tabela é genérica pra reaproveito.
+create table if not exists public.avisos (
+  id bigint generated always as identity primary key,
+  tipo text not null,
+  titulo text not null,
+  corpo text,
+  aluno_id uuid references public.profiles(id) on delete set null,
+  criado_por uuid references public.profiles(id) on delete set null,
+  criado_em timestamptz not null default now()
+);
+create index if not exists idx_avisos_criado_em on public.avisos (criado_em desc);
+
+alter table public.avisos enable row level security;
+
+drop policy if exists "avisos: gestao le" on public.avisos;
+create policy "avisos: gestao le"
+  on public.avisos for select
+  using (public.is_admin());
+
+drop policy if exists "avisos: gestao cria" on public.avisos;
+create policy "avisos: gestao cria"
+  on public.avisos for insert
+  with check (public.is_admin());
+
+drop policy if exists "avisos: professor ve dos proprios alunos" on public.avisos;
+create policy "avisos: professor ve dos proprios alunos"
+  on public.avisos for select
+  using (
+    aluno_id is not null and exists (
+      select 1 from public.profiles p
+      where p.id = avisos.aluno_id
+        and p.turma_id is not null
+        and public.teacher_can_see_turma(p.turma_id)
+    )
+  );
+
+--     18.3) avisos_lidos — estado de leitura por usuário (cada pessoa da
+--     coordenação marca os seus como lidos).
+create table if not exists public.avisos_lidos (
+  aviso_id bigint not null references public.avisos(id) on delete cascade,
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  lido_em timestamptz not null default now(),
+  primary key (aviso_id, user_id)
+);
+
+alter table public.avisos_lidos enable row level security;
+
+drop policy if exists "avisos_lidos: cada um gerencia o proprio" on public.avisos_lidos;
+create policy "avisos_lidos: cada um gerencia o proprio"
+  on public.avisos_lidos for all
+  using (user_id = auth.uid())
+  with check (user_id = auth.uid());
+
 -- ======================================================================
 -- PRONTO! Depois de rodar este script:
 --

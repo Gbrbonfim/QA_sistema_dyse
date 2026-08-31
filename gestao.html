@@ -158,6 +158,40 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .topbar-bell svg{width:18px; height:18px;}
 .topbar-bell:hover{border-color:var(--amaranth); color:var(--amaranth);}
 
+/* ---------- Avisos da coordenação (sininho) ---------- */
+.avisos-wrap{position:relative; flex:none;}
+.avisos-badge{
+  position:absolute; top:-4px; right:-4px; min-width:17px; height:17px; padding:0 4px; border-radius:999px;
+  background:var(--amaranth); color:#fff; font-size:.66rem; font-weight:800; line-height:17px;
+  text-align:center; display:none;
+}
+.avisos-badge.show{display:block;}
+.avisos-panel{
+  position:absolute; top:46px; right:0; width:min(360px, 86vw); background:#fff; border:1px solid #eee0cf;
+  border-radius:14px; box-shadow:0 18px 44px rgba(58,29,16,.20); z-index:60; overflow:hidden; display:none;
+}
+.avisos-panel.open{display:block;}
+.avisos-panel-head{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px 14px; border-bottom:1px solid #f0e3d2; font-weight:800; font-size:.9rem; color:var(--seal);
+}
+.avisos-panel-head button{
+  background:none; border:none; color:var(--amaranth); font-weight:700; font-size:.76rem; cursor:pointer;
+}
+.avisos-list{max-height:min(60vh, 420px); overflow-y:auto;}
+.aviso-item{padding:11px 14px; border-bottom:1px solid #f6ece0; cursor:pointer;}
+.aviso-item:last-child{border-bottom:none;}
+.aviso-item:hover{background:var(--antique-soft);}
+.aviso-item.nao-lido{background:#fff7f8;}
+.aviso-item.nao-lido .aviso-titulo::before{
+  content:""; display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--amaranth);
+  margin-right:7px; vertical-align:middle;
+}
+.aviso-titulo{font-weight:700; font-size:.85rem; color:var(--seal);}
+.aviso-corpo{font-size:.8rem; color:var(--seal-soft); margin-top:2px; line-height:1.45;}
+.aviso-quando{font-size:.7rem; color:var(--seal-soft); opacity:.65; margin-top:4px;}
+.avisos-vazio{padding:22px 14px; text-align:center; font-size:.82rem; color:var(--seal-soft); opacity:.7;}
+
 .content{flex:1 1 auto; padding:28px 32px 60px; width:100%;}
 
 .page-header{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:22px;}
@@ -748,9 +782,19 @@ body.dyse-modal-open{overflow:hidden;}
       </div>
       <div class="topbar-right">
         <nav class="topbar-links" id="topbarLinks"></nav>
-        <button type="button" class="topbar-bell" onclick="dyseNotificationsStub()" title="Notificações">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-        </button>
+        <div class="avisos-wrap">
+          <button type="button" class="topbar-bell" onclick="toggleAvisosPanel(event)" title="Avisos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="avisos-badge" id="avisosBadge">0</span>
+          </button>
+          <div class="avisos-panel" id="avisosPanel">
+            <div class="avisos-panel-head">
+              <span>Avisos da coordenação</span>
+              <button type="button" onclick="marcarTodosAvisosLidos()">Marcar todas como lidas</button>
+            </div>
+            <div class="avisos-list" id="avisosList"><div class="avisos-vazio">Carregando...</div></div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -1903,7 +1947,9 @@ body.dyse-modal-open{overflow:hidden;}
     const studentsInTurma = STUDENTS.filter(s => s.turma_id === CURRENT_TURMA_MODAL_ID);
     container.innerHTML = studentsInTurma.length
       ? studentsInTurma.map(s =>
-          '<div class="student-in-turma-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.id) + '</span>' +
+          '<div class="student-in-turma-row"><span class="name">' + escapeHtmlLocal(s.full_name || s.id) +
+            (s.situacao_financeira === 'pausado' ? ' <span class="turma-badge" style="background:#fbeceb; color:var(--bad);">pausado</span>' : '') +
+          '</span>' +
           '<button type="button" class="btn btn-danger btn-xs" onclick="removeStudentFromTurma(\'' + s.id + '\')">Remover</button></div>'
         ).join('')
       : '<p class="report-line" style="opacity:.6;">Nenhum aluno nesta turma ainda — busque acima pra adicionar.</p>';
@@ -3945,6 +3991,7 @@ body.dyse-modal-open{overflow:hidden;}
     renderAlunoFinObsList();
     renderAlunosTable();
     if(typeof renderTurmasTable === 'function') renderTurmasTable(); // aluno pode ter saído da turma
+    carregarAvisos(); // pausar um aluno cria um aviso
     return false;
   }
 
@@ -4401,9 +4448,79 @@ body.dyse-modal-open{overflow:hidden;}
       '</div>';
   }
 
-  function dyseNotificationsStub(){
-    alert('Nenhuma notificação por enquanto.');
+  /* ---------- Avisos da coordenação (sininho) ---------- */
+  let AVISOS_CACHE = [];
+
+  async function carregarAvisos(){
+    AVISOS_CACHE = await dyseListAvisos(50);
+    renderAvisosBadge();
+    if(document.getElementById('avisosPanel').classList.contains('open')) renderAvisosList();
   }
+
+  function renderAvisosBadge(){
+    const naoLidos = AVISOS_CACHE.filter(a => !a.lido).length;
+    const badge = document.getElementById('avisosBadge');
+    badge.textContent = naoLidos > 9 ? '9+' : String(naoLidos);
+    badge.classList.toggle('show', naoLidos > 0);
+  }
+
+  function renderAvisosList(){
+    const el = document.getElementById('avisosList');
+    if(!AVISOS_CACHE.length){
+      el.innerHTML = '<div class="avisos-vazio">Nenhum aviso por enquanto.</div>';
+      return;
+    }
+    el.innerHTML = AVISOS_CACHE.map(a => {
+      const quando = new Date(a.criado_em).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      return '<div class="aviso-item' + (a.lido ? '' : ' nao-lido') + '" onclick="abrirAviso(' + a.id + ')">' +
+        '<div class="aviso-titulo">' + escapeHtmlLocal(a.titulo) + '</div>' +
+        (a.corpo ? '<div class="aviso-corpo">' + escapeHtmlLocal(a.corpo) + '</div>' : '') +
+        '<div class="aviso-quando">' + quando + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function toggleAvisosPanel(event){
+    if(event) event.stopPropagation();
+    const panel = document.getElementById('avisosPanel');
+    const abrindo = !panel.classList.contains('open');
+    panel.classList.toggle('open', abrindo);
+    if(abrindo) renderAvisosList();
+  }
+
+  async function abrirAviso(id){
+    const aviso = AVISOS_CACHE.find(a => a.id === id);
+    if(aviso && !aviso.lido){
+      aviso.lido = true;
+      renderAvisosBadge();
+      renderAvisosList();
+      await dyseMarcarAvisoLido(id);
+    }
+    if(aviso && aviso.aluno_id){
+      document.getElementById('avisosPanel').classList.remove('open');
+      showPanel('alunos');
+      const aluno = (typeof STUDENTS !== 'undefined' ? STUDENTS : []).find(s => s.id === aviso.aluno_id);
+      const filtro = document.getElementById('filterAlunoName');
+      if(filtro){ filtro.value = aluno ? (aluno.full_name || '') : ''; renderAlunosTable(); }
+      if(document.body.classList.contains('dyse-can-financeiro') && typeof openAlunoFinModal === 'function'){
+        openAlunoFinModal(aviso.aluno_id);
+      }
+    }
+  }
+
+  async function marcarTodosAvisosLidos(){
+    const ids = AVISOS_CACHE.filter(a => !a.lido).map(a => a.id);
+    if(!ids.length) return;
+    AVISOS_CACHE.forEach(a => a.lido = true);
+    renderAvisosBadge();
+    renderAvisosList();
+    await dyseMarcarTodosAvisosLidos(ids);
+  }
+
+  document.addEventListener('click', (event) => {
+    const wrap = document.querySelector('.avisos-wrap');
+    if(wrap && !wrap.contains(event.target)) document.getElementById('avisosPanel').classList.remove('open');
+  });
 
   function toggleTurmaFilterMenu(event){
     event.stopPropagation();
@@ -4471,6 +4588,7 @@ body.dyse-modal-open{overflow:hidden;}
     const hashPanel = location.hash.slice(1);
     showPanel(['turmas','materias','alunos','professores','contas','financeiro'].includes(hashPanel) ? hashPanel : 'turmas');
     await loadAll();
+    carregarAvisos();
   })();
 </script>
 </body>
