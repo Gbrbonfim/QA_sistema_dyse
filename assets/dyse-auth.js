@@ -885,9 +885,30 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
     .maybeSingle();
   if(!error){
     await dyseLogAlunoFinanceiroObservacao(alunoId, data ? data.id : null, campos.observacao, aberto ? aberto.observacao : null, userId);
+    if(aberto && (aberto.situacao || 'ativo') !== situacaoNova){
+      await dyseLogAlunoFinanceiroEvento(
+        alunoId,
+        data ? data.id : null,
+        'Situação alterada de "' + (aberto.situacao || 'ativo') + '" para "' + situacaoNova + '".',
+        userId
+      );
+    }
     await dyseDesvincularTurmaSeInativo(alunoId, situacaoNova);
   }
   return { data, error };
+}
+
+/* Registro datado de um evento do vínculo financeiro (ex: troca de situação)
+   no mesmo "Histórico de observações". Sempre insere (não deduplica). */
+async function dyseLogAlunoFinanceiroEvento(alunoId, periodoId, texto, userId){
+  const t = (texto || '').trim();
+  if(!t) return;
+  await sb.from('aluno_financeiro_observacoes').insert({
+    aluno_id: alunoId,
+    periodo_id: periodoId || null,
+    observacao: t,
+    registrado_por: userId || null
+  });
 }
 
 /* Aluno cancelado/encerrado sai da turma automaticamente (deixa de aparecer
