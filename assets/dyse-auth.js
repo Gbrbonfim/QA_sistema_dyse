@@ -848,7 +848,10 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
         contrato_fim: campos.contrato_fim || null
       })
       .eq('id', aberto.id);
-    if(!error) await dyseLogAlunoFinanceiroObservacao(alunoId, aberto.id, campos.observacao, aberto.observacao, userId);
+    if(!error){
+      await dyseLogAlunoFinanceiroObservacao(alunoId, aberto.id, campos.observacao, aberto.observacao, userId);
+      await dyseDesvincularTurmaSeInativo(alunoId, situacaoNova);
+    }
     return { error };
   }
 
@@ -880,8 +883,22 @@ async function dyseSetAlunoFinanceiro(alunoId, campos){
     })
     .select('*')
     .maybeSingle();
-  if(!error) await dyseLogAlunoFinanceiroObservacao(alunoId, data ? data.id : null, campos.observacao, aberto ? aberto.observacao : null, userId);
+  if(!error){
+    await dyseLogAlunoFinanceiroObservacao(alunoId, data ? data.id : null, campos.observacao, aberto ? aberto.observacao : null, userId);
+    await dyseDesvincularTurmaSeInativo(alunoId, situacaoNova);
+  }
   return { data, error };
+}
+
+/* Aluno cancelado/encerrado sai da turma automaticamente (deixa de aparecer
+   pro professor e o rateio já ignora situação != "ativo"). Escreve direto no
+   banco (não depende do cache do cliente), e só quando ainda há turma. */
+async function dyseDesvincularTurmaSeInativo(alunoId, situacao){
+  if(situacao !== 'cancelado' && situacao !== 'encerrado') return;
+  const { data: perfil } = await sb.from('profiles').select('turma_id').eq('id', alunoId).maybeSingle();
+  if(perfil && perfil.turma_id){
+    await sb.from('profiles').update({ turma_id: null }).eq('id', alunoId);
+  }
 }
 
 /* Log somente-inserção da observação a cada "Salvar" no modal Financeiro.

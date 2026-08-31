@@ -1932,6 +1932,12 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   async function addStudentToTurma(studentId){
+    // Evita rematricular na turma quem está cancelado/encerrado no financeiro
+    // (foi isso que deixou um aluno cancelado "preso" numa turma).
+    const aberto = dyseFindPeriodoAberto(ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === studentId));
+    if(aberto && (aberto.situacao === 'cancelado' || aberto.situacao === 'encerrado')){
+      if(!confirm('Esse aluno está com situação "' + aberto.situacao + '" no financeiro. Adicionar mesmo assim à turma?')) return;
+    }
     const { error } = await dyseSetStudentTurma(studentId, CURRENT_TURMA_MODAL_ID);
     if(error){ alert('Não foi possível adicionar o aluno: ' + error.message); return; }
     const s = STUDENTS.find(x => x.id === studentId);
@@ -3929,20 +3935,16 @@ body.dyse-modal-open{overflow:hidden;}
     const { error } = await dyseSetAlunoFinanceiro(CURRENT_ALUNO_FIN_ID, campos);
     if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
 
-    // Cancelado/encerrado: tira o aluno da turma automaticamente (deixa de
-    // aparecer pro professor, e dyseGerarMensalidadesDoMes já ignora
-    // qualquer situação != "ativo" na geração do pagamento do professor).
-    if(situacao === 'cancelado' || situacao === 'encerrado'){
-      const aluno = STUDENTS.find(s => s.id === CURRENT_ALUNO_FIN_ID);
-      if(aluno && aluno.turma_id) await dyseSetStudentTurma(CURRENT_ALUNO_FIN_ID, null);
-    }
-
+    // Cancelado/encerrado tira o aluno da turma automaticamente — isso agora
+    // acontece dentro de dyseSetAlunoFinanceiro (escreve direto no banco, não
+    // depende do cache STUDENTS). Aqui só recarregamos e re-renderizamos.
     STUDENTS = await dyseListProfilesByRole('student');
     ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
     await dyseGerarMensalidadesDoMes(dyseMesCompetencia()); // reflete o vínculo novo no mês corrente na hora, sem esperar a gestão abrir Pagamentos/Relatório
     renderAlunoFinModalBody();
     renderAlunoFinObsList();
     renderAlunosTable();
+    if(typeof renderTurmasTable === 'function') renderTurmasTable(); // aluno pode ter saído da turma
     return false;
   }
 
