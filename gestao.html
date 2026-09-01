@@ -871,6 +871,8 @@ body.dyse-modal-open{overflow:hidden;}
         <option value="sem-data">Sem data de fim definida</option>
       </select>
     </div>
+    <div class="turma-status-chips fin-only" id="alunoStatusChips"></div>
+    <p class="result-count" id="alunosCount"></p>
     <div id="alunosTableWrap"></div>
   </div>
 
@@ -2756,6 +2758,43 @@ body.dyse-modal-open{overflow:hidden;}
     return true;
   }
 
+  // Conta alunos por situação financeira do período aberto (sem período = "sem-vinculo").
+  function contarSituacoesAlunos(itens){
+    const c = { total: itens.length, ativo: 0, pausado: 0, cancelado: 0, encerrado: 0, 'sem-vinculo': 0 };
+    itens.forEach(({ periodo }) => {
+      if(!periodo){ c['sem-vinculo']++; return; }
+      if(c[periodo.situacao] !== undefined) c[periodo.situacao]++;
+    });
+    return c;
+  }
+
+  function setAlunoSituacaoFilter(v){
+    document.getElementById('filterAlunoSituacao').value = v;
+    renderAlunosTable();
+  }
+
+  function renderAlunoStatusChips(baseRows){
+    const el = document.getElementById('alunoStatusChips');
+    if(!el) return;
+    const c = contarSituacoesAlunos(baseRows);
+    const atual = document.getElementById('filterAlunoSituacao').value;
+    const defs = [
+      { key:'', label:'Todos', n:c.total },
+      { key:'ativo', label:'Ativos', n:c.ativo },
+      { key:'pausado', label:'Pausados', n:c.pausado },
+      { key:'cancelado', label:'Cancelados', n:c.cancelado },
+      { key:'encerrado', label:'Encerrados', n:c.encerrado },
+      { key:'sem-vinculo', label:'Sem vínculo', n:c['sem-vinculo'] }
+    ];
+    el.innerHTML = defs
+      .filter(d => d.key === '' || d.key === 'ativo' || d.n > 0 || atual === d.key)
+      .map(d =>
+        '<button type="button" class="turma-status-chip' + (atual === d.key ? ' active' : '') + '" onclick="setAlunoSituacaoFilter(\'' + d.key + '\')">' +
+          d.label + '<span class="count">' + d.n + '</span>' +
+        '</button>'
+      ).join('');
+  }
+
   function renderAlunosTable(){
     const filter = (document.getElementById('filterAlunoName').value || '').trim().toLowerCase();
     const turmaFiltro = document.getElementById('filterAlunoTurma').value;
@@ -2773,7 +2812,8 @@ body.dyse-modal-open{overflow:hidden;}
       return { s, turma, periodo, modalidade, professor };
     });
 
-    const rows = enriquecidos.filter(({ s, turma, periodo, modalidade, professor }) => {
+    // Passa em tudo MENOS o filtro de situação — base pros contadores por status.
+    const baseRows = enriquecidos.filter(({ s, turma, modalidade, professor }) => {
       if(filter && !(s.full_name||'').toLowerCase().includes(filter) && !(s.email||'').toLowerCase().includes(filter)) return false;
       if(turmaFiltro === 'sem-turma' && turma) return false;
       if(turmaFiltro && turmaFiltro !== 'sem-turma' && (!turma || turma.id !== turmaFiltro)) return false;
@@ -2781,6 +2821,12 @@ body.dyse-modal-open{overflow:hidden;}
       if(modFiltro && modFiltro !== 'sem-modalidade' && (!modalidade || modalidade.id !== modFiltro)) return false;
       if(profFiltro === 'sem-professor' && professor) return false;
       if(profFiltro && profFiltro !== 'sem-professor' && (!professor || professor.id !== profFiltro)) return false;
+      return true;
+    });
+
+    renderAlunoStatusChips(baseRows);
+
+    const rows = baseRows.filter(({ periodo }) => {
       if(situacaoFiltro === 'sem-vinculo' && periodo) return false;
       if(situacaoFiltro && situacaoFiltro !== 'sem-vinculo' && (!periodo || periodo.situacao !== situacaoFiltro)) return false;
       if(contratoFiltro && !dyseContratoPassaNoFiltro(periodo, contratoFiltro)) return false;
@@ -2789,6 +2835,8 @@ body.dyse-modal-open{overflow:hidden;}
 
     const wrap = document.getElementById('alunosTableWrap');
     const isFin = document.body.classList.contains('dyse-can-financeiro');
+    document.getElementById('alunosCount').textContent =
+      rows.length + (rows.length === 1 ? ' aluno' : ' alunos') + (rows.length !== baseRows.length ? ' (de ' + baseRows.length + ')' : '');
 
     if(!rows.length){
       wrap.innerHTML = '<div class="turmas-card-list"><p style="text-align:center; opacity:.6; padding:24px;">Nenhum aluno encontrado.</p></div>';
@@ -2825,11 +2873,21 @@ body.dyse-modal-open{overflow:hidden;}
       ? (professor.full_name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase()
       : '—';
     const rowsHtml = itens.map(item => renderAlunoRowHtml(item, true)).join('');
+    const c = contarSituacoesAlunos(itens);
+    const extras = [
+      c.pausado ? c.pausado + ' pausado' + (c.pausado === 1 ? '' : 's') : '',
+      c.cancelado ? c.cancelado + ' cancelado' + (c.cancelado === 1 ? '' : 's') : '',
+      c.encerrado ? c.encerrado + ' encerrado' + (c.encerrado === 1 ? '' : 's') : '',
+      c['sem-vinculo'] ? c['sem-vinculo'] + ' sem vínculo' : ''
+    ].filter(Boolean).join(' · ');
+    const extrasHtml = extras
+      ? ' <span class="pill-count" style="background:#fbeceb; color:var(--bad);">' + escapeHtmlLocal(extras) + '</span>'
+      : '';
     return '<details class="dyse-collapsible">' +
       '<summary><span class="summary-left">' +
         '<span class="turma-group-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</span>' +
         '<span class="turma-group-name">' + (professor ? escapeHtmlLocal(professor.full_name || '(sem nome)') : 'Sem professor responsável') + '</span>' +
-        '<span class="pill-count">' + itens.length + ' aluno' + (itens.length === 1 ? '' : 's') + '</span>' +
+        '<span class="pill-count">' + c.ativo + ' ativo' + (c.ativo === 1 ? '' : 's') + ' / ' + itens.length + '</span>' + extrasHtml +
       '</span><span class="chevron">›</span></summary>' +
       '<div class="dyse-collapsible-body"><div class="turmas-card-list turma-group-body">' + rowsHtml + '</div></div>' +
     '</details>';
@@ -2844,8 +2902,12 @@ body.dyse-modal-open{overflow:hidden;}
     const modalidadeBadge = modalidade ? '<span class="turma-pill fin-only">' + escapeHtmlLocal(modalidade.name) + '</span>' : '';
     const professorBadge = (!groupedByProfessor && professor)
       ? '<span class="turma-pill fin-only">' + escapeHtmlLocal(professor.full_name || '') + '</span>' : '';
+    const situacaoCores = {
+      ativo: 'background:#eaf7ee; color:var(--ok);',
+      pausado: 'background:#fff3d6; color:var(--gamboge-dark);'
+    };
     const situacaoBadge = periodo
-      ? '<span class="turma-badge fin-only" style="background:' + (periodo.situacao === 'ativo' ? '#eaf7ee' : '#fbeceb') + '; color:' + (periodo.situacao === 'ativo' ? 'var(--ok)' : 'var(--bad)') + ';">' + escapeHtmlLocal(capitalize(periodo.situacao)) + '</span>'
+      ? '<span class="turma-badge fin-only" style="' + (situacaoCores[periodo.situacao] || 'background:#fbeceb; color:var(--bad);') + '">' + escapeHtmlLocal(capitalize(periodo.situacao)) + '</span>'
       : '';
     const contratoBadge = dyseContratoPassaNoFiltro(periodo, 'vencido')
       ? '<span class="turma-badge fin-only" style="background:#fbeceb; color:var(--bad);">Contrato vencido</span>'
