@@ -2873,21 +2873,11 @@ body.dyse-modal-open{overflow:hidden;}
       ? (professor.full_name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase()
       : '—';
     const rowsHtml = itens.map(item => renderAlunoRowHtml(item, true)).join('');
-    const c = contarSituacoesAlunos(itens);
-    const extras = [
-      c.pausado ? c.pausado + ' pausado' + (c.pausado === 1 ? '' : 's') : '',
-      c.cancelado ? c.cancelado + ' cancelado' + (c.cancelado === 1 ? '' : 's') : '',
-      c.encerrado ? c.encerrado + ' encerrado' + (c.encerrado === 1 ? '' : 's') : '',
-      c['sem-vinculo'] ? c['sem-vinculo'] + ' sem vínculo' : ''
-    ].filter(Boolean).join(' · ');
-    const extrasHtml = extras
-      ? ' <span class="pill-count" style="background:#fbeceb; color:var(--bad);">' + escapeHtmlLocal(extras) + '</span>'
-      : '';
     return '<details class="dyse-collapsible">' +
       '<summary><span class="summary-left">' +
         '<span class="turma-group-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</span>' +
         '<span class="turma-group-name">' + (professor ? escapeHtmlLocal(professor.full_name || '(sem nome)') : 'Sem professor responsável') + '</span>' +
-        '<span class="pill-count">' + c.ativo + ' ativo' + (c.ativo === 1 ? '' : 's') + ' / ' + itens.length + '</span>' + extrasHtml +
+        '<span class="pill-count">' + itens.length + ' aluno' + (itens.length === 1 ? '' : 's') + '</span>' +
       '</span><span class="chevron">›</span></summary>' +
       '<div class="dyse-collapsible-body"><div class="turmas-card-list turma-group-body">' + rowsHtml + '</div></div>' +
     '</details>';
