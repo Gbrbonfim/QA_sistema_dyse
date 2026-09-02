@@ -618,95 +618,104 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 }
 
 /* ============ REPORT CARD DO ALUNO (visão apresentação + PDF) ============ */
-.rc-shell{margin-top:6px;}
-.rc-toolbar{
-  display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px;
+/* Lista suspensa: fica recolhido por padrão e cabe em 1 folha A4 quando aberto. */
+.rc-accordion{
+  background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card);
+  overflow:hidden; border-top:5px solid var(--amaranth);
 }
-.rc-toolbar h3{font-family:var(--font-display); font-size:1.9rem; color:var(--amaranth); margin:0; line-height:1.1;}
-.rc-toolbar h3 .spark{color:var(--gamboge);}
-.rc-toolbar p{font-size:.86rem; color:var(--seal-soft); margin:2px 0 0;}
-.rc-toolbar-right{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+.rc-accordion > summary{
+  list-style:none; cursor:pointer; padding:14px 18px; display:flex; align-items:center;
+  justify-content:space-between; gap:12px;
+}
+.rc-accordion > summary::-webkit-details-marker{display:none;}
+.rc-accordion > summary:hover{background:var(--antique-soft);}
+.rc-summary-txt h3{font-family:var(--font-display); font-size:1.4rem; color:var(--amaranth); margin:0; line-height:1.1;}
+.rc-summary-txt h3 .spark{color:var(--gamboge);}
+.rc-summary-txt p{font-size:.8rem; color:var(--seal-soft); margin:2px 0 0;}
+.rc-summary-chevron{transition:transform .2s; opacity:.55; flex:none; font-size:1.1rem;}
+.rc-accordion[open] > summary .rc-summary-chevron{transform:rotate(180deg);}
+
+.rc-shell{padding:0 18px 18px;}
+.rc-toolbar{
+  display:flex; align-items:center; justify-content:flex-end; gap:10px; flex-wrap:wrap; margin:0 0 12px;
+}
+.rc-toolbar-right{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
 .rc-select{
-  border:2px solid #eee0cf; border-radius:999px; padding:9px 16px; font-family:var(--font-body);
-  font-weight:700; font-size:.82rem; color:var(--seal); background:#fff; cursor:pointer; max-width:100%;
+  border:2px solid #eee0cf; border-radius:999px; padding:7px 14px; font-family:var(--font-body);
+  font-weight:700; font-size:.78rem; color:var(--seal); background:#fff; cursor:pointer; max-width:100%;
 }
 .rc-select:focus{outline:none; border-color:var(--amaranth);}
 .rc-pdf-btn{
-  display:inline-flex; align-items:center; gap:7px; background:var(--amaranth); color:#fff; border:none;
-  border-radius:999px; padding:10px 18px; font-family:var(--font-body); font-weight:700; font-size:.82rem;
+  display:inline-flex; align-items:center; gap:6px; background:var(--amaranth); color:#fff; border:none;
+  border-radius:999px; padding:8px 15px; font-family:var(--font-body); font-weight:700; font-size:.78rem;
   cursor:pointer; transition:.15s;
 }
 .rc-pdf-btn:hover{background:var(--amaranth-dark);}
-.rc-pdf-btn svg{width:15px; height:15px;}
+.rc-pdf-btn svg{width:14px; height:14px;}
 
-.rc-doc{
-  display:none; background:#fff; border-radius:var(--radius-lg); box-shadow:var(--shadow-card);
-  padding:clamp(20px,4vw,38px); border-top:8px solid var(--amaranth);
-}
+.rc-doc{display:none;}
 .rc-doc.is-active{display:block;}
-.rc-doc-title{font-family:var(--font-display); font-size:1.7rem; color:var(--amaranth); margin:0;}
-.rc-doc-title .spark{color:var(--gamboge);}
-.rc-doc-sub{font-size:.85rem; color:var(--seal-soft); margin:2px 0 22px;}
+.rc-doc-sub{font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;}
 
 .rc-freq{
-  display:flex; align-items:center; gap:16px; background:var(--antique-soft); border-radius:var(--radius-md);
-  padding:16px 20px; margin-bottom:26px; position:relative; overflow:hidden;
+  display:flex; align-items:center; gap:11px; background:var(--antique-soft); border-radius:var(--radius-md);
+  padding:9px 13px; margin-bottom:14px; position:relative; overflow:hidden;
 }
 .rc-freq-icon{
-  flex:none; width:44px; height:44px; border-radius:50%; background:var(--gamboge); color:#fff;
-  display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+  flex:none; width:30px; height:30px; border-radius:50%; background:var(--gamboge); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:.95rem;
 }
-.rc-freq b{display:block; color:var(--seal); font-size:.98rem;}
-.rc-freq span{font-size:.85rem; color:var(--seal-soft);}
+.rc-freq b{display:block; color:var(--seal); font-size:.85rem;}
+.rc-freq span{font-size:.76rem; color:var(--seal-soft);}
 
-.rc-section{margin-bottom:26px;}
+.rc-section{margin-bottom:14px;}
 .rc-h{
-  font-family:var(--font-display); font-size:1.25rem; color:var(--amaranth); margin:0 0 12px;
-  display:flex; align-items:center; gap:8px;
+  font-family:var(--font-display); font-size:1rem; color:var(--amaranth); margin:0 0 6px;
+  display:flex; align-items:center; gap:7px;
 }
-.rc-h::before{content:""; width:22px; height:3px; border-radius:3px; background:var(--gamboge); flex:none;}
-.rc-prose{font-size:.95rem; color:var(--seal); white-space:pre-line; line-height:1.7;}
+.rc-h::before{content:""; width:16px; height:3px; border-radius:3px; background:var(--gamboge); flex:none;}
+.rc-prose{font-size:.8rem; color:var(--seal); white-space:pre-line; line-height:1.5;}
 .rc-prose.empty, .rc-plain.empty{color:var(--seal-soft); font-style:italic;}
 
-.rc-skills{display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:14px;}
+.rc-skills{display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:8px;}
 .rc-skill{
-  border:1px solid #f0e3d2; border-radius:var(--radius-md); padding:16px; display:flex; gap:13px;
+  border:1px solid #f0e3d2; border-radius:var(--radius-md); padding:9px 11px; display:flex; gap:9px;
   align-items:flex-start;
 }
 .rc-skill-ic{
-  flex:none; width:40px; height:40px; border-radius:12px; display:flex; align-items:center;
-  justify-content:center; font-size:1.15rem; background:#FCE4E9; color:var(--amaranth);
+  flex:none; width:28px; height:28px; border-radius:9px; display:flex; align-items:center;
+  justify-content:center; font-size:.95rem; background:#FCE4E9; color:var(--amaranth);
 }
 .rc-skill-body{min-width:0; flex:1 1 auto;}
-.rc-skill-top{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px;}
-.rc-skill-name{font-weight:800; color:var(--seal); font-size:.95rem;}
-.rc-skill-text{font-size:.86rem; color:var(--seal-soft); line-height:1.55; white-space:pre-line;}
+.rc-skill-top{display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:3px;}
+.rc-skill-name{font-weight:800; color:var(--seal); font-size:.82rem;}
+.rc-skill-text{font-size:.76rem; color:var(--seal-soft); line-height:1.45; white-space:pre-line;}
 .rc-badge{
-  font-size:.66rem; font-weight:800; letter-spacing:.02em; padding:3px 10px; border-radius:999px; white-space:nowrap;
+  font-size:.6rem; font-weight:800; letter-spacing:.02em; padding:2px 8px; border-radius:999px; white-space:nowrap;
 }
 .rc-badge.forte{background:#eaf7ee; color:var(--ok);}
 .rc-badge.dev{background:#fdf0dd; color:#a06a2e;}
 
-.rc-two-col{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:26px;}
+.rc-two-col{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;}
 @media (max-width:620px){ .rc-two-col{grid-template-columns:1fr;} }
 
 .rc-teacher{
-  display:flex; align-items:center; gap:16px; background:var(--antique-soft); border-radius:var(--radius-md);
-  padding:18px 20px; border-left:4px solid var(--gamboge);
+  display:flex; align-items:center; gap:11px; background:var(--antique-soft); border-radius:var(--radius-md);
+  padding:11px 13px; border-left:4px solid var(--gamboge);
 }
-.rc-teacher-ic{flex:none; width:40px; height:40px; border-radius:50%; background:var(--amaranth); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.15rem;}
-.rc-teacher b{display:block; color:var(--seal); margin-bottom:3px; font-size:.95rem;}
-.rc-teacher p{margin:0; font-size:.88rem; color:var(--seal-soft); white-space:pre-line;}
-.rc-teacher .yougotthis{margin-left:auto; font-family:var(--font-display); color:var(--amaranth); font-size:1.15rem; flex:none; text-align:center; line-height:1.1;}
+.rc-teacher-ic{flex:none; width:30px; height:30px; border-radius:50%; background:var(--amaranth); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.95rem;}
+.rc-teacher b{display:block; color:var(--seal); margin-bottom:2px; font-size:.82rem;}
+.rc-teacher p{margin:0; font-size:.76rem; color:var(--seal-soft); white-space:pre-line;}
+.rc-teacher .yougotthis{margin-left:auto; font-family:var(--font-display); color:var(--amaranth); font-size:1rem; flex:none; text-align:center; line-height:1.1;}
 
 .rc-empty{
   background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:26px;
   text-align:center; color:var(--seal-soft);
 }
 
-/* ---- impressão / salvar em PDF ---- */
+/* ---- impressão / salvar em PDF (1 folha A4) ---- */
 @media print{
-  @page{margin:14mm;}
+  @page{size:A4; margin:10mm;}
   body.rc-printing::before{display:none;}
   body.rc-printing .sidebar,
   body.rc-printing .topbar,
@@ -717,11 +726,14 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   body.rc-printing #coursesWrap,
   body.rc-printing #materialWrap,
   body.rc-printing .content-footer,
-  body.rc-printing .rc-toolbar{display:none !important;}
+  body.rc-printing .rc-toolbar,
+  body.rc-printing .rc-accordion > summary{display:none !important;}
   body.rc-printing .app-shell,
   body.rc-printing .main-area,
   body.rc-printing .content{display:block; height:auto; overflow:visible;}
   body.rc-printing .content{padding:0;}
+  body.rc-printing .rc-accordion{box-shadow:none; border-top:none;}
+  body.rc-printing .rc-shell{padding:0;}
   body.rc-printing .rc-doc{
     display:none; box-shadow:none; border-top:none; padding:0; border-radius:0;
   }
@@ -1088,9 +1100,13 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   // "Baixar PDF" = diálogo de impressão do navegador (Salvar como PDF),
   // com só o report card ativo visível.
   function rcBaixarPdf(){
+    const acc = document.getElementById('rcAccordion');
+    const eraAberto = acc ? acc.open : true;
+    if(acc) acc.open = true;
     document.body.classList.add('rc-printing');
     const cleanup = () => {
       document.body.classList.remove('rc-printing');
+      if(acc) acc.open = eraAberto;
       window.removeEventListener('afterprint', cleanup);
     };
     window.addEventListener('afterprint', cleanup);
@@ -1121,21 +1137,26 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       : '';
 
     wrap.innerHTML =
-      '<div class="rc-shell">' +
-        '<div class="rc-toolbar">' +
-          '<div>' +
+      '<details class="rc-accordion" id="rcAccordion">' +
+        '<summary>' +
+          '<div class="rc-summary-txt">' +
             '<h3>Report Card <span class="spark">✦</span></h3>' +
             '<p>Seu progresso, suas conquistas e os próximos passos.</p>' +
           '</div>' +
-          '<div class="rc-toolbar-right">' + seletor +
-            '<button type="button" class="rc-pdf-btn" onclick="rcBaixarPdf()">' +
-              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
-              'Baixar PDF' +
-            '</button>' +
+          '<span class="rc-summary-chevron">▾</span>' +
+        '</summary>' +
+        '<div class="rc-shell">' +
+          '<div class="rc-toolbar">' +
+            '<div class="rc-toolbar-right">' + seletor +
+              '<button type="button" class="rc-pdf-btn" onclick="rcBaixarPdf()">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
+                'Baixar PDF' +
+              '</button>' +
+            '</div>' +
           '</div>' +
+          lista.map((rc, i) => renderReportCardReadOnly(rc, materias, i === 0)).join('') +
         '</div>' +
-        lista.map((rc, i) => renderReportCardReadOnly(rc, materias, i === 0)).join('') +
-      '</div>';
+      '</details>';
   }
 
   function renderReportCardReadOnly(rc, materias, active){
@@ -1208,7 +1229,6 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       : '';
 
     return '<article class="rc-doc' + (active ? ' is-active' : '') + '">' +
-      '<h4 class="rc-doc-title">Report Card <span class="spark">✦</span></h4>' +
       '<p class="rc-doc-sub">' + escapeHtmlLocal(nivelNome + ' — ' + rc.semestre + 'º semestre · aulas ' + rc.aula_inicio + ' a ' + rc.aula_fim) + '</p>' +
 
       '<div class="rc-freq">' +
