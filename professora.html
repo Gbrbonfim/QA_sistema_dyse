@@ -1541,6 +1541,7 @@ body.dyse-modal-open{overflow:hidden;}
   let REGISTRO_NIVEIS_CACHE = [];
   let REGISTRO_AULAS_DA_TURMA = [];
   let REGISTRO_EIXOS = [];
+  let TURMA_AULA_MATERIAL = {}; // nivel_aula_id -> link da cópia desta turma
   const LABEL_AVALIACAO = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' };
 
   async function carregarRegistroClasseDaTurma(){
@@ -1566,6 +1567,9 @@ body.dyse-modal-open{overflow:hidden;}
 
     REGISTRO_EIXOS = nivel.eixos_avaliacao || [];
     REGISTRO_AULAS_DA_TURMA = await dyseListNivelAulas(nivel.slug);
+
+    TURMA_AULA_MATERIAL = {};
+    (await dyseListTurmaAulaMaterial(turmaId)).forEach(r => { TURMA_AULA_MATERIAL[r.nivel_aula_id] = r.material_url; });
 
     // Status ✓/⚠️ por aula: busca os registros de todos os alunos da turma
     // de uma vez (poucas chamadas — turma é pequena) pra marcar quais aulas
@@ -1598,12 +1602,42 @@ body.dyse-modal-open{overflow:hidden;}
       ['Foco fonético — correção sugerida', c.foco_fonetico_correcao],
       ['Tarefa de casa', c.tarefa_de_casa]
     ].filter(([, v]) => v);
-    const materialLink = aula.material_url
-      ? '<p style="margin:0 0 14px;"><a href="' + escapeHtmlLocal(aula.material_url) + '" target="_blank" rel="noopener" class="btn btn-ghost btn-xs">↗ Abrir slides desta aula</a></p>'
-      : '';
+    const base = (aula.material_url || '').trim();
+    const copia = (TURMA_AULA_MATERIAL[aula.id] || '').trim();
+    const efetivo = copia || base;
+    let materialLink = '';
+    if(efetivo){
+      materialLink += '<p style="margin:0 0 6px;"><a href="' + escapeHtmlLocal(efetivo) + '" target="_blank" rel="noopener" class="btn btn-ghost btn-xs">↗ Abrir slides desta aula</a> ' +
+        '<span style="font-size:.72rem; color:var(--seal-soft);">' + (copia ? '(cópia desta turma)' : '(material base)') + '</span></p>';
+    }
+    if(base && copia && base !== copia){
+      materialLink += '<p style="margin:0 0 6px;"><a href="' + escapeHtmlLocal(base) + '" target="_blank" rel="noopener" style="font-size:.78rem; color:var(--seal-soft);">↗ abrir material base (modelo)</a></p>';
+    }
+    materialLink +=
+      '<details style="margin:2px 0 14px;">' +
+        '<summary style="font-size:.78rem; color:var(--seal-soft); cursor:pointer;">' + (copia ? 'Trocar a cópia desta turma' : 'Usar uma cópia só desta turma') + '</summary>' +
+        '<p style="font-size:.76rem; color:var(--seal-soft); margin:8px 0 6px;">Abra o material base, faça uma cópia no seu Drive (Arquivo → Fazer uma cópia), deixe como "qualquer pessoa com o link pode ver" e cole o link aqui. As anotações desta turma ficam só nesta cópia. Deixe em branco pra voltar ao material base.</p>' +
+        '<div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">' +
+          '<input type="url" id="turmaMaterialInput" placeholder="https://docs.google.com/..." value="' + escapeHtmlLocal(copia) + '" style="flex:1 1 260px; border:2px solid #eee0cf; border-radius:8px; padding:7px 10px; font-family:var(--font-body); font-size:.82rem;">' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="salvarMaterialCopiaTurma(\'' + aula.id + '\')">Salvar cópia</button>' +
+          '<span id="turmaMaterialMsg" style="font-size:.76rem; color:var(--seal-soft);"></span>' +
+        '</div>' +
+      '</details>';
     document.getElementById('registroClasseBlocoA').innerHTML = materialLink + linhas.map(([label, val]) =>
       '<p style="margin:0 0 10px;"><b style="color:var(--seal); font-size:.8rem; text-transform:uppercase; letter-spacing:.03em; display:block; margin-bottom:2px;">' + escapeHtmlLocal(label) + '</b><span style="font-size:.88rem;">' + escapeHtmlLocal(val) + '</span></p>'
     ).join('');
+  }
+
+  async function salvarMaterialCopiaTurma(aulaId){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    const url = (document.getElementById('turmaMaterialInput').value || '').trim();
+    const msg = document.getElementById('turmaMaterialMsg');
+    if(msg) msg.textContent = 'Salvando...';
+    const { error } = await dyseSetTurmaAulaMaterial(turmaId, aulaId, url);
+    if(error){ if(msg) msg.textContent = 'Erro: ' + error.message; return; }
+    if(url) TURMA_AULA_MATERIAL[aulaId] = url; else delete TURMA_AULA_MATERIAL[aulaId];
+    const aula = REGISTRO_AULAS_DA_TURMA.find(a => a.id === aulaId);
+    if(aula) renderRegistroClasseBlocoA(aula);
   }
 
   async function onRegistroClasseAulaChange(){

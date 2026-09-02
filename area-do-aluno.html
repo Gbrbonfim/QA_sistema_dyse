@@ -1013,7 +1013,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '</div>' +
         '</div>';
 
-    await renderMeuMaterial(allowedSlugs);
+    await renderMeuMaterial(allowedSlugs, profile ? profile.turma_id : null);
     await renderMeusReportCards(session.user.id);
   })();
 
@@ -1023,26 +1023,30 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
      tabela é anotação interna da professora (avaliações, observações), o
      aluno não pode ler nenhum campo dela, só saber quais aulas já
      aconteceram. */
-  async function renderMeuMaterial(allowedSlugs){
+  async function renderMeuMaterial(allowedSlugs, turmaId){
     const wrap = document.getElementById('materialWrap');
     const niveis = (await dyseListNiveis()).filter(n => allowedSlugs.has(n.slug));
     if(!niveis.length){ wrap.innerHTML = ''; return; }
 
-    const [aulasPorNivel, aulaIdsRegistradosPorNivel] = await Promise.all([
+    const [aulasPorNivel, aulaIdsRegistradosPorNivel, materialDaTurma] = await Promise.all([
       Promise.all(niveis.map(n => dyseListNivelAulas(n.slug))),
-      Promise.all(niveis.map(n => dyseListMinhasAulasRegistradas(n.slug)))
+      Promise.all(niveis.map(n => dyseListMinhasAulasRegistradas(n.slug))),
+      dyseListTurmaAulaMaterial(turmaId) // cópia da minha turma, quando existe
     ]);
+    const copiaPorAula = {};
+    (materialDaTurma || []).forEach(r => { copiaPorAula[r.nivel_aula_id] = r.material_url; });
+    const linkDaAula = a => (copiaPorAula[a.id] || a.material_url || '').trim();
 
     const blocos = niveis.map((n, i) => {
       const aulaIdsComRegistro = new Set(aulaIdsRegistradosPorNivel[i]);
       const aulas = aulasPorNivel[i]
-        .filter(a => aulaIdsComRegistro.has(a.id) && a.material_url)
+        .filter(a => aulaIdsComRegistro.has(a.id) && linkDaAula(a))
         .sort((a, b) => a.numero - b.numero);
       if(!aulas.length) return '';
       return '<div style="margin-bottom:24px;">' +
         '<p class="material-nivel-title">' + escapeHtmlLocal(n.name) + ' — Material das aulas</p>' +
         aulas.map(a =>
-          '<a href="' + escapeHtmlLocal(a.material_url) + '" target="_blank" rel="noopener" class="material-aula-link">' +
+          '<a href="' + escapeHtmlLocal(linkDaAula(a)) + '" target="_blank" rel="noopener" class="material-aula-link">' +
             '<span class="num">' + String(a.numero).padStart(2, '0') + '</span>' +
             '<span class="topico">' + escapeHtmlLocal(a.topico) + '</span>' +
             '<span class="arrow">↗</span>' +

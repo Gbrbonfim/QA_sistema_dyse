@@ -2177,7 +2177,7 @@ body.dyse-modal-open{overflow:hidden;}
     const aulas = CURRICULO_AULAS_CACHE[slug] || [];
     const proximoNumero = aulas.length ? (aulas[aulas.length - 1].numero + 1) : 1;
     document.getElementById('curriculoModalBody').innerHTML =
-      '<p class="report-line" style="margin-bottom:14px;">Cole o link do Google Slides/Drive de cada aula — a professora vê no Plano da Aula (Registro de Classe) e o aluno vê depois que a aula for registrada em nome dele.</p>' +
+      '<p class="report-line" style="margin-bottom:14px;">Cole aqui o link do Google Slides/Drive <b>base (modelo)</b> de cada aula. Cada turma pode ter uma cópia própria com as anotações dela — quem cadastra a cópia é o professor, na tela do Registro de Classe. Turma sem cópia usa este material base. A professora vê no Plano da Aula e o aluno vê depois que a aula for registrada em nome dele.</p>' +
       (aulas.length
         ? aulas.map(a =>
             '<div class="curriculo-row" style="' + (a.ativo === false ? 'opacity:.55;' : '') + '">' +

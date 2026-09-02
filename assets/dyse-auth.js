@@ -1036,18 +1036,20 @@ async function dyseMesFechado(mes){
 
 /* Gera/atualiza as mensalidades do mês a partir do histórico financeiro dos
    alunos e dos valores de modalidade vigentes naquele mês. Não faz nada se
-   o mês já estiver fechado (preserva o congelamento). Só alunos com
-   situação "ativo" no período geram mensalidade.
+   o mês já estiver fechado (preserva o congelamento). Gera para situação
+   "ativo" e "pausado" (pausado = mensalidade atrasada, a cobrança continua).
 
    Quando mais de um período do histórico toca o mesmo mês (troca de
    professor no meio do mês), o valor é RATEADO entre os professores
-   envolvidos, proporcional a quantas aulas cada um deu ao aluno naquele
-   mês — contado via o módulo de presença (turma_sessoes/sessao_presencas,
-   usando a turma ATUAL do aluno: profiles.turma_id não é historizado, então
-   isso assume que a troca de turma acontece junto com a troca de professor
-   financeiro). Sem presença lançada ainda (mês futuro, chamada não feita),
-   cai no comportamento antigo: o período de "data_inicio" mais recente leva
-   o mês inteiro — garante que a geração nunca fica vazia. */
+   envolvidos por DATA, não por presença: cada professor recebe pela fração
+   de aulas da turma (turma_sessoes) que caiu dentro da janela do período
+   dele. A presença/falta do aluno NÃO influencia pagamento nenhum — aluno
+   que ficou o mês todo e faltou um dia não gera desconto. Referência é a
+   turma ATUAL do aluno (profiles.turma_id não é historizado); se um período
+   não tem aula da turma atual na janela (troca de professor veio junto com
+   troca de turma), cai nas aulas daquele professor em qualquer turma. Sem
+   nenhuma aula registrada no mês, o período mais recente leva o mês inteiro
+   — garante que a geração nunca fica vazia. */
 async function dyseGerarMensalidadesDoMes(mes){
   if(await dyseMesFechado(mes)) return { skipped: true };
 
@@ -1151,33 +1153,31 @@ async function dyseGerarMensalidadesDoMes(mes){
 
     // Mais de um período tocando o mês (troca de professor no meio do mês).
     const vencedor = periodos[0]; // mais recente — usado no fallback e como referência de valor_mensal_aluno
-    let contagemPorProfessor = null; // Map professor_id(ou null) -> nº de presenças
+    let contagemPorProfessor = null; // Map professor_id(ou null) -> nº de aulas na janela do período
 
     {
       const sessoes = await sessoesDoMes();
-      // Só conta aulas de professores que fazem parte do vínculo financeiro
-      // deste aluno no mês — uma aula dada por um substituto sem vínculo
-      // financeiro não deve gerar pagamento a ele. Não restringe por turma:
-      // cada professora entitulada pode ter dado aula pra este aluno numa
-      // turma diferente (ver comentário em sessoesDoMes, acima).
-      const professoresEntitulados = new Set(periodos.map(h => h.professor_id || null));
-      const professorPorSessao = {};
-      sessoes.forEach(s => { professorPorSessao[s.id] = s.professor_id || null; });
-      const sessoesEntituladasIds = sessoes.filter(s => professoresEntitulados.has(s.professor_id || null)).map(s => s.id);
-      if(sessoesEntituladasIds.length){
-        const presencas = await dyseListPresencasAluno(alunoId, sessoesEntituladasIds);
-        if(presencas.length){
-          contagemPorProfessor = new Map();
-          presencas.forEach(p => {
-            const prof = professorPorSessao[p.sessao_id];
-            contagemPorProfessor.set(prof, (contagemPorProfessor.get(prof) || 0) + 1);
-          });
-        }
-      }
+      const turmaAtual = turmaIdPorAluno[alunoId];
+      const sessoesRef = turmaAtual ? sessoes.filter(s => s.turma_id === turmaAtual) : sessoes;
+      contagemPorProfessor = new Map();
+      periodos.forEach(h => {
+        const profId = h.professor_id || null;
+        const ini = h.data_inicio > mes ? h.data_inicio : mes;
+        const fim = (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr;
+        const naJanela = s => s.data >= ini && s.data <= fim;
+        // Aulas da turma atual do aluno dentro da janela deste período.
+        let n = sessoesRef.filter(naJanela).length;
+        // Fallback: período sem aula da turma atual na janela (troca de
+        // professor veio junto com troca de turma) — usa as aulas dadas por
+        // ESTE professor em qualquer turma, na janela.
+        if(!n) n = sessoes.filter(s => (s.professor_id || null) === profId && naJanela(s)).length;
+        if(n) contagemPorProfessor.set(profId, (contagemPorProfessor.get(profId) || 0) + n);
+      });
+      if(!contagemPorProfessor.size) contagemPorProfessor = null;
     }
 
     if(!contagemPorProfessor || !contagemPorProfessor.size){
-      // Fallback: sem turma atual, ou zero presença lançada no mês —
+      // Fallback: nenhuma aula registrada no mês —
       // o período mais recente leva o mês inteiro (comportamento antigo).
       linhas.push({
         aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
@@ -1189,12 +1189,12 @@ async function dyseGerarMensalidadesDoMes(mes){
       continue;
     }
 
-    // Rateio proporcional às presenças. valor_recebido é uma "panela" única
-    // (o aluno paga UMA mensalidade) — divide em centavos exatos entre as
-    // linhas, sobra pro último item (ordem determinística por professor_id).
-    // valor_pago_professor NÃO é panela compartilhada: cada professor tem
-    // sua própria taxa (pode ter modalidade/valor diferente), multiplicada
-    // pela PRÓPRIA fração de aulas.
+    // Rateio proporcional às AULAS que caíram na janela de cada professor.
+    // valor_recebido é uma "panela" única (o aluno paga UMA mensalidade) —
+    // divide em centavos exatos entre as linhas, sobra pro último item
+    // (ordem determinística por professor_id). valor_pago_professor NÃO é
+    // panela compartilhada: cada professor tem sua própria taxa (pode ter
+    // modalidade/valor diferente), multiplicada pela PRÓPRIA fração de aulas.
     const totalContagem = [...contagemPorProfessor.values()].reduce((s, n) => s + n, 0);
     const totalCentavos = Math.round(Number(vencedor.valor_mensal_aluno || 0) * 100);
     const entradas = [...contagemPorProfessor.entries()].sort((a, b) => String(a[0]).localeCompare(String(b[0])));
@@ -1565,20 +1565,6 @@ async function dyseUpsertPresencas(sessaoId, presencas){
   return { error };
 }
 
-/* Presenças (presente=true) de UM aluno, restritas a uma lista específica
-   de sessao_id — o chamador já filtrou por turma+mês+professores
-   elegíveis; aqui só falta cruzar com o aluno. */
-async function dyseListPresencasAluno(alunoId, sessaoIds){
-  if(!sessaoIds || !sessaoIds.length) return [];
-  const { data, error } = await sb
-    .from('sessao_presencas')
-    .select('sessao_id, presente')
-    .eq('aluno_id', alunoId)
-    .eq('presente', true)
-    .in('sessao_id', sessaoIds);
-  return error ? [] : data;
-}
-
 /* ======================================================================
    MÓDULO ACADÊMICO — Registro de Classe e histórico do aluno.
    Escalável por nível: nenhuma função aqui é específica de A1 ou de 44
@@ -1610,10 +1596,41 @@ async function dyseListNivelAulas(materiaSlug, incluirInativas){
   return error ? [] : data;
 }
 
-/* Link do material (Google Slides/Drive) de uma aula — só admin (RLS de
-   nivel_aulas já restringe update a is_admin()). */
+/* Link do material BASE (Google Slides/Drive) de uma aula do nível — o
+   "modelo". Só admin (RLS de nivel_aulas já restringe update a is_admin()). */
 async function dyseUpdateNivelAulaMaterial(nivelAulaId, url){
   const { error } = await sb.from('nivel_aulas').update({ material_url: (url || '').trim() || null }).eq('id', nivelAulaId);
+  return { error };
+}
+
+/* Material POR TURMA (turma_aula_material) — a cópia daquela turma daquela
+   aula, com as anotações da turma. Override do material base. Escrita pela
+   gestão ou pelo professor da turma; aluno só lê a da própria turma. Uma
+   linha por (turma, aula); URL vazia apaga a linha (volta pro base). */
+async function dyseListTurmaAulaMaterial(turmaId){
+  if(!turmaId) return [];
+  const { data, error } = await sb
+    .from('turma_aula_material')
+    .select('nivel_aula_id, material_url')
+    .eq('turma_id', turmaId);
+  return error ? [] : data;
+}
+
+async function dyseSetTurmaAulaMaterial(turmaId, nivelAulaId, url){
+  const session = await dyseGetSession();
+  const link = (url || '').trim();
+  if(!link){
+    const { error } = await sb.from('turma_aula_material')
+      .delete().eq('turma_id', turmaId).eq('nivel_aula_id', nivelAulaId);
+    return { error };
+  }
+  const { error } = await sb.from('turma_aula_material').upsert({
+    turma_id: turmaId,
+    nivel_aula_id: nivelAulaId,
+    material_url: link,
+    atualizado_por: session ? session.user.id : null,
+    atualizado_em: new Date().toISOString()
+  }, { onConflict: 'turma_id,nivel_aula_id' });
   return { error };
 }
 
