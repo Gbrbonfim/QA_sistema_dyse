@@ -11,11 +11,12 @@
    - Pagou (RECEIVED/CONFIRMED) e não sobra cobrança vencida → reativa.
    - NÃO suspende aqui: a regra dos 14 dias é do cron (api/asaas-cron.js).
    - INVOICE_*  → atualiza o status da nota fiscal na cobrança.
+   - SUBSCRIPTION_*  → atualiza o cache de assinaturas.
 
    Env: SUPABASE_SERVICE_ROLE_KEY, ASAAS_API_KEY, ASAAS_WEBHOOK_TOKEN
    ====================================================================== */
 
-const { adminClient, asaasFetch, mapCobranca } = require('./_asaas');
+const { adminClient, asaasFetch, mapCobranca, mapAssinatura } = require('./_asaas');
 
 const PAGO = ['PAYMENT_RECEIVED', 'PAYMENT_CONFIRMED', 'PAYMENT_RECEIVED_IN_CASH'];
 
@@ -39,6 +40,7 @@ async function run(req, res){
   const evento = body.event || null;
   const pay = body.payment || null;
   const inv = body.invoice || null;
+  const sub = body.subscription || null;
   if(!evento){ res.status(200).json({ ok: true, ignored: 'sem event' }); return; }
 
   const admin = adminClient();
@@ -93,6 +95,18 @@ async function run(req, res){
     };
     if(inv.payment) await admin.from('asaas_cobrancas').update(patch).eq('id', inv.payment);
     else await admin.from('asaas_cobrancas').update(patch).eq('nota_fiscal_id', inv.id);
+  } else if(sub){
+    // evento de assinatura
+    if(evento === 'SUBSCRIPTION_DELETED'){
+      await admin.from('asaas_assinaturas').delete().eq('id', sub.id);
+    } else {
+      const alunoId = await resolverAlunoId(admin, sub.customer);
+      await admin.from('asaas_assinaturas').upsert({
+        ...mapAssinatura(sub),
+        aluno_id: alunoId,
+        sincronizado_em: new Date().toISOString()
+      }, { onConflict: 'id' });
+    }
   }
 
   if(eventoId) await admin.from('asaas_eventos').update({ processado: true }).eq('asaas_event_id', eventoId);
