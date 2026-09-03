@@ -917,6 +917,7 @@ body.dyse-modal-open{overflow:hidden;}
       <button type="button" class="auth-tab" id="finTabPagamentos" onclick="showFinPanel('pagamentos')">Pagamentos</button>
       <button type="button" class="auth-tab" id="finTabRelatorio" onclick="showFinPanel('relatorio')">Relatório</button>
       <button type="button" class="auth-tab" id="finTabFechamento" onclick="showFinPanel('fechamento')">Fechamento</button>
+      <button type="button" class="auth-tab" id="finTabCobrancas" onclick="showFinPanel('cobrancas')">Cobranças (Asaas)</button>
     </div>
 
     <!-- Modalidades e valores -->
@@ -1011,6 +1012,39 @@ body.dyse-modal-open{overflow:hidden;}
           <thead><tr><th>Mês</th><th>Status</th><th>Fechado em</th><th>Reaberto em</th></tr></thead>
           <tbody id="fechamentosBody"></tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Cobranças (Asaas) -->
+    <div id="finPanelCobrancas" style="display:none;">
+      <div class="gestao-card">
+        <div class="gestao-card-title">Conciliação com o Asaas</div>
+        <p class="gestao-hint">
+          O Asaas já cobra as mensalidades (assinaturas recorrentes). Aqui o sistema casa cada aluno
+          com o cliente do Asaas (por CPF, senão por e-mail) e traz as cobranças pra dentro. O aluno vê
+          as próprias cobranças na área dele. Cobrança vencida há mais de 14 dias suspende o aluno
+          automaticamente; regularizou, reativa.
+        </p>
+        <div class="btn-row">
+          <button type="button" class="btn btn-primary" id="btnAsaasSync" onclick="handleAsaasSync()">↻ Sincronizar com Asaas</button>
+        </div>
+        <div class="auth-msg" id="asaasSyncMsg"></div>
+        <div class="kpi-grid" id="asaasChips" style="margin-top:12px;"></div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="asaasCobrancasTable">
+          <thead>
+            <tr><th>Aluno</th><th>Assinatura</th><th>Última cobrança</th><th>Status</th><th>Vencimento</th><th>Sistema × Asaas</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="asaasCobrancasBody"></tbody>
+        </table>
+      </div>
+
+      <div class="gestao-card" id="asaasSemMatchCard" style="display:none; margin-top:20px;">
+        <div class="gestao-card-title">Sem correspondência no Asaas</div>
+        <p class="gestao-hint">Alunos com vínculo financeiro que o sistema não conseguiu casar automaticamente. Cole o ID do cliente no Asaas (começa com <code>cus_</code>) pra vincular à mão.</p>
+        <div id="asaasSemMatchList"></div>
       </div>
     </div>
   </div>
@@ -1274,6 +1308,18 @@ body.dyse-modal-open{overflow:hidden;}
       <button type="button" class="report-modal-close" onclick="closePagamentoModal()" aria-label="Fechar">&times;</button>
     </div>
     <div class="report-modal-body" id="pagamentoModalBody"></div>
+  </div>
+</div>
+
+<!-- Modal de cobrança avulsa (Asaas) -->
+<div id="cobrancaAvulsaModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeCobrancaAvulsaModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="cobrancaAvulsaModalTitle">
+    <div class="report-modal-header">
+      <h3 id="cobrancaAvulsaModalTitle">Cobrança avulsa</h3>
+      <button type="button" class="report-modal-close" onclick="closeCobrancaAvulsaModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="cobrancaAvulsaModalBody"></div>
   </div>
 </div>
 
@@ -3445,10 +3491,11 @@ body.dyse-modal-open{overflow:hidden;}
      ====================================================================== */
 
   function showFinPanel(which){
-    ['modalidades','pagamentos','relatorio','fechamento'].forEach(p => {
+    ['modalidades','pagamentos','relatorio','fechamento','cobrancas'].forEach(p => {
       document.getElementById('finTab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('finPanel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
     });
+    if(which === 'cobrancas') loadAsaasCobrancas();
     if(which === 'pagamentos' && !document.getElementById('pagamentosMes').value){
       document.getElementById('pagamentosMes').value = competenciaToMonthInput(dyseMesCompetencia());
       loadPagamentosMes();
@@ -3553,14 +3600,22 @@ body.dyse-modal-open{overflow:hidden;}
 
   /* ---------- Ficha financeira do aluno ---------- */
   let CURRENT_ALUNO_FIN_ID = null;
+  let CURRENT_ALUNO_ASAAS = null;
 
-  function openAlunoFinModal(alunoId){
+  async function openAlunoFinModal(alunoId){
     const s = STUDENTS.find(x => x.id === alunoId);
     if(!s) return;
     CURRENT_ALUNO_FIN_ID = alunoId;
+    CURRENT_ALUNO_ASAAS = null;
     document.getElementById('alunoFinModalTitle').textContent = 'Financeiro — ' + (s.full_name || s.email || '');
     renderAlunoFinModalBody();
     renderAlunoFinObsList();
+    dyseGetAlunoAsaas(alunoId).then(a => {
+      if(alunoId !== CURRENT_ALUNO_FIN_ID) return;
+      CURRENT_ALUNO_ASAAS = a;
+      renderAlunoFinModalBody();
+      renderAlunoFinObsList();
+    });
     document.getElementById('alunoFinModal').classList.add('open');
     document.getElementById('alunoFinModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
@@ -3925,6 +3980,16 @@ body.dyse-modal-open{overflow:hidden;}
     if(CURRENT_ALUNO_HISTORICO_ID) await renderAlunoReportCardsList(CURRENT_ALUNO_HISTORICO_ID);
   }
 
+  function asaasStatusLinhaModal(){
+    const a = CURRENT_ALUNO_ASAAS;
+    if(!a) return 'Asaas: ainda não sincronizado. Rode “Sincronizar com Asaas” na aba Cobranças.';
+    if(a.asaas_customer_id){
+      const via = { cpf: 'por CPF', email: 'por e-mail', manual: 'manualmente' }[a.match_metodo] || '';
+      return 'Asaas: casado ' + via + ' · cliente ' + a.asaas_customer_id + (a.nome_asaas ? ' (' + escapeHtmlLocal(a.nome_asaas) + ')' : '') + '.';
+    }
+    return 'Asaas: sem correspondência. Preencha o CPF e sincronize, ou vincule à mão na aba Cobranças.';
+  }
+
   function renderAlunoFinModalBody(){
     const historico = ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === CURRENT_ALUNO_FIN_ID).slice().sort((a,b) => b.data_inicio.localeCompare(a.data_inicio));
     const aberto = dyseFindPeriodoAberto(historico);
@@ -3948,6 +4013,8 @@ body.dyse-modal-open{overflow:hidden;}
         '<div class="gestao-field"><label>Contrato — início (opcional)</label><input type="date" id="finContratoInicio" value="' + (aberto && aberto.contrato_inicio ? aberto.contrato_inicio : '') + '"></div>' +
         '<div class="gestao-field"><label>Contrato — fim (opcional)</label><input type="date" id="finContratoFim" value="' + (aberto && aberto.contrato_fim ? aberto.contrato_fim : '') + '"></div>' +
         '<div class="gestao-field"><label>Observação</label><input type="text" id="finObservacao" value="' + escapeHtmlLocal(aberto ? (aberto.observacao || '') : '') + '"></div>' +
+        '<div class="gestao-field"><label>CPF/CNPJ (usado pra casar com o Asaas)</label><input type="text" id="finCpfCnpj" inputmode="numeric" placeholder="Só números" value="' + escapeHtmlLocal(CURRENT_ALUNO_ASAAS ? (CURRENT_ALUNO_ASAAS.cpf_cnpj || '') : '') + '"></div>' +
+        '<p class="gestao-hint">' + asaasStatusLinhaModal() + '</p>' +
         '<p class="gestao-hint">Trocar de professor ou de modalidade encerra o período atual automaticamente e abre um novo a partir de hoje — o histórico anterior fica preservado e os meses já calculados não mudam.</p>' +
         '<button type="submit" class="btn btn-primary">Salvar</button>' +
       '</form>';
@@ -4032,6 +4099,15 @@ body.dyse-modal-open{overflow:hidden;}
     };
     const { error } = await dyseSetAlunoFinanceiro(CURRENT_ALUNO_FIN_ID, campos);
     if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+
+    // CPF/CNPJ pro match com o Asaas (tabela aluno_asaas, separada do histórico)
+    const cpfEl = document.getElementById('finCpfCnpj');
+    const cpfNovo = cpfEl ? cpfEl.value.replace(/\D+/g, '') : '';
+    const cpfAntigo = (CURRENT_ALUNO_ASAAS && CURRENT_ALUNO_ASAAS.cpf_cnpj) || '';
+    if(cpfEl && cpfNovo !== cpfAntigo){
+      await dyseUpsertAlunoAsaasCpf(CURRENT_ALUNO_FIN_ID, cpfNovo);
+      CURRENT_ALUNO_ASAAS = await dyseGetAlunoAsaas(CURRENT_ALUNO_FIN_ID);
+    }
 
     // Cancelado/encerrado tira o aluno da turma automaticamente — isso agora
     // acontece dentro de dyseSetAlunoFinanceiro (escreve direto no banco, não
@@ -4459,9 +4535,208 @@ body.dyse-modal-open{overflow:hidden;}
     }).join('') : '<tr><td colspan="4" style="text-align:center; opacity:.6;">Nenhum mês fechado ainda.</td></tr>';
   }
 
+  /* ======================================================================
+     COBRANÇAS (ASAAS) — conciliação com o gateway de pagamento
+     ====================================================================== */
+  let ASAAS_COBRANCAS = [], ASAAS_ASSINATURAS = [], ALUNO_ASAAS = [];
+
+  const ASAAS_STATUS_LABEL = {
+    PENDING: 'Aguardando', RECEIVED: 'Pago', CONFIRMED: 'Pago', RECEIVED_IN_CASH: 'Pago (dinheiro)',
+    OVERDUE: 'Vencida', REFUNDED: 'Estornada', REFUND_REQUESTED: 'Estorno pedido',
+    CHARGEBACK_REQUESTED: 'Chargeback', CHARGEBACK_DISPUTE: 'Chargeback', AWAITING_CHARGEBACK_REVERSAL: 'Chargeback',
+    DUNNING_REQUESTED: 'Negativação', DUNNING_RECEIVED: 'Negativação', AWAITING_RISK_ANALYSIS: 'Em análise'
+  };
+  const ASAAS_STATUS_PAGO = ['RECEIVED', 'CONFIRMED', 'RECEIVED_IN_CASH'];
+
+  function asaasStatusPill(status){
+    const label = ASAAS_STATUS_LABEL[status] || (status || '-');
+    const cls = ASAAS_STATUS_PAGO.includes(status) ? ' pill-ok' : (status === 'OVERDUE' ? ' pill-bad' : '');
+    return '<span class="pill-count' + cls + '">' + label + '</span>';
+  }
+
+  async function handleAsaasSync(){
+    const btn = document.getElementById('btnAsaasSync');
+    btn.disabled = true; btn.textContent = 'Sincronizando...';
+    const { data, error } = await dyseAsaasSync();
+    btn.disabled = false; btn.textContent = '↻ Sincronizar com Asaas';
+    if(error){ flashMsg('asaasSyncMsg', 'Falha: ' + error.message, false); return; }
+    flashMsg('asaasSyncMsg',
+      data.casados + ' de ' + data.alunos_com_vinculo + ' alunos casados · ' +
+      data.cobrancas + ' cobranças · ' + data.assinaturas + ' assinaturas' +
+      (data.suspensos ? ' · ' + data.suspensos + ' suspenso(s)' : '') +
+      (data.reativados ? ' · ' + data.reativados + ' reativado(s)' : '') +
+      (data.nao_encontrados ? ' · ' + data.nao_encontrados + ' sem correspondência' : ''), true);
+    ALUNO_FIN_HISTORICO = await dyseListAlunoFinanceiroHistorico();
+    await loadAsaasCobrancas();
+  }
+
+  async function loadAsaasCobrancas(){
+    [ASAAS_COBRANCAS, ASAAS_ASSINATURAS, ALUNO_ASAAS] = await Promise.all([
+      dyseListAsaasCobrancas(), dyseListAsaasAssinaturas(), dyseListAlunoAsaas()
+    ]);
+    renderAsaasCobrancas();
+  }
+
+  function asaasNomeAluno(alunoId, link){
+    const s = STUDENTS.find(x => x.id === alunoId);
+    return (s && s.full_name) || (link && link.nome_asaas) || alunoId.slice(0, 8);
+  }
+
+  function renderAsaasCobrancas(){
+    const abertoPorAluno = {};
+    ALUNO_FIN_HISTORICO.forEach(h => { if(!h.data_fim) abertoPorAluno[h.aluno_id] = h; });
+    const linkPorAluno = {}; ALUNO_ASAAS.forEach(a => { linkPorAluno[a.aluno_id] = a; });
+    const cobrPorAluno = {}; ASAAS_COBRANCAS.forEach(c => { if(c.aluno_id){ (cobrPorAluno[c.aluno_id] = cobrPorAluno[c.aluno_id] || []).push(c); } });
+    const assinPorAluno = {}; ASAAS_ASSINATURAS.forEach(s => { if(s.aluno_id) assinPorAluno[s.aluno_id] = s; });
+
+    const alunoIds = Object.keys(abertoPorAluno);
+    let noAsaas = 0, fora = 0, inadimplentes = 0, suspensos = 0;
+    alunoIds.forEach(id => {
+      const link = linkPorAluno[id];
+      if(link && link.asaas_customer_id) noAsaas++; else fora++;
+      if((cobrPorAluno[id] || []).some(c => c.status === 'OVERDUE')) inadimplentes++;
+      if(abertoPorAluno[id].situacao === 'pausado' && abertoPorAluno[id].pausa_automatica) suspensos++;
+    });
+
+    document.getElementById('asaasChips').innerHTML =
+      asaasKpi(noAsaas, 'No Asaas') + asaasKpi(fora, 'Fora do Asaas') +
+      asaasKpi(inadimplentes, 'Inadimplentes') + asaasKpi(suspensos, 'Suspensos (auto)');
+
+    const casados = alunoIds
+      .filter(id => linkPorAluno[id] && linkPorAluno[id].asaas_customer_id)
+      .sort((a, b) => asaasNomeAluno(a, linkPorAluno[a]).localeCompare(asaasNomeAluno(b, linkPorAluno[b])));
+
+    document.getElementById('asaasCobrancasBody').innerHTML = casados.length ? casados.map(id => {
+      const link = linkPorAluno[id];
+      const aberto = abertoPorAluno[id];
+      const assin = assinPorAluno[id];
+      const cobrs = (cobrPorAluno[id] || []).slice().sort((a, b) => String(b.vencimento || '').localeCompare(String(a.vencimento || '')));
+      const ultima = cobrs[0];
+      const valorSistema = aberto ? Number(aberto.valor_mensal_aluno || 0) : 0;
+      const valorAsaas = assin ? Number(assin.valor || 0) : (ultima ? Number(ultima.valor || 0) : 0);
+      const diverge = valorSistema && valorAsaas && Math.abs(valorSistema - valorAsaas) >= 0.01;
+      const pagavelNF = cobrs.find(c => c.billing_type === 'BOLETO' && ASAAS_STATUS_PAGO.includes(c.status) && !c.nota_fiscal_url);
+
+      return '<tr>' +
+        '<td><b>' + escapeHtmlLocal(asaasNomeAluno(id, link)) + '</b>' +
+          (aberto && aberto.situacao === 'pausado' ? ' <span class="pill-count pill-bad">pausado</span>' : '') + '</td>' +
+        '<td>' + (assin ? (formatMoney(assin.valor) + ' · ' + (assin.status || '-')) : '<span style="opacity:.5;">sem assinatura</span>') + '</td>' +
+        '<td>' + (ultima ? (formatMoney(ultima.valor) + (ultima.avulsa ? ' <span class="pill-count">avulsa</span>' : '')) : '-') + '</td>' +
+        '<td>' + (ultima ? asaasStatusPill(ultima.status) : '-') + '</td>' +
+        '<td>' + (ultima ? formatDateBR(ultima.vencimento) : '-') + '</td>' +
+        '<td' + (diverge ? ' style="color:var(--bad); font-weight:700;"' : '') + '>' +
+          formatMoney(valorSistema) + ' / ' + formatMoney(valorAsaas) + (diverge ? ' ⚠️' : '') + '</td>' +
+        '<td style="white-space:nowrap;">' +
+          (ultima && ultima.invoice_url ? '<a class="btn btn-ghost btn-sm" href="' + ultima.invoice_url + '" target="_blank" rel="noopener">Ver no Asaas</a> ' : '') +
+          '<button type="button" class="btn btn-ghost btn-sm" onclick="openCobrancaAvulsaModal(\'' + id + '\')">Cobrança avulsa</button> ' +
+          (pagavelNF
+            ? '<button type="button" class="btn btn-ghost btn-sm" onclick="handleAsaasNotaFiscal(\'' + pagavelNF.id + '\', this)">Emitir NF</button>'
+            : '') +
+        '</td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="7" style="text-align:center; opacity:.6;">Nenhum aluno casado com o Asaas ainda. Clique em “Sincronizar”.</td></tr>';
+
+    // Sem correspondência
+    const semMatch = alunoIds.filter(id => !linkPorAluno[id] || !linkPorAluno[id].asaas_customer_id);
+    const card = document.getElementById('asaasSemMatchCard');
+    if(semMatch.length){
+      card.style.display = 'block';
+      document.getElementById('asaasSemMatchList').innerHTML = semMatch
+        .sort((a, b) => asaasNomeAluno(a).localeCompare(asaasNomeAluno(b)))
+        .map(id => {
+          const s = STUDENTS.find(x => x.id === id);
+          return '<div class="chip-toggle-row" style="gap:10px; flex-wrap:wrap;">' +
+            '<span class="name">' + escapeHtmlLocal(asaasNomeAluno(id)) + (s && s.email ? ' <span style="opacity:.6;">· ' + escapeHtmlLocal(s.email) + '</span>' : '') + '</span>' +
+            '<span style="display:flex; gap:6px;">' +
+              '<input type="text" id="asaasCus-' + id + '" placeholder="cus_..." style="border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem; width:190px;">' +
+              '<button type="button" class="btn btn-ghost btn-sm" onclick="handleAsaasLinkManual(\'' + id + '\')">Vincular</button>' +
+            '</span>' +
+          '</div>';
+        }).join('');
+    } else {
+      card.style.display = 'none';
+    }
+  }
+
+  function asaasKpi(valor, label){
+    return '<div class="kpi-card"><div class="kpi-value">' + valor + '</div><div class="kpi-label">' + label + '</div></div>';
+  }
+
+  async function handleAsaasLinkManual(alunoId){
+    const input = document.getElementById('asaasCus-' + alunoId);
+    const cus = (input.value || '').trim();
+    if(!cus){ input.focus(); return; }
+    input.disabled = true;
+    const { data, error } = await dyseAsaasLinkManual(alunoId, cus);
+    input.disabled = false;
+    if(error){ flashMsg('asaasSyncMsg', 'Vínculo falhou: ' + error.message, false); return; }
+    flashMsg('asaasSyncMsg', 'Vinculado a ' + (data.cliente ? data.cliente.nome : cus) + ' · ' + data.cobrancas + ' cobranças.', true);
+    await loadAsaasCobrancas();
+  }
+
+  async function handleAsaasNotaFiscal(cobrancaId, btn){
+    if(btn){ btn.disabled = true; btn.textContent = 'Emitindo...'; }
+    const { data, error } = await dyseAsaasNotaFiscal(cobrancaId);
+    if(error){
+      if(btn){ btn.disabled = false; btn.textContent = 'Emitir NF'; }
+      flashMsg('asaasSyncMsg', 'NF: ' + error.message, false);
+      return;
+    }
+    flashMsg('asaasSyncMsg', 'Nota fiscal: ' + (data.nota_fiscal_status || 'acionada') + '.', true);
+    await loadAsaasCobrancas();
+  }
+
+  /* ---------- Modal de cobrança avulsa ---------- */
+  function openCobrancaAvulsaModal(alunoId){
+    const link = (ALUNO_ASAAS.find(a => a.aluno_id === alunoId)) || {};
+    const nome = asaasNomeAluno(alunoId, link);
+    const amanha = new Date(); amanha.setDate(amanha.getDate() + 3);
+    document.getElementById('cobrancaAvulsaModalTitle').textContent = 'Cobrança avulsa — ' + nome;
+    document.getElementById('cobrancaAvulsaModalBody').innerHTML =
+      '<form class="gestao-form gestao-form-col" onsubmit="return handleCobrancaAvulsa(event, \'' + alunoId + '\')">' +
+        '<div class="gestao-field"><label>Valor (R$)</label><input type="number" step="0.01" min="1" id="avValor" required></div>' +
+        '<div class="gestao-field"><label>Vencimento</label><input type="date" id="avVencimento" value="' + amanha.toISOString().slice(0, 10) + '" required></div>' +
+        '<div class="gestao-field"><label>Descrição</label><input type="text" id="avDescricao" placeholder="Ex: Material didático 2º semestre" required></div>' +
+        '<div class="gestao-field"><label>Forma de pagamento</label><select id="avBilling">' +
+          '<option value="UNDEFINED">Boleto + PIX (aluno escolhe)</option>' +
+          '<option value="BOLETO">Só boleto</option>' +
+          '<option value="PIX">Só PIX</option>' +
+        '</select></div>' +
+        '<button type="submit" class="btn btn-primary">Gerar cobrança</button>' +
+      '</form>' +
+      '<p class="auth-msg" id="avMsg"></p>' +
+      '<div id="avResultado" style="margin-top:14px;"></div>';
+    document.getElementById('cobrancaAvulsaModal').classList.add('open');
+    document.getElementById('cobrancaAvulsaModal').setAttribute('aria-hidden', 'false');
+  }
+  function closeCobrancaAvulsaModal(){
+    document.getElementById('cobrancaAvulsaModal').classList.remove('open');
+    document.getElementById('cobrancaAvulsaModal').setAttribute('aria-hidden', 'true');
+  }
+  async function handleCobrancaAvulsa(ev, alunoId){
+    ev.preventDefault();
+    const btn = ev.target.querySelector('button[type=submit]');
+    btn.disabled = true; btn.textContent = 'Gerando...';
+    const { data, error } = await dyseAsaasCobrancaAvulsa({
+      aluno_id: alunoId,
+      valor: Number(document.getElementById('avValor').value),
+      vencimento: document.getElementById('avVencimento').value,
+      descricao: document.getElementById('avDescricao').value,
+      billing_type: document.getElementById('avBilling').value
+    });
+    btn.disabled = false; btn.textContent = 'Gerar cobrança';
+    if(error){ flashMsg('avMsg', error.message, false); return; }
+    flashMsg('avMsg', 'Cobrança criada.', true);
+    document.getElementById('avResultado').innerHTML =
+      (data.invoiceUrl ? '<p><a class="btn btn-ghost btn-sm" href="' + data.invoiceUrl + '" target="_blank" rel="noopener">Abrir página de pagamento</a></p>' : '') +
+      (data.pixPayload ? '<div class="gestao-field"><label>PIX copia e cola</label><input type="text" readonly value="' + escapeHtmlLocal(data.pixPayload) + '" onclick="this.select()"></div>' : '');
+    await loadAsaasCobrancas();
+    return false;
+  }
+
   document.addEventListener('keydown', e => {
     if(e.key === 'Escape'){
-      closeTurmaCreateModal(); closeTurmaEditModal(); closeStudentCreateModal(); closeCsvImportModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal();
+      closeTurmaCreateModal(); closeTurmaEditModal(); closeStudentCreateModal(); closeCsvImportModal(); closeMateriaModal(); closeModalidadeModal(); closeAlunoFinModal(); closePagamentoModal(); closeCobrancaAvulsaModal();
     }
   });
 

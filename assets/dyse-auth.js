@@ -1027,6 +1027,87 @@ async function dyseGetMinhaSituacaoFinanceira(){
   return data.situacao;
 }
 
+/* ======================================================================
+   ASAAS — conciliação de cobranças (ver supabase-schema.sql seção 20 e
+   as funções serverless api/asaas-*.js). O navegador só LÊ os caches
+   (asaas_cobrancas / asaas_assinaturas / aluno_asaas) via RLS; toda
+   escrita e toda chamada ao Asaas passa pelas funções serverless.
+   ====================================================================== */
+
+/* POST numa função serverless autenticada com o token do Supabase.
+   Devolve { data } em sucesso ou { error: { message } }. */
+async function dyseApiPost(path, body){
+  const session = await dyseGetSession();
+  if(!session) return { error: { message: 'Sessão expirada. Entre de novo.' } };
+  let resp;
+  try{
+    resp = await fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+      body: JSON.stringify(body || {})
+    });
+  }catch(err){
+    return { error: { message: 'Erro de conexão: ' + err.message } };
+  }
+  const result = await resp.json().catch(() => ({}));
+  if(!resp.ok) return { error: { message: result.error || resp.statusText } };
+  return { data: result };
+}
+
+async function dyseAsaasSync(){
+  return dyseApiPost('/api/asaas-sync', {});
+}
+async function dyseAsaasLinkManual(alunoId, asaasCustomerId){
+  return dyseApiPost('/api/asaas-link-manual', { aluno_id: alunoId, asaas_customer_id: asaasCustomerId });
+}
+async function dyseAsaasCobrancaAvulsa(payload){
+  return dyseApiPost('/api/asaas-cobranca-avulsa', payload);
+}
+async function dyseAsaasNotaFiscal(cobrancaId){
+  return dyseApiPost('/api/asaas-nota-fiscal', { cobranca_id: cobrancaId });
+}
+
+/* Leituras diretas (RLS). alunoId opcional filtra; sem ele, is_financeiro()
+   vê tudo. */
+async function dyseListAsaasCobrancas(alunoId){
+  let q = sb.from('asaas_cobrancas').select('*').order('vencimento', { ascending: false });
+  if(alunoId) q = q.eq('aluno_id', alunoId);
+  const { data, error } = await q;
+  return error ? [] : (data || []);
+}
+async function dyseListAsaasAssinaturas(){
+  const { data, error } = await sb.from('asaas_assinaturas').select('*');
+  return error ? [] : (data || []);
+}
+async function dyseListAlunoAsaas(){
+  const { data, error } = await sb.from('aluno_asaas').select('*');
+  return error ? [] : (data || []);
+}
+async function dyseGetAlunoAsaas(alunoId){
+  const { data, error } = await sb.from('aluno_asaas').select('*').eq('aluno_id', alunoId).maybeSingle();
+  return error ? null : data;
+}
+async function dyseUpsertAlunoAsaasCpf(alunoId, cpfCnpj){
+  const digitos = String(cpfCnpj || '').replace(/\D+/g, '');
+  const { error } = await sb.from('aluno_asaas').upsert(
+    { aluno_id: alunoId, cpf_cnpj: digitos || null, atualizado_em: new Date().toISOString() },
+    { onConflict: 'aluno_id' }
+  );
+  return { error };
+}
+
+/* Cobranças do próprio aluno logado (área do aluno). */
+async function dyseListMinhasCobrancas(){
+  const session = await dyseGetSession();
+  if(!session) return [];
+  const { data, error } = await sb
+    .from('asaas_cobrancas')
+    .select('*')
+    .eq('aluno_id', session.user.id)
+    .order('vencimento', { ascending: false });
+  return error ? [] : (data || []);
+}
+
 /* ---------- Mensalidades (razão mensal por aluno) ---------- */
 async function dyseMesFechado(mes){
   const { data, error } = await sb.from('fechamentos_mensais').select('fechado_em').eq('mes_competencia', mes).maybeSingle();

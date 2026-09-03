@@ -714,6 +714,31 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   text-align:center; color:var(--seal-soft);
 }
 
+/* ---- Minhas cobranças (Asaas) ---- */
+.cob-list{display:flex; flex-direction:column; gap:10px; padding:0 18px 18px;}
+.cob-item{
+  border:1px solid #f0e3d2; border-radius:var(--radius-md); padding:11px 13px;
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.cob-item.venc{border-color:#f0c9c4; background:#fdf3f2;}
+.cob-main{min-width:0; flex:1 1 200px;}
+.cob-valor{font-weight:800; color:var(--seal); font-size:.95rem;}
+.cob-sub{font-size:.78rem; color:var(--seal-soft); margin-top:1px;}
+.cob-badge{font-size:.66rem; font-weight:800; padding:3px 9px; border-radius:999px; white-space:nowrap;}
+.cob-badge.pago{background:#eaf7ee; color:var(--ok);}
+.cob-badge.aguardando{background:#fdf0dd; color:#a06a2e;}
+.cob-badge.venc{background:#fbeceb; color:var(--bad);}
+.cob-acoes{display:flex; gap:7px; flex-wrap:wrap;}
+.cob-btn{
+  display:inline-flex; align-items:center; gap:5px; border:2px solid #eee0cf; background:#fff;
+  border-radius:999px; padding:6px 13px; font-family:var(--font-body); font-weight:700; font-size:.76rem;
+  color:var(--seal); cursor:pointer; text-decoration:none; transition:.15s;
+}
+.cob-btn:hover{border-color:var(--amaranth);}
+.cob-btn.primary{background:var(--amaranth); border-color:var(--amaranth); color:#fff;}
+.cob-btn:disabled{opacity:.5; cursor:not-allowed;}
+.cob-hint{font-size:.72rem; color:var(--seal-soft); font-style:italic; flex-basis:100%;}
+
 /* ---- impressão / salvar em PDF (1 folha A4) ---- */
 @media print{
   @page{size:A4; margin:10mm;}
@@ -824,6 +849,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="coursesWrap"></div>
 
       <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="materialWrap"></div>
+
+      <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="cobrancasWrap"></div>
 
       <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="reportCardsWrap"></div>
 
@@ -1027,6 +1054,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         '</div>';
 
     await renderMeuMaterial(allowedSlugs, profile ? profile.turma_id : null);
+    await renderMinhasCobrancas();
     await renderMeusReportCards(session.user.id);
   })();
 
@@ -1260,6 +1288,106 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '</div>'
         : '') +
     '</article>';
+  }
+
+  /* ---------- Minhas cobranças (Asaas, somente leitura) ---------- */
+  const COB_STATUS = {
+    PENDING: ['Aguardando pagamento', 'aguardando'],
+    RECEIVED: ['Pago', 'pago'], CONFIRMED: ['Pago', 'pago'], RECEIVED_IN_CASH: ['Pago', 'pago'],
+    OVERDUE: ['Vencida', 'venc'],
+    REFUNDED: ['Estornada', 'aguardando'], REFUND_REQUESTED: ['Estorno em análise', 'aguardando'],
+    AWAITING_RISK_ANALYSIS: ['Em análise', 'aguardando']
+  };
+  const COB_PAGO = ['RECEIVED', 'CONFIRMED', 'RECEIVED_IN_CASH'];
+
+  function cobMoney(n){
+    return 'R$ ' + Number(n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function cobData(d){
+    if(!d) return '-';
+    const [y, m, dd] = d.split('-');
+    return dd + '/' + m + '/' + y;
+  }
+
+  async function renderMinhasCobrancas(){
+    const wrap = document.getElementById('cobrancasWrap');
+    if(!wrap) return;
+    let cobrancas = [];
+    try{ cobrancas = await dyseListMinhasCobrancas(); }catch(e){ cobrancas = []; }
+    if(!cobrancas.length){ wrap.innerHTML = ''; return; }
+
+    const abertas = cobrancas.filter(c => c.status === 'PENDING' || c.status === 'OVERDUE').length;
+
+    wrap.innerHTML =
+      '<details class="rc-accordion" id="cobAccordion"' + (abertas ? ' open' : '') + '>' +
+        '<summary>' +
+          '<div class="rc-summary-txt">' +
+            '<h3>Minhas cobranças <span class="spark">✦</span></h3>' +
+            '<p>Boletos, PIX e notas fiscais das suas mensalidades.' +
+              (abertas ? ' <b>' + abertas + ' em aberto.</b>' : '') + '</p>' +
+          '</div>' +
+          '<span class="rc-summary-chevron">▾</span>' +
+        '</summary>' +
+        '<div class="cob-list">' + cobrancas.map(renderCobrancaItem).join('') + '</div>' +
+      '</details>';
+  }
+
+  function renderCobrancaItem(c){
+    const st = COB_STATUS[c.status] || [c.status || '-', 'aguardando'];
+    const pago = COB_PAGO.includes(c.status);
+    const vencida = c.status === 'OVERDUE';
+
+    let acoes = '';
+    if(!pago){
+      if(c.invoice_url){
+        acoes += '<a class="cob-btn primary" href="' + c.invoice_url + '" target="_blank" rel="noopener">Boleto / PIX</a>';
+      } else if(c.bank_slip_url){
+        acoes += '<a class="cob-btn primary" href="' + c.bank_slip_url + '" target="_blank" rel="noopener">Boleto</a>';
+      }
+      if(c.pix_payload){
+        acoes += '<button type="button" class="cob-btn" data-pix="' + escapeHtmlLocal(c.pix_payload) + '" onclick="copiarPix(this)">Copiar PIX</button>';
+      }
+    }
+
+    let nf = '';
+    if(c.nota_fiscal_url){
+      nf = '<a class="cob-btn" href="' + c.nota_fiscal_url + '" target="_blank" rel="noopener">Baixar NF</a>';
+    } else if(c.billing_type === 'BOLETO' && pago){
+      nf = '<button type="button" class="cob-btn" onclick="emitirMinhaNota(\'' + c.id + '\', this)">Emitir NF</button>';
+    } else {
+      nf = '<button type="button" class="cob-btn" disabled>Emitir NF</button>' +
+           '<span class="cob-hint">A nota fiscal só pode ser emitida para boletos já pagos.</span>';
+    }
+
+    return '<div class="cob-item' + (vencida ? ' venc' : '') + '">' +
+      '<div class="cob-main">' +
+        '<div class="cob-valor">' + cobMoney(c.valor) + (c.avulsa ? ' <span class="cob-badge aguardando">avulsa</span>' : '') + '</div>' +
+        '<div class="cob-sub">' + (c.descricao ? escapeHtmlLocal(c.descricao) + ' · ' : '') + 'vence ' + cobData(c.vencimento) +
+          (pago && c.pago_em ? ' · pago em ' + cobData(c.pago_em) : '') + '</div>' +
+      '</div>' +
+      '<span class="cob-badge ' + st[1] + '">' + escapeHtmlLocal(st[0]) + '</span>' +
+      '<div class="cob-acoes">' + acoes + nf + '</div>' +
+    '</div>';
+  }
+
+  function copiarPix(btn){
+    const payload = btn.getAttribute('data-pix') || '';
+    navigator.clipboard.writeText(payload).then(() => {
+      const t = btn.textContent; btn.textContent = 'Copiado!';
+      setTimeout(() => { btn.textContent = t; }, 1500);
+    }).catch(() => {});
+  }
+
+  async function emitirMinhaNota(cobrancaId, btn){
+    btn.disabled = true; btn.textContent = 'Emitindo...';
+    const { data, error } = await dyseAsaasNotaFiscal(cobrancaId);
+    if(error){
+      btn.disabled = false; btn.textContent = 'Emitir NF';
+      alert(error.message);
+      return;
+    }
+    btn.textContent = data.nota_fiscal_url ? 'Pronta!' : 'Em processamento';
+    await renderMinhasCobrancas();
   }
 </script>
 </body>
