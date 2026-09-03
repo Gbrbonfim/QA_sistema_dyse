@@ -960,13 +960,18 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
   function mostrarView(view, ev){
     if(ev) ev.preventDefault();
+    if(view !== 'atividades' && view !== 'financeiro') view = 'atividades';
     document.querySelectorAll('.sidebar-item[data-view]').forEach(el =>
       el.classList.toggle('active', el.dataset.view === view));
     document.getElementById('viewAtividades').style.display = view === 'atividades' ? 'block' : 'none';
     document.getElementById('viewFinanceiro').style.display = view === 'financeiro' ? 'block' : 'none';
     if(view === 'atividades') voltarCursos();
+    if(('#' + view) !== location.hash) history.replaceState(null, '', view === 'atividades' ? location.pathname : '#financeiro');
     window.scrollTo(0, 0);
   }
+  // link vindo de outra página (ex: /calendario-letivo.html) com #financeiro
+  window.addEventListener('hashchange', () => mostrarView(location.hash.replace('#', '')));
+  if(location.hash === '#financeiro') mostrarView('financeiro');
 
   function voltarCursos(){
     document.getElementById('cursoPane').style.display = 'none';

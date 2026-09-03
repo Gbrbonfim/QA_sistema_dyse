@@ -216,9 +216,6 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
     </header>
 
     <div class="content">
-      <h2 class="page-title">Calendário Letivo</h2>
-      <p class="page-sub" id="pageSub">Visualize o calendário anual da escola.</p>
-
       <div class="cal-toolbar">
         <label for="anoSelect" style="font-weight:700; font-size:.85rem;">Ano letivo</label>
         <select id="anoSelect" onchange="onAnoChange()"></select>
@@ -315,7 +312,10 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
         ['reportcards','Report Cards',SVG.report], ['disponibilidade','Disponibilidade',SVG.calendar]
       ]};
     }
-    return { base:'/area-do-aluno.html', itens:[['','Minhas atividades',SVG.list]] };
+    return { base:'/area-do-aluno.html', itens:[
+      ['','Minhas atividades',SVG.list],
+      ['financeiro','Financeiro',SVG.card]
+    ]};
   }
 
   function renderChrome(session, profile){
@@ -570,10 +570,9 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
     const profile = await dyseGetProfile(session);
     CAN_EDIT = dyseIsAdmin(profile);
 
-    document.getElementById('pageSub').textContent = CAN_EDIT
-      ? 'Clique em qualquer dia para marcar feriado, recesso, reposição etc. Libere o ano quando quiser que alunos e professores vejam.'
+    document.getElementById('topbarSub').textContent = CAN_EDIT
+      ? 'Clique num dia para marcar feriado, recesso, reposição etc. Libere o ano quando quiser que alunos e professores vejam.'
       : 'Calendário anual da escola.';
-    document.getElementById('topbarSub').textContent = CAN_EDIT ? 'Configure e libere o calendário anual.' : 'Calendário anual da escola.';
 
     renderChrome(session, profile);
     buildAnoSelect();
