@@ -1035,7 +1035,7 @@ body.dyse-modal-open{overflow:hidden;}
       <div style="overflow-x:auto;">
         <table class="dash-table" id="asaasCobrancasTable">
           <thead>
-            <tr><th>Aluno</th><th>Assinatura</th><th>Última cobrança</th><th>Status</th><th>Vencimento</th><th>Sistema × Asaas</th><th>Ações</th></tr>
+            <tr><th>Aluno</th><th>Assinatura</th><th>Última paga</th><th>Próxima</th><th>Atrasada</th><th>Sistema × Asaas</th><th>Ações</th></tr>
           </thead>
           <tbody id="asaasCobrancasBody"></tbody>
         </table>
@@ -4589,12 +4589,15 @@ body.dyse-modal-open{overflow:hidden;}
     const cobrPorAluno = {}; ASAAS_COBRANCAS.forEach(c => { if(c.aluno_id){ (cobrPorAluno[c.aluno_id] = cobrPorAluno[c.aluno_id] || []).push(c); } });
     const assinPorAluno = {}; ASAAS_ASSINATURAS.forEach(s => { if(s.aluno_id) assinPorAluno[s.aluno_id] = s; });
 
+    const hojeChip = new Date().toISOString().slice(0, 10);
+    const emAtraso = c => c.status === 'OVERDUE' || (c.status === 'PENDING' && (c.vencimento || '9999') < hojeChip);
+
     const alunoIds = Object.keys(abertoPorAluno);
     let noAsaas = 0, fora = 0, inadimplentes = 0, suspensos = 0;
     alunoIds.forEach(id => {
       const link = linkPorAluno[id];
       if(link && link.asaas_customer_id) noAsaas++; else fora++;
-      if((cobrPorAluno[id] || []).some(c => c.status === 'OVERDUE')) inadimplentes++;
+      if((cobrPorAluno[id] || []).some(emAtraso)) inadimplentes++;
       if(abertoPorAluno[id].situacao === 'pausado' && abertoPorAluno[id].pausa_automatica) suspensos++;
     });
 
@@ -4606,28 +4609,53 @@ body.dyse-modal-open{overflow:hidden;}
       .filter(id => linkPorAluno[id] && linkPorAluno[id].asaas_customer_id)
       .sort((a, b) => asaasNomeAluno(a, linkPorAluno[a]).localeCompare(asaasNomeAluno(b, linkPorAluno[b])));
 
+    const hojeStr = new Date().toISOString().slice(0, 10);
+    const sub = t => '<br><span style="opacity:.6; font-size:.76rem;">' + t + '</span>';
+
     document.getElementById('asaasCobrancasBody').innerHTML = casados.length ? casados.map(id => {
       const link = linkPorAluno[id];
       const aberto = abertoPorAluno[id];
       const assin = assinPorAluno[id];
-      const cobrs = (cobrPorAluno[id] || []).slice().sort((a, b) => String(b.vencimento || '').localeCompare(String(a.vencimento || '')));
-      const ultima = cobrs[0];
+      const cobrs = (cobrPorAluno[id] || []).slice();
+
+      const vencAsc = (a, b) => String(a.vencimento || '').localeCompare(String(b.vencimento || ''));
+      const pagas = cobrs.filter(c => ASAAS_STATUS_PAGO.includes(c.status))
+        .sort((a, b) => String(b.pago_em || b.vencimento || '').localeCompare(String(a.pago_em || a.vencimento || '')));
+      // atrasada = OVERDUE, ou ainda PENDING mas já passou do vencimento
+      const atrasadas = cobrs.filter(c =>
+        c.status === 'OVERDUE' || (c.status === 'PENDING' && (c.vencimento || '9999') < hojeStr)
+      ).sort(vencAsc);
+      const proxima = cobrs.filter(c => c.status === 'PENDING' && (c.vencimento || '') >= hojeStr)
+        .sort(vencAsc)[0];
+
+      const ultimaPaga = pagas[0];
+      const totalAtraso = atrasadas.reduce((s, c) => s + Number(c.valor || 0), 0);
+
+      const maisRecente = cobrs.slice().sort((a, b) => String(b.vencimento || '').localeCompare(String(a.vencimento || '')))[0];
       const valorSistema = aberto ? Number(aberto.valor_mensal_aluno || 0) : 0;
-      const valorAsaas = assin ? Number(assin.valor || 0) : (ultima ? Number(ultima.valor || 0) : 0);
+      const valorAsaas = assin ? Number(assin.valor || 0) : (maisRecente ? Number(maisRecente.valor || 0) : 0);
       const diverge = valorSistema && valorAsaas && Math.abs(valorSistema - valorAsaas) >= 0.01;
-      const pagavelNF = cobrs.find(c => c.billing_type === 'BOLETO' && ASAAS_STATUS_PAGO.includes(c.status) && !c.nota_fiscal_url);
+
+      const pagavelNF = pagas.find(c => c.billing_type === 'BOLETO' && !c.nota_fiscal_url);
+      const foco = atrasadas[0] || proxima || ultimaPaga || maisRecente;
+
+      const celAtrasada = atrasadas.length
+        ? '<span style="color:var(--bad); font-weight:700;">' + formatMoney(totalAtraso) +
+            (atrasadas.length > 1 ? ' (' + atrasadas.length + ')' : '') + '</span>' +
+            sub('desde ' + formatDateBR(atrasadas[0].vencimento))
+        : '<span style="color:var(--ok);">em dia</span>';
 
       return '<tr>' +
         '<td><b>' + escapeHtmlLocal(asaasNomeAluno(id, link)) + '</b>' +
           (aberto && aberto.situacao === 'pausado' ? ' <span class="pill-count pill-bad">pausado</span>' : '') + '</td>' +
-        '<td>' + (assin ? (formatMoney(assin.valor) + ' · ' + (assin.status || '-')) : '<span style="opacity:.5;">sem assinatura</span>') + '</td>' +
-        '<td>' + (ultima ? (formatMoney(ultima.valor) + (ultima.avulsa ? ' <span class="pill-count">avulsa</span>' : '')) : '-') + '</td>' +
-        '<td>' + (ultima ? asaasStatusPill(ultima.status) : '-') + '</td>' +
-        '<td>' + (ultima ? formatDateBR(ultima.vencimento) : '-') + '</td>' +
+        '<td>' + (assin ? (formatMoney(assin.valor) + sub(assin.status || '-')) : '<span style="opacity:.5;">sem assinatura</span>') + '</td>' +
+        '<td>' + (ultimaPaga ? (formatMoney(ultimaPaga.valor) + sub(formatDateBR(ultimaPaga.pago_em || ultimaPaga.vencimento))) : '—') + '</td>' +
+        '<td>' + (proxima ? (formatMoney(proxima.valor) + sub('vence ' + formatDateBR(proxima.vencimento))) : '—') + '</td>' +
+        '<td>' + celAtrasada + '</td>' +
         '<td' + (diverge ? ' style="color:var(--bad); font-weight:700;"' : '') + '>' +
           formatMoney(valorSistema) + ' / ' + formatMoney(valorAsaas) + (diverge ? ' ⚠️' : '') + '</td>' +
         '<td style="white-space:nowrap;">' +
-          (ultima && ultima.invoice_url ? '<a class="btn btn-ghost btn-sm" href="' + ultima.invoice_url + '" target="_blank" rel="noopener">Ver no Asaas</a> ' : '') +
+          (foco && foco.invoice_url ? '<a class="btn btn-ghost btn-sm" href="' + foco.invoice_url + '" target="_blank" rel="noopener">Ver no Asaas</a> ' : '') +
           '<button type="button" class="btn btn-ghost btn-sm" onclick="openCobrancaAvulsaModal(\'' + id + '\')">Cobrança avulsa</button> ' +
           (pagavelNF
             ? '<button type="button" class="btn btn-ghost btn-sm" onclick="handleAsaasNotaFiscal(\'' + pagavelNF.id + '\', this)">Emitir NF</button>'
