@@ -7,7 +7,7 @@
 -- Supabase resolve sem depender de plano.
 -- ======================================================================
 
--- 1) Função da varredura (mesma lógica de api/asaas-cron.js).
+-- 1) Função da varredura (mesma lógica de api/asaas.js?action=cron).
 create or replace function public.fn_asaas_cron_inadimplencia()
 returns jsonb
 language plpgsql

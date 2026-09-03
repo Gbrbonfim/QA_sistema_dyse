@@ -9,7 +9,7 @@
      é unique. Evento já processado → 200 e sai (o Asaas reenvia em erro).
    - PAYMENT_*  → atualiza asaas_cobrancas a partir de body.payment.
    - Pagou (RECEIVED/CONFIRMED) e não sobra cobrança vencida → reativa.
-   - NÃO suspende aqui: a regra dos 14 dias é do cron (api/asaas-cron.js).
+   - NÃO suspende aqui: a regra dos 14 dias é do pg_cron / api/asaas.js?action=cron.
    - INVOICE_*  → atualiza o status da nota fiscal na cobrança.
    - SUBSCRIPTION_*  → atualiza o cache de assinaturas.
 

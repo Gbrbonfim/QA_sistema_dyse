@@ -2746,8 +2746,9 @@ grant execute on function public.fn_asaas_suspender(uuid, text) to service_role;
 grant execute on function public.fn_asaas_reativar(uuid, text) to service_role;
 
 -- 20.7) Varredura diária de inadimplência. Roda no Supabase via pg_cron
---       (o plano Hobby da Vercel não deixa agendar cron lá). A função
---       api/asaas-cron.js é só um gatilho manual da MESMA lógica.
+--       (o plano Hobby da Vercel não deixa agendar cron lá, nem comporta
+--       mais funções serverless). api/asaas.js?action=cron é só um gatilho
+--       manual da MESMA lógica.
 --       Suspende quem tem cobrança OVERDUE vencida há > 14 dias; reativa
 --       quem foi pausado automaticamente e não tem mais OVERDUE.
 create or replace function public.fn_asaas_cron_inadimplencia()

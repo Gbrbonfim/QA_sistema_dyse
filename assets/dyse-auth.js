@@ -1055,16 +1055,16 @@ async function dyseApiPost(path, body){
 }
 
 async function dyseAsaasSync(){
-  return dyseApiPost('/api/asaas-sync', {});
+  return dyseApiPost('/api/asaas', { action: 'sync' });
 }
 async function dyseAsaasLinkManual(alunoId, asaasCustomerId){
-  return dyseApiPost('/api/asaas-link-manual', { aluno_id: alunoId, asaas_customer_id: asaasCustomerId });
+  return dyseApiPost('/api/asaas', { action: 'link', aluno_id: alunoId, asaas_customer_id: asaasCustomerId });
 }
 async function dyseAsaasCobrancaAvulsa(payload){
-  return dyseApiPost('/api/asaas-cobranca-avulsa', payload);
+  return dyseApiPost('/api/asaas', { action: 'cobranca', ...payload });
 }
 async function dyseAsaasNotaFiscal(cobrancaId){
-  return dyseApiPost('/api/asaas-nota-fiscal', { cobranca_id: cobrancaId });
+  return dyseApiPost('/api/asaas', { action: 'nota', cobranca_id: cobrancaId });
 }
 
 /* Leituras diretas (RLS). alunoId opcional filtra; sem ele, is_financeiro()

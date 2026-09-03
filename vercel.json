@@ -3,7 +3,6 @@
   "trailingSlash": false,
   "functions": {
     "api/report-card-ia.js": { "maxDuration": 60 },
-    "api/asaas-sync.js": { "maxDuration": 60 },
-    "api/asaas-link-manual.js": { "maxDuration": 60 }
+    "api/asaas.js": { "maxDuration": 60 }
   }
 }
