@@ -1069,18 +1069,21 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const body = document.getElementById('aulaBody' + numeroAula);
     if(!body || body.dataset.loaded) return;
     body.dataset.loaded = '1';
-    const manifesto = AULAS_MANIFEST[numeroAula];
-    if(!manifesto){
-      body.innerHTML = '<p class="card-instructions" style="margin:0;">As atividades desta aula ainda estão sendo produzidas pela coordenação.</p>';
-      return;
-    }
-    const publishedSet = await dyseGetPublishedSet('a1', numeroAula);
+
     const aulaMeta = AREA_CTX.aulasA1[numeroAula];
     const matUrl = aulaMeta && AREA_CTX.materialPorAulaId[aulaMeta.id];
     const matHtml = matUrl
       ? '<a href="' + escapeHtmlLocal(matUrl) + '" target="_blank" rel="noopener" class="material-aula-link" style="margin-bottom:12px;">' +
           '<span class="num">📄</span><span class="topico">Material desta aula</span><span class="arrow">↗</span></a>'
       : '';
+
+    const manifesto = AULAS_MANIFEST[numeroAula];
+    if(!manifesto){
+      body.innerHTML = matHtml +
+        '<p class="card-instructions" style="margin:0;">As atividades desta aula ainda estão sendo produzidas pela coordenação.</p>';
+      return;
+    }
+    const publishedSet = await dyseGetPublishedSet('a1', numeroAula);
     body.innerHTML = matHtml + '<div class="dash-grid">' + manifesto.map(a => {
       const liberada = AREA_CTX.staff || publishedSet.has(a.num);
       const done = AREA_CTX.doneMap['a1:' + numeroAula + ':' + a.num];
@@ -1268,17 +1271,16 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
   /* ---------- Material das aulas ----------
      O material (slides) de cada aula fica DENTRO da aula, na visão do curso
-     — não numa lista solta. Aqui só montamos o mapa aula_id -> url, das
-     aulas que já aconteceram (minhas_aulas_registradas, RPC security
-     definer — nunca lendo registros_classe direto). Devolve quantas aulas
-     têm material (pra contagem de novidade). */
+     — não numa lista solta. Monta o mapa aula_id -> url do material: mostra
+     sempre que existir link (cópia da turma ou base do nível), mesmo que as
+     atividades da aula ainda estejam em produção. Devolve quantas aulas têm
+     material (pra contagem de novidade). */
   async function carregarMapaMaterial(allowedSlugs, turmaId){
     const niveis = (await dyseListNiveis()).filter(n => allowedSlugs.has(n.slug));
     if(!niveis.length) return 0;
 
-    const [aulasPorNivel, aulaIdsRegistradosPorNivel, materialDaTurma] = await Promise.all([
+    const [aulasPorNivel, materialDaTurma] = await Promise.all([
       Promise.all(niveis.map(n => dyseListNivelAulas(n.slug))),
-      Promise.all(niveis.map(n => dyseListMinhasAulasRegistradas(n.slug))),
       dyseListTurmaAulaMaterial(turmaId)
     ]);
     const copiaPorAula = {};
@@ -1286,11 +1288,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
     let total = 0;
     niveis.forEach((n, i) => {
-      const registrado = new Set(aulaIdsRegistradosPorNivel[i]);
       aulasPorNivel[i].forEach(a => {
         if(n.slug === 'a1') AREA_CTX.aulasA1[a.numero] = { id: a.id, topico: a.topico };
         const url = (copiaPorAula[a.id] || a.material_url || '').trim();
-        if(url && registrado.has(a.id)){
+        if(url){
           AREA_CTX.materialPorAulaId[a.id] = url;
           total++;
         }
