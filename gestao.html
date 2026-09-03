@@ -4678,7 +4678,19 @@ body.dyse-modal-open{overflow:hidden;}
     ALUNO_FIN_HISTORICO.forEach(h => { if(!h.data_fim) abertoPorAluno[h.aluno_id] = h; });
     const linkPorAluno = {}; ALUNO_ASAAS.forEach(a => { linkPorAluno[a.aluno_id] = a; });
     const cobrPorAluno = {}; ASAAS_COBRANCAS.forEach(c => { if(c.aluno_id){ (cobrPorAluno[c.aluno_id] = cobrPorAluno[c.aluno_id] || []).push(c); } });
-    const assinPorAluno = {}; ASAAS_ASSINATURAS.forEach(s => { if(s.aluno_id) assinPorAluno[s.aluno_id] = s; });
+
+    // Um aluno pode ter mais de uma assinatura no Asaas (ex: uma antiga
+    // expirada + a renovação atual). Escolhe a ATIVA; se não houver, a de
+    // vencimento mais recente.
+    const assinsPorAluno = {}; ASAAS_ASSINATURAS.forEach(s => { if(s.aluno_id) (assinsPorAluno[s.aluno_id] = assinsPorAluno[s.aluno_id] || []).push(s); });
+    const escolherAssinatura = lista => {
+      if(!lista || !lista.length) return null;
+      const ativas = lista.filter(s => String(s.status || '').toUpperCase() === 'ACTIVE');
+      const pool = ativas.length ? ativas : lista;
+      return pool.slice().sort((a, b) => String(b.proximo_vencimento || '').localeCompare(String(a.proximo_vencimento || '')))[0];
+    };
+    const assinPorAluno = {};
+    Object.keys(assinsPorAluno).forEach(id => { assinPorAluno[id] = escolherAssinatura(assinsPorAluno[id]); });
 
     const hojeChip = new Date().toISOString().slice(0, 10);
     const emAtraso = c => c.status === 'OVERDUE' || (c.status === 'PENDING' && (c.vencimento || '9999') < hojeChip);
@@ -4726,7 +4738,13 @@ body.dyse-modal-open{overflow:hidden;}
 
       const maisRecente = cobrs.slice().sort((a, b) => String(b.vencimento || '').localeCompare(String(a.vencimento || '')))[0];
       const valorSistema = aberto ? Number(aberto.valor_mensal_aluno || 0) : 0;
-      const valorAsaas = assin ? Number(assin.valor || 0) : (maisRecente ? Number(maisRecente.valor || 0) : 0);
+      // "o que o Asaas cobra hoje": assinatura ATIVA > próxima cobrança > última cobrança
+      const assinAtiva = assin && String(assin.status || '').toUpperCase() === 'ACTIVE' ? assin : null;
+      const valorAsaas = Number(
+        (assinAtiva && assinAtiva.valor) ||
+        (proxima && proxima.valor) ||
+        (maisRecente && maisRecente.valor) || 0
+      );
       const diverge = valorSistema && valorAsaas && Math.abs(valorSistema - valorAsaas) >= 0.01;
 
       const pagavelNF = pagas.find(c => c.billing_type === 'BOLETO' && !c.nota_fiscal_url);
