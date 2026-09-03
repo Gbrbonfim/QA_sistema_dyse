@@ -32,10 +32,15 @@
   --font-body:'Poppins', sans-serif;
 }
 
-/* Títulos em Poppins forte (Lobster fica só na wordmark "dyse"). */
-.card-title, .score-summary h2, .dash-card .n, .course-folder-name, .level-group-title,
-.manage-course-title, .report-modal-header h3, .gestao-card-title, .kpi-value{
-  font-family:var(--font-body) !important; font-weight:800; letter-spacing:-.01em;
+/* Títulos: Poppins, escala enxuta, SEM extrabold. Lobster só na wordmark "dyse". */
+.topbar-greeting h1{font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.35rem !important;}
+.page-header-text h2{font-family:var(--font-body) !important; font-weight:600 !important; font-size:1.2rem !important;}
+.card-title, .manage-course-title, .report-modal-header h3, .gestao-card-title,
+.course-folder-name, .level-group-title{
+  font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.1rem !important;
+}
+.score-summary h2, .dash-card .n, .kpi-value{
+  font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.35rem !important;
 }
 
 *{box-sizing:border-box;}
@@ -960,7 +965,7 @@ body.dyse-modal-open{overflow:hidden;}
     </div>
 
     <hr style="border:none; border-top:2px solid #f0e3d2; margin:32px 0 24px;">
-    <p style="font-family:var(--font-body); font-weight:800; letter-spacing:-.01em; font-size:1.2rem; color:var(--amaranth); margin-bottom:6px;">Registro de Classe</p>
+    <p style="font-family:var(--font-body); font-weight:600; font-size:1.1rem; color:var(--amaranth); margin-bottom:6px;">Registro de Classe</p>
     <p id="registroClasseSemNivel" style="color:var(--seal-soft); font-size:.85rem; display:none;">
       Essa turma ainda não tem um nível acadêmico definido pela gestão — peça pra vincularem um nível a ela pra usar o Registro de Classe.
     </p>

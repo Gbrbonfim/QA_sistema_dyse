@@ -36,10 +36,15 @@
   --font-body:'Poppins', sans-serif;
 }
 
-/* Títulos em Poppins forte (Lobster fica só na wordmark "dyse"). */
-.gestao-card-title, .kpi-value, .report-modal-header h3, .manage-course-title,
-.card-title, .dash-card .n, .course-folder-name, .course-card-name, .score-summary h2{
-  font-family:var(--font-body) !important; font-weight:800; letter-spacing:-.01em;
+/* Títulos: Poppins, escala enxuta, SEM extrabold. Lobster só na wordmark "dyse". */
+.topbar-greeting h1{font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.35rem !important;}
+.page-header-text h2{font-family:var(--font-body) !important; font-weight:600 !important; font-size:1.2rem !important;}
+.gestao-card-title, .manage-course-title, .card-title, .report-modal-header h3,
+.course-folder-name, .course-card-name{
+  font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.1rem !important;
+}
+.kpi-value, .dash-card .n, .score-summary h2{
+  font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.35rem !important;
 }
 
 *{box-sizing:border-box;}
@@ -538,7 +543,7 @@ body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
 .materia-icon svg{width:26px; height:26px;}
 .materia-info{flex:1 1 220px; min-width:0;}
 .materia-slug-label{font-size:.66rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--seal-soft); opacity:.65; margin-right:6px;}
-.materia-name{font-size:1.2rem; font-weight:800; color:var(--seal); margin:4px 0 6px;}
+.materia-name{font-size:1.1rem; font-weight:600; color:var(--seal); margin:4px 0 6px;}
 .materia-desc-label{font-size:.64rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--seal-soft); opacity:.55;}
 .materia-desc{font-size:.85rem; color:var(--seal-soft);}
 .materia-stats{display:flex; gap:12px; flex-wrap:wrap; flex:none;}
@@ -612,15 +617,15 @@ tr.pag-detalhe-row .dash-table th{background:transparent; color:var(--seal-soft)
 /* ---------- Cobranças (Asaas): visual dedicado (tudo em Poppins) ---------- */
 #finPanelCobrancas .gestao-card-title,
 #cobrancaAvulsaModalTitle{
-  font-family:var(--font-body); font-weight:800; font-size:1.05rem; color:var(--amaranth); letter-spacing:-.005em;
+  font-family:var(--font-body); font-weight:600; font-size:1.1rem; color:var(--amaranth); letter-spacing:normal;
 }
 #cobrancaAvulsaModalTitle{font-size:1.15rem;}
 .asaas-hero-row{display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap;}
 .asaas-hero-row > div{flex:1 1 340px; min-width:0;}
 .asaas-hero-row .btn{flex:none;}
 .asaas-hero h3{
-  font-family:var(--font-body); font-weight:800; font-size:1.35rem; color:var(--amaranth);
-  margin:0 0 6px; letter-spacing:-.01em;
+  font-family:var(--font-body); font-weight:600; font-size:1.2rem; color:var(--amaranth);
+  margin:0 0 6px;
 }
 .asaas-hero p{max-width:640px;}
 
@@ -629,7 +634,7 @@ tr.pag-detalhe-row .dash-table th{background:transparent; color:var(--seal-soft)
   display:flex; align-items:flex-start; justify-content:space-between; gap:10px; background:#fff;
   border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:18px 20px;
 }
-.asaas-kpi-n{font-family:var(--font-body); font-weight:800; font-size:1.9rem; line-height:1; color:var(--seal);}
+.asaas-kpi-n{font-family:var(--font-body); font-weight:600; font-size:1.6rem; line-height:1; color:var(--seal);}
 .asaas-kpi-l{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--seal-soft); opacity:.7; margin-top:5px;}
 .asaas-kpi-ic{flex:none; color:var(--amaranth); opacity:.32;}
 .asaas-kpi.warn .asaas-kpi-ic{color:var(--gamboge-dark); opacity:.5;}

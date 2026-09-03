@@ -32,11 +32,18 @@
   --font-body:'Poppins', sans-serif;
 }
 
-/* Títulos em Poppins forte (Lobster fica só na wordmark "dyse"). */
-.card-title, .score-summary h2, .dyse-blocked-card h2, .dash-card .n, .course-folder-name,
-.course-card-name, .material-nivel-title, .level-group-title, .manage-course-title,
-.rc-summary-txt h3{
-  font-family:var(--font-body) !important; font-weight:800; letter-spacing:-.01em;
+/* Títulos: Poppins, escala enxuta, SEM extrabold. Lobster só na wordmark "dyse".
+   Peso 600 (semibold) em tudo; tamanhos numa escala curta. */
+.topbar-greeting h1{font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.35rem !important;}
+.page-header-text h2{font-family:var(--font-body) !important; font-weight:600 !important; font-size:1.2rem !important;}
+.card-title, .rc-summary-txt h3, .manage-course-title, .level-group-title, .material-nivel-title{
+  font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.1rem !important;
+}
+.course-card-name, .course-folder-name{
+  font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.05rem !important;
+}
+.dash-card .n, .score-summary h2, .dyse-blocked-card h2, .aluno-kpi-value{
+  font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.3rem !important;
 }
 
 *{box-sizing:border-box;}
