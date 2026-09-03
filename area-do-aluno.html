@@ -109,7 +109,16 @@ body::before{
 .sidebar-item{
   display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm);
   color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none;
-  cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none;
+  cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none; position:relative;
+}
+.sidebar-badge{
+  margin-left:auto; flex:none; min-width:18px; height:18px; padding:0 5px; border-radius:999px;
+  background:var(--gamboge); color:var(--seal); font-size:.68rem; font-weight:800;
+  display:flex; align-items:center; justify-content:center; line-height:1;
+}
+.sidebar-item.active .sidebar-badge{background:var(--amaranth); color:#fff;}
+@media (max-width:900px){
+  .sidebar-badge{position:absolute; top:4px; right:4px; margin:0;}
 }
 .sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
 .sidebar-item:hover{background:rgba(255,255,255,.12);}
@@ -808,12 +817,19 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     </div>
     <nav class="sidebar-nav">
       <a href="#" class="sidebar-item active" data-view="atividades" onclick="mostrarView('atividades', event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-        <span>Minhas atividades</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+        <span>Meus cursos</span>
+        <span class="sidebar-badge" data-badge="atividades" hidden></span>
+      </a>
+      <a href="#" class="sidebar-item" data-view="reportcard" onclick="mostrarView('reportcard', event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="12" y2="11"/></svg>
+        <span>Report Card</span>
+        <span class="sidebar-badge" data-badge="reportcard" hidden></span>
       </a>
       <a href="#" class="sidebar-item" data-view="financeiro" onclick="mostrarView('financeiro', event)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
         <span>Financeiro</span>
+        <span class="sidebar-badge" data-badge="financeiro" hidden></span>
       </a>
       <a href="/calendario-letivo.html" class="sidebar-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -850,23 +866,19 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         <button type="button" onclick="document.getElementById('pageNotice').style.display='none'" style="float:right; background:none; border:none; font-weight:700; cursor:pointer; color:inherit;">×</button>
       </div>
 
-      <!-- ===== Minhas atividades ===== -->
+      <!-- ===== Meus cursos ===== -->
       <div id="viewAtividades">
         <div id="cursosPane">
-          <div class="aluno-kpi-row" id="alunoKpiRow"></div>
-          <hr class="aluno-divider">
           <div class="page-header">
             <div class="page-header-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
             </div>
             <div class="page-header-text">
               <h2>Seus cursos</h2>
-              <p>Escolha um curso para ver as atividades liberadas pela professora.</p>
+              <p>Escolha um curso para ver as atividades e o material liberados pela professora.</p>
             </div>
           </div>
           <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="coursesWrap"></div>
-          <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="materialWrap"></div>
-          <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="reportCardsWrap"></div>
         </div>
 
         <div id="cursoPane" style="display:none;">
@@ -874,6 +886,20 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           <div class="page-header" id="cursoPaneHeader"></div>
           <div id="cursoPaneBody"><p class="card-instructions" style="opacity:.6;">Carregando...</p></div>
         </div>
+      </div>
+
+      <!-- ===== Report Card ===== -->
+      <div id="viewReportCard" style="display:none;">
+        <div class="page-header">
+          <div class="page-header-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="12" y2="11"/></svg>
+          </div>
+          <div class="page-header-text">
+            <h2>Report Card</h2>
+            <p>Seu progresso, suas conquistas e os próximos passos, por semestre.</p>
+          </div>
+        </div>
+        <div class="wrap" style="max-width:100%; margin:0; padding:0;" id="reportCardsWrap"><p class="card-instructions" style="opacity:.6;">Carregando...</p></div>
       </div>
 
       <!-- ===== Financeiro ===== -->
@@ -940,7 +966,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const links = [];
     if(dyseIsAdmin(profile)) links.push({ href:'/gestao.html', label:'Painel da gestão', icon:userIcon, active:false });
     if(dyseIsTeacher(profile)) links.push({ href:'/professora.html', label:'Painel do professor', icon:userIcon, active:false });
-    links.push({ href:'/area-do-aluno.html', label:'Minhas atividades', icon:listIcon, active:true });
+    links.push({ href:'/area-do-aluno.html', label:'Meus cursos', icon:listIcon, active:true });
     document.getElementById('topbarLinks').innerHTML = links.map(l =>
       '<a href="' + l.href + '" class="topbar-link' + (l.active ? ' active' : '') + '">' + l.icon + '<span>' + l.label + '</span></a>'
     ).join('');
@@ -955,23 +981,54 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   }
 
   /* ---------- Navegação por "view" (mesma página, menu fixo) ---------- */
-  const AREA_CTX = { doneMap: {}, staff: false };
   const CURSO_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>';
 
+  const VIEWS = ['atividades', 'reportcard', 'financeiro'];
   function mostrarView(view, ev){
     if(ev) ev.preventDefault();
-    if(view !== 'atividades' && view !== 'financeiro') view = 'atividades';
+    if(VIEWS.indexOf(view) === -1) view = 'atividades';
     document.querySelectorAll('.sidebar-item[data-view]').forEach(el =>
       el.classList.toggle('active', el.dataset.view === view));
     document.getElementById('viewAtividades').style.display = view === 'atividades' ? 'block' : 'none';
+    document.getElementById('viewReportCard').style.display = view === 'reportcard' ? 'block' : 'none';
     document.getElementById('viewFinanceiro').style.display = view === 'financeiro' ? 'block' : 'none';
     if(view === 'atividades') voltarCursos();
-    if(('#' + view) !== location.hash) history.replaceState(null, '', view === 'atividades' ? location.pathname : '#financeiro');
+    else marcarVisto(view); // ver a seção = "li as novidades dela"
+    const hash = view === 'atividades' ? '' : '#' + view;
+    if(hash !== location.hash) history.replaceState(null, '', hash || location.pathname);
     window.scrollTo(0, 0);
   }
-  // link vindo de outra página (ex: /calendario-letivo.html) com #financeiro
   window.addEventListener('hashchange', () => mostrarView(location.hash.replace('#', '')));
-  if(location.hash === '#financeiro') mostrarView('financeiro');
+
+  /* ---------- Notificações "algo novo" no menu (por navegador) ---------- */
+  const AREA_CTX = { doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, aulasA1: {} };
+  let SEEN_KEY = 'dyse_aluno_seen';
+
+  function getSeen(){ try{ return JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; }catch(e){ return {}; } }
+  function setSeen(o){ try{ localStorage.setItem(SEEN_KEY, JSON.stringify(o)); }catch(e){} }
+
+  function marcarVisto(key){
+    if(!AREA_CTX.countsReady) return;
+    const s = getSeen();
+    s[key] = AREA_CTX.counts[key] || 0;
+    setSeen(s);
+    atualizarBadges();
+  }
+
+  function atualizarBadges(){
+    if(!AREA_CTX.countsReady) return; // só depois que a IIFE contou tudo
+    const seen = getSeen();
+    VIEWS.forEach(key => {
+      const el = document.querySelector('.sidebar-badge[data-badge="' + key + '"]');
+      if(!el) return;
+      const cur = AREA_CTX.counts[key] || 0;
+      // 1ª vez que o navegador vê essa chave: considera tudo já visto (sem badge).
+      if(seen[key] == null){ const s = getSeen(); s[key] = cur; setSeen(s); el.hidden = true; return; }
+      const novo = Math.max(0, cur - seen[key]);
+      el.hidden = novo === 0;
+      el.textContent = novo > 9 ? '9+' : String(novo);
+    });
+  }
 
   function voltarCursos(){
     document.getElementById('cursoPane').style.display = 'none';
@@ -981,6 +1038,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
   async function abrirCurso(courseId){
     const course = COURSES.find(c => c.id === courseId);
+    marcarVisto('atividades'); // abriu um curso = viu as novidades de atividade/material
     document.getElementById('cursosPane').style.display = 'none';
     document.getElementById('cursoPane').style.display = 'block';
     window.scrollTo(0, 0);
@@ -1017,7 +1075,13 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       return;
     }
     const publishedSet = await dyseGetPublishedSet('a1', numeroAula);
-    body.innerHTML = '<div class="dash-grid">' + manifesto.map(a => {
+    const aulaMeta = AREA_CTX.aulasA1[numeroAula];
+    const matUrl = aulaMeta && AREA_CTX.materialPorAulaId[aulaMeta.id];
+    const matHtml = matUrl
+      ? '<a href="' + escapeHtmlLocal(matUrl) + '" target="_blank" rel="noopener" class="material-aula-link" style="margin-bottom:12px;">' +
+          '<span class="num">📄</span><span class="topico">Material desta aula</span><span class="arrow">↗</span></a>'
+      : '';
+    body.innerHTML = matHtml + '<div class="dash-grid">' + manifesto.map(a => {
       const liberada = AREA_CTX.staff || publishedSet.has(a.num);
       const done = AREA_CTX.doneMap['a1:' + numeroAula + ':' + a.num];
       const badge = done && done.status === 'concluida' ? '<span class="dash-badge done">Feita</span>' : '';
@@ -1084,6 +1148,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       return;
     }
 
+    SEEN_KEY = 'dyse_aluno_seen_' + session.user.id;
     renderAlunoChrome(session, profile);
 
     const wrap = document.getElementById('coursesWrap');
@@ -1112,6 +1177,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     results.forEach(r => doneMap[r.course + ':' + (r.aula || 1) + ':' + r.activity_num] = r);
     AREA_CTX.doneMap = doneMap;
     AREA_CTX.staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
+
+    // Mapa de material das aulas (usado dentro de cada aula, na visão do curso)
+    const nMaterial = await carregarMapaMaterial(allowedSlugs, profile.turma_id);
 
     // Paleta/ícone por curso — alterna pela posição, mesma ideia do
     // dyseColorForSlug usado em gestao.html, só que sem depender dele aqui.
@@ -1174,16 +1242,6 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       );
     }
 
-    document.getElementById('alunoKpiRow').innerHTML =
-      '<div class="aluno-kpi-card">' +
-        '<div class="aluno-kpi-icon" style="background:#FCE4E9; color:#D03B55;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg></div>' +
-        '<div><div class="aluno-kpi-value">' + cards.length + '</div><div class="aluno-kpi-label">Curso' + (cards.length === 1 ? '' : 's') + ' ativo' + (cards.length === 1 ? '' : 's') + '</div><div class="aluno-kpi-sub">Continue aprendendo!</div></div>' +
-      '</div>' +
-      '<div class="aluno-kpi-card">' +
-        '<div class="aluno-kpi-icon" style="background:#FDF0DD; color:#CE8613;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-3"/><rect x="9" y="3" width="6" height="6" rx="1"/></svg></div>' +
-        '<div><div class="aluno-kpi-value">' + kpiAtividadesLiberadas + '</div><div class="aluno-kpi-label">Atividade' + (kpiAtividadesLiberadas === 1 ? '' : 's') + ' liberada' + (kpiAtividadesLiberadas === 1 ? '' : 's') + '</div><div class="aluno-kpi-sub">Em todos os cursos</div></div>' +
-      '</div>';
-
     wrap.innerHTML = cards.length
       ? '<div class="course-folder-grid">' + cards.join('') + '</div>'
       : '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
@@ -1194,50 +1252,51 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '</div>' +
         '</div>';
 
-    await renderMeuMaterial(allowedSlugs, profile ? profile.turma_id : null);
-    await renderMinhasCobrancas();
-    await renderMeusReportCards(session.user.id);
+    const cobrancas = await renderMinhasCobrancas();
+    const reportCards = await renderMeusReportCards(session.user.id);
+
+    // Contadores pras notificações do menu
+    AREA_CTX.counts.atividades = kpiAtividadesLiberadas + nMaterial;
+    AREA_CTX.counts.reportcard = (reportCards || []).length;
+    AREA_CTX.counts.financeiro = (cobrancas || []).length;
+    AREA_CTX.countsReady = true;
+    atualizarBadges();
+
+    // Link direto pra uma view via #hash (ex: vindo do calendário)
+    if(location.hash) mostrarView(location.hash.replace('#', ''));
   })();
 
-  /* ---------- Material das aulas (slides das aulas já dadas) ----------
-     "Já dada" é decidido pela função minhas_aulas_registradas (RPC
-     security definer) — NUNCA lendo registros_classe direto: aquela
-     tabela é anotação interna da professora (avaliações, observações), o
-     aluno não pode ler nenhum campo dela, só saber quais aulas já
-     aconteceram. */
-  async function renderMeuMaterial(allowedSlugs, turmaId){
-    const wrap = document.getElementById('materialWrap');
+  /* ---------- Material das aulas ----------
+     O material (slides) de cada aula fica DENTRO da aula, na visão do curso
+     — não numa lista solta. Aqui só montamos o mapa aula_id -> url, das
+     aulas que já aconteceram (minhas_aulas_registradas, RPC security
+     definer — nunca lendo registros_classe direto). Devolve quantas aulas
+     têm material (pra contagem de novidade). */
+  async function carregarMapaMaterial(allowedSlugs, turmaId){
     const niveis = (await dyseListNiveis()).filter(n => allowedSlugs.has(n.slug));
-    if(!niveis.length){ wrap.innerHTML = ''; return; }
+    if(!niveis.length) return 0;
 
     const [aulasPorNivel, aulaIdsRegistradosPorNivel, materialDaTurma] = await Promise.all([
       Promise.all(niveis.map(n => dyseListNivelAulas(n.slug))),
       Promise.all(niveis.map(n => dyseListMinhasAulasRegistradas(n.slug))),
-      dyseListTurmaAulaMaterial(turmaId) // cópia da minha turma, quando existe
+      dyseListTurmaAulaMaterial(turmaId)
     ]);
     const copiaPorAula = {};
     (materialDaTurma || []).forEach(r => { copiaPorAula[r.nivel_aula_id] = r.material_url; });
-    const linkDaAula = a => (copiaPorAula[a.id] || a.material_url || '').trim();
 
-    const blocos = niveis.map((n, i) => {
-      const aulaIdsComRegistro = new Set(aulaIdsRegistradosPorNivel[i]);
-      const aulas = aulasPorNivel[i]
-        .filter(a => aulaIdsComRegistro.has(a.id) && linkDaAula(a))
-        .sort((a, b) => a.numero - b.numero);
-      if(!aulas.length) return '';
-      return '<div style="margin-bottom:24px;">' +
-        '<p class="material-nivel-title">' + escapeHtmlLocal(n.name) + ' — Material das aulas</p>' +
-        aulas.map(a =>
-          '<a href="' + escapeHtmlLocal(linkDaAula(a)) + '" target="_blank" rel="noopener" class="material-aula-link">' +
-            '<span class="num">' + String(a.numero).padStart(2, '0') + '</span>' +
-            '<span class="topico">' + escapeHtmlLocal(a.topico) + '</span>' +
-            '<span class="arrow">↗</span>' +
-          '</a>'
-        ).join('') +
-      '</div>';
-    }).join('');
-
-    wrap.innerHTML = blocos;
+    let total = 0;
+    niveis.forEach((n, i) => {
+      const registrado = new Set(aulaIdsRegistradosPorNivel[i]);
+      aulasPorNivel[i].forEach(a => {
+        if(n.slug === 'a1') AREA_CTX.aulasA1[a.numero] = { id: a.id, topico: a.topico };
+        const url = (copiaPorAula[a.id] || a.material_url || '').trim();
+        if(url && registrado.has(a.id)){
+          AREA_CTX.materialPorAulaId[a.id] = url;
+          total++;
+        }
+      });
+    });
+    return total;
   }
 
   /* ---------- Report Cards liberados (visão somente leitura) ---------- */
@@ -1289,7 +1348,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       dyseListReportCards(alunoId), // RLS já só devolve os liberados pra este aluno
       dyseListMaterias()
     ]);
-    if(!cards.length){ wrap.innerHTML = ''; return; }
+    if(!cards.length){
+      wrap.innerHTML = '<div class="rc-empty">Seu Report Card aparece aqui assim que a professora liberar o primeiro, ao fim de um semestre.</div>';
+      return [];
+    }
 
     // mais recente primeiro
     const lista = cards.slice().sort((a, b) =>
@@ -1327,6 +1389,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           lista.map((rc, i) => renderReportCardReadOnly(rc, materias, i === 0)).join('') +
         '</div>' +
       '</details>';
+    return cards;
   }
 
   function renderReportCardReadOnly(rc, materias, active){
@@ -1452,12 +1515,12 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
   async function renderMinhasCobrancas(){
     const wrap = document.getElementById('cobrancasWrap');
-    if(!wrap) return;
+    if(!wrap) return [];
     let cobrancas = [];
     try{ cobrancas = await dyseListMinhasCobrancas(); }catch(e){ cobrancas = []; }
     if(!cobrancas.length){
       wrap.innerHTML = '<div class="rc-empty">Nenhuma cobrança registrada. Suas mensalidades pagas fora do sistema não aparecem aqui.</div>';
-      return;
+      return [];
     }
 
     const abertas = cobrancas.filter(c => c.status === 'PENDING' || c.status === 'OVERDUE').length;
@@ -1474,6 +1537,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         '</summary>' +
         '<div class="cob-list">' + cobrancas.map(renderCobrancaItem).join('') + '</div>' +
       '</details>';
+    return cobrancas;
   }
 
   function renderCobrancaItem(c){
