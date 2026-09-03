@@ -406,7 +406,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:4px 18px 18px;}
 }
 .topbar-link svg{width:16px; height:16px; flex:none;}
 
-.content{flex:1 1 auto; padding:28px 32px 60px; width:100%; max-width:1000px;}
+.content{flex:1 1 auto; padding:28px 32px 40px; width:100%; max-width:1000px; display:flex; flex-direction:column;}
 .page-header{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:22px;}
 .page-header-icon{
   flex:none; width:52px; height:52px; border-radius:50%; background:var(--amaranth); color:#fff;
@@ -416,7 +416,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:4px 18px 18px;}
 .page-header-text{flex:1 1 240px; min-width:0;}
 .page-header-text h2{font-family:var(--font-body); font-weight:600; font-size:1.2rem; margin:0 0 2px; color:var(--seal);}
 .page-header-text p{font-size:.86rem; color:var(--seal-soft); margin:0;}
-.content-footer{text-align:center; padding:40px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
+.content-footer{margin-top:auto; text-align:center; padding:48px 20px 6px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
 .content-footer .fmark{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); display:block; margin-bottom:4px;}
 
 @media (max-width:900px){

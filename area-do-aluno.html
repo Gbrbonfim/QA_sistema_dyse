@@ -172,7 +172,7 @@ body::before{
 .topbar-bell svg{width:18px; height:18px;}
 .topbar-bell:hover{border-color:var(--amaranth); color:var(--amaranth);}
 
-.content{flex:1 1 auto; padding:28px 32px 60px; width:100%;}
+.content{flex:1 1 auto; padding:28px 32px 40px; width:100%; display:flex; flex-direction:column;}
 
 .page-header{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:22px;}
 .page-header-icon{
@@ -185,7 +185,7 @@ body::before{
 .page-header-text p{font-size:.86rem; color:var(--seal-soft); margin:0;}
 .page-header-action{flex:none;}
 
-.content-footer{text-align:center; padding:40px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
+.content-footer{margin-top:auto; text-align:center; padding:48px 20px 6px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
 .content-footer .fmark{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); display:block; margin-bottom:4px;}
 
 @media (max-width:900px){
@@ -510,18 +510,18 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .course-card-desc{font-size:.85rem; color:var(--seal-soft); margin-top:4px;}
 .course-card-icon{flex:none; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;}
 .course-card-icon svg{width:26px; height:26px;}
-.course-card-stats{display:flex; align-items:center; gap:12px; background:var(--antique-soft); border-radius:var(--radius-sm); padding:12px 16px;}
+.course-card-stats{display:flex; align-items:center; gap:10px; background:var(--antique-soft); border-radius:var(--radius-sm); padding:12px 14px;}
 .course-card-stats-icon{
   flex:none; width:32px; height:32px; border-radius:50%; background:#fff; display:flex; align-items:center;
   justify-content:center; color:var(--seal-soft);
 }
 .course-card-stats-icon svg{width:15px; height:15px;}
 .course-card-stats-text{flex:1 1 auto; min-width:0;}
-.course-card-stats-text span{font-size:.8rem; color:var(--seal-soft); font-weight:600;}
+.course-card-stats-text span{display:block; font-size:.76rem; line-height:1.35; color:var(--seal-soft); font-weight:600;}
 .course-card-bar{height:6px; border-radius:999px; background:#e9d9c5; overflow:hidden; margin-top:6px;}
 .course-card-bar span{display:block; height:100%; background:var(--amaranth);}
 .course-card-pct{flex:none; font-size:.78rem; font-weight:800; color:var(--seal-soft);}
-.course-card-cta{width:100%; justify-content:center; text-decoration:none;}
+.course-card-cta{width:100%; justify-content:center; text-decoration:none; margin-top:auto;}
 
 /* ---------- MATERIAL DAS AULAS (slides das aulas já dadas) ---------- */
 .material-nivel-title{font-family:var(--font-display); font-size:1.2rem; color:var(--amaranth); margin-bottom:8px;}
@@ -537,20 +537,26 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 
 /* Faixa de material da aula (destaque, dentro da visão do curso) */
 .material-banner{
-  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-  background:linear-gradient(100deg, #FDF0DD, #FCE0D3);
-  border:1px solid #f1d9bb; border-radius:var(--radius-md);
+  display:flex; align-items:center; gap:16px; flex-wrap:nowrap;
+  background:linear-gradient(100deg, #F9C868, #F3AE3C);
+  border:1px solid #E8A62E; border-radius:var(--radius-md);
   padding:16px 20px; margin-bottom:18px;
 }
 .material-banner-ic{
   flex:none; width:46px; height:46px; border-radius:50%; background:#fff;
   display:flex; align-items:center; justify-content:center; font-size:1.3rem;
-  box-shadow:0 4px 12px rgba(58,29,16,.14);
+  box-shadow:0 4px 12px rgba(58,29,16,.16);
 }
-.material-banner-txt{flex:1 1 220px; min-width:0;}
-.material-banner-txt b{display:block; color:var(--seal); font-size:1rem; font-weight:600;}
-.material-banner-txt span{font-size:.83rem; color:var(--seal-soft);}
-.material-banner .btn{flex:none;}
+.material-banner-txt{flex:1 1 auto; min-width:0;}
+.material-banner-txt b{display:block; color:var(--seal); font-size:1rem; font-weight:700;}
+.material-banner-txt span{display:block; font-size:.83rem; color:var(--seal-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.material-banner .btn{flex:none; white-space:nowrap;}
+@media (max-width:560px){
+  .material-banner{flex-wrap:wrap;}
+  .material-banner-txt{flex:1 1 100%;}
+  .material-banner-txt span{white-space:normal;}
+  .material-banner .btn{width:100%; justify-content:center;}
+}
 
 /* ---------- LEVEL GROUPS (dentro de um curso) ---------- */
 .level-group{margin-bottom:36px;}
@@ -1273,7 +1279,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '<div class="course-card-stats">' +
             '<div class="course-card-stats-icon">' + STATS_ICON_SVG + '</div>' +
             '<div class="course-card-stats-text">' +
-              '<span>' + publishedCount + ' de ' + totalCount + ' atividades liberadas &middot; ' + doneCount + ' enviadas</span>' +
+              '<span>' + publishedCount + '/' + totalCount + ' liberadas &middot; ' + doneCount + ' enviadas</span>' +
               '<div class="course-card-bar"><span style="width:' + pct + '%;"></span></div>' +
             '</div>' +
             '<div class="course-card-pct">' + pct + '%</div>' +

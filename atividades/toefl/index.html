@@ -524,13 +524,13 @@ h1.title, .card-title, .dash-card .n, .level-group-title, .course-folder-name,
 .topbar-greeting p{font-size:.85rem; color:var(--seal-soft); margin:0;}
 .topbar-right{display:flex; align-items:center; gap:22px; flex-wrap:wrap; flex:none; margin-left:auto;}
 .topbar-link{display:flex; align-items:center; gap:6px; font-size:.85rem; font-weight:600; color:var(--seal-soft); text-decoration:none; white-space:nowrap;}
-.content{flex:1 1 auto; padding:28px 32px 60px; width:100%; max-width:1000px;}
+.content{flex:1 1 auto; padding:28px 32px 40px; width:100%; max-width:1000px; display:flex; flex-direction:column;}
 .page-header{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:22px;}
 .page-header-icon{flex:none; width:52px; height:52px; border-radius:50%; background:var(--amaranth); color:#fff; display:flex; align-items:center; justify-content:center;}
 .page-header-icon svg{width:24px; height:24px;}
 .page-header-text h2{font-family:var(--font-body); font-weight:600; font-size:1.2rem; margin:0 0 2px; color:var(--seal);}
 .page-header-text p{font-size:.86rem; color:var(--seal-soft); margin:0;}
-.content-footer{text-align:center; padding:40px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
+.content-footer{margin-top:auto; text-align:center; padding:48px 20px 6px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
 .content-footer .fmark{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); display:block; margin-bottom:4px;}
 @media (max-width:900px){
   .app-shell{flex-direction:column;}
@@ -561,7 +561,11 @@ h1.title, .card-title, .dash-card .n, .level-group-title, .course-folder-name,
     <nav class="sidebar-nav">
       <a href="/area-do-aluno.html" class="sidebar-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-        <span>Minhas atividades</span>
+        <span>Meus cursos</span>
+      </a>
+      <a href="/area-do-aluno.html#reportcard" class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="12" y2="11"/></svg>
+        <span>Report Card</span>
       </a>
       <a href="/atividades/toefl/" class="sidebar-item active">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
@@ -636,7 +640,7 @@ h1.title, .card-title, .dash-card .n, .level-group-title, .course-folder-name,
     const links = [];
     if(dyseIsAdmin(profile)) links.push(['/gestao.html', 'Painel da gestão']);
     if(dyseIsTeacher(profile)) links.push(['/professora.html', 'Painel do professor']);
-    links.push(['/area-do-aluno.html', 'Minhas atividades']);
+    links.push(['/area-do-aluno.html', 'Meus cursos']);
     document.getElementById('topbarLinks').innerHTML = links.map(l =>
       '<a href="' + l[0] + '" class="topbar-link">' + l[1] + '</a>').join('');
   }
