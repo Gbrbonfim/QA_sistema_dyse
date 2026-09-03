@@ -485,6 +485,62 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   *{transition:none !important;}
 }
 
+/* Títulos em Poppins (Lobster fica só na wordmark) */
+h1.title, .card-title, .dash-card .n, .level-group-title, .course-folder-name,
+.manage-course-title, .score-summary h2{
+  font-family:var(--font-body) !important; font-weight:800; letter-spacing:-.01em;
+}
+h1.title{font-size:clamp(1.5rem,4vw,2rem);}
+
+/* Shell com menu lateral (mesmo padrão de area-do-aluno.html / gestao.html) */
+.app-shell{display:flex; align-items:stretch; min-height:100vh; position:relative; z-index:1;}
+.sidebar{flex:none; width:250px; background:var(--amaranth); color:var(--antique-soft); display:flex; flex-direction:column; padding:24px 18px; position:sticky; top:0; height:100vh; overflow-y:auto;}
+.sidebar-brand{margin-bottom:26px;}
+.sidebar-logo{height:32px; width:auto; display:block; margin-bottom:10px;}
+.sidebar-tagline{font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; opacity:.85; line-height:1.5;}
+.sidebar-nav{display:flex; flex-direction:column; gap:4px; flex:1 1 auto;}
+.sidebar-item{display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm); color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none; cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none;}
+.sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
+.sidebar-item:hover{background:rgba(255,255,255,.12);}
+.sidebar-item.active{background:#fff; color:var(--amaranth);}
+.sidebar-item.active svg{opacity:1;}
+.sidebar-footer{margin-top:20px; display:flex; flex-direction:column; gap:10px;}
+.sidebar-help{display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.12); border-radius:var(--radius-sm); padding:12px 14px; color:var(--antique-soft); text-decoration:none; font-size:.78rem; line-height:1.4;}
+.sidebar-help-icon{font-size:1.2rem; flex:none;}
+.sidebar-help b{display:block; font-size:.82rem;}
+.sidebar-user{display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.08); border-radius:var(--radius-sm); padding:10px 12px; font-size:.82rem; min-width:0;}
+.sidebar-user-avatar{flex:none; width:34px; height:34px; border-radius:50%; background:#fff; color:var(--amaranth); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.8rem;}
+.sidebar-user-name{font-weight:700; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.sidebar-user-role{font-size:.72rem; opacity:.8;}
+.sidebar-logout{display:flex; align-items:center; gap:8px; background:transparent; border:none; color:var(--antique-soft); font-weight:600; font-size:.85rem; padding:8px 12px; cursor:pointer; opacity:.9;}
+.sidebar-logout:hover{opacity:1; text-decoration:underline;}
+.sidebar-logout svg{width:16px; height:16px;}
+.main-area{flex:1 1 auto; min-width:0; display:flex; flex-direction:column;}
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; background:#fff; padding:20px 32px; border-bottom:1px solid #f0e3d2;}
+.topbar-greeting h1{font-family:var(--font-body); font-weight:800; font-size:1.3rem; color:var(--seal); margin:0 0 2px; letter-spacing:-.01em;}
+.topbar-greeting p{font-size:.85rem; color:var(--seal-soft); margin:0;}
+.topbar-right{display:flex; align-items:center; gap:22px; flex-wrap:wrap; flex:none; margin-left:auto;}
+.topbar-link{display:flex; align-items:center; gap:6px; font-size:.85rem; font-weight:600; color:var(--seal-soft); text-decoration:none; white-space:nowrap;}
+.content{flex:1 1 auto; padding:28px 32px 60px; width:100%; max-width:1000px;}
+.page-header{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:22px;}
+.page-header-icon{flex:none; width:52px; height:52px; border-radius:50%; background:var(--amaranth); color:#fff; display:flex; align-items:center; justify-content:center;}
+.page-header-icon svg{width:24px; height:24px;}
+.page-header-text h2{font-family:var(--font-body); font-weight:800; font-size:1.4rem; margin:0 0 2px; color:var(--seal); letter-spacing:-.01em;}
+.page-header-text p{font-size:.86rem; color:var(--seal-soft); margin:0;}
+.content-footer{text-align:center; padding:40px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
+.content-footer .fmark{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); display:block; margin-bottom:4px;}
+@media (max-width:900px){
+  .app-shell{flex-direction:column;}
+  .sidebar{width:100%; height:auto; position:static; overflow-y:visible; padding:16px;}
+  .sidebar-tagline{display:none;}
+  .sidebar-nav{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
+  .sidebar-item{flex-direction:column; text-align:center; font-size:.68rem; padding:10px 4px; gap:4px;}
+  .sidebar-footer{flex-direction:row; flex-wrap:wrap; margin-top:14px;}
+  .sidebar-help,.sidebar-user{flex:1 1 200px;}
+  .topbar{padding:16px 20px;}
+  .content{padding:20px 16px 48px;}
+}
+
 </style>
 </head>
 <body>
@@ -493,29 +549,90 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   <p>dyse</p>
 </div>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div class="brand-row">
-      <span class="mark">👁 dyse</span>
-      <span>Do You Speak English? &middot; TOEFL iBT</span>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="/assets/images/brand/dyse-logo-white.png" alt="DYSE" class="sidebar-logo">
+      <div class="sidebar-tagline">Do You Speak English?*<br>TOEFL iBT</div>
     </div>
-    <a href="/area-do-aluno.html" class="back-link">&#8592; Meus cursos</a>
-    <h1 class="title">TOEFL iBT</h1>
-    <p class="subtitle">Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.</p>
-    <div class="dyse-auth-bar" id="authBar"></div>
+    <nav class="sidebar-nav">
+      <a href="/area-do-aluno.html" class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span>Minhas atividades</span>
+      </a>
+      <a href="/atividades/toefl/" class="sidebar-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+        <span>TOEFL iBT</span>
+      </a>
+      <a href="/calendario-letivo.html" class="sidebar-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Calendário Letivo</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a class="sidebar-help" href="mailto:contato@doyouspeakenglish.com.br">
+        <span class="sidebar-help-icon">🎧</span>
+        <span><b>Precisa de ajuda?</b>Fale com o suporte <span class="arrow">→</span></span>
+      </a>
+      <div class="sidebar-user" id="sidebarUser"></div>
+      <button type="button" class="sidebar-logout" onclick="dyseLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="topbar-greeting">
+        <h1>TOEFL iBT</h1>
+        <p>Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.</p>
+      </div>
+      <div class="topbar-right" id="topbarLinks"></div>
+    </header>
+
+    <div class="content">
+      <div class="page-header">
+        <div class="page-header-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+        </div>
+        <div class="page-header-text">
+          <h2>Atividades por nível</h2>
+          <p>Escolha uma atividade pra praticar. Você recebe feedback e o resultado fica salvo.</p>
+        </div>
+      </div>
+
+      <div id="levelsWrap"></div>
+
+      <footer class="content-footer">
+        <span class="fmark">dyse</span>
+        Do You Speak English?* &middot; TOEFL iBT
+      </footer>
+    </div>
   </div>
 </div>
-
-<div class="wrap" style="margin-top:40px;" id="levelsWrap"></div>
-
-<footer class="site-footer">
-  <div class="fmark">dyse</div>
-  <p>Do You Speak English? &middot; TOEFL iBT</p>
-</footer>
 
 <script src="/assets/dyse-auth.js"></script>
 <script>
   const COURSE = {id:'toefl', name:'TOEFL iBT', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]};
+
+  function renderChrome(session, profile){
+    const meta = session.user.user_metadata || {};
+    const fullName = meta.full_name || session.user.email;
+    const div = document.createElement('div'); div.textContent = fullName; const nomeSafe = div.innerHTML;
+    const initials = (fullName || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'U';
+    const isStaff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
+    document.getElementById('sidebarUser').innerHTML =
+      '<div class="sidebar-user-avatar">' + initials + '</div>' +
+      '<div style="min-width:0;"><div class="sidebar-user-name">' + nomeSafe + '</div>' +
+      '<div class="sidebar-user-role">' + (isStaff ? 'Equipe DYSE' : 'Aluno(a)') + '</div></div>';
+    const links = [];
+    if(dyseIsAdmin(profile)) links.push(['/gestao.html', 'Painel da gestão']);
+    if(dyseIsTeacher(profile)) links.push(['/professora.html', 'Painel do professor']);
+    links.push(['/area-do-aluno.html', 'Minhas atividades']);
+    document.getElementById('topbarLinks').innerHTML = links.map(l =>
+      '<a href="' + l[0] + '" class="topbar-link">' + l[1] + '</a>').join('');
+  }
 
   (async () => {
     const session = await dyseRequireAuth();
@@ -524,7 +641,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
     const profile = await dyseGetProfile(session);
     // professora enxerga liberado e oculto igual; segue normalmente, sem redirecionar
 
-    dyseRenderAuthBar('authBar');
+    renderChrome(session, profile);
 
     const results = await dyseListMyResults(COURSE.id);
     const doneMap = {};

@@ -90,11 +90,13 @@ body::before{
   padding:5px 13px; border-radius:999px; margin-bottom:12px;
 }
 h1.title{
-  font-family:var(--font-display);
-  font-size:clamp(1.8rem, 5vw, 2.7rem);
+  font-family:var(--font-body);
+  font-weight:800;
+  letter-spacing:-.01em;
+  font-size:clamp(1.6rem, 4.4vw, 2.3rem);
   margin:0 0 8px;
   color:var(--antique);
-  line-height:1.1;
+  line-height:1.15;
 }
 .subtitle{font-size:.95rem; max-width:56ch; color:var(--antique-soft); opacity:.95;}
 .hero-meta{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;}
@@ -121,8 +123,9 @@ section.card{
   display:flex; align-items:center; justify-content:center; flex:none;
   box-shadow:0 4px 10px rgba(0,0,0,0.15); font-size:1.2rem;
 }
+.card-head > .icon-badge{flex:none;}   /* especificidade: vence .card-head > div (senão o badge estica) */
 .card-eyebrow{font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent,var(--amaranth));}
-.card-title{font-family:var(--font-display); font-size:1.5rem; margin:0; color:var(--seal);}
+.card-title{font-family:var(--font-body); font-weight:800; letter-spacing:-.01em; font-size:1.25rem; margin:0; color:var(--seal);}
 .card-instructions{
   background:var(--antique-soft); border-radius:var(--radius-sm); padding:11px 15px;
   font-weight:600; font-size:.9rem; margin:14px 0 18px; color:var(--seal-soft);
@@ -264,7 +267,7 @@ textarea.write-area:focus{outline:none; border-color:var(--amaranth);}
   text-align:center; margin-top:8px; display:none;
 }
 .done-banner.show{display:block;}
-.done-banner h2{font-family:var(--font-display); font-size:1.5rem; margin:0 0 6px; color:var(--gamboge);}
+.done-banner h2{font-family:var(--font-body); font-weight:800; letter-spacing:-.01em; font-size:1.3rem; margin:0 0 6px; color:var(--gamboge);}
 .done-banner p{margin:0; opacity:.9; font-size:.88rem;}
 
 footer.site-footer{text-align:center; padding:26px 20px 10px; font-size:.78rem; color:var(--seal-soft); opacity:.75;}
@@ -306,7 +309,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .dash-card:nth-child(3n+2){border-left-color:var(--gamboge);}
 .dash-card:nth-child(3n){border-left-color:var(--orangered);}
 .dash-card:hover{transform:translateY(-3px); box-shadow:0 14px 34px rgba(58,29,16,.16);}
-.dash-card .n{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth);}
+.dash-card .n{font-family:var(--font-body); font-weight:800; font-size:1.15rem; color:var(--amaranth);}
 .dash-card .t{font-weight:700; font-size:.92rem; margin:4px 0 2px;}
 .dash-card .l{font-size:.76rem; color:var(--seal-soft); opacity:.75;}
 .dash-badge{
@@ -339,4 +342,95 @@ details.dyse-collapsible .dyse-collapsible-body{padding:4px 18px 18px;}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}
   *{transition:none !important;}
+}
+
+/* ============================================================
+   SHELL COM MENU LATERAL — mesmo padrão de area-do-aluno.html /
+   gestao.html. Usado pelas telas de LISTAGEM (index.html das
+   pastas). As telas de exercício continuam com .hero por enquanto.
+   ============================================================ */
+.app-shell{display:flex; align-items:stretch; min-height:100vh; position:relative; z-index:1;}
+.sidebar{
+  flex:none; width:250px; background:var(--amaranth); color:var(--antique-soft);
+  display:flex; flex-direction:column; padding:24px 18px; position:sticky; top:0; height:100vh; overflow-y:auto;
+}
+.sidebar-brand{margin-bottom:26px;}
+.sidebar-logo{height:32px; width:auto; display:block; margin-bottom:10px;}
+.sidebar-mark{font-family:var(--font-display); font-size:1.6rem; color:var(--antique); line-height:1; margin-bottom:10px; display:block;}
+.sidebar-tagline{font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; opacity:.85; line-height:1.5;}
+.sidebar-nav{display:flex; flex-direction:column; gap:4px; flex:1 1 auto;}
+.sidebar-item{
+  display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm);
+  color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none;
+  cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none;
+}
+.sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
+.sidebar-item:hover{background:rgba(255,255,255,.12);}
+.sidebar-item.active{background:#fff; color:var(--amaranth);}
+.sidebar-item.active svg{opacity:1;}
+.sidebar-footer{margin-top:20px; display:flex; flex-direction:column; gap:10px;}
+.sidebar-help{
+  display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.12); border-radius:var(--radius-sm);
+  padding:12px 14px; color:var(--antique-soft); text-decoration:none; font-size:.78rem; line-height:1.4;
+}
+.sidebar-help-icon{font-size:1.2rem; flex:none;}
+.sidebar-help b{display:block; font-size:.82rem;}
+.sidebar-help .arrow{opacity:.8;}
+.sidebar-user{
+  display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.08); border-radius:var(--radius-sm);
+  padding:10px 12px; font-size:.82rem; min-width:0;
+}
+.sidebar-user-avatar{
+  flex:none; width:34px; height:34px; border-radius:50%; background:#fff; color:var(--amaranth);
+  display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.8rem;
+}
+.sidebar-user-name{font-weight:700; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.sidebar-user-role{font-size:.72rem; opacity:.8;}
+.sidebar-logout{
+  display:flex; align-items:center; gap:8px; background:transparent; border:none; color:var(--antique-soft);
+  font-weight:600; font-size:.85rem; padding:8px 12px; cursor:pointer; opacity:.9;
+}
+.sidebar-logout:hover{opacity:1; text-decoration:underline;}
+.sidebar-logout svg{width:16px; height:16px;}
+
+.main-area{flex:1 1 auto; min-width:0; display:flex; flex-direction:column;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  background:#fff; padding:20px 32px; border-bottom:1px solid #f0e3d2;
+}
+.topbar-greeting h1{font-family:var(--font-body); font-weight:800; font-size:1.3rem; color:var(--seal); margin:0 0 2px; letter-spacing:-.01em;}
+.topbar-greeting p{font-size:.85rem; color:var(--seal-soft); margin:0;}
+.topbar-right{display:flex; align-items:center; gap:22px; flex-wrap:wrap; flex:none; margin-left:auto;}
+.topbar-link{
+  display:flex; align-items:center; gap:6px; font-size:.85rem; font-weight:600; color:var(--seal-soft);
+  text-decoration:none; white-space:nowrap;
+}
+.topbar-link svg{width:16px; height:16px; flex:none;}
+
+.content{flex:1 1 auto; padding:28px 32px 60px; width:100%; max-width:1000px;}
+.page-header{display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:22px;}
+.page-header-icon{
+  flex:none; width:52px; height:52px; border-radius:50%; background:var(--amaranth); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+}
+.page-header-icon svg{width:24px; height:24px;}
+.page-header-text{flex:1 1 240px; min-width:0;}
+.page-header-text h2{font-family:var(--font-body); font-weight:800; font-size:1.4rem; margin:0 0 2px; color:var(--seal); letter-spacing:-.01em;}
+.page-header-text p{font-size:.86rem; color:var(--seal-soft); margin:0;}
+.content-footer{text-align:center; padding:40px 20px 10px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
+.content-footer .fmark{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); display:block; margin-bottom:4px;}
+
+@media (max-width:900px){
+  .app-shell{flex-direction:column;}
+  .sidebar{width:100%; height:auto; position:static; overflow-y:visible; padding:16px;}
+  .sidebar-brand{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .sidebar-mark{margin-bottom:0;}
+  .sidebar-tagline{display:none;}
+  .sidebar-nav{display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;}
+  .sidebar-item{flex-direction:column; text-align:center; font-size:.68rem; padding:10px 4px; gap:4px;}
+  .sidebar-footer{flex-direction:row; flex-wrap:wrap; margin-top:14px;}
+  .sidebar-help{flex:1 1 200px;}
+  .sidebar-user{flex:1 1 160px;}
+  .topbar{padding:16px 20px;}
+  .content{padding:20px 16px 48px;}
 }
