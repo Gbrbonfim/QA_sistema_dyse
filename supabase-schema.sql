@@ -2745,4 +2745,62 @@ revoke all on function public.fn_asaas_reativar(uuid, text) from public;
 grant execute on function public.fn_asaas_suspender(uuid, text) to service_role;
 grant execute on function public.fn_asaas_reativar(uuid, text) to service_role;
 
+-- 20.7) Varredura diária de inadimplência. Roda no Supabase via pg_cron
+--       (o plano Hobby da Vercel não deixa agendar cron lá). A função
+--       api/asaas-cron.js é só um gatilho manual da MESMA lógica.
+--       Suspende quem tem cobrança OVERDUE vencida há > 14 dias; reativa
+--       quem foi pausado automaticamente e não tem mais OVERDUE.
+create or replace function public.fn_asaas_cron_inadimplencia()
+returns jsonb
+language plpgsql
+security definer set search_path = public
+as $$
+declare
+  r record;
+  v_suspensos int := 0;
+  v_reativados int := 0;
+begin
+  for r in
+    select h.aluno_id
+    from public.aluno_financeiro_historico h
+    where h.data_fim is null and h.situacao = 'ativo'
+      and exists (
+        select 1 from public.asaas_cobrancas c
+        where c.aluno_id = h.aluno_id
+          and c.status = 'OVERDUE'
+          and c.vencimento <= current_date - 14
+      )
+  loop
+    perform public.fn_asaas_suspender(r.aluno_id, 'Suspensão automática: cobrança do Asaas vencida há mais de 14 dias.');
+    v_suspensos := v_suspensos + 1;
+  end loop;
+
+  for r in
+    select h.aluno_id
+    from public.aluno_financeiro_historico h
+    where h.data_fim is null and h.situacao = 'pausado' and h.pausa_automatica = true
+      and not exists (
+        select 1 from public.asaas_cobrancas c
+        where c.aluno_id = h.aluno_id and c.status = 'OVERDUE'
+      )
+  loop
+    perform public.fn_asaas_reativar(r.aluno_id, 'Reativação automática: cobranças do Asaas regularizadas.');
+    v_reativados := v_reativados + 1;
+  end loop;
+
+  return jsonb_build_object('suspensos', v_suspensos, 'reativados', v_reativados, 'rodou_em', now());
+end;
+$$;
+
+revoke all on function public.fn_asaas_cron_inadimplencia() from public;
+grant execute on function public.fn_asaas_cron_inadimplencia() to service_role, postgres;
+
+-- Agendamento (pg_cron). Requer a extensão habilitada:
+--   create extension if not exists pg_cron;
+-- Depois, agende (idempotente — desagenda antes de reagendar):
+--   select cron.unschedule('asaas-inadimplencia-diaria')
+--     where exists (select 1 from cron.job where jobname = 'asaas-inadimplencia-diaria');
+--   select cron.schedule('asaas-inadimplencia-diaria', '0 9 * * *',
+--     $$ select public.fn_asaas_cron_inadimplencia(); $$);
+
 -- ======================================================================

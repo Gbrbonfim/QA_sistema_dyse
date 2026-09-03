@@ -5,8 +5,5 @@
     "api/report-card-ia.js": { "maxDuration": 60 },
     "api/asaas-sync.js": { "maxDuration": 60 },
     "api/asaas-link-manual.js": { "maxDuration": 60 }
-  },
-  "crons": [
-    { "path": "/api/asaas-cron", "schedule": "0 9 * * *" }
-  ]
+  }
 }
