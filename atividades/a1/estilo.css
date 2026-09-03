@@ -361,8 +361,14 @@ details.dyse-collapsible .dyse-collapsible-body{padding:4px 18px 18px;}
 .sidebar-item{
   display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm);
   color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none;
-  cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none;
+  cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none; position:relative;
 }
+.sidebar-badge{
+  margin-left:auto; flex:none; min-width:18px; height:18px; padding:0 5px; border-radius:999px;
+  background:var(--gamboge); color:var(--seal); font-size:.68rem; font-weight:800;
+  display:flex; align-items:center; justify-content:center; line-height:1;
+}
+.sidebar-item.active .sidebar-badge{background:var(--amaranth); color:#fff;}
 .sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
 .sidebar-item:hover{background:rgba(255,255,255,.12);}
 .sidebar-item.active{background:#fff; color:var(--amaranth);}
@@ -427,6 +433,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:4px 18px 18px;}
   .sidebar-tagline{display:none;}
   .sidebar-nav{display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;}
   .sidebar-item{flex-direction:column; text-align:center; font-size:.68rem; padding:10px 4px; gap:4px;}
+  .sidebar-badge{position:absolute; top:4px; right:4px; margin:0;}
   .sidebar-footer{flex-direction:row; flex-wrap:wrap; margin-top:14px;}
   .sidebar-help{flex:1 1 200px;}
   .sidebar-user{flex:1 1 160px;}

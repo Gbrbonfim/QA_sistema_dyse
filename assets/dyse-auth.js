@@ -1028,6 +1028,51 @@ async function dyseGetMinhaSituacaoFinanceira(){
 }
 
 /* ======================================================================
+   MENU DO ALUNO — selinhos de "algo novo" (badges de notificação)
+   ----------------------------------------------------------------------
+   area-do-aluno.html é quem calcula os contadores (cursos+material /
+   report card / financeiro) e publica em localStorage com
+   dyseAlunoSetCounts(). Qualquer outra tela do aluno (calendário, listas
+   de atividade A1/TOEFL) só LÊ esse cache e pinta os selinhos com
+   dyseAlunoRenderBadges() — sem recalcular nada. O "visto" por seção é
+   gravado quando o aluno abre aquela seção na área do aluno; enquanto o
+   contador estiver acima do "visto", o selinho aparece em todo menu.
+   Chave de "visto" = a mesma que area-do-aluno.html já usa
+   (dyse_aluno_seen_<uid>), então os dois lados ficam sincronizados.
+   ====================================================================== */
+const DYSE_ALUNO_VIEWS = ['atividades', 'reportcard', 'financeiro'];
+function dyseAlunoCountsKey(uid){ return 'dyse_aluno_counts_' + (uid || 'anon'); }
+function dyseAlunoSeenKey(uid){ return 'dyse_aluno_seen_' + (uid || 'anon'); }
+function dyseAlunoGetCounts(uid){ try{ return JSON.parse(localStorage.getItem(dyseAlunoCountsKey(uid)) || '{}') || {}; }catch(e){ return {}; } }
+function dyseAlunoSetCounts(uid, counts){ try{ localStorage.setItem(dyseAlunoCountsKey(uid), JSON.stringify(counts || {})); }catch(e){} }
+function dyseAlunoGetSeen(uid){ try{ return JSON.parse(localStorage.getItem(dyseAlunoSeenKey(uid)) || '{}') || {}; }catch(e){ return {}; } }
+function dyseAlunoSetSeen(uid, seen){ try{ localStorage.setItem(dyseAlunoSeenKey(uid), JSON.stringify(seen || {})); }catch(e){} }
+
+/* Quantos itens novos há por seção (contador atual − o que já foi visto).
+   Primeira vez que o navegador vê a chave: 0 (não fica badge de "boas-vindas"). */
+function dyseAlunoBadgeDeltas(uid){
+  const counts = dyseAlunoGetCounts(uid);
+  const seen = dyseAlunoGetSeen(uid);
+  const out = {};
+  DYSE_ALUNO_VIEWS.forEach(k => {
+    const cur = counts[k] || 0;
+    out[k] = seen[k] == null ? 0 : Math.max(0, cur - seen[k]);
+  });
+  return out;
+}
+
+/* Pinta os selinhos em qualquer sidebar: procura elementos com
+   data-aluno-badge="atividades|reportcard|financeiro". */
+function dyseAlunoRenderBadges(uid){
+  const deltas = dyseAlunoBadgeDeltas(uid);
+  document.querySelectorAll('[data-aluno-badge]').forEach(el => {
+    const n = deltas[el.getAttribute('data-aluno-badge')] || 0;
+    el.hidden = n === 0;
+    el.textContent = n > 9 ? '9+' : String(n);
+  });
+}
+
+/* ======================================================================
    ASAAS — conciliação de cobranças (ver supabase-schema.sql seção 20 e
    as funções serverless api/asaas-*.js). O navegador só LÊ os caches
    (asaas_cobrancas / asaas_assinaturas / aluno_asaas) via RLS; toda

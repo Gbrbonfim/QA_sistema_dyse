@@ -23,10 +23,12 @@
       <a href="/area-do-aluno.html" class="sidebar-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
         <span>Meus cursos</span>
+        <span class="sidebar-badge" data-aluno-badge="atividades" hidden></span>
       </a>
       <a href="/area-do-aluno.html#reportcard" class="sidebar-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="12" y2="11"/></svg>
         <span>Report Card</span>
+        <span class="sidebar-badge" data-aluno-badge="reportcard" hidden></span>
       </a>
       <a href="/atividades/a1/" class="sidebar-item active">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
@@ -35,6 +37,7 @@
       <a href="/area-do-aluno.html#financeiro" class="sidebar-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
         <span>Financeiro</span>
+        <span class="sidebar-badge" data-aluno-badge="financeiro" hidden></span>
       </a>
       <a href="/calendario-letivo.html" class="sidebar-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -114,6 +117,8 @@ function renderChrome(session, profile){
   document.getElementById('topbarLinks').innerHTML = links.map(l =>
     '<a href="' + l[0] + '" class="topbar-link">' + escapeHtmlIndex(l[1]) + '</a>'
   ).join('');
+
+  dyseAlunoRenderBadges(session.user.id); // selinhos "algo novo" no menu
 }
 
 (async () => {

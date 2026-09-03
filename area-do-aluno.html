@@ -1308,6 +1308,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     AREA_CTX.counts.financeiro = (cobrancas || []).length;
     AREA_CTX.countsReady = true;
     atualizarBadges();
+    // Publica os contadores pro cache do navegador — as outras telas do
+    // aluno (calendário, listas de atividade) pintam os mesmos selinhos.
+    dyseAlunoSetCounts(session.user.id, AREA_CTX.counts);
 
     // Link direto pra uma view via #hash (ex: vindo do calendário)
     if(location.hash) mostrarView(location.hash.replace('#', ''));

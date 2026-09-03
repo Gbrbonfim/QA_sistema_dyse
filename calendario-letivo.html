@@ -40,7 +40,9 @@ html:not(.dyse-auth-ready) body{visibility:hidden;}
 .sidebar-logo{height:32px; width:auto; display:block; margin-bottom:10px;}
 .sidebar-tagline{font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; font-weight:600; opacity:.85; line-height:1.5;}
 .sidebar-nav{display:flex; flex-direction:column; gap:4px; flex:1 1 auto;}
-.sidebar-item{display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm); color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none; cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none;}
+.sidebar-item{display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm); color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none; cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none; position:relative;}
+.sidebar-badge{margin-left:auto; flex:none; min-width:18px; height:18px; padding:0 5px; border-radius:999px; background:var(--gamboge); color:var(--seal); font-size:.68rem; font-weight:800; display:flex; align-items:center; justify-content:center; line-height:1;}
+.sidebar-item.active .sidebar-badge{background:var(--amaranth); color:#fff;}
 .sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
 .sidebar-item:hover{background:rgba(255,255,255,.12);}
 .sidebar-item.active{background:#fff; color:var(--amaranth);}
@@ -163,6 +165,7 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
   .sidebar-tagline{display:none;}
   .sidebar-nav{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
   .sidebar-item{flex-direction:column; text-align:center; font-size:.68rem; padding:10px 4px; gap:4px;}
+  .sidebar-badge{position:absolute; top:4px; right:4px; margin:0;}
   .sidebar-footer{flex-direction:row; flex-wrap:wrap; margin-top:14px;}
   .sidebar-help{flex:1 1 200px;}
   .sidebar-user{flex:1 1 160px;}
@@ -324,12 +327,17 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
     const fullName = meta.full_name || session.user.email;
 
     const ns = navSetPara(profile);
-    const navHtml = ns.itens.map(([key, label, icon]) =>
-      '<a href="' + ns.base + (key ? '#' + key : '') + '" class="sidebar-item">' + icon + '<span>' + label + '</span></a>'
-    ).join('') +
+    const ehAluno = dyseIsStudent(profile) && !dyseIsAdmin(profile) && !dyseIsTeacher(profile);
+    const navHtml = ns.itens.map(([key, label, icon]) => {
+      const badgeKey = key === '' ? 'atividades' : key;
+      const badge = ehAluno && DYSE_ALUNO_VIEWS.indexOf(badgeKey) !== -1
+        ? '<span class="sidebar-badge" data-aluno-badge="' + badgeKey + '" hidden></span>' : '';
+      return '<a href="' + ns.base + (key ? '#' + key : '') + '" class="sidebar-item">' + icon + '<span>' + label + '</span>' + badge + '</a>';
+    }).join('') +
       '<a href="/calendario-letivo.html" class="sidebar-item active">' + SVG.calCheck + '<span>Calendário Letivo</span></a>';
     document.getElementById('sidebarNav').innerHTML = navHtml;
     document.getElementById('topbarLinks').innerHTML = '';
+    if(ehAluno) dyseAlunoRenderBadges(session.user.id);
 
     const initials = (fullName || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'U';
     const roleLabel = dyseIsAdmin(profile) ? 'Gestão' : (dyseIsTeacher(profile) ? 'Professor(a)' : 'Aluno(a)');
