@@ -32,6 +32,13 @@
   --font-body:'Poppins', sans-serif;
 }
 
+/* Títulos em Poppins forte (Lobster fica só na wordmark/logo "dyse"). */
+h1.title, .card-title, .score-summary h2, .dash-card .n, .course-folder-name,
+.level-group-title, .manage-course-title{
+  font-family:var(--font-body) !important; font-weight:800; letter-spacing:-.015em;
+}
+h1.title{font-size:clamp(1.9rem, 5vw, 2.8rem);}
+
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 html, body{max-width:100%; overflow-x:hidden;}

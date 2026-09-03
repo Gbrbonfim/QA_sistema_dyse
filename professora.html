@@ -32,6 +32,12 @@
   --font-body:'Poppins', sans-serif;
 }
 
+/* Títulos em Poppins forte (Lobster fica só na wordmark "dyse"). */
+.card-title, .score-summary h2, .dash-card .n, .course-folder-name, .level-group-title,
+.manage-course-title, .report-modal-header h3, .gestao-card-title, .kpi-value{
+  font-family:var(--font-body) !important; font-weight:800; letter-spacing:-.01em;
+}
+
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 html, body{max-width:100%; overflow-x:hidden;}
@@ -954,7 +960,7 @@ body.dyse-modal-open{overflow:hidden;}
     </div>
 
     <hr style="border:none; border-top:2px solid #f0e3d2; margin:32px 0 24px;">
-    <p style="font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); margin-bottom:6px;">Registro de Classe</p>
+    <p style="font-family:var(--font-body); font-weight:800; letter-spacing:-.01em; font-size:1.2rem; color:var(--amaranth); margin-bottom:6px;">Registro de Classe</p>
     <p id="registroClasseSemNivel" style="color:var(--seal-soft); font-size:.85rem; display:none;">
       Essa turma ainda não tem um nível acadêmico definido pela gestão — peça pra vincularem um nível a ela pra usar o Registro de Classe.
     </p>
