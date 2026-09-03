@@ -609,43 +609,34 @@ tr.pag-detalhe-row .dash-table th{background:transparent; color:var(--seal-soft)
   font-family:var(--font-body); font-weight:800; font-size:1.05rem; color:var(--amaranth); letter-spacing:-.005em;
 }
 #cobrancaAvulsaModalTitle{font-size:1.15rem;}
-.asaas-hero{position:relative; overflow:hidden;}
+.asaas-hero-row{display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap;}
+.asaas-hero-row > div{flex:1 1 340px; min-width:0;}
+.asaas-hero-row .btn{flex:none;}
 .asaas-hero h3{
-  font-family:var(--font-body); font-weight:800; font-size:1.45rem; color:var(--amaranth);
-  margin:0 0 8px; letter-spacing:-.01em;
+  font-family:var(--font-body); font-weight:800; font-size:1.35rem; color:var(--amaranth);
+  margin:0 0 6px; letter-spacing:-.01em;
 }
-.asaas-hero p{max-width:600px; position:relative; z-index:1;}
-.asaas-hero .btn-row, .asaas-hero .auth-msg{position:relative; z-index:1;}
-.asaas-hero-art{position:absolute; right:-6px; top:0; bottom:0; width:240px; pointer-events:none; opacity:.92;}
-@media (max-width:760px){ .asaas-hero-art{display:none;} }
+.asaas-hero p{max-width:640px;}
 
-.asaas-kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(196px,1fr)); gap:16px; margin:-6px 0 24px;}
+.asaas-kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin:0 0 24px;}
 .asaas-kpi{
-  display:flex; align-items:center; gap:14px; background:#fff;
-  border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:16px 18px;
+  display:flex; align-items:flex-start; justify-content:space-between; gap:10px; background:#fff;
+  border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:18px 20px;
 }
-.asaas-kpi-ic{flex:none; width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center;}
-.asaas-kpi-ic svg{width:21px; height:21px;}
-.asaas-kpi-n{font-family:var(--font-body); font-weight:800; font-size:1.7rem; line-height:1; color:var(--seal);}
-.asaas-kpi-l{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--seal-soft); opacity:.72; margin-top:3px;}
-.asaas-kpi.rose  .asaas-kpi-ic{background:#FCE4E9; color:var(--amaranth);}
-.asaas-kpi.peach .asaas-kpi-ic{background:#FDE7DA; color:var(--orangered);}
-.asaas-kpi.amber .asaas-kpi-ic{background:#FDF0DD; color:var(--gamboge-dark);}
-.asaas-kpi.slate .asaas-kpi-ic{background:#F1E7DC; color:var(--seal-soft);}
+.asaas-kpi-n{font-family:var(--font-body); font-weight:800; font-size:1.9rem; line-height:1; color:var(--seal);}
+.asaas-kpi-l{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--seal-soft); opacity:.7; margin-top:5px;}
+.asaas-kpi-ic{flex:none; color:var(--amaranth); opacity:.32;}
+.asaas-kpi.warn .asaas-kpi-ic{color:var(--gamboge-dark); opacity:.5;}
+.asaas-kpi.warn .asaas-kpi-n{color:var(--gamboge-dark);}
 
-#asaasCobrancasTable th{background:var(--seal);}
-#asaasCobrancasTable td{padding:13px 14px;}
-.asaas-aluno{display:flex; align-items:center; gap:12px;}
-.asaas-avatar{
-  flex:none; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-  font-weight:800; font-size:.78rem; color:#fff; letter-spacing:.02em;
-}
-.asaas-aluno-nome{font-weight:700; color:var(--seal); line-height:1.25;}
+#asaasCobrancasTable th{background:var(--antique); color:var(--seal-soft);}
+#asaasCobrancasTable td{padding:14px; vertical-align:top;}
+.asaas-nome{font-weight:700; color:var(--seal);}
 .asaas-strong{font-weight:700; color:var(--seal);}
-.asaas-sub{opacity:.6; font-size:.76rem; margin-top:1px;}
+.asaas-sub{opacity:.6; font-size:.76rem; margin-top:2px;}
 .asaas-badge{
-  display:inline-block; font-size:.6rem; font-weight:800; letter-spacing:.03em; text-transform:uppercase;
-  padding:3px 8px; border-radius:999px; margin-top:4px;
+  display:inline-block; font-size:.62rem; font-weight:800; letter-spacing:.03em; text-transform:uppercase;
+  padding:2px 7px; border-radius:999px;
 }
 .asaas-badge.on{background:#e6f4ec; color:var(--ok);}
 .asaas-badge.off{background:#efe4d8; color:var(--seal-soft);}
@@ -653,15 +644,9 @@ tr.pag-detalhe-row .dash-table th{background:transparent; color:var(--seal-soft)
 .asaas-emdia::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--ok); flex:none;}
 .asaas-atraso{color:var(--bad); font-weight:700;}
 .asaas-acoes{display:flex; gap:8px; flex-wrap:wrap;}
-.asaas-btn{
-  display:inline-flex; align-items:center; gap:6px; border:1.5px solid #eaddcd; background:#fff;
-  color:var(--seal); border-radius:999px; padding:7px 13px; font-family:var(--font-body);
-  font-weight:700; font-size:.75rem; cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s;
-}
-.asaas-btn svg{width:13px; height:13px; opacity:.65;}
-.asaas-btn:hover{border-color:var(--amaranth); color:var(--amaranth); background:#fff;}
-.asaas-btn:hover svg{opacity:1;}
-.asaas-btn:disabled{opacity:.45; cursor:not-allowed;}
+.btn-soft{background:var(--antique-soft); color:var(--amaranth);}
+.btn-soft:hover{background:var(--antique);}
+.btn-xs svg{width:13px; height:13px;}
 
 /* Pill de sub-abas dentro de um painel (hoje só usado pelo Financeiro:
    Modalidades/Pagamentos/Relatório/Fechamento) — não confundir com a
@@ -1078,25 +1063,16 @@ body.dyse-modal-open{overflow:hidden;}
     <!-- Cobranças (Asaas) -->
     <div id="finPanelCobrancas" style="display:none;">
       <div class="gestao-card asaas-hero">
-        <svg class="asaas-hero-art" viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M232 6c-34 4-58 22-70 46-13 26-8 52 6 70" stroke="#F0A224" stroke-width="3" stroke-linecap="round"/>
-          <path d="M168 122c-22-6-30-30-24-56M168 122c22-2 40-20 44-46M168 122c-6 20 2 40 20 52M168 122c20 6 42-2 54-22" stroke="#EB6424" stroke-width="3" stroke-linecap="round"/>
-          <ellipse cx="150" cy="60" rx="17" ry="34" transform="rotate(-32 150 60)" fill="#FCABAF"/>
-          <ellipse cx="196" cy="52" rx="15" ry="30" transform="rotate(28 196 52)" fill="#FFEAD6"/>
-          <ellipse cx="202" cy="110" rx="14" ry="27" transform="rotate(60 202 110)" fill="#FCE4E9"/>
-          <ellipse cx="150" cy="122" rx="13" ry="24" transform="rotate(-58 150 122)" fill="#FDE7DA"/>
-          <circle cx="178" cy="92" r="11" fill="#F0A224"/>
-          <circle cx="222" cy="150" r="6" fill="#FCABAF"/>
-          <circle cx="140" cy="30" r="5" fill="#F0A224"/>
-        </svg>
-        <h3>Conciliação com o Asaas</h3>
-        <p class="gestao-hint">
-          O Asaas já cobra as mensalidades (assinaturas recorrentes). Aqui o sistema casa cada aluno
-          com o cliente do Asaas (por CPF, senão por e-mail) e traz as cobranças pra dentro. O aluno vê
-          as próprias cobranças na área dele. Cobrança vencida há mais de 14 dias suspende o aluno
-          automaticamente; regularizou, reativa.
-        </p>
-        <div class="btn-row">
+        <div class="asaas-hero-row">
+          <div>
+            <h3>Conciliação com o Asaas</h3>
+            <p class="gestao-hint">
+              O Asaas já cobra as mensalidades (assinaturas recorrentes). Aqui o sistema casa cada aluno
+              com o cliente do Asaas (por CPF, senão por e-mail) e traz as cobranças pra dentro. O aluno vê
+              as próprias cobranças na área dele. Cobrança vencida há mais de 14 dias suspende o aluno
+              automaticamente; regularizou, reativa.
+            </p>
+          </div>
           <button type="button" class="btn btn-primary" id="btnAsaasSync" onclick="handleAsaasSync()">↻ Sincronizar com Asaas</button>
         </div>
         <div class="auth-msg" id="asaasSyncMsg"></div>
@@ -4623,21 +4599,12 @@ body.dyse-modal-open{overflow:hidden;}
     file:  '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
     users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
     alert: '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
-    pause: '<circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/>',
+    lock:  '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
     eye:   '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
     plus:  '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>',
     note:  '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>'
   };
-  const asaasIcon = k => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ASAAS_SVG[k] + '</svg>';
-
-  const ASAAS_AVATAR_CORES = ['#D03B55', '#F0A224', '#EB6424', '#2E8B57', '#8E5AA8', '#3A7CA5'];
-  function asaasAvatar(nome){
-    const partes = String(nome || '?').trim().split(/\s+/);
-    const ini = ((partes[0] || '?')[0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
-    let h = 0; for(const ch of String(nome || '')) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-    const cor = ASAAS_AVATAR_CORES[h % ASAAS_AVATAR_CORES.length];
-    return '<span class="asaas-avatar" style="background:' + cor + ';">' + escapeHtmlLocal(ini) + '</span>';
-  }
+  const asaasIcon = (k, size) => '<svg width="' + (size || 24) + '" height="' + (size || 24) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ASAAS_SVG[k] + '</svg>';
 
   function asaasStatusPill(status){
     const label = ASAAS_STATUS_LABEL[status] || (status || '-');
@@ -4705,10 +4672,10 @@ body.dyse-modal-open{overflow:hidden;}
     });
 
     document.getElementById('asaasChips').innerHTML =
-      asaasKpi(noAsaas, 'No Asaas', 'rose', 'file') +
-      asaasKpi(fora, 'Fora do Asaas', 'peach', 'users') +
-      asaasKpi(inadimplentes, 'Inadimplentes', 'amber', 'alert') +
-      asaasKpi(suspensos, 'Suspensos (auto)', 'slate', 'pause');
+      asaasKpi(noAsaas, 'No Asaas', 'file', '') +
+      asaasKpi(fora, 'Fora do Asaas', 'users', '') +
+      asaasKpi(inadimplentes, 'Inadimplentes', 'alert', inadimplentes ? 'warn' : '') +
+      asaasKpi(suspensos, 'Suspensos (auto)', 'lock', suspensos ? 'warn' : '');
 
     const casados = alunoIds
       .filter(id => linkPorAluno[id] && linkPorAluno[id].asaas_customer_id)
@@ -4745,7 +4712,9 @@ body.dyse-modal-open{overflow:hidden;}
         (proxima && proxima.valor) ||
         (maisRecente && maisRecente.valor) || 0
       );
-      const diverge = valorSistema && valorAsaas && Math.abs(valorSistema - valorAsaas) >= 0.01;
+      // ⚠️ quando o Asaas tem um valor e o sistema difere — inclui o caso
+      // "sistema zerado / falta preencher".
+      const diverge = valorAsaas > 0 && Math.abs(valorSistema - valorAsaas) >= 0.01;
 
       const pagavelNF = pagas.find(c => c.billing_type === 'BOLETO' && !c.nota_fiscal_url);
       const foco = atrasadas[0] || proxima || ultimaPaga || maisRecente;
@@ -4757,16 +4726,18 @@ body.dyse-modal-open{overflow:hidden;}
         : '<span class="asaas-emdia">em dia</span>';
 
       const nome = asaasNomeAluno(id, link);
+      // pagador do Asaas diferente do aluno (ex: pai/responsável) → anota em cinza
+      const pagador = (link && link.nome_asaas && link.nome_asaas.trim().toLowerCase() !== String(nome).trim().toLowerCase())
+        ? ' <span style="opacity:.5; font-weight:400;">(' + escapeHtmlLocal(link.nome_asaas) + ')</span>' : '';
       const assinBadge = assin
-        ? '<span class="asaas-badge ' + (String(assin.status).toUpperCase() === 'ACTIVE' ? 'on' : 'off') + '">' + escapeHtmlLocal(assin.status || '-') + '</span>'
+        ? ' <span class="asaas-badge ' + (String(assin.status).toUpperCase() === 'ACTIVE' ? 'on' : 'off') + '">' + escapeHtmlLocal(assin.status || '-') + '</span>'
         : '';
 
       return '<tr>' +
-        '<td><div class="asaas-aluno">' + asaasAvatar(nome) +
-          '<div><div class="asaas-aluno-nome">' + escapeHtmlLocal(nome) + '</div>' +
-          (aberto && aberto.situacao === 'pausado' ? '<span class="pill-count pill-bad">pausado</span>' : '') + '</div></div></td>' +
+        '<td><span class="asaas-nome">' + escapeHtmlLocal(nome) + '</span>' + pagador +
+          (aberto && aberto.situacao === 'pausado' ? '<div style="margin-top:4px;"><span class="pill-count pill-bad">pausado</span></div>' : '') + '</td>' +
         '<td>' + (assin
-          ? '<span class="asaas-strong">' + formatMoney(assin.valor) + '</span><br>' + assinBadge
+          ? '<span class="asaas-strong">' + formatMoney(assin.valor) + '</span>' + assinBadge
           : '<span style="opacity:.45;">sem assinatura</span>') + '</td>' +
         '<td>' + (ultimaPaga
           ? '<span class="asaas-strong">' + formatMoney(ultimaPaga.valor) + '</span>' + sub(formatDateBR(ultimaPaga.pago_em || ultimaPaga.vencimento))
@@ -4778,10 +4749,10 @@ body.dyse-modal-open{overflow:hidden;}
         '<td' + (diverge ? ' class="asaas-atraso"' : ' class="asaas-strong"') + '>' +
           formatMoney(valorSistema) + ' / ' + formatMoney(valorAsaas) + (diverge ? ' ⚠️' : '') + '</td>' +
         '<td><div class="asaas-acoes">' +
-          (foco && foco.invoice_url ? '<a class="asaas-btn" href="' + foco.invoice_url + '" target="_blank" rel="noopener">' + asaasIcon('eye') + 'Ver no Asaas</a>' : '') +
-          '<button type="button" class="asaas-btn" onclick="openCobrancaAvulsaModal(\'' + id + '\')">' + asaasIcon('plus') + 'Cobrança avulsa</button>' +
+          (foco && foco.invoice_url ? '<a class="btn btn-soft btn-xs" href="' + foco.invoice_url + '" target="_blank" rel="noopener">' + asaasIcon('eye', 13) + 'Ver no Asaas</a>' : '') +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="openCobrancaAvulsaModal(\'' + id + '\')">' + asaasIcon('plus', 13) + 'Cobrança avulsa</button>' +
           (pagavelNF
-            ? '<button type="button" class="asaas-btn" onclick="handleAsaasNotaFiscal(\'' + pagavelNF.id + '\', this)">' + asaasIcon('note') + 'Emitir NF</button>'
+            ? '<button type="button" class="btn btn-ghost btn-xs" onclick="handleAsaasNotaFiscal(\'' + pagavelNF.id + '\', this)">' + asaasIcon('note', 13) + 'Emitir NF</button>'
             : '') +
         '</div></td>' +
       '</tr>';
@@ -4797,12 +4768,11 @@ body.dyse-modal-open{overflow:hidden;}
         .map(id => {
           const s = STUDENTS.find(x => x.id === id);
           return '<div class="chip-toggle-row" style="gap:10px; flex-wrap:wrap;">' +
-            '<span class="asaas-aluno">' + asaasAvatar(asaasNomeAluno(id)) +
-              '<span><span class="asaas-aluno-nome">' + escapeHtmlLocal(asaasNomeAluno(id)) + '</span>' +
-              (s && s.email ? '<div class="asaas-sub">' + escapeHtmlLocal(s.email) + '</div>' : '') + '</span></span>' +
-            '<span style="display:flex; gap:6px;">' +
-              '<input type="text" id="asaasCus-' + id + '" placeholder="cus_..." style="border:1.5px solid #eaddcd; border-radius:999px; padding:7px 13px; font-family:var(--font-body); font-size:.8rem; width:180px;">' +
-              '<button type="button" class="asaas-btn" onclick="handleAsaasLinkManual(\'' + id + '\')">Vincular</button>' +
+            '<span><span class="asaas-nome">' + escapeHtmlLocal(asaasNomeAluno(id)) + '</span>' +
+              (s && s.email ? '<div class="asaas-sub">' + escapeHtmlLocal(s.email) + '</div>' : '') + '</span>' +
+            '<span style="display:flex; gap:8px;">' +
+              '<input type="text" id="asaasCus-' + id + '" placeholder="cus_..." style="border:2px solid #e4d4c4; border-radius:999px; padding:7px 14px; font-family:var(--font-body); font-size:.8rem; width:180px;">' +
+              '<button type="button" class="btn btn-ghost btn-xs" onclick="handleAsaasLinkManual(\'' + id + '\')">Vincular</button>' +
             '</span>' +
           '</div>';
         }).join('');
@@ -4811,10 +4781,10 @@ body.dyse-modal-open{overflow:hidden;}
     }
   }
 
-  function asaasKpi(valor, label, tone, iconKey){
-    return '<div class="asaas-kpi ' + (tone || 'rose') + '">' +
-      '<div class="asaas-kpi-ic">' + asaasIcon(iconKey || 'file') + '</div>' +
+  function asaasKpi(valor, label, iconKey, tone){
+    return '<div class="asaas-kpi ' + (tone || '') + '">' +
       '<div><div class="asaas-kpi-n">' + valor + '</div><div class="asaas-kpi-l">' + label + '</div></div>' +
+      '<span class="asaas-kpi-ic">' + asaasIcon(iconKey || 'file', 22) + '</span>' +
     '</div>';
   }
 
