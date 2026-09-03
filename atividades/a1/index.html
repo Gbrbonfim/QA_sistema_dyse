@@ -158,15 +158,17 @@ function renderChrome(session, profile){
     if(!body || body.dataset.loaded) return;
     body.dataset.loaded = '1';
 
-    const manifesto = AULAS_MANIFEST[numeroAula];
-    if(!manifesto){
-      body.innerHTML = '<p class="card-instructions" style="margin:0;">As atividades desta aula ainda estão sendo produzidas pela coordenação. Elas aparecem aqui assim que forem publicadas.</p>';
-      return;
-    }
     const publicadasSet = publicadasPorAula[numeroAula] || new Set();
     const statusPorNum = resultadoPorAula[numeroAula] || {};
+    const manifesto = AULAS_MANIFEST[numeroAula] || [];
+    const visiveis = staff ? manifesto : manifesto.filter(a => publicadasSet.has(a.num));
 
-    body.innerHTML = '<div class="dash-grid">' + manifesto.map(a => {
+    if(!visiveis.length){
+      body.innerHTML = '<p class="card-instructions" style="margin:0; opacity:.7;">Nenhuma atividade desta aula foi liberada ainda.</p>';
+      return;
+    }
+
+    body.innerHTML = '<div class="dash-grid">' + visiveis.map(a => {
       const liberada = staff || publicadasSet.has(a.num);
       const status = statusPorNum[a.num];
       const badge = status === 'concluida' ? '<span class="dash-badge done">Feita</span>' : status === 'pulada' ? '<span class="dash-badge video">Pulada</span>' : '';

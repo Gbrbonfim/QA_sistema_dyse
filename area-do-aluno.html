@@ -535,6 +535,23 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .material-aula-link .topico{flex:1; min-width:0; font-size:.88rem;}
 .material-aula-link .arrow{flex:none; color:var(--gamboge);}
 
+/* Faixa de material da aula (destaque, dentro da visão do curso) */
+.material-banner{
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  background:linear-gradient(100deg, #FDF0DD, #FCE0D3);
+  border:1px solid #f1d9bb; border-radius:var(--radius-md);
+  padding:16px 20px; margin-bottom:18px;
+}
+.material-banner-ic{
+  flex:none; width:46px; height:46px; border-radius:50%; background:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+  box-shadow:0 4px 12px rgba(58,29,16,.14);
+}
+.material-banner-txt{flex:1 1 220px; min-width:0;}
+.material-banner-txt b{display:block; color:var(--seal); font-size:1rem; font-weight:600;}
+.material-banner-txt span{font-size:.83rem; color:var(--seal-soft);}
+.material-banner .btn{flex:none;}
+
 /* ---------- LEVEL GROUPS (dentro de um curso) ---------- */
 .level-group{margin-bottom:36px;}
 .level-group-title{
@@ -1042,10 +1059,13 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     document.getElementById('cursosPane').style.display = 'none';
     document.getElementById('cursoPane').style.display = 'block';
     window.scrollTo(0, 0);
+    const mat = AREA_CTX.materias[courseId] || {};
+    const cNome = mat.name || (course ? course.name : courseId);
+    const cDesc = mat.description || 'Abra uma aula pra ver o material e as atividades liberadas pela professora.';
     document.getElementById('cursoPaneHeader').innerHTML =
       '<div class="page-header-icon">' + CURSO_ICON + '</div>' +
-      '<div class="page-header-text"><h2>' + escapeHtmlLocal(course ? course.name : courseId) + '</h2>' +
-      '<p>Clique numa atividade pra abrir. Você recebe feedback e o resultado fica salvo.</p></div>';
+      '<div class="page-header-text"><h2>' + escapeHtmlLocal(cNome) + '</h2>' +
+      '<p>' + escapeHtmlLocal(cDesc) + '</p></div>';
     const body = document.getElementById('cursoPaneBody');
     body.innerHTML = '<p class="card-instructions" style="opacity:.6;">Carregando...</p>';
     body.innerHTML = courseId === 'a1' ? await renderAulasA1() : await renderAtividadesFlat(course);
@@ -1072,19 +1092,20 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
     const aulaMeta = AREA_CTX.aulasA1[numeroAula];
     const matUrl = aulaMeta && AREA_CTX.materialPorAulaId[aulaMeta.id];
-    const matHtml = matUrl
-      ? '<a href="' + escapeHtmlLocal(matUrl) + '" target="_blank" rel="noopener" class="material-aula-link" style="margin-bottom:12px;">' +
-          '<span class="num">📄</span><span class="topico">Material desta aula</span><span class="arrow">↗</span></a>'
-      : '';
+    const matHtml = matUrl ? bannerMaterial(matUrl) : '';
 
-    const manifesto = AULAS_MANIFEST[numeroAula];
-    if(!manifesto){
+    const publishedSet = await dyseGetPublishedSet('a1', numeroAula);
+    const manifesto = AULAS_MANIFEST[numeroAula] || [];
+    // aluno só vê o que a professora liberou; professor/gestão vê tudo
+    const visiveis = AREA_CTX.staff ? manifesto : manifesto.filter(a => publishedSet.has(a.num));
+
+    if(!visiveis.length){
       body.innerHTML = matHtml +
-        '<p class="card-instructions" style="margin:0;">As atividades desta aula ainda estão sendo produzidas pela coordenação.</p>';
+        (matHtml ? '' : '<p class="card-instructions" style="margin:0; opacity:.7;">Nenhuma atividade desta aula foi liberada ainda.</p>');
       return;
     }
-    const publishedSet = await dyseGetPublishedSet('a1', numeroAula);
-    body.innerHTML = matHtml + '<div class="dash-grid">' + manifesto.map(a => {
+
+    body.innerHTML = matHtml + '<div class="dash-grid">' + visiveis.map(a => {
       const liberada = AREA_CTX.staff || publishedSet.has(a.num);
       const done = AREA_CTX.doneMap['a1:' + numeroAula + ':' + a.num];
       const badge = done && done.status === 'concluida' ? '<span class="dash-badge done">Feita</span>' : '';
@@ -1098,15 +1119,25 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     }).join('') + '</div>';
   };
 
+  function bannerMaterial(url){
+    return '<div class="material-banner">' +
+      '<div class="material-banner-ic">📄</div>' +
+      '<div class="material-banner-txt"><b>Material desta aula</b><span>Clique para abrir o material de apoio da aula</span></div>' +
+      '<a class="btn btn-primary" href="' + escapeHtmlLocal(url) + '" target="_blank" rel="noopener">Abrir material ↗</a>' +
+    '</div>';
+  }
+
   async function renderAtividadesFlat(course){
     if(!course || !course.activities) return '<p class="card-instructions">Nenhuma atividade cadastrada.</p>';
     const publishedSet = await dyseGetPublishedSet(course.id);
     const groups = []; const gi = {};
     course.activities.forEach(a => {
+      if(!AREA_CTX.staff && !publishedSet.has(a.num)) return; // aluno só vê o liberado
       const code = (a.level || '').split(' · ')[0];
       if(!(code in gi)){ gi[code] = groups.length; groups.push({ label: a.level || '', items: [] }); }
       groups[gi[code]].items.push(a);
     });
+    if(!groups.length) return '<p class="card-instructions" style="opacity:.7;">Nenhuma atividade deste curso foi liberada ainda.</p>';
     return groups.map(g =>
       '<div class="level-group"><div class="level-group-title">' + escapeHtmlLocal((g.label.split(' · ')[1]) || g.label) + '</div>' +
       '<div class="dash-grid">' + g.items.map(a => {
@@ -1181,6 +1212,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     AREA_CTX.doneMap = doneMap;
     AREA_CTX.staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
 
+    // Nome/descrição de cada curso vêm do que a gestão cadastrou em Matérias.
+    AREA_CTX.materias = {};
+    (await dyseListMaterias()).forEach(m => { AREA_CTX.materias[m.slug] = m; });
+
     // Mapa de material das aulas (usado dentro de cada aula, na visão do curso)
     const nMaterial = await carregarMapaMaterial(allowedSlugs, profile.turma_id);
 
@@ -1222,13 +1257,16 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       kpiAtividadesLiberadas += publishedCount;
       const accent = COURSE_ACCENTS[cards.length % COURSE_ACCENTS.length];
       const pct = totalCount ? Math.round((publishedCount / totalCount) * 100) : 0;
+      const mat = AREA_CTX.materias[course.id] || {};
+      const cNome = mat.name || course.name;
+      const cDesc = mat.description || course.description;
 
       cards.push(
         '<div class="course-card" style="border-left-color:' + accent.border + ';">' +
           '<div class="course-card-top">' +
             '<div>' +
-              '<h3 class="course-card-name" style="color:' + accent.text + ';">' + course.name + '</h3>' +
-              '<p class="course-card-desc">' + course.description + '</p>' +
+              '<h3 class="course-card-name" style="color:' + accent.text + ';">' + escapeHtmlLocal(cNome) + '</h3>' +
+              '<p class="course-card-desc">' + escapeHtmlLocal(cDesc) + '</p>' +
             '</div>' +
             '<div class="course-card-icon" style="background:' + accent.bg + '; color:' + accent.fg + ';">' + COURSE_ICON_SVG + '</div>' +
           '</div>' +
