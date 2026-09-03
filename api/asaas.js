@@ -302,6 +302,21 @@ async function acaoNota(req, res, admin, ctx){
     }
   }
 
+  // "Descrição do Serviço" nunca pode ir vazia pro Asaas — assinatura recorrente
+  // costuma vir com description nulo. Ordem: env var → descrição da cobrança →
+  // um texto padrão com o nome do aluno e o vencimento.
+  let nomeAluno = '';
+  if(cobr.aluno_id){
+    const { data: pf } = await admin.from('profiles').select('full_name').eq('id', cobr.aluno_id).maybeSingle();
+    nomeAluno = (pf && String(pf.full_name || '').trim()) || '';
+  }
+  const serviceDescription =
+    String(process.env.ASAAS_NF_SERVICE_DESCRIPTION || '').trim() ||
+    String(cobr.descricao || '').trim() ||
+    ('Mensalidade de curso de idiomas' +
+      (nomeAluno ? ' - ' + nomeAluno : '') +
+      (cobr.vencimento ? ' - venc. ' + cobr.vencimento : ''));
+
   const lista = await asaasFetch('/invoices?payment=' + encodeURIComponent(cobrancaId) + '&limit=10');
   let invoice = (lista && lista.data && lista.data[0]) || null;
 
@@ -310,7 +325,7 @@ async function acaoNota(req, res, admin, ctx){
       method: 'POST',
       body: {
         payment: cobrancaId,
-        serviceDescription: process.env.ASAAS_NF_SERVICE_DESCRIPTION || cobr.descricao || 'Serviços educacionais',
+        serviceDescription: serviceDescription,
         observations: 'Nota fiscal referente à cobrança ' + cobrancaId + '.',
         value: cobr.valor,
         deductions: 0,

@@ -1611,8 +1611,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     } else if(c.billing_type === 'BOLETO' && pago){
       nf = '<button type="button" class="cob-btn" onclick="emitirMinhaNota(\'' + c.id + '\', this)">Emitir NF</button>';
     } else {
-      nf = '<button type="button" class="cob-btn" disabled>Emitir NF</button>' +
-           '<span class="cob-hint">A nota fiscal só pode ser emitida para boletos já pagos.</span>';
+      nf = '<button type="button" class="cob-btn" onclick="notaFiscalIndisponivel()">Emitir NF</button>';
     }
 
     return '<div class="cob-item' + (vencida ? ' venc' : '') + '">' +
@@ -1632,6 +1631,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       const t = btn.textContent; btn.textContent = 'Copiado!';
       setTimeout(() => { btn.textContent = t; }, 1500);
     }).catch(() => {});
+  }
+
+  function notaFiscalIndisponivel(){
+    alert('A nota fiscal só pode ser emitida depois que o boleto for pago e compensado. Assim que o pagamento cair, o botão "Emitir NF" fica disponível aqui.');
   }
 
   async function emitirMinhaNota(cobrancaId, btn){
