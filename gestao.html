@@ -3731,9 +3731,11 @@ body.dyse-modal-open{overflow:hidden;}
             const val = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' }[r.avaliacoes[eixo]] || r.avaliacoes[eixo];
             return eixo + ': ' + val;
           }).join(' · ');
+          const datasTxt = (r.datas && r.datas.length ? r.datas : [r.data_aula])
+            .filter(Boolean).map(d => formatDateBR(String(d).slice(0, 10))).join(', ');
           return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:6px;">' +
             '<span class="name">Aula ' + (aula ? String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlLocal(aula.topico) : '(aula removida)') + '</span>' +
-            '<span style="font-size:.78rem; opacity:.75;">' + formatDateBR(r.data_aula) + ' · ' + escapeHtmlLocal(professor ? (professor.full_name || '') : '(professor removido)') + ' · ' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + '</span>' +
+            '<span style="font-size:.78rem; opacity:.75;">' + escapeHtmlLocal(datasTxt) + ' · ' + escapeHtmlLocal(professor ? (professor.full_name || '') : '(professor removido)') + ' · ' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + '</span>' +
             (avaliacoesTexto ? '<span style="font-size:.82rem;">' + escapeHtmlLocal(avaliacoesTexto) + '</span>' : '') +
             (r.observacoes ? '<span style="font-size:.8rem; opacity:.85;">' + escapeHtmlLocal(r.observacoes) + '</span>' : '') +
           '</div>';

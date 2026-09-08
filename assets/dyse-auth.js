@@ -1810,11 +1810,26 @@ async function dyseListRegistrosClasseDaAula(alunoIds, nivelAulaId){
   return error ? [] : data;
 }
 
+/* Normaliza a lista de datas de uma aula do Registro de Classe: aceita um
+   array de 'YYYY-MM-DD' (ou Date), tira vazios/duplicados e ordena. Se vier
+   vazia, cai pra [dataFallback] ou [hoje] — "data_aula" nunca pode ser nula. */
+function dyseNormalizarDatasAula(datas, dataFallback){
+  const limpas = [...new Set((datas || [])
+    .map(d => String(d || '').slice(0, 10))
+    .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)))].sort();
+  if(limpas.length) return limpas;
+  const fb = String(dataFallback || '').slice(0, 10);
+  return [/^\d{4}-\d{2}-\d{2}$/.test(fb) ? fb : dyseHoje()];
+}
+
 /* "avaliacoes" = { "Tarefa Final": "sim"|"parcial"|"nao"|"nao_participou", ... },
-   chaves = niveis.eixos_avaliacao do nível daquela aula. */
+   chaves = niveis.eixos_avaliacao do nível daquela aula. "campos.datas" é a
+   lista de dias em que a aula foi ministrada; "data_aula" fica sendo o dia
+   mais recente (espelho, pra quem lê só um campo). */
 async function dyseUpsertRegistroClasse(alunoId, nivelAulaId, campos){
   const session = await dyseGetSession();
   const userId = session ? session.user.id : null;
+  const datas = dyseNormalizarDatasAula(campos.datas, campos.data_aula);
   const { data, error } = await sb
     .from('registros_classe')
     .upsert({
@@ -1822,7 +1837,8 @@ async function dyseUpsertRegistroClasse(alunoId, nivelAulaId, campos){
       nivel_aula_id: nivelAulaId,
       turma_id: campos.turma_id || null,
       professor_id: userId,
-      data_aula: campos.data_aula || dyseHoje(),
+      data_aula: datas[datas.length - 1],
+      datas: datas,
       avaliacoes: campos.avaliacoes || {},
       observacoes: campos.observacoes || null,
       criado_por: userId,
@@ -1848,12 +1864,14 @@ async function dyseGetRegistroClasseSessao(turmaId, nivelAulaId){
 async function dyseUpsertRegistroClasseSessao(turmaId, nivelAulaId, campos){
   const session = await dyseGetSession();
   const userId = session ? session.user.id : null;
+  const datas = dyseNormalizarDatasAula(campos.datas, campos.data_aula);
   const { data, error } = await sb
     .from('registro_classe_sessao')
     .upsert({
       turma_id: turmaId,
       nivel_aula_id: nivelAulaId,
-      data_aula: campos.data_aula || dyseHoje(),
+      data_aula: datas[datas.length - 1],
+      datas: datas,
       pontos_a_retomar: campos.pontos_a_retomar || null,
       ajuste_de_ritmo: campos.ajuste_de_ritmo || null,
       alerta_report_card: !!campos.alerta_report_card,

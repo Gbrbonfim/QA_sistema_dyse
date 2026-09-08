@@ -1402,6 +1402,11 @@ create table if not exists public.registros_classe (
   turma_id uuid references public.turmas(id) on delete set null,
   professor_id uuid references auth.users(id) on delete set null,
   data_aula date not null default current_date,
+  -- Uma aula pode ser ministrada em MAIS DE UM DIA. "datas" guarda todos os
+  -- dias; "data_aula" segue existindo como espelho do dia mais recente
+  -- (compatibilidade com quem só lê um campo). Continua 1 registro por
+  -- (aluno, aula) — o que é multivalorado é só a data, não a avaliação.
+  datas date[] not null default '{}',
   avaliacoes jsonb not null default '{}'::jsonb,
   observacoes text,
   criado_por uuid references auth.users(id),
@@ -1409,6 +1414,10 @@ create table if not exists public.registros_classe (
   atualizado_por uuid references auth.users(id),
   atualizado_em timestamptz default now()
 );
+
+alter table public.registros_classe add column if not exists datas date[] not null default '{}';
+update public.registros_classe set datas = array[data_aula]
+  where (datas is null or datas = '{}') and data_aula is not null;
 
 alter table public.registros_classe drop constraint if exists registros_classe_aluno_aula_key;
 alter table public.registros_classe add constraint registros_classe_aluno_aula_key unique (aluno_id, nivel_aula_id);
@@ -1484,6 +1493,8 @@ create table if not exists public.registro_classe_sessao (
   turma_id uuid not null references public.turmas(id) on delete cascade,
   nivel_aula_id uuid not null references public.nivel_aulas(id) on delete restrict,
   data_aula date not null default current_date,
+  -- Mesma ideia de registros_classe: a aula pode acontecer em vários dias.
+  datas date[] not null default '{}',
   pontos_a_retomar text,
   ajuste_de_ritmo text,
   alerta_report_card boolean not null default false,
@@ -1492,6 +1503,10 @@ create table if not exists public.registro_classe_sessao (
   criado_em timestamptz default now(),
   atualizado_em timestamptz default now()
 );
+
+alter table public.registro_classe_sessao add column if not exists datas date[] not null default '{}';
+update public.registro_classe_sessao set datas = array[data_aula]
+  where (datas is null or datas = '{}') and data_aula is not null;
 
 alter table public.registro_classe_sessao drop constraint if exists registro_classe_sessao_turma_aula_key;
 alter table public.registro_classe_sessao add constraint registro_classe_sessao_turma_aula_key unique (turma_id, nivel_aula_id);
