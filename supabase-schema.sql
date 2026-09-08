@@ -793,6 +793,16 @@ create policy "aluno ve o proprio historico financeiro"
   on public.aluno_financeiro_historico for select
   using (aluno_id = auth.uid());
 
+-- Admin comum (role 'admin', não só 'financeiro') LÊ o histórico — os filtros
+-- da aba Alunos em gestao.html (modalidade / professor responsável / situação /
+-- contrato vencendo) e os selinhos de cada linha precisam desses dados. É SÓ
+-- select: editar valor/modalidade/professor continua exclusivo de is_financeiro()
+-- pela política "admins gerenciam historico financeiro dos alunos" acima.
+drop policy if exists "admin comum le historico financeiro" on public.aluno_financeiro_historico;
+create policy "admin comum le historico financeiro"
+  on public.aluno_financeiro_historico for select
+  using (public.is_admin());
+
 -- 9.3.1) Histórico de observações do vínculo financeiro — a coluna
 --        "observacao" em aluno_financeiro_historico guarda só a observação
 --        ATUAL do período (sobrescrita a cada "Salvar" no modal Financeiro).

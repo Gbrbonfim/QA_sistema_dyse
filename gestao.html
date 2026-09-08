@@ -339,10 +339,16 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   .schedule-stats{grid-template-columns:repeat(2,1fr);}
 }
 
-/* Módulo Financeiro é exclusivo da role "financeiro" (acima de "admin") —
-   a trava de verdade é a RLS no banco, isto aqui só evita mostrar pra
-   quem não tem acesso uma tela que ia dar erro de permissão. */
+/* Módulo Financeiro (editar valores, aba Financeiro) é exclusivo da role
+   "financeiro" (acima de "admin"). A trava de verdade é a RLS no banco,
+   isto aqui só evita mostrar pra quem não tem acesso uma tela que ia dar
+   erro de permissão. */
 body:not(.dyse-can-financeiro) .fin-only{display:none !important;}
+
+/* Já os FILTROS da aba Alunos (modalidade/professor/situação/contrato) e os
+   selinhos de linha são só LEITURA — admin comum também vê (RLS tem policy
+   de select por is_admin() em aluno_financeiro_historico). */
+body:not(.dyse-can-ver-financeiro) .fin-view-only{display:none !important;}
 
 .btn{
   font-family:var(--font-body); font-weight:700; font-size:.88rem; letter-spacing:.01em;
@@ -910,9 +916,9 @@ body.dyse-modal-open{overflow:hidden;}
     <div class="dash-filter">
       <input type="text" id="filterAlunoName" placeholder="Filtrar por nome ou e-mail..." oninput="renderAlunosTable()">
       <select id="filterAlunoTurma" onchange="renderAlunosTable()"><option value="">Todas as turmas</option></select>
-      <select id="filterAlunoModalidade" class="fin-only" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
-      <select id="filterAlunoProfessor" class="fin-only" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
-      <select id="filterAlunoSituacao" onchange="renderAlunosTable()">
+      <select id="filterAlunoModalidade" class="fin-view-only" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
+      <select id="filterAlunoProfessor" class="fin-view-only" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
+      <select id="filterAlunoSituacao" class="fin-view-only" onchange="renderAlunosTable()">
         <option value="">Todas as situações</option>
         <option value="ativo">Ativo</option>
         <option value="pausado">Pausado</option>
@@ -920,14 +926,14 @@ body.dyse-modal-open{overflow:hidden;}
         <option value="encerrado">Encerrado</option>
         <option value="sem-vinculo">Sem vínculo financeiro</option>
       </select>
-      <select id="filterAlunoContrato" class="fin-only" onchange="renderAlunosTable()">
+      <select id="filterAlunoContrato" class="fin-view-only" onchange="renderAlunosTable()">
         <option value="">Todos os contratos</option>
         <option value="vencendo">Vencendo em 30 dias</option>
         <option value="vencido">Vencido</option>
         <option value="sem-data">Sem data de fim definida</option>
       </select>
     </div>
-    <div class="turma-status-chips fin-only" id="alunoStatusChips"></div>
+    <div class="turma-status-chips fin-view-only" id="alunoStatusChips"></div>
     <p class="result-count" id="alunosCount"></p>
     <div id="alunosTableWrap"></div>
   </div>
@@ -2913,9 +2919,7 @@ body.dyse-modal-open{overflow:hidden;}
       const periodo = dyseFindPeriodoAberto(historicoAluno);
       const modalidade = periodo ? MODALIDADES.find(m => m.id === periodo.modalidade_id) : null;
       const professor = periodo ? TEACHERS.find(t => t.id === periodo.professor_id) : null;
-      // Sem acesso financeiro (admin puro) o histórico não é legível pela RLS —
-      // a situação vem do espelho profiles.situacao_financeira, que o admin lê.
-      const situacao = periodo ? (periodo.situacao || null) : (s.situacao_financeira || null);
+      const situacao = periodo ? (periodo.situacao || null) : null;
       return { s, turma, periodo, modalidade, professor, situacao };
     });
 
@@ -2941,7 +2945,7 @@ body.dyse-modal-open{overflow:hidden;}
     });
 
     const wrap = document.getElementById('alunosTableWrap');
-    const isFin = document.body.classList.contains('dyse-can-financeiro');
+    const isFin = document.body.classList.contains('dyse-can-ver-financeiro');
     document.getElementById('alunosCount').textContent =
       rows.length + (rows.length === 1 ? ' aluno' : ' alunos') + (rows.length !== baseRows.length ? ' (de ' + baseRows.length + ')' : '');
 
@@ -2996,9 +3000,9 @@ body.dyse-modal-open{overflow:hidden;}
     const turmaBadge = turma
       ? '<span class="turma-pill">' + escapeHtmlLocal(turma.name) + '</span>'
       : '<span class="turma-badge" style="background:#fbeceb; color:var(--bad);">Sem turma</span>';
-    const modalidadeBadge = modalidade ? '<span class="turma-pill fin-only">' + escapeHtmlLocal(modalidade.name) + '</span>' : '';
+    const modalidadeBadge = modalidade ? '<span class="turma-pill fin-view-only">' + escapeHtmlLocal(modalidade.name) + '</span>' : '';
     const professorBadge = (!groupedByProfessor && professor)
-      ? '<span class="turma-pill fin-only">' + escapeHtmlLocal(professor.full_name || '') + '</span>' : '';
+      ? '<span class="turma-pill fin-view-only">' + escapeHtmlLocal(professor.full_name || '') + '</span>' : '';
     const situacaoCores = {
       ativo: 'background:#eaf7ee; color:var(--ok);',
       pausado: 'background:#fff3d6; color:var(--gamboge-dark);'
@@ -3007,9 +3011,9 @@ body.dyse-modal-open{overflow:hidden;}
       ? '<span class="turma-badge" style="' + (situacaoCores[situacao] || 'background:#fbeceb; color:var(--bad);') + '">' + escapeHtmlLocal(capitalize(situacao)) + '</span>'
       : '';
     const contratoBadge = dyseContratoPassaNoFiltro(periodo, 'vencido')
-      ? '<span class="turma-badge fin-only" style="background:#fbeceb; color:var(--bad);">Contrato vencido</span>'
+      ? '<span class="turma-badge fin-view-only" style="background:#fbeceb; color:var(--bad);">Contrato vencido</span>'
       : (dyseContratoPassaNoFiltro(periodo, 'vencendo')
-        ? '<span class="turma-badge fin-only" style="background:#fff3d6; color:var(--gamboge-dark);">Contrato vencendo</span>'
+        ? '<span class="turma-badge fin-view-only" style="background:#fff3d6; color:var(--gamboge-dark);">Contrato vencendo</span>'
         : '');
 
     return '<div class="turma-row">' +
@@ -5051,6 +5055,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(!session) return;
     const profile = await dyseGetProfile(session);
     document.body.classList.toggle('dyse-can-financeiro', dyseIsFinanceiro(profile));
+    document.body.classList.toggle('dyse-can-ver-financeiro', dyseIsAdmin(profile));
     renderGestaoChrome(session, profile);
     const hashPanel = location.hash.slice(1);
     showPanel(['turmas','materias','alunos','professores','contas','financeiro'].includes(hashPanel) ? hashPanel : 'turmas');
