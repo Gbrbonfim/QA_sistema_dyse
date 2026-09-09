@@ -87,10 +87,10 @@ async function run(req, res){
 
   const aulaIds = aulas.map(a => a.id);
   const { data: registros } = await admin.from('registros_classe')
-    .select('nivel_aula_id, sessao_ordem, data_aula, avaliacoes, observacoes')
+    .select('nivel_aula_id, data_aula, avaliacoes, observacoes')
     .eq('aluno_id', alunoId).in('nivel_aula_id', aulaIds)
-    .order('sessao_ordem', { ascending: true });
-  // Uma aula pode ter mais de um registro (Dia 1, Dia 2…) — agrupa por aula.
+    .order('data_aula', { ascending: true });
+  // Uma aula pode ter mais de um registro (um por data) — agrupa por aula.
   const regsPorAula = {};
   (registros || []).forEach(r => { (regsPorAula[r.nivel_aula_id] = regsPorAula[r.nivel_aula_id] || []).push(r); });
 
@@ -120,10 +120,11 @@ async function run(req, res){
       const avals = Object.entries(reg.avaliacoes || {}).map(([eixo, v]) => eixo + ': ' + (AVAL_LABEL[v] || v)).join('; ');
       registroTexto = (avals || '(sem avaliação por eixo)') + (reg.observacoes ? '\n    Observações do professor: ' + reg.observacoes : '');
     } else {
-      // Aula dada em vários dias — mostra cada dia; a IA deve ler como trajetória.
+      // Aula dada em vários dias — mostra cada data; a IA deve ler como trajetória.
       registroTexto = 'aula dada em ' + regs.length + ' dias:\n    ' + regs.map((reg, i) => {
         const avals = Object.entries(reg.avaliacoes || {}).map(([eixo, v]) => eixo + ': ' + (AVAL_LABEL[v] || v)).join('; ');
-        return 'Dia ' + (reg.sessao_ordem || (i + 1)) + ': ' + (avals || '(sem avaliação por eixo)') +
+        const dia = reg.data_aula ? String(reg.data_aula).slice(0, 10).split('-').reverse().join('/') : ('dia ' + (i + 1));
+        return dia + ': ' + (avals || '(sem avaliação por eixo)') +
           (reg.observacoes ? ' | Observações do professor: ' + reg.observacoes : '');
       }).join('\n    ');
     }
@@ -140,7 +141,7 @@ async function run(req, res){
     'É o boletim que fecha um período de estudo do aluno. Ele junta TUDO que o professor registrou nas aulas do intervalo (avaliação de cada habilidade + observações escritas) e devolve uma leitura honesta e acolhedora do desenvolvimento do aluno.\n\n' +
     '# COMO LER OS DADOS\n' +
     'Cada aula abaixo tem duas partes: o PLANO DA AULA (o que a coordenação desenhou pra aquela aula trabalhar) e o REGISTRO DO ALUNO (como o professor marcou cada habilidade + observações livres, às vezes de mais de um dia). CRUZE as duas: o plano diz o que a aula tentou desenvolver, o registro diz como o aluno respondeu. Uma habilidade marcada bem numa aula que era justamente sobre ela é um ponto forte real. Uma habilidade com dificuldade numa aula focada nela é um ponto claro pra trabalhar. As observações escritas do professor carregam a nuance, use-as de verdade.\n' +
-    'Se uma aula tem registro de mais de um dia (Dia 1, Dia 2...), leia como uma trajetória: um dia difícil seguido de um dia melhor é evolução, e isso merece ser contado com alegria. Considere todos os dias, não só o último.\n\n' +
+    'Se uma aula tem registro de mais de uma data, leia como uma trajetória: um dia difícil seguido de um dia melhor é evolução, e isso merece ser contado com alegria. Considere todos os dias, não só o último.\n\n' +
     '# REGRA DO EQUILÍBRIO (OBRIGATÓRIA)\n' +
     'O texto SEMPRE abre reconhecendo algo concreto e verdadeiro que foi bem, e SEMPRE nomeia pelo menos um ponto concreto a desenvolver no próximo período, mesmo para um aluno excelente (sempre existe um próximo passo). Nunca entregue um boletim só de elogio nem só de crítica. O aluno tem que terminar de ler MOTIVADO e ao mesmo tempo sabendo com clareza o que vai evoluir.\n\n' +
     '# REGRA OBRIGATÓRIA: FALE DIRETAMENTE COM O ALUNO\n' +

@@ -96,9 +96,9 @@ begin
         );
       end loop;
 
-      insert into public.registros_classe (aluno_id, nivel_aula_id, turma_id, professor_id, data_aula, sessao_ordem, avaliacoes, observacoes, criado_por)
-      values (v_aluno_id, v_aula.id, v_turma_id, v_professor_id, current_date - ((v_aula_fim - v_aula.numero) * 7), 1, v_avaliacoes, 'Registro de teste gerado por seed.', v_professor_id)
-      on conflict (aluno_id, nivel_aula_id, sessao_ordem) do update
+      insert into public.registros_classe (aluno_id, nivel_aula_id, turma_id, professor_id, data_aula, avaliacoes, observacoes, criado_por)
+      values (v_aluno_id, v_aula.id, v_turma_id, v_professor_id, current_date - ((v_aula_fim - v_aula.numero) * 7), v_avaliacoes, 'Registro de teste gerado por seed.', v_professor_id)
+      on conflict (aluno_id, nivel_aula_id, data_aula) do update
         set avaliacoes = excluded.avaliacoes,
             observacoes = excluded.observacoes,
             turma_id = excluded.turma_id,
