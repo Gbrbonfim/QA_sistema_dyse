@@ -110,7 +110,8 @@ async function run(req, res){
       c.tarefa_comunicativa ? 'Tarefa comunicativa: ' + c.tarefa_comunicativa : null,
       c.estrutura_gramatical ? 'Gramática: ' + c.estrutura_gramatical : null,
       c.foco_fonetico_som ? 'Foco fonético: ' + c.foco_fonetico_som : null,
-      (c.pontos_atencao && c.pontos_atencao.length) ? 'Pontos de atenção do plano: ' + c.pontos_atencao.join(' | ') : null
+      (c.pontos_atencao && c.pontos_atencao.length) ? 'Pontos de atenção do plano: ' + c.pontos_atencao.join(' | ') : null,
+      c.tarefa_de_casa ? 'Tarefa de casa passada: ' + c.tarefa_de_casa : null
     ].filter(Boolean).join('\n    ');
     let registroTexto;
     if(!regs.length){
@@ -134,6 +135,13 @@ async function run(req, res){
   const coberturaPct = aulas.length ? Math.round((comRegistro / aulas.length) * 1000) / 10 : 0;
   const listaEixos = eixos.length ? eixos.join(', ') : 'Reading, Writing, Speaking, Listening, Gramática';
 
+  // Speaking Club (aula de conversação) e tarefa de casa não têm campo próprio:
+  // a professora menciona nas observações. Detecta se houve QUALQUER menção no
+  // período — a ausência de menção também vira comentário no Report Card.
+  const obsPeriodo = (registros || []).map(r => r.observacoes || '').join('  \n  ').toLowerCase();
+  const mencionaSpeakingClub = /speaking club|clube de conversa|conversation club|convers[aãç]/.test(obsPeriodo);
+  const mencionaTarefaCasa = /tarefa de casa|dever de casa|li[çc][ãa]o de casa|atividade de casa|homework|fez a tarefa|n[ãa]o fez a tarefa/.test(obsPeriodo);
+
   const primeiroNome = String(nomeAluno).trim().split(/\s+/)[0] || '';
   const system =
     'Você escreve, em nome da DYSE (escola de inglês), o texto do Report Card (boletim de fim de período) que o ALUNO e a família vão ler. Português do Brasil.\n\n' +
@@ -141,7 +149,15 @@ async function run(req, res){
     'É o boletim que fecha um período de estudo do aluno. Ele junta TUDO que o professor registrou nas aulas do intervalo (avaliação de cada habilidade + observações escritas) e devolve uma leitura honesta e acolhedora do desenvolvimento do aluno.\n\n' +
     '# COMO LER OS DADOS\n' +
     'Cada aula abaixo tem duas partes: o PLANO DA AULA (o que a coordenação desenhou pra aquela aula trabalhar) e o REGISTRO DO ALUNO (como o professor marcou cada habilidade + observações livres, às vezes de mais de um dia). CRUZE as duas: o plano diz o que a aula tentou desenvolver, o registro diz como o aluno respondeu. Uma habilidade marcada bem numa aula que era justamente sobre ela é um ponto forte real. Uma habilidade com dificuldade numa aula focada nela é um ponto claro pra trabalhar. As observações escritas do professor carregam a nuance, use-as de verdade.\n' +
-    'Se uma aula tem registro de mais de uma data, leia como uma trajetória: um dia difícil seguido de um dia melhor é evolução, e isso merece ser contado com alegria. Considere todos os dias, não só o último.\n\n' +
+    'Se uma aula tem registro de mais de uma data, leia como uma trajetória: um dia difícil seguido de um dia melhor é evolução, e isso merece ser contado com alegria. Considere todos os dias, não só o último.\n' +
+    'As observações do professor também podem mencionar o SPEAKING CLUB e a TAREFA DE CASA (ver seção própria abaixo).\n\n' +
+    '# SPEAKING CLUB E TAREFA DE CASA (SEMPRE COMENTE ALGO)\n' +
+    'O Speaking Club é a aula de conversação da DYSE, recomendada pra quem quer soltar a fala e ampliar o vocabulário. A tarefa de casa é o que o aluno pratica entre as aulas. Nenhum dos dois tem campo próprio, o professor menciona nas observações quando é relevante.\n' +
+    '- Se as observações do período mencionam que você TEM ido ao Speaking Club ou participado bem, reconheça isso com entusiasmo e ligue à sua evolução de fala/fluência/vocabulário.\n' +
+    '- Se mencionam que você NÃO tem ido, ou tem ido pouco, comente com acolhimento e convide a retomar, explicando o quanto ajuda.\n' +
+    '- Se NÃO há nenhuma menção ao Speaking Club no período, mesmo assim inclua uma frase recomendando o Speaking Club como um próximo passo pra desenvolver a fala e o vocabulário. Isso é uma recomendação da escola, não um dado sobre você, então enquadre como convite ("vale muito a pena", "queremos ver você lá"), nunca como algo que você deixou de fazer.\n' +
+    '- Faça o mesmo raciocínio pra tarefa de casa: elogie a constância se houver menção positiva, acolha e incentive se houver menção de que ficou devendo, e se não houver menção nenhuma, reforce com carinho a importância de praticar em casa entre as aulas.\n' +
+    'Essas duas questões entram no corpo do texto (resumo_geral e/ou recomendacoes), de forma natural, sem virar lista.\n\n' +
     '# REGRA DO EQUILÍBRIO (OBRIGATÓRIA)\n' +
     'O texto SEMPRE abre reconhecendo algo concreto e verdadeiro que foi bem, e SEMPRE nomeia pelo menos um ponto concreto a desenvolver no próximo período, mesmo para um aluno excelente (sempre existe um próximo passo). Nunca entregue um boletim só de elogio nem só de crítica. O aluno tem que terminar de ler MOTIVADO e ao mesmo tempo sabendo com clareza o que vai evoluir.\n\n' +
     '# REGRA OBRIGATÓRIA: FALE DIRETAMENTE COM O ALUNO\n' +
@@ -154,7 +170,7 @@ async function run(req, res){
     '# PROIBIÇÕES\n' +
     '- NÃO use travessão nem hífen como pontuação (—, –, -). Ligue as ideias com vírgula, ponto e conectivos ("e", "mas", "porque", "por isso").\n' +
     '- NÃO use números, porcentagens, contagem de aulas ou de habilidades, nem termos técnicos de avaliação ("parcial", "PP", "P", "R", "cobertura", "amostras", "eixo", "critério"). Os dados abaixo são só pra você saber O QUE dizer, não para citar.\n' +
-    '- NÃO invente qualidades, episódios ou notas que não estejam nos dados. Seja honesto e específico, sem esconder o que precisa melhorar.\n' +
+    '- NÃO invente qualidades, episódios ou notas que não estejam nos dados. Seja honesto e específico, sem esconder o que precisa melhorar. (A recomendação de Speaking Club e de tarefa de casa é a única exceção: é orientação da escola, sempre permitida, mesmo sem dado.)\n' +
     '- Pode citar conteúdos concretos de forma natural ("o som do TH", "o verbo to be", "se apresentar em inglês") quando ajudar o aluno a entender.\n\n' +
     '# FORMATO DA RESPOSTA\n' +
     'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código). Todos os campos falam COM o aluno, em "você", sem travessão/hífen:\n' +
@@ -170,7 +186,13 @@ async function run(req, res){
   const userMsg =
     'Aluno: ' + nomeAluno + ' · ' + nomeNivel + ' · ' + semestre + 'º semestre\n\n' +
     'DADOS DO PERÍODO (uso interno, não cite números nem termos técnicos):\n' +
-    'Registros lançados pelo professor: ' + comRegistro + ' de ' + aulas.length + ' aulas do período.\n\n' +
+    'Registros lançados pelo professor: ' + comRegistro + ' de ' + aulas.length + ' aulas do período.\n' +
+    'Speaking Club: ' + (mencionaSpeakingClub
+      ? 'HÁ menção nas observações do período. Comente com base no que o professor escreveu (confirme lendo os registros abaixo).'
+      : 'NENHUMA menção no período. Inclua uma frase recomendando o Speaking Club como próximo passo, enquadrada como convite da escola, não como algo que o aluno deixou de fazer.') + '\n' +
+    'Tarefa de casa: ' + (mencionaTarefaCasa
+      ? 'HÁ menção nas observações do período. Comente com base no que o professor escreveu.'
+      : 'NENHUMA menção no período. Reforce com carinho a importância de praticar em casa entre as aulas.') + '\n\n' +
     'Aula por aula (o que a aula trabalhou + como o aluno foi):\n\n' + aulasTexto;
 
   const anthropic = new Anthropic();
