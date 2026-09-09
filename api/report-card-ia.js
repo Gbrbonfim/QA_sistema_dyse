@@ -87,10 +87,12 @@ async function run(req, res){
 
   const aulaIds = aulas.map(a => a.id);
   const { data: registros } = await admin.from('registros_classe')
-    .select('nivel_aula_id, avaliacoes, observacoes')
-    .eq('aluno_id', alunoId).in('nivel_aula_id', aulaIds);
-  const regPorAula = {};
-  (registros || []).forEach(r => { regPorAula[r.nivel_aula_id] = r; });
+    .select('nivel_aula_id, sessao_ordem, data_aula, avaliacoes, observacoes')
+    .eq('aluno_id', alunoId).in('nivel_aula_id', aulaIds)
+    .order('sessao_ordem', { ascending: true });
+  // Uma aula pode ter mais de um registro (Dia 1, Dia 2…) — agrupa por aula.
+  const regsPorAula = {};
+  (registros || []).forEach(r => { (regsPorAula[r.nivel_aula_id] = regsPorAula[r.nivel_aula_id] || []).push(r); });
 
   const eixos = (materiaResp.data && materiaResp.data.eixos_avaliacao) || [];
   const nomeNivel = (materiaResp.data && materiaResp.data.name) || materiaSlug;
@@ -100,8 +102,8 @@ async function run(req, res){
   let comRegistro = 0;
   const aulasTexto = aulas.map(a => {
     const c = a.conteudo || {};
-    const reg = regPorAula[a.id];
-    const participou = reg && Object.values(reg.avaliacoes || {}).some(v => v && v !== 'nao_participou');
+    const regs = regsPorAula[a.id] || [];
+    const participou = regs.some(r => Object.values(r.avaliacoes || {}).some(v => v && v !== 'nao_participou'));
     if(participou) comRegistro++;
     const plano = [
       c.habilidades && c.habilidades.length ? 'Habilidades foco: ' + c.habilidades.join(', ') : null,
@@ -111,13 +113,21 @@ async function run(req, res){
       (c.pontos_atencao && c.pontos_atencao.length) ? 'Pontos de atenção do plano: ' + c.pontos_atencao.join(' | ') : null
     ].filter(Boolean).join('\n    ');
     let registroTexto;
-    if(!reg){
+    if(!regs.length){
       registroTexto = '(sem registro lançado para este aluno)';
-    } else {
+    } else if(regs.length === 1){
+      const reg = regs[0];
       const avals = Object.entries(reg.avaliacoes || {}).map(([eixo, v]) => eixo + ': ' + (AVAL_LABEL[v] || v)).join('; ');
       registroTexto = (avals || '(sem avaliação por eixo)') + (reg.observacoes ? '\n    Observações do professor: ' + reg.observacoes : '');
+    } else {
+      // Aula dada em vários dias — mostra cada dia; a IA deve ler como trajetória.
+      registroTexto = 'aula dada em ' + regs.length + ' dias:\n    ' + regs.map((reg, i) => {
+        const avals = Object.entries(reg.avaliacoes || {}).map(([eixo, v]) => eixo + ': ' + (AVAL_LABEL[v] || v)).join('; ');
+        return 'Dia ' + (reg.sessao_ordem || (i + 1)) + ': ' + (avals || '(sem avaliação por eixo)') +
+          (reg.observacoes ? ' | Observações do professor: ' + reg.observacoes : '');
+      }).join('\n    ');
     }
-    return 'Aula ' + a.numero + ' — ' + a.topico + '\n    ' + (plano || '(plano não detalhado)') + '\n    REGISTRO DO ALUNO: ' + registroTexto;
+    return 'Aula ' + a.numero + ' — ' + a.topico + '\n    PLANO DA AULA (o que a coordenação desenhou pra trabalhar): ' + (plano || '(plano não detalhado)') + '\n    REGISTRO DO ALUNO: ' + registroTexto;
   }).join('\n\n');
 
   const coberturaPct = aulas.length ? Math.round((comRegistro / aulas.length) * 1000) / 10 : 0;
@@ -125,14 +135,21 @@ async function run(req, res){
 
   const primeiroNome = String(nomeAluno).trim().split(/\s+/)[0] || '';
   const system =
-    'Você escreve, em nome da DYSE (escola de inglês), o texto do Report Card de fim de semestre que o ALUNO e a família vão ler. Português do Brasil.\n\n' +
+    'Você escreve, em nome da DYSE (escola de inglês), o texto do Report Card (boletim de fim de período) que o ALUNO e a família vão ler. Português do Brasil.\n\n' +
+    '# O QUE É ESTE TEXTO\n' +
+    'É o boletim que fecha um período de estudo do aluno. Ele junta TUDO que o professor registrou nas aulas do intervalo (avaliação de cada habilidade + observações escritas) e devolve uma leitura honesta e acolhedora do desenvolvimento do aluno.\n\n' +
+    '# COMO LER OS DADOS\n' +
+    'Cada aula abaixo tem duas partes: o PLANO DA AULA (o que a coordenação desenhou pra aquela aula trabalhar) e o REGISTRO DO ALUNO (como o professor marcou cada habilidade + observações livres, às vezes de mais de um dia). CRUZE as duas: o plano diz o que a aula tentou desenvolver, o registro diz como o aluno respondeu. Uma habilidade marcada bem numa aula que era justamente sobre ela é um ponto forte real. Uma habilidade com dificuldade numa aula focada nela é um ponto claro pra trabalhar. As observações escritas do professor carregam a nuance, use-as de verdade.\n' +
+    'Se uma aula tem registro de mais de um dia (Dia 1, Dia 2...), leia como uma trajetória: um dia difícil seguido de um dia melhor é evolução, e isso merece ser contado com alegria. Considere todos os dias, não só o último.\n\n' +
+    '# REGRA DO EQUILÍBRIO (OBRIGATÓRIA)\n' +
+    'O texto SEMPRE abre reconhecendo algo concreto e verdadeiro que foi bem, e SEMPRE nomeia pelo menos um ponto concreto a desenvolver no próximo período, mesmo para um aluno excelente (sempre existe um próximo passo). Nunca entregue um boletim só de elogio nem só de crítica. O aluno tem que terminar de ler MOTIVADO e ao mesmo tempo sabendo com clareza o que vai evoluir.\n\n' +
     '# REGRA OBRIGATÓRIA: FALE DIRETAMENTE COM O ALUNO\n' +
     'Todo o texto, do início ao fim, é escrito DIRETAMENTE PARA O ALUNO, em segunda pessoa ("você"). O aluno deve sentir que a DYSE está conversando com ele, não que está lendo uma ficha escrita sobre ele.\n' +
     'Use "nós" pela escola: "Percebemos que você...", "Notamos uma evolução...", "Durante nossas aulas, você...", "Vamos continuar trabalhando...", "Nosso próximo objetivo será...", "Queremos ajudar você a...", "Estamos felizes em acompanhar a sua evolução".\n' +
     'NUNCA escreva sobre o aluno em terceira pessoa. Proibido: "' + (primeiroNome || 'O aluno') + ' apresentou...", "a aluna demonstra...", "o aluno conseguiu...", "ele ainda precisa...". Se qualquer trecho falar SOBRE o aluno, reescreva para falar COM o aluno.\n' +
     (primeiroNome ? 'Pode chamar pelo primeiro nome (' + primeiroNome + ') no começo, com carinho.\n' : '') +
     '\n# TOM\n' +
-    'Caloroso, de parceria e acompanhamento. Comece sempre reconhecendo algo concreto e verdadeiro que você viu de bom. Fale das dificuldades com acolhimento, sempre como "o que vamos desenvolver juntos no próximo semestre", nunca como falha, nota baixa ou veredito. Pode encerrar com uma frase de incentivo e o emoji 💙.\n\n' +
+    'Caloroso, de parceria e acompanhamento. Comece sempre reconhecendo algo concreto e verdadeiro que você viu de bom. Fale das dificuldades com acolhimento, sempre como "o que vamos desenvolver juntos no próximo período", nunca como falha, nota baixa ou veredito. Pode encerrar com uma frase de incentivo e o emoji 💙.\n\n' +
     '# PROIBIÇÕES\n' +
     '- NÃO use travessão nem hífen como pontuação (—, –, -). Ligue as ideias com vírgula, ponto e conectivos ("e", "mas", "porque", "por isso").\n' +
     '- NÃO use números, porcentagens, contagem de aulas ou de habilidades, nem termos técnicos de avaliação ("parcial", "PP", "P", "R", "cobertura", "amostras", "eixo", "critério"). Os dados abaixo são só pra você saber O QUE dizer, não para citar.\n' +
@@ -140,11 +157,11 @@ async function run(req, res){
     '- Pode citar conteúdos concretos de forma natural ("o som do TH", "o verbo to be", "se apresentar em inglês") quando ajudar o aluno a entender.\n\n' +
     '# FORMATO DA RESPOSTA\n' +
     'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código). Todos os campos falam COM o aluno, em "você", sem travessão/hífen:\n' +
-    '{"resumo_geral": "2 a 4 parágrafos curtos, como uma carta da escola pra você: primeiro o que foi bem neste semestre, depois com acolhimento o que vamos desenvolver juntos, fechando com incentivo pro próximo semestre (pode usar 💙)", ' +
+    '{"resumo_geral": "2 a 4 parágrafos curtos, como uma carta da escola pra você: primeiro o que foi bem neste período, depois com acolhimento o que vamos desenvolver juntos, fechando com incentivo pro próximo período (pode usar 💙)", ' +
     '"por_eixo": [{"eixo": "<nome exato da habilidade>", "nivel": "forte" quando essa habilidade já é um ponto forte seu no período, ou "desenvolvimento" quando ainda é algo que vamos trabalhar juntos, "texto": "2 a 3 frases dirigidas a você sobre essa habilidade: o que você já faz bem e/ou qual vai ser o nosso próximo passo, de forma encorajadora"}], ' +
     '"pontos_fortes": "1 a 3 frases celebrando de forma específica o que você mais mandou bem", ' +
-    '"pontos_desenvolvimento": "1 a 3 frases acolhedoras sobre o que vamos trabalhar juntos no próximo semestre", ' +
-    '"recomendacoes": "1 a 2 frases de incentivo prático pra você no próximo semestre"}\n' +
+    '"pontos_desenvolvimento": "1 a 3 frases acolhedoras sobre o que vamos trabalhar juntos no próximo período", ' +
+    '"recomendacoes": "1 a 2 frases de incentivo prático pra você no próximo período"}\n' +
     'O array "por_eixo" deve ter exatamente um item para cada uma destas habilidades, nesta ordem: ' + listaEixos + '.\n\n' +
     '# REVISÃO FINAL\n' +
     'Antes de responder, releia cada campo e confirme: "Estou conversando diretamente com este aluno, ou falando sobre ele?" e "Tem algum travessão ou hífen?". Corrija o que estiver fora dessas regras.';

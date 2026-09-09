@@ -1,4 +1,10 @@
 -- ======================================================================
+-- ⚠️ OBSOLETO — SUBSTITUÍDO POR migracao-registro-classe-dia-por-dia.sql
+-- (aquela guarda cada dia da aula numa LINHA própria; esta guardava as
+-- datas num array numa linha só, que perdia avaliação/observação por dia).
+-- Não rode este arquivo. Mantido só como histórico. Se já foi rodado, a
+-- migração nova faz "drop column if exists datas".
+-- ======================================================================
 -- Migração: Registro de Classe — 1 aula pode ter VÁRIAS datas
 -- Rodar no Supabase (QA e produção). Seguro rodar mais de uma vez.
 -- (Mesmo conteúdo já embutido nas seções 12.4 e 12.5 de supabase-schema.sql.)

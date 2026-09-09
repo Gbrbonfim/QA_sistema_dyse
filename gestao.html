@@ -3721,7 +3721,11 @@ body.dyse-modal-open{overflow:hidden;}
     await garantirNivelAulasCache();
     const registros = (await dyseListRegistrosClasse(alunoId))
       .map(r => ({ r, aula: NIVEL_AULAS_POR_ID[r.nivel_aula_id] || null }))
-      .sort((a, b) => (a.aula ? a.aula.numero : 0) - (b.aula ? b.aula.numero : 0));
+      .sort((a, b) =>
+        ((a.aula ? a.aula.numero : 0) - (b.aula ? b.aula.numero : 0)) ||
+        ((a.r.sessao_ordem || 1) - (b.r.sessao_ordem || 1)));
+    const diasPorAula = {};
+    registros.forEach(({ r }) => { diasPorAula[r.nivel_aula_id] = (diasPorAula[r.nivel_aula_id] || 0) + 1; });
 
     const historicoHtml = registros.length
       ? registros.map(({ r, aula }) => {
@@ -3731,11 +3735,11 @@ body.dyse-modal-open{overflow:hidden;}
             const val = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' }[r.avaliacoes[eixo]] || r.avaliacoes[eixo];
             return eixo + ': ' + val;
           }).join(' · ');
-          const datasTxt = (r.datas && r.datas.length ? r.datas : [r.data_aula])
-            .filter(Boolean).map(d => formatDateBR(String(d).slice(0, 10))).join(', ');
+          const dataTxt = formatDateBR(String(r.data_aula || '').slice(0, 10));
+          const diaTag = (diasPorAula[r.nivel_aula_id] || 1) > 1 ? ' · Dia ' + (r.sessao_ordem || 1) : '';
           return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:6px;">' +
-            '<span class="name">Aula ' + (aula ? String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlLocal(aula.topico) : '(aula removida)') + '</span>' +
-            '<span style="font-size:.78rem; opacity:.75;">' + escapeHtmlLocal(datasTxt) + ' · ' + escapeHtmlLocal(professor ? (professor.full_name || '') : '(professor removido)') + ' · ' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + '</span>' +
+            '<span class="name">Aula ' + (aula ? String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlLocal(aula.topico) : '(aula removida)') + diaTag + '</span>' +
+            '<span style="font-size:.78rem; opacity:.75;">' + escapeHtmlLocal(dataTxt) + ' · ' + escapeHtmlLocal(professor ? (professor.full_name || '') : '(professor removido)') + ' · ' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + '</span>' +
             (avaliacoesTexto ? '<span style="font-size:.82rem;">' + escapeHtmlLocal(avaliacoesTexto) + '</span>' : '') +
             (r.observacoes ? '<span style="font-size:.8rem; opacity:.85;">' + escapeHtmlLocal(r.observacoes) + '</span>' : '') +
           '</div>';
@@ -3945,7 +3949,10 @@ body.dyse-modal-open{overflow:hidden;}
     const alertas = d.alertas_planner || [];
     const blocoAlertas = alertas.length ? '<div class="report-section-head">Alertas do Planner no período (referência)</div>' +
       '<p class="gestao-hint">Marcados como "Alerta para Report Card" pelo professor durante as aulas — revise antes de decidir os eixos acima.</p>' +
-      alertas.map(a => '<p class="report-line">Aula ' + a.aula_numero + ' — ' + escapeHtmlLocal(a.aula_topico || '') + ': ' + escapeHtmlLocal(a.motivo || '') + '</p>').join('') : '';
+      alertas.map(a => {
+        const diaTxt = a.dia ? ' · Dia ' + a.dia + (a.data ? ' (' + formatDateBR(String(a.data).slice(0, 10)) + ')' : '') : '';
+        return '<p class="report-line">Aula ' + a.aula_numero + ' — ' + escapeHtmlLocal(a.aula_topico || '') + diaTxt + ': ' + escapeHtmlLocal(a.motivo || '') + '</p>';
+      }).join('') : '';
 
     const enc = d.encaminhamento || {};
     const blocoRestante =

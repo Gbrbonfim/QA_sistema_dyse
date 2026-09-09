@@ -974,13 +974,13 @@ body.dyse-modal-open{overflow:hidden;}
       <div class="dash-filter">
         <select id="registroClasseAulaSelect" onchange="onRegistroClasseAulaChange()"></select>
       </div>
-      <div style="margin:8px 0 4px;">
-        <label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:6px;">Datas desta aula <span style="font-weight:400; color:var(--seal-soft);">— uma aula pode ser dada em mais de um dia</span></label>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+      <div style="margin:10px 0 4px;">
+        <label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:6px;">Dias desta aula <span style="font-weight:400; color:var(--seal-soft);">— uma aula pode ser dada em mais de um dia; cada dia tem sua avaliação e sua anotação</span></label>
+        <div id="registroClasseDiasBar" style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;"></div>
+        <div style="margin-top:10px;">
+          <label style="font-weight:700; font-size:.82rem; color:var(--seal); display:block; margin-bottom:4px;">Data deste dia</label>
           <input type="date" id="registroClasseDataInput" style="border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:7px 10px; font-family:var(--font-body); font-size:.85rem;">
-          <button type="button" class="btn btn-ghost btn-xs" onclick="adicionarDataRegistroClasse()">Adicionar data</button>
         </div>
-        <div id="registroClasseDatasChips" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;"></div>
       </div>
       <details class="dyse-collapsible">
         <summary><span>Plano da aula (referência da coordenação)</span><span class="chevron">›</span></summary>
@@ -1560,33 +1560,102 @@ body.dyse-modal-open{overflow:hidden;}
   let REGISTRO_NIVEIS_CACHE = [];
   let REGISTRO_AULAS_DA_TURMA = [];
   let REGISTRO_EIXOS = [];
-  let REGISTRO_DATAS = []; // datas (YYYY-MM-DD) da aula selecionada no Registro de Classe
+  let REGISTRO_DIAS = [];           // [{ sessao_ordem, data_aula, salvo }] da aula selecionada
+  let REGISTRO_DIA_ATUAL = 1;       // sessao_ordem do dia sendo editado
+  let REGISTRO_SESSOES_CACHE = [];  // linhas de registro_classe_sessao (planner) da aula atual
   let TURMA_AULA_MATERIAL = {}; // nivel_aula_id -> link da cópia desta turma
   const LABEL_AVALIACAO = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' };
 
-  function renderRegistroClasseDatasChips(){
-    const wrap = document.getElementById('registroClasseDatasChips');
-    if(!wrap) return;
-    REGISTRO_DATAS = [...new Set(REGISTRO_DATAS.filter(Boolean))].sort();
-    wrap.innerHTML = REGISTRO_DATAS.length
-      ? REGISTRO_DATAS.map(d =>
-          '<span style="display:inline-flex; align-items:center; gap:6px; background:var(--antique-soft); border:1px solid #eee0cf; border-radius:999px; padding:4px 6px 4px 12px; font-size:.8rem;">' +
-            formatDateBR(d) +
-            '<button type="button" onclick="removerDataRegistroClasse(\'' + d + '\')" aria-label="Remover data" style="border:none; background:#f0d9cf; color:var(--seal); width:18px; height:18px; border-radius:50%; cursor:pointer; line-height:1; font-weight:700; padding:0;">&times;</button>' +
-          '</span>').join('')
-      : '<span style="font-size:.78rem; color:var(--seal-soft);">Nenhuma data ainda — adicione pelo menos uma.</span>';
+  function renderRegistroClasseDias(){
+    const bar = document.getElementById('registroClasseDiasBar');
+    if(!bar) return;
+    const multi = REGISTRO_DIAS.length > 1;
+    bar.innerHTML = REGISTRO_DIAS.map(d => {
+      const atual = d.sessao_ordem === REGISTRO_DIA_ATUAL;
+      const dt = /^\d{4}-\d{2}-\d{2}$/.test(d.data_aula || '') ? ' (' + formatDateBR(d.data_aula) + ')' : '';
+      return '<button type="button" class="btn btn-xs ' + (atual ? 'btn-primary' : 'btn-ghost') + '" ' +
+        'onclick="selecionarDiaRegistroClasse(' + d.sessao_ordem + ')">Dia ' + d.sessao_ordem + dt + '</button>';
+    }).join('') +
+      '<button type="button" class="btn btn-ghost btn-xs" onclick="adicionarDiaRegistroClasse()">+ Adicionar dia</button>' +
+      (multi ? '<button type="button" class="btn btn-xs" style="background:transparent; color:var(--amaranth); border:2px solid #f0d9cf;" onclick="removerDiaRegistroClasse()">Remover o Dia ' + REGISTRO_DIA_ATUAL + '</button>' : '');
   }
-  function adicionarDataRegistroClasse(){
-    const inp = document.getElementById('registroClasseDataInput');
-    const v = (inp.value || '').slice(0, 10);
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(v)) return;
-    if(!REGISTRO_DATAS.includes(v)) REGISTRO_DATAS.push(v);
-    inp.value = '';
-    renderRegistroClasseDatasChips();
+
+  async function selecionarDiaRegistroClasse(ordem){
+    REGISTRO_DIA_ATUAL = ordem;
+    renderRegistroClasseDias();
+    await carregarDiaRegistroClasse();
   }
-  function removerDataRegistroClasse(d){
-    REGISTRO_DATAS = REGISTRO_DATAS.filter(x => x !== d);
-    renderRegistroClasseDatasChips();
+
+  function adicionarDiaRegistroClasse(){
+    const prox = REGISTRO_DIAS.reduce((m, d) => Math.max(m, d.sessao_ordem), 0) + 1;
+    REGISTRO_DIAS.push({ sessao_ordem: prox, data_aula: dyseHoje(), salvo: false });
+    REGISTRO_DIA_ATUAL = prox;
+    renderRegistroClasseDias();
+    carregarDiaRegistroClasse({ vazio: true });
+  }
+
+  async function removerDiaRegistroClasse(){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    const aulaId = document.getElementById('registroClasseAulaSelect').value;
+    const ordem = REGISTRO_DIA_ATUAL;
+    const dia = REGISTRO_DIAS.find(d => d.sessao_ordem === ordem);
+    const msg = document.getElementById('registroClasseMsg');
+    if(dia && dia.salvo){
+      if(!confirm('Apagar o Dia ' + ordem + ' desta aula? A avaliação e a anotação desse dia serão removidas de todos os alunos da turma.')) return;
+      const { error } = await dyseDeleteRegistroClasseDia(turmaId, aulaId, ordem);
+      if(error){ if(msg) msg.textContent = 'Erro ao remover o dia: ' + error.message; return; }
+    }
+    // carregarRegistroClasseDaTurma refaz o seletor de aula + REGISTRO_DIAS
+    // (via onRegistroClasseAulaChange) e recarrega a grade do primeiro dia.
+    await carregarRegistroClasseDaTurma();
+  }
+
+  /* Monta a grade (avaliações + observações por aluno) e o planner do dia
+     atual. opts.vazio = dia recém-adicionado, tudo em branco. */
+  async function carregarDiaRegistroClasse(opts){
+    opts = opts || {};
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    const aulaId = document.getElementById('registroClasseAulaSelect').value;
+    const ordem = REGISTRO_DIA_ATUAL;
+    const dia = REGISTRO_DIAS.find(d => d.sessao_ordem === ordem) || { data_aula: dyseHoje() };
+    document.getElementById('registroClasseDataInput').value = /^\d{4}-\d{2}-\d{2}$/.test(dia.data_aula || '') ? dia.data_aula : dyseHoje();
+
+    const alunoIds = CHAMADA_STUDENTS.map(s => s.id);
+    const existentes = opts.vazio ? [] : await dyseListRegistrosClasseDaAula(alunoIds, aulaId, ordem);
+    const existentePorAluno = {};
+    existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
+
+    document.getElementById('registroClasseTheadRow').innerHTML =
+      '<th>Aluno</th>' + REGISTRO_EIXOS.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + '<th>Observações</th>';
+
+    document.getElementById('registroClasseBody').innerHTML = CHAMADA_STUDENTS.length
+      ? CHAMADA_STUDENTS.map(s => {
+          const nome = escapeHtmlLocal(s.full_name || s.email || '');
+          if(alunoPausado(s)){
+            return '<tr class="linha-pausada" style="opacity:.6;"><td data-label="Aluno">' + nome + TAG_PAUSADO + '</td>' +
+              '<td colspan="' + (REGISTRO_EIXOS.length + 1) + '" style="font-size:.78rem; color:var(--seal-soft);">registro bloqueado enquanto a situação financeira estiver pausada</td></tr>';
+          }
+          const reg = existentePorAluno[s.id];
+          const avaliacoes = (reg && reg.avaliacoes) || {};
+          const selects = REGISTRO_EIXOS.map(eixo => {
+            const atual = avaliacoes[eixo] || '';
+            const opcoes = ['', 'sim', 'parcial', 'nao', 'nao_participou'].map(v =>
+              '<option value="' + v + '"' + (atual === v ? ' selected' : '') + '>' + (v ? LABEL_AVALIACAO[v] : '—') + '</option>'
+            ).join('');
+            return '<td><select data-aluno="' + s.id + '" data-eixo="' + escapeHtmlLocal(eixo) + '">' + opcoes + '</select></td>';
+          }).join('');
+          return '<tr><td data-label="Aluno">' + nome + '</td>' + selects +
+            '<td><input type="text" data-obs="' + s.id + '" value="' + escapeHtmlLocal(reg ? (reg.observacoes || '') : '') + '" style="width:100%; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem;"></td></tr>';
+        }).join('')
+      : '<tr><td colspan="' + (REGISTRO_EIXOS.length + 2) + '" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
+
+    const sessao = opts.vazio ? null : REGISTRO_SESSOES_CACHE.find(x => x.sessao_ordem === ordem);
+    document.getElementById('registroClassePontos').value = sessao ? (sessao.pontos_a_retomar || '') : '';
+    document.getElementById('registroClasseRitmo').value = sessao ? (sessao.ajuste_de_ritmo || '') : '';
+    document.getElementById('registroClasseAlerta').checked = !!(sessao && sessao.alerta_report_card);
+    document.getElementById('registroClasseAlertaMotivo').value = sessao ? (sessao.alerta_report_card_motivo || '') : '';
+    document.getElementById('registroClasseAlertaMotivoWrap').style.display = (sessao && sessao.alerta_report_card) ? 'block' : 'none';
+    document.getElementById('registroClasseMsg').textContent = '';
   }
 
   async function carregarRegistroClasseDaTurma(){
@@ -1618,16 +1687,19 @@ body.dyse-modal-open{overflow:hidden;}
 
     // Status ✓/⚠️ por aula: busca os registros de todos os alunos da turma
     // de uma vez (poucas chamadas — turma é pequena) pra marcar quais aulas
-    // já têm registro completo.
+    // já têm registro completo. Conta ALUNO distinto (uma aula pode ter
+    // vários dias/linhas por aluno).
     const registrosPorAluno = await Promise.all(CHAMADA_STUDENTS.map(s => dyseListRegistrosClasse(s.id)));
-    const registrosPorAula = {};
-    registrosPorAluno.flat().forEach(r => { (registrosPorAula[r.nivel_aula_id] = registrosPorAula[r.nivel_aula_id] || 0); registrosPorAula[r.nivel_aula_id]++; });
+    const registrosPorAula = {}; // nivel_aula_id -> Set(aluno_id)
+    registrosPorAluno.flat().forEach(r => {
+      (registrosPorAula[r.nivel_aula_id] = registrosPorAula[r.nivel_aula_id] || new Set()).add(r.aluno_id);
+    });
 
     const totalRegistravel = CHAMADA_STUDENTS.filter(s => !alunoPausado(s)).length;
     const sel = document.getElementById('registroClasseAulaSelect');
     const valorAnterior = sel.value;
     sel.innerHTML = REGISTRO_AULAS_DA_TURMA.map(a => {
-      const feitos = registrosPorAula[a.id] || 0;
+      const feitos = (registrosPorAula[a.id] || new Set()).size;
       const status = !feitos ? '' : (feitos >= totalRegistravel ? ' ✓' : ' ⚠️');
       return '<option value="' + a.id + '">' + String(a.numero).padStart(2,'0') + '. ' + escapeHtmlLocal(a.topico) + status + '</option>';
     }).join('');
@@ -1686,51 +1758,32 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   async function onRegistroClasseAulaChange(){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
     const aulaId = document.getElementById('registroClasseAulaSelect').value;
     const aula = REGISTRO_AULAS_DA_TURMA.find(a => a.id === aulaId);
     if(!aula) return;
     renderRegistroClasseBlocoA(aula);
 
+    // Dias da aula = linhas do planner. Robustez: também junta ordens que só
+    // têm linha de aluno (planner faltando) — nunca some com um dia.
+    REGISTRO_SESSOES_CACHE = await dyseListRegistroClasseSessoes(turmaId, aulaId);
     const alunoIds = CHAMADA_STUDENTS.map(s => s.id);
-    const existentes = await dyseListRegistrosClasseDaAula(alunoIds, aulaId);
-    const existentePorAluno = {};
-    existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
+    const linhasAluno = await dyseListRegistrosClasseDaAula(alunoIds, aulaId);
+    const ordens = new Set(REGISTRO_SESSOES_CACHE.map(s => s.sessao_ordem || 1));
+    linhasAluno.forEach(r => ordens.add(r.sessao_ordem || 1));
 
-    document.getElementById('registroClasseTheadRow').innerHTML =
-      '<th>Aluno</th>' + REGISTRO_EIXOS.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + '<th>Observações</th>';
-
-    document.getElementById('registroClasseBody').innerHTML = CHAMADA_STUDENTS.length
-      ? CHAMADA_STUDENTS.map(s => {
-          const nome = escapeHtmlLocal(s.full_name || s.email || '');
-          if(alunoPausado(s)){
-            return '<tr class="linha-pausada" style="opacity:.6;"><td data-label="Aluno">' + nome + TAG_PAUSADO + '</td>' +
-              '<td colspan="' + (REGISTRO_EIXOS.length + 1) + '" style="font-size:.78rem; color:var(--seal-soft);">registro bloqueado enquanto a situação financeira estiver pausada</td></tr>';
-          }
-          const reg = existentePorAluno[s.id];
-          const avaliacoes = (reg && reg.avaliacoes) || {};
-          const selects = REGISTRO_EIXOS.map(eixo => {
-            const atual = avaliacoes[eixo] || '';
-            const opts = ['', 'sim', 'parcial', 'nao', 'nao_participou'].map(v =>
-              '<option value="' + v + '"' + (atual === v ? ' selected' : '') + '>' + (v ? LABEL_AVALIACAO[v] : '—') + '</option>'
-            ).join('');
-            return '<td><select data-aluno="' + s.id + '" data-eixo="' + escapeHtmlLocal(eixo) + '">' + opts + '</select></td>';
-          }).join('');
-          return '<tr><td data-label="Aluno">' + nome + '</td>' + selects +
-            '<td><input type="text" data-obs="' + s.id + '" value="' + escapeHtmlLocal(reg ? (reg.observacoes || '') : '') + '" style="width:100%; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem;"></td></tr>';
-        }).join('')
-      : '<tr><td colspan="' + (REGISTRO_EIXOS.length + 2) + '" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
-
-    const sessao = await dyseGetRegistroClasseSessao(document.getElementById('chamadaTurmaSelect').value, aulaId);
-    REGISTRO_DATAS = (sessao && sessao.datas && sessao.datas.length)
-      ? sessao.datas.map(d => String(d).slice(0, 10))
-      : (sessao && sessao.data_aula ? [String(sessao.data_aula).slice(0, 10)] : [dyseHoje()]);
-    renderRegistroClasseDatasChips();
-    document.getElementById('registroClassePontos').value = sessao ? (sessao.pontos_a_retomar || '') : '';
-    document.getElementById('registroClasseRitmo').value = sessao ? (sessao.ajuste_de_ritmo || '') : '';
-    document.getElementById('registroClasseAlerta').checked = !!(sessao && sessao.alerta_report_card);
-    document.getElementById('registroClasseAlertaMotivo').value = sessao ? (sessao.alerta_report_card_motivo || '') : '';
-    document.getElementById('registroClasseAlertaMotivoWrap').style.display = (sessao && sessao.alerta_report_card) ? 'block' : 'none';
-    document.getElementById('registroClasseMsg').textContent = '';
+    const dataDe = ordem => {
+      const s = REGISTRO_SESSOES_CACHE.find(x => (x.sessao_ordem || 1) === ordem);
+      if(s && s.data_aula) return String(s.data_aula).slice(0, 10);
+      const r = linhasAluno.find(x => (x.sessao_ordem || 1) === ordem && x.data_aula);
+      return r ? String(r.data_aula).slice(0, 10) : dyseHoje();
+    };
+    REGISTRO_DIAS = ordens.size
+      ? [...ordens].sort((a, b) => a - b).map(o => ({ sessao_ordem: o, data_aula: dataDe(o), salvo: true }))
+      : [{ sessao_ordem: 1, data_aula: dyseHoje(), salvo: false }];
+    REGISTRO_DIA_ATUAL = REGISTRO_DIAS[0].sessao_ordem;
+    renderRegistroClasseDias();
+    await carregarDiaRegistroClasse();
   }
 
   async function salvarRegistroClasse(){
@@ -1739,8 +1792,9 @@ body.dyse-modal-open{overflow:hidden;}
     const msg = document.getElementById('registroClasseMsg');
     if(!turmaId || !aulaId){ msg.textContent = 'Escolha a turma e a aula.'; return; }
 
-    const datas = [...new Set((REGISTRO_DATAS || []).filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)))].sort();
-    if(!datas.length){ msg.textContent = 'Adicione pelo menos uma data desta aula.'; return; }
+    const ordem = REGISTRO_DIA_ATUAL;
+    const data = (document.getElementById('registroClasseDataInput').value || '').slice(0, 10);
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(data)){ msg.textContent = 'Escolha a data deste dia.'; return; }
 
     const alunosRegistraveis = CHAMADA_STUDENTS.filter(s => !alunoPausado(s));
     const porAluno = {};
@@ -1753,17 +1807,17 @@ body.dyse-modal-open{overflow:hidden;}
     });
 
     const resultados = await Promise.all(alunosRegistraveis.map(s =>
-      dyseUpsertRegistroClasse(s.id, aulaId, {
+      dyseUpsertRegistroClasse(s.id, aulaId, ordem, {
         turma_id: turmaId,
-        datas: datas,
+        data_aula: data,
         avaliacoes: porAluno[s.id].avaliacoes,
         observacoes: porAluno[s.id].observacoes || null
       })
     ));
     const erroAluno = resultados.find(r => r.error);
 
-    const { error: erroSessao } = await dyseUpsertRegistroClasseSessao(turmaId, aulaId, {
-      datas: datas,
+    const { error: erroSessao } = await dyseUpsertRegistroClasseSessao(turmaId, aulaId, ordem, {
+      data_aula: data,
       pontos_a_retomar: document.getElementById('registroClassePontos').value.trim() || null,
       ajuste_de_ritmo: document.getElementById('registroClasseRitmo').value.trim() || null,
       alerta_report_card: document.getElementById('registroClasseAlerta').checked,
@@ -1771,8 +1825,20 @@ body.dyse-modal-open{overflow:hidden;}
     });
 
     if(erroAluno || erroSessao){ msg.textContent = 'Erro ao salvar: ' + ((erroAluno && erroAluno.error.message) || erroSessao.message); return; }
-    msg.textContent = 'Registro de classe salvo!';
+
+    const diaAtual = REGISTRO_DIAS.find(d => d.sessao_ordem === ordem);
+    if(diaAtual){ diaAtual.salvo = true; diaAtual.data_aula = data; }
+    else REGISTRO_DIAS.push({ sessao_ordem: ordem, data_aula: data, salvo: true });
+    renderRegistroClasseDias();
+    msg.textContent = 'Dia ' + ordem + ' salvo!';
     await carregarRegistroClasseDaTurma(); // atualiza os indicadores ✓/⚠️ do seletor de aula
+    // carregarRegistroClasseDaTurma refaz REGISTRO_DIAS via onRegistroClasseAulaChange;
+    // volta o professor pro dia que ele estava editando.
+    if(REGISTRO_DIAS.some(d => d.sessao_ordem === ordem)){
+      REGISTRO_DIA_ATUAL = ordem;
+      renderRegistroClasseDias();
+      await carregarDiaRegistroClasse();
+    }
   }
 
   /* ======================================================================

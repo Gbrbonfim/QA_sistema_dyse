@@ -1794,91 +1794,94 @@ async function dyseListMinhasAulasRegistradas(materiaSlug){
    quem pode ver o aluno agora enxerga isso, mesmo registros antigos
    feitos por outro professor/turma. */
 async function dyseListRegistrosClasse(alunoId){
-  const { data, error } = await sb.from('registros_classe').select('*').eq('aluno_id', alunoId);
+  const { data, error } = await sb.from('registros_classe').select('*')
+    .eq('aluno_id', alunoId)
+    .order('nivel_aula_id', { ascending: true })
+    .order('sessao_ordem', { ascending: true });
   return error ? [] : data;
 }
 
 /* Registros de uma LISTA de alunos numa aula específica — usado pra
-   pré-preencher a tela de registro de uma turma inteira de uma vez. */
-async function dyseListRegistrosClasseDaAula(alunoIds, nivelAulaId){
+   pré-preencher a tela de registro de uma turma inteira de uma vez.
+   "sessaoOrdem" opcional: só as linhas daquele dia (Dia 1, Dia 2…). */
+async function dyseListRegistrosClasseDaAula(alunoIds, nivelAulaId, sessaoOrdem){
   if(!alunoIds || !alunoIds.length) return [];
-  const { data, error } = await sb
-    .from('registros_classe')
-    .select('*')
+  let q = sb.from('registros_classe').select('*')
     .eq('nivel_aula_id', nivelAulaId)
     .in('aluno_id', alunoIds);
+  if(sessaoOrdem != null) q = q.eq('sessao_ordem', sessaoOrdem);
+  const { data, error } = await q;
   return error ? [] : data;
 }
 
-/* Normaliza a lista de datas de uma aula do Registro de Classe: aceita um
-   array de 'YYYY-MM-DD' (ou Date), tira vazios/duplicados e ordena. Se vier
-   vazia, cai pra [dataFallback] ou [hoje] — "data_aula" nunca pode ser nula. */
-function dyseNormalizarDatasAula(datas, dataFallback){
-  const limpas = [...new Set((datas || [])
-    .map(d => String(d || '').slice(0, 10))
-    .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)))].sort();
-  if(limpas.length) return limpas;
-  const fb = String(dataFallback || '').slice(0, 10);
-  return [/^\d{4}-\d{2}-\d{2}$/.test(fb) ? fb : dyseHoje()];
-}
-
 /* "avaliacoes" = { "Tarefa Final": "sim"|"parcial"|"nao"|"nao_participou", ... },
-   chaves = niveis.eixos_avaliacao do nível daquela aula. "campos.datas" é a
-   lista de dias em que a aula foi ministrada; "data_aula" fica sendo o dia
-   mais recente (espelho, pra quem lê só um campo). */
-async function dyseUpsertRegistroClasse(alunoId, nivelAulaId, campos){
+   chaves = niveis.eixos_avaliacao do nível daquela aula. "sessaoOrdem" é o dia
+   da aula (1 = Dia 1, 2 = Dia 2…) — cada dia é uma linha própria, com sua
+   avaliação, sua observação e sua data. */
+async function dyseUpsertRegistroClasse(alunoId, nivelAulaId, sessaoOrdem, campos){
   const session = await dyseGetSession();
   const userId = session ? session.user.id : null;
-  const datas = dyseNormalizarDatasAula(campos.datas, campos.data_aula);
   const { data, error } = await sb
     .from('registros_classe')
     .upsert({
       aluno_id: alunoId,
       nivel_aula_id: nivelAulaId,
+      sessao_ordem: sessaoOrdem || 1,
       turma_id: campos.turma_id || null,
       professor_id: userId,
-      data_aula: datas[datas.length - 1],
-      datas: datas,
+      data_aula: campos.data_aula || dyseHoje(),
       avaliacoes: campos.avaliacoes || {},
       observacoes: campos.observacoes || null,
       criado_por: userId,
       atualizado_por: userId,
       atualizado_em: new Date().toISOString()
-    }, { onConflict: 'aluno_id,nivel_aula_id' })
+    }, { onConflict: 'aluno_id,nivel_aula_id,sessao_ordem' })
     .select('*')
     .maybeSingle();
   return { data, error };
 }
 
-/* ---------- Planner da sessão (Bloco C — por turma+aula) ---------- */
-async function dyseGetRegistroClasseSessao(turmaId, nivelAulaId){
+/* Apaga um dia inteiro de uma aula de uma turma (linhas dos alunos + planner)
+   — usado pelo "Remover o Dia N". Aluno que trocou de turma entre um dia e
+   outro fica com linha gravada com outro turma_id e NÃO é apagado aqui
+   (conservador — não mexe no histórico de outra turma). */
+async function dyseDeleteRegistroClasseDia(turmaId, nivelAulaId, sessaoOrdem){
+  const d1 = await sb.from('registros_classe').delete()
+    .eq('turma_id', turmaId).eq('nivel_aula_id', nivelAulaId).eq('sessao_ordem', sessaoOrdem);
+  const d2 = await sb.from('registro_classe_sessao').delete()
+    .eq('turma_id', turmaId).eq('nivel_aula_id', nivelAulaId).eq('sessao_ordem', sessaoOrdem);
+  return { error: d1.error || d2.error || null };
+}
+
+/* ---------- Planner da sessão (Bloco C — por turma+aula+dia) ---------- */
+/* Todos os dias (planner) de uma aula de uma turma, ordenados por sessao_ordem. */
+async function dyseListRegistroClasseSessoes(turmaId, nivelAulaId){
   const { data, error } = await sb
     .from('registro_classe_sessao')
     .select('*')
     .eq('turma_id', turmaId)
     .eq('nivel_aula_id', nivelAulaId)
-    .maybeSingle();
-  return error ? null : data;
+    .order('sessao_ordem', { ascending: true });
+  return error ? [] : data;
 }
 
-async function dyseUpsertRegistroClasseSessao(turmaId, nivelAulaId, campos){
+async function dyseUpsertRegistroClasseSessao(turmaId, nivelAulaId, sessaoOrdem, campos){
   const session = await dyseGetSession();
   const userId = session ? session.user.id : null;
-  const datas = dyseNormalizarDatasAula(campos.datas, campos.data_aula);
   const { data, error } = await sb
     .from('registro_classe_sessao')
     .upsert({
       turma_id: turmaId,
       nivel_aula_id: nivelAulaId,
-      data_aula: datas[datas.length - 1],
-      datas: datas,
+      sessao_ordem: sessaoOrdem || 1,
+      data_aula: campos.data_aula || dyseHoje(),
       pontos_a_retomar: campos.pontos_a_retomar || null,
       ajuste_de_ritmo: campos.ajuste_de_ritmo || null,
       alerta_report_card: !!campos.alerta_report_card,
       alerta_report_card_motivo: campos.alerta_report_card_motivo || null,
       criado_por: userId,
       atualizado_em: new Date().toISOString()
-    }, { onConflict: 'turma_id,nivel_aula_id' })
+    }, { onConflict: 'turma_id,nivel_aula_id,sessao_ordem' })
     .select('*')
     .maybeSingle();
   return { data, error };
@@ -1951,17 +1954,33 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
     const aula = aulaPorId[r.nivel_aula_id];
     return aula && aula.numero >= aulaInicio && aula.numero <= aulaFim;
   });
-  const registroPorNumero = {};
-  registrosDoIntervalo.forEach(r => { const aula = aulaPorId[r.nivel_aula_id]; if(aula) registroPorNumero[aula.numero] = r; });
+  // Uma aula pode ter mais de um registro (Dia 1, Dia 2…) — agrupa por número
+  // da aula, cada grupo ordenado por sessao_ordem.
+  const registrosPorNumero = {};
+  registrosDoIntervalo.forEach(r => {
+    const aula = aulaPorId[r.nivel_aula_id]; if(!aula) return;
+    (registrosPorNumero[aula.numero] = registrosPorNumero[aula.numero] || []).push(r);
+  });
+  Object.values(registrosPorNumero).forEach(arr => arr.sort((a, b) => (a.sessao_ordem || 1) - (b.sessao_ordem || 1)));
+  // Último valor não-vazio de um eixo entre os dias de uma aula (Dia 2 conta
+  // mais recente que Dia 1) — pros campos que só cabem um valor por aula.
+  const ultimoValorEixo = (rows, eixo) => {
+    for(let i = (rows || []).length - 1; i >= 0; i--){
+      const v = (rows[i].avaliacoes || {})[eixo];
+      if(v && v !== 'nao_participou') return v;
+    }
+    return null;
+  };
 
   // Frequência: presente = tem registro E pelo menos um eixo diferente de
-  // "não participou". Aula sem registro nenhum não conta como ausência —
-  // vira um aviso separado (pode só não ter sido lançada ainda).
+  // "não participou" em ALGUM dia. Aula sem registro nenhum não conta como
+  // ausência — vira um aviso separado (pode só não ter sido lançada ainda).
+  // Aula dada em vários dias continua contando como UMA aula prevista.
   let presentes = 0, semRegistro = 0;
   aulasDoIntervalo.forEach(a => {
-    const r = registroPorNumero[a.numero];
-    if(!r){ semRegistro++; return; }
-    const participou = Object.values(r.avaliacoes || {}).some(v => v !== 'nao_participou');
+    const rows = registrosPorNumero[a.numero];
+    if(!rows || !rows.length){ semRegistro++; return; }
+    const participou = rows.some(r => Object.values(r.avaliacoes || {}).some(v => v !== 'nao_participou'));
     if(participou) presentes++;
   });
   const previstas = aulasDoIntervalo.length;
@@ -1969,6 +1988,8 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
   const frequencia = { aulas_previstas: previstas, aulas_presentes: presentes, percentual, criterio_atingido: percentual >= 75, aulas_sem_registro: semRegistro };
 
   // Avaliação por eixo — uma sugestão por eixo configurado na matéria/nível.
+  // CADA DIA de aula é uma amostra (o usuário quer que dia ruim + dia bom
+  // entrem os dois na conta) — por isso itera registrosDoIntervalo direto.
   const materiaAtual = materias.find(m => m.slug === materiaSlug);
   const eixosNivel = (materiaAtual && materiaAtual.eixos_avaliacao) || [];
   const avaliacaoEixos = {};
@@ -1980,16 +2001,15 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
 
   // Revisões-teste: aulas de revisão dentro do intervalo. Nota do Forms e
   // validade oficial não têm fonte de dado — ficam pendentes; "fluência
-  // oral" é sugerida a partir do eixo "Tarefa Final" daquela aula.
+  // oral" é sugerida a partir do eixo "Tarefa Final" daquela aula (último dia).
   const checkpoints = aulasDoIntervalo.filter(a => /revis[ãa]o/i.test(a.topico));
   const revisoesTeste = checkpoints.map(a => {
-    const r = registroPorNumero[a.numero];
-    const tarefaFinal = r ? (r.avaliacoes || {})['Tarefa Final'] : null;
+    const tarefaFinal = ultimoValorEixo(registrosPorNumero[a.numero], 'Tarefa Final');
     return {
       aula_numero: a.numero,
       aula_topico: a.topico,
       nota_forms: null,
-      fluencia_oral: tarefaFinal && tarefaFinal !== 'nao_participou' ? dyseMapAvaliacaoParaPPR(tarefaFinal) : null,
+      fluencia_oral: tarefaFinal ? dyseMapAvaliacaoParaPPR(tarefaFinal) : null,
       validade_oficial: null
     };
   });
@@ -1998,12 +2018,11 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
   const aulaFinal = aulasDoIntervalo.find(a => /apresenta[çc][ãa]o final/i.test(a.topico));
   let apresentacaoFinal = null;
   if(aulaFinal){
-    const r = registroPorNumero[aulaFinal.numero];
-    const tarefaFinal = r ? (r.avaliacoes || {})['Tarefa Final'] : null;
+    const tarefaFinal = ultimoValorEixo(registrosPorNumero[aulaFinal.numero], 'Tarefa Final');
     apresentacaoFinal = {
       aula_numero: aulaFinal.numero,
       eixos: {
-        'Cumprimento da Tarefa': { nivel: tarefaFinal && tarefaFinal !== 'nao_participou' ? dyseMapAvaliacaoParaPPR(tarefaFinal) : null, observacoes: '' },
+        'Cumprimento da Tarefa': { nivel: tarefaFinal ? dyseMapAvaliacaoParaPPR(tarefaFinal) : null, observacoes: '' },
         'Gramática do Nível': { nivel: null, observacoes: '' },
         'Fluência e Pronúncia': { nivel: null, observacoes: '' },
         'Interação': { nivel: null, observacoes: '' },
@@ -2023,8 +2042,11 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
   const sessoesCandidatas = await dyseListRegistroClasseSessoesPorPares(turmaIds, nivelAulaIds);
   const alertasPlanner = sessoesCandidatas
     .filter(s => s.alerta_report_card && paresValidos.has(s.turma_id + '|' + s.nivel_aula_id))
-    .map(s => { const aula = aulaPorId[s.nivel_aula_id]; return { aula_numero: aula ? aula.numero : null, aula_topico: aula ? aula.topico : null, motivo: s.alerta_report_card_motivo || null }; })
-    .sort((a, b) => (a.aula_numero || 0) - (b.aula_numero || 0));
+    .map(s => {
+      const aula = aulaPorId[s.nivel_aula_id];
+      return { aula_numero: aula ? aula.numero : null, aula_topico: aula ? aula.topico : null, dia: s.sessao_ordem || 1, data: s.data_aula || null, motivo: s.alerta_report_card_motivo || null };
+    })
+    .sort((a, b) => (a.aula_numero || 0) - (b.aula_numero || 0) || (a.dia || 0) - (b.dia || 0));
 
   const dados = {
     frequencia,
@@ -2039,7 +2061,13 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
   };
 
   const aluno = alunos.find(a => a.id === alunoId);
-  const ultimoRegistro = registrosDoIntervalo[registrosDoIntervalo.length - 1];
+  // professor_id do report card = o do registro mais recente do período
+  // (por número da aula, depois por dia).
+  const ultimoRegistro = registrosDoIntervalo.slice().sort((a, b) => {
+    const na = (aulaPorId[a.nivel_aula_id] || {}).numero || 0;
+    const nb = (aulaPorId[b.nivel_aula_id] || {}).numero || 0;
+    return na - nb || (a.sessao_ordem || 1) - (b.sessao_ordem || 1);
+  }).pop();
 
   const { data, error } = await sb
     .from('report_cards')

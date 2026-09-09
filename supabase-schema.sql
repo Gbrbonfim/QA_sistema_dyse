@@ -1389,8 +1389,10 @@ create policy "admins gerenciam aulas do nivel"
   with check (public.is_admin());
 
 -- 12.4) Registro de Classe (Bloco B) — vinculado ao ALUNO, não à turma.
---       "unique(aluno_id, nivel_aula_id)": um registro por aluno por aula,
---       para sempre — troca de turma/professor nunca duplica nem reinicia
+--       "unique(aluno_id, nivel_aula_id, sessao_ordem)": uma aula pode ser
+--       ministrada em MAIS DE UM DIA — cada dia é uma linha própria
+--       (sessao_ordem = "Dia 1", "Dia 2"…), com sua data, sua avaliação e
+--       sua observação. Troca de turma/professor nunca duplica nem reinicia
 --       o histórico. turma_id/professor_id aqui são só o retrato de quem
 --       registrou; quem PODE VER depende da turma atual do aluno (RLS
 --       abaixo), não da turma gravada aqui — é isso que faz o histórico
@@ -1402,11 +1404,9 @@ create table if not exists public.registros_classe (
   turma_id uuid references public.turmas(id) on delete set null,
   professor_id uuid references auth.users(id) on delete set null,
   data_aula date not null default current_date,
-  -- Uma aula pode ser ministrada em MAIS DE UM DIA. "datas" guarda todos os
-  -- dias; "data_aula" segue existindo como espelho do dia mais recente
-  -- (compatibilidade com quem só lê um campo). Continua 1 registro por
-  -- (aluno, aula) — o que é multivalorado é só a data, não a avaliação.
-  datas date[] not null default '{}',
+  -- Qual dia da aula este registro é (1 = Dia 1, 2 = Dia 2…). Aula dada num
+  -- dia só fica sempre com sessao_ordem = 1.
+  sessao_ordem smallint not null default 1,
   avaliacoes jsonb not null default '{}'::jsonb,
   observacoes text,
   criado_por uuid references auth.users(id),
@@ -1415,12 +1415,11 @@ create table if not exists public.registros_classe (
   atualizado_em timestamptz default now()
 );
 
-alter table public.registros_classe add column if not exists datas date[] not null default '{}';
-update public.registros_classe set datas = array[data_aula]
-  where (datas is null or datas = '{}') and data_aula is not null;
+alter table public.registros_classe add column if not exists sessao_ordem smallint not null default 1;
+alter table public.registros_classe drop column if exists datas; -- coluna da tentativa anterior (multidata numa linha só)
 
 alter table public.registros_classe drop constraint if exists registros_classe_aluno_aula_key;
-alter table public.registros_classe add constraint registros_classe_aluno_aula_key unique (aluno_id, nivel_aula_id);
+alter table public.registros_classe add constraint registros_classe_aluno_aula_key unique (aluno_id, nivel_aula_id, sessao_ordem);
 
 create index if not exists idx_registros_classe_aluno on public.registros_classe (aluno_id, nivel_aula_id);
 
@@ -1473,6 +1472,21 @@ create policy "professoras atualizam registros dos alunos das turmas atuais"
     )
   );
 
+-- DELETE: a professora precisa poder APAGAR um dia lançado por engano
+-- (botão "Remover o Dia N" no Registro de Classe). Mesmo critério de
+-- visibilidade das outras políticas (turma ATUAL do aluno).
+drop policy if exists "professoras apagam registros dos alunos das turmas atuais" on public.registros_classe;
+create policy "professoras apagam registros dos alunos das turmas atuais"
+  on public.registros_classe for delete
+  using (
+    exists (
+      select 1 from public.profiles p
+      where p.id = public.registros_classe.aluno_id
+        and p.turma_id is not null
+        and public.teacher_can_see_turma(p.turma_id)
+    )
+  );
+
 drop policy if exists "admins gerenciam todos os registros de classe" on public.registros_classe;
 create policy "admins gerenciam todos os registros de classe"
   on public.registros_classe for all
@@ -1493,8 +1507,8 @@ create table if not exists public.registro_classe_sessao (
   turma_id uuid not null references public.turmas(id) on delete cascade,
   nivel_aula_id uuid not null references public.nivel_aulas(id) on delete restrict,
   data_aula date not null default current_date,
-  -- Mesma ideia de registros_classe: a aula pode acontecer em vários dias.
-  datas date[] not null default '{}',
+  -- Mesma ideia de registros_classe: 1 linha por dia da aula (Dia 1, Dia 2…).
+  sessao_ordem smallint not null default 1,
   pontos_a_retomar text,
   ajuste_de_ritmo text,
   alerta_report_card boolean not null default false,
@@ -1504,12 +1518,11 @@ create table if not exists public.registro_classe_sessao (
   atualizado_em timestamptz default now()
 );
 
-alter table public.registro_classe_sessao add column if not exists datas date[] not null default '{}';
-update public.registro_classe_sessao set datas = array[data_aula]
-  where (datas is null or datas = '{}') and data_aula is not null;
+alter table public.registro_classe_sessao add column if not exists sessao_ordem smallint not null default 1;
+alter table public.registro_classe_sessao drop column if exists datas; -- coluna da tentativa anterior
 
 alter table public.registro_classe_sessao drop constraint if exists registro_classe_sessao_turma_aula_key;
-alter table public.registro_classe_sessao add constraint registro_classe_sessao_turma_aula_key unique (turma_id, nivel_aula_id);
+alter table public.registro_classe_sessao add constraint registro_classe_sessao_turma_aula_key unique (turma_id, nivel_aula_id, sessao_ordem);
 
 alter table public.registro_classe_sessao enable row level security;
 
@@ -2132,7 +2145,9 @@ language sql
 stable
 security definer set search_path = public
 as $$
-  select rc.nivel_aula_id
+  -- "distinct": uma aula pode ter mais de um registro (Dia 1, Dia 2…),
+  -- mas aqui só interessa se ela já foi dada — um id por aula.
+  select distinct rc.nivel_aula_id
   from public.registros_classe rc
   join public.nivel_aulas na on na.id = rc.nivel_aula_id
   where rc.aluno_id = auth.uid() and na.materia_slug = check_materia_slug;
