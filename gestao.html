@@ -3145,9 +3145,10 @@ body.dyse-modal-open{overflow:hidden;}
     const turmaIdsDoProf = new Set(turmasDoProf.map(t => t.id));
     // Mesmo alerta que já existia: aluno cobrado no financeiro pra este
     // professor, mas fora das turmas que ele(a) tem acesso (ou sem turma).
+    // Aluno cancelado/encerrado não é mais cobrado -> não entra no alerta.
     const financeiroAlunosDoProf = STUDENTS.filter(s => {
       const periodo = dyseFindPeriodoAberto(ALUNO_FIN_HISTORICO.filter(h => h.aluno_id === s.id));
-      return periodo && periodo.professor_id === p.id;
+      return periodo && periodo.professor_id === p.id && dyseSituacaoGeraMensalidade(periodo.situacao);
     });
     const alunosParaVerificar = financeiroAlunosDoProf.filter(s => !s.turma_id || !turmaIdsDoProf.has(s.turma_id));
 
