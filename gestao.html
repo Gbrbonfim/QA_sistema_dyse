@@ -979,6 +979,7 @@ body.dyse-modal-open{overflow:hidden;}
       <button type="button" class="auth-tab active" id="finTabModalidades" onclick="showFinPanel('modalidades')">Modalidades</button>
       <button type="button" class="auth-tab" id="finTabPagamentos" onclick="showFinPanel('pagamentos')">Pagamentos</button>
       <button type="button" class="auth-tab" id="finTabRelatorio" onclick="showFinPanel('relatorio')">Relatório</button>
+      <button type="button" class="auth-tab" id="finTabSubstituicoes" onclick="showFinPanel('substituicoes')">Substituições</button>
       <button type="button" class="auth-tab" id="finTabFechamento" onclick="showFinPanel('fechamento')">Fechamento</button>
       <button type="button" class="auth-tab" id="finTabCobrancas" onclick="showFinPanel('cobrancas')">Cobranças (Asaas)</button>
     </div>
@@ -1030,6 +1031,28 @@ body.dyse-modal-open{overflow:hidden;}
             <tr><th>Professor</th><th>Alunos</th><th>Modalidades</th><th>Total previsto</th><th>Total pago</th><th>Status</th><th>Data pagamento</th><th>Ações</th></tr>
           </thead>
           <tbody id="pagamentosBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Substituições de professor -->
+    <div id="finPanelSubstituicoes" style="display:none;">
+      <div class="gestao-card">
+        <div class="gestao-card-title">Registrar substituição</div>
+        <p class="gestao-hint">Quando um professor cobre a aula de outro num dia específico. A fatia daquele dia (1 de N aulas do mês) sai do pagamento do professor titular e vai pro substituto, no rateio do mês — o custo da turma não muda. Registre <b>antes de fechar o mês</b> e depois clique em "Atualizar mês" em Pagamentos.</p>
+        <form class="gestao-form" onsubmit="return handleCreateSubstituicao(event)">
+          <div class="gestao-field" style="flex:1 1 200px;"><label>Turma</label><select id="subTurma" required></select></div>
+          <div class="gestao-field" style="flex:1 1 150px;"><label>Data da aula</label><input type="date" id="subData" required></div>
+          <div class="gestao-field" style="flex:1 1 200px;"><label>Professor substituto</label><select id="subProfessor" required></select></div>
+          <div class="gestao-field" style="flex:1 1 220px;"><label>Observação (opcional)</label><input type="text" id="subObs" placeholder="Ex: Thaís de atestado"></div>
+          <button type="submit" class="btn btn-primary">Registrar</button>
+        </form>
+        <div class="auth-msg" id="subMsg"></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table" id="substituicoesTable">
+          <thead><tr><th>Data</th><th>Turma</th><th>Professor substituto</th><th>Observação</th><th>Ações</th></tr></thead>
+          <tbody id="substituicoesBody"></tbody>
         </table>
       </div>
     </div>
@@ -3584,11 +3607,12 @@ body.dyse-modal-open{overflow:hidden;}
      ====================================================================== */
 
   function showFinPanel(which){
-    ['modalidades','pagamentos','relatorio','fechamento','cobrancas'].forEach(p => {
+    ['modalidades','pagamentos','relatorio','substituicoes','fechamento','cobrancas'].forEach(p => {
       document.getElementById('finTab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('finPanel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
     });
     if(which === 'cobrancas') loadAsaasCobrancas();
+    if(which === 'substituicoes') loadSubstituicoes();
     if(which === 'pagamentos' && !document.getElementById('pagamentosMes').value){
       document.getElementById('pagamentosMes').value = competenciaToMonthInput(dyseMesCompetencia());
       loadPagamentosMes();
@@ -3712,6 +3736,62 @@ body.dyse-modal-open{overflow:hidden;}
     renderModalidadeModalBody();
     renderModalidadesTable();
     return false;
+  }
+
+  /* ---------- Substituições de professor ---------- */
+  let SUBSTITUICOES = [];
+
+  async function loadSubstituicoes(){
+    if(!TURMAS || !TURMAS.length) TURMAS = await dyseListTurmas();
+    if(!TEACHERS || !TEACHERS.length) TEACHERS = await dyseListProfilesByRole('teacher');
+    const selT = document.getElementById('subTurma');
+    const selP = document.getElementById('subProfessor');
+    selT.innerHTML = '<option value="">Selecione…</option>' +
+      TURMAS.slice().sort((a,b) => (a.name||'').localeCompare(b.name||''))
+        .map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name || '') + '</option>').join('');
+    selP.innerHTML = '<option value="">Selecione…</option>' +
+      TEACHERS.slice().sort((a,b) => (a.full_name||'').localeCompare(b.full_name||''))
+        .map(p => '<option value="' + p.id + '">' + escapeHtmlLocal(p.full_name || p.email || '') + '</option>').join('');
+    SUBSTITUICOES = await dyseListSubstituicoes();
+    renderSubstituicoesTable();
+  }
+
+  function renderSubstituicoesTable(){
+    document.getElementById('substituicoesBody').innerHTML = SUBSTITUICOES.map(s => {
+      const t = TURMAS.find(x => x.id === s.turma_id);
+      const p = TEACHERS.find(x => x.id === s.professor_substituto_id);
+      return '<tr>' +
+        '<td>' + formatDateBR(String(s.data_aula || '').slice(0, 10)) + '</td>' +
+        '<td>' + escapeHtmlLocal(t ? t.name : '(turma removida)') + '</td>' +
+        '<td>' + escapeHtmlLocal(p ? (p.full_name || p.email || '') : '(professor removido)') + '</td>' +
+        '<td>' + escapeHtmlLocal(s.observacao || '') + '</td>' +
+        '<td><button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteSubstituicao(' + s.id + ')">Remover</button></td>' +
+      '</tr>';
+    }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma substituição registrada.</td></tr>';
+  }
+
+  async function handleCreateSubstituicao(e){
+    e.preventDefault();
+    const turmaId = document.getElementById('subTurma').value;
+    const data = document.getElementById('subData').value;
+    const profId = document.getElementById('subProfessor').value;
+    const obs = document.getElementById('subObs').value.trim();
+    if(!turmaId || !data || !profId){ flashMsg('subMsg', 'Preencha turma, data e professor substituto.', false); return false; }
+    const { error } = await dyseCreateSubstituicao(turmaId, data, profId, obs);
+    if(error){ flashMsg('subMsg', 'Não foi possível registrar: ' + error.message, false); return false; }
+    document.getElementById('subObs').value = '';
+    flashMsg('subMsg', 'Substituição registrada. Vá em Pagamentos e clique em "Atualizar mês" pra refletir no rateio.', true);
+    SUBSTITUICOES = await dyseListSubstituicoes();
+    renderSubstituicoesTable();
+    return false;
+  }
+
+  async function handleDeleteSubstituicao(id){
+    if(!confirm('Remover esta substituição? No próximo cálculo do mês o valor volta pro professor titular.')) return;
+    const { error } = await dyseDeleteSubstituicao(id);
+    if(error){ alert('Não foi possível remover: ' + error.message); return; }
+    SUBSTITUICOES = await dyseListSubstituicoes();
+    renderSubstituicoesTable();
   }
 
   /* ---------- Ficha financeira do aluno ---------- */

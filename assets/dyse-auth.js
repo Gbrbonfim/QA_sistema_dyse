@@ -1153,6 +1153,36 @@ async function dyseListMinhasCobrancas(){
   return error ? [] : (data || []);
 }
 
+/* ---------- Substituição de professor num dia específico ----------
+   Um professor cobre a aula de outro num dia. dyseGerarMensalidadesDoMes
+   tira a fatia daquele dia (1 de N aulas do mês) do titular e passa pro
+   substituto, na mesma taxa da modalidade do aluno. */
+async function dyseListSubstituicoes(){
+  const { data, error } = await sb.from('substituicoes_professor').select('*')
+    .order('data_aula', { ascending: false });
+  return error ? [] : (data || []);
+}
+async function dyseListSubstituicoesNoMes(mesStr, fimDoMesStr){
+  const { data, error } = await sb.from('substituicoes_professor').select('*')
+    .gte('data_aula', mesStr).lte('data_aula', fimDoMesStr);
+  return error ? [] : (data || []);
+}
+async function dyseCreateSubstituicao(turmaId, dataAula, professorSubstitutoId, observacao){
+  const session = await dyseGetSession();
+  const { data, error } = await sb.from('substituicoes_professor').upsert({
+    turma_id: turmaId,
+    data_aula: dataAula,
+    professor_substituto_id: professorSubstitutoId,
+    observacao: observacao || null,
+    criado_por: session ? session.user.id : null
+  }, { onConflict: 'turma_id,data_aula' }).select('*').maybeSingle();
+  return { data, error };
+}
+async function dyseDeleteSubstituicao(id){
+  const { error } = await sb.from('substituicoes_professor').delete().eq('id', id);
+  return { error };
+}
+
 /* ---------- Mensalidades (razão mensal por aluno) ---------- */
 async function dyseMesFechado(mes){
   const { data, error } = await sb.from('fechamentos_mensais').select('fechado_em').eq('mes_competencia', mes).maybeSingle();
@@ -1179,12 +1209,16 @@ async function dyseMesFechado(mes){
 async function dyseGerarMensalidadesDoMes(mes){
   if(await dyseMesFechado(mes)) return { skipped: true };
 
-  const [historico, modalidades, valores, alunos] = await Promise.all([
+  const [historico, modalidades, valores, alunos, substituicoes] = await Promise.all([
     dyseListAlunoFinanceiroHistorico(),
     dyseListModalidades(),
     dyseListModalidadeValores(),
-    dyseListProfilesByRole('student')
+    dyseListProfilesByRole('student'),
+    dyseListSubstituicoesNoMes(mes, dyseFimDoMes(mes))
   ]);
+
+  const subsPorTurma = {};
+  substituicoes.forEach(x => { (subsPorTurma[x.turma_id] = subsPorTurma[x.turma_id] || []).push(x); });
 
   const modalidadeById = {};
   modalidades.forEach(m => { modalidadeById[m.id] = m; });
@@ -1259,95 +1293,147 @@ async function dyseGerarMensalidadesDoMes(mes){
     return sessoesDoMesCache;
   }
 
+  /* Substituição pontual (substituicoes_professor): um professor cobriu a
+     aula de outro num dia. Tira 1/N (N = dias de aula da turma no mês) da
+     linha do titular e cria uma linha pro substituto, na mesma taxa da
+     modalidade do aluno. Cost-neutral pra escola. Recebe as linhas-base do
+     aluno (com "_periodo" anexado) e devolve as linhas finais, sem "_periodo". */
+  async function aplicarSubstituicoesDoAluno(linhasDoAluno, alunoId){
+    const semPeriodo = arr => arr.map(l => { const c = Object.assign({}, l); delete c._periodo; return c; });
+    const turmaId = turmaIdPorAluno[alunoId];
+    if(!turmaId || !subsPorTurma[turmaId]) return semPeriodo(linhasDoAluno);
+    const subs = subsPorTurma[turmaId].filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
+    if(!subs.length) return semPeriodo(linhasDoAluno);
+
+    const sessoesTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
+    const datasAula = new Set(sessoesTurma.map(s => s.data));
+    subs.forEach(x => datasAula.add(x.data_aula));
+    const N = datasAula.size;
+    if(!N) return semPeriodo(linhasDoAluno);
+
+    const saida = [];
+    linhasDoAluno.forEach(l => {
+      const per = l._periodo || null;
+      const janIni = (per && per.data_inicio > mes) ? per.data_inicio : mes;
+      const janFim = (per && per.data_fim && per.data_fim < fimDoMesStr) ? per.data_fim : fimDoMesStr;
+      const subsAqui = subs.filter(x => (x.professor_substituto_id || null) !== (l.professor_id || null)
+        && x.data_aula >= janIni && x.data_aula <= janFim);
+      const base = Object.assign({}, l); delete base._periodo;
+      if(!subsAqui.length){ saida.push(base); return; }
+
+      const rateCheia = per ? valorProfessorDoPeriodo(per) : Number(l.valor_pago_professor || 0);
+      const recebCentavos = Math.round(Number(l.valor_recebido || 0) * 100);
+      const nMove = Math.min(subsAqui.length, N);
+      const recebMovido = Math.round(recebCentavos * nMove / N);
+      const pagoMovido = Math.round(rateCheia * nMove / N * 100) / 100;
+
+      base.valor_recebido = Math.max(0, recebCentavos - recebMovido) / 100;
+      base.valor_pago_professor = Math.max(0, Math.round((Number(l.valor_pago_professor || 0) - pagoMovido) * 100) / 100);
+      if(base.valor_recebido > 0 || base.valor_pago_professor > 0) saida.push(base);
+
+      const diasPorSub = {};
+      subsAqui.forEach(x => { diasPorSub[x.professor_substituto_id] = (diasPorSub[x.professor_substituto_id] || 0) + 1; });
+      Object.keys(diasPorSub).forEach(subId => {
+        const dias = diasPorSub[subId];
+        saida.push({
+          aluno_id: alunoId, aluno_nome: l.aluno_nome, mes_competencia: mes,
+          professor_id: subId, modalidade_id: l.modalidade_id,
+          valor_recebido: Math.round(recebCentavos * dias / N) / 100,
+          valor_pago_professor: Math.round(rateCheia * dias / N * 100) / 100,
+          atualizado_em: new Date().toISOString()
+        });
+      });
+    });
+
+    // Junta linhas do mesmo professor (substituto que também é titular de outra fatia).
+    const merged = {};
+    saida.forEach(l => {
+      const k = l.professor_id || '';
+      if(!merged[k]){ merged[k] = l; return; }
+      merged[k].valor_recebido = Math.round((merged[k].valor_recebido + l.valor_recebido) * 100) / 100;
+      merged[k].valor_pago_professor = Math.round((merged[k].valor_pago_professor + l.valor_pago_professor) * 100) / 100;
+    });
+    return Object.values(merged);
+  }
+
   const linhas = [];
   for(const alunoId of Object.keys(periodosPorAluno)){
     const periodos = periodosPorAluno[alunoId];
     const nomeAluno = nomeAlunoById[alunoId] || null;
+    const linhasDoAluno = [];
 
     if(periodos.length === 1){
       const h = periodos[0];
       const fator = await fatorProporcionalPeriodo(h);
-      linhas.push({
+      linhasDoAluno.push({
         aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
         professor_id: h.professor_id, modalidade_id: h.modalidade_id,
         valor_recebido: Number(h.valor_mensal_aluno || 0),
         valor_pago_professor: Math.round(valorProfessorDoPeriodo(h) * fator * 100) / 100,
-        atualizado_em: new Date().toISOString()
+        atualizado_em: new Date().toISOString(),
+        _periodo: h
       });
-      continue;
+    } else {
+      // Mais de um período tocando o mês (troca de professor no meio do mês).
+      const vencedor = periodos[0]; // mais recente — fallback e referência de valor_mensal_aluno
+      let contagemPorProfessor = new Map(); // professor_id(ou null) -> nº de aulas na janela
+
+      {
+        const sessoes = await sessoesDoMes();
+        const turmaAtual = turmaIdPorAluno[alunoId];
+        const sessoesRef = turmaAtual ? sessoes.filter(s => s.turma_id === turmaAtual) : sessoes;
+        periodos.forEach(h => {
+          const profId = h.professor_id || null;
+          const ini = h.data_inicio > mes ? h.data_inicio : mes;
+          const fim = (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr;
+          const naJanela = s => s.data >= ini && s.data <= fim;
+          let n = sessoesRef.filter(naJanela).length;
+          if(!n) n = sessoes.filter(s => (s.professor_id || null) === profId && naJanela(s)).length;
+          if(n) contagemPorProfessor.set(profId, (contagemPorProfessor.get(profId) || 0) + n);
+        });
+      }
+
+      if(!contagemPorProfessor.size){
+        // Nenhuma aula registrada no mês — o período mais recente leva o mês inteiro.
+        linhasDoAluno.push({
+          aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
+          professor_id: vencedor.professor_id, modalidade_id: vencedor.modalidade_id,
+          valor_recebido: Number(vencedor.valor_mensal_aluno || 0),
+          valor_pago_professor: valorProfessorDoPeriodo(vencedor),
+          atualizado_em: new Date().toISOString(),
+          _periodo: vencedor
+        });
+      } else {
+        // Rateio proporcional às AULAS na janela de cada professor. valor_recebido
+        // é uma "panela" única (o aluno paga UMA mensalidade) — divide em centavos
+        // exatos, sobra pro último item. valor_pago_professor NÃO é panela: cada
+        // professor tem sua taxa, multiplicada pela PRÓPRIA fração de aulas.
+        const totalContagem = [...contagemPorProfessor.values()].reduce((s, n) => s + n, 0);
+        const totalCentavos = Math.round(Number(vencedor.valor_mensal_aluno || 0) * 100);
+        const entradas = [...contagemPorProfessor.entries()].sort((a, b) => String(a[0]).localeCompare(String(b[0])));
+
+        let distribuidos = 0;
+        entradas.forEach(([professorId, contagem], idx) => {
+          const periodo = periodos.find(h => (h.professor_id || null) === professorId) || vencedor;
+          const share = contagem / totalContagem;
+          const isUltimo = idx === entradas.length - 1;
+          const centavos = isUltimo ? (totalCentavos - distribuidos) : Math.round(totalCentavos * share);
+          distribuidos += centavos;
+          const valorRecebido = centavos / 100;
+          const valorProfessor = Math.round(valorProfessorDoPeriodo(periodo) * share * 100) / 100;
+          if(valorRecebido <= 0 && valorProfessor <= 0) return;
+          linhasDoAluno.push({
+            aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
+            professor_id: professorId, modalidade_id: periodo.modalidade_id,
+            valor_recebido: valorRecebido, valor_pago_professor: valorProfessor,
+            atualizado_em: new Date().toISOString(),
+            _periodo: periodo
+          });
+        });
+      }
     }
 
-    // Mais de um período tocando o mês (troca de professor no meio do mês).
-    const vencedor = periodos[0]; // mais recente — usado no fallback e como referência de valor_mensal_aluno
-    let contagemPorProfessor = null; // Map professor_id(ou null) -> nº de aulas na janela do período
-
-    {
-      const sessoes = await sessoesDoMes();
-      const turmaAtual = turmaIdPorAluno[alunoId];
-      const sessoesRef = turmaAtual ? sessoes.filter(s => s.turma_id === turmaAtual) : sessoes;
-      contagemPorProfessor = new Map();
-      periodos.forEach(h => {
-        const profId = h.professor_id || null;
-        const ini = h.data_inicio > mes ? h.data_inicio : mes;
-        const fim = (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr;
-        const naJanela = s => s.data >= ini && s.data <= fim;
-        // Aulas da turma atual do aluno dentro da janela deste período.
-        let n = sessoesRef.filter(naJanela).length;
-        // Fallback: período sem aula da turma atual na janela (troca de
-        // professor veio junto com troca de turma) — usa as aulas dadas por
-        // ESTE professor em qualquer turma, na janela.
-        if(!n) n = sessoes.filter(s => (s.professor_id || null) === profId && naJanela(s)).length;
-        if(n) contagemPorProfessor.set(profId, (contagemPorProfessor.get(profId) || 0) + n);
-      });
-      if(!contagemPorProfessor.size) contagemPorProfessor = null;
-    }
-
-    if(!contagemPorProfessor || !contagemPorProfessor.size){
-      // Fallback: nenhuma aula registrada no mês —
-      // o período mais recente leva o mês inteiro (comportamento antigo).
-      linhas.push({
-        aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
-        professor_id: vencedor.professor_id, modalidade_id: vencedor.modalidade_id,
-        valor_recebido: Number(vencedor.valor_mensal_aluno || 0),
-        valor_pago_professor: valorProfessorDoPeriodo(vencedor),
-        atualizado_em: new Date().toISOString()
-      });
-      continue;
-    }
-
-    // Rateio proporcional às AULAS que caíram na janela de cada professor.
-    // valor_recebido é uma "panela" única (o aluno paga UMA mensalidade) —
-    // divide em centavos exatos entre as linhas, sobra pro último item
-    // (ordem determinística por professor_id). valor_pago_professor NÃO é
-    // panela compartilhada: cada professor tem sua própria taxa (pode ter
-    // modalidade/valor diferente), multiplicada pela PRÓPRIA fração de aulas.
-    const totalContagem = [...contagemPorProfessor.values()].reduce((s, n) => s + n, 0);
-    const totalCentavos = Math.round(Number(vencedor.valor_mensal_aluno || 0) * 100);
-    const entradas = [...contagemPorProfessor.entries()].sort((a, b) => String(a[0]).localeCompare(String(b[0])));
-
-    let distribuidos = 0;
-    entradas.forEach(([professorId, contagem], idx) => {
-      const periodo = periodos.find(h => (h.professor_id || null) === professorId) || vencedor;
-      const share = contagem / totalContagem;
-      const isUltimo = idx === entradas.length - 1;
-      const centavos = isUltimo ? (totalCentavos - distribuidos) : Math.round(totalCentavos * share);
-      distribuidos += centavos;
-      const valorRecebido = centavos / 100;
-      const valorProfessor = Math.round(valorProfessorDoPeriodo(periodo) * share * 100) / 100;
-      // Só pula a linha se não houver NADA a registrar pra este professor —
-      // valor_recebido é o valor mensal do ALUNO (pode estar zerado por erro
-      // de cadastro, ou genuinamente ser R$0 nesse período) e valor_professor
-      // vem da tabela de modalidade, os dois são independentes: um valor
-      // recebido zerado não pode apagar a comissão da professora que deu a
-      // aula de verdade.
-      if(valorRecebido <= 0 && valorProfessor <= 0) return;
-      linhas.push({
-        aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
-        professor_id: professorId, modalidade_id: periodo.modalidade_id,
-        valor_recebido: valorRecebido, valor_pago_professor: valorProfessor,
-        atualizado_em: new Date().toISOString()
-      });
-    });
+    linhas.push(...await aplicarSubstituicoesDoAluno(linhasDoAluno, alunoId));
   }
 
   // Apaga linhas "órfãs" — tanto aluno que SUMIU inteiramente do cálculo do
