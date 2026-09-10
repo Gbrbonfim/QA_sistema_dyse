@@ -4980,8 +4980,9 @@ body.dyse-modal-open{overflow:hidden;}
       // "sistema zerado / falta preencher".
       const diverge = valorAsaas > 0 && Math.abs(valorSistema - valorAsaas) >= 0.01;
 
-      // NF: pega o boleto pago mais recente e mostra o estado da nota dele.
-      const nfAlvo = pagas.find(c => c.billing_type === 'BOLETO');
+      // NF: a gestão pode emitir de qualquer cobrança paga (o aluno só de boleto).
+      // Pega a paga mais recente que ainda não tem NF, senão a mais recente com NF.
+      const nfAlvo = pagas.find(c => !c.nota_fiscal_id && !c.nota_fiscal_url) || pagas[0];
       let nfAcao = '';
       if(nfAlvo){
         if(nfAlvo.nota_fiscal_url){
