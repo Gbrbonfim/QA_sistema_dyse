@@ -283,6 +283,47 @@ async function acaoCobranca(req, res, admin){
   });
 }
 
+// Texto padrão da "Descrição do Serviço" da NF (o mesmo que o Asaas mostra
+// pré-preenchido no modal "Emitir Nota Fiscal"). Usado quando não há
+// ASAAS_NF_SERVICE_DESCRIPTION na Vercel.
+const NF_DESCRICAO_PADRAO =
+  'Aulas particulares ministradas semanalmente visando instruir o aluno a ' +
+  'aprender, aprimorar ou alcançar o nível de fluência na língua inglesa, ' +
+  'mediante atividades, testes, provas e conversação utilizando o idioma.';
+
+// O Asaas EXIGE identificar o serviço municipal na criação da NF
+// (municipalServiceName + um entre municipalServiceId / municipalServiceCode).
+// Quando a prefeitura tem catálogo, /invoices/municipalServices lista os
+// serviços já configurados na conta — pegamos o de idiomas (ou o 1º). Sem
+// catálogo, caímos no ASAAS_NF_SERVICE_CODE/_NAME da Vercel.
+async function resolverServicoMunicipalNF(){
+  const nomeAlvo = String(process.env.ASAAS_NF_SERVICE_NAME || 'idioma').trim().toLowerCase();
+  let servicos = [];
+  try{
+    const r = await asaasFetch('/invoices/municipalServices?limit=100');
+    servicos = (r && Array.isArray(r.data)) ? r.data : [];
+  }catch(e){ servicos = []; }
+
+  let escolhido = null;
+  if(servicos.length){
+    escolhido =
+      servicos.find(s => /idioma|ingl[eê]s|instru|ensino|educac/i.test(String(s.description || ''))) ||
+      (nomeAlvo && servicos.find(s => String(s.description || '').toLowerCase().includes(nomeAlvo))) ||
+      servicos[0];
+  }
+
+  const codeEnv = String(process.env.ASAAS_NF_SERVICE_CODE || '').trim();
+  const nameEnv = String(process.env.ASAAS_NF_SERVICE_NAME || '').trim();
+  return {
+    municipalServiceId: escolhido && escolhido.id ? escolhido.id : undefined,
+    municipalServiceCode: escolhido ? undefined : (codeEnv || undefined),
+    municipalServiceName:
+      (escolhido && String(escolhido.description || '').trim()) ||
+      nameEnv ||
+      'Instrução em idioma estrangeiro'
+  };
+}
+
 /* --------------------------------------------------------------------
    action=nota
    ------------------------------------------------------------------ */
@@ -302,9 +343,8 @@ async function acaoNota(req, res, admin, ctx){
     }
   }
 
-  // "Descrição do Serviço" nunca pode ir vazia pro Asaas — assinatura recorrente
-  // costuma vir com description nulo. Ordem: env var → descrição da cobrança →
-  // um texto padrão com o nome do aluno e o vencimento.
+  // "Descrição do Serviço" nunca pode ir vazia pro Asaas. Ordem: env var da
+  // Vercel → texto institucional padrão → descrição da cobrança → genérico.
   let nomeAluno = '';
   if(cobr.aluno_id){
     const { data: pf } = await admin.from('profiles').select('full_name').eq('id', cobr.aluno_id).maybeSingle();
@@ -312,26 +352,39 @@ async function acaoNota(req, res, admin, ctx){
   }
   const serviceDescription =
     String(process.env.ASAAS_NF_SERVICE_DESCRIPTION || '').trim() ||
+    NF_DESCRICAO_PADRAO ||
     String(cobr.descricao || '').trim() ||
     ('Mensalidade de curso de idiomas' +
       (nomeAluno ? ' - ' + nomeAluno : '') +
       (cobr.vencimento ? ' - venc. ' + cobr.vencimento : ''));
 
   const lista = await asaasFetch('/invoices?payment=' + encodeURIComponent(cobrancaId) + '&limit=10');
-  let invoice = (lista && lista.data && lista.data[0]) || null;
+  // Ignora NFs que já falharam/foram canceladas — vamos gerar de novo.
+  let invoice = (lista && Array.isArray(lista.data))
+    ? (lista.data.find(i => !['ERROR', 'CANCELLED', 'CANCELLATION_DENIED'].includes(i.status)) || null)
+    : null;
 
   if(!invoice){
+    const servico = await resolverServicoMunicipalNF();
+    if(!servico.municipalServiceId && !servico.municipalServiceCode){
+      throw new HttpError(422,
+        'A emissão de NF não está configurada: o Asaas não retornou nenhum serviço municipal ' +
+        'e não há ASAAS_NF_SERVICE_CODE na Vercel. Configure o serviço em Configurações → ' +
+        'Notas Fiscais no Asaas (ou defina ASAAS_NF_SERVICE_CODE/ASAAS_NF_SERVICE_NAME).');
+    }
     invoice = await asaasFetch('/invoices', {
       method: 'POST',
       body: {
         payment: cobrancaId,
         serviceDescription: serviceDescription,
-        observations: 'Nota fiscal referente à cobrança ' + cobrancaId + '.',
+        observations: 'Nota fiscal referente à cobrança ' + cobrancaId +
+          (nomeAluno ? ' — ' + nomeAluno : '') + '.',
         value: cobr.valor,
         deductions: 0,
         effectiveDate: new Date().toISOString().slice(0, 10),
-        municipalServiceCode: process.env.ASAAS_NF_SERVICE_CODE || undefined,
-        municipalServiceName: process.env.ASAAS_NF_SERVICE_NAME || undefined,
+        municipalServiceId: servico.municipalServiceId,
+        municipalServiceCode: servico.municipalServiceCode,
+        municipalServiceName: servico.municipalServiceName,
         taxes: { retainIss: false, iss: 0, cofins: 0, csll: 0, inss: 0, ir: 0, pis: 0 }
       }
     });
