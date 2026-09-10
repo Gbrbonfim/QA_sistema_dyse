@@ -2925,3 +2925,41 @@ create trigger trg_audit_substituicoes
   for each row execute procedure public.log_financeiro_auditoria();
 
 -- ======================================================================
+-- 23) DESCONTOS no pagamento do professor (ex.: plano de saúde)
+--     Lançados pela gestão por professor + mês. Colunas "Descontos"/
+--     "Descrição" da aba Pagamentos; "A pagar" = Total previsto − Descontos.
+--     (Mesmo conteúdo de migracao-descontos-professor.sql.)
+-- ======================================================================
+create table if not exists public.descontos_professor (
+  id bigint generated always as identity primary key,
+  professor_id uuid not null references auth.users(id) on delete cascade,
+  mes_competencia date not null,
+  tipo text not null default 'outro' check (tipo in ('plano_saude','substituicao_aulas','outro')),
+  valor numeric(10,2) not null check (valor >= 0),
+  descricao text,
+  criado_por uuid references auth.users(id) on delete set null,
+  criado_em timestamptz default now()
+);
+
+create index if not exists idx_descontos_professor_prof_mes
+  on public.descontos_professor (professor_id, mes_competencia);
+
+alter table public.descontos_professor enable row level security;
+
+drop policy if exists "gestao gerencia descontos professor" on public.descontos_professor;
+create policy "gestao gerencia descontos professor"
+  on public.descontos_professor for all
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
+
+drop policy if exists "professor ve os proprios descontos" on public.descontos_professor;
+create policy "professor ve os proprios descontos"
+  on public.descontos_professor for select
+  using (professor_id = auth.uid());
+
+drop trigger if exists trg_audit_descontos_professor on public.descontos_professor;
+create trigger trg_audit_descontos_professor
+  after insert or update or delete on public.descontos_professor
+  for each row execute procedure public.log_financeiro_auditoria();
+
+-- ======================================================================

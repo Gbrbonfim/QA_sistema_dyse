@@ -1028,7 +1028,7 @@ body.dyse-modal-open{overflow:hidden;}
       <div style="overflow-x:auto;">
         <table class="dash-table" id="pagamentosTable">
           <thead>
-            <tr><th>Professor</th><th>Alunos</th><th>Modalidades</th><th>Total previsto</th><th>Total pago</th><th>Status</th><th>Data pagamento</th><th>Ações</th></tr>
+            <tr><th>Professor</th><th>Alunos</th><th>Modalidades</th><th>Total previsto</th><th>Descontos</th><th>Descrição</th><th>A pagar</th><th>Total pago</th><th>Status</th><th>Data pagamento</th><th>Ações</th></tr>
           </thead>
           <tbody id="pagamentosBody"></tbody>
         </table>
@@ -4332,23 +4332,42 @@ body.dyse-modal-open{overflow:hidden;}
   let PAGAMENTOS_MES_ATUAL = dyseMesCompetencia();
   let PAGAMENTOS_CACHE = [];
 
+  let PAGAMENTOS_DESCONTOS = [];
+  let PAGAMENTOS_SUBSTITUICOES = [];
+
   async function loadPagamentosMes(){
     const mes = monthInputToCompetencia(document.getElementById('pagamentosMes').value);
     PAGAMENTOS_MES_ATUAL = mes;
     await dyseGerarMensalidadesDoMes(mes);
-    const [mensalidades, pagamentos] = await Promise.all([
+    const [mensalidades, pagamentos, historicoMes, descontos, substituicoes] = await Promise.all([
       dyseListMensalidades(mes),
-      dyseListPagamentosProfessores(mes)
+      dyseListPagamentosProfessores(mes),
+      dyseListPagamentosHistoricoMes(mes),
+      dyseListDescontosProfessor(mes),
+      dyseListSubstituicoesNoMes(mes, dyseFimDoMes(mes))
     ]);
     PAGAMENTOS_CACHE = pagamentos;
-    renderPagamentosTable(mensalidades, pagamentos);
+    PAGAMENTOS_DESCONTOS = descontos;
+    PAGAMENTOS_SUBSTITUICOES = substituicoes;
+    renderPagamentosTable(mensalidades, pagamentos, historicoMes);
   }
 
-  function renderPagamentosTable(mensalidades, pagamentos){
+  const DESCONTO_TIPO_LABELS = { plano_saude: 'Plano de saúde', substituicao_aulas: 'Substituição de aulas', outro: 'Outro' };
+
+  function renderPagamentosTable(mensalidades, pagamentos, historicoMes){
+    historicoMes = historicoMes || [];
     const porProfessor = {};
     mensalidades.forEach(m => {
       if(!m.professor_id) return;
       (porProfessor[m.professor_id] = porProfessor[m.professor_id] || []).push(m);
+    });
+
+    // "Total pago" = soma de todas as parcelas registradas no mês (a linha de
+    // estado atual só guarda o último "Salvar").
+    const pagoPorProfessor = {};
+    historicoMes.forEach(h => {
+      if(h.status === 'cancelado' || h.valor_pago == null) return;
+      pagoPorProfessor[h.professor_id] = (pagoPorProfessor[h.professor_id] || 0) + Number(h.valor_pago);
     });
 
     const rows = Object.keys(porProfessor).map(profId => {
@@ -4356,6 +4375,23 @@ body.dyse-modal-open{overflow:hidden;}
       const professor = TEACHERS.find(t => t.id === profId);
       const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
       const pagamento = pagamentos.find(p => p.professor_id === profId);
+
+      const descontosDoProf = PAGAMENTOS_DESCONTOS.filter(d => d.professor_id === profId);
+      const totalDescontos = descontosDoProf.reduce((s,d) => s + Number(d.valor || 0), 0);
+      const aPagar = Math.round((totalPrevisto - totalDescontos) * 100) / 100;
+
+      // Substituição: informativo (já está no Total previsto, não desconta de novo).
+      const turmasDoProf = new Set(TEACHER_TURMAS.filter(tt => tt.teacher_id === profId).map(tt => tt.turma_id));
+      const subsCoberto = PAGAMENTOS_SUBSTITUICOES.filter(s => turmasDoProf.has(s.turma_id) && s.professor_substituto_id !== profId);
+      const subsCobriu = PAGAMENTOS_SUBSTITUICOES.filter(s => s.professor_substituto_id === profId);
+
+      const descPartes = descontosDoProf.map(d =>
+        (DESCONTO_TIPO_LABELS[d.tipo] || d.tipo) + (d.descricao ? ' (' + d.descricao + ')' : '') + ': ' + formatMoney(Number(d.valor || 0))
+      );
+      if(subsCoberto.length) descPartes.push('Substituído em ' + subsCoberto.map(s => formatDateBR(String(s.data_aula).slice(0,10))).join(', ') + ' (já no previsto)');
+      if(subsCobriu.length) descPartes.push('Cobriu ' + subsCobriu.map(s => formatDateBR(String(s.data_aula).slice(0,10))).join(', ') + ' (já no previsto)');
+      const descricaoTexto = descPartes.join(' · ');
+
       const modalidadesResumo = {};
       linhas.forEach(l => {
         const mod = MODALIDADES.find(m => m.id === l.modalidade_id);
@@ -4363,7 +4399,12 @@ body.dyse-modal-open{overflow:hidden;}
         modalidadesResumo[nome] = (modalidadesResumo[nome] || 0) + 1;
       });
       const modalidadesTexto = Object.keys(modalidadesResumo).map(n => n + ' (' + modalidadesResumo[n] + ')').join(', ');
-      return { profId, professor, linhas, totalPrevisto, pagamento, modalidadesTexto, status: pagamento ? pagamento.status : 'pendente' };
+      return {
+        profId, professor, linhas, totalPrevisto, pagamento, modalidadesTexto,
+        totalDescontos, aPagar, descricaoTexto,
+        totalPago: pagoPorProfessor[profId] || 0,
+        status: pagamento ? pagamento.status : 'pendente'
+      };
     });
 
     document.getElementById('pagamentosBody').innerHTML = rows.length ? rows.map(r => {
@@ -4381,20 +4422,23 @@ body.dyse-modal-open{overflow:hidden;}
         '<td><span class="pill-count">' + r.linhas.length + '</span></td>' +
         '<td style="font-size:.78rem;">' + escapeHtmlLocal(r.modalidadesTexto) + '</td>' +
         '<td>' + formatMoney(r.totalPrevisto) + '</td>' +
-        '<td>' + (r.pagamento && r.pagamento.valor_pago != null ? formatMoney(r.pagamento.valor_pago) : '-') + '</td>' +
+        '<td>' + (r.totalDescontos > 0 ? '<span style="color:var(--bad);">− ' + formatMoney(r.totalDescontos) + '</span>' : '-') + '</td>' +
+        '<td style="font-size:.76rem; max-width:220px; white-space:normal;">' + (r.descricaoTexto ? escapeHtmlLocal(r.descricaoTexto) : '-') + '</td>' +
+        '<td><b>' + formatMoney(r.aPagar) + '</b></td>' +
+        '<td>' + (r.totalPago > 0 ? formatMoney(r.totalPago) : '-') + '</td>' +
         '<td>' + statusBadge(r.status) + '</td>' +
         '<td>' + (r.pagamento && r.pagamento.data_pagamento ? formatDateBR(r.pagamento.data_pagamento) : '-') + '</td>' +
         '<td><button type="button" class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openPagamentoModal(\'' + r.profId + '\')">Registrar pagamento</button></td>' +
       '</tr>' +
       '<tr class="pag-detalhe-row" id="' + detalheId + '" style="display:none;">' +
-        '<td colspan="8">' +
+        '<td colspan="11">' +
           '<table class="dash-table" style="margin:0; box-shadow:none;">' +
             '<thead><tr><th>Aluno</th><th>Modalidade</th><th>Valor pago ao professor</th></tr></thead>' +
             '<tbody>' + detalheLinhas + '</tbody>' +
           '</table>' +
         '</td>' +
       '</tr>';
-    }).join('') : '<tr><td colspan="8" style="text-align:center; opacity:.6;">Nenhum aluno com mensalidade gerada para este mês ainda.</td></tr>';
+    }).join('') : '<tr><td colspan="11" style="text-align:center; opacity:.6;">Nenhum aluno com mensalidade gerada para este mês ainda.</td></tr>';
   }
 
   function togglePagamentoDetalhe(profId){
@@ -4425,12 +4469,67 @@ body.dyse-modal-open{overflow:hidden;}
         '<div class="gestao-field"><label>Observações</label><input type="text" id="pgObservacoes" value="' + escapeHtmlLocal(pagamento ? (pagamento.observacoes || '') : '') + '"></div>' +
         '<button type="submit" class="btn btn-primary">Salvar pagamento</button>' +
       '</form>' +
+      '<div class="report-section-head">Descontos do mês</div>' +
+      '<p class="gestao-hint">Ex.: plano de saúde. A substituição de aulas já entra no Total previsto pela aba Substituições, não precisa lançar aqui de novo.</p>' +
+      '<form class="gestao-form" onsubmit="return handleAddDescontoProfessor(event)">' +
+        '<div class="gestao-field" style="flex:1 1 150px;"><label>Tipo</label><select id="descTipo">' +
+          '<option value="plano_saude">Plano de saúde</option>' +
+          '<option value="substituicao_aulas">Substituição de aulas</option>' +
+          '<option value="outro">Outro</option>' +
+        '</select></div>' +
+        '<div class="gestao-field" style="flex:0 1 120px;"><label>Valor (R$)</label><input type="number" step="0.01" min="0" id="descValor" required></div>' +
+        '<div class="gestao-field" style="flex:1 1 180px;"><label>Descrição (opcional)</label><input type="text" id="descDescricao"></div>' +
+        '<button type="submit" class="btn btn-ghost btn-sm">+ Adicionar</button>' +
+      '</form>' +
+      '<div id="descontosProfList"><p class="report-line" style="opacity:.6;">Carregando...</p></div>' +
       '<div class="report-section-head">Histórico de pagamentos registrados neste mês</div>' +
       '<div id="pagamentoHistoricoList"><p class="report-line" style="opacity:.6;">Carregando...</p></div>';
     document.getElementById('pagamentoModal').classList.add('open');
     document.getElementById('pagamentoModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
+    await renderDescontosProfList();
     await renderPagamentoHistoricoList();
+  }
+
+  async function renderDescontosProfList(){
+    const el = document.getElementById('descontosProfList');
+    if(!el) return;
+    const descontos = (await dyseListDescontosProfessor(PAGAMENTOS_MES_ATUAL))
+      .filter(d => d.professor_id === CURRENT_PAGAMENTO_PROF_ID);
+    const total = descontos.reduce((s,d) => s + Number(d.valor || 0), 0);
+    el.innerHTML = descontos.length
+      ? descontos.map(d =>
+          '<div class="chip-toggle-row" style="justify-content:space-between;">' +
+            '<span class="name">' + (DESCONTO_TIPO_LABELS[d.tipo] || d.tipo) + (d.descricao ? ' · ' + escapeHtmlLocal(d.descricao) : '') + ' · <b>' + formatMoney(Number(d.valor || 0)) + '</b></span>' +
+            '<button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteDescontoProfessor(' + d.id + ')">Remover</button>' +
+          '</div>'
+        ).join('') + '<p class="report-line" style="margin-top:6px;"><b>Total de descontos: ' + formatMoney(total) + '</b></p>'
+      : '<p class="report-line" style="opacity:.6;">Nenhum desconto neste mês.</p>';
+  }
+
+  async function handleAddDescontoProfessor(e){
+    e.preventDefault();
+    const valor = parseFloat(document.getElementById('descValor').value);
+    if(!(valor >= 0)) return false;
+    const { error } = await dyseCreateDescontoProfessor(CURRENT_PAGAMENTO_PROF_ID, PAGAMENTOS_MES_ATUAL, {
+      tipo: document.getElementById('descTipo').value,
+      valor: valor,
+      descricao: document.getElementById('descDescricao').value.trim() || null
+    });
+    if(error){ alert('Não foi possível adicionar o desconto: ' + error.message); return false; }
+    document.getElementById('descValor').value = '';
+    document.getElementById('descDescricao').value = '';
+    await renderDescontosProfList();
+    await loadPagamentosMes();
+    return false;
+  }
+
+  async function handleDeleteDescontoProfessor(id){
+    if(!confirm('Remover este desconto?')) return;
+    const { error } = await dyseDeleteDescontoProfessor(id);
+    if(error){ alert('Não foi possível remover: ' + error.message); return; }
+    await renderDescontosProfList();
+    await loadPagamentosMes();
   }
 
   async function renderPagamentoHistoricoList(){

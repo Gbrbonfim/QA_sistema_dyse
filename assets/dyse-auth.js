@@ -2470,6 +2470,27 @@ async function dyseListMyPagamentos(){
   return error ? [] : data;
 }
 
+/* Histórico (todas as parcelas) e descontos do professor logado — pra somar o
+   "Total pago" real e mostrar "A pagar = previsto − descontos" no painel dele. */
+async function dyseListMyPagamentoHistorico(){
+  const session = await dyseGetSession();
+  if(!session) return [];
+  const { data, error } = await sb
+    .from('pagamentos_professores_historico')
+    .select('*')
+    .eq('professor_id', session.user.id);
+  return error ? [] : data;
+}
+async function dyseListMyDescontos(){
+  const session = await dyseGetSession();
+  if(!session) return [];
+  const { data, error } = await sb
+    .from('descontos_professor')
+    .select('*')
+    .eq('professor_id', session.user.id);
+  return error ? [] : data;
+}
+
 async function dyseRegistrarPagamentoProfessor(professorId, mes, campos){
   const session = await dyseGetSession();
   const userId = session ? session.user.id : null;
@@ -2513,6 +2534,41 @@ async function dyseListPagamentoProfessorHistorico(professorId, mes){
     .eq('mes_competencia', mes)
     .order('registrado_em', { ascending: false });
   return error ? [] : data;
+}
+
+/* Histórico de pagamentos de TODOS os professores num mês — usado pra somar o
+   "Total pago" (a linha de estado atual só guarda o último "Salvar", não a
+   soma das parcelas do mês). */
+async function dyseListPagamentosHistoricoMes(mes){
+  const { data, error } = await sb
+    .from('pagamentos_professores_historico')
+    .select('*')
+    .eq('mes_competencia', mes);
+  return error ? [] : data;
+}
+
+/* ---------- Descontos no pagamento do professor (ex.: plano de saúde) ---------- */
+async function dyseListDescontosProfessor(mes){
+  let q = sb.from('descontos_professor').select('*').order('criado_em', { ascending: false });
+  if(mes) q = q.eq('mes_competencia', mes);
+  const { data, error } = await q;
+  return error ? [] : data;
+}
+async function dyseCreateDescontoProfessor(professorId, mes, campos){
+  const session = await dyseGetSession();
+  const { data, error } = await sb.from('descontos_professor').insert({
+    professor_id: professorId,
+    mes_competencia: mes,
+    tipo: campos.tipo || 'outro',
+    valor: campos.valor,
+    descricao: campos.descricao || null,
+    criado_por: session ? session.user.id : null
+  }).select('*').maybeSingle();
+  return { data, error };
+}
+async function dyseDeleteDescontoProfessor(id){
+  const { error } = await sb.from('descontos_professor').delete().eq('id', id);
+  return { error };
 }
 
 /* ---------- Fechamento mensal ---------- */

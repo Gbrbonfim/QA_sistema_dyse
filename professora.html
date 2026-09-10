@@ -2347,10 +2347,16 @@ body.dyse-modal-open{overflow:hidden;}
   async function loadFinanceiroProfessor(){
     const mes = monthInputToCompetencia(document.getElementById('finProfMes').value);
     if(!MODALIDADES_CACHE.length) MODALIDADES_CACHE = await dyseListModalidades();
-    const [todasMensalidades, pagamentos] = await Promise.all([
+    const [todasMensalidades, pagamentos, historicoPag, descontos] = await Promise.all([
       dyseListMyMensalidades(),
-      dyseListMyPagamentos()
+      dyseListMyPagamentos(),
+      dyseListMyPagamentoHistorico(),
+      dyseListMyDescontos()
     ]);
+    const totalPagoMes = historicoPag
+      .filter(h => h.mes_competencia === mes && h.status !== 'cancelado' && h.valor_pago != null)
+      .reduce((s,h) => s + Number(h.valor_pago), 0);
+    const descontosMes = descontos.filter(d => d.mes_competencia === mes);
     let doMes = todasMensalidades.filter(m => m.mes_competencia === mes);
     // Mês ainda sem mensalidade gerada oficialmente (só acontece quando a
     // gestão abre Pagamentos/Relatório pra esse mês) — mostra uma previsão
@@ -2362,13 +2368,17 @@ body.dyse-modal-open{overflow:hidden;}
       if(previsao.length){ doMes = previsao; isPrevisao = true; }
     }
     document.getElementById('finProfPrevisaoNote').style.display = isPrevisao ? 'block' : 'none';
-    renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes), isPrevisao);
+    renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes), isPrevisao, totalPagoMes, descontosMes);
     renderFinanceiroTabela(doMes, isPrevisao);
-    await renderFinanceiroHistorico(todasMensalidades, pagamentos);
+    await renderFinanceiroHistorico(todasMensalidades, pagamentos, historicoPag);
   }
 
-  function renderFinanceiroKpis(linhas, pagamento, isPrevisao){
+  const DESCONTO_TIPO_LABELS_PROF = { plano_saude: 'Plano de saúde', substituicao_aulas: 'Substituição de aulas', outro: 'Outro' };
+
+  function renderFinanceiroKpis(linhas, pagamento, isPrevisao, totalPagoMes, descontosMes){
     const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
+    const totalDescontos = (descontosMes || []).reduce((s,d) => s + Number(d.valor || 0), 0);
+    const aPagar = Math.round((totalPrevisto - totalDescontos) * 100) / 100;
     const porModalidade = {};
     linhas.forEach(l => {
       const mod = MODALIDADES_CACHE.find(m => m.id === l.modalidade_id);
@@ -2376,15 +2386,21 @@ body.dyse-modal-open{overflow:hidden;}
       porModalidade[nome] = (porModalidade[nome] || 0) + 1;
     });
     const modalidadesTexto = Object.keys(porModalidade).map(n => n + ': ' + porModalidade[n]).join(' · ') || '-';
+    const descricaoTexto = (descontosMes || []).map(d =>
+      (DESCONTO_TIPO_LABELS_PROF[d.tipo] || d.tipo) + (d.descricao ? ' (' + d.descricao + ')' : '') + ': ' + formatMoney(Number(d.valor || 0))
+    ).join(' · ') || '-';
 
     const kpis = [
       ['Total de alunos', String(linhas.length)],
       ['Por modalidade', modalidadesTexto],
       ['Total previsto', formatMoney(totalPrevisto)],
-      ['Total pago', pagamento && pagamento.valor_pago != null ? formatMoney(pagamento.valor_pago) : '-'],
+      ['Descontos', totalDescontos > 0 ? '− ' + formatMoney(totalDescontos) : '-'],
+      ['A pagar', formatMoney(aPagar)],
+      ['Total pago', totalPagoMes > 0 ? formatMoney(totalPagoMes) : '-'],
       ['Status', statusBadge(pagamento ? pagamento.status : 'pendente')],
       ['Data do pagamento', pagamento && pagamento.data_pagamento ? formatDateBR(pagamento.data_pagamento) : '-']
     ];
+    if(totalDescontos > 0) kpis.push(['Descrição dos descontos', descricaoTexto]);
     document.getElementById('finProfKpis').innerHTML = kpis.map(([label,val]) =>
       '<div class="kpi-card"><div class="kpi-value" style="font-size:1.05rem;">' + val + '</div><div class="kpi-label">' + label + '</div></div>'
     ).join('');
@@ -2408,7 +2424,13 @@ body.dyse-modal-open{overflow:hidden;}
      "visitou" em Pagamentos/Relatório (sem isso, um mês contratado ficava
      simplesmente ausente da lista até a gestão abrir ele). Mês com dado
      real nunca é substituído pela previsão. */
-  async function renderFinanceiroHistorico(todasMensalidades, pagamentos){
+  async function renderFinanceiroHistorico(todasMensalidades, pagamentos, historicoPag){
+    historicoPag = historicoPag || [];
+    const pagoPorMes = {};
+    historicoPag.forEach(h => {
+      if(h.status === 'cancelado' || h.valor_pago == null) return;
+      pagoPorMes[h.mes_competencia] = (pagoPorMes[h.mes_competencia] || 0) + Number(h.valor_pago);
+    });
     const mesesReais = new Set(todasMensalidades.map(m => m.mes_competencia));
     const previsao = await dyseListMinhaPrevisaoHistoricoFinanceiro();
     const linhasPorMes = {};
@@ -2428,7 +2450,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<td>' + formatMesLabel(mes) + (isPrevisaoDoMes ? ' <span style="opacity:.55; font-size:.72rem;">(previsão)</span>' : '') + '</td>' +
         '<td><span class="pill-count">' + linhas.length + '</span></td>' +
         '<td>' + formatMoney(totalPrevisto) + '</td>' +
-        '<td>' + (pagamento && pagamento.valor_pago != null ? formatMoney(pagamento.valor_pago) : '-') + '</td>' +
+        '<td>' + (pagoPorMes[mes] > 0 ? formatMoney(pagoPorMes[mes]) : '-') + '</td>' +
         '<td>' + statusBadge(pagamento ? pagamento.status : 'pendente') + '</td>' +
         '<td>' + (pagamento && pagamento.data_pagamento ? formatDateBR(pagamento.data_pagamento) : '-') + '</td>' +
       '</tr>';
