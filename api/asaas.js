@@ -293,30 +293,46 @@ const NF_DESCRICAO_PADRAO =
 
 // O Asaas EXIGE identificar o serviço municipal na criação da NF
 // (municipalServiceName + um entre municipalServiceId / municipalServiceCode).
-// Quando a prefeitura tem catálogo, /invoices/municipalServices lista os
-// serviços já configurados na conta — pegamos o de idiomas (ou o 1º). Sem
-// catálogo, caímos no ASAAS_NF_SERVICE_CODE/_NAME da Vercel.
+// Quando a prefeitura tem catálogo, GET /fiscalInfo/services lista os serviços
+// disponíveis — pegamos o de idiomas/instrução (ou o 1º) e usamos o id.
+// Sem catálogo (Portal Nacional), caímos no serviceListItem da conta
+// (GET /fiscalInfo) ou no ASAAS_NF_SERVICE_CODE da Vercel.
 async function resolverServicoMunicipalNF(){
   const nomeAlvo = String(process.env.ASAAS_NF_SERVICE_NAME || 'idioma').trim().toLowerCase();
+
   let servicos = [];
-  try{
-    const r = await asaasFetch('/invoices/municipalServices?limit=100');
-    servicos = (r && Array.isArray(r.data)) ? r.data : [];
-  }catch(e){ servicos = []; }
+  for(const ep of ['/fiscalInfo/services?limit=100', '/invoices/municipalServices?limit=100']){
+    try{
+      const r = await asaasFetch(ep);
+      servicos = (r && Array.isArray(r.data)) ? r.data : [];
+      if(servicos.length) break;
+    }catch(e){ /* tenta o próximo */ }
+  }
 
   let escolhido = null;
   if(servicos.length){
     escolhido =
-      servicos.find(s => /idioma|ingl[eê]s|instru|ensino|educac/i.test(String(s.description || ''))) ||
+      servicos.find(s => /idioma|ingl[eê]s|instru|ensino|educac|treinamento/i.test(String(s.description || ''))) ||
       (nomeAlvo && servicos.find(s => String(s.description || '').toLowerCase().includes(nomeAlvo))) ||
       servicos[0];
   }
 
+  // Conta sem catálogo: usa o "Item da lista de serviço" configurado na conta.
+  let serviceListItem = '';
+  if(!escolhido){
+    try{
+      const fi = await asaasFetch('/fiscalInfo');
+      serviceListItem = String((fi && fi.serviceListItem) || '').trim();
+    }catch(e){ /* segue */ }
+  }
+
   const codeEnv = String(process.env.ASAAS_NF_SERVICE_CODE || '').trim();
   const nameEnv = String(process.env.ASAAS_NF_SERVICE_NAME || '').trim();
+
+  // Com id do catálogo, manda só o id (code = null). Sem catálogo, manda o code.
   return {
-    municipalServiceId: escolhido && escolhido.id ? escolhido.id : undefined,
-    municipalServiceCode: escolhido ? undefined : (codeEnv || undefined),
+    municipalServiceId: escolhido && escolhido.id ? String(escolhido.id) : undefined,
+    municipalServiceCode: escolhido ? undefined : (codeEnv || serviceListItem || undefined),
     municipalServiceName:
       (escolhido && String(escolhido.description || '').trim()) ||
       nameEnv ||
@@ -368,9 +384,10 @@ async function acaoNota(req, res, admin, ctx){
     const servico = await resolverServicoMunicipalNF();
     if(!servico.municipalServiceId && !servico.municipalServiceCode){
       throw new HttpError(422,
-        'A emissão de NF não está configurada: o Asaas não retornou nenhum serviço municipal ' +
-        'e não há ASAAS_NF_SERVICE_CODE na Vercel. Configure o serviço em Configurações → ' +
-        'Notas Fiscais no Asaas (ou defina ASAAS_NF_SERVICE_CODE/ASAAS_NF_SERVICE_NAME).');
+        'A emissão de NF ainda não está configurada. No Asaas, abra Configurações → ' +
+        'Notas Fiscais e finalize o cadastro do serviço (item da lista de serviço / ' +
+        'código do serviço). Se a sua prefeitura não usa catálogo, defina ' +
+        'ASAAS_NF_SERVICE_CODE (e ASAAS_NF_SERVICE_NAME) nas variáveis de ambiente da Vercel.');
     }
     invoice = await asaasFetch('/invoices', {
       method: 'POST',
