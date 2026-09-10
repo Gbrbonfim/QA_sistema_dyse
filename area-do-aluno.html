@@ -1551,6 +1551,13 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     AWAITING_RISK_ANALYSIS: ['Em análise', 'aguardando']
   };
   const COB_PAGO = ['RECEIVED', 'CONFIRMED', 'RECEIVED_IN_CASH'];
+  const NF_STATUS_TXT = {
+    SCHEDULED: 'NF agendada', SYNCHRONIZED: 'NF em processamento', PROCESSING: 'NF em processamento',
+    AUTHORIZED: 'NF emitida', PROCESSING_CANCELLATION: 'NF em cancelamento',
+    CANCELED: 'NF cancelada', CANCELLED: 'NF cancelada', CANCELLATION_DENIED: 'Cancelamento negado',
+    ERROR: 'Falha na emissão'
+  };
+  const NF_STATUS_FINAL_RUIM = ['ERROR', 'CANCELED', 'CANCELLED'];
 
   function cobMoney(n){
     return 'R$ ' + Number(n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -1564,6 +1571,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   async function renderMinhasCobrancas(){
     const wrap = document.getElementById('cobrancasWrap');
     if(!wrap) return [];
+    const accAntes = document.getElementById('cobAccordion');
+    const abertoAntes = accAntes ? accAntes.open : null;
     let cobrancas = [];
     try{ cobrancas = await dyseListMinhasCobrancas(); }catch(e){ cobrancas = []; }
     if(!cobrancas.length){
@@ -1572,9 +1581,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     }
 
     const abertas = cobrancas.filter(c => c.status === 'PENDING' || c.status === 'OVERDUE').length;
+    const abrir = abertoAntes != null ? abertoAntes : !!abertas;
 
     wrap.innerHTML =
-      '<details class="rc-accordion" id="cobAccordion"' + (abertas ? ' open' : '') + '>' +
+      '<details class="rc-accordion" id="cobAccordion"' + (abrir ? ' open' : '') + '>' +
         '<summary>' +
           '<div class="rc-summary-txt">' +
             '<h3>Minhas cobranças <span class="spark">✦</span></h3>' +
@@ -1608,8 +1618,13 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     let nf = '';
     if(c.nota_fiscal_url){
       nf = '<a class="cob-btn" href="' + c.nota_fiscal_url + '" target="_blank" rel="noopener">Baixar NF</a>';
+    } else if(c.nota_fiscal_id && NF_STATUS_FINAL_RUIM.indexOf(c.nota_fiscal_status) === -1){
+      // NF acionada, o Asaas ainda está gerando (leva de 3 a 5 minutos).
+      nf = '<button type="button" class="cob-btn" onclick="emitirMinhaNota(\'' + c.id + '\', this)" ' +
+        'title="A nota está sendo gerada pela prefeitura. Isso leva de 3 a 5 minutos — toque para atualizar.">Nota sendo gerada…</button>';
     } else if(c.billing_type === 'BOLETO' && pago){
-      nf = '<button type="button" class="cob-btn" onclick="emitirMinhaNota(\'' + c.id + '\', this)">Emitir NF</button>';
+      nf = '<button type="button" class="cob-btn" onclick="emitirMinhaNota(\'' + c.id + '\', this)">' +
+        (c.nota_fiscal_status === 'ERROR' ? 'Reemitir NF' : 'Emitir NF') + '</button>';
     } else {
       nf = '<button type="button" class="cob-btn" onclick="notaFiscalIndisponivel()">Emitir NF</button>';
     }
@@ -1638,15 +1653,21 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   }
 
   async function emitirMinhaNota(cobrancaId, btn){
-    btn.disabled = true; btn.textContent = 'Emitindo...';
+    const eraProcessando = /gerada/i.test(btn.textContent || '');
+    btn.disabled = true; btn.textContent = eraProcessando ? 'Atualizando…' : 'Emitindo…';
     const { data, error } = await dyseAsaasNotaFiscal(cobrancaId);
     if(error){
       btn.disabled = false; btn.textContent = 'Emitir NF';
       alert(error.message);
       return;
     }
-    btn.textContent = data.nota_fiscal_url ? 'Pronta!' : 'Em processamento';
     await renderMinhasCobrancas();
+    if(data.nota_fiscal_url){
+      alert('Nota fiscal pronta! É só clicar em "Baixar NF".');
+    } else if(!eraProcessando){
+      alert('Nota fiscal solicitada! A prefeitura leva de 3 a 5 minutos para gerar. ' +
+        'O botão vai mudar para "Baixar NF" assim que ela ficar pronta — pode fechar esta tela e voltar depois.');
+    }
   }
 </script>
 </body>

@@ -4851,6 +4851,13 @@ body.dyse-modal-open{overflow:hidden;}
     DUNNING_REQUESTED: 'Negativação', DUNNING_RECEIVED: 'Negativação', AWAITING_RISK_ANALYSIS: 'Em análise'
   };
   const ASAAS_STATUS_PAGO = ['RECEIVED', 'CONFIRMED', 'RECEIVED_IN_CASH'];
+  const NF_STATUS_TXT = {
+    SCHEDULED: 'NF agendada', SYNCHRONIZED: 'NF em processamento', PROCESSING: 'NF em processamento',
+    AUTHORIZED: 'NF emitida', PROCESSING_CANCELLATION: 'NF em cancelamento',
+    CANCELED: 'NF cancelada', CANCELLED: 'NF cancelada', CANCELLATION_DENIED: 'Cancelamento negado',
+    ERROR: 'Falha na emissão'
+  };
+  const NF_STATUS_FINAL_RUIM = ['ERROR', 'CANCELED', 'CANCELLED'];
 
   const ASAAS_SVG = {
     file:  '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
@@ -4973,7 +4980,20 @@ body.dyse-modal-open{overflow:hidden;}
       // "sistema zerado / falta preencher".
       const diverge = valorAsaas > 0 && Math.abs(valorSistema - valorAsaas) >= 0.01;
 
-      const pagavelNF = pagas.find(c => c.billing_type === 'BOLETO' && !c.nota_fiscal_url);
+      // NF: pega o boleto pago mais recente e mostra o estado da nota dele.
+      const nfAlvo = pagas.find(c => c.billing_type === 'BOLETO');
+      let nfAcao = '';
+      if(nfAlvo){
+        if(nfAlvo.nota_fiscal_url){
+          nfAcao = '<a class="btn btn-soft btn-xs" href="' + nfAlvo.nota_fiscal_url + '" target="_blank" rel="noopener">' + asaasIcon('note', 13) + 'Baixar NF</a>';
+        } else if(nfAlvo.nota_fiscal_id && NF_STATUS_FINAL_RUIM.indexOf(nfAlvo.nota_fiscal_status) === -1){
+          nfAcao = '<button type="button" class="btn btn-ghost btn-xs" onclick="handleAsaasNotaFiscal(\'' + nfAlvo.id + '\', this)" title="Consultar / atualizar a nota">' +
+            asaasIcon('note', 13) + (NF_STATUS_TXT[nfAlvo.nota_fiscal_status] || 'NF em processamento') + '</button>';
+        } else {
+          nfAcao = '<button type="button" class="btn btn-ghost btn-xs" onclick="handleAsaasNotaFiscal(\'' + nfAlvo.id + '\', this)">' +
+            asaasIcon('note', 13) + (nfAlvo.nota_fiscal_status === 'ERROR' ? 'Reemitir NF' : 'Emitir NF') + '</button>';
+        }
+      }
       const foco = atrasadas[0] || proxima || ultimaPaga || maisRecente;
 
       const celAtrasada = atrasadas.length
@@ -5008,9 +5028,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<td><div class="asaas-acoes">' +
           (foco && foco.invoice_url ? '<a class="btn btn-soft btn-xs" href="' + foco.invoice_url + '" target="_blank" rel="noopener">' + asaasIcon('eye', 13) + 'Ver no Asaas</a>' : '') +
           '<button type="button" class="btn btn-ghost btn-xs" onclick="openCobrancaAvulsaModal(\'' + id + '\')">' + asaasIcon('plus', 13) + 'Cobrança avulsa</button>' +
-          (pagavelNF
-            ? '<button type="button" class="btn btn-ghost btn-xs" onclick="handleAsaasNotaFiscal(\'' + pagavelNF.id + '\', this)">' + asaasIcon('note', 13) + 'Emitir NF</button>'
-            : '') +
+          nfAcao +
         '</div></td>' +
       '</tr>';
     }).join('') : '<tr><td colspan="7" style="text-align:center; opacity:.6; padding:26px;">Nenhum aluno casado com o Asaas ainda. Clique em “Sincronizar com Asaas”.</td></tr>';
@@ -5065,7 +5083,12 @@ body.dyse-modal-open{overflow:hidden;}
       flashMsg('asaasSyncMsg', 'NF: ' + error.message, false);
       return;
     }
-    flashMsg('asaasSyncMsg', 'Nota fiscal: ' + (data.nota_fiscal_status || 'acionada') + '.', true);
+    const pronta = !!data.nota_fiscal_url;
+    flashMsg('asaasSyncMsg',
+      pronta ? 'Nota fiscal emitida — já dá pra baixar.'
+             : (NF_STATUS_TXT[data.nota_fiscal_status] || 'Nota fiscal acionada') +
+               '. Ela fica pronta em alguns minutos; clique de novo pra atualizar.',
+      true);
     await loadAsaasCobrancas();
   }
 
