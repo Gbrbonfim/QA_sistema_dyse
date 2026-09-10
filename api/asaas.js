@@ -293,24 +293,49 @@ const NF_DESCRICAO_PADRAO =
 
 // O Asaas EXIGE identificar o serviço municipal na criação da NF
 // (municipalServiceName + um entre municipalServiceId / municipalServiceCode).
-// Quando a prefeitura tem catálogo, GET /fiscalInfo/services lista os serviços
-// disponíveis — pegamos o de idiomas/instrução (ou o 1º) e usamos o id.
-// Sem catálogo (Portal Nacional), caímos no serviceListItem da conta
-// (GET /fiscalInfo) ou no ASAAS_NF_SERVICE_CODE da Vercel.
+// Estratégia, em ordem:
+//   1. Reaproveitar uma NF que já foi emitida com sucesso nesta conta
+//      (GET /invoices) — copia serviço, alíquotas e descrição exatamente como
+//      o que já funciona (inclusive quando a emissão é feita pela tela do Asaas).
+//   2. Catálogo da prefeitura (GET /fiscalInfo/services) → usa o id.
+//   3. serviceListItem do cadastro fiscal (GET /fiscalInfo).
+//   4. ASAAS_NF_SERVICE_CODE / _NAME das variáveis de ambiente.
 async function resolverServicoMunicipalNF(){
   const nomeAlvo = String(process.env.ASAAS_NF_SERVICE_NAME || 'idioma').trim().toLowerCase();
   const diag = [];
 
+  // 1. NF já emitida antes nesta conta — a fonte mais confiável.
+  try{
+    const r = await asaasFetch('/invoices?limit=20');
+    const nfs = (r && Array.isArray(r.data)) ? r.data : [];
+    const prio = { AUTHORIZED: 3, SYNCHRONIZED: 2, SCHEDULED: 1 };
+    const ref = nfs
+      .filter(n => (n.municipalServiceCode || n.municipalServiceId) && n.municipalServiceName)
+      .sort((a, b) => (prio[b.status] || 0) - (prio[a.status] || 0))[0];
+    if(ref){
+      diag.push('reaproveitado da NF ' + ref.id + ' (' + ref.status + ')');
+      return {
+        municipalServiceId: ref.municipalServiceId ? String(ref.municipalServiceId) : undefined,
+        municipalServiceCode: ref.municipalServiceId ? undefined : (ref.municipalServiceCode ? String(ref.municipalServiceCode) : undefined),
+        municipalServiceName: String(ref.municipalServiceName || '').trim() || undefined,
+        serviceDescription: String(ref.serviceDescription || '').trim() || undefined,
+        taxes: (ref.taxes && typeof ref.taxes === 'object') ? ref.taxes : undefined,
+        _diag: diag
+      };
+    }
+    diag.push('GET /invoices → ' + nfs.length + ' NF(s), nenhuma com serviço utilizável');
+  }catch(e){ diag.push('GET /invoices → ' + (e && e.message || e)); }
+
+  // 2. Catálogo da prefeitura.
   let servicos = [];
   for(const ep of ['/fiscalInfo/services?limit=100&offset=0', '/invoices/municipalServices?limit=100']){
     try{
-      const r = await asaasFetch(ep);
-      const arr = (r && Array.isArray(r.data)) ? r.data : [];
+      const rr = await asaasFetch(ep);
+      const arr = (rr && Array.isArray(rr.data)) ? rr.data : [];
       diag.push(ep.split('?')[0] + ' → ' + arr.length + ' serviço(s)');
       if(arr.length){ servicos = arr; break; }
     }catch(e){ diag.push(ep.split('?')[0] + ' → ' + (e && e.message || e)); }
   }
-
   let escolhido = null;
   if(servicos.length){
     escolhido =
@@ -320,22 +345,21 @@ async function resolverServicoMunicipalNF(){
     diag.push('escolhido: ' + (escolhido && (escolhido.description || escolhido.id)));
   }
 
-  // Conta sem catálogo: usa o "Item da lista de serviço" configurado na conta.
+  // 3. serviceListItem do cadastro fiscal.
   let serviceListItem = '';
   if(!escolhido){
     try{
       const fi = await asaasFetch('/fiscalInfo');
       serviceListItem = String((fi && fi.serviceListItem) || '').trim();
-      diag.push('fiscalInfo.serviceListItem = ' + (serviceListItem || '(vazio)') +
-        '; nbsCode = ' + ((fi && fi.nbsCode) || '(vazio)'));
+      diag.push('fiscalInfo.serviceListItem = ' + (serviceListItem || '(vazio)'));
     }catch(e){ diag.push('/fiscalInfo → ' + (e && e.message || e)); }
   }
 
+  // 4. Variáveis de ambiente.
   const codeEnv = String(process.env.ASAAS_NF_SERVICE_CODE || '').trim();
   const nameEnv = String(process.env.ASAAS_NF_SERVICE_NAME || '').trim();
   if(codeEnv) diag.push('ASAAS_NF_SERVICE_CODE = ' + codeEnv);
 
-  // Com id do catálogo, manda só o id (code = null). Sem catálogo, manda o code.
   return {
     municipalServiceId: escolhido && escolhido.id ? String(escolhido.id) : undefined,
     municipalServiceCode: escolhido ? undefined : (codeEnv || serviceListItem || undefined),
@@ -366,21 +390,12 @@ async function acaoNota(req, res, admin, ctx){
     }
   }
 
-  // "Descrição do Serviço" nunca pode ir vazia pro Asaas. Ordem: env var da
-  // Vercel → texto institucional padrão → descrição da cobrança → genérico.
+  // Nome do aluno só pra compor as "observações" da NF.
   let nomeAluno = '';
   if(cobr.aluno_id){
     const { data: pf } = await admin.from('profiles').select('full_name').eq('id', cobr.aluno_id).maybeSingle();
     nomeAluno = (pf && String(pf.full_name || '').trim()) || '';
   }
-  const serviceDescription =
-    String(process.env.ASAAS_NF_SERVICE_DESCRIPTION || '').trim() ||
-    NF_DESCRICAO_PADRAO ||
-    String(cobr.descricao || '').trim() ||
-    ('Mensalidade de curso de idiomas' +
-      (nomeAluno ? ' - ' + nomeAluno : '') +
-      (cobr.vencimento ? ' - venc. ' + cobr.vencimento : ''));
-
   const lista = await asaasFetch('/invoices?payment=' + encodeURIComponent(cobrancaId) + '&limit=10');
   // Ignora NFs que já falharam/foram canceladas — vamos gerar de novo.
   let invoice = (lista && Array.isArray(lista.data))
@@ -400,6 +415,12 @@ async function acaoNota(req, res, admin, ctx){
         'ASAAS_NF_SERVICE_CODE (e ASAAS_NF_SERVICE_NAME) nas variáveis de ambiente da Vercel.' +
         detalhe);
     }
+    // Descrição: env var → a mesma da NF que já funciona nesta conta → padrão.
+    const serviceDescription =
+      String(process.env.ASAAS_NF_SERVICE_DESCRIPTION || '').trim() ||
+      String(servico.serviceDescription || '').trim() ||
+      NF_DESCRICAO_PADRAO;
+
     invoice = await asaasFetch('/invoices', {
       method: 'POST',
       body: {
@@ -413,7 +434,7 @@ async function acaoNota(req, res, admin, ctx){
         municipalServiceId: servico.municipalServiceId,
         municipalServiceCode: servico.municipalServiceCode,
         municipalServiceName: servico.municipalServiceName,
-        taxes: { retainIss: false, iss: 0, cofins: 0, csll: 0, inss: 0, ir: 0, pis: 0 }
+        taxes: servico.taxes || { retainIss: false, iss: 0, cofins: 0, csll: 0, inss: 0, ir: 0, pis: 0 }
       }
     });
   }
