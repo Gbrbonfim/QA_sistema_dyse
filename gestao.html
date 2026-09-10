@@ -327,6 +327,7 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .slot-cell.slot-indisponivel{color:var(--seal-soft); opacity:.4;}
 .slot-turma-name{font-size:.68rem; font-weight:800; white-space:normal; margin-top:2px;}
 .slot-turma-alunos{font-size:.66rem; opacity:.85; font-weight:600;}
+.slot-turma-obs{font-size:.63rem; font-weight:600; font-style:italic; opacity:.8; white-space:normal; margin-top:1px;}
 .schedule-legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:.78rem; color:var(--seal-soft);}
 .schedule-legend .dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px;}
 .schedule-legend .dot.vago{background:var(--ok);}
@@ -3155,9 +3156,10 @@ body.dyse-modal-open{overflow:hidden;}
         const cell = g.cells[dia.slug + '_' + horario];
         if(cell.state === 'ocupado'){
           const alunosCount = STUDENTS.filter(s => s.turma_id === cell.turma.id).length;
-          return '<td class="slot-cell slot-ocupado" onclick="openTurmaSlotModal(\'' + cell.turma.id + '\',\'' + dia.slug + '\',\'' + horario + '\')">' +
+          return '<td class="slot-cell slot-ocupado" title="' + escapeHtmlLocal(cell.turma.name + (cell.turma.description ? ' — ' + cell.turma.description : '')) + '" onclick="openTurmaSlotModal(\'' + cell.turma.id + '\',\'' + dia.slug + '\',\'' + horario + '\')">' +
             horario + '–' + horarioSlotFim(horario) +
             '<div class="slot-turma-name">' + escapeHtmlLocal(cell.turma.name) + '</div>' +
+            (cell.turma.description ? '<div class="slot-turma-obs">' + escapeHtmlLocal(cell.turma.description) + '</div>' : '') +
             '<div class="slot-turma-alunos">👤 ' + alunosCount + '</div>' +
           '</td>';
         }

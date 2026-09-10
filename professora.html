@@ -626,6 +626,7 @@ details.manage-course-block .manage-course-body{padding:0 24px 20px;}
 .disp-cell.disp-indisponivel{color:var(--seal-soft); opacity:.4;}
 .disp-cell.disp-indisponivel:hover{background:var(--antique-soft);}
 .disp-turma-name{font-size:.68rem; font-weight:800; white-space:normal; margin-top:2px;}
+.disp-turma-obs{font-size:.63rem; font-weight:600; font-style:italic; opacity:.8; white-space:normal; margin-top:1px;}
 .disp-legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:.78rem; color:var(--seal-soft);}
 .disp-legend .dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px;}
 .disp-legend .dot.vago{background:var(--ok);}
@@ -1967,9 +1968,10 @@ body.dyse-modal-open{overflow:hidden;}
         const turma = ocupadoMap[key];
         if(turma){
           ocupados++;
-          return '<td class="disp-cell disp-ocupado" title="Ocupado por ' + escapeHtmlLocal(turma.name) + '">' +
+          return '<td class="disp-cell disp-ocupado" title="Ocupado por ' + escapeHtmlLocal(turma.name) + (turma.description ? ' (' + escapeHtmlLocal(turma.description) + ')' : '') + '">' +
             horario + '–' + horarioSlotFim(horario) +
             '<div class="disp-turma-name">' + escapeHtmlLocal(turma.name) + '</div>' +
+            (turma.description ? '<div class="disp-turma-obs">' + escapeHtmlLocal(turma.description) + '</div>' : '') +
           '</td>';
         }
         const isVago = disponivel.has(key);
