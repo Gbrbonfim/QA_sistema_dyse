@@ -2841,3 +2841,44 @@ grant execute on function public.fn_asaas_cron_inadimplencia() to service_role, 
 --     $$ select public.fn_asaas_cron_inadimplencia(); $$);
 
 -- ======================================================================
+-- 21) EXCLUSÃO DE USUÁRIO — nenhuma coluna de "autor" pode travar o delete
+--     Colunas de autoria anuláveis (criado_por, registrado_por, gerado_por,
+--     financeiro_auditoria.usuario_id, etc.) que apontam pra auth.users /
+--     public.profiles devem ser ON DELETE SET NULL: o registro histórico
+--     fica, só perde o "quem fez". Sem isso, apagar um aluno/professor pela
+--     gestão dá "Database error deleting user". Idempotente.
+--     (Mesmo conteúdo de migracao-fk-exclusao-usuario.sql.)
+-- ======================================================================
+do $$
+declare
+  r record;
+begin
+  for r in
+    select con.conname,
+           con.conrelid::regclass::text  as tbl,
+           att.attname                   as col,
+           con.confrelid::regclass::text as ref_tbl
+    from pg_constraint con
+    join pg_attribute  att
+      on att.attrelid = con.conrelid and att.attnum = con.conkey[1]
+    where con.contype = 'f'
+      and con.connamespace = 'public'::regnamespace
+      and array_length(con.conkey, 1) = 1
+      and con.confrelid in ('auth.users'::regclass, 'public.profiles'::regclass)
+      and con.confdeltype in ('a', 'r')
+      and not att.attnotnull
+  loop
+    execute format('alter table %s drop constraint %I', r.tbl, r.conname);
+    execute format(
+      'alter table %s add constraint %I foreign key (%I) references %s(id) on delete set null',
+      r.tbl, r.conname, r.col, r.ref_tbl
+    );
+  end loop;
+end $$;
+
+alter table public.horario_sugestoes drop constraint if exists horario_sugestoes_criado_por_fkey;
+alter table public.horario_sugestoes
+  add constraint horario_sugestoes_criado_por_fkey
+  foreign key (criado_por) references auth.users(id) on delete cascade;
+
+-- ======================================================================

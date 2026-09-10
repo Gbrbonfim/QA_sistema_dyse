@@ -73,7 +73,12 @@ module.exports = async function handler(req, res){
 
   const { error: deleteError } = await admin.auth.admin.deleteUser(userId);
   if(deleteError){
-    res.status(400).json({ error: deleteError.message });
+    const msg = String(deleteError.message || '');
+    if(/deleting user|foreign key|violates/i.test(msg)){
+      res.status(409).json({ error: 'A exclusão foi bloqueada por um vínculo no banco (registro histórico feito por este usuário). Rode a migração migracao-fk-exclusao-usuario.sql no Supabase e tente de novo.' });
+      return;
+    }
+    res.status(400).json({ error: msg });
     return;
   }
 
