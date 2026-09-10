@@ -3182,6 +3182,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<div class="btn-row" style="justify-content:flex-end; margin-bottom:14px;">' +
           '<button type="button" class="btn btn-ghost btn-xs" onclick="handleReenviarAcesso(\'' + escapeHtmlLocal(p.email || '') + '\')"' + (p.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
           '<button type="button" class="btn btn-ghost btn-xs" onclick="handleDefinirSenhaTemporaria(\'' + p.id + '\')">Definir senha temporária</button>' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="handleAcessarConta(\'' + p.id + '\')">Acessar conta</button>' +
           '<button type="button" class="btn btn-danger btn-xs" onclick="handleExcluirProfessor(\'' + p.id + '\')">Excluir</button>' +
         '</div>' +
         '<div class="schedule-grid-wrap"><table class="schedule-grid"><thead><tr><th>Horário</th>' +
@@ -3473,6 +3474,30 @@ body.dyse-modal-open{overflow:hidden;}
     const { error } = await dyseReenviarAcesso(email);
     if(error){ alert('Não foi possível reenviar: ' + error.message); return; }
     alert('E-mail de acesso reenviado para ' + email + '!');
+  }
+
+  /* ---------- Acessar conta do professor (sem senha) ----------
+     Gera um magic link de uso único (função serverless com service_role) e
+     abre — o navegador passa a estar logado como o professor. A sessão da
+     gestão neste navegador é substituída; pra voltar, login de novo. */
+  async function handleAcessarConta(id){
+    const professor = TEACHERS.find(p => p.id === id);
+    const nome = professor ? (professor.full_name || professor.email || '') : id;
+    if(!confirm('Entrar na conta de "' + nome + '"?\n\nVocê vai SAIR da sua conta de gestão neste navegador e entrar como esse professor. Pra voltar, é só fazer login de novo.')) return;
+
+    const session = await dyseGetSession();
+    try{
+      const resp = await fetch('/api/impersonate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({ user_id: id })
+      });
+      const result = await resp.json().catch(() => ({}));
+      if(!resp.ok || !result.url){ alert('Não foi possível acessar a conta: ' + (result.error || resp.statusText)); return; }
+      window.location.href = result.url;
+    }catch(err){
+      alert('Erro de conexão com o servidor: ' + err.message);
+    }
   }
 
   /* ---------- Definir senha temporária (aluno ou professor) ----------
