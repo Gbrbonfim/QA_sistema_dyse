@@ -1622,7 +1622,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       // NF acionada, o Asaas ainda está gerando (leva de 3 a 5 minutos).
       nf = '<button type="button" class="cob-btn" onclick="emitirMinhaNota(\'' + c.id + '\', this)" ' +
         'title="A nota está sendo gerada pela prefeitura. Isso leva de 3 a 5 minutos — toque para atualizar.">Nota sendo gerada…</button>';
-    } else if(c.billing_type === 'BOLETO' && pago){
+    } else if(pago){
       nf = '<button type="button" class="cob-btn" onclick="emitirMinhaNota(\'' + c.id + '\', this)">' +
         (c.nota_fiscal_status === 'ERROR' ? 'Reemitir NF' : 'Emitir NF') + '</button>';
     } else {

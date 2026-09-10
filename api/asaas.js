@@ -385,8 +385,9 @@ async function acaoNota(req, res, admin, ctx){
 
   if(!ehGestao){
     if(cobr.aluno_id !== ctx.user.id){ res.status(403).json({ error: 'Essa cobrança não é sua.' }); return; }
-    if(cobr.billing_type !== 'BOLETO' || !NF_PAGO.includes(cobr.status)){
-      res.status(403).json({ error: 'A nota fiscal só pode ser emitida para boletos já pagos.' }); return;
+    // Qualquer cobrança paga e compensada — boleto, PIX ou cartão.
+    if(!NF_PAGO.includes(cobr.status)){
+      res.status(403).json({ error: 'A nota fiscal só pode ser emitida depois que o pagamento for confirmado.' }); return;
     }
   }
 
