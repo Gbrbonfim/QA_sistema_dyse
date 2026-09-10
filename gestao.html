@@ -3591,7 +3591,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<td><b>' + escapeHtmlLocal(m.name) + '</b> <span style="opacity:.6; font-size:.76rem;">(' + escapeHtmlLocal(m.slug) + ')</span></td>' +
         '<td>' + valorTexto + '</td>' +
         '<td>' + (ultima ? formatDateBR(ultima.vigente_desde) : '-') + '</td>' +
-        '<td><button type="button" class="btn btn-ghost btn-sm" onclick="openModalidadeModal(\'' + m.id + '\')">Histórico / editar valor</button></td>' +
+        '<td><button type="button" class="btn btn-ghost btn-sm" onclick="openModalidadeModal(\'' + m.id + '\')">Editar / histórico</button></td>' +
       '</tr>';
     }).join('') || '<tr><td colspan="4" style="text-align:center; opacity:.6;">Nenhuma modalidade cadastrada.</td></tr>';
   }
@@ -3640,6 +3640,14 @@ body.dyse-modal-open{overflow:hidden;}
       ? valores.map(v => '<div class="chip-toggle-row"><span class="name">' + formatMoney(v.valor_professor) + '</span><span style="opacity:.65; font-size:.78rem;">desde ' + formatDateBR(v.vigente_desde) + '</span></div>').join('')
       : '<p class="report-line" style="opacity:.6;">Nenhum valor cadastrado ainda.</p>';
 
+    const identHtml =
+      '<form class="gestao-form" onsubmit="return handleRenomearModalidade(event)">' +
+        '<div class="gestao-field" style="flex:1 1 180px;"><label>Nome</label><input type="text" id="editModalidadeName" value="' + escapeHtmlLocal(m.name) + '" required></div>' +
+        '<div class="gestao-field" style="flex:1 1 150px;"><label>Identificador (slug)</label><input type="text" id="editModalidadeSlug" value="' + escapeHtmlLocal(m.slug) + '" required pattern="[a-z0-9\\-]+"></div>' +
+        '<button type="submit" class="btn btn-primary">Salvar nome</button>' +
+      '</form>' +
+      '<p class="gestao-hint">O <b>slug</b> é o identificador usado na importação por CSV. Mudar o nome ou o slug não altera os alunos já vinculados a esta modalidade.</p>';
+
     const formHtml = m.is_custom_value
       ? '<p class="report-line" style="opacity:.7;">Esta modalidade usa valor personalizado por aluno (definido na ficha financeira de cada aluno) — não tem valor de catálogo.</p>'
       : '<form class="gestao-form" onsubmit="return handleSetModalidadeValor(event)">' +
@@ -3650,8 +3658,23 @@ body.dyse-modal-open{overflow:hidden;}
         '<p class="gestao-hint">Não sobrescreve o valor atual — só passa a valer a partir do mês escolhido. Meses anteriores continuam usando o valor que estava vigente na época.</p>';
 
     document.getElementById('modalidadeModalBody').innerHTML =
+      '<div class="report-section-head">Nome e identificador</div>' + identHtml +
       '<div class="report-section-head">Histórico de valores</div>' + historicoHtml +
       '<div class="report-section-head">Definir novo valor</div>' + formHtml;
+  }
+
+  async function handleRenomearModalidade(e){
+    e.preventDefault();
+    const name = document.getElementById('editModalidadeName').value.trim();
+    const slug = document.getElementById('editModalidadeSlug').value.trim().toLowerCase();
+    if(!name || !slug) return false;
+    const { error } = await dyseUpdateModalidade(CURRENT_MODALIDADE_MODAL_ID, { name, slug });
+    if(error){ alert('Não foi possível salvar: ' + error.message); return false; }
+    MODALIDADES = await dyseListModalidades();
+    document.getElementById('modalidadeModalTitle').textContent = name;
+    renderModalidadeModalBody();
+    renderModalidadesTable();
+    return false;
   }
 
   async function handleSetModalidadeValor(e){
