@@ -2149,8 +2149,8 @@ body.dyse-modal-open{overflow:hidden;}
       if(checkboxEl) checkboxEl.checked = !enabled; // desfaz a marcação na tela
       return;
     }
+    TURMA_MATERIAS = TURMA_MATERIAS.filter(tm => !(tm.turma_id === turmaId && tm.materia_slug === slug));
     if(enabled) TURMA_MATERIAS.push({ turma_id: turmaId, materia_slug: slug });
-    else TURMA_MATERIAS = TURMA_MATERIAS.filter(tm => !(tm.turma_id === turmaId && tm.materia_slug === slug));
     renderTurmasTable();
     renderMateriasTable();
   }

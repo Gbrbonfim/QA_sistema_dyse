@@ -469,7 +469,10 @@ async function dyseListAllTurmaMaterias(){
 
 async function dyseSetTurmaMateria(turmaId, materiaSlug, enabled){
   if(enabled){
-    const { error } = await sb.from('turma_materias').insert({ turma_id: turmaId, materia_slug: materiaSlug });
+    // upsert idempotente: se a linha já existir (a tela pode estar dessincronizada
+    // do banco), não estoura "duplicate key value violates unique constraint".
+    const { error } = await sb.from('turma_materias')
+      .upsert({ turma_id: turmaId, materia_slug: materiaSlug }, { onConflict: 'turma_id,materia_slug', ignoreDuplicates: true });
     return { error };
   }
   const { error } = await sb.from('turma_materias').delete().eq('turma_id', turmaId).eq('materia_slug', materiaSlug);
