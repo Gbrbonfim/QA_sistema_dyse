@@ -32,10 +32,16 @@ create policy "gestao gerencia substituicoes"
   using (public.is_financeiro())
   with check (public.is_financeiro());
 
+-- O professor enxerga: as substituições onde ele foi o substituto (ganho) E
+-- as das turmas que ele acessa (perda — pra previsão dele descontar o dia).
 drop policy if exists "professor ve substituicoes onde e o substituto" on public.substituicoes_professor;
-create policy "professor ve substituicoes onde e o substituto"
+drop policy if exists "professor ve substituicoes das turmas dele" on public.substituicoes_professor;
+create policy "professor ve substituicoes das turmas dele"
   on public.substituicoes_professor for select
-  using (professor_substituto_id = auth.uid());
+  using (
+    professor_substituto_id = auth.uid()
+    or public.teacher_can_see_turma(turma_id)
+  );
 
 drop trigger if exists trg_audit_substituicoes on public.substituicoes_professor;
 create trigger trg_audit_substituicoes

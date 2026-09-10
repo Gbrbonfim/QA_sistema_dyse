@@ -2911,9 +2911,13 @@ create policy "gestao gerencia substituicoes"
   with check (public.is_financeiro());
 
 drop policy if exists "professor ve substituicoes onde e o substituto" on public.substituicoes_professor;
-create policy "professor ve substituicoes onde e o substituto"
+drop policy if exists "professor ve substituicoes das turmas dele" on public.substituicoes_professor;
+create policy "professor ve substituicoes das turmas dele"
   on public.substituicoes_professor for select
-  using (professor_substituto_id = auth.uid());
+  using (
+    professor_substituto_id = auth.uid()
+    or public.teacher_can_see_turma(turma_id)
+  );
 
 drop trigger if exists trg_audit_substituicoes on public.substituicoes_professor;
 create trigger trg_audit_substituicoes

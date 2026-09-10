@@ -1545,6 +1545,64 @@ function dyseProximosMeses(mes, qtd){
    com outro professor (isso depende de presença lançada, calculada só na
    geração oficial em dyseGerarMensalidadesDoMes), então é só uma
    estimativa: o valor final pode sair diferente. */
+/* Ajusta uma PREVISÃO do professor (não gravada) descontando a fatia dos
+   dias em que ele foi substituído (substituicoes_professor) — só o lado da
+   PERDA. O ganho de quem substituiu aparece nas mensalidades REAIS assim que
+   a gestão gera o mês (dyseGerarMensalidadesDoMes). Nunca quebra a previsão:
+   qualquer erro devolve as linhas como estavam. Mesma conta k/N do rateio
+   oficial (N = datas de aula distintas da turma no mês). */
+async function dyseAjustarPrevisaoPorSubstituicoes(linhas, turmaIdPorAluno){
+  try{
+    const session = await dyseGetSession();
+    const meuId = session ? session.user.id : null;
+    if(!meuId || !linhas || !linhas.length) return linhas || [];
+
+    const subs = await dyseListSubstituicoes(); // RLS: turmas do professor + onde substituiu
+    if(!subs.length) return linhas;
+    const subsPorTurma = {};
+    subs.forEach(x => { (subsPorTurma[x.turma_id] = subsPorTurma[x.turma_id] || []).push(x); });
+
+    const precisaN = new Set();
+    linhas.forEach(l => {
+      const t = turmaIdPorAluno[l.aluno_id];
+      if(t && subsPorTurma[t] && (l.professor_id || null) === meuId) precisaN.add(t + '|' + l.mes_competencia);
+    });
+    if(!precisaN.size) return linhas;
+
+    const NPor = {};
+    for(const chave of precisaN){
+      const [turmaId, mes] = chave.split('|');
+      const fim = dyseFimDoMes(mes);
+      let datas;
+      try{ datas = new Set((await dyseListSessoesTurma(turmaId, mes)).map(s => s.data)); }
+      catch(e){ datas = new Set(); }
+      (subsPorTurma[turmaId] || []).forEach(x => { if(x.data_aula >= mes && x.data_aula <= fim) datas.add(x.data_aula); });
+      NPor[chave] = datas.size;
+    }
+
+    return linhas.map(l => {
+      const turmaId = turmaIdPorAluno[l.aluno_id];
+      if(!turmaId || !subsPorTurma[turmaId] || (l.professor_id || null) !== meuId) return l;
+      const fim = dyseFimDoMes(l.mes_competencia);
+      const k = subsPorTurma[turmaId].filter(x =>
+        x.data_aula >= l.mes_competencia && x.data_aula <= fim
+        && (x.professor_substituto_id || null) !== meuId
+      ).length;
+      if(!k) return l;
+      const N = NPor[turmaId + '|' + l.mes_competencia] || 0;
+      if(!N) return l;
+      const f = Math.max(0, 1 - Math.min(k, N) / N);
+      return Object.assign({}, l, {
+        valor_recebido: Math.round(Number(l.valor_recebido || 0) * f * 100) / 100,
+        valor_pago_professor: Math.round(Number(l.valor_pago_professor || 0) * f * 100) / 100
+      });
+    });
+  }catch(e){
+    console.warn('previsão: falha ao aplicar substituições', e);
+    return linhas || [];
+  }
+}
+
 async function dysePreverFinanceiroProfessorMeses(mesInicial, qtdMeses){
   const session = await dyseGetSession();
   if(!session) return [];
@@ -1562,9 +1620,10 @@ async function dysePreverFinanceiroProfessorMeses(mesInicial, qtdMeses){
   const valoresPorModalidade = {};
   valores.forEach(v => { (valoresPorModalidade[v.modalidade_id] = valoresPorModalidade[v.modalidade_id] || []).push(v); });
   const nomeAlunoById = {};
-  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
+  const turmaIdPorAluno = {};
+  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; turmaIdPorAluno[a.id] = a.turma_id || null; });
 
-  return dyseProximosMeses(mesInicial, qtdMeses).map(mes => {
+  const porMes = dyseProximosMeses(mesInicial, qtdMeses).map(mes => {
     const fimDoMesStr = dyseFimDoMes(mes);
     const porAluno = {};
     meuHistorico.forEach(h => {
@@ -1595,6 +1654,17 @@ async function dysePreverFinanceiroProfessorMeses(mesInicial, qtdMeses){
     });
     return { mes, linhas };
   });
+
+  const ajustadas = await dyseAjustarPrevisaoPorSubstituicoes(
+    porMes.reduce((acc, x) => acc.concat(x.linhas), []),
+    turmaIdPorAluno
+  );
+  const porChave = {};
+  ajustadas.forEach(l => { porChave[l.aluno_id + '|' + l.mes_competencia] = l; });
+  return porMes.map(x => ({
+    mes: x.mes,
+    linhas: x.linhas.map(l => porChave[l.aluno_id + '|' + l.mes_competencia] || l)
+  }));
 }
 
 /* Previsão de UM mês só — mantida por conveniência pra quem só precisa de
@@ -1635,7 +1705,8 @@ async function dyseListMinhaPrevisaoHistoricoFinanceiro(){
   const valoresPorModalidade = {};
   valores.forEach(v => { (valoresPorModalidade[v.modalidade_id] = valoresPorModalidade[v.modalidade_id] || []).push(v); });
   const nomeAlunoById = {};
-  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; });
+  const turmaIdPorAluno = {};
+  alunos.forEach(a => { nomeAlunoById[a.id] = a.full_name || a.email || ''; turmaIdPorAluno[a.id] = a.turma_id || null; });
 
   function mesSeguinte(mes){
     const [y, m] = mes.split('-').map(Number);
@@ -1691,7 +1762,7 @@ async function dyseListMinhaPrevisaoHistoricoFinanceiro(){
       });
     });
   });
-  return linhas;
+  return dyseAjustarPrevisaoPorSubstituicoes(linhas, turmaIdPorAluno);
 }
 
 /* ======================================================================
