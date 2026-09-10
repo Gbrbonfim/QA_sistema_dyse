@@ -299,14 +299,16 @@ const NF_DESCRICAO_PADRAO =
 // (GET /fiscalInfo) ou no ASAAS_NF_SERVICE_CODE da Vercel.
 async function resolverServicoMunicipalNF(){
   const nomeAlvo = String(process.env.ASAAS_NF_SERVICE_NAME || 'idioma').trim().toLowerCase();
+  const diag = [];
 
   let servicos = [];
-  for(const ep of ['/fiscalInfo/services?limit=100', '/invoices/municipalServices?limit=100']){
+  for(const ep of ['/fiscalInfo/services?limit=100&offset=0', '/invoices/municipalServices?limit=100']){
     try{
       const r = await asaasFetch(ep);
-      servicos = (r && Array.isArray(r.data)) ? r.data : [];
-      if(servicos.length) break;
-    }catch(e){ /* tenta o próximo */ }
+      const arr = (r && Array.isArray(r.data)) ? r.data : [];
+      diag.push(ep.split('?')[0] + ' → ' + arr.length + ' serviço(s)');
+      if(arr.length){ servicos = arr; break; }
+    }catch(e){ diag.push(ep.split('?')[0] + ' → ' + (e && e.message || e)); }
   }
 
   let escolhido = null;
@@ -315,6 +317,7 @@ async function resolverServicoMunicipalNF(){
       servicos.find(s => /idioma|ingl[eê]s|instru|ensino|educac|treinamento/i.test(String(s.description || ''))) ||
       (nomeAlvo && servicos.find(s => String(s.description || '').toLowerCase().includes(nomeAlvo))) ||
       servicos[0];
+    diag.push('escolhido: ' + (escolhido && (escolhido.description || escolhido.id)));
   }
 
   // Conta sem catálogo: usa o "Item da lista de serviço" configurado na conta.
@@ -323,11 +326,14 @@ async function resolverServicoMunicipalNF(){
     try{
       const fi = await asaasFetch('/fiscalInfo');
       serviceListItem = String((fi && fi.serviceListItem) || '').trim();
-    }catch(e){ /* segue */ }
+      diag.push('fiscalInfo.serviceListItem = ' + (serviceListItem || '(vazio)') +
+        '; nbsCode = ' + ((fi && fi.nbsCode) || '(vazio)'));
+    }catch(e){ diag.push('/fiscalInfo → ' + (e && e.message || e)); }
   }
 
   const codeEnv = String(process.env.ASAAS_NF_SERVICE_CODE || '').trim();
   const nameEnv = String(process.env.ASAAS_NF_SERVICE_NAME || '').trim();
+  if(codeEnv) diag.push('ASAAS_NF_SERVICE_CODE = ' + codeEnv);
 
   // Com id do catálogo, manda só o id (code = null). Sem catálogo, manda o code.
   return {
@@ -336,7 +342,8 @@ async function resolverServicoMunicipalNF(){
     municipalServiceName:
       (escolhido && String(escolhido.description || '').trim()) ||
       nameEnv ||
-      'Instrução em idioma estrangeiro'
+      'Instrução em idioma estrangeiro',
+    _diag: diag
   };
 }
 
@@ -383,11 +390,15 @@ async function acaoNota(req, res, admin, ctx){
   if(!invoice){
     const servico = await resolverServicoMunicipalNF();
     if(!servico.municipalServiceId && !servico.municipalServiceCode){
+      const detalhe = ehGestao && Array.isArray(servico._diag) && servico._diag.length
+        ? ' [diagnóstico: ' + servico._diag.join(' | ') + ']'
+        : '';
       throw new HttpError(422,
         'A emissão de NF ainda não está configurada. No Asaas, abra Configurações → ' +
         'Notas Fiscais e finalize o cadastro do serviço (item da lista de serviço / ' +
         'código do serviço). Se a sua prefeitura não usa catálogo, defina ' +
-        'ASAAS_NF_SERVICE_CODE (e ASAAS_NF_SERVICE_NAME) nas variáveis de ambiente da Vercel.');
+        'ASAAS_NF_SERVICE_CODE (e ASAAS_NF_SERVICE_NAME) nas variáveis de ambiente da Vercel.' +
+        detalhe);
     }
     invoice = await asaasFetch('/invoices', {
       method: 'POST',
