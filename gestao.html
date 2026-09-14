@@ -4795,9 +4795,26 @@ body.dyse-modal-open{overflow:hidden;}
     FECHAMENTO_MES_ATUAL = mes;
     const [avisos, jaFechado] = await Promise.all([dyseValidarFechamento(mes), dyseMesFechado(mes)]);
 
-    document.getElementById('fechamentoAvisos').innerHTML = avisos.length
-      ? '<div class="gestao-card-title" style="color:var(--bad);">Pendências encontradas</div><ul style="padding-left:20px;">' + avisos.map(a => '<li class="report-line">' + escapeHtmlLocal(a) + '</li>').join('') + '</ul>'
-      : '<div class="gestao-card-title" style="color:var(--ok);">Nenhuma pendência encontrada</div><p class="report-line">O mês pode ser fechado com segurança.</p>';
+    if(avisos.length){
+      if(!TEACHERS || !TEACHERS.length) TEACHERS = await dyseListProfilesByRole('teacher');
+      if(!STUDENTS || !STUDENTS.length) STUDENTS = await dyseListProfilesByRole('student');
+      const nomeItem = it => {
+        const lista = it.tipo === 'professor' ? TEACHERS : STUDENTS;
+        const pessoa = lista.find(p => p.id === it.id);
+        return pessoa ? (pessoa.full_name || pessoa.email || it.id) : '(removido)';
+      };
+      document.getElementById('fechamentoAvisos').innerHTML =
+        '<div class="gestao-card-title" style="color:var(--bad);">Pendências encontradas</div><ul style="padding-left:20px;">' +
+        avisos.map(a => {
+          const nomes = [...new Set(a.itens.map(nomeItem))];
+          return '<li class="report-line">' +
+            '<details><summary style="cursor:pointer;">' + escapeHtmlLocal(a.texto) + '</summary>' +
+            '<ul style="padding-left:20px; margin-top:6px;">' + nomes.map(n => '<li>' + escapeHtmlLocal(n) + '</li>').join('') + '</ul>' +
+            '</details></li>';
+        }).join('') + '</ul>';
+    } else {
+      document.getElementById('fechamentoAvisos').innerHTML = '<div class="gestao-card-title" style="color:var(--ok);">Nenhuma pendência encontrada</div><p class="report-line">O mês pode ser fechado com segurança.</p>';
+    }
 
     document.getElementById('btnFecharMes').style.display = jaFechado ? 'none' : 'inline-flex';
     document.getElementById('btnReabrirMes').style.display = jaFechado ? 'inline-flex' : 'none';
@@ -4809,7 +4826,7 @@ body.dyse-modal-open{overflow:hidden;}
     const avisos = await dyseValidarFechamento(FECHAMENTO_MES_ATUAL);
     let observacao = null;
     if(avisos.length){
-      const ok = confirm('Existem pendências neste mês:\n\n' + avisos.join('\n') + '\n\nDeseja fechar mesmo assim?');
+      const ok = confirm('Existem pendências neste mês:\n\n' + avisos.map(a => a.texto).join('\n') + '\n\nDeseja fechar mesmo assim?');
       if(!ok) return;
       observacao = prompt('Observação sobre o fechamento (opcional):') || null;
     }

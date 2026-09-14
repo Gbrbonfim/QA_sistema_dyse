@@ -2581,7 +2581,9 @@ async function dyseListFechamentos(){
 }
 
 /* Lista avisos de pendência antes de fechar o mês (seção 9 do briefing).
-   Array vazio = nenhuma pendência encontrada. */
+   Array vazio = nenhuma pendência encontrada. Cada aviso traz "itens" (ids
+   de aluno/professor envolvidos) pra quem quiser exibir o detalhe (ex: caixa
+   expansiva na tela de Fechamento). */
 async function dyseValidarFechamento(mes){
   const avisos = [];
   await dyseGerarMensalidadesDoMes(mes);
@@ -2592,21 +2594,36 @@ async function dyseValidarFechamento(mes){
   ]);
 
   const ativosSemModalidade = historico.filter(h => !h.data_fim && h.situacao === 'ativo' && !h.modalidade_id);
-  if(ativosSemModalidade.length) avisos.push(ativosSemModalidade.length + ' aluno(s) ativo(s) sem modalidade definida.');
+  if(ativosSemModalidade.length) avisos.push({
+    texto: ativosSemModalidade.length + ' aluno(s) ativo(s) sem modalidade definida.',
+    itens: ativosSemModalidade.map(h => ({ tipo: 'aluno', id: h.aluno_id }))
+  });
 
   const ativosSemProfessor = historico.filter(h => !h.data_fim && h.situacao === 'ativo' && !h.professor_id);
-  if(ativosSemProfessor.length) avisos.push(ativosSemProfessor.length + ' aluno(s) ativo(s) sem professor responsável.');
+  if(ativosSemProfessor.length) avisos.push({
+    texto: ativosSemProfessor.length + ' aluno(s) ativo(s) sem professor responsável.',
+    itens: ativosSemProfessor.map(h => ({ tipo: 'aluno', id: h.aluno_id }))
+  });
 
   const semValorRecebido = mensalidades.filter(m => !m.valor_recebido || Number(m.valor_recebido) <= 0);
-  if(semValorRecebido.length) avisos.push(semValorRecebido.length + ' aluno(s) sem valor recebido cadastrado neste mês.');
+  if(semValorRecebido.length) avisos.push({
+    texto: semValorRecebido.length + ' aluno(s) sem valor recebido cadastrado neste mês.',
+    itens: semValorRecebido.map(m => ({ tipo: 'aluno', id: m.aluno_id }))
+  });
 
   const professoresComAluno = new Set(mensalidades.map(m => m.professor_id).filter(Boolean));
   const professoresComPagamento = new Set(pagamentos.map(p => p.professor_id));
   const professoresSemCalculo = [...professoresComAluno].filter(id => !professoresComPagamento.has(id));
-  if(professoresSemCalculo.length) avisos.push(professoresSemCalculo.length + ' professor(es) sem pagamento lançado neste mês.');
+  if(professoresSemCalculo.length) avisos.push({
+    texto: professoresSemCalculo.length + ' professor(es) sem pagamento lançado neste mês.',
+    itens: professoresSemCalculo.map(id => ({ tipo: 'professor', id }))
+  });
 
   const pendentes = pagamentos.filter(p => p.status === 'pendente');
-  if(pendentes.length) avisos.push(pendentes.length + ' pagamento(s) de professor ainda pendente(s).');
+  if(pendentes.length) avisos.push({
+    texto: pendentes.length + ' pagamento(s) de professor ainda pendente(s).',
+    itens: pendentes.map(p => ({ tipo: 'professor', id: p.professor_id }))
+  });
 
   return avisos;
 }
