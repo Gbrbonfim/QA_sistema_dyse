@@ -66,40 +66,55 @@ function dyseIsStudent(profile){
   return !!(profile && (String(profile.role || '').trim().toLowerCase() === 'student' || profile.also_student === true));
 }
 
+/* Cache do perfil por carregamento de página: dyseRequireAuth →
+   dyseRequireTeacher/dyseRequireAdmin → o init da própria página chamam
+   dyseGetProfile em sequência, cada um pedindo a MESMA linha de novo — sem
+   isso, cada navegação (e cada clique que salva progresso de atividade,
+   via dyseSaveResult/dyseAutosaveParcial/dyseSkipActivity) pagava 2 ou 3
+   idas ao banco onde bastava uma. Como cada navegação é um recarregamento
+   de página inteiro (não é SPA), essa variável nasce vazia sozinha a cada
+   página — não precisa invalidar. */
+let DYSE_PROFILE_CACHE = null; // { userId, promise }
+
 async function dyseGetProfile(session){
   if(!session) return null;
-  try{
-    const { data, error: selectError } = await sb
-      .from('profiles')
-      .select('*')
-      .eq('id', session.user.id)
-      .maybeSingle();
-
-    console.log('%c[DYSE DEBUG] dyseGetProfile SELECT', 'color:#F0A224;font-weight:bold', { data, selectError });
-
-    if(data) return data;
-
-    // Autocorreção: se por qualquer motivo o perfil não existe ainda
-    // (conta criada antes do gatilho existir, login social, criação manual
-    // no painel do Supabase, falha pontual do gatilho, etc.), criamos aqui
-    // mesmo, na hora. Assim o login nunca fica "travado" por falta de perfil.
-    const fallbackName = session.user.user_metadata?.full_name || session.user.email;
-    const { data: created, error: upsertError } = await sb
-      .from('profiles')
-      .upsert(
-        { id: session.user.id, full_name: fallbackName, email: session.user.email }, // sem "role" aqui: se a linha já existir, não sobrescreve o role dela
-        { onConflict: 'id', ignoreDuplicates: false }
-      )
-      .select('*')
-      .maybeSingle();
-
-    console.log('%c[DYSE DEBUG] dyseGetProfile FALLBACK UPSERT (SELECT não achou nada)', 'color:#EB6424;font-weight:bold', { created, upsertError });
-
-    return created;
-  }catch(e){
-    console.error('%c[DYSE DEBUG] dyseGetProfile EXCEÇÃO', 'color:red;font-weight:bold', e);
-    return null; // nunca deixa isso travar quem chamou — segue como se não tivesse perfil ainda
+  if(DYSE_PROFILE_CACHE && DYSE_PROFILE_CACHE.userId === session.user.id){
+    return DYSE_PROFILE_CACHE.promise;
   }
+
+  const promise = (async () => {
+    try{
+      const { data } = await sb
+        .from('profiles')
+        .select('*')
+        .eq('id', session.user.id)
+        .maybeSingle();
+
+      if(data) return data;
+
+      // Autocorreção: se por qualquer motivo o perfil não existe ainda
+      // (conta criada antes do gatilho existir, login social, criação manual
+      // no painel do Supabase, falha pontual do gatilho, etc.), criamos aqui
+      // mesmo, na hora. Assim o login nunca fica "travado" por falta de perfil.
+      const fallbackName = session.user.user_metadata?.full_name || session.user.email;
+      const { data: created } = await sb
+        .from('profiles')
+        .upsert(
+          { id: session.user.id, full_name: fallbackName, email: session.user.email }, // sem "role" aqui: se a linha já existir, não sobrescreve o role dela
+          { onConflict: 'id', ignoreDuplicates: false }
+        )
+        .select('*')
+        .maybeSingle();
+
+      return created;
+    }catch(e){
+      console.error('dyseGetProfile:', e);
+      return null; // nunca deixa isso travar quem chamou — segue como se não tivesse perfil ainda
+    }
+  })();
+
+  DYSE_PROFILE_CACHE = { userId: session.user.id, promise };
+  return promise;
 }
 
 /* Bloqueia a página caso não haja login. Chame no topo de páginas
@@ -121,13 +136,6 @@ async function dyseRequireTeacher(){
   const session = await dyseRequireAuth();
   if(!session) return null;
   const profile = await dyseGetProfile(session);
-  console.log('%c[DYSE DEBUG] dyseRequireTeacher', 'color:#D03B55;font-weight:bold', {
-    userId: session.user.id,
-    userEmail: session.user.email,
-    profile: profile,
-    'profile.role (raw)': profile ? JSON.stringify(profile.role) : '(perfil veio nulo)',
-    isTeacher: dyseIsTeacher(profile)
-  });
   if(!dyseIsTeacher(profile)){
     location.href = '/area-do-aluno.html?notice=not-teacher';
     return null;
@@ -367,6 +375,24 @@ async function dyseGetPublishedSet(course, aula = 1){
     .eq('aula', aula);
   if(error || !data) return new Set();
   return new Set(data.filter(r => r.is_published).map(r => r.activity_num));
+}
+
+/* Mesma coisa, mas de TODAS as aulas de um curso numa única consulta —
+   usado onde precisa somar o publicado aula por aula (ex: card de
+   progresso do A1 na área do aluno, que tem 44 aulas): sem isso, quem
+   chama faz 1 consulta por aula em sequência, 44 idas ao banco só pra
+   abrir a página. Aula sem nenhuma atividade publicada nem aparece aqui. */
+async function dyseGetPublishedSetsPorAula(course){
+  const { data, error } = await sb
+    .from('published_activities')
+    .select('aula, activity_num, is_published')
+    .eq('course', course);
+  const porAula = {};
+  if(!error && data) data.forEach(r => {
+    if(!r.is_published) return;
+    (porAula[r.aula] = porAula[r.aula] || new Set()).add(r.activity_num);
+  });
+  return porAula;
 }
 
 /* ---------- [Professora] listar liberação de TODAS as atividades de uma aula de um curso ----------

@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 
 :root{
@@ -947,6 +946,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/assets/dyse-auth.js"></script>
 <script src="/atividades/a1/manifest.js"></script>
 <script>
@@ -1248,8 +1248,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         const aulas = (await dyseListNivelAulas('a1')).filter(a => AULAS_MANIFEST[a.numero]);
         totalCount = aulas.length * 15;
         publishedCount = 0; doneCount = 0;
+        // Uma consulta só pra todas as aulas, em vez de uma por aula (44 no A1).
+        const publishedPorAula = await dyseGetPublishedSetsPorAula('a1');
         for(const aula of aulas){
-          const publishedSet = await dyseGetPublishedSet('a1', aula.numero);
+          const publishedSet = publishedPorAula[aula.numero] || new Set();
           publishedCount += AULAS_MANIFEST[aula.numero].filter(a => publishedSet.has(a.num)).length;
           doneCount += AULAS_MANIFEST[aula.numero].filter(a => doneMap['a1:' + aula.numero + ':' + a.num]).length;
         }

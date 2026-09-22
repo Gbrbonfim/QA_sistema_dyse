@@ -7,11 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
 <style>
 
 :root{
@@ -1422,6 +1417,11 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
 <script src="/assets/dyse-auth.js"></script>
 <script>
   let TURMAS = [], MATERIAS = [], STUDENTS = [], TEACHERS = [], TURMA_MATERIAS = [], TEACHER_TURMAS = [], MATERIA_ACTIVITIES_DB = [], DISPONIBILIDADE = [];
@@ -4705,8 +4705,9 @@ body.dyse-modal-open{overflow:hidden;}
       meses.push(ano + '-' + String(mesNum).padStart(2,'0') + '-01');
     }
 
-    const receitas = [], pagos = [], lucros = [];
-    for(const mes of meses){
+    // Os 6 meses são independentes entre si — dispara tudo de uma vez em vez
+    // de esperar um mês terminar pra só então pedir o próximo.
+    const porMes = await Promise.all(meses.map(async mes => {
       const [mensalidadesMes, gastosMes] = await Promise.all([dyseListMensalidades(mes), dyseListGastos(null, mes)]);
       const gastosPorAluno = {};
       gastosMes.forEach(g => { (gastosPorAluno[g.aluno_id] = gastosPorAluno[g.aluno_id] || []).push(g); });
@@ -4721,8 +4722,11 @@ body.dyse-modal-open{overflow:hidden;}
       Object.keys(mensalidadesPorAlunoMes).forEach(alunoId => {
         lucro += dyseLucroPorAluno(mensalidadesPorAlunoMes[alunoId], gastosPorAluno[alunoId] || []).lucroTotal;
       });
-      receitas.push(receita); pagos.push(pago); lucros.push(lucro);
-    }
+      return { receita, pago, lucro };
+    }));
+    const receitas = porMes.map(x => x.receita);
+    const pagos = porMes.map(x => x.pago);
+    const lucros = porMes.map(x => x.lucro);
 
     const labels = meses.map(formatMesLabel);
     if(CHART_EVOLUCAO) CHART_EVOLUCAO.destroy();
