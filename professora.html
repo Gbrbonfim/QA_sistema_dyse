@@ -1650,7 +1650,7 @@ body.dyse-modal-open{overflow:hidden;}
     existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
 
     document.getElementById('registroClasseTheadRow').innerHTML =
-      '<th>Aluno</th>' + REGISTRO_EIXOS.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + '<th>Observações</th>';
+      '<th>Aluno</th>' + REGISTRO_EIXOS.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + '<th style="width:100%;">Observações</th>';
 
     document.getElementById('registroClasseBody').innerHTML = CHAMADA_STUDENTS.length
       ? CHAMADA_STUDENTS.map(s => {
