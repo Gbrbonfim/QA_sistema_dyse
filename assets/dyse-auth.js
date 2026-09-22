@@ -451,11 +451,6 @@ async function dyseListMaterias(){
   return error ? [] : data;
 }
 
-async function dyseCreateMateria(slug, name, description){
-  const { data, error } = await sb.from('materias').insert({ slug, name, description }).select('*').maybeSingle();
-  return { data, error };
-}
-
 async function dyseDeleteMateria(slug){
   const { error } = await sb.from('materias').delete().eq('slug', slug);
   return { error };
@@ -652,26 +647,6 @@ async function dyseSetMateriaActivityReleased(materiaSlug, activityNum, released
    real de aulas por matéria (numero/topico); o nome/descrição do curso em
    si (que não muda por aula, não faz sentido morar no banco linha a linha)
    fica num manifesto mínimo aqui do lado do código. */
-const DYSE_COURSE_META = {
-  toefl: { name: 'TOEFL iBT', description: 'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.' },
-  a1:    { name: 'A1 · Atividades Complementares', description: 'Atividades complementares por aula do curso A1.' }
-};
-async function dyseListCourseCatalog(){
-  const { data, error } = await sb.from('nivel_aulas').select('materia_slug, numero, topico').eq('ativo', true).order('numero', { ascending: true });
-  if(error || !data) return [];
-  const bySlug = {};
-  data.forEach(row => {
-    if(!DYSE_COURSE_META[row.materia_slug]) return; // só matérias que também são "curso de atividades" (TOEFL, A1...)
-    (bySlug[row.materia_slug] = bySlug[row.materia_slug] || []).push({ numero: row.numero, topico: row.topico });
-  });
-  return Object.keys(bySlug).map(slug => ({
-    id: slug,
-    name: DYSE_COURSE_META[slug].name,
-    description: DYSE_COURSE_META[slug].description,
-    aulas: bySlug[slug]
-  }));
-}
-
 /* ---------- [Gestão] adicionar uma nova aula a qualquer matéria com currículo ----------
    Usado pelo botão "+ Adicionar aula" no modal de Material (gestao.html) —
    genérico, funciona pra A1, TOEFL ou qualquer matéria futura. */
@@ -1049,7 +1024,6 @@ function dyseAlunoSeenKey(uid){ return 'dyse_aluno_seen_' + (uid || 'anon'); }
 function dyseAlunoGetCounts(uid){ try{ return JSON.parse(localStorage.getItem(dyseAlunoCountsKey(uid)) || '{}') || {}; }catch(e){ return {}; } }
 function dyseAlunoSetCounts(uid, counts){ try{ localStorage.setItem(dyseAlunoCountsKey(uid), JSON.stringify(counts || {})); }catch(e){} }
 function dyseAlunoGetSeen(uid){ try{ return JSON.parse(localStorage.getItem(dyseAlunoSeenKey(uid)) || '{}') || {}; }catch(e){ return {}; } }
-function dyseAlunoSetSeen(uid, seen){ try{ localStorage.setItem(dyseAlunoSeenKey(uid), JSON.stringify(seen || {})); }catch(e){} }
 
 /* Quantos itens novos há por seção (contador atual − o que já foi visto).
    Primeira vez que o navegador vê a chave: 0 (não fica badge de "boas-vindas"). */
@@ -1936,17 +1910,6 @@ async function dyseDeleteNivelAula(nivelAulaId){
   return { error };
 }
 
-/* IDs de nivel_aula já registrados (registros_classe) pro ALUNO LOGADO,
-   numa matéria — via RPC "security definer", nunca lendo registros_classe
-   direto: aquela tabela é anotação interna da professora (avaliações,
-   observações), o aluno não pode ler nenhum campo dela, só saber "essa
-   aula já foi dada" pra tela de Material (área do aluno). */
-async function dyseListMinhasAulasRegistradas(materiaSlug){
-  if(!materiaSlug) return [];
-  const { data, error } = await sb.rpc('minhas_aulas_registradas', { check_materia_slug: materiaSlug });
-  return error ? [] : data.map(r => r.nivel_aula_id);
-}
-
 /* ---------- Registro de Classe (Bloco B — por aluno) ---------- */
 
 /* Histórico completo de um aluno, em qualquer turma/professor — a RLS
@@ -2356,66 +2319,10 @@ async function dyseListGastos(alunoId, mes){
   return error ? [] : data;
 }
 
-async function dyseCreateGasto(campos){
-  const session = await dyseGetSession();
-  const { data, error } = await sb
-    .from('gastos_personalizados')
-    .insert({
-      aluno_id: campos.aluno_id,
-      mes_competencia: campos.mes_competencia,
-      descricao: campos.descricao,
-      tipo: campos.tipo || 'outro',
-      forma_calculo: campos.forma_calculo,
-      valor: campos.valor,
-      observacao: campos.observacao || null,
-      criado_por: session ? session.user.id : null
-    })
-    .select('*')
-    .maybeSingle();
-  return { data, error };
-}
-
-async function dyseUpdateGasto(id, fields){
-  const { error } = await sb.from('gastos_personalizados').update(fields).eq('id', id);
-  return { error };
-}
-
-async function dyseDeleteGasto(id){
-  const { error } = await sb.from('gastos_personalizados').delete().eq('id', id);
-  return { error };
-}
-
 /* ---------- Gastos padrão (aplicados automaticamente a TODOS os alunos ativos, todo mês) ---------- */
 async function dyseListGastosPadrao(){
   const { data, error } = await sb.from('gastos_padrao').select('*').order('descricao', { ascending: true });
   return error ? [] : data;
-}
-
-async function dyseCreateGastoPadrao(campos){
-  const session = await dyseGetSession();
-  const { data, error } = await sb
-    .from('gastos_padrao')
-    .insert({
-      descricao: campos.descricao,
-      tipo: campos.tipo || 'outro',
-      forma_calculo: campos.forma_calculo,
-      valor: campos.valor,
-      ativo: campos.ativo !== false,
-      criado_por: session ? session.user.id : null
-    })
-    .select('*')
-    .maybeSingle();
-  return { data, error };
-}
-
-async function dyseUpdateGastoPadrao(id, fields){
-  const { error } = await sb.from('gastos_padrao').update(fields).eq('id', id);
-  return { error };
-}
-
-async function dyseDeleteGastoPadrao(id){
-  const { error } = await sb.from('gastos_padrao').delete().eq('id', id);
-  return { error };
 }
 
 /* Valor efetivo de um gasto: se percentual, calcula em cima do valor
