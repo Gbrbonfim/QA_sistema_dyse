@@ -1650,7 +1650,7 @@ body.dyse-modal-open{overflow:hidden;}
     existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
 
     document.getElementById('registroClasseTheadRow').innerHTML =
-      '<th>Aluno</th>' + REGISTRO_EIXOS.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + '<th style="width:100%;">Observações</th>';
+      '<th>Aluno</th>' + REGISTRO_EIXOS.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + '<th>Observações</th>';
 
     document.getElementById('registroClasseBody').innerHTML = CHAMADA_STUDENTS.length
       ? CHAMADA_STUDENTS.map(s => {
@@ -1669,7 +1669,7 @@ body.dyse-modal-open{overflow:hidden;}
             return '<td><select data-aluno="' + s.id + '" data-eixo="' + escapeHtmlLocal(eixo) + '">' + opcoes + '</select></td>';
           }).join('');
           return '<tr><td data-label="Aluno">' + nome + '</td>' + selects +
-            '<td><input type="text" data-obs="' + s.id + '" value="' + escapeHtmlLocal(reg ? (reg.observacoes || '') : '') + '" style="width:100%; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem;"></td></tr>';
+            '<td><textarea data-obs="' + s.id + '" rows="1" oninput="autoResizeObs(this)" style="display:block; width:100%; min-width:160px; resize:none; overflow:hidden; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem; line-height:1.35;">' + escapeHtmlLocal(reg ? (reg.observacoes || '') : '') + '</textarea></td></tr>';
         }).join('')
       : '<tr><td colspan="' + (REGISTRO_EIXOS.length + 2) + '" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
 
@@ -1680,6 +1680,15 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('registroClasseAlertaMotivo').value = sessao ? (sessao.alerta_report_card_motivo || '') : '';
     document.getElementById('registroClasseAlertaMotivoWrap').style.display = (sessao && sessao.alerta_report_card) ? 'block' : 'none';
     document.getElementById('registroClasseMsg').textContent = '';
+
+    document.querySelectorAll('#registroClasseBody textarea[data-obs]').forEach(autoResizeObs);
+  }
+
+  /* Cresce o textarea de Observações verticalmente conforme o texto, em vez
+     de espremer a coluna ou estourar a largura da tabela. */
+  function autoResizeObs(el){
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
   }
 
   async function carregarRegistroClasseDaTurma(){
@@ -1818,7 +1827,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.querySelectorAll('#registroClasseBody select[data-aluno]').forEach(el => {
       if(el.value && porAluno[el.dataset.aluno]) porAluno[el.dataset.aluno].avaliacoes[el.dataset.eixo] = el.value;
     });
-    document.querySelectorAll('#registroClasseBody input[data-obs]').forEach(el => {
+    document.querySelectorAll('#registroClasseBody textarea[data-obs]').forEach(el => {
       if(porAluno[el.dataset.obs]) porAluno[el.dataset.obs].observacoes = el.value.trim();
     });
 
