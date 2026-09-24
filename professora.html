@@ -1523,7 +1523,7 @@ body.dyse-modal-open{overflow:hidden;}
     presencasExistentes.forEach(p => presenteById[p.aluno_id] = p.presente);
 
     document.getElementById('chamadaBody').innerHTML = CHAMADA_STUDENTS.length
-      ? CHAMADA_STUDENTS.map((s, idx) => {
+      ? CHAMADA_STUDENTS.map(s => {
           const nome = escapeHtmlLocal(s.full_name || s.email || '');
           if(alunoPausado(s)){
             return '<tr class="linha-pausada" style="opacity:.6;"><td>' + nome + TAG_PAUSADO + '</td>' +
@@ -1742,7 +1742,7 @@ body.dyse-modal-open{overflow:hidden;}
       '<th>Aluno</th>' + eixos.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + (temResultado ? '<th>Resultado</th>' : '') + '<th>Observações</th>';
 
     document.getElementById('registroClasseBody').innerHTML = CHAMADA_STUDENTS.length
-      ? CHAMADA_STUDENTS.map(s => {
+      ? CHAMADA_STUDENTS.map((s, idx) => {
           const nome = escapeHtmlLocal(s.full_name || s.email || '');
           if(alunoPausado(s)){
             return '<tr class="linha-pausada" style="opacity:.6;"><td data-label="Aluno">' + nome + TAG_PAUSADO + '</td>' +
