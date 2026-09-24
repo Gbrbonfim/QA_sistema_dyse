@@ -3469,3 +3469,36 @@ where slug in ('a1','a2','b1','b2','c1')
 
 alter table public.materias
   alter column eixos_avaliacao set default '["Tarefa Final","Speaking","Listening","Reading","Writing","Gramática"]'::jsonb;
+
+-- ======================================================================
+-- 27) A2 — AULA 44: layout de FICHA por aluno (modelo do Registro de Classe)
+--     Em vez da grade horizontal, a aula 44 mostra uma ficha por aluno:
+--     situação sorteada da Parte B, tabela da Parte A (5 blocos × Bem / No
+--     processo / Não atingiu), tabela da rubrica 6.4.2 (5 eixos), resultado
+--     (Aprovado / Encaminhar 6.5.1 — sugerido pela regra, editável) e campo
+--     de feedback. "layout" liga a ficha; "ficha" traz os textos. Complementa
+--     a seção 25 (mescla no conteúdo já existente; idempotente).
+-- ======================================================================
+update public.nivel_aulas
+set conteudo = conteudo || jsonb_build_object(
+  'layout', 'ficha_apresentacao',
+  'ficha', jsonb_build_object(
+    'situacoes', jsonb_build_array($$Restaurante$$, $$Loja/Compras$$, $$Na cidade (direções)$$),
+    'blocos', jsonb_build_array(
+      jsonb_build_object('eixo', $$Bloco 1 · Minha vida hoje$$,       'nome', $$Minha vida hoje$$,               'estruturas', $$present simple · frequência · present continuous$$),
+      jsonb_build_object('eixo', $$Bloco 2 · Uma história que vivi$$,  'nome', $$Uma história que vivi$$,         'estruturas', $$past simple · past continuous · when/while · sequencers$$),
+      jsonb_build_object('eixo', $$Bloco 3 · Lugares que comparo$$,    'nome', $$Lugares que comparo$$,           'estruturas', $$comparativos · superlativos · there is/was$$),
+      jsonb_build_object('eixo', $$Bloco 4 · Coisas que já fiz$$,      'nome', $$Coisas que já fiz (e nunca fiz)$$, 'estruturas', $$present perfect ever/never · past simple$$),
+      jsonb_build_object('eixo', $$Bloco 5 · Meus planos e sonhos$$,   'nome', $$Meus planos e sonhos$$,          'estruturas', $$be going to · would like / want / hope to$$)
+    ),
+    'rubrica', jsonb_build_array(
+      jsonb_build_object('eixo', $$Cumprimento da Tarefa$$,  'texto', $$Cumprimento da Tarefa (5 blocos da Parte A)$$),
+      jsonb_build_object('eixo', $$Gramática do Nível$$,     'texto', $$Gramática do Nível (past simple x continuous, comparativos/superlativos, present perfect x past simple)$$),
+      jsonb_build_object('eixo', $$Coesão e Fluência$$,      'texto', $$Coesão e Fluência (conectores, início-meio-fim, pronúncia inteligível)$$),
+      jsonb_build_object('eixo', $$Interação (Parte B)$$,    'texto', $$Interação — Parte B (perguntas não roteirizadas e imprevisto)$$),
+      jsonb_build_object('eixo', $$Vocabulário do nível$$,   'texto', $$Vocabulário do nível$$)
+    ),
+    'criterio', $$Critério de aprovação (seção 6.4.2): "Bem" ou "No processo" em pelo menos 4 dos 5 eixos, sem nenhum "Não atingiu" em Cumprimento da Tarefa. Escala equivalente ao Report Card: Bem = PP · No processo = P · Não atingiu = R.$$
+  )
+)
+where materia_slug = 'a2' and numero = 44;

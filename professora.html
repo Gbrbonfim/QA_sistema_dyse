@@ -776,6 +776,28 @@ body.dyse-modal-open{overflow:hidden;}
   *{transition:none !important;}
 }
 
+.ficha-ap{border:2px solid #eee0cf; border-radius:12px; overflow:hidden; background:#fff; margin:0 0 22px;}
+.ficha-ap-head{background:#5b2c18; color:#fff; padding:10px 16px; font-size:.82rem;}
+.ficha-ap-head small{display:block; color:#f2c9a5; font-weight:700; letter-spacing:.04em;}
+.ficha-ap-head b{font-size:1rem;}
+.ficha-ap-body{padding:14px 16px 16px;}
+.ficha-ap h4{margin:16px 0 6px; font-size:.82rem; color:var(--amaranth);}
+.ficha-ap table{width:100%; border-collapse:collapse; font-size:.82rem; margin-bottom:6px;}
+.ficha-ap th{background:#5b2c18; color:#fff; padding:8px 10px; text-align:center; font-size:.76rem;}
+.ficha-ap th:first-child, .ficha-ap th.esq{text-align:left;}
+.ficha-ap td{padding:8px 10px; border-bottom:1px solid #eee0cf; vertical-align:middle;}
+.ficha-ap tr:nth-child(even) td{background:#fbf3ea;}
+.ficha-ap td.ck{text-align:center; width:88px;}
+.ficha-ap td.ck input{width:auto; transform:scale(1.25); cursor:pointer;}
+.ficha-ap .est{font-style:italic; color:var(--seal-soft); font-size:.76rem;}
+.ficha-ap .crit{font-size:.74rem; font-style:italic; color:var(--seal-soft); margin:4px 0 10px;}
+.ficha-ap .linha-opcoes{display:flex; flex-wrap:wrap; gap:6px 18px; align-items:center; font-size:.85rem; margin:0 0 4px;}
+.ficha-ap .linha-opcoes label{display:inline-flex; gap:6px; align-items:center; cursor:pointer;}
+.ficha-ap .linha-opcoes input{width:auto;}
+.ficha-ap .resultado{display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center; background:#5b2c18; color:#fff; border-radius:8px; padding:10px 14px; font-weight:700; font-size:.85rem; margin-top:10px;}
+.ficha-ap .resultado label{display:inline-flex; gap:6px; align-items:center; cursor:pointer;}
+.ficha-ap .resultado input{width:auto;}
+.ficha-ap textarea{display:block; width:100%; min-height:90px; resize:vertical; border:2px solid #eee0cf; border-radius:8px; padding:8px 10px; font-family:var(--font-body); font-size:.82rem;}
 </style>
 </head>
 <body>
@@ -1501,7 +1523,7 @@ body.dyse-modal-open{overflow:hidden;}
     presencasExistentes.forEach(p => presenteById[p.aluno_id] = p.presente);
 
     document.getElementById('chamadaBody').innerHTML = CHAMADA_STUDENTS.length
-      ? CHAMADA_STUDENTS.map(s => {
+      ? CHAMADA_STUDENTS.map((s, idx) => {
           const nome = escapeHtmlLocal(s.full_name || s.email || '');
           if(alunoPausado(s)){
             return '<tr class="linha-pausada" style="opacity:.6;"><td>' + nome + TAG_PAUSADO + '</td>' +
@@ -1650,6 +1672,47 @@ body.dyse-modal-open{overflow:hidden;}
     await carregarRegistroClasseDaTurma();
   }
 
+  /* Ficha individual da Apresentação Final (aula 44 do A2) — segue o modelo do
+     Registro de Classe: Parte A por bloco, rubrica por eixo (Bem / No processo /
+     Não atingiu) e o resultado. Os valores gravados são os mesmos de sempre
+     (sim / parcial / nao); só os rótulos mudam. Tudo vem do conteudo da aula. */
+  const FICHA_OPCOES = [['sim', 'Bem'], ['parcial', 'No processo'], ['nao', 'Não atingiu']];
+  const FICHA_RESULTADO = 'Resultado da Apresentação Final';
+  const FICHA_SITUACAO = 'Situação sorteada (Parte B)';
+
+  function renderFichaApresentacao(s, i, total, avaliacoes, reg, cfg){
+    const ficha = cfg.ficha || {};
+    const radio = (eixo, valor, nome) =>
+      '<input type="radio" name="' + nome + '" data-aluno="' + s.id + '" data-eixo="' + escapeHtmlLocal(eixo) + '" value="' + escapeHtmlLocal(valor) + '"' +
+      (avaliacoes[eixo] === valor ? ' checked' : '') + ' onchange="atualizarResultadoApresentacao(\x27' + s.id + '\x27, true)">';
+    const tabela = (titulo, linhas, comEstrutura) =>
+      '<table><thead><tr>' + (comEstrutura ? '<th>Nº</th><th class="esq">Bloco</th><th class="esq">Estruturas esperadas</th>' : '<th class="esq">' + titulo + '</th>') +
+      FICHA_OPCOES.map(o => '<th>' + o[1] + '</th>').join('') + '</tr></thead><tbody>' +
+      linhas.map((l, n) => {
+        const nome = 'f_' + s.id + '_' + (comEstrutura ? 'b' : 'r') + n;
+        return '<tr>' + (comEstrutura
+            ? '<td>' + (n + 1) + '</td><td>' + escapeHtmlLocal(l.nome) + '</td><td class="est">' + escapeHtmlLocal(l.estruturas || '') + '</td>'
+            : '<td>' + escapeHtmlLocal(l.texto || l.eixo) + '</td>') +
+          FICHA_OPCOES.map(o => '<td class="ck">' + radio(l.eixo, o[0], nome) + '</td>').join('') + '</tr>';
+      }).join('') + '</tbody></table>';
+    const situacoes = (ficha.situacoes || []).map(sit =>
+      '<label>' + radio(FICHA_SITUACAO, sit, 'f_' + s.id + '_sit') + escapeHtmlLocal(sit) + '</label>').join('');
+    const resultado = '<div class="resultado"><span>' + FICHA_RESULTADO + '</span>' +
+      '<label>' + radio(FICHA_RESULTADO, 'aprovado', 'f_' + s.id + '_res') + 'Aprovado</label>' +
+      '<label>' + radio(FICHA_RESULTADO, 'encaminhar', 'f_' + s.id + '_res') + 'Encaminhar para 6.5.1 (protocolo de reforço)</label></div>';
+    return '<tr><td colspan="20" style="padding:0; border:none;"><div class="ficha-ap">' +
+      '<div class="ficha-ap-head"><small>ALUNO(A) ' + (i + 1) + ' DE ' + total + '</small><b>' + escapeHtmlLocal(s.full_name || s.email || '') + '</b> · Apresentação Final de Nível — Aula 44 · Nível A2 · "Meu ano em inglês"</div>' +
+      '<div class="ficha-ap-body">' +
+        (situacoes ? '<h4>Situação sorteada (Parte B)</h4><div class="linha-opcoes">' + situacoes + '</div>' : '') +
+        '<h4>Parte A — desempenho por bloco (4-5 min)</h4>' + tabela('', ficha.blocos || [], true) +
+        '<h4>Rubrica (6.4.2)</h4>' + tabela('Eixo (rubrica 6.4.2)', ficha.rubrica || [], false) +
+        '<div class="crit">' + escapeHtmlLocal(ficha.criterio || '') + '</div>' +
+        resultado +
+        '<h4>Observações e feedback qualitativo (pontos fortes, pronúncia, o que levar para a Avaliação Final de Nível)</h4>' +
+        '<textarea data-obs="' + s.id + '">' + escapeHtmlLocal(reg ? (reg.observacoes || '') : '') + '</textarea>' +
+      '</div></div></td></tr>';
+  }
+
   /* Monta a grade (avaliações + observações por aluno) e o planner do registro
      da data atual. opts.vazio = registro novo, tudo em branco. */
   async function carregarDiaRegistroClasse(opts){
@@ -1666,13 +1729,15 @@ body.dyse-modal-open{overflow:hidden;}
     REGISTRO_CFG_AULA = (aulaAtual && aulaAtual.conteudo) || {};
     const eixos = REGISTRO_CFG_AULA.eixos_avaliacao || REGISTRO_EIXOS;
     const escala = REGISTRO_CFG_AULA.escala_avaliacao || LABEL_AVALIACAO;
-    const temResultado = !!REGISTRO_CFG_AULA.rubrica_eixos;
+    const usaFicha = REGISTRO_CFG_AULA.layout === "ficha_apresentacao";
+    const temResultado = !!REGISTRO_CFG_AULA.rubrica_eixos && !usaFicha;
 
     const alunoIds = CHAMADA_STUDENTS.map(s => s.id);
     const existentes = branco ? [] : await dyseListRegistrosClasseDaAula(alunoIds, aulaId, data);
     const existentePorAluno = {};
     existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
 
+    document.getElementById("registroClasseTheadRow").parentElement.style.display = usaFicha ? "none" : "";
     document.getElementById('registroClasseTheadRow').innerHTML =
       '<th>Aluno</th>' + eixos.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + (temResultado ? '<th>Resultado</th>' : '') + '<th>Observações</th>';
 
@@ -1685,6 +1750,7 @@ body.dyse-modal-open{overflow:hidden;}
           }
           const reg = existentePorAluno[s.id];
           const avaliacoes = (reg && reg.avaliacoes) || {};
+          if(usaFicha) return renderFichaApresentacao(s, idx, CHAMADA_STUDENTS.length, avaliacoes, reg, REGISTRO_CFG_AULA);
           const selects = eixos.map(eixo => {
             const atual = avaliacoes[eixo] || '';
             const opcoes = ['', 'sim', 'parcial', 'nao', 'nao_participou'].map(v =>
@@ -1707,23 +1773,33 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('registroClasseMsg').textContent = '';
 
     document.querySelectorAll('#registroClasseBody textarea[data-obs]').forEach(autoResizeObs);
-    if(temResultado) CHAMADA_STUDENTS.forEach(s => atualizarResultadoApresentacao(s.id));
+    if(temResultado || usaFicha) CHAMADA_STUDENTS.forEach(s => atualizarResultadoApresentacao(s.id, false));
   }
 
   /* Resultado da Apresentação Final (aula 44), calculado a partir dos eixos da
      rubrica: aprovado com "Bem" ou "No processo" em pelo menos 4 eixos e sem
      "Não atingiu" no eixo obrigatório; senão, encaminhar pro protocolo 6.5.1. */
-  function atualizarResultadoApresentacao(alunoId){
+  function atualizarResultadoApresentacao(alunoId, auto){
     const cfg = REGISTRO_CFG_AULA || {};
-    const cel = document.querySelector('#registroClasseBody td[data-resultado="' + alunoId + '"]');
-    if(!cel || !cfg.rubrica_eixos) return;
+    if(!cfg.rubrica_eixos) return;
     const val = {};
     document.querySelectorAll('#registroClasseBody select[data-aluno="' + alunoId + '"]').forEach(el => { val[el.dataset.eixo] = el.value; });
-    if(cfg.rubrica_eixos.some(e => !val[e])){ cel.textContent = "—"; cel.style.color = ""; return; }
-    const ok = cfg.rubrica_eixos.filter(e => val[e] === "sim" || val[e] === "parcial").length;
-    const aprovado = ok >= (cfg.rubrica_minimo || 4) && val[cfg.rubrica_obrigatorio] !== "nao";
-    cel.textContent = aprovado ? "✓ Aprovado" : "Encaminhar p/ 6.5.1";
-    cel.style.color = aprovado ? "#2e7d32" : "#b3261e";
+    document.querySelectorAll('#registroClasseBody input[type="radio"][data-aluno="' + alunoId + '"]:checked').forEach(el => { val[el.dataset.eixo] = el.value; });
+    const completo = cfg.rubrica_eixos.every(e => val[e]);
+    const ok = cfg.rubrica_eixos.filter(e => val[e] === 'sim' || val[e] === 'parcial').length;
+    const aprovado = completo && ok >= (cfg.rubrica_minimo || 4) && val[cfg.rubrica_obrigatorio] !== 'nao';
+
+    // Layout de tabela (colunas): mostra o resultado na célula.
+    const cel = document.querySelector('#registroClasseBody td[data-resultado="' + alunoId + '"]');
+    if(cel){
+      cel.textContent = !completo ? '—' : (aprovado ? '✓ Aprovado' : 'Encaminhar p/ 6.5.1');
+      cel.style.color = !completo ? '' : (aprovado ? '#2e7d32' : '#b3261e');
+    }
+    // Layout de ficha: sugere o resultado marcando a opção (a professora ainda pode trocar).
+    if(auto && completo){
+      const alvo = document.querySelector('#registroClasseBody input[type="radio"][data-aluno="' + alunoId + '"][data-eixo="' + FICHA_RESULTADO + '"][value="' + (aprovado ? 'aprovado' : 'encaminhar') + '"]');
+      if(alvo) alvo.checked = true;
+    }
   }
 
   /* Cresce o textarea de Observações verticalmente conforme o texto, em vez
@@ -1886,7 +1962,7 @@ body.dyse-modal-open{overflow:hidden;}
     const alunosRegistraveis = CHAMADA_STUDENTS.filter(s => !alunoPausado(s));
     const porAluno = {};
     alunosRegistraveis.forEach(s => { porAluno[s.id] = { avaliacoes: {}, observacoes: '' }; });
-    document.querySelectorAll('#registroClasseBody select[data-aluno]').forEach(el => {
+    document.querySelectorAll('#registroClasseBody select[data-aluno], #registroClasseBody input[type="radio"][data-aluno]:checked').forEach(el => {
       if(el.value && porAluno[el.dataset.aluno]) porAluno[el.dataset.aluno].avaliacoes[el.dataset.eixo] = el.value;
     });
     document.querySelectorAll('#registroClasseBody textarea[data-obs]').forEach(el => {
