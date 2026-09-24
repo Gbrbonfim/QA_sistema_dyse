@@ -1285,7 +1285,6 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     for(const nivel of AREA_CTX.niveis){
       if(!TRILHA.includes(nivel.slug)) cards.push(await cardDoNivel(nivel));
     }
-    }
 
     wrap.innerHTML = cards.length
       ? '<div class="course-folder-grid">' + cards.join('') + '</div>'
