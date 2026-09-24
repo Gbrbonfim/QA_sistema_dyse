@@ -1577,6 +1577,7 @@ body.dyse-modal-open{overflow:hidden;}
   }
   let REGISTRO_AULAS_DA_TURMA = [];
   let REGISTRO_EIXOS = [];
+  let REGISTRO_CFG_AULA = {};      // conteúdo da aula atual (critérios próprios, quando houver)
   let REGISTRO_DATAS = [];          // [{ data_aula:'YYYY-MM-DD', salvo }] — datas já lançadas da aula
   let REGISTRO_DATA_ATUAL = '';     // data (YYYY-MM-DD) do registro sendo editado; '' = novo, sem data
   let REGISTRO_SESSOES_CACHE = [];  // linhas de registro_classe_sessao (planner) da aula atual
@@ -1659,34 +1660,43 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('registroClasseDataInput').value = data;
     const branco = opts.vazio || !data;
 
+    // Aula com critérios próprios (ex.: Apresentação Final do A2, aula 44): os eixos, a
+    // escala e o resultado vêm do conteúdo da aula; as demais usam os eixos do nível.
+    const aulaAtual = REGISTRO_AULAS_DA_TURMA.find(a => a.id === aulaId);
+    REGISTRO_CFG_AULA = (aulaAtual && aulaAtual.conteudo) || {};
+    const eixos = REGISTRO_CFG_AULA.eixos_avaliacao || REGISTRO_EIXOS;
+    const escala = REGISTRO_CFG_AULA.escala_avaliacao || LABEL_AVALIACAO;
+    const temResultado = !!REGISTRO_CFG_AULA.rubrica_eixos;
+
     const alunoIds = CHAMADA_STUDENTS.map(s => s.id);
     const existentes = branco ? [] : await dyseListRegistrosClasseDaAula(alunoIds, aulaId, data);
     const existentePorAluno = {};
     existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
 
     document.getElementById('registroClasseTheadRow').innerHTML =
-      '<th>Aluno</th>' + REGISTRO_EIXOS.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + '<th>Observações</th>';
+      '<th>Aluno</th>' + eixos.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + (temResultado ? '<th>Resultado</th>' : '') + '<th>Observações</th>';
 
     document.getElementById('registroClasseBody').innerHTML = CHAMADA_STUDENTS.length
       ? CHAMADA_STUDENTS.map(s => {
           const nome = escapeHtmlLocal(s.full_name || s.email || '');
           if(alunoPausado(s)){
             return '<tr class="linha-pausada" style="opacity:.6;"><td data-label="Aluno">' + nome + TAG_PAUSADO + '</td>' +
-              '<td colspan="' + (REGISTRO_EIXOS.length + 1) + '" style="font-size:.78rem; color:var(--seal-soft);">registro bloqueado enquanto a situação financeira estiver pausada</td></tr>';
+              '<td colspan="' + (eixos.length + (temResultado ? 2 : 1)) + '" style="font-size:.78rem; color:var(--seal-soft);">registro bloqueado enquanto a situação financeira estiver pausada</td></tr>';
           }
           const reg = existentePorAluno[s.id];
           const avaliacoes = (reg && reg.avaliacoes) || {};
-          const selects = REGISTRO_EIXOS.map(eixo => {
+          const selects = eixos.map(eixo => {
             const atual = avaliacoes[eixo] || '';
             const opcoes = ['', 'sim', 'parcial', 'nao', 'nao_participou'].map(v =>
-              '<option value="' + v + '"' + (atual === v ? ' selected' : '') + '>' + (v ? LABEL_AVALIACAO[v] : '—') + '</option>'
+              '<option value="' + v + '"' + (atual === v ? ' selected' : '') + '>' + (v ? (escala[v] || LABEL_AVALIACAO[v]) : '—') + '</option>'
             ).join('');
-            return '<td><select data-aluno="' + s.id + '" data-eixo="' + escapeHtmlLocal(eixo) + '">' + opcoes + '</select></td>';
+            return '<td><select data-aluno="' + s.id + '" data-eixo="' + escapeHtmlLocal(eixo) + '" onchange="atualizarResultadoApresentacao(\x27' + s.id + '\x27)">' + opcoes + '</select></td>';
           }).join('');
-          return '<tr><td data-label="Aluno">' + nome + '</td>' + selects +
+          const celulaResultado = temResultado ? '<td data-resultado="' + s.id + '" style="font-weight:700; white-space:nowrap;">—</td>' : '';
+          return '<tr><td data-label="Aluno">' + nome + '</td>' + selects + celulaResultado +
             '<td><textarea data-obs="' + s.id + '" rows="1" oninput="autoResizeObs(this)" style="display:block; width:100%; min-width:160px; resize:none; overflow:hidden; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem; line-height:1.35;">' + escapeHtmlLocal(reg ? (reg.observacoes || '') : '') + '</textarea></td></tr>';
         }).join('')
-      : '<tr><td colspan="' + (REGISTRO_EIXOS.length + 2) + '" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
+      : '<tr><td colspan="' + (eixos.length + (temResultado ? 3 : 2)) + '" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
 
     const sessao = branco ? null : REGISTRO_SESSOES_CACHE.find(x => String(x.data_aula || '').slice(0, 10) === data);
     document.getElementById('registroClassePontos').value = sessao ? (sessao.pontos_a_retomar || '') : '';
@@ -1697,6 +1707,23 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('registroClasseMsg').textContent = '';
 
     document.querySelectorAll('#registroClasseBody textarea[data-obs]').forEach(autoResizeObs);
+    if(temResultado) CHAMADA_STUDENTS.forEach(s => atualizarResultadoApresentacao(s.id));
+  }
+
+  /* Resultado da Apresentação Final (aula 44), calculado a partir dos eixos da
+     rubrica: aprovado com "Bem" ou "No processo" em pelo menos 4 eixos e sem
+     "Não atingiu" no eixo obrigatório; senão, encaminhar pro protocolo 6.5.1. */
+  function atualizarResultadoApresentacao(alunoId){
+    const cfg = REGISTRO_CFG_AULA || {};
+    const cel = document.querySelector('#registroClasseBody td[data-resultado="' + alunoId + '"]');
+    if(!cel || !cfg.rubrica_eixos) return;
+    const val = {};
+    document.querySelectorAll('#registroClasseBody select[data-aluno="' + alunoId + '"]').forEach(el => { val[el.dataset.eixo] = el.value; });
+    if(cfg.rubrica_eixos.some(e => !val[e])){ cel.textContent = "—"; cel.style.color = ""; return; }
+    const ok = cfg.rubrica_eixos.filter(e => val[e] === "sim" || val[e] === "parcial").length;
+    const aprovado = ok >= (cfg.rubrica_minimo || 4) && val[cfg.rubrica_obrigatorio] !== "nao";
+    cel.textContent = aprovado ? "✓ Aprovado" : "Encaminhar p/ 6.5.1";
+    cel.style.color = aprovado ? "#2e7d32" : "#b3261e";
   }
 
   /* Cresce o textarea de Observações verticalmente conforme o texto, em vez
@@ -1746,7 +1773,8 @@ body.dyse-modal-open{overflow:hidden;}
     }
     wrap.style.display = 'block';
 
-    REGISTRO_EIXOS = nivel.eixos_avaliacao || [];
+    // Critérios padrão de A1 a C1; só cai neles se o nível vier sem eixos cadastrados.
+    REGISTRO_EIXOS = (nivel.eixos_avaliacao && nivel.eixos_avaliacao.length) ? nivel.eixos_avaliacao : ["Tarefa Final", "Speaking", "Listening", "Reading", "Writing", "Gramática"];
     REGISTRO_AULAS_DA_TURMA = await dyseListNivelAulas(nivel.slug);
 
     TURMA_AULA_MATERIAL = {};

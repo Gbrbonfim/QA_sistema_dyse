@@ -2975,7 +2975,7 @@ create trigger trg_audit_descontos_professor
 --     cada aula é preenchido pela gestão no modal de Material.
 -- ======================================================================
 insert into public.materias (slug, name, description, total_aulas, eixos_avaliacao)
-values ('a2', 'A2', 'Currículo do nível A2 — 44 aulas.', 44, '["Tarefa Final","Speaking","Listening","Read./Writ."]'::jsonb)
+values ('a2', 'A2', 'Currículo do nível A2 — 44 aulas.', 44, '["Tarefa Final","Speaking","Listening","Reading","Writing","Gramática"]'::jsonb)
 on conflict (slug) do nothing;
 
 insert into public.nivel_aulas (materia_slug, numero, topico, conteudo) values
@@ -3410,3 +3410,62 @@ insert into public.nivel_aulas (materia_slug, numero, topico, conteudo) values
     'tarefa_de_casa', $$Google Forms de revisão gramatical (link no slide 2: https://forms.gle/AVy1wkHH34WVRcDG9), feito em casa após a aula (seção 6.3 do currículo). Preparar o roteiro da Apresentação Final de Nível (Aula 44) com o Guia do Aluno "Meu Ano em Inglês" (cinco blocos).$$
   ))
 on conflict (materia_slug, numero) do nothing;
+
+-- ======================================================================
+-- 25) A2 — AULA 44 (Apresentação Final de Nível), com critérios próprios.
+--     Diferente das demais aulas: o Bloco B avalia os 5 blocos da Parte A e
+--     os 5 eixos da rubrica (seção 6.4.2 do currículo) na escala Bem / No
+--     processo / Não atingiu, e o resultado (Aprovado / Encaminhar 6.5.1) é
+--     calculado na tela. Isso vem do próprio "conteudo" da aula:
+--       eixos_avaliacao   → colunas da avaliação (no lugar dos eixos do nível)
+--       escala_avaliacao  → rótulos de sim/parcial/nao (Bem = PP, No processo
+--                           = P, Não atingiu = R — os valores gravados seguem
+--                           sim/parcial/nao, então Report Card e histórico
+--                           continuam funcionando)
+--       rubrica_eixos / rubrica_obrigatorio / rubrica_minimo → regra de
+--                           aprovação: "Bem"/"No processo" em pelo menos 4 dos
+--                           5 eixos, sem "Não atingiu" em Cumprimento da Tarefa.
+--     Idempotente (ON CONFLICT DO NOTHING).
+-- ======================================================================
+insert into public.nivel_aulas (materia_slug, numero, topico, conteudo) values
+  ('a2', 44, $$Apresentação Final de Nível — "Meu ano em inglês: de onde vim, o que vivi e para onde vou"$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening'),
+    'tarefa_comunicativa', $$Parte A — apresentação individual (4-5 min) em cinco blocos, conectando as ideias com then, after that, because, but: (1) minha vida hoje — rotina e hábitos; (2) uma experiência marcante do passado, contada em sequência (o que aconteceu e o que estava acontecendo); (3) um lugar que conheço comparado a outro (o melhor, o mais bonito...); (4) experiências de vida (coisas que já fiz / nunca fiz); (5) meus planos e sonhos para o próximo ano. Parte B — interação espontânea com o professor (2-3 min): situação cotidiana sorteada na hora (restaurante, loja/compras ou pedindo direções na cidade), com 4-5 perguntas não roteirizadas e um pequeno imprevisto a resolver.$$,
+    'estrutura_gramatical', $$Bloco 1: present simple + advérbios de frequência · Bloco 2: past simple (regular/irregular) + past continuous + time sequencers · Bloco 3: comparativos e superlativos (+ there is/was) · Bloco 4: present perfect com ever/never · Bloco 5: be going to + would like / want / hope to. Ver seção 6.4.2 do currículo (v0.6).$$,
+    'pontos_atencao', jsonb_build_array($$Nota da coordenação: pela seção 6.4 do currículo (critério 3), a Apresentação Final de Nível acontece na última aula regular do módulo, dentro das 44 aulas. Rubrica de 5 eixos (seção 6.4.2): Cumprimento da Tarefa, Gramática do Nível, Coesão e Fluência, Interação (Listening) e Vocabulário. Aprovação com "Bem" ou "No processo" em pelo menos 4 eixos, sem "Não atingiu" em Cumprimento da Tarefa. A avaliação é registrada por aluno, por bloco da Parte A e por eixo da rubrica, na escala Bem / No processo / Não atingiu (equivalente a PP / P / R). Ao final da aula, agendar a Avaliação Final de Nível (evento fora da grade, critério 4).$$, $$Pré-aula: na Aula 43, enviar o Guia do Aluno "Meu Ano em Inglês" e orientar cada aluno a preparar a apresentação nos cinco blocos, com um pequeno roteiro de apoio (tópicos, não texto para ler). Sugerir usar as próprias produções do ano (descrição de foto, história de férias, bucket list) como material de base.$$, $$Condução (50 min): abertura (5 min) recapitulando o propósito da tarefa e sorteando a ordem; apresentações individuais (35 min, tempo ajustável ao número de alunos — Parte A de 4-5 min seguida da Parte B de 2-3 min; prioridade absoluta da aula); perguntas dos colegas (5 min) após algumas apresentações; fechamento (5 min) com feedback geral celebrando o percurso do A2, retomando a Trilha Pedagógica da Aula 01 e comunicando a data da Avaliação Final de Nível e do Forms.$$, $$A prioridade é 100% a Apresentação Final — não cortar tempo de apresentação para revisar. O deck (checklist can-do, slides 3-6) só é usado se sobrar tempo, nunca como atividade principal. Itens do checklist que correspondem a aulas retiradas da grade (personalidade, 'The 99 Gold Coins', último filme/série, pedido com Could) devem ser pulados.$$, $$Em turma de 5 alunos o tempo fica justo: controlar o relógio e, se necessário, dispensar a rodada de perguntas dos colegas. Em aula individual (VIP), a Parte A pode se estender (6-7 min) e a Parte B ter mais perguntas.$$),
+    'foco_fonetico_som', $$Fluência e entonação natural na fala espontânea, integrando os padrões fonéticos trabalhados no ano (-s/-es, -ed, -ing, was/were fracos, can forte/fraco, /θ/ e /ð/, formas fracas de than, of, to, contrações 've/'s).$$,
+    'foco_fonetico_erro', $$Sob a pressão de uma apresentação, é esperado que padrões já mapeados ao longo do ano reapareçam pontualmente — isso não deve ser tratado como reprovação automática, mas registrado com cuidado.$$,
+    'foco_fonetico_correcao', $$Não corrigir durante a apresentação — reservar observações para o feedback individual após a atividade, preservando a confiança do aluno. Usar o Registro desta aula, somado às revisões-teste (Aulas 13, 24, 33 e 43), como base para o Report Card (seção 6.2) e, se necessário, para o protocolo da seção 6.5.1.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical final (link no slide 2: https://forms.gle/jxLnERf9t6HHFiwW7), preenchido pelo aluno em casa após a aula. O professor agenda a Avaliação Final de Nível (fora da grade) e, em caso de desempenho insatisfatório na Apresentação, aciona o protocolo da seção 6.5.1 do currículo.$$,
+    'eixos_avaliacao', jsonb_build_array(
+      $$Bloco 1 · Minha vida hoje$$, $$Bloco 2 · Uma história que vivi$$, $$Bloco 3 · Lugares que comparo$$,
+      $$Bloco 4 · Coisas que já fiz$$, $$Bloco 5 · Meus planos e sonhos$$,
+      $$Cumprimento da Tarefa$$, $$Gramática do Nível$$, $$Coesão e Fluência$$, $$Interação (Parte B)$$, $$Vocabulário do nível$$
+    ),
+    'escala_avaliacao', jsonb_build_object('sim', 'Bem', 'parcial', 'No processo', 'nao', 'Não atingiu', 'nao_participou', 'Não participou'),
+    'rubrica_eixos', jsonb_build_array($$Cumprimento da Tarefa$$, $$Gramática do Nível$$, $$Coesão e Fluência$$, $$Interação (Parte B)$$, $$Vocabulário do nível$$),
+    'rubrica_obrigatorio', $$Cumprimento da Tarefa$$,
+    'rubrica_minimo', 4
+  ))
+on conflict (materia_slug, numero) do nothing;
+
+-- ======================================================================
+-- 26) CRITÉRIOS PADRÃO DO REGISTRO DE CLASSE — A1 ao C1
+--     Todo nível avalia os mesmos 6 critérios: Tarefa Final, Speaking,
+--     Listening, Reading, Writing e Gramática (os mesmos que o Report Card
+--     usa). O A1 já foi migrado na seção 13.1; aqui:
+--       a) o A2 (seed da seção 24 entrou com os 4 eixos antigos) e
+--          qualquer nível A1..C1 ainda no default antigo passam pros 6;
+--       b) esses 6 viram o DEFAULT da coluna, então B1, B2, C1 (e qualquer
+--          matéria com currículo criada depois) já nascem com eles.
+--     Não mexe em eixos customizados à mão (só troca quem está no default
+--     antigo ou sem eixos). A aula 44 do A2 tem critérios próprios (seção 25).
+-- ======================================================================
+update public.materias
+set eixos_avaliacao = '["Tarefa Final","Speaking","Listening","Reading","Writing","Gramática"]'::jsonb
+where slug in ('a1','a2','b1','b2','c1')
+  and (eixos_avaliacao is null
+       or eixos_avaliacao = '["Tarefa Final","Speaking","Listening","Read./Writ."]'::jsonb);
+
+alter table public.materias
+  alter column eixos_avaliacao set default '["Tarefa Final","Speaking","Listening","Reading","Writing","Gramática"]'::jsonb;
