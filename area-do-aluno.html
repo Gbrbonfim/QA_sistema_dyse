@@ -539,6 +539,14 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .material-aula-link.bloqueada .arrow{color:var(--seal-soft); opacity:.7;}
 .material-aula-link .dada{flex:none; font-size:.7rem; font-weight:800; color:#2e7d32; background:#e6f4e7; border-radius:999px; padding:2px 8px;}
 .trilha-intro{font-size:.85rem; color:var(--seal-soft); margin:0 0 14px;}
+.trilha-geral{background:#fff; border-radius:var(--radius-sm); padding:14px 18px 16px; margin:0 0 18px; box-shadow:0 4px 14px rgba(58,29,16,.08);}
+.trilha-geral-top{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:10px; font-size:.85rem; color:var(--seal-soft);}
+.trilha-geral-top b{color:var(--seal); font-size:.95rem;}
+.trilha-geral-bar{display:flex; gap:4px;}
+.trilha-geral-seg{flex:1; min-width:0;}
+.trilha-geral-seg .trilha-track{height:12px; border-radius:999px; background:#eadfd0; overflow:hidden;}
+.trilha-geral-seg .trilha-track span{display:block; height:100%; background:linear-gradient(90deg,var(--gamboge),var(--amaranth)); border-radius:999px; transition:width .4s;}
+.trilha-geral-seg .lbl{display:block; margin-top:5px; text-align:center; font-size:.7rem; font-weight:700; color:var(--seal-soft);}
 
 /* Faixa de material da aula (destaque, dentro da visão do curso) */
 .material-banner{
@@ -1286,8 +1294,27 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       if(!TRILHA.includes(nivel.slug)) cards.push(await cardDoNivel(nivel));
     }
 
+    // Barra geral da trilha: cada nível conta 44 aulas (A1..C1 = 220). Enche conforme
+    // as aulas ministradas (registradas pela professora) de cada nível.
+    const AULAS_POR_NIVEL = 44;
+    let feitasTotal = 0;
+    const segs = TRILHA.map(slug => {
+      const aulasN = AREA_CTX.aulasNivel[slug] || [];
+      const dadasN = AREA_CTX.aulasDadas[slug] || new Set();
+      const feitas = Math.min(AULAS_POR_NIVEL, aulasN.filter(a => dadasN.has(a.id)).length);
+      feitasTotal += feitas;
+      const nome = (AREA_CTX.materias[slug] && AREA_CTX.materias[slug].name) || slug.toUpperCase();
+      return "<div class=\"trilha-geral-seg\" title=\"" + escapeHtmlLocal(nome) + ": " + feitas + "/" + AULAS_POR_NIVEL + " aulas\">" +
+        "<div class=\"trilha-track\"><span style=\"width:" + Math.round((feitas / AULAS_POR_NIVEL) * 100) + "%;\"></span></div>" +
+        "<span class=\"lbl\">" + escapeHtmlLocal(nome) + "</span></div>";
+    });
+    const totalTrilha = TRILHA.length * AULAS_POR_NIVEL;
+    const trilhaGeralHtml = "<div class=\"trilha-geral\"><div class=\"trilha-geral-top\"><span><b>Sua trilha de aprendizagem</b> — A1 ao C1</span>" +
+      "<span><b>" + Math.round((feitasTotal / totalTrilha) * 100) + "%</b> · " + feitasTotal + " de " + totalTrilha + " aulas</span></div>" +
+      "<div class=\"trilha-geral-bar\">" + segs.join("") + "</div></div>";
+
     wrap.innerHTML = cards.length
-      ? '<div class="course-folder-grid">' + cards.join('') + '</div>'
+      ? trilhaGeralHtml + '<div class="course-folder-grid">' + cards.join('') + '</div>'
       : '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
           '<div class="course-folder-icon">🗂️</div>' +
           '<div class="course-folder-info">' +
