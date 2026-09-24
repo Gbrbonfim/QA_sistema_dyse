@@ -3502,3 +3502,66 @@ set conteudo = conteudo || jsonb_build_object(
   )
 )
 where materia_slug = 'a2' and numero = 44;
+
+-- ======================================================================
+-- 28) APRESENTAÇÃO FINAL (aula 44) — mesmo modelo de ficha no A1 e no A2
+--     a) A2: título e nome da rubrica da ficha (complementa a seção 27).
+--     b) A1: aula 44 passa a usar o modelo de ficha por aluno (Parte A por
+--        bloco + rubrica 6.4.1 + resultado), com o texto do modelo
+--        "Minha história até aqui — e minha próxima viagem" — inclui o Bloco A
+--        atualizado. Mescla no conteúdo existente; idempotente.
+-- ======================================================================
+update public.nivel_aulas
+set conteudo = jsonb_set(
+  jsonb_set(conteudo, '{ficha,titulo}', to_jsonb($$Apresentação Final de Nível — Aula 44 · Nível A2 · "Meu ano em inglês"$$::text)),
+  '{ficha,rubrica_titulo}', to_jsonb($$Eixo (rubrica 6.4.2)$$::text))
+where materia_slug = 'a2' and numero = 44 and conteudo ? 'ficha';
+
+update public.nivel_aulas
+set conteudo = conteudo || jsonb_build_object(
+  'habilidades', jsonb_build_array('Speaking','Listening'),
+  'tarefa_comunicativa', $$Tema: "Minha história até aqui — e minha próxima viagem" (seção 6.4.1 do currículo). Parte A — apresentação individual (3-4 min) em cinco blocos: (1) quem eu sou; (2) minha rotina; (3) uma viagem ou evento marcante do passado; (4) um lugar ou pessoa importante; (5) meu próximo destino dos sonhos. Parte B — interação espontânea com o professor (1-2 min): situação previsível sorteada na hora (hotel, restaurante ou loja/mercado), com 3-4 perguntas não roteirizadas.$$,
+  'estrutura_gramatical', $$Bloco 1: to be, possessive adjectives e genitivo 's · Bloco 2: present simple + advérbios de frequência · Bloco 3: past simple (regular e irregular) + vocabulário de viagem · Bloco 4: adjetivos + there is/there are · Bloco 5: present continuous para futuro. Ver rubrica de 5 eixos na seção 6.4.1 do currículo.$$,
+  'pontos_atencao', jsonb_build_array(
+    $$Nota da coordenação: pela seção 6.4 do currículo (critério 3), a Apresentação Final de Nível acontece na última aula regular do módulo, dentro das 44 aulas. Tema, formato e rubrica estão definidos na seção 6.4.1: 5 eixos — Cumprimento da Tarefa, Gramática do Nível, Fluência e Pronúncia, Interação (Listening) e Vocabulário — na escala PP/P/R; aprovação com PP ou P em pelo menos 4 eixos, sem R em Cumprimento da Tarefa. O aluno se prepara com o Guia do Aluno "Minha História Até Aqui". A avaliação é registrada na ficha individual de cada aluno (Bloco B desta aula), por bloco da Parte A e por eixo da rubrica, na escala Bem / No processo / Não atingiu (equivalente a PP / P / R). O material 'Class 44: Final Review' da WeHelpU é o conteúdo-base da Avaliação Final de Nível (evento fora da grade, critério 4) e só é usado dentro desta aula se sobrar tempo depois das apresentações.$$,
+    $$Pré-aula: na Aula 43, enviar o Guia do Aluno "Minha História Até Aqui" e orientar cada aluno a preparar a apresentação nos cinco blocos, com um pequeno roteiro de apoio (tópicos, não texto para ler). Avisar que a Parte B é sorteada na hora e não precisa ser preparada.$$,
+    $$Condução (50 min): abertura (5 min) recapitulando o propósito da tarefa (mobilizar numa situação real o que foi aprendido no A1 — seção 6.4, critério 3) e sorteando a ordem; apresentações individuais (35 min, tempo ajustável ao número de alunos — Parte A de 3-4 min cobrindo os cinco blocos, seguida da Parte B de 1-2 min de interação com o professor, situação sorteada na hora: hotel, restaurante ou loja/mercado; o professor preenche a ficha individual durante e logo após cada apresentação; prioridade absoluta da aula); perguntas dos colegas (5 min) após algumas apresentações; fechamento (5 min) com feedback geral celebrando o percurso do A1, retomando a Trilha Pedagógica da Aula 01 e comunicando a data da Avaliação Final de Nível. Se — e somente se — sobrar tempo: usar o material 'Class 44: Final Review' como revisão extra e opcional.$$,
+    $$A prioridade desta aula é 100% a Apresentação Final — não cortar tempo de apresentação para revisar. Em turma de 5 alunos, o tempo fica justo: controlar o relógio e, se necessário, dispensar a rodada de perguntas dos colegas. Em aula individual (VIP), a Parte A pode se estender (5-6 min) e a Parte B ter mais perguntas.$$,
+    $$A Parte B testa o can-do de interações curtas e previsíveis (seção 5): o professor faz perguntas simples e reais da situação sorteada, sem roteiro prévio para o aluno.$$
+  ),
+  'foco_fonetico_som', $$Fluência e entonação natural na fala espontânea, integrando os padrões fonéticos trabalhados ao longo do A1 (contrações, -s da 3ª pessoa, -ed, -ing, entonação de perguntas).$$,
+  'foco_fonetico_erro', $$Sob a pressão de uma apresentação, é esperado que padrões de erro já mapeados ao longo do A1 reapareçam pontualmente — isso não deve ser tratado como reprovação automática, mas registrado com cuidado.$$,
+  'foco_fonetico_correcao', $$Não corrigir durante a apresentação — reservar observações para o feedback individual após a atividade, preservando a confiança do aluno. Usar as fichas desta aula, somadas às revisões-teste anteriores (Aulas 15, 30, 40 e 43), como base para o Report Card (seção 6.2) e, se necessário, para o protocolo da seção 6.5.1.$$,
+  'tarefa_de_casa', $$Nenhuma tarefa de Google Forms nesta aula. Ao final da Aula 44, o professor agenda a Avaliação Final de Nível (evento formal, fora da grade, em até 2 semanas), comunicando ao aluno os 4 componentes avaliados: gramática, vocabulário, listening e checklist de can-do oral (seção 6.4). Em caso de desempenho insatisfatório na Apresentação Final, aciona-se o protocolo da seção 6.5.1.$$,
+  'eixos_avaliacao', jsonb_build_array(
+    $$Bloco 1 · Quem eu sou$$, $$Bloco 2 · Minha rotina$$, $$Bloco 3 · Viagem ou evento marcante$$,
+    $$Bloco 4 · Lugar ou pessoa importante$$, $$Bloco 5 · Meu próximo destino$$,
+    $$Cumprimento da Tarefa$$, $$Gramática do Nível$$, $$Fluência e Pronúncia$$, $$Interação (Parte B)$$, $$Vocabulário do nível$$
+  ),
+  'escala_avaliacao', jsonb_build_object('sim', 'Bem', 'parcial', 'No processo', 'nao', 'Não atingiu', 'nao_participou', 'Não participou'),
+  'rubrica_eixos', jsonb_build_array($$Cumprimento da Tarefa$$, $$Gramática do Nível$$, $$Fluência e Pronúncia$$, $$Interação (Parte B)$$, $$Vocabulário do nível$$),
+  'rubrica_obrigatorio', $$Cumprimento da Tarefa$$,
+  'rubrica_minimo', 4,
+  'layout', 'ficha_apresentacao',
+  'ficha', jsonb_build_object(
+    'titulo', $$Apresentação Final de Nível — Aula 44 · Nível A1 · "Minha história até aqui"$$,
+    'rubrica_titulo', $$Eixo (rubrica 6.4.1)$$,
+    'situacoes', jsonb_build_array($$Hotel$$, $$Restaurante$$, $$Loja/Mercado$$),
+    'blocos', jsonb_build_array(
+      jsonb_build_object('eixo', $$Bloco 1 · Quem eu sou$$,                'nome', $$Quem eu sou$$,                           'estruturas', $$to be · possessive adjectives · genitivo 's$$),
+      jsonb_build_object('eixo', $$Bloco 2 · Minha rotina$$,               'nome', $$Minha rotina$$,                          'estruturas', $$present simple · advérbios de frequência$$),
+      jsonb_build_object('eixo', $$Bloco 3 · Viagem ou evento marcante$$,  'nome', $$Uma viagem/evento marcante do passado$$,  'estruturas', $$past simple (regular e irregular) · vocabulário de viagem$$),
+      jsonb_build_object('eixo', $$Bloco 4 · Lugar ou pessoa importante$$, 'nome', $$Um lugar ou pessoa importante$$,         'estruturas', $$adjetivos · there is / there are$$),
+      jsonb_build_object('eixo', $$Bloco 5 · Meu próximo destino$$,        'nome', $$Meu próximo destino dos sonhos$$,        'estruturas', $$present continuous para futuro$$)
+    ),
+    'rubrica', jsonb_build_array(
+      jsonb_build_object('eixo', $$Cumprimento da Tarefa$$, 'texto', $$Cumprimento da Tarefa (5 blocos da Parte A)$$),
+      jsonb_build_object('eixo', $$Gramática do Nível$$,    'texto', $$Gramática do Nível (uso espontâneo das estruturas-alvo)$$),
+      jsonb_build_object('eixo', $$Fluência e Pronúncia$$,  'texto', $$Fluência e Pronúncia (hesitação mínima, pontos fonéticos do ano)$$),
+      jsonb_build_object('eixo', $$Interação (Parte B)$$,   'texto', $$Interação — Parte B (perguntas não roteirizadas)$$),
+      jsonb_build_object('eixo', $$Vocabulário do nível$$,  'texto', $$Vocabulário do nível$$)
+    ),
+    'criterio', $$Critério de aprovação (seção 6.4.1): "Bem" ou "No processo" em pelo menos 4 dos 5 eixos, sem nenhum "Não atingiu" em Cumprimento da Tarefa. Escala equivalente ao Report Card: Bem = PP · No processo = P · Não atingiu = R.$$
+  )
+)
+where materia_slug = 'a1' and numero = 44;

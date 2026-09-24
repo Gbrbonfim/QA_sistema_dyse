@@ -1701,11 +1701,11 @@ body.dyse-modal-open{overflow:hidden;}
       '<label>' + radio(FICHA_RESULTADO, 'aprovado', 'f_' + s.id + '_res') + 'Aprovado</label>' +
       '<label>' + radio(FICHA_RESULTADO, 'encaminhar', 'f_' + s.id + '_res') + 'Encaminhar para 6.5.1 (protocolo de reforço)</label></div>';
     return '<tr><td colspan="20" style="padding:0; border:none;"><div class="ficha-ap">' +
-      '<div class="ficha-ap-head"><small>ALUNO(A) ' + (i + 1) + ' DE ' + total + '</small><b>' + escapeHtmlLocal(s.full_name || s.email || '') + '</b> · Apresentação Final de Nível — Aula 44 · Nível A2 · "Meu ano em inglês"</div>' +
+      '<div class="ficha-ap-head"><small>ALUNO(A) ' + (i + 1) + ' DE ' + total + '</small><b>' + escapeHtmlLocal(s.full_name || s.email || '') + '</b> · ' + escapeHtmlLocal(ficha.titulo || "Apresentação Final de Nível — Aula 44") + '</div>' +
       '<div class="ficha-ap-body">' +
         (situacoes ? '<h4>Situação sorteada (Parte B)</h4><div class="linha-opcoes">' + situacoes + '</div>' : '') +
         '<h4>Parte A — desempenho por bloco (4-5 min)</h4>' + tabela('', ficha.blocos || [], true) +
-        '<h4>Rubrica (6.4.2)</h4>' + tabela('Eixo (rubrica 6.4.2)', ficha.rubrica || [], false) +
+        '<h4>Rubrica</h4>' + tabela(ficha.rubrica_titulo || "Eixo (rubrica)", ficha.rubrica || [], false) +
         '<div class="crit">' + escapeHtmlLocal(ficha.criterio || '') + '</div>' +
         resultado +
         '<h4>Observações e feedback qualitativo (pontos fortes, pronúncia, o que levar para a Avaliação Final de Nível)</h4>' +
