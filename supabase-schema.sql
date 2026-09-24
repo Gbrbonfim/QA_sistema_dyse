@@ -2963,3 +2963,450 @@ create trigger trg_audit_descontos_professor
   for each row execute procedure public.log_financeiro_auditoria();
 
 -- ======================================================================
+
+-- ======================================================================
+-- 24) NÍVEL A2 — matéria "A2" e as aulas 1 a 43 do Registro de Classe
+--     (extraído de "Registro de Classe & Planner Pedagógico A2 · Modelo
+--     Institucional"). Mesma estrutura do A1 (seção 12.6): mesmos eixos de
+--     avaliação, mesmos campos de "conteudo". A aula 44 (Apresentação Final
+--     de Nível) fica de fora de propósito — será cadastrada depois, com
+--     conteúdo diferente. Idempotente (ON CONFLICT DO NOTHING): nunca
+--     sobrescreve edição manual feita depois. O material base (slides) de
+--     cada aula é preenchido pela gestão no modal de Material.
+-- ======================================================================
+insert into public.materias (slug, name, description, total_aulas, eixos_avaliacao)
+values ('a2', 'A2', 'Currículo do nível A2 — 44 aulas.', 44, '["Tarefa Final","Speaking","Listening","Read./Writ."]'::jsonb)
+on conflict (slug) do nothing;
+
+insert into public.nivel_aulas (materia_slug, numero, topico, conteudo) values
+  ('a2', 1, $$Acolhimento — revisão diagnóstica do A1 ("How much do you remember?") + entrevista pessoal$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Entrevistar um colega com perguntas pessoais que cobrem todo o A1 (rotina, trabalho, hobbies, roupas, clima, casa, ontem, aniversário) e reportar à turma o que descobriu.$$,
+    'estrutura_gramatical', $$Revisão diagnóstica das estruturas do A1 em perguntas reais: present simple (do/does), can, present continuous, was/were e past simple. Não sistematizar nada novo — a aula serve para mapear o ponto de partida da turma no A2.$$,
+    'pontos_atencao', jsonb_build_array($$Primeiros 10 min: acolhimento dos alunos + apresentação da Trilha Pedagógica do A2 (de onde o aluno sai e onde chega — can-do de saída, seção 5 do currículo). Bloco obrigatório, não deve ser cortado. Nesta aula também se apresenta o Flexge (seção 6.6), que será a primeira tarefa de casa do nível.$$, $$Aula diagnóstica: anotar no Registro de Classe quais estruturas do A1 ainda estão instáveis (3ª pessoa do present simple, did nas perguntas do passado, was/were) — serão retomadas ao longo do 1º bloco do A2.$$, $$Se faltar tempo, reduzir o número de perguntas da entrevista (priorizar as do slide 8, que misturam tempos verbais).$$),
+    'foco_fonetico_som', $$Entonação das perguntas: descendente em Wh-questions (Where do you live? ↘) e ascendente em yes/no questions (Do you like your job? ↗).$$,
+    'foco_fonetico_erro', $$Aplicar a mesma entonação em todas as perguntas (subida em Wh-questions por analogia com as de sim/não) ou entonação plana, soando como afirmação.$$,
+    'foco_fonetico_correcao', $$Marcar setas de entonação no quadro ao lado de 2-3 perguntas do slide 7 e fazer drilling contrastivo (uma Wh, uma yes/no) antes da entrevista.$$,
+    'tarefa_de_casa', $$Flexge: iniciar a trilha do nível na plataforma (atividades atribuídas pelo professor), priorizando os exercícios de speaking e listening.$$
+  )),
+  ('a2', 2, $$To be (revisão) + possessive adjectives — perfil de Matthew Encina$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Apresentar à turma o próprio perfil (nome, nacionalidade, ocupação, paixão, hobbies e o objeto sem o qual não vive) usando to be e possessive adjectives.$$,
+    'estrutura_gramatical', $$Revisão do to be nas três formas + possessive adjectives (my, your, his, her, its, our, their) e o contraste entre contração e possessivo (he's/his, it's/its, they're/their, you're/your).$$,
+    'pontos_atencao', jsonb_build_array($$Os pares homófonos (they're/their, it's/its, you're/your) quase não geram erro na fala, mas geram muito na escrita — observar a tarefa de casa.$$, $$Interferência do português 'seu/sua': o aluno escolhe his/her pelo gênero do objeto possuído, e não do possuidor ('She loves his dog' querendo dizer o cachorro dela).$$),
+    'foco_fonetico_som', $$Diferença de vogal entre he's /hiːz/ (longa) e his /hɪz/ (curta); /h/ aspirado de his/her.$$,
+    'foco_fonetico_erro', $$He's e his pronunciados de forma idêntica; 'her' e 'his' com o 'r' gutural do português (/rɪz/).$$,
+    'foco_fonetico_correcao', $$Drilling em pares mínimos he's/his com frases do slide 4 (His name is Matthew. He's a creative professional.). Modelar o /h/ como um sopro suave, sem fricção na garganta.$$,
+    'tarefa_de_casa', $$Slides 10, 11 e 12.$$
+  )),
+  ('a2', 3, $$Casa e quartos famosos — reading (Mean Girls, Toy Story, Stranger Things, Harry Potter)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Descrever e opinar sobre quartos famosos de filmes e séries, dizendo de qual gosta ou não gosta e por quê.$$,
+    'estrutura_gramatical', $$There is / there are + vocabulário de móveis e objetos da casa (pillows, shelves, blankets, bunk bed, cupboard) em descrições. As preposições de lugar em negrito no texto só são notadas aqui — a sistematização é na Aula 04.$$,
+    'pontos_atencao', jsonb_build_array($$Os textos trazem passado (was, lived, put) — tratar apenas como reconhecimento, sem sistematizar.$$, $$O vocabulário é denso: priorizar os itens de mobília que serão reutilizados na Aula 04 (bed, shelves, pillows, sofa, cupboard, window).$$),
+    'foco_fonetico_som', $$Palavras da casa com pronúncia distante da escrita: cupboard /ˈkʌbəd/ (p mudo), shelf/shelves (/f/ → /v/ no plural), pillow /ˈpɪləʊ/.$$,
+    'foco_fonetico_erro', $$Pronunciar o 'p' de cupboard ('cup-board'); dizer 'shelfs'; 'pillow' com vogal longa (/piː/).$$,
+    'foco_fonetico_correcao', $$Modelar e fazer drilling isolado das palavras-problema antes da leitura em voz alta. Destacar no quadro o plural irregular shelf → shelves.$$,
+    'tarefa_de_casa', $$Sem tarefa de slides nesta aula — o deck continua na Aula 04.$$
+  )),
+  ('a2', 4, $$Preposições de lugar (in, on, under, behind, between, over) + descrevendo quartos$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Descrever o próprio quarto dizendo onde estão os móveis e objetos, usando preposições de lugar e adjetivos (comfortable, modern, cool).$$,
+    'estrutura_gramatical', $$Prepositions of place (in, on, under, behind, between... and..., over) + there is/are + adjetivos para descrever ambientes.$$,
+    'pontos_atencao', jsonb_build_array($$Over (acima, sem contato) x on (em cima, com contato) é confusão recorrente, porque o português usa 'em cima' para os dois.$$, $$Between exige 'and' (between the sofa and the armchair). Behind costuma ser confundido com in front of.$$),
+    'foco_fonetico_som', $$Acento na segunda sílaba de behind /bɪˈhaɪnd/ e between /bɪˈtwiːn/; /ð/ de the e there.$$,
+    'foco_fonetico_erro', $$Acentuar a primeira sílaba ('BE-hind', 'BE-tween'); pronunciar o /ð/ de 'the/there' como /d/.$$,
+    'foco_fonetico_correcao', $$Bater palmas na sílaba tônica; drilling de frase inteira (The lamp is between the bed and the window). Para o /ð/, mostrar a posição da língua entre os dentes.$$,
+    'tarefa_de_casa', $$Slide 15 (escrever a descrição do próprio quarto e apresentá-la à turma na próxima aula).$$
+  )),
+  ('a2', 5, $$Adjetivos de aparência física + modifiers (very/really/quite) + alturas$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Perguntar e dizer alturas (How tall is...? / How tall are you?) e descrever a aparência de colegas e celebridades com adjetivos e modifiers.$$,
+    'estrutura_gramatical', $$Posição do adjetivo (antes do substantivo e depois do be), a/an diante de adjetivo iniciado por vogal, adjetivo invariável no plural, modifiers very/really/quite antes do adjetivo; How tall...? e a forma de dizer alturas (feet/inches e metros).$$,
+    'pontos_atencao', jsonb_build_array($$Pré-aula: slides 4 e 5 (leitura do post sobre Olivier Rioux e respostas às perguntas).$$, $$Interferência direta do português: adjetivo depois do substantivo ('hair curly') e concordância no plural ('cheaps hotels').$$, $$'Quite' significa 'razoavelmente' e é confundido com 'quiet'. 'The tallest/the shortest' aparece aqui só como chunk — os superlativos serão sistematizados na Aula 34.$$),
+    'foco_fonetico_som', $$Leitura de medidas e decimais: two point three six meters; seven feet nine inches.$$,
+    'foco_fonetico_erro', $$Dizer 'two comma three six' ou 'two meters and thirty-six'; confundir feet /fiːt/ com fit /fɪt/.$$,
+    'foco_fonetico_correcao', $$Drilling com alturas de 3-4 celebridades; par mínimo feet/fit. Reforçar que em inglês se usa 'point' para a vírgula decimal.$$,
+    'tarefa_de_casa', $$Slides 12 e 13.$$
+  )),
+  ('a2', 6, $$Sentimentos + imperativos e sugestões com Let's — "Feeding your feelings"$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Em pares, reagir a situações e sentimentos do colega (stressed, bored, anxious...) com conselhos no imperativo e sugestões com Let's / Let's not.$$,
+    'estrutura_gramatical', $$Imperativo afirmativo (verbo) e negativo (Don't + verbo), uso de please para suavizar; Let's + verbo / Let's not + verbo para sugestões; adjetivos de sentimentos (stressed, anxious, relaxed, bored, excited, worried, disappointed, angry).$$,
+    'pontos_atencao', jsonb_build_array($$Pré-aula: slides 4, 5, 6 e 7 (leitura do blog post "Feeding Your Feelings").$$, $$'Don't be stressed/worried' — o aluno tende a omitir o be ('Don't stressed').$$, $$O imperativo pode soar rude para brasileiros acostumados a pedidos indiretos; mostrar o papel de please e da entonação.$$, $$O texto trata de alimentação e emoções: conduzir o tema com leveza, focado nas estratégias do blog.$$),
+    'foco_fonetico_som', $$Entonação de sugestão amigável (Let's go for a walk! com subida suave) em contraste com ordem seca; contração Let's /lets/.$$,
+    'foco_fonetico_erro', $$Imperativo com entonação plana e descendente, soando como ordem ríspida; dizer 'Let us' por extenso na fala informal.$$,
+    'foco_fonetico_correcao', $$Modelar a mesma frase em duas versões (ríspida x gentil) e pedir que o aluno repita a gentil; acrescentar please nas ordens.$$,
+    'tarefa_de_casa', $$Slides 16, 17 e 18.$$
+  )),
+  ('a2', 7, $$Rotina + preposições de tempo (at/in/on) — "A day in the life" de Anthony em Harvard$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Entrevistar um colega sobre a rotina usando preposições de tempo corretamente e reportar as respostas à turma (E.g. Amanda relaxes at weekends).$$,
+    'estrutura_gramatical', $$Preposições de tempo: at (horas, night, the weekend, Christmas), in (partes do dia, meses, estações, anos), on (dias, datas); go to + lugar e go home (sem to); verbos de rotina (wake up, hang out, eat breakfast).$$,
+    'pontos_atencao', jsonb_build_array($$At night x in the morning; at the weekend (BrE) x on weekends (AmE) — aceitar as duas variantes.$$, $$'Go to home' é erro muito frequente.$$, $$Usar a rotina de Anthony como gancho, mas priorizar a rotina real dos alunos na tarefa final.$$),
+    'foco_fonetico_som', $$Formas fracas de at /ət/ e to /tə/ na fala conectada (at seven, go to the gym).$$,
+    'foco_fonetico_erro', $$Pronunciar as preposições com a forma forte e isoladas, deixando a fala 'robotizada' ('go TÚ the gym AT seven').$$,
+    'foco_fonetico_correcao', $$Backchaining: gym → to the gym → go to the gym → I go to the gym at seven, mantendo to e at reduzidos.$$,
+    'tarefa_de_casa', $$Slide 12.$$
+  )),
+  ('a2', 8, $$Present simple (afirmativa, negativa, interrogativa) — rotina de estudo em Cambridge$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Writing'),
+    'tarefa_comunicativa', $$Descrever a própria rotina de estudo/trabalho e perguntar sobre a do colega usando o present simple nas três formas (Do you have a study routine? Does your boss give you a lot of things to do?).$$,
+    'estrutura_gramatical', $$Present simple consolidado: afirmativa com regras de 3ª pessoa (-s, -es, -ies, has, does, goes), negativa com don't/doesn't + verbo base, interrogativa com do/does.$$,
+    'pontos_atencao', jsonb_build_array($$No A2 o present simple é consolidação: espera-se menos erro de 3ª pessoa do que no A1, mas ainda aparecem 'doesn't likes' e 'Does he goes?' — verbo base depois de does/doesn't.$$, $$Usar o Registro da Aula 01 para saber quais alunos precisam de mais atenção aqui.$$),
+    'foco_fonetico_som', $$As três pronúncias do -s/-es da 3ª pessoa: /s/ (works), /z/ (goes, has) e /ɪz/ (relaxes, watches).$$,
+    'foco_fonetico_erro', $$Pronunciar todo -es como /ɪz/ ou todo -s como /s/; 'studies' dividido em sílabas ('stu-di-es').$$,
+    'foco_fonetico_correcao', $$Quadro em três colunas de som com os verbos do próprio artigo (believes, relaxes, studies, watches); drilling em pares.$$,
+    'tarefa_de_casa', $$Slides 20 e 21.$$
+  )),
+  ('a2', 9, $$Formação de perguntas (question words + be/do) — Gifted e as perguntas das crianças$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Entrevistar um colega com Wh-questions sobre a vida pessoal e os gostos (Where do you work? What kind of music do you listen to? Who is your favorite celebrity?) usando a ordem correta.$$,
+    'estrutura_gramatical', $$Ordem das perguntas: (question word) + be + sujeito; (question word) + do/does + sujeito + verbo; preposição no final da pergunta (What is air made of? What music do you listen to?).$$,
+    'pontos_atencao', jsonb_build_array($$Omissão do auxiliar ('Where you live?') e escolha errada entre be e do ('Where are you live?').$$, $$Preposição no fim da pergunta é estranha para o brasileiro, que tende a colocá-la no início ('To what music...?').$$),
+    'foco_fonetico_som', $$Entonação descendente em Wh-questions; redução de do you para /djə/ na fala rápida.$$,
+    'foco_fonetico_erro', $$Subir o tom no final de Wh-questions por analogia com as perguntas de sim/não; pronunciar 'do you' separado e forte.$$,
+    'foco_fonetico_correcao', $$Setas de entonação no quadro; drilling em cadeia (cada aluno faz uma pergunta ao seguinte) cuidando da redução /djə/.$$,
+    'tarefa_de_casa', $$Slides 11 e 12.$$
+  )),
+  ('a2', 10, $$Preposições de lugar in/on/at (cidade, casa, transporte) + quiz "Are you a genius?"$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Aplicar o quiz "Are you a Genius?" a um colega (perguntas de conhecimentos gerais) e descobrir o 'gênio' da turma, reutilizando question words e in/on/at.$$,
+    'estrutura_gramatical', $$In/on/at para lugares: in + país, cidade, cômodo, prédio, parque; on + transporte e superfícies (exceção: in a car); at + home, work, school, university e lugares da cidade (at the airport, at a bus station).$$,
+    'pontos_atencao', jsonb_build_array($$'In home' e 'in the work' (interferência de 'em casa', 'no trabalho'); on the bus x in the car.$$, $$'In school' é possível no inglês americano, mas ensinar at school como padrão.$$),
+    'foco_fonetico_som', $$Linking consoante + vogal: at_home, on_a plane, in_a hotel.$$,
+    'foco_fonetico_erro', $$Inserir vogal de apoio após a consoante final ('atchi home', 'oni a plane').$$,
+    'foco_fonetico_correcao', $$Drilling de chunks com linking, marcando a ligação com um arco no quadro.$$,
+    'tarefa_de_casa', $$Sem tarefa de slides nesta aula — deck compartilhado com a Aula 09.$$
+  )),
+  ('a2', 11, $$Tarefas domésticas + advérbios e expressões de frequência$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Entrevistar um colega sobre com que frequência ele faz cada tarefa doméstica e calcular aproximadamente quantas calorias ele queima por semana.$$,
+    'estrutura_gramatical', $$Adverbs of frequency (always, usually, often, sometimes, hardly ever, never): antes do verbo principal, depois do be e entre don't/doesn't e o verbo; expressions of frequency (every day, once/twice/three times a week) no fim da frase. Vocabulário de housework (do the laundry, iron clothes, mop/sweep/vacuum the floor).$$,
+    'pontos_atencao', jsonb_build_array($$Pré-aula: slides 7 e 8 (vocabulário de tarefas domésticas).$$, $$Do x make (do the laundry, make the bed) é confusão frequente. 'Hardly ever' não tem relação com 'hard'.$$, $$A posição do advérbio com o be (I'm hardly ever stressed) costuma sair invertida. Esta aula retoma e aprofunda o que foi visto no A1 — observar quem já posiciona o advérbio com autonomia.$$),
+    'foco_fonetico_som', $$Palavras de housework com pronúncia enganosa: ironing /ˈaɪənɪŋ/ (r mudo), vacuum /ˈvækjuːm/, laundry /ˈlɔːndri/.$$,
+    'foco_fonetico_erro', $$Pronunciar o 'r' de iron/ironing ('ai-RON-ing'); ler vacuum 'à portuguesa'.$$,
+    'foco_fonetico_correcao', $$Modelar e fazer drilling isolado das três palavras antes do Speaking; pedir que o aluno repita dentro de uma frase completa (I hardly ever iron clothes).$$,
+    'tarefa_de_casa', $$Slides 16, 17 e 18.$$
+  )),
+  ('a2', 12, $$Família + genitivo 's + who/whose — a árvore genealógica de George Clooney$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Apresentar a própria família (foto ou nomes) a um colega, que pergunta Who is...? e Whose...? para descobrir o parentesco e a quem pertencem as coisas.$$,
+    'estrutura_gramatical', $$Genitivo 's (person + 's; plural regular s'; plural irregular children's; nomes compostos Ella and Alexander's; nomes terminados em s); diferença entre 's possessivo e 's = is; who x whose; vocabulário de família (grandparents, aunt, cousin, in-laws).$$,
+    'pontos_atencao', jsonb_build_array($$Interferência do português: 'the car of my father' em vez de my father's car.$$, $$Whose e who's são homófonos — erro aparece na escrita. Parent's x parents' confunde no plural.$$),
+    'foco_fonetico_som', $$As três pronúncias do 's: /s/ (Mike's), /z/ (George's, Amal's) e /ɪz/ (James's, Alice's).$$,
+    'foco_fonetico_erro', $$Pronunciar sempre /s/ ou omitir o 's na fala rápida ('my brother car').$$,
+    'foco_fonetico_correcao', $$Usar nomes reais dos alunos da turma para montar a tabela de três sons; drilling de frases com possessivo.$$,
+    'tarefa_de_casa', $$Slides 14 e 15.$$
+  )),
+  ('a2', 13, $$Revisão 1-12$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking'),
+    'tarefa_comunicativa', $$Checklist de autoavaliação (can-do) com um colega: apresentar-se, descrever o quarto e onde as coisas estão, descrever aparência, dar sugestões, falar da rotina com preposições, fazer Wh-questions, dizer a frequência das tarefas domésticas e falar da árvore genealógica.$$,
+    'estrutura_gramatical', $$Revisão integrada das Aulas 1-12: to be + possessive adjectives, preposições de lugar (in/on/under/between...; in/on/at), adjetivos + modifiers, imperativos e Let's, preposições de tempo, present simple, formação de perguntas, advérbios de frequência, genitivo 's e who/whose.$$,
+    'pontos_atencao', jsonb_build_array($$O link do Google Forms só deve ser enviado DEPOIS desta aula: a prática oral com correção ao vivo vem primeiro e o Forms feito depois é o dado que conta oficialmente para a progressão (seção 6.3 do currículo — ordem obrigatória).$$, $$Primeira revisão-teste do A2 (seção 6.3): usar o desempenho oral desta aula e o resultado do Forms feito em casa como dado para o Registro de Classe e o critério de progressão.$$, $$Itens marcados como 'não consigo ainda' são dado real para o planejamento (Bloco C), não falha a esconder — reforçar esse princípio com a turma (seção 2.2).$$),
+    'foco_fonetico_som', $$Revisão consolidada: entonação de Wh x yes/no questions, -s da 3ª pessoa, 's possessivo, acento de behind/between.$$,
+    'foco_fonetico_erro', $$Reincidência pontual dos padrões já mapeados (3ª pessoa, auxiliar omitido nas perguntas, his/her) sob a pressão de uma conversa longa.$$,
+    'foco_fonetico_correcao', $$Não interromper as atividades para corrigir — anotar no Registro de Classe e fazer, ao final, uma rodada coletiva rápida apenas com os 2-3 erros mais recorrentes da turma.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (link no slide 2: https://forms.gle/zigh92UWv6KRaAK17), feito em casa após a aula (seção 6.3 do currículo).$$
+  )),
+  ('a2', 14, $$Can / can't (habilidade, permissão, possibilidade e pedido) — exames e o Mr. Bean$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Entrevistar um colega sobre o que ele pode ou consegue fazer no trabalho, na escola/universidade e em casa (Can you have a break when you want to?) e reportar à turma.$$,
+    'estrutura_gramatical', $$Can/can't + infinitivo para habilidade, permissão, possibilidade e pedido educado (mesma forma para todas as pessoas); formas informais equivalentes: I have no idea how to..., There's no way I can...$$,
+    'pontos_atencao', jsonb_build_array($$No A2, as várias funções de can aparecem num mesmo ponto — nomear a função de cada exemplo (habilidade, permissão, possibilidade, pedido).$$, $$Erros típicos: 'Do you can...?' e 'can to go'. As formas informais (There's no way I can...) são novidade útil para soar mais natural.$$),
+    'foco_fonetico_som', $$Can forte /kæn/ em perguntas, respostas curtas e negativas; can fraco /kən/ em afirmativas; can't /kɑːnt/ (BrE) ou /kænt/ (AmE).$$,
+    'foco_fonetico_erro', $$Can e can't pronunciados de forma quase idêntica — o ouvinte entende o oposto do que o aluno quis dizer.$$,
+    'foco_fonetico_correcao', $$Exercício rápido de discriminação auditiva (o professor diz frases e a turma levanta a mão para can ou can't); mostrar que na afirmativa o acento vai para o verbo principal (I can SWIM).$$,
+    'tarefa_de_casa', $$Slides 11 e 12.$$
+  )),
+  ('a2', 15, $$Present continuous — trabalhar de casa$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Information gap: descrever ao colega o que as pessoas estão fazendo em uma imagem de casa e encontrar juntos as sete diferenças (In my house, the woman is playing with the dog).$$,
+    'estrutura_gramatical', $$Present continuous nas três formas (am/is/are + verbo -ing) e regras de ortografia (-e: making; consoante dobrada: getting, running, swimming).$$,
+    'pontos_atencao', jsonb_build_array($$Omissão do be ('She working') é o erro mais frequente.$$, $$Verbos de estado (like, know, want) não vão para o -ing ('I'm liking') — fazer um alerta pontual, sem sistematizar.$$, $$Ortografia do -ing (dobrar consoante) aparece na tarefa de casa.$$),
+    'foco_fonetico_som', $$Terminação -ing /ɪŋ/ sem vogal final; contrações I'm, she's, they're.$$,
+    'foco_fonetico_erro', $$Acrescentar uma vogal depois do -ing ('workingui') e não contrair o be ('She is working' lento e separado).$$,
+    'foco_fonetico_correcao', $$Modelar o /ŋ/ como som nasal que termina 'no nariz'; drilling de frases com contração a partir das diferenças encontradas na imagem.$$,
+    'tarefa_de_casa', $$Slides 11, 12, 13 e 14.$$
+  )),
+  ('a2', 16, $$Present simple x present continuous — os alemães nas férias$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Entrevistar um colega sobre hábitos (present simple) e sobre o que ele está fazendo ou planejando neste momento (present continuous), recontar as respostas à turma e escrever um parágrafo curto sobre si.$$,
+    'estrutura_gramatical', $$Contraste present simple (hábitos, rotina, fatos) x present continuous (ações acontecendo agora ou em torno de agora); marcadores (usually, every summer x now, today, this week); vocabulário de viagem (go sightseeing, pack bags, buy souvenirs, lie on the beach).$$,
+    'pontos_atencao', jsonb_build_array($$Pré-aula: slides 6 e 7 (vocabulário de viagem).$$, $$Os marcadores de tempo são o principal apoio para a escolha do tempo verbal — ensinar o aluno a procurá-los.$$, $$'I'm going on holiday' (plano) aparece como uso de futuro do continuous, já visto no A1 — só reconhecer. Retomar o Registro da Aula 15 para quem ainda omite o be.$$),
+    'foco_fonetico_som', $$Acento contrastivo: I USUALLY travel for WORK, but TODAY I'm going on HOLIDAY.$$,
+    'foco_fonetico_erro', $$Entonação plana que não destaca o contraste entre hábito e momento, deixando a frase sem ênfase.$$,
+    'foco_fonetico_correcao', $$Ler em voz alta as frases do slide 11 marcando em negrito as palavras que carregam o contraste; drilling por imitação.$$,
+    'tarefa_de_casa', $$Slides 18 e 19.$$
+  )),
+  ('a2', 17, $$Object pronouns — escolhendo a roupa do dia$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Conversar sobre como escolhe a roupa do dia e opinar sobre peças de roupa usando object pronouns (I love it. / I don't like them. / Can you help me?).$$,
+    'estrutura_gramatical', $$Subject pronouns x object pronouns (me, you, him, her, it, us, them) depois de verbos e preposições; vocabulário do infográfico (match, lay out, change your mind, look right, go out, pick, look good, comfy).$$,
+    'pontos_atencao', jsonb_build_array($$Omissão do objeto ('I love!', 'I want to buy.') por interferência do português, que omite o pronome.$$, $$Them x they e him x he se confundem. Esta aula retoma um ponto visto no A1 — o foco do A2 é o uso automático em conversa.$$),
+    'foco_fonetico_som', $$Redução de pronomes objeto na fala conectada: help her /ˈhelpə/, like them /ˈlaɪkðəm/.$$,
+    'foco_fonetico_erro', $$Pronunciar him/her com o 'r' gutural do português (/rɪm/, /rɛr/) e sempre na forma forte.$$,
+    'foco_fonetico_correcao', $$Modelar o /h/ suave e trabalhar reconhecimento auditivo das formas reduzidas; na produção, aceitar a forma plena desde que o /h/ esteja correto.$$,
+    'tarefa_de_casa', $$Slides 11 e 12.$$
+  )),
+  ('a2', 18, $$Números ordinais, datas e celebrações pelo mundo$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Perguntar e dizer as datas de feriados e celebrações do próprio país, explicando como as pessoas os celebram.$$,
+    'estrutura_gramatical', $$Ordinal numbers (first to thirty-first), como dizer datas (January first / the first of January) e anos (twenty twenty-four), formatos britânico e americano, in + mês e on + data.$$,
+    'pontos_atencao', jsonb_build_array($$Ordinais irregulares (first, second, third, fifth, eighth, ninth, twelfth) precisam de destaque.$$, $$A ordem dia/mês muda entre inglês britânico e americano (12/1 é ambíguo) — ponto prático importante para viagens e documentos.$$, $$On + data (on 27th November) x in + mês (in November).$$),
+    'foco_fonetico_som', $$Som /θ/ nos ordinais: fifth, sixth, eighth, twelfth, twentieth.$$,
+    'foco_fonetico_erro', $$Trocar o /θ/ por /f/ ou /t/ ('fift', 'twelf', 'eight' no lugar de 'eighth').$$,
+    'foco_fonetico_correcao', $$Mostrar a língua entre os dentes; drilling de ordinais em cadeia pela turma (cada aluno diz o seguinte) e com as datas de aniversário dos alunos.$$,
+    'tarefa_de_casa', $$Slide 8.$$
+  )),
+  ('a2', 19, $$Love / like / don't mind / hate + -ing — Christmas na Austrália$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Dizer o que ama, gosta, não se importa e odeia fazer em celebrações (Christmas, New Year's Eve, Halloween) usando verbo + -ing e comparar as preferências com as do colega.$$,
+    'estrutura_gramatical', $$Verbs of preference (love, like, enjoy, don't mind, prefer, hate) + verbo com -ing; 3ª pessoa (She likes having...; He doesn't mind cleaning...).$$,
+    'pontos_atencao', jsonb_build_array($$'I like to...' também é possível, mas o foco da aula é o -ing.$$, $$'Don't mind' significa 'não me importo' (aceitação), não 'não ligo' no sentido de desinteresse.$$, $$Retomar a 3ª pessoa do present simple (She likes, He doesn't mind).$$),
+    'foco_fonetico_som', $$Elisão do /t/ em don't mind /dəʊn(t) maɪnd/ e ligação suave entre as palavras.$$,
+    'foco_fonetico_erro', $$Inserir vogal de apoio após o t ('donchi mind'), quebrando o ritmo da frase.$$,
+    'foco_fonetico_correcao', $$Drilling de chunks (I don't mind cleaning / She doesn't mind cooking) com ritmo contínuo, sem pausa entre as palavras.$$,
+    'tarefa_de_casa', $$Slide 25.$$
+  )),
+  ('a2', 20, $$Passado do be (was/were) — mulheres no espaço$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Perguntar e responder sobre o próprio passado (Where were you born? Where were you last weekend? Were you tired yesterday?) e comentar mulheres importantes da história da ciência usando was/were.$$,
+    'estrutura_gramatical', $$Past simple do be: was/were nas três formas + short answers; was/were born; expressões de tempo passado (yesterday, last year, in 1963).$$,
+    'pontos_atencao', jsonb_build_array($$Pré-aula: slides 4 e 5 (assistir ao vídeo sobre mulheres no espaço: associar cada mulher a um fato e marcar verdadeiro/falso).$$, $$'I was born' é erro muito frequente ('I born', 'I am born') por interferência de 'eu nasci'.$$, $$Was x were por pessoa costuma estar razoável desde o A1 — observar sobretudo a interrogativa com inversão (Were you...?).$$),
+    'foco_fonetico_som', $$Formas fracas /wəz/ e /wə/ no meio da frase x formas fortes /wɒz/ e /wɜː/ nas short answers.$$,
+    'foco_fonetico_erro', $$Pronunciar sempre a forma forte ('She WAS a pilot'), o que soa artificial.$$,
+    'foco_fonetico_correcao', $$Drilling contrastivo: She was /wəz/ a pilot. — Was she? — Yes, she WAS.$$,
+    'tarefa_de_casa', $$Slides 10, 11 e 12.$$
+  )),
+  ('a2', 21, $$Biografias de mulheres famosas + profissões (-er, -or, -ist, -ian)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Montar uma lista de mulheres importantes em diferentes profissões e apresentá-las ao colega combinando presente e passado do be (Sally Ride was an astronaut and a physicist).$$,
+    'estrutura_gramatical', $$Formação de profissões a partir de verbos (-er/-or: painter, inventor) e substantivos (-ist/-ian: artist, politician); present e past do be em biografias (vivas x falecidas).$$,
+    'pontos_atencao', jsonb_build_array($$Escolher is ou was conforme a pessoa esteja viva ou não (Malala is / Frida was).$$, $$'Physicist' (físico) é confundido com 'physician' (médico).$$, $$Os textos têm past simple regular (died, loved, created) — só reconhecimento, a sistematização é na Aula 22.$$),
+    'foco_fonetico_som', $$Mudança de acento nas profissões derivadas: POLitics → poliTIcian, MATHS → mathemaTIcian, SCIence → SCIentist.$$,
+    'foco_fonetico_erro', $$Manter o acento da palavra de origem ('POli-tician') ou acentuar a última sílaba por analogia com o português ('politiCIAN').$$,
+    'foco_fonetico_correcao', $$Marcar a sílaba tônica de cada profissão no quadro e fazer drilling com batidas de palma.$$,
+    'tarefa_de_casa', $$Slide 21.$$
+  )),
+  ('a2', 22, $$Past simple — verbos regulares (holiday disasters)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Contar oralmente uma história (real ou inventada) de desastre nas férias usando o past simple, e escrevê-la em casa.$$,
+    'estrutura_gramatical', $$Past simple dos verbos regulares nas três formas (-ed; didn't + verbo base; Did + sujeito + verbo base?) e regras de ortografia (-d, -ied, consoante dobrada).$$,
+    'pontos_atencao', jsonb_build_array($$Pré-aula: slides 4, 5, 6, 7 e 8 (as quatro histórias de desastres de férias e as morais).$$, $$Erros típicos: 'didn't went', 'Did you went?' (passado depois de did).$$, $$Os textos trazem irregulares (had, went, got) — reconhecer sem sistematizar (foco da Aula 23). A pronúncia do -ed está nos slides de tarefa de casa, mas vale modelar rapidamente em sala.$$),
+    'foco_fonetico_som', $$As três pronúncias do -ed: /t/ (looked, booked), /d/ (stayed, loved), /ɪd/ (needed, decided).$$,
+    'foco_fonetico_erro', $$Pronunciar o -ed sempre como sílaba extra ('loo-ked', 'sta-yed'), por influência da escrita.$$,
+    'foco_fonetico_correcao', $$Regra prática: só há sílaba extra quando o verbo termina em t ou d; demonstrar com os verbos das histórias antes de o aluno narrar.$$,
+    'tarefa_de_casa', $$Slides 18, 19 e 20.$$
+  )),
+  ('a2', 23, $$Past simple — verbos irregulares + could — festivais de música$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Entrevistar um colega sobre um festival de música ou show a que ele foi (história real ou inventada) e descobrir se a história é verdadeira.$$,
+    'estrutura_gramatical', $$Past simple dos verbos irregulares (went, bought, saw, wore, ate, drank, felt, said) nas três formas; could/couldn't como passado de can.$$,
+    'pontos_atencao', jsonb_build_array($$Regularização dos irregulares ('buyed', 'wented') e passado depois de did ('Did you went?').$$, $$Could aparece como passado de can — retomar a Aula 14.$$, $$A escrita do parágrafo (slide 12) pode ficar como extra se faltar tempo.$$),
+    'foco_fonetico_som', $$Irregulares com 'gh' mudo e vogal /ɔː/: bought /bɔːt/, thought, caught; saw /sɔː/, wore /wɔː/.$$,
+    'foco_fonetico_erro', $$Pronunciar o 'gh' ou ler bought 'à portuguesa'; confundir bought (comprei) com brought (trouxe).$$,
+    'foco_fonetico_correcao', $$Agrupar os irregulares por som no quadro (bought/thought/caught; saw/wore) e fazer drilling em grupo.$$,
+    'tarefa_de_casa', $$Slides 13, 14 e 15.$$
+  )),
+  ('a2', 24, $$Revisão 14-23$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking'),
+    'tarefa_comunicativa', $$Checklist de autoavaliação (can-do) com um colega: can/can't no trabalho/escola, o que está fazendo agora, o que a família está fazendo, rotina x esta semana, do que gosta e não gosta de fazer, 2 pessoas famosas do passado e um festival de música.$$,
+    'estrutura_gramatical', $$Revisão integrada das Aulas 14-23: can (4 funções), present continuous, contraste simple x continuous, object pronouns, ordinais e datas, love/like/don't mind/hate + -ing, was/were, past simple regular e irregular, could.$$,
+    'pontos_atencao', jsonb_build_array($$O link do Google Forms só deve ser enviado DEPOIS desta aula: a prática oral com correção ao vivo vem primeiro e o Forms feito depois é o dado que conta oficialmente para a progressão (seção 6.3 do currículo — ordem obrigatória).$$, $$Segunda revisão-teste do A2 — usar a fluência oral e o Forms como dado para o Registro de Classe e o critério de progressão (seção 6.4).$$, $$O item do checklist 'describe your personality and a friend's personality' corresponde a uma aula retirada da grade: pular este item.$$, $$Observar com atenção a escolha simple x continuous e regular x irregular em fala espontânea.$$),
+    'foco_fonetico_som', $$Revisão consolidada: can forte/fraco, -ing, /θ/ dos ordinais, was/were fracos e as três pronúncias do -ed.$$,
+    'foco_fonetico_erro', $$Reincidência pontual dos padrões já mapeados no Registro de Classe sob a pressão de uma conversa longa que mistura vários tempos verbais.$$,
+    'foco_fonetico_correcao', $$Não interromper as atividades para corrigir — anotar no Registro de Classe e fazer, ao final, uma rodada coletiva rápida apenas com os 2-3 erros mais recorrentes da turma.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (link no slide 2: https://forms.gle/bmzrPSqBaVzxYAjS9), feito em casa após a aula (seção 6.3 do currículo).$$
+  )),
+  ('a2', 25, $$Past continuous + time sequencers — a mensagem na garrafa$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Dizer o que estava fazendo em momentos específicos do passado (What were you doing at 8 p.m. yesterday?) e recontar a história da garrafa em sequência usando time sequencers.$$,
+    'estrutura_gramatical', $$Past continuous (was/were + verbo -ing) nas três formas: ação em progresso num momento do passado, ação longa interrompida e cenário de uma história; time sequencers (then, after that, the next day, years later, when, while).$$,
+    'pontos_atencao', jsonb_build_array($$'After' sozinho para ligar ações consecutivas ('After I threw it.') — usar then/after that.$$, $$Esquecer o be ('I sleeping at 8 p.m.').$$, $$O contraste com o past simple (when/while) será sistematizado na Aula 26 — aqui só reconhecimento.$$),
+    'foco_fonetico_som', $$Formas fracas de was /wəz/ e were /wə/ antes do verbo -ing (I was /wəz/ sleeping).$$,
+    'foco_fonetico_erro', $$Pronunciar was/were fortes e separados, deixando a frase lenta e artificial.$$,
+    'foco_fonetico_correcao', $$Drilling de frases curtas com ritmo (I was watching TV. They were cleaning the beach.), com o acento no verbo principal.$$,
+    'tarefa_de_casa', $$Slide 11.$$
+  )),
+  ('a2', 26, $$Past simple x past continuous + when/while — histórias por trás de fotos$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Writing'),
+    'tarefa_comunicativa', $$Descrever uma foto favorita contando onde e quando foi tirada e o que estava acontecendo naquele momento (My brother took the photo when we were on a hiking trip).$$,
+    'estrutura_gramatical', $$Past continuous (ação longa, em andamento, cenário) + past simple (ação curta que interrompe); when + past simple x while + past continuous.$$,
+    'pontos_atencao', jsonb_build_array($$Pré-aula: slides 3, 4 e 5 (artigo "Telling Stories in Photography" e associação histórias x fotos).$$, $$While + past continuous ('While I took photos' é erro). 'I was see' mistura as estruturas.$$, $$Pedir aos alunos que tenham uma foto pessoal no celular — a tarefa ganha autenticidade.$$),
+    'foco_fonetico_som', $$Entonação de narrativa: pausa curta depois da oração de fundo (I was walking on the beach | when I saw the sunset).$$,
+    'foco_fonetico_erro', $$Frase corrida sem pausa, ou entonação de lista, sem destacar a ação que interrompe.$$,
+    'foco_fonetico_correcao', $$Marcar a pausa com uma barra no quadro e modelar a subida na primeira oração e a descida na segunda.$$,
+    'tarefa_de_casa', $$Slides 14 e 15.$$
+  )),
+  ('a2', 27, $$There is / there are + a/an/some/any — o restaurante de Gordon Ramsay$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play telefônico: o cliente pergunta sobre um restaurante (Is there a large dining room? Are there any vegetarian options?) e o gerente responde a partir do anúncio.$$,
+    'estrutura_gramatical', $$There is/there are nas três formas + short answers; a/an com singular, some em afirmativas e any em negativas e perguntas; vocabulário de restaurante (starters, bill, tip, napkin, tray, staff, dining room).$$,
+    'pontos_atencao', jsonb_build_array($$Interferência de 'tem': 'Have a table by the window?' em vez de Is there...$$, $$'Some' em pergunta só em ofertas e pedidos (Would you like some...?).$$, $$O texto escrito do slide 15 (restaurante favorito) pode ser extra se sobrar tempo.$$),
+    'foco_fonetico_som', $$There's /ðeəz/ e there are com linking /ðeərə/; /ð/ inicial.$$,
+    'foco_fonetico_erro', $$Trocar o /ð/ por /d/ ('dér is') e separar 'there are' em duas palavras fortes.$$,
+    'foco_fonetico_correcao', $$Posição da língua entre os dentes para o /ð/; drilling de perguntas completas do role-play (Are there any tables outside?).$$,
+    'tarefa_de_casa', $$Slides 17, 18 e 19.$$
+  )),
+  ('a2', 28, $$There was / there were + lugares da cidade + números altos — Paris e Londres$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Comparar uma cidade no passado e hoje (There were only two schools... Today there are five), usando lugares da cidade e números altos.$$,
+    'estrutura_gramatical', $$There was/there were nas três formas + a/an/some/any; contraste com there is/are; números altos (hundreds, thousands, millions) na fala e na escrita.$$,
+    'pontos_atencao', jsonb_build_array($$Pré-aula: slides 3 e 4 (vocabulário de lugares da cidade).$$, $$'There was many parks' (was com plural).$$, $$Números: o inglês usa vírgula para milhar e ponto para decimal (1,400 x 1.400 em português); 'and' em 'one hundred and thirty-four' (BrE). Chemist = farmácia (BrE).$$),
+    'foco_fonetico_som', $$Contraste de acento entre -teen e -ty: thirTEEN x THIRty, fourTEEN x FORty.$$,
+    'foco_fonetico_erro', $$Confundir 13/30, 14/40 etc. na escuta e na fala.$$,
+    'foco_fonetico_correcao', $$Discriminação auditiva rápida (o professor diz um número e os alunos escrevem) seguida de drilling dos pares.$$,
+    'tarefa_de_casa', $$Slides 17 e 18.$$
+  )),
+  ('a2', 29, $$Contáveis e incontáveis + a/an/some/any — a alimentação dos atletas$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play atleta x nutricionista: montar um plano alimentar para um dia e discutir as refeições (What do I have for breakfast? — I think you need some scrambled eggs and a bagel).$$,
+    'estrutura_gramatical', $$Substantivos contáveis e incontáveis; a/an com singular contável; some em afirmativas (e em ofertas/pedidos); any em negativas e perguntas; substantivos que podem ser das duas classes (an ice cream / some ice cream).$$,
+    'pontos_atencao', jsonb_build_array($$Erros por interferência do português: 'a bread', 'rices', 'some informations'.$$, $$Chicken, ice cream e cake mudam de classe conforme o uso.$$, $$Aproveitar para retomar there is/are + some/any da Aula 27.$$),
+    'foco_fonetico_som', $$Formas fracas de some /səm/ e linking an + vogal (an_apple, an_egg).$$,
+    'foco_fonetico_erro', $$Pronunciar some sempre forte (/sʌm/) e separar 'an apple' com pausa ou vogal de apoio.$$,
+    'foco_fonetico_correcao', $$Drilling de chunks de pedido (Can I have some water? I'd like an apple) com ritmo natural.$$,
+    'tarefa_de_casa', $$Slide 17.$$
+  )),
+  ('a2', 30, $$How much / how many + quantificadores + recipientes — quanto açúcar consumimos?$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Jogo de tabuleiro: perguntar e responder sobre hábitos alimentares com How much/How many e quantificadores (I don't eat many sweets. I drink a lot of water.).$$,
+    'estrutura_gramatical', $$How much (incontáveis) x How many (contáveis); quantificadores a lot of, a few, a little, not many, not much, not any; recipientes e porções (a can of, a slice of, a bowl of, a jar of, a carton of).$$,
+    'pontos_atencao', jsonb_build_array($$'Much' em frases afirmativas soa formal ('I eat much sugar') — preferir a lot of.$$, $$A few (contável) x a little (incontável). Fruit é normalmente incontável (How much fruit...).$$),
+    'foco_fonetico_som', $$Redução de of /əv/ ou /ə/ nas expressões de recipiente: a can of Coke /əˈkænəv/, a cup of tea /əˈkʌpə/.$$,
+    'foco_fonetico_erro', $$Pronunciar 'of' forte e separado ('a can ÓF Coke').$$,
+    'foco_fonetico_correcao', $$Backchaining com os recipientes: Coke → of Coke → a can of Coke, mantendo o of reduzido.$$,
+    'tarefa_de_casa', $$Slides 14, 15 e 16.$$
+  )),
+  ('a2', 31, $$Adverbs of manner + modifiers — choque cultural$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Falar e escrever sobre coisas do próprio país que podem surpreender um estrangeiro, usando adjetivos e advérbios (In Brazil, people greet each other warmly).$$,
+    'estrutura_gramatical', $$Adverbs of manner (adjetivo + -ly; irregulares fast, hard, well), posição depois do verbo ou do complemento; adjetivo (descreve substantivo) x advérbio (descreve verbo, adjetivo ou outro advérbio); modifiers (very, quite, really).$$,
+    'pontos_atencao', jsonb_build_array($$Good x well ('She speaks English very good') é o erro mais recorrente.$$, $$Hardly não é o advérbio de hard. Friendly e lovely terminam em -ly mas são adjetivos.$$, $$Tratar os estereótipos culturais do texto com cuidado — são relatos pessoais, não verdades sobre os países.$$),
+    'foco_fonetico_som', $$Sufixo -ly átono e acento da palavra base preservado: inCREDibly, SURprisingly, DANgerously, PERfectly.$$,
+    'foco_fonetico_erro', $$Acentuar o sufixo ('perfectLY') por influência do '-mente' do português.$$,
+    'foco_fonetico_correcao', $$Marcar a sílaba tônica de cada advérbio no quadro; drilling adjetivo → advérbio mantendo o mesmo acento (careful → CAREfully).$$,
+    'tarefa_de_casa', $$Slides 18 e 19.$$
+  )),
+  ('a2', 32, $$Comparativos de adjetivos e advérbios — cardio x strength training$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Debater com o colega preferências de exercício e hábitos de saúde, comparando as opções e justificando (Which one do you prefer and why? / Who do you think is healthier?).$$,
+    'estrutura_gramatical', $$Comparative adjectives (-er; more/less + adjetivo longo; -y → -ier; consoante dobrada: bigger, hotter; irregulares better, worse, farther/further) + than; comparative adverbs (more quickly, faster, harder, better, worse).$$,
+    'pontos_atencao', jsonb_build_array($$'More better', 'more big' e 'than' confundido com 'that' ou 'then'.$$, $$Advérbios comparativos (more quickly) retomam diretamente a Aula 31.$$, $$Tema de saúde e corpo: manter o foco em hábitos e preferências, sem comentários sobre peso de pessoas.$$),
+    'foco_fonetico_som', $$Than na forma fraca /ðən/ e o -er átono /ə/ (bigger /ˈbɪɡə/).$$,
+    'foco_fonetico_erro', $$Pronunciar than forte (/ðæn/ ou /dan/) e o -er com 'r' carregado e acentuado ('big-GÉR').$$,
+    'foco_fonetico_correcao', $$Drilling de frases completas com ritmo (Running is HARDer than WALKing), mantendo than e -er reduzidos.$$,
+    'tarefa_de_casa', $$Slides 15 e 16.$$
+  )),
+  ('a2', 33, $$Revisão 25-32$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking'),
+    'tarefa_comunicativa', $$Checklist de autoavaliação (can-do) com um colega: contar as últimas férias em sequência, dizer o que fazia às 8 p.m. de ontem, descrever uma foto, perguntar sobre um restaurante, falar da cidade no passado, da alimentação, de uma surpresa cultural e comparar pessoas e modos de fazer as coisas.$$,
+    'estrutura_gramatical', $$Revisão integrada das Aulas 25-32: past continuous, past simple x continuous (when/while), time sequencers, there is/are e there was/were + a/an/some/any, contáveis/incontáveis, How much/How many + quantificadores, adverbs of manner, comparativos de adjetivos e advérbios.$$,
+    'pontos_atencao', jsonb_build_array($$O link do Google Forms só deve ser enviado DEPOIS desta aula: a prática oral com correção ao vivo vem primeiro e o Forms feito depois é o dado que conta oficialmente para a progressão (seção 6.3 do currículo — ordem obrigatória).$$, $$Terceira revisão-teste do A2 — observar sobretudo a narrativa com past simple + past continuous, que é o can-do 'narra experiências passadas conectando eventos em sequência lógica' (seção 5).$$, $$O item do checklist sobre a história 'The 99 gold coins' corresponde a uma aula retirada da grade: pular este item.$$),
+    'foco_fonetico_som', $$Revisão consolidada: was/were fracos, pausa de narrativa, /ð/ de there, -teen x -ty, of reduzido, than fraco.$$,
+    'foco_fonetico_erro', $$Reincidência pontual dos padrões já mapeados no Registro de Classe sob a pressão de uma conversa longa que mistura vários tempos verbais.$$,
+    'foco_fonetico_correcao', $$Não interromper as atividades para corrigir — anotar no Registro de Classe e fazer, ao final, uma rodada coletiva rápida apenas com os 2-3 erros mais recorrentes da turma.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (link no slide 2: https://forms.gle/F2kVBgoZYzXkxLqQ7), feito em casa após a aula (seção 6.3 do currículo).$$
+  )),
+  ('a2', 34, $$Superlativos — Burj Khalifa e landmarks pelo mundo$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Role-play: um aluno é turista e o outro, morador, indica os melhores lugares da cidade usando superlativos (What's the most beautiful park? What's the cheapest place to go shopping?).$$,
+    'estrutura_gramatical', $$Superlative adjectives (the + -est; the most/the least + adjetivo longo; -y → -iest; consoante dobrada; irregulares the best, the worst, the farthest) + in the world / in the city / of all; contraste comparativo (dois itens) x superlativo (um em um grupo).$$,
+    'pontos_atencao', jsonb_build_array($$Omissão do 'the' ('It's tallest building') e dupla marcação ('the most tallest').$$, $$In x of: the tallest building in the world (não 'of the world').$$, $$Retomar os comparativos da Aula 32 para marcar o contraste.$$),
+    'foco_fonetico_som', $$Terminação -est átona /ɪst/ e the /ði/ antes de vogal (the oldest, the easiest).$$,
+    'foco_fonetico_erro', $$Acentuar o -est ('tall-EST') e pronunciar sempre /ðə/ antes de vogal.$$,
+    'foco_fonetico_correcao', $$Drilling de pares comparativo → superlativo (older → the oldest) com acento na raiz; destacar o /ði/ antes de vogal (retomado na Aula 37).$$,
+    'tarefa_de_casa', $$Slides 17 e 18.$$
+  )),
+  ('a2', 35, $$Be going to (planos e previsões) — morar e estudar fora$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Entrevistar um colega sobre planos futuros — morar, trabalhar ou estudar fora, ou planos mais próximos (What are you going to do on your next vacation?) — usando be going to.$$,
+    'estrutura_gramatical', $$Be going to + verbo base para planos e intenções e para previsões com evidência; forma afirmativa, negativa e interrogativa; vocabulário de bagagem (hoodie, toiletries, valuables, documents, footwear).$$,
+    'pontos_atencao', jsonb_build_array($$Pré-aula: slides 11 e 12 (o que é o Workaway e a pergunta sobre a experiência de Merilin).$$, $$Omissão do be ('I going to travel'). 'Gonna' é comum na fala nativa — ensinar como reconhecimento.$$, $$Diferença sutil em relação ao present continuous para compromissos marcados (visto no A1) — não aprofundar.$$, $$Os alunos que não pensam em morar fora seguem o lado NO dos cartões, sem prejuízo da tarefa.$$),
+    'foco_fonetico_som', $$Going to reduzido para /ˈɡəʊɪŋ tə/ ou /ˈɡənə/ (gonna) na fala informal.$$,
+    'foco_fonetico_erro', $$Pronunciar 'going to' lento e forte, com o to acentuado ('go-ing TÚ').$$,
+    'foco_fonetico_correcao', $$Modelar a forma com to reduzido para produção e mostrar 'gonna' em áudio para reconhecimento, sem exigir sua produção.$$,
+    'tarefa_de_casa', $$Slides 19 e 20.$$
+  )),
+  ('a2', 36, $$Would like / verbo + to-infinitive — bucket list$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Compartilhar com um colega sonhos e planos da própria bucket list usando would like to, want to, hope to, plan to (I'd really like to visit Japan. — Oh really? Why Japan?).$$,
+    'estrutura_gramatical', $$Would like + to + infinitivo (desejo agora/no futuro) x like + -ing (gosto em geral); outros verbos + to-infinitive: want, need, learn, decide, plan, choose, expect, try, promise, forget, hope.$$,
+    'pontos_atencao', jsonb_build_array($$I'd like to (quero) x I like -ing (gosto) — confusão central da aula; retomar a Aula 19.$$, $$Interferência 'I want that you...' ('quero que você'). 'Decide for' em vez de decide to.$$),
+    'foco_fonetico_som', $$Contração 'd em I'd like /aɪd laɪk/ e want to reduzido /ˈwɒntə/ ou /ˈwɒnə/ (wanna, reconhecimento).$$,
+    'foco_fonetico_erro', $$Omitir o 'd na fala ('I like to visit' querendo dizer 'I'd like to'), mudando o sentido da frase.$$,
+    'foco_fonetico_correcao', $$Par mínimo de sentido: I like traveling x I'd like to travel — o professor diz uma e a turma identifica se é gosto ou desejo.$$,
+    'tarefa_de_casa', $$Slide 15.$$
+  )),
+  ('a2', 37, $$Artigos the / a-an / zero article — tecnologia e casa inteligente (IoT)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Conversar sobre os gadgets que usa, os que gostaria de ter e se casas inteligentes são uma boa ideia, usando os artigos corretamente.$$,
+    'estrutura_gramatical', $$The (algo específico ou único, superlativos: the internet, the Sun, the best); zero article (generalizações, refeições, home/work/school/bed, by car/by email); a/an na primeira menção e the depois.$$,
+    'pontos_atencao', jsonb_build_array($$Interferência forte do português, que usa artigo em generalizações: 'The people spend hours on their phones' (as pessoas...). 'Go to the home', 'have the lunch'.$$, $$A letra da música é material do deck: usar apenas como atividade de listening/rima.$$),
+    'foco_fonetico_som', $$The pronunciado /ðə/ antes de consoante e /ðiː/ (ou /ði/) antes de vogal (the phone x the email).$$,
+    'foco_fonetico_erro', $$Pronunciar the sempre da mesma forma, ou como /de/ ('dê').$$,
+    'foco_fonetico_correcao', $$Exercício do slide 16 (mesmo/diferente) seguido de drilling com gadgets da aula (the smartwatch x the app).$$,
+    'tarefa_de_casa', $$Slides 17 e 18.$$
+  )),
+  ('a2', 38, $$Present perfect — introdução (a família Goy viajando o mundo)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening'),
+    'tarefa_comunicativa', $$Discutir a experiência da família que viaja o mundo — o que eles já fizeram e o que aprenderam — e opinar sobre fazer uma viagem longa.$$,
+    'estrutura_gramatical', $$Present perfect (have/has + past participle) para experiências de vida e ações sem tempo definido; ever/never; formas afirmativa, negativa e interrogativa com short answers (introdução).$$,
+    'pontos_atencao', jsonb_build_array($$Primeiro contato com o present perfect: foco em reconhecimento de forma e de uso (experiência, sem tempo definido).$$, $$A tradução 'tenho feito' engana — evitar.$$, $$O contraste com o past simple será sistematizado na Aula 41; aqui, só notar que as perguntas de follow-up (When? Where?) vão para o passado.$$),
+    'foco_fonetico_som', $$Contrações 've e 's (they've, she's visited); 's pode ser is ou has.$$,
+    'foco_fonetico_erro', $$Não contrair ('They have visited' lento e forte) ou pronunciar o have como /rév/.$$,
+    'foco_fonetico_correcao', $$Drilling de frases do vídeo com contração (They've created incredible experiences. I've booked the tickets.).$$,
+    'tarefa_de_casa', $$Sem tarefa de slides nesta aula — deck compartilhado com a Aula 39.$$
+  )),
+  ('a2', 39, $$Present perfect — prática + particípios irregulares (Have you ever...?)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Perguntar ao colega Have you ever...? sobre experiências de viagem e aprofundar com follow-up questions (When? Where? With who? How was it? / Would you like to?).$$,
+    'estrutura_gramatical', $$Present perfect nas três formas com contrações; particípios regulares (= past simple) e irregulares (been, gone, seen, taken, eaten, made, bought, gotten, had, driven).$$,
+    'pontos_atencao', jsonb_build_array($$Uso do passado no lugar do particípio ('Have you ever went/saw...?'). Gotten (AmE) x got (BrE) — aceitar os dois.$$, $$As follow-up questions (When did you go?) exigem past simple — observar, mas não sistematizar (Aula 41).$$),
+    'foco_fonetico_som', $$Particípios em -en com vogal reduzida ou 'n' silábico: taken /ˈteɪkən/, eaten /ˈiːtn/, driven /ˈdrɪvn/; been /biːn/ (BrE) ou /bɪn/ (AmE).$$,
+    'foco_fonetico_erro', $$Acentuar a terminação ('ta-KEN', 'ea-TEN') e pronunciar o -en como 'ém' pleno.$$,
+    'foco_fonetico_correcao', $$Drilling das três colunas (eat – ate – eaten) com acento sempre na primeira sílaba do particípio.$$,
+    'tarefa_de_casa', $$Slide 27.$$
+  )),
+  ('a2', 40, $$Vocabulário de compras + Amazon Go (grab and go)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Explicar ao colega como funciona uma compra na Amazon Go e contar as próprias preferências e experiências de compra (online x loja física).$$,
+    'estrutura_gramatical', $$Verb phrases de compras (shop, grab, pick up, put back, put in your bag, walk out) e vocabulário de loja (checkout, line, receipt, basket, fitting rooms, price tag, virtual cart); present simple para descrever um processo.$$,
+    'pontos_atencao', jsonb_build_array($$Phrasal verbs separáveis com pronome: put it back (não 'put back it').$$, $$A pergunta 'Have you ever been to an Amazon Go store?' (slide 8) antecipa a Aula 41 — aceitar respostas simples.$$, $$Grab e pick up são quase sinônimos; grab indica rapidez.$$),
+    'foco_fonetico_som', $$Receipt /rɪˈsiːt/ com p mudo; acento em CHECKout e SHOPping bag.$$,
+    'foco_fonetico_erro', $$Pronunciar o 'p' de receipt ('re-cei-pt') e acentuar a segunda parte de checkout.$$,
+    'foco_fonetico_correcao', $$Modelar e fazer drilling isolado; usar a sequência de passos da Amazon Go como fala contínua para praticar.$$,
+    'tarefa_de_casa', $$Sem tarefa de slides nesta aula — deck compartilhado com a Aula 41.$$
+  )),
+  ('a2', 41, $$Present perfect x past simple + been/gone — experiências de compra$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Entrevistar um colega com Have you ever...? sobre experiências de compra e aprofundar cada resposta com perguntas no past simple (When did you...? What did you buy?).$$,
+    'estrutura_gramatical', $$Present perfect (experiência, sem tempo definido) x past simple (tempo definido: yesterday, last week, in 2023); proibição do present perfect com expressões de tempo passado; been (foi e voltou) x gone (ainda está lá).$$,
+    'pontos_atencao', jsonb_build_array($$'I have bought a snack yesterday' — erro central da aula, porque o português usa o mesmo tempo nos dois casos.$$, $$Been x gone confunde muito.$$, $$Esta aula fecha o bloco de present perfect: usar o Registro das Aulas 38-39 para ver quem ainda não domina a forma.$$),
+    'foco_fonetico_som', $$Forma fraca de have em perguntas: Have you ever /həvjuˈevə/...? e resposta curta forte: Yes, I HAVE.$$,
+    'foco_fonetico_erro', $$Pronunciar 'Have you ever' separado e forte ou com 'r' inicial (/rév/).$$,
+    'foco_fonetico_correcao', $$Drilling de pergunta + short answer em cadeia pela turma, com a pergunta rápida e a resposta enfática.$$,
+    'tarefa_de_casa', $$Slides 19 e 20.$$
+  )),
+  ('a2', 42, $$Perguntas em todos os tempos verbais — Q&A com Millie Bobby Brown$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Role-play de entrevista com um influencer: formular perguntas em diferentes tempos verbais para o colega e responder a elas (com short answers e detalhes).$$,
+    'estrutura_gramatical', $$Revisão da formação de perguntas em todos os tempos do A2: be (presente e passado), present simple, can, present continuous, past continuous, past simple, present perfect e be going to; question words (what, when, how often, how many, whose...) e short answers.$$,
+    'pontos_atencao', jsonb_build_array($$Aula-ponte para as revisões finais: observar se o aluno escolhe o auxiliar certo para cada tempo (do/does, did, have/has, am/is/are, was/were).$$, $$Short answers com o auxiliar correto (Yes, I have. / No, I didn't.).$$),
+    'foco_fonetico_som', $$Entonação: descendente em Wh-questions e ascendente em yes/no questions — retomada da Aula 01, fechando o ciclo.$$,
+    'foco_fonetico_erro', $$Entonação única para todas as perguntas, que fica mais evidente quando o aluno alterna tempos verbais.$$,
+    'foco_fonetico_correcao', $$No role-play, o professor anota 2-3 perguntas com entonação inadequada e faz uma rodada coletiva de repetição ao final.$$,
+    'tarefa_de_casa', $$Slides 14 e 15.$$
+  )),
+  ('a2', 43, $$Revisão 34-42$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking'),
+    'tarefa_comunicativa', $$Checklist de autoavaliação (can-do) com um colega: falar de lugares famosos com superlativos, dizer planos com be going to, sonhos com would like/want/hope, falar da tecnologia que usa, fazer perguntas Have you ever...? e perguntas em vários tempos.$$,
+    'estrutura_gramatical', $$Revisão integrada das Aulas 34-42: superlativos, be going to, would like + verbos + to-infinitive, artigos (the/a/zero), present perfect (experiências, particípios irregulares), present perfect x past simple, been/gone e perguntas em todos os tempos.$$,
+    'pontos_atencao', jsonb_build_array($$O link do Google Forms só deve ser enviado DEPOIS desta aula: a prática oral com correção ao vivo vem primeiro e o Forms feito depois é o dado que conta oficialmente para a progressão (seção 6.3 do currículo — ordem obrigatória).$$, $$Quarta revisão-teste do A2 e penúltimo dado antes do fechamento do nível. Observar especialmente o contraste present perfect x past simple, que é o conteúdo novo mais delicado do semestre.$$, $$O item do checklist 'make a polite request using Could...?' corresponde a uma aula retirada da grade: pular este item.$$),
+    'foco_fonetico_som', $$Revisão consolidada: superlativos com -est átono, gonna (reconhecimento), I'd like, the /ðə/ x /ðiː/, particípios em -en, entonação de perguntas.$$,
+    'foco_fonetico_erro', $$Reincidência pontual dos padrões já mapeados no Registro de Classe sob a pressão de uma conversa longa que mistura vários tempos verbais.$$,
+    'foco_fonetico_correcao', $$Não interromper as atividades para corrigir — anotar no Registro de Classe e fazer, ao final, uma rodada coletiva rápida apenas com os 2-3 erros mais recorrentes da turma.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (link no slide 2: https://forms.gle/AVy1wkHH34WVRcDG9), feito em casa após a aula (seção 6.3 do currículo). Preparar o roteiro da Apresentação Final de Nível (Aula 44) com o Guia do Aluno "Meu Ano em Inglês" (cinco blocos).$$
+  ))
+on conflict (materia_slug, numero) do nothing;
