@@ -875,7 +875,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     <header class="topbar">
       <div class="topbar-greeting">
         <h1 id="topbarGreeting">Olá! 👋</h1>
-        <p>Escolha um curso para ver as atividades liberadas pela professora.</p>
+        <p>Escolha um curso para ver o material liberado pela professora.</p>
       </div>
       <div class="topbar-right">
         <nav class="topbar-links" id="topbarLinks"></nav>
@@ -897,7 +897,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
             </div>
             <div class="page-header-text">
               <h2>Seus cursos</h2>
-              <p>Escolha um curso para ver as atividades e o material liberados pela professora.</p>
+              <p>Escolha um curso para ver o material liberado pela professora.</p>
             </div>
           </div>
           <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="coursesWrap"></div>
@@ -948,15 +948,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/assets/dyse-auth.js"></script>
-<script src="/atividades/a1/manifest.js"></script>
 <script>
-  const COURSES = [
-    {id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]},
-    // A1 não tem "activities" aqui — 44 aulas × 15 não cabe numa lista flat.
-    // A contagem "X de Y liberadas" é somada por aula em runtime, usando
-    // AULAS_MANIFEST (só conta aulas cujo conteúdo já existe).
-    {id:'a1', name:'A1 · Atividades Complementares', description:'Atividades pra praticar o que você viu em cada aula.'}
-  ];
 
   const NOTICE_MESSAGES = {
     'locked': '🔒 Essa atividade ainda não foi liberada pela professora. Assim que ela liberar, o card aparece colorido e você pode clicar nele.',
@@ -1004,6 +996,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   }
 
   /* ---------- Navegação por "view" (mesma página, menu fixo) ---------- */
+  // Só o TOEFL tem lista de atividades no painel do aluno (A1/A2 mostram só aulas + material).
+  const COURSES = [
+    {id:'toefl', name:'TOEFL iBT', description:'Reading, Listening, Writing, Speaking e Grammar no novo formato do exame.', activities:[{num:1, theme:'Rotina Diária', level:'A2 · Iniciante'},{num:2, theme:'Viagens e Turismo', level:'A2 · Iniciante'},{num:3, theme:'Alimentação e Saúde', level:'B1 · Pré-intermediário'},{num:4, theme:'Compras e Dinheiro', level:'B1 · Pré-intermediário'},{num:5, theme:'Meio Ambiente', level:'B1 · Pré-intermediário'},{num:6, theme:'Tecnologia', level:'B1+ · Intermediário'},{num:7, theme:'Educação', level:'B2 · Intermediário'},{num:8, theme:'Trabalho e Carreira', level:'B2 · Intermediário'},{num:9, theme:'Cultura e Mídia', level:'B2 · Intermediário'},{num:10, theme:'Ciência', level:'B2+ · Intermediário-avançado'},{num:11, theme:'História', level:'C1 · Avançado'},{num:12, theme:'Psicologia', level:'C1 · Avançado'},{num:13, theme:'Negócios e Economia', level:'C1 · Avançado'},{num:14, theme:'Questões Globais', level:'C1 · Avançado'},{num:15, theme:'Artes e Literatura', level:'C1+ · Avançado'},{num:16, theme:'Revisão Geral', level:'C1 · Revisão Final'}]},
+  ];
   const CURSO_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>';
 
   const VIEWS = ['atividades', 'reportcard', 'financeiro'];
@@ -1024,7 +1020,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   window.addEventListener('hashchange', () => mostrarView(location.hash.replace('#', '')));
 
   /* ---------- Notificações "algo novo" no menu (por navegador) ---------- */
-  const AREA_CTX = { doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, aulasA1: {}, niveis: [], aulasNivel: {} };
+  const AREA_CTX = { doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, niveis: [], aulasNivel: {}, aulasDadas: {} };
   let SEEN_KEY = 'dyse_aluno_seen';
 
   function getSeen(){ try{ return JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; }catch(e){ return {}; } }
@@ -1067,19 +1063,15 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     window.scrollTo(0, 0);
     const mat = AREA_CTX.materias[courseId] || {};
     const cNome = mat.name || (course ? course.name : courseId);
-    const cDesc = mat.description || 'Abra uma aula pra ver o material e as atividades liberadas pela professora.';
+    const cDesc = mat.description || 'Abra uma aula pra ver o material liberado pela professora.';
     document.getElementById('cursoPaneHeader').innerHTML =
       '<div class="page-header-icon">' + CURSO_ICON + '</div>' +
       '<div class="page-header-text"><h2>' + escapeHtmlLocal(cNome) + '</h2>' +
       '<p>' + escapeHtmlLocal(cDesc) + '</p></div>';
     const body = document.getElementById('cursoPaneBody');
     body.innerHTML = '<p class="card-instructions" style="opacity:.6;">Carregando...</p>';
-    // A1 tem atividades por aula; TOEFL tem lista flat de atividades; qualquer
-    // outro nível (A2, B1...) é uma matéria com currículo cadastrada pela
-    // gestão — mostra as aulas com o material de cada uma.
-    body.innerHTML = courseId === 'a1' ? await renderAulasA1()
-      : (course && course.activities) ? await renderAtividadesFlat(course)
-      : renderAulasNivel(courseId);
+    // TOEFL: lista de atividades. Demais níveis (A1, A2...): aulas + material.
+    body.innerHTML = (course && course.activities) ? await renderAtividadesFlat(course) : renderAulasNivel(courseId);
   }
 
   // Aulas de um nível genérico (sem atividades próprias ainda): cada aula
@@ -1097,54 +1089,6 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       '</details>';
     }).join('');
   }
-
-  async function renderAulasA1(){
-    const aulas = await dyseListNivelAulas('a1');
-    if(!aulas.length) return '<p class="card-instructions">Nenhuma aula cadastrada ainda.</p>';
-    setTimeout(() => { if(aulas[0]) carregarAulaA1(aulas[0].numero); }, 0);
-    return aulas.map((aula, i) =>
-      '<details class="dyse-collapsible"' + (i === 0 ? ' open' : '') + '>' +
-        '<summary onclick="setTimeout(function(){ carregarAulaA1(' + aula.numero + '); }, 0)">' +
-          '<span class="summary-left"><span class="chevron">▸</span>Aula ' + String(aula.numero).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.topico) + '</span>' +
-        '</summary>' +
-        '<div class="dyse-collapsible-body" id="aulaBody' + aula.numero + '"></div>' +
-      '</details>'
-    ).join('');
-  }
-
-  window.carregarAulaA1 = async function(numeroAula){
-    const body = document.getElementById('aulaBody' + numeroAula);
-    if(!body || body.dataset.loaded) return;
-    body.dataset.loaded = '1';
-
-    const aulaMeta = AREA_CTX.aulasA1[numeroAula];
-    const matUrl = aulaMeta && AREA_CTX.materialPorAulaId[aulaMeta.id];
-    const matHtml = matUrl ? bannerMaterial(matUrl) : '';
-
-    const publishedSet = await dyseGetPublishedSet('a1', numeroAula);
-    const manifesto = AULAS_MANIFEST[numeroAula] || [];
-    // aluno só vê o que a professora liberou; professor/gestão vê tudo
-    const visiveis = AREA_CTX.staff ? manifesto : manifesto.filter(a => publishedSet.has(a.num));
-
-    if(!visiveis.length){
-      body.innerHTML = matHtml +
-        (matHtml ? '' : '<p class="card-instructions" style="margin:0; opacity:.7;">Nenhuma atividade desta aula foi liberada ainda.</p>');
-      return;
-    }
-
-    body.innerHTML = matHtml + '<div class="dash-grid">' + visiveis.map(a => {
-      const liberada = AREA_CTX.staff || publishedSet.has(a.num);
-      const done = AREA_CTX.doneMap['a1:' + numeroAula + ':' + a.num];
-      const badge = done && done.status === 'concluida' ? '<span class="dash-badge done">Feita</span>' : '';
-      return liberada
-        ? '<a class="dash-card" href="' + dyseUrlAtividadeA1(numeroAula, a.num) + '">' + badge +
-            '<div class="n">' + String(a.num).padStart(2, '0') + '</div><div class="t">' + a.titulo + '</div>' +
-            '<div class="l">Atividade ' + a.num + '/15</div></a>'
-        : '<div class="dash-card" style="opacity:.5; cursor:default;">' +
-            '<div class="n">' + String(a.num).padStart(2, '0') + '</div><div class="t">' + a.titulo + '</div>' +
-            '<div class="l">🔒 Ainda não liberada</div></div>';
-    }).join('') + '</div>';
-  };
 
   function bannerMaterial(url){
     return '<div class="material-banner">' +
@@ -1233,9 +1177,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       allTurmaMaterias.filter(tm => tm.turma_id === profile.turma_id).map(tm => tm.materia_slug)
     );
 
-    const results = await dyseListMyResults(); // todos os cursos do aluno
+    const results = await dyseListMyResults();
     const doneMap = {}; // "course:aula:num" -> resultado
-    results.forEach(r => doneMap[r.course + ':' + (r.aula || 1) + ':' + r.activity_num] = r);
+    results.forEach(r => doneMap[r.course + ":" + (r.aula || 1) + ":" + r.activity_num] = r);
     AREA_CTX.doneMap = doneMap;
     AREA_CTX.staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
 
@@ -1278,52 +1222,32 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       '</div>';
 
     const cards = [];
+    // Todo curso (A1, A2, TOEFL...) é uma matéria com currículo: o card mostra o
+    // progresso pelas AULAS MINISTRADAS (registradas pela professora), que sobe
+    // a cada registro salvo. Sem atividades — só aulas e material.
     let kpiAtividadesLiberadas = 0;
-    for(const course of COURSES){
-      if(!allowedSlugs.has(course.id)) continue; // matéria não liberada pra turma do aluno
-
-      let publishedCount, totalCount, doneCount;
-      if(course.id === 'a1'){
-        // 44 aulas × 15 — soma por aula, só contando aulas com conteúdo real
-        // (AULAS_MANIFEST); aulas "em produção" não entram no total ainda.
-        const aulas = (await dyseListNivelAulas('a1')).filter(a => AULAS_MANIFEST[a.numero]);
-        totalCount = aulas.length * 15;
-        publishedCount = 0; doneCount = 0;
-        // Uma consulta só pra todas as aulas, em vez de uma por aula (44 no A1).
-        const publishedPorAula = await dyseGetPublishedSetsPorAula('a1');
-        for(const aula of aulas){
-          const publishedSet = publishedPorAula[aula.numero] || new Set();
-          publishedCount += AULAS_MANIFEST[aula.numero].filter(a => publishedSet.has(a.num)).length;
-          doneCount += AULAS_MANIFEST[aula.numero].filter(a => doneMap['a1:' + aula.numero + ':' + a.num]).length;
-        }
-      }else{
-        const publishedSet = await dyseGetPublishedSet(course.id);
-        totalCount = course.activities.length;
-        publishedCount = course.activities.filter(a => publishedSet.has(a.num)).length;
-        doneCount = course.activities.filter(a => doneMap[course.id + ':1:' + a.num]).length;
-      }
-
-      kpiAtividadesLiberadas += publishedCount;
-      const accent = COURSE_ACCENTS[cards.length % COURSE_ACCENTS.length];
-      const pct = totalCount ? Math.round((publishedCount / totalCount) * 100) : 0;
-      const mat = AREA_CTX.materias[course.id] || {};
-      const cNome = mat.name || course.name;
-      const cDesc = mat.description || course.description;
-
-      cards.push(cardCurso(course.id, cNome, cDesc, accent,
-        publishedCount + '/' + totalCount + ' liberadas &middot; ' + doneCount + ' enviadas', pct));
-    }
-
-    // Demais níveis com currículo liberados pra turma (A2, B1...) — não estão
-    // na lista fixa COURSES, então entram aqui, mostrando as aulas com material.
     for(const nivel of AREA_CTX.niveis){
-      if(COURSES.some(c => c.id === nivel.slug)) continue;
+      const course = COURSES.find(c => c.id === nivel.slug);
+      if(course && course.activities){
+        // TOEFL: continua com a contagem de atividades liberadas/enviadas.
+        const publishedSet = await dyseGetPublishedSet(course.id);
+        const totalCount = course.activities.length;
+        const publishedCount = course.activities.filter(a => publishedSet.has(a.num)).length;
+        const doneCount = course.activities.filter(a => doneMap[course.id + ":1:" + a.num]).length;
+        kpiAtividadesLiberadas += publishedCount;
+        cards.push(cardCurso(course.id, nivel.name || course.name, nivel.description || course.description,
+          COURSE_ACCENTS[cards.length % COURSE_ACCENTS.length],
+          publishedCount + "/" + totalCount + " liberadas &middot; " + doneCount + " enviadas",
+          totalCount ? Math.round((publishedCount / totalCount) * 100) : 0));
+        continue;
+      }
       const aulas = AREA_CTX.aulasNivel[nivel.slug] || [];
-      const comMaterial = aulas.filter(a => AREA_CTX.materialPorAulaId[a.id]).length;
+      const dadas = AREA_CTX.aulasDadas[nivel.slug] || new Set();
+      const ministradas = aulas.filter(a => dadas.has(a.id)).length;
       const accent = COURSE_ACCENTS[cards.length % COURSE_ACCENTS.length];
-      const pct = aulas.length ? Math.round((comMaterial / aulas.length) * 100) : 0;
-      cards.push(cardCurso(nivel.slug, nivel.name, nivel.description || 'Abra uma aula pra ver o material liberado.', accent,
-        comMaterial + '/' + aulas.length + ' aulas com material', pct));
+      const pct = aulas.length ? Math.round((ministradas / aulas.length) * 100) : 0;
+      cards.push(cardCurso(nivel.slug, nivel.name, nivel.description || "Abra uma aula pra ver o material liberado.", accent,
+        ministradas + "/" + aulas.length + " aulas ministradas", pct));
     }
 
     wrap.innerHTML = cards.length
@@ -1363,9 +1287,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const niveis = (await dyseListNiveis()).filter(n => allowedSlugs.has(n.slug));
     if(!niveis.length) return 0;
 
-    const [aulasPorNivel, materialDaTurma] = await Promise.all([
+    const [aulasPorNivel, materialDaTurma, dadasPorNivel] = await Promise.all([
       Promise.all(niveis.map(n => dyseListNivelAulas(n.slug))),
-      dyseListTurmaAulaMaterial(turmaId)
+      dyseListTurmaAulaMaterial(turmaId),
+      Promise.all(niveis.map(n => dyseMinhasAulasRegistradas(n.slug)))
     ]);
     const copiaPorAula = {};
     (materialDaTurma || []).forEach(r => { copiaPorAula[r.nivel_aula_id] = r.material_url; });
@@ -1374,8 +1299,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     AREA_CTX.niveis = niveis;
     niveis.forEach((n, i) => {
       AREA_CTX.aulasNivel[n.slug] = aulasPorNivel[i];
+      AREA_CTX.aulasDadas[n.slug] = new Set(dadasPorNivel[i]);
       aulasPorNivel[i].forEach(a => {
-        if(n.slug === 'a1') AREA_CTX.aulasA1[a.numero] = { id: a.id, topico: a.topico };
         const url = (copiaPorAula[a.id] || a.material_url || '').trim();
         if(url){
           AREA_CTX.materialPorAulaId[a.id] = url;

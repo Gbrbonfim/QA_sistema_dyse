@@ -1950,6 +1950,14 @@ async function dyseListRegistrosClasse(alunoId){
   return error ? [] : data;
 }
 
+/* IDs das aulas de uma matéria já registradas pela professora pro aluno logado.
+   Usa a função "security definer" minhas_aulas_registradas (seção 14.1) — o aluno
+   nunca lê registros_classe (anotação interna), só descobre QUAIS aulas foram dadas. */
+async function dyseMinhasAulasRegistradas(materiaSlug){
+  const { data, error } = await sb.rpc("minhas_aulas_registradas", { check_materia_slug: materiaSlug });
+  return error ? [] : (data || []).map(r => r.nivel_aula_id);
+}
+
 /* Registros de uma LISTA de alunos numa aula específica — usado pra
    pré-preencher a tela de registro de uma turma inteira de uma vez.
    "dataAula" opcional (YYYY-MM-DD): só as linhas daquele dia. */
