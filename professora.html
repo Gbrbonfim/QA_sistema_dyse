@@ -969,6 +969,12 @@ body.dyse-modal-open{overflow:hidden;}
     <p id="registroClasseSemNivel" style="color:var(--seal-soft); font-size:.85rem; display:none;">
       Essa turma ainda não tem um nível acadêmico definido pela gestão — peça pra vincularem um nível a ela pra usar o Registro de Classe.
     </p>
+    <div id="registroClasseNivelWrap" style="display:none; margin-bottom:14px;">
+      <label for="registroClasseNivelSelect" style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:6px;">Essa turma tem mais de um material ativo — de qual você quer ver o registro?</label>
+      <div class="dash-filter">
+        <select id="registroClasseNivelSelect" onchange="onRegistroClasseNivelChange()"></select>
+      </div>
+    </div>
     <div id="registroClasseWrap" style="display:none;">
       <p style="color:var(--seal-soft); font-size:.85rem; margin-bottom:14px;">Escolha a aula ministrada — o plano dela e a lista de alunos da turma carregam automaticamente.</p>
       <div class="dash-filter">
@@ -1562,6 +1568,13 @@ body.dyse-modal-open{overflow:hidden;}
      fixo pra A1 nem pra 44 aulas.
      ====================================================================== */
   let REGISTRO_NIVEIS_CACHE = [];
+  let REGISTRO_NIVEL_ESCOLHIDO = ''; // slug do material escolhido quando a turma tem mais de um
+  let REGISTRO_NIVEL_TURMA = '';     // turma à qual a escolha acima pertence
+
+  async function onRegistroClasseNivelChange(){
+    REGISTRO_NIVEL_ESCOLHIDO = document.getElementById('registroClasseNivelSelect').value;
+    await carregarRegistroClasseDaTurma();
+  }
   let REGISTRO_AULAS_DA_TURMA = [];
   let REGISTRO_EIXOS = [];
   let REGISTRO_DATAS = [];          // [{ data_aula:'YYYY-MM-DD', salvo }] — datas já lançadas da aula
@@ -1697,21 +1710,40 @@ body.dyse-modal-open{overflow:hidden;}
     const turmaId = document.getElementById('chamadaTurmaSelect').value;
     const wrap = document.getElementById('registroClasseWrap');
     const semNivel = document.getElementById('registroClasseSemNivel');
-    if(!turmaId){ wrap.style.display = 'none'; semNivel.style.display = 'none'; return; }
+    const nivelWrap = document.getElementById('registroClasseNivelWrap');
+    if(!turmaId){ wrap.style.display = 'none'; semNivel.style.display = 'none'; nivelWrap.style.display = 'none'; return; }
 
     // "Nível" (A1, A2...) é uma matéria com currículo (total_aulas
     // preenchido) vinculada à turma pelo mesmo turma_materias de
     // "Matérias liberadas" — não existe um campo separado pra isso.
     if(!REGISTRO_NIVEIS_CACHE.length) REGISTRO_NIVEIS_CACHE = await dyseListNiveis();
     const turmaMaterias = await dyseListAllTurmaMaterias();
-    const nivel = REGISTRO_NIVEIS_CACHE.find(n => turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
+    const niveisDaTurma = REGISTRO_NIVEIS_CACHE.filter(n => turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
 
-    if(!nivel){
+    if(!niveisDaTurma.length){
       wrap.style.display = 'none';
+      nivelWrap.style.display = 'none';
       semNivel.style.display = 'block';
       return;
     }
     semNivel.style.display = 'none';
+
+    // Turma com mais de um material ativo: a professora escolhe de qual quer
+    // ver o registro (a escolha é lembrada enquanto ela não trocar de turma).
+    let nivel = niveisDaTurma[0];
+    if(niveisDaTurma.length > 1){
+      if(REGISTRO_NIVEL_TURMA !== turmaId){ REGISTRO_NIVEL_TURMA = turmaId; REGISTRO_NIVEL_ESCOLHIDO = ''; }
+      const sel = document.getElementById('registroClasseNivelSelect');
+      sel.innerHTML = '<option value="">Escolha o material…</option>' +
+        niveisDaTurma.map(n => '<option value="' + escapeHtmlLocal(n.slug) + '">' + escapeHtmlLocal(n.name) + '</option>').join('');
+      const escolhido = niveisDaTurma.find(n => n.slug === REGISTRO_NIVEL_ESCOLHIDO);
+      sel.value = escolhido ? escolhido.slug : '';
+      nivelWrap.style.display = 'block';
+      if(!escolhido){ wrap.style.display = 'none'; return; }
+      nivel = escolhido;
+    }else{
+      nivelWrap.style.display = 'none';
+    }
     wrap.style.display = 'block';
 
     REGISTRO_EIXOS = nivel.eixos_avaliacao || [];

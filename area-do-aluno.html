@@ -1024,7 +1024,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   window.addEventListener('hashchange', () => mostrarView(location.hash.replace('#', '')));
 
   /* ---------- Notificações "algo novo" no menu (por navegador) ---------- */
-  const AREA_CTX = { doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, aulasA1: {} };
+  const AREA_CTX = { doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, aulasA1: {}, niveis: [], aulasNivel: {} };
   let SEEN_KEY = 'dyse_aluno_seen';
 
   function getSeen(){ try{ return JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; }catch(e){ return {}; } }
@@ -1074,7 +1074,28 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       '<p>' + escapeHtmlLocal(cDesc) + '</p></div>';
     const body = document.getElementById('cursoPaneBody');
     body.innerHTML = '<p class="card-instructions" style="opacity:.6;">Carregando...</p>';
-    body.innerHTML = courseId === 'a1' ? await renderAulasA1() : await renderAtividadesFlat(course);
+    // A1 tem atividades por aula; TOEFL tem lista flat de atividades; qualquer
+    // outro nível (A2, B1...) é uma matéria com currículo cadastrada pela
+    // gestão — mostra as aulas com o material de cada uma.
+    body.innerHTML = courseId === 'a1' ? await renderAulasA1()
+      : (course && course.activities) ? await renderAtividadesFlat(course)
+      : renderAulasNivel(courseId);
+  }
+
+  // Aulas de um nível genérico (sem atividades próprias ainda): cada aula
+  // ativa aparece com o banner do material, se a gestão já cadastrou o link.
+  function renderAulasNivel(slug){
+    const aulas = AREA_CTX.aulasNivel[slug] || [];
+    if(!aulas.length) return '<p class="card-instructions">Nenhuma aula cadastrada ainda.</p>';
+    return aulas.map((aula, i) => {
+      const url = AREA_CTX.materialPorAulaId[aula.id];
+      return '<details class="dyse-collapsible"' + (i === 0 ? ' open' : '') + '>' +
+        '<summary><span class="summary-left"><span class="chevron">▸</span>Aula ' + String(aula.numero).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.topico) + '</span></summary>' +
+        '<div class="dyse-collapsible-body">' +
+          (url ? bannerMaterial(url) : '<p class="card-instructions" style="margin:0; opacity:.7;">O material desta aula ainda não foi liberado.</p>') +
+        '</div>' +
+      '</details>';
+    }).join('');
   }
 
   async function renderAulasA1(){
@@ -1236,6 +1257,26 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const COURSE_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>';
     const STATS_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>';
 
+    const cardCurso = (id, nome, desc, accent, statsHtml, pct) =>
+      '<div class="course-card" style="border-left-color:' + accent.border + ';">' +
+        '<div class="course-card-top">' +
+          '<div>' +
+            '<h3 class="course-card-name" style="color:' + accent.text + ';">' + escapeHtmlLocal(nome) + '</h3>' +
+            '<p class="course-card-desc">' + escapeHtmlLocal(desc) + '</p>' +
+          '</div>' +
+          '<div class="course-card-icon" style="background:' + accent.bg + '; color:' + accent.fg + ';">' + COURSE_ICON_SVG + '</div>' +
+        '</div>' +
+        '<div class="course-card-stats">' +
+          '<div class="course-card-stats-icon">' + STATS_ICON_SVG + '</div>' +
+          '<div class="course-card-stats-text">' +
+            '<span>' + statsHtml + '</span>' +
+            '<div class="course-card-bar"><span style="width:' + pct + '%;"></span></div>' +
+          '</div>' +
+          '<div class="course-card-pct">' + pct + '%</div>' +
+        '</div>' +
+        '<button type="button" class="btn btn-primary course-card-cta" onclick="abrirCurso(\'' + id + '\')">Acessar curso →</button>' +
+      '</div>';
+
     const cards = [];
     let kpiAtividadesLiberadas = 0;
     for(const course of COURSES){
@@ -1269,26 +1310,20 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       const cNome = mat.name || course.name;
       const cDesc = mat.description || course.description;
 
-      cards.push(
-        '<div class="course-card" style="border-left-color:' + accent.border + ';">' +
-          '<div class="course-card-top">' +
-            '<div>' +
-              '<h3 class="course-card-name" style="color:' + accent.text + ';">' + escapeHtmlLocal(cNome) + '</h3>' +
-              '<p class="course-card-desc">' + escapeHtmlLocal(cDesc) + '</p>' +
-            '</div>' +
-            '<div class="course-card-icon" style="background:' + accent.bg + '; color:' + accent.fg + ';">' + COURSE_ICON_SVG + '</div>' +
-          '</div>' +
-          '<div class="course-card-stats">' +
-            '<div class="course-card-stats-icon">' + STATS_ICON_SVG + '</div>' +
-            '<div class="course-card-stats-text">' +
-              '<span>' + publishedCount + '/' + totalCount + ' liberadas &middot; ' + doneCount + ' enviadas</span>' +
-              '<div class="course-card-bar"><span style="width:' + pct + '%;"></span></div>' +
-            '</div>' +
-            '<div class="course-card-pct">' + pct + '%</div>' +
-          '</div>' +
-          '<button type="button" class="btn btn-primary course-card-cta" onclick="abrirCurso(\'' + course.id + '\')">Acessar curso →</button>' +
-        '</div>'
-      );
+      cards.push(cardCurso(course.id, cNome, cDesc, accent,
+        publishedCount + '/' + totalCount + ' liberadas &middot; ' + doneCount + ' enviadas', pct));
+    }
+
+    // Demais níveis com currículo liberados pra turma (A2, B1...) — não estão
+    // na lista fixa COURSES, então entram aqui, mostrando as aulas com material.
+    for(const nivel of AREA_CTX.niveis){
+      if(COURSES.some(c => c.id === nivel.slug)) continue;
+      const aulas = AREA_CTX.aulasNivel[nivel.slug] || [];
+      const comMaterial = aulas.filter(a => AREA_CTX.materialPorAulaId[a.id]).length;
+      const accent = COURSE_ACCENTS[cards.length % COURSE_ACCENTS.length];
+      const pct = aulas.length ? Math.round((comMaterial / aulas.length) * 100) : 0;
+      cards.push(cardCurso(nivel.slug, nivel.name, nivel.description || 'Abra uma aula pra ver o material liberado.', accent,
+        comMaterial + '/' + aulas.length + ' aulas com material', pct));
     }
 
     wrap.innerHTML = cards.length
@@ -1336,7 +1371,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     (materialDaTurma || []).forEach(r => { copiaPorAula[r.nivel_aula_id] = r.material_url; });
 
     let total = 0;
+    AREA_CTX.niveis = niveis;
     niveis.forEach((n, i) => {
+      AREA_CTX.aulasNivel[n.slug] = aulasPorNivel[i];
       aulasPorNivel[i].forEach(a => {
         if(n.slug === 'a1') AREA_CTX.aulasA1[a.numero] = { id: a.id, topico: a.topico };
         const url = (copiaPorAula[a.id] || a.material_url || '').trim();
