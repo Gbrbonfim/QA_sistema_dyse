@@ -38,6 +38,7 @@
 .card-title, .rc-summary-txt h3, .manage-course-title, .level-group-title, .material-nivel-title{
   font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.1rem !important;
 }
+.course-card.bloqueada{opacity:.55; filter:blur(1.5px) grayscale(.3); pointer-events:none; user-select:none;}
 .course-card-name, .course-folder-name{
   font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.05rem !important;
 }
@@ -533,6 +534,11 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .material-aula-link .num{flex:none; font-weight:800; color:var(--seal-soft); font-size:.8rem;}
 .material-aula-link .topico{flex:1; min-width:0; font-size:.88rem;}
 .material-aula-link .arrow{flex:none; color:var(--gamboge);}
+.material-aula-link.bloqueada{background:rgba(255,255,255,.55); box-shadow:none; cursor:default; pointer-events:none; user-select:none;}
+.material-aula-link.bloqueada .num, .material-aula-link.bloqueada .topico{filter:blur(1.6px); opacity:.6;}
+.material-aula-link.bloqueada .arrow{color:var(--seal-soft); opacity:.7;}
+.material-aula-link .dada{flex:none; font-size:.7rem; font-weight:800; color:#2e7d32; background:#e6f4e7; border-radius:999px; padding:2px 8px;}
+.trilha-intro{font-size:.85rem; color:var(--seal-soft); margin:0 0 14px;}
 
 /* Faixa de material da aula (destaque, dentro da visão do curso) */
 .material-banner{
@@ -1079,15 +1085,19 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   function renderAulasNivel(slug){
     const aulas = AREA_CTX.aulasNivel[slug] || [];
     if(!aulas.length) return '<p class="card-instructions">Nenhuma aula cadastrada ainda.</p>';
-    return aulas.map((aula, i) => {
-      const url = AREA_CTX.materialPorAulaId[aula.id];
-      return '<details class="dyse-collapsible"' + (i === 0 ? ' open' : '') + '>' +
-        '<summary><span class="summary-left"><span class="chevron">▸</span>Aula ' + String(aula.numero).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.topico) + '</span></summary>' +
-        '<div class="dyse-collapsible-body">' +
-          (url ? bannerMaterial(url) : '<p class="card-instructions" style="margin:0; opacity:.7;">O material desta aula ainda não foi liberado.</p>') +
-        '</div>' +
-      '</details>';
-    }).join('');
+    // Trilha de aprendizagem: TODAS as aulas ficam visíveis; só as que já têm
+    // material liberado são clicáveis, as demais aparecem desfocadas e travadas.
+    const dadas = AREA_CTX.aulasDadas[slug] || new Set();
+    return "<p class=\"trilha-intro\">Sua trilha de aprendizagem: as aulas em destaque já têm material liberado; as desfocadas ainda vão chegar.</p>" +
+      aulas.map(aula => {
+        const url = AREA_CTX.materialPorAulaId[aula.id];
+        const num = String(aula.numero).padStart(2, "0");
+        const dada = dadas.has(aula.id) ? "<span class=\"dada\">✓ Aula dada</span>" : "";
+        const miolo = "<span class=\"num\">" + num + "</span><span class=\"topico\">" + escapeHtmlLocal(aula.topico) + "</span>";
+        return url
+          ? "<a class=\"material-aula-link\" href=\"" + escapeHtmlLocal(url) + "\" target=\"_blank\" rel=\"noopener\">" + miolo + dada + "<span class=\"arrow\">↗</span></a>"
+          : "<div class=\"material-aula-link bloqueada\" aria-disabled=\"true\">" + miolo + "<span class=\"arrow\">🔒</span></div>";
+      }).join("");
   }
 
   function bannerMaterial(url){
@@ -1226,28 +1236,55 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     // progresso pelas AULAS MINISTRADAS (registradas pela professora), que sobe
     // a cada registro salvo. Sem atividades — só aulas e material.
     let kpiAtividadesLiberadas = 0;
-    for(const nivel of AREA_CTX.niveis){
+
+    // Card de um curso liberado pra turma. TOEFL mantém atividades liberadas/
+    // enviadas; os níveis mostram o progresso por aulas ministradas.
+    const cardDoNivel = async (nivel) => {
       const course = COURSES.find(c => c.id === nivel.slug);
+      const accent = COURSE_ACCENTS[cards.length % COURSE_ACCENTS.length];
       if(course && course.activities){
-        // TOEFL: continua com a contagem de atividades liberadas/enviadas.
         const publishedSet = await dyseGetPublishedSet(course.id);
         const totalCount = course.activities.length;
         const publishedCount = course.activities.filter(a => publishedSet.has(a.num)).length;
         const doneCount = course.activities.filter(a => doneMap[course.id + ":1:" + a.num]).length;
         kpiAtividadesLiberadas += publishedCount;
-        cards.push(cardCurso(course.id, nivel.name || course.name, nivel.description || course.description,
-          COURSE_ACCENTS[cards.length % COURSE_ACCENTS.length],
+        return cardCurso(course.id, nivel.name || course.name, nivel.description || course.description, accent,
           publishedCount + "/" + totalCount + " liberadas &middot; " + doneCount + " enviadas",
-          totalCount ? Math.round((publishedCount / totalCount) * 100) : 0));
-        continue;
+          totalCount ? Math.round((publishedCount / totalCount) * 100) : 0);
       }
       const aulas = AREA_CTX.aulasNivel[nivel.slug] || [];
       const dadas = AREA_CTX.aulasDadas[nivel.slug] || new Set();
       const ministradas = aulas.filter(a => dadas.has(a.id)).length;
-      const accent = COURSE_ACCENTS[cards.length % COURSE_ACCENTS.length];
       const pct = aulas.length ? Math.round((ministradas / aulas.length) * 100) : 0;
-      cards.push(cardCurso(nivel.slug, nivel.name, nivel.description || "Abra uma aula pra ver o material liberado.", accent,
-        ministradas + "/" + aulas.length + " aulas ministradas", pct));
+      return cardCurso(nivel.slug, nivel.name, nivel.description || "Abra uma aula pra ver o material liberado.", accent,
+        ministradas + "/" + aulas.length + " aulas ministradas", pct);
+    };
+
+    // Card travado: nível da trilha que a turma ainda não tem liberado.
+    const cardBloqueado = (slug) => {
+      const nome = (AREA_CTX.materias[slug] && AREA_CTX.materias[slug].name) || slug.toUpperCase();
+      return "<div class=\"course-card bloqueada\" aria-disabled=\"true\" style=\"border-left-color:var(--seal-soft);\">" +
+        "<div class=\"course-card-top\"><div><h3 class=\"course-card-name\">" + escapeHtmlLocal(nome) + "</h3>" +
+        "<p class=\"course-card-desc\">Próximo passo da sua trilha de aprendizagem.</p></div>" +
+        "<div class=\"course-card-icon\" style=\"background:#EFE2D2; color:#6b5a45;\">" + COURSE_ICON_SVG + "</div></div>" +
+        "<div class=\"course-card-stats\"><div class=\"course-card-stats-icon\">" + STATS_ICON_SVG + "</div>" +
+        "<div class=\"course-card-stats-text\"><span>🔒 Ainda não liberado</span><div class=\"course-card-bar\"><span style=\"width:0%;\"></span></div></div>" +
+        "<div class=\"course-card-pct\">0%</div></div>" +
+        "<button type=\"button\" class=\"btn btn-primary course-card-cta\" disabled>Em breve</button></div>";
+    };
+
+    // Trilha de aprendizagem: A1 → A2 → B1 → B2 → C1, sempre visível — o que a turma
+    // ainda não tem liberado aparece desfocado. Depois vêm os demais cursos (TOEFL...),
+    // que só aparecem quando liberados.
+    const TRILHA = ["a1", "a2", "b1", "b2", "c1"];
+    const nivelPorSlug = {};
+    AREA_CTX.niveis.forEach(n => { nivelPorSlug[n.slug] = n; });
+    for(const slug of TRILHA){
+      cards.push(nivelPorSlug[slug] ? await cardDoNivel(nivelPorSlug[slug]) : cardBloqueado(slug));
+    }
+    for(const nivel of AREA_CTX.niveis){
+      if(!TRILHA.includes(nivel.slug)) cards.push(await cardDoNivel(nivel));
+    }
     }
 
     wrap.innerHTML = cards.length
