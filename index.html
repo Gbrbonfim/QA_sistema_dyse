@@ -481,28 +481,6 @@
     *{ animation:none !important; transition:none !important; }
   }
 
-  /* ---------- Travar rolagem enquanto o vídeo do gate está tocando ---------- */
-  html.dyse-scroll-lock, body.dyse-scroll-lock{
-    overflow:hidden !important;
-    touch-action:none;
-    overscroll-behavior:none;
-  }
-  .scroll-lock-toast{
-    position:fixed; left:50%; bottom:26px; z-index:250;
-    transform:translateX(-50%) translateY(14px);
-    background:var(--brown); color:var(--off);
-    padding:11px 22px; border-radius:999px;
-    font-family:'Poppins', sans-serif; font-size:13.5px; font-weight:600;
-    box-shadow:0 14px 30px rgba(86,41,21,0.3);
-    white-space:nowrap; max-width:calc(100vw - 32px);
-    opacity:0; pointer-events:none;
-    transition:opacity .25s ease, transform .25s ease;
-  }
-  .scroll-lock-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-  @media(max-width:420px){
-    .scroll-lock-toast{ white-space:normal; text-align:center; font-size:13px; padding:10px 18px; }
-  }
-
   /* ======================================================================
      NOVO LAYOUT (esboço) — regras adicionadas, nada acima foi alterado
      ====================================================================== */
@@ -548,8 +526,6 @@
     background:linear-gradient(160deg, var(--blossom), var(--cream));
   }
   .video-cta-wrap{ text-align:center; margin-top:32px; }
-  .video-cta.is-disabled{ opacity:.45; pointer-events:none; cursor:not-allowed; }
-  .video-cta-note{ margin-top:10px; font-size:13px; color:#8a6a54; }
 
   /* ---------- Depoimentos: cards ---------- */
   .testimonial-grid{
@@ -715,8 +691,7 @@
       <div id="dyseVideoPlayer"></div>
     </div>
     <div class="video-cta-wrap">
-      <a href="#valores" class="btn btn-primary video-cta is-disabled" id="btnQuantoCusta" aria-disabled="true">Quanto custa</a>
-      <p class="video-cta-note">O botão libera depois de alguns segundos de vídeo.</p>
+      <a href="#valores" class="btn btn-primary video-cta" id="btnQuantoCusta">Quanto custa</a>
     </div>
   </div>
 </section>
@@ -990,9 +965,6 @@
   </div>
 </footer>
 
-<!-- ===== Aviso flutuante: tela travada durante o vídeo ===== -->
-<div class="scroll-lock-toast" id="scrollLockToast" role="status" aria-live="polite"></div>
-
 <script>
   (function(){
     const toggle = document.getElementById('navToggle');
@@ -1035,92 +1007,17 @@
      caixa é mais alta que esse espaço (tela muito baixa), aceita "o quanto
      der pra ver" já que não tem como mostrar mais que isso. Autoplay só
      funciona mudo — regra do navegador, não dá pra contornar; a pessoa
-     ativa o som pelo próprio controle do player do YouTube. No exato
-     momento em que o vídeo COMEÇA A TOCAR de verdade pela primeira vez
-     (autoplay ou play manual, tanto faz), a tela inteira trava pra
-     rolagem (pra cima e pra baixo, mouse/touch/teclado) e aparece um
-     aviso flutuante avisando do bloqueio de 1:30 (LOCK_SECONDS abaixo).
-     O botão "Quanto custa" libera — e a tela destrava junto — quando
-     esse tempo termina. Isso acontece só uma vez, na primeira vez que o
-     vídeo toca: pausar/tocar de novo depois não trava a tela outra vez.
+     ativa o som pelo próprio controle do player do YouTube. Sem trava de
+     tela e sem o botão "Quanto custa" desabilitado: ele já entra clicável.
      Pra trocar o vídeo, basta mudar "videoId" abaixo. */
   (function(){
-    const btn = document.getElementById('btnQuantoCusta');
     const videoSection = document.getElementById('video');
     const videoEmbed = videoSection ? videoSection.querySelector('.video-embed') : null;
     const siteTop = document.querySelector('.site-top');
-    const lockToast = document.getElementById('scrollLockToast');
-    if(!btn || !videoSection || !videoEmbed) return;
-    let unlockTimer = null;
-    let unlocked = false;
+    if(!videoSection || !videoEmbed) return;
     let player = null;
     let playerReady = false;
     let autoplayFired = false;
-    let scrollLocked = false;
-    let lockStarted = false;
-    let toastInterval = null;
-    const LOCK_SECONDS = 90; // 1:30
-
-    const SCROLL_LOCK_KEYS = ['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' ','Spacebar'];
-    function preventScroll(e){ e.preventDefault(); }
-    function preventScrollKeys(e){
-      if(SCROLL_LOCK_KEYS.includes(e.key)) e.preventDefault();
-    }
-    function lockScroll(){
-      if(scrollLocked) return;
-      scrollLocked = true;
-      document.documentElement.classList.add('dyse-scroll-lock');
-      document.body.classList.add('dyse-scroll-lock');
-      window.addEventListener('wheel', preventScroll, { passive:false });
-      window.addEventListener('touchmove', preventScroll, { passive:false });
-      window.addEventListener('keydown', preventScrollKeys, { passive:false });
-    }
-    function unlockScroll(){
-      scrollLocked = false;
-      document.documentElement.classList.remove('dyse-scroll-lock');
-      document.body.classList.remove('dyse-scroll-lock');
-      window.removeEventListener('wheel', preventScroll);
-      window.removeEventListener('touchmove', preventScroll);
-      window.removeEventListener('keydown', preventScrollKeys);
-    }
-
-    function formatCountdown(seconds){
-      const m = Math.floor(seconds / 60);
-      const s = seconds % 60;
-      return m + ':' + String(s).padStart(2, '0');
-    }
-    function setToastText(seconds){
-      if(lockToast) lockToast.textContent = '🔒 Tela liberando em ' + formatCountdown(seconds);
-    }
-    function startLockToast(){
-      if(!lockToast) return;
-      if(toastInterval){ clearInterval(toastInterval); toastInterval = null; }
-      let remaining = LOCK_SECONDS;
-      setToastText(remaining);
-      lockToast.classList.add('show');
-      toastInterval = setInterval(function(){
-        remaining -= 1;
-        if(remaining <= 0){
-          clearInterval(toastInterval);
-          toastInterval = null;
-          return;
-        }
-        setToastText(remaining);
-      }, 1000);
-    }
-    function stopLockToast(){
-      if(toastInterval){ clearInterval(toastInterval); toastInterval = null; }
-      if(lockToast) lockToast.classList.remove('show');
-    }
-
-    function unlockBtn(){
-      if(unlocked) return;
-      unlocked = true;
-      btn.classList.remove('is-disabled');
-      btn.removeAttribute('aria-disabled');
-      unlockScroll();
-      stopLockToast();
-    }
 
     function isVideoFullyVisible(){
       const rect = videoEmbed.getBoundingClientRect();
@@ -1156,21 +1053,11 @@
       queueVisibilityCheck(); // cobre o caso de a caixa já estar toda visível quando o player termina de carregar
     }
 
-    function onPlayerStateChange(event){
-      if(unlocked || lockStarted) return;
-      if(event.data === YT.PlayerState.PLAYING){
-        lockStarted = true;
-        lockScroll();
-        startLockToast();
-        unlockTimer = setTimeout(unlockBtn, LOCK_SECONDS * 1000);
-      }
-    }
-
     window.onYouTubeIframeAPIReady = function(){
       player = new YT.Player('dyseVideoPlayer', {
         videoId: '5wFqeDi5vck',
         playerVars: { rel: 0 },
-        events: { onReady: onPlayerReady, onStateChange: onPlayerStateChange }
+        events: { onReady: onPlayerReady }
       });
     };
 
