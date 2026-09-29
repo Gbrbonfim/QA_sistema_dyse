@@ -5567,7 +5567,7 @@ body.dyse-modal-open{overflow:hidden;}
     const links = [];
     if(dyseIsAdmin(profile)) links.push({ href:'/gestao.html', label:'Painel da gestão', icon:userIcon, active:true });
     if(dyseIsTeacher(profile)) links.push({ href:'/professora.html', label:'Painel do professor', icon:userIcon, active:false });
-    if(!links.length || alsoStudent) links.push({ href:'/area-do-aluno.html', label:'Minhas atividades', icon:listIcon, active:false });
+    if(!links.length || alsoStudent) links.push({ href:'/area-do-aluno.html', label:'Painel do aluno', icon:listIcon, active:false });
     document.getElementById('topbarLinks').innerHTML = links.map(l =>
       '<a href="' + l.href + '" class="topbar-link' + (l.active ? ' active' : '') + '">' + l.icon + '<span>' + l.label + '</span></a>'
     ).join('');

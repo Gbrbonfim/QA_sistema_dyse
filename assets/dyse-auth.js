@@ -211,7 +211,7 @@ async function dyseRenderAuthBar(containerId){
   const links = [];
   if(dyseIsAdmin(profile)) links.push('<a href="/gestao.html" class="dyse-auth-link">Painel da gestão</a>');
   if(dyseIsTeacher(profile)) links.push('<a href="/professora.html" class="dyse-auth-link">Painel da professora</a>');
-  if(!links.length || alsoStudent) links.push('<a href="/area-do-aluno.html" class="dyse-auth-link">Minhas atividades</a>');
+  if(!links.length || alsoStudent) links.push('<a href="/area-do-aluno.html" class="dyse-auth-link">Painel do aluno</a>');
 
   el.innerHTML =
     '<span class="dyse-auth-name">👤 ' + escapeHtml(name) + '</span>' +

@@ -2513,7 +2513,7 @@ create policy "turma_aula_material: aluno da propria turma"
 --    Mesma lógica pro caminho inverso — alguém de gestão/financeiro/professor
 --    que TAMBÉM é aluno (faz as próprias atividades): marque "also_student"
 --    como "true" na linha da pessoa. Ela continua entrando por padrão no
---    painel principal dela, e ganha o link "Minhas atividades" (leva pra
+--    painel principal dela, e ganha o link "Painel do aluno" (leva pra
 --    /area-do-aluno.html). Sem turma vinculada (aba Alunos → vincular
 --    turma) ela não vê nenhuma matéria liberada lá, igual qualquer aluno.
 -- 3. Todo aluno que se cadastrar entra automaticamente como "student", SEM
