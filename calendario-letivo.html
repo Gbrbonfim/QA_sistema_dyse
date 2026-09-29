@@ -309,9 +309,9 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
   function navSetPara(profile){
     if(dyseIsAdmin(profile)){
       const itens = [
-        ['turmas','Turmas',SVG.users], ['materias','Matérias',SVG.book],
-        ['alunos','Alunos',SVG.user], ['professores','Professores',SVG.briefcase],
-        ['contas','Contas',SVG.folder]
+        ['turmas','Turmas',SVG.users], ['alunos','Alunos',SVG.user],
+        ['registro','Registro de Classe',SVG.report], ['materias','Material',SVG.book],
+        ['professores','Professores',SVG.briefcase], ['contas','Contas',SVG.folder]
       ];
       if(dyseIsFinanceiro(profile)) itens.push(['financeiro','Financeiro',SVG.card]);
       return { base:'/gestao.html', itens };
