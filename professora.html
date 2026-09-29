@@ -827,6 +827,10 @@ body.dyse-modal-open{overflow:hidden;}
       </button>
       <button type="button" class="sidebar-item" id="tabManage" onclick="showPanel('manage')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        <span>Gerenciar Atividades</span>
+      </button>
+      <button type="button" class="sidebar-item" id="tabMaterial" onclick="showPanel('material')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
         <span>Gerenciar Material</span>
       </button>
       <button type="button" class="sidebar-item" id="tabFinanceiro" onclick="showPanel('financeiro')">
@@ -933,6 +937,13 @@ body.dyse-modal-open{overflow:hidden;}
       Clique em <b>👁 Visualizar</b> para abrir e revisar a atividade antes de liberar — como professora, você sempre consegue acessar qualquer atividade, mesmo oculta dos alunos. Ative o interruptor para liberar aos alunos, ou desative para escondê-la novamente.
     </p>
     <div id="manageCourses"></div>
+  </div>
+
+  <div id="panelMaterial" style="display:none;">
+    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
+      A gestão cadastra e ativa a aula; aqui você decide, turma por turma, quais ficam visíveis pros seus alunos. As aulas do currículo original já vêm ativadas — o que a gestão adicionar depois entra desativado até você revisar e ligar.
+    </p>
+    <div id="materialTurmas"></div>
   </div>
 
   <div id="panelFinanceiro" style="display:none;">
@@ -1431,7 +1442,11 @@ body.dyse-modal-open{overflow:hidden;}
     },
     manage:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>',
-      title:'Gerenciar Material', subtitle:'Ative ou desative, por turma, quais aulas ficam visíveis para os alunos — e libere ou oculte as atividades do TOEFL.'
+      title:'Gerenciar Atividades', subtitle:'Libere ou oculte as atividades do TOEFL que os alunos podem acessar.'
+    },
+    material:{
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+      title:'Gerenciar Material', subtitle:'Ative ou desative, por turma, quais aulas ficam visíveis para os alunos.'
     },
     financeiro:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Z"/><path d="M16 7V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2"/><path d="M18 14h.01"/></svg>',
@@ -1455,12 +1470,14 @@ body.dyse-modal-open{overflow:hidden;}
     if(location.hash.slice(1) !== which) history.replaceState(null, '', '#' + which);
     document.getElementById('tabResults').classList.toggle('active', which==='results');
     document.getElementById('tabManage').classList.toggle('active', which==='manage');
+    document.getElementById('tabMaterial').classList.toggle('active', which==='material');
     document.getElementById('tabFinanceiro').classList.toggle('active', which==='financeiro');
     document.getElementById('tabTurmas').classList.toggle('active', which==='turmas');
     document.getElementById('tabReportCards').classList.toggle('active', which==='reportcards');
     document.getElementById('tabDisponibilidade').classList.toggle('active', which==='disponibilidade');
     document.getElementById('panelResults').style.display = which==='results' ? 'block' : 'none';
     document.getElementById('panelManage').style.display = which==='manage' ? 'block' : 'none';
+    document.getElementById('panelMaterial').style.display = which==='material' ? 'block' : 'none';
     document.getElementById('panelFinanceiro').style.display = which==='financeiro' ? 'block' : 'none';
     document.getElementById('panelTurmas').style.display = which==='turmas' ? 'block' : 'none';
     document.getElementById('panelReportCards').style.display = which==='reportcards' ? 'block' : 'none';
@@ -2698,12 +2715,13 @@ body.dyse-modal-open{overflow:hidden;}
         '</details>'
       );
     }
-    container.innerHTML =
-      '<div class="report-section-head">Atividades — TOEFL</div>' +
-      blocksToefl.join('') +
-      '<div class="report-section-head" style="margin-top:20px;">Material por turma — A1 a C1</div>' +
-      '<p style="color:var(--seal-soft); font-size:.85rem; margin:-6px 0 14px;">A gestão cadastra e ativa a aula; aqui você decide, turma por turma, quais ficam visíveis pros seus alunos. As aulas do currículo original já vêm ativadas — o que a gestão adicionar depois entra desativado até você revisar e ligar.</p>' +
-      (await renderTurmaMaterialBlocks());
+    container.innerHTML = blocksToefl.join('');
+  }
+
+  async function loadMaterialPanel(){
+    const container = document.getElementById('materialTurmas');
+    container.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+    container.innerHTML = await renderTurmaMaterialBlocks();
   }
 
   async function togglePublish(courseId, activityNum, isChecked){
@@ -2904,7 +2922,7 @@ body.dyse-modal-open{overflow:hidden;}
     const profile = await dyseGetProfile(session);
     renderProfessoraChrome(session, profile);
     const hashPanel = location.hash.slice(1);
-    showPanel(['results','manage','financeiro','turmas','reportcards','disponibilidade'].includes(hashPanel) ? hashPanel : 'turmas');
+    showPanel(['results','manage','material','financeiro','turmas','reportcards','disponibilidade'].includes(hashPanel) ? hashPanel : 'turmas');
 
     // As duas buscas são independentes — dispara junto em vez de esperar uma
     // pra só então começar a outra (a segunda nem depende da primeira).
@@ -2915,6 +2933,7 @@ body.dyse-modal-open{overflow:hidden;}
     ALL_RESULTS = (await dyseListAllResults()).filter(r => r.course === 'toefl');
     await turmasInfoPromise;
     loadManagePanel();
+    loadMaterialPanel();
     refreshNotificationsBell();
 
     const courseSelect = document.getElementById('filterCourse');
