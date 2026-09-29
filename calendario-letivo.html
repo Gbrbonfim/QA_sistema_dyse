@@ -318,9 +318,10 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
     }
     if(dyseIsTeacher(profile)){
       return { base:'/professora.html', itens:[
-        ['results','Resultados',SVG.list], ['manage','Gerenciar atividades',SVG.barchart],
-        ['financeiro','Financeiro',SVG.card], ['turmas','Turmas',SVG.users],
-        ['reportcards','Report Cards',SVG.report], ['disponibilidade','Disponibilidade',SVG.calendar]
+        ['turmas','Turmas',SVG.users], ['material','Gerenciar Material',SVG.book],
+        ['manage','Gerenciar Atividades',SVG.barchart], ['reportcards','Report Cards',SVG.report],
+        ['results','Resultados',SVG.list], ['disponibilidade','Disponibilidade',SVG.calendar],
+        ['financeiro','Financeiro',SVG.card]
       ]};
     }
     return { base:'/area-do-aluno.html', itens:[
