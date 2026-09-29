@@ -1648,6 +1648,10 @@ body.dyse-modal-open{overflow:hidden;}
     renderProfessoresPanel();
     renderContasList();
     renderModalidadesTable();
+    // Repopula os selects de Registro de Classe se a página abriu direto
+    // em #registro (showPanel roda antes disto terminar — ver comentário
+    // em initRegistroPanel).
+    initRegistroPanel();
 
     // Mantém o mês corrente sempre em dia pra quem entra direto no painel do
     // professor sem a gestão ter aberto as abas Pagamentos/Relatório/Fechamento
@@ -4061,16 +4065,23 @@ body.dyse-modal-open{overflow:hidden;}
     if(which === 'reportcard') renderRegistroReportCardList();
   }
 
+  // "dataset.filled" só é marcado quando TEACHERS/TURMAS já têm dado de
+  // verdade — se a página abre direto em #registro (hash da última visita),
+  // showPanel roda ANTES de loadAll() terminar (ver o IIFE final do
+  // arquivo), então a 1ª chamada aqui pode encontrar as duas listas ainda
+  // vazias; sem essa checagem o select ficava travado só com o
+  // placeholder pra sempre. loadAll() chama isto de novo no fim, garantindo
+  // que preenche assim que os dados chegarem.
   function initRegistroPanel(){
     const selProf = document.getElementById('regProfessorSelect');
-    if(!selProf.dataset.filled){
+    if(!selProf.dataset.filled && TEACHERS.length){
       const professoresOrdenados = TEACHERS.slice().sort((a, b) => (a.full_name || a.email || '').localeCompare(b.full_name || b.email || ''));
       selProf.innerHTML = '<option value="">Escolha o professor…</option>' +
         professoresOrdenados.map(p => '<option value="' + p.id + '">' + escapeHtmlLocal(p.full_name || p.email) + '</option>').join('');
       selProf.dataset.filled = '1';
     }
     const filtroTurma = document.getElementById('rcListTurmaFiltro');
-    if(!filtroTurma.dataset.filled){
+    if(!filtroTurma.dataset.filled && TURMAS.length){
       filtroTurma.innerHTML = '<option value="">Todas as turmas</option>' +
         TURMAS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('');
       filtroTurma.dataset.filled = '1';
