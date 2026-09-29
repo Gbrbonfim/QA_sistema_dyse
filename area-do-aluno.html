@@ -1382,8 +1382,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       dyseListTurmaAulaMaterial(turmaId),
       Promise.all(niveis.map(n => dyseMinhasAulasRegistradas(n.slug)))
     ]);
-    const copiaPorAula = {};
-    (materialDaTurma || []).forEach(r => { copiaPorAula[r.nivel_aula_id] = r.material_url; });
+    const statusPorAula = {};
+    (materialDaTurma || []).forEach(r => { statusPorAula[r.nivel_aula_id] = r; });
 
     let total = 0;
     AREA_CTX.niveis = niveis;
@@ -1391,7 +1391,12 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       AREA_CTX.aulasNivel[n.slug] = aulasPorNivel[i];
       AREA_CTX.aulasDadas[n.slug] = new Set(dadasPorNivel[i]);
       aulasPorNivel[i].forEach(a => {
-        const url = (copiaPorAula[a.id] || a.material_url || '').trim();
+        const status = statusPorAula[a.id];
+        // Segundo interruptor (por turma, da professora): sem decisão
+        // explícita (ativo null/sem linha), usa o padrão por número da
+        // aula — ver dyseAulaAtivaPadrao em dyse-auth.js.
+        const ativo = (status && status.ativo != null) ? status.ativo : dyseAulaAtivaPadrao(a.numero, n.total_aulas);
+        const url = ativo ? ((status && status.material_url) || a.material_url || '').trim() : '';
         if(url){
           AREA_CTX.materialPorAulaId[a.id] = url;
           total++;

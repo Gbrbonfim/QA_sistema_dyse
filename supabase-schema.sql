@@ -3591,3 +3591,20 @@ end;
 $$;
 
 grant execute on function public.atualizar_link_meet_turma(uuid, text) to authenticated;
+
+-- ======================================================================
+-- 30) Visibilidade de material por turma (professor liga/desliga por aula)
+--     nivel_aulas.ativo (existente) é o interruptor GLOBAL da gestão — se a
+--     aula nem está ativa ali, ninguém vê. turma_aula_material.ativo é o
+--     segundo interruptor, da PROFESSORA, por turma: gestão cria e ativa a
+--     aula -> professora entra em "Gerenciar Material" e ativa pra turma
+--     dela -> só aí o aluno enxerga. null = "ainda não decidido": nesse
+--     caso o app usa o padrão por número da aula (dyseAulaAtivaPadrao em
+--     dyse-auth.js) — as aulas originais do nível (numero <= total_aulas)
+--     vêm ativas, qualquer aula nova que a gestão adicionar depois do total
+--     original vem desativada até a professora ligar, turma por turma.
+--     material_url passa a aceitar null porque agora uma linha pode existir
+--     só pra guardar "ativo", sem override de link nenhum.
+-- ======================================================================
+alter table public.turma_aula_material alter column material_url drop not null;
+alter table public.turma_aula_material add column if not exists ativo boolean;

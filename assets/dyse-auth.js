@@ -1908,28 +1908,51 @@ async function dyseUpdateNivelAulaMaterial(nivelAulaId, url){
 /* Material POR TURMA (turma_aula_material) — a cópia daquela turma daquela
    aula, com as anotações da turma. Override do material base. Escrita pela
    gestão ou pelo professor da turma; aluno só lê a da própria turma. Uma
-   linha por (turma, aula); URL vazia apaga a linha (volta pro base). */
+   linha por (turma, aula). "ativo" (seção 30) é a visibilidade da aula pro
+   aluno DAQUELA turma: null = "ainda não decidido" (dyseAulaAtivaPadrao usa
+   o padrão — as aulas originais do nível vêm ativas, o que for adicionado
+   depois vem desativado); true/false = decisão explícita do professor. */
 async function dyseListTurmaAulaMaterial(turmaId){
   if(!turmaId) return [];
   const { data, error } = await sb
     .from('turma_aula_material')
-    .select('nivel_aula_id, material_url')
+    .select('nivel_aula_id, material_url, ativo')
     .eq('turma_id', turmaId);
   return error ? [] : data;
 }
 
+/* numero <= total_aulas do nível: aula "original" do currículo — é esse o
+   padrão quando "ativo" ainda é null (true pras 44 aulas de sempre, false
+   pra qualquer aula que a gestão adicionar depois; essa só fica visível
+   quando o professor ligar o interruptor pra cada turma). */
+function dyseAulaAtivaPadrao(aulaNumero, totalAulasNivel){
+  return !!totalAulasNivel && aulaNumero <= totalAulasNivel;
+}
+
+/* "ativo" nunca entra neste upsert de propósito — numa linha nova ele fica
+   null (padrão calculado por número da aula, ver acima); numa linha
+   existente ele não é tocado (não está no SET do upsert). */
 async function dyseSetTurmaAulaMaterial(turmaId, nivelAulaId, url){
   const session = await dyseGetSession();
   const link = (url || '').trim();
-  if(!link){
-    const { error } = await sb.from('turma_aula_material')
-      .delete().eq('turma_id', turmaId).eq('nivel_aula_id', nivelAulaId);
-    return { error };
-  }
   const { error } = await sb.from('turma_aula_material').upsert({
     turma_id: turmaId,
     nivel_aula_id: nivelAulaId,
-    material_url: link,
+    material_url: link || null,
+    atualizado_por: session ? session.user.id : null,
+    atualizado_em: new Date().toISOString()
+  }, { onConflict: 'turma_id,nivel_aula_id' });
+  return { error };
+}
+
+/* Liga/desliga a visibilidade de uma aula pros alunos de uma turma
+   específica — não mexe no material_url (upsert só troca "ativo"). */
+async function dyseSetAulaAtivaTurma(turmaId, nivelAulaId, ativo){
+  const session = await dyseGetSession();
+  const { error } = await sb.from('turma_aula_material').upsert({
+    turma_id: turmaId,
+    nivel_aula_id: nivelAulaId,
+    ativo: !!ativo,
     atualizado_por: session ? session.user.id : null,
     atualizado_em: new Date().toISOString()
   }, { onConflict: 'turma_id,nivel_aula_id' });
