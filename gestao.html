@@ -810,6 +810,10 @@ body.dyse-modal-open{overflow:hidden;}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Alunos</span>
       </button>
+      <button type="button" class="sidebar-item" id="tabRegistro" onclick="showPanel('registro')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        <span>Registro de Classe</span>
+      </button>
       <button type="button" class="sidebar-item" id="tabProfessores" onclick="showPanel('professores')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
         <span>Professores</span>
@@ -940,6 +944,63 @@ body.dyse-modal-open{overflow:hidden;}
     <div class="turma-status-chips fin-view-only" id="alunoStatusChips"></div>
     <p class="result-count" id="alunosCount"></p>
     <div id="alunosTableWrap"></div>
+  </div>
+
+  <!-- ---------- REGISTRO DE CLASSE ---------- -->
+  <div id="panelRegistro" style="display:none;">
+    <div class="auth-tabs fin-subtabs">
+      <button type="button" class="auth-tab active" id="regTabTurmas" onclick="showRegistroPanel('turmas')">Turmas</button>
+      <button type="button" class="auth-tab" id="regTabReportcard" onclick="showRegistroPanel('reportcard')">Report Card</button>
+    </div>
+
+    <!-- Sub: por turma — visão rápida de quem já tem registro e geração em lote -->
+    <div id="regPanelTurmas">
+      <p class="gestao-hint" style="margin-bottom:12px;">Escolha a turma pra ver, de cada aluno, quantas aulas já foram registradas pela professora e os Report Cards já gerados — sem precisar abrir aluno por aluno.</p>
+      <div class="dash-filter">
+        <select id="regTurmaSelect" onchange="onRegTurmaChange()"></select>
+        <select id="regNivelSelect" onchange="onRegNivelChange()" style="display:none;"></select>
+      </div>
+      <p id="regTurmaMsg" class="gestao-hint"></p>
+
+      <div id="regBulkWrap" style="display:none; margin:14px 0; padding:14px 16px; background:var(--antique-soft); border-radius:var(--radius-sm);">
+        <p style="font-weight:700; font-size:.85rem; color:var(--seal); margin-bottom:10px;">Gerar Report Card da turma inteira</p>
+        <div class="gestao-form" style="align-items:flex-end;">
+          <div class="gestao-field" style="flex:0 0 110px;"><label>Semestre</label><select id="regBulkSemestre" onchange="onRegBulkSemestreChange()"><option value="1">1º</option><option value="2">2º</option></select></div>
+          <div class="gestao-field" style="flex:0 0 90px;"><label>Aula início</label><input type="number" min="1" id="regBulkInicio"></div>
+          <div class="gestao-field" style="flex:0 0 90px;"><label>Aula fim</label><input type="number" min="1" id="regBulkFim"></div>
+          <button type="button" class="btn btn-primary" onclick="handleGerarReportCardTurma()">Gerar pra turma toda</button>
+        </div>
+        <p class="gestao-hint">Gera (ou atualiza, se ainda estiver em rascunho) um Report Card por aluno da turma, um de cada vez — inclusive de quem ainda não tem nenhum registro no período. Pode levar alguns minutos com a turma cheia (a análise por IA de cada um leva até 1 min).</p>
+        <p class="auth-msg" id="regBulkMsg"></p>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead><tr><th>Aluno</th><th>Aulas registradas</th><th>Report Cards</th><th>Ações</th></tr></thead>
+          <tbody id="regTurmaBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sub: Report Card — todos os já gerados, mesma lógica de hoje (só mudou o lugar) -->
+    <div id="regPanelReportcard" style="display:none;">
+      <div class="dash-filter">
+        <select id="rcListTurmaFiltro" onchange="renderRegistroReportCardList()"><option value="">Todas as turmas</option></select>
+        <select id="rcListStatusFiltro" onchange="renderRegistroReportCardList()">
+          <option value="">Todos os status</option>
+          <option value="rascunho">Rascunho</option>
+          <option value="liberado_professor">Liberado p/ Professor</option>
+          <option value="liberado_aluno">Liberado p/ Aluno</option>
+        </select>
+      </div>
+      <p class="result-count" id="rcListCount"></p>
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead><tr><th>Aluno</th><th>Turma</th><th>Nível</th><th>Semestre</th><th>Aulas</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="rcListBody"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <!-- ---------- PROFESSORES (Horários / Disponibilidade) ---------- -->
@@ -1478,6 +1539,10 @@ body.dyse-modal-open{overflow:hidden;}
         '</span>' +
       '</div>'
     },
+    registro: {
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>',
+      title: 'Registro de Classe', subtitle: 'Veja e gere o registro de classe e os Report Cards por turma, sem precisar entrar aluno por aluno.', action: ''
+    },
     professores: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
       title: 'Horários / Disponibilidade', subtitle: 'Confira a disponibilidade dos professores e os horários ocupados pelas turmas.',
@@ -1502,7 +1567,7 @@ body.dyse-modal-open{overflow:hidden;}
     // fica bloqueada e cai em "alunos".
     if(which === 'financeiro' && !document.body.classList.contains('dyse-can-financeiro')) which = 'alunos';
     if(location.hash.slice(1) !== which) history.replaceState(null, '', '#' + which);
-    ['turmas','materias','alunos','professores','contas','financeiro'].forEach(p => {
+    ['turmas','materias','alunos','registro','professores','contas','financeiro'].forEach(p => {
       document.getElementById('tab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('panel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
     });
@@ -1512,6 +1577,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('pageHeaderSubtitle').textContent = meta.subtitle;
     document.getElementById('pageHeaderAction').innerHTML = meta.action;
     if(which === 'financeiro') showFinPanel('modalidades');
+    if(which === 'registro') initRegistroPanel();
   }
   function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
@@ -3900,6 +3966,10 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('alunoHistoricoModal').setAttribute('aria-hidden','true');
     document.body.classList.remove('dyse-modal-open');
     CURRENT_ALUNO_HISTORICO_ID = null;
+    // Se aberto por cima da tela "Registro de Classe", atualiza a linha da
+    // turma (pode ter mudado: novo Report Card gerado ali dentro).
+    const turmaSelAtual = document.getElementById('regTurmaSelect');
+    if(turmaSelAtual && turmaSelAtual.value) carregarRegistroTurmaBody(turmaSelAtual.value);
   }
 
   const REPORT_CARD_STATUS_LABELS = { rascunho: 'Rascunho', liberado_professor: 'Liberado p/ Professor', liberado_aluno: 'Liberado p/ Aluno' };
@@ -3963,6 +4033,197 @@ body.dyse-modal-open{overflow:hidden;}
       flashMsg('rcGerarMsg', 'Report Card + análise da IA prontos!', true);
     }
     openReportCardModal((comIA || data).id, 'gestao');
+  }
+
+  /* ======================================================================
+     REGISTRO DE CLASSE (visão por turma) — acesso rápido ao que hoje só
+     dava pra ver entrando aluno por aluno na aba Alunos. Reaproveita toda
+     a lógica que já existe (openAlunoHistoricoModal, dyseGerarReportCard,
+     openReportCardModal): só junta tudo numa visão em lote por turma, mais
+     um submenu "Report Card" com todos os já gerados.
+     ====================================================================== */
+  let REG_TURMA_STUDENTS = [];
+  let REG_TURMA_NIVEL_SLUG = null;
+
+  function showRegistroPanel(which){
+    ['turmas','reportcard'].forEach(p => {
+      document.getElementById('regTab' + capitalize(p)).classList.toggle('active', p === which);
+      document.getElementById('regPanel' + capitalize(p)).style.display = p === which ? 'block' : 'none';
+    });
+    if(which === 'reportcard') renderRegistroReportCardList();
+  }
+
+  function initRegistroPanel(){
+    const selTurma = document.getElementById('regTurmaSelect');
+    if(!selTurma.dataset.filled){
+      selTurma.innerHTML = '<option value="">Escolha uma turma…</option>' +
+        TURMAS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('');
+      selTurma.dataset.filled = '1';
+    }
+    const filtroTurma = document.getElementById('rcListTurmaFiltro');
+    if(!filtroTurma.dataset.filled){
+      filtroTurma.innerHTML = '<option value="">Todas as turmas</option>' +
+        TURMAS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('');
+      filtroTurma.dataset.filled = '1';
+    }
+  }
+
+  async function onRegTurmaChange(){
+    const turmaId = document.getElementById('regTurmaSelect').value;
+    const nivelSel = document.getElementById('regNivelSelect');
+    const bulkWrap = document.getElementById('regBulkWrap');
+    const msg = document.getElementById('regTurmaMsg');
+    const body = document.getElementById('regTurmaBody');
+    if(!turmaId){
+      nivelSel.style.display = 'none'; bulkWrap.style.display = 'none';
+      body.innerHTML = ''; msg.textContent = '';
+      return;
+    }
+    REG_TURMA_STUDENTS = STUDENTS.filter(s => s.turma_id === turmaId);
+    const niveisDaTurma = NIVEIS.filter(n => TURMA_MATERIAS.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
+    if(!niveisDaTurma.length){
+      nivelSel.style.display = 'none'; bulkWrap.style.display = 'none';
+      body.innerHTML = '';
+      msg.textContent = 'Essa turma ainda não tem um nível acadêmico vinculado (aba Matérias) — sem isso não dá pra calcular aulas registradas.';
+      return;
+    }
+    msg.textContent = '';
+    if(niveisDaTurma.length > 1){
+      nivelSel.style.display = '';
+      nivelSel.innerHTML = niveisDaTurma.map(n => '<option value="' + n.slug + '">' + escapeHtmlLocal(n.name) + '</option>').join('');
+      REG_TURMA_NIVEL_SLUG = nivelSel.value;
+    } else {
+      nivelSel.style.display = 'none';
+      REG_TURMA_NIVEL_SLUG = niveisDaTurma[0].slug;
+    }
+    bulkWrap.style.display = 'block';
+    onRegBulkSemestreChange();
+    await carregarRegistroTurmaBody(turmaId);
+  }
+
+  async function onRegNivelChange(){
+    REG_TURMA_NIVEL_SLUG = document.getElementById('regNivelSelect').value;
+    onRegBulkSemestreChange();
+    await carregarRegistroTurmaBody(document.getElementById('regTurmaSelect').value);
+  }
+
+  function onRegBulkSemestreChange(){
+    const nivel = NIVEIS.find(n => n.slug === REG_TURMA_NIVEL_SLUG);
+    const totalAulas = (nivel && nivel.total_aulas) || 0;
+    if(!totalAulas) return;
+    const semestre = document.getElementById('regBulkSemestre').value;
+    const metade = Math.ceil(totalAulas / 2);
+    document.getElementById('regBulkInicio').value = semestre === '1' ? 1 : metade + 1;
+    document.getElementById('regBulkFim').value = semestre === '1' ? metade : totalAulas;
+  }
+
+  async function carregarRegistroTurmaBody(turmaId){
+    const body = document.getElementById('regTurmaBody');
+    if(!REG_TURMA_STUDENTS.length){
+      body.innerHTML = '<tr><td colspan="4" style="opacity:.6;">Essa turma ainda não tem alunos.</td></tr>';
+      return;
+    }
+    body.innerHTML = '<tr><td colspan="4" style="opacity:.6;">Carregando…</td></tr>';
+    const [aulas, registrosPorAluno, cards] = await Promise.all([
+      dyseListNivelAulas(REG_TURMA_NIVEL_SLUG, false),
+      Promise.all(REG_TURMA_STUDENTS.map(s => dyseListRegistrosClasse(s.id))),
+      dyseListReportCards()
+    ]);
+    const totalAulas = aulas.length;
+    const aulaIdsDoNivel = new Set(aulas.map(a => a.id));
+    const cardsPorAluno = {};
+    cards.forEach(c => { (cardsPorAluno[c.aluno_id] = cardsPorAluno[c.aluno_id] || []).push(c); });
+
+    body.innerHTML = REG_TURMA_STUDENTS.map((s, i) => {
+      const registros = registrosPorAluno[i] || [];
+      const registradas = new Set(registros.filter(r => aulaIdsDoNivel.has(r.nivel_aula_id)).map(r => r.nivel_aula_id)).size;
+      const meusCards = (cardsPorAluno[s.id] || []).filter(c => c.materia_slug === REG_TURMA_NIVEL_SLUG);
+      const cardsTxt = meusCards.length
+        ? meusCards.map(c => c.semestre + 'º sem. ' + reportCardStatusBadge(c.status)).join(' ')
+        : '<span style="opacity:.5;">Nenhum</span>';
+      return '<tr>' +
+        '<td>' + escapeHtmlLocal(s.full_name || s.email) + (alunoPausadoGestao(s) ? ' <span class="pill-count pill-bad">pausado</span>' : '') + '</td>' +
+        '<td>' + registradas + ' / ' + (totalAulas || '?') + '</td>' +
+        '<td>' + cardsTxt + '</td>' +
+        '<td><button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoHistoricoModal(\'' + s.id + '\')">Ver / gerar</button></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function alunoPausadoGestao(s){ return s && s.situacao_financeira === 'pausado'; }
+
+  async function handleGerarReportCardTurma(){
+    const turmaId = document.getElementById('regTurmaSelect').value;
+    const materiaSlug = REG_TURMA_NIVEL_SLUG;
+    const semestre = parseInt(document.getElementById('regBulkSemestre').value, 10);
+    const aulaInicio = parseInt(document.getElementById('regBulkInicio').value, 10);
+    const aulaFim = parseInt(document.getElementById('regBulkFim').value, 10);
+    const msg = document.getElementById('regBulkMsg');
+    if(!turmaId || !materiaSlug || !aulaInicio || !aulaFim){ flashMsg('regBulkMsg', 'Escolha a turma e preencha o intervalo de aulas.', false); return; }
+    if(!REG_TURMA_STUDENTS.length){ flashMsg('regBulkMsg', 'Essa turma não tem alunos.', false); return; }
+    if(!confirm('Gerar o Report Card de ' + semestre + 'º semestre (aulas ' + aulaInicio + '-' + aulaFim + ') pros ' + REG_TURMA_STUDENTS.length + ' aluno(s) dessa turma?\n\nQuem já tiver um liberado nesse semestre é pulado (não sobrescreve); quem estiver em rascunho é regravado.')) return;
+
+    let criados = 0;
+    const iaFalhas = [], erros = [], pulados = [];
+    for(let i = 0; i < REG_TURMA_STUDENTS.length; i++){
+      const s = REG_TURMA_STUDENTS[i];
+      msg.style.color = 'var(--seal-soft)';
+      msg.textContent = 'Gerando ' + (i + 1) + '/' + REG_TURMA_STUDENTS.length + ' — ' + (s.full_name || s.email) + '…';
+      const { data, error } = await dyseGerarReportCard(s.id, materiaSlug, semestre, aulaInicio, aulaFim);
+      if(error){
+        // "já foi liberado" não é falha de verdade — é o comportamento
+        // esperado de pular quem já tem Report Card liberado nesse período.
+        if(/já foi liberado/.test(error.message)) pulados.push(s.full_name || s.email);
+        else erros.push((s.full_name || s.email) + ': ' + error.message);
+        continue;
+      }
+      criados++;
+      const { error: iaError } = await dyseGerarAnaliseReportCardIA(data);
+      if(iaError) iaFalhas.push(s.full_name || s.email);
+    }
+    msg.style.color = (erros.length || iaFalhas.length) ? '#c0392b' : '#2e8b57';
+    let resumo = criados + ' Report Card(s) criado(s)/atualizado(s).';
+    if(pulados.length) resumo += ' ' + pulados.length + ' pulado(s) (já liberado): ' + pulados.join(', ') + '.';
+    if(iaFalhas.length) resumo += ' A análise de IA falhou pra: ' + iaFalhas.join(', ') + ' — abra o Report Card de cada um e use "Tentar gerar agora".';
+    if(erros.length) resumo += ' Erros: ' + erros.join(' · ');
+    msg.textContent = resumo;
+    await carregarRegistroTurmaBody(turmaId);
+  }
+
+  /* Sub: Report Card — lista todos os já gerados (visíveis pra gestão),
+     mesma lógica/modal de sempre (openReportCardModal), só que centralizada
+     aqui em vez de dentro do histórico de cada aluno. */
+  async function renderRegistroReportCardList(){
+    const turmaFiltro = document.getElementById('rcListTurmaFiltro').value;
+    const statusFiltro = document.getElementById('rcListStatusFiltro').value;
+    const body = document.getElementById('rcListBody');
+    const count = document.getElementById('rcListCount');
+    body.innerHTML = '<tr><td colspan="7" style="opacity:.6;">Carregando…</td></tr>';
+    const cards = await dyseListReportCards();
+    const filtrados = cards.filter(c => {
+      if(turmaFiltro && c.turma_id !== turmaFiltro) return false;
+      if(statusFiltro && c.status !== statusFiltro) return false;
+      return true;
+    }).sort((a, b) => {
+      const an = ((STUDENTS.find(s => s.id === a.aluno_id) || {}).full_name || '');
+      const bn = ((STUDENTS.find(s => s.id === b.aluno_id) || {}).full_name || '');
+      return an.localeCompare(bn) || a.semestre - b.semestre;
+    });
+    count.textContent = filtrados.length + ' Report Card(s)';
+    body.innerHTML = filtrados.length ? filtrados.map(rc => {
+      const aluno = STUDENTS.find(s => s.id === rc.aluno_id);
+      const turma = TURMAS.find(t => t.id === rc.turma_id);
+      const nivel = MATERIAS.find(m => m.slug === rc.materia_slug);
+      return '<tr>' +
+        '<td>' + escapeHtmlLocal(aluno ? (aluno.full_name || aluno.email) : '(aluno removido)') + '</td>' +
+        '<td>' + escapeHtmlLocal(turma ? turma.name : '-') + '</td>' +
+        '<td>' + escapeHtmlLocal(nivel ? nivel.name : rc.materia_slug) + '</td>' +
+        '<td>' + rc.semestre + 'º</td>' +
+        '<td>' + rc.aula_inicio + '-' + rc.aula_fim + '</td>' +
+        '<td>' + reportCardStatusBadge(rc.status) + '</td>' +
+        '<td><button type="button" class="btn btn-ghost btn-xs" onclick="openReportCardModal(' + rc.id + ', \'gestao\')">Abrir</button></td>' +
+      '</tr>';
+    }).join('') : '<tr><td colspan="7" style="opacity:.6;">Nenhum Report Card encontrado.</td></tr>';
   }
 
   function iaOverlayShow(msg){
@@ -4096,7 +4357,7 @@ body.dyse-modal-open{overflow:hidden;}
     const enc = d.encaminhamento || {};
     const blocoRestante =
       '<div class="report-section-head">F · Pontos Fortes e de Desenvolvimento</div>' +
-      '<div class="gestao-field"><label>Pontos fortes</label><input type="text" id="rcPontosFortes" value="' + escapeHtmlLocal(d.pontos_fortes || '') + '" placeholder="[Preenchimento necessário]"></div>' +
+      '<div class="gestao-field"><label>Pontos fortes</label><textarea id="rcPontosFortes" placeholder="[Preenchimento necessário]" style="min-height:90px; max-height:160px; overflow-y:auto; resize:vertical;">' + escapeHtmlLocal(d.pontos_fortes || '') + '</textarea></div>' +
       '<div class="gestao-field"><label>Pontos de desenvolvimento</label><input type="text" id="rcPontosDesenvolvimento" value="' + escapeHtmlLocal(d.pontos_desenvolvimento || '') + '" placeholder="[Preenchimento necessário]"></div>' +
       '<div class="report-section-head">G · Considerações Pessoais do Professor(a)</div>' +
       '<div class="gestao-field"><input type="text" id="rcConsideracoes" value="' + escapeHtmlLocal(d.consideracoes_professor || '') + '" placeholder="[Preenchimento necessário]"></div>' +
@@ -4141,6 +4402,9 @@ body.dyse-modal-open{overflow:hidden;}
     if(error){ flashMsg('rcModalMsg', 'Não foi possível excluir: ' + error.message, false); return; }
     closeReportCardModal();
     if(CURRENT_ALUNO_HISTORICO_ID) await renderAlunoReportCardsList(CURRENT_ALUNO_HISTORICO_ID);
+    if(document.getElementById('rcListBody')) await renderRegistroReportCardList();
+    const turmaSelAtual = document.getElementById('regTurmaSelect');
+    if(turmaSelAtual && turmaSelAtual.value) await carregarRegistroTurmaBody(turmaSelAtual.value);
   }
 
   function coletarDadosReportCardDoFormulario(){
@@ -5338,7 +5602,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.body.classList.toggle('dyse-can-ver-financeiro', dyseIsAdmin(profile));
     renderGestaoChrome(session, profile);
     const hashPanel = location.hash.slice(1);
-    showPanel(['turmas','materias','alunos','professores','contas','financeiro'].includes(hashPanel) ? hashPanel : 'turmas');
+    showPanel(['turmas','materias','alunos','registro','professores','contas','financeiro'].includes(hashPanel) ? hashPanel : 'turmas');
     await loadAll();
     carregarAvisos();
   })();

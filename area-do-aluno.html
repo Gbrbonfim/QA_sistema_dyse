@@ -922,6 +922,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
               <p>Escolha um curso para ver o material liberado pela professora.</p>
             </div>
           </div>
+          <div id="meetCard" style="display:none;"></div>
           <div class="wrap" style="max-width:100%; margin:14px 0 0; padding:0;" id="coursesWrap"></div>
         </div>
 
@@ -1014,6 +1015,22 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       '<div style="min-width:0;">' +
         '<div class="sidebar-user-name">' + escapeHtmlLocal(fullName) + '</div>' +
         '<div class="sidebar-user-role">Aluno(a)</div>' +
+      '</div>';
+  }
+
+  /* Link do Google Meet da turma — a professora cadastra no painel dela;
+     aqui é só leitura. Some quando a turma ainda não tem link definido. */
+  function renderMeetCard(turma){
+    const wrap = document.getElementById('meetCard');
+    if(!turma || !turma.link_meet){ wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+    wrap.style.display = 'block';
+    wrap.innerHTML =
+      '<div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:14px 0 0; padding:16px 20px; background:linear-gradient(135deg, var(--amaranth), var(--gamboge)); border-radius:var(--radius); color:#fff;">' +
+        '<div style="flex:1 1 220px; min-width:0;">' +
+          '<div style="font-weight:800; font-size:1rem;">🎥 Aula ao vivo — ' + escapeHtmlLocal(turma.name || '') + '</div>' +
+          '<div style="font-size:.85rem; opacity:.92;">Entre pelo Google Meet no horário da sua aula.</div>' +
+        '</div>' +
+        '<a href="' + escapeHtmlLocal(turma.link_meet) + '" target="_blank" rel="noopener" class="btn" style="background:#fff; color:var(--amaranth); font-weight:800; flex:0 0 auto;">Entrar no Google Meet</a>' +
       '</div>';
   }
 
@@ -1202,6 +1219,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const allowedSlugs = new Set(
       allTurmaMaterias.filter(tm => tm.turma_id === profile.turma_id).map(tm => tm.materia_slug)
     );
+
+    renderMeetCard(await dyseGetTurmaPorId(profile.turma_id));
 
     const results = await dyseListMyResults();
     const doneMap = {}; // "course:aula:num" -> resultado

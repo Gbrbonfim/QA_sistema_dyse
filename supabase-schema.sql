@@ -3565,3 +3565,29 @@ set conteudo = conteudo || jsonb_build_object(
   )
 )
 where materia_slug = 'a1' and numero = 44;
+
+-- ======================================================================
+-- 29) Link do Google Meet por turma — único por turma, cadastrado pela
+--     professora (painel do professor, Turmas/Registro de Classe) e
+--     visível pro aluno no painel dele. RPC "security definer" em vez de
+--     política de UPDATE direta em turmas: evita abrir a linha inteira
+--     pra escrita da professora (ela só altera turmas.link_meet, mais
+--     nada) — só quem tem acesso à turma (teacher_can_see_turma) ou é
+--     admin pode chamar.
+-- ======================================================================
+alter table public.turmas add column if not exists link_meet text;
+
+create or replace function public.atualizar_link_meet_turma(turma_id_param uuid, link_param text)
+returns void
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if not (public.teacher_can_see_turma(turma_id_param) or public.is_admin()) then
+    raise exception 'Sem permissão para editar o link dessa turma.';
+  end if;
+  update public.turmas set link_meet = nullif(trim(link_param), '') where id = turma_id_param;
+end;
+$$;
+
+grant execute on function public.atualizar_link_meet_turma(uuid, text) to authenticated;

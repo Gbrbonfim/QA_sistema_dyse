@@ -471,6 +471,22 @@ async function dyseDeleteTurma(id){
   return { error };
 }
 
+async function dyseGetTurmaPorId(turmaId){
+  if(!turmaId) return null;
+  const { data, error } = await sb.from('turmas').select('*').eq('id', turmaId).maybeSingle();
+  return error ? null : data;
+}
+
+/* Link do Google Meet da turma — único por turma. Passa por uma RPC
+   "security definer" (em vez de policy de UPDATE direta em turmas) porque
+   quem chama normalmente é a professora, que só pode mexer nesse campo,
+   não na turma inteira; a função valida teacher_can_see_turma/is_admin
+   antes de gravar (seção 29 do schema). */
+async function dyseAtualizarLinkMeetTurma(turmaId, link){
+  const { error } = await sb.rpc('atualizar_link_meet_turma', { turma_id_param: turmaId, link_param: link || '' });
+  return { error };
+}
+
 /* ---------- Matérias ---------- */
 async function dyseListMaterias(){
   const { data, error } = await sb.from('materias').select('*').order('name', { ascending: true });

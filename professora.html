@@ -977,6 +977,13 @@ body.dyse-modal-open{overflow:hidden;}
       <input type="date" id="chamadaData" onchange="loadChamadaDoDia()">
     </div>
     <p id="chamadaMsg" style="font-size:.82rem; margin:8px 0; color:var(--seal-soft);"></p>
+
+    <div id="meetLinkWrap" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; margin:4px 0 16px; padding:12px 14px; background:#fff8f0; border:2px solid #eee0cf; border-radius:var(--radius-sm);">
+      <label for="meetLinkInput" style="font-weight:700; font-size:.82rem; color:var(--seal); flex:0 0 auto;">🔗 Link do Google Meet da turma</label>
+      <input type="url" id="meetLinkInput" placeholder="https://meet.google.com/xxx-xxxx-xxx" style="flex:1 1 260px; min-width:0; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:8px 12px; font-family:var(--font-body); font-size:.85rem;">
+      <button type="button" class="btn btn-ghost" style="padding:8px 16px; font-size:.82rem;" onclick="salvarLinkMeetTurma()">Salvar link</button>
+      <span id="meetLinkMsg" style="font-size:.78rem; color:var(--seal-soft); flex-basis:100%;"></span>
+    </div>
     <div style="overflow-x:auto;">
       <table class="dash-table" id="chamadaTable">
         <thead><tr><th>Aluno</th><th>Presente</th></tr></thead>
@@ -1510,12 +1517,43 @@ body.dyse-modal-open{overflow:hidden;}
 
   async function onChamadaTurmaChange(){
     const turmaId = document.getElementById('chamadaTurmaSelect').value;
-    if(!turmaId){ document.getElementById('chamadaBody').innerHTML = ''; document.getElementById('chamadaHistoricoBody').innerHTML = ''; return; }
+    if(!turmaId){
+      document.getElementById('chamadaBody').innerHTML = '';
+      document.getElementById('chamadaHistoricoBody').innerHTML = '';
+      document.getElementById('meetLinkWrap').style.display = 'none';
+      return;
+    }
     const students = await dyseListProfilesByRole('student'); // já vem só das turmas permitidas (RLS)
     CHAMADA_STUDENTS = students.filter(s => s.turma_id === turmaId);
+    carregarLinkMeetTurma(turmaId);
     await loadChamadaDoDia();
     await renderChamadaHistorico();
     await carregarRegistroClasseDaTurma();
+  }
+
+  /* Link do Google Meet — único por turma, editado só pela professora
+     vinculada a ela (o valor já vem em CHAMADA_MY_TURMAS, sem query
+     extra). Salvar passa pela RPC atualizar_link_meet_turma (seção 29). */
+  function carregarLinkMeetTurma(turmaId){
+    const turma = CHAMADA_MY_TURMAS.find(t => t.id === turmaId);
+    document.getElementById('meetLinkInput').value = (turma && turma.link_meet) || '';
+    document.getElementById('meetLinkMsg').textContent = '';
+    document.getElementById('meetLinkWrap').style.display = 'flex';
+  }
+
+  async function salvarLinkMeetTurma(){
+    const turmaId = document.getElementById('chamadaTurmaSelect').value;
+    if(!turmaId) return;
+    const link = document.getElementById('meetLinkInput').value.trim();
+    const msg = document.getElementById('meetLinkMsg');
+    msg.style.color = 'var(--seal-soft)';
+    msg.textContent = 'Salvando…';
+    const { error } = await dyseAtualizarLinkMeetTurma(turmaId, link);
+    if(error){ msg.style.color = '#c0392b'; msg.textContent = 'Não foi possível salvar: ' + error.message; return; }
+    const turma = CHAMADA_MY_TURMAS.find(t => t.id === turmaId);
+    if(turma) turma.link_meet = link || null;
+    msg.style.color = '#2e8b57';
+    msg.textContent = 'Link salvo! Já aparece no painel do aluno.';
   }
 
   async function loadChamadaDoDia(){
@@ -2285,6 +2323,9 @@ body.dyse-modal-open{overflow:hidden;}
   function pfInput(idAttr, value, placeholder){
     return '<input type="text" ' + idAttr + ' value="' + escapeHtmlLocal(value || '') + '" placeholder="' + (placeholder || '') + '" style="width:100%; max-width:520px; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;">';
   }
+  function pfTextareaScroll(idAttr, value, placeholder){
+    return '<textarea ' + idAttr + ' placeholder="' + (placeholder || '') + '" style="width:100%; max-width:520px; min-height:90px; max-height:160px; overflow-y:auto; resize:vertical; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;">' + escapeHtmlLocal(value || '') + '</textarea>';
+  }
 
   async function openReportCardModal(id, contexto){
     const cards = await dyseListReportCards();
@@ -2370,7 +2411,7 @@ body.dyse-modal-open{overflow:hidden;}
     const enc = d.encaminhamento || {};
     const blocoRestante =
       '<div class="report-section-head">F · Pontos Fortes e de Desenvolvimento</div>' +
-      pfCampo('Pontos fortes', pfInput('id="rcPontosFortes"', d.pontos_fortes, '[Preenchimento necessário]')) +
+      pfCampo('Pontos fortes', pfTextareaScroll('id="rcPontosFortes"', d.pontos_fortes, '[Preenchimento necessário]')) +
       pfCampo('Pontos de desenvolvimento', pfInput('id="rcPontosDesenvolvimento"', d.pontos_desenvolvimento, '[Preenchimento necessário]')) +
       '<div class="report-section-head">G · Considerações Pessoais do Professor(a)</div>' +
       pfCampo('', pfInput('id="rcConsideracoes"', d.consideracoes_professor, '[Preenchimento necessário]')) +
