@@ -2026,6 +2026,16 @@ async function dyseDeleteRegistroClasseDia(turmaId, nivelAulaId, dataAula){
   return { error: d1.error || d2.error || null };
 }
 
+/* Apaga o registro de UM aluno só (ex: lançamento de teste/engano num
+   aluno específico) — ao contrário de dyseDeleteRegistroClasseDia acima,
+   não mexe nos registros dos outros alunos da turma naquele dia. Usada
+   pela gestão no histórico acadêmico do aluno. */
+async function dyseDeleteRegistroClasseAluno(alunoId, nivelAulaId, dataAula){
+  const { error } = await sb.from('registros_classe').delete()
+    .eq('aluno_id', alunoId).eq('nivel_aula_id', nivelAulaId).eq('data_aula', dataAula);
+  return { error };
+}
+
 /* ---------- Planner da sessão (Bloco C — por turma+aula+data) ---------- */
 /* Todas as datas (planner) de uma aula de uma turma, ordenadas por data. */
 async function dyseListRegistroClasseSessoes(turmaId, nivelAulaId){

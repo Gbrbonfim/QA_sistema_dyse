@@ -3920,8 +3920,10 @@ body.dyse-modal-open{overflow:hidden;}
 
   /* Monta o HTML do "Registro de Classe (por aula)" de um aluno — usado
      tanto no modal de histórico (Alunos → Registro de classe) quanto na
-     caixa suspensa da tela Registro de Classe → Turmas (clicar no nome). */
-  async function renderHistoricoAulasHtml(alunoId){
+     caixa suspensa da tela Registro de Classe → Turmas (clicar no nome).
+     "containerId" é o id do elemento que mostra esse HTML — o botão
+     Excluir de cada linha precisa saber onde se re-renderizar depois. */
+  async function renderHistoricoAulasHtml(alunoId, containerId){
     await garantirNivelAulasCache();
     const registros = (await dyseListRegistrosClasse(alunoId))
       .map(r => ({ r, aula: NIVEL_AULAS_POR_ID[r.nivel_aula_id] || null }))
@@ -3939,16 +3941,31 @@ body.dyse-modal-open{overflow:hidden;}
             const val = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' }[r.avaliacoes[eixo]] || r.avaliacoes[eixo];
             return eixo + ': ' + val;
           }).join(' · ');
-          const dataTxt = formatDateBR(String(r.data_aula || '').slice(0, 10));
+          const dataIso = String(r.data_aula || '').slice(0, 10);
+          const dataTxt = formatDateBR(dataIso);
           const diaTag = (diasPorAula[r.nivel_aula_id] || 1) > 1 ? ' · ' + dataTxt : '';
           return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:6px;">' +
-            '<span class="name">Aula ' + (aula ? String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlLocal(aula.topico) : '(aula removida)') + diaTag + '</span>' +
+            '<div style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:10px;">' +
+              '<span class="name">Aula ' + (aula ? String(aula.numero).padStart(2,'0') + ' — ' + escapeHtmlLocal(aula.topico) : '(aula removida)') + diaTag + '</span>' +
+              '<button type="button" class="btn btn-danger btn-xs" style="flex:none;" onclick="handleExcluirRegistroAluno(\'' + alunoId + '\', \'' + r.nivel_aula_id + '\', \'' + dataIso + '\', \'' + containerId + '\')">Excluir</button>' +
+            '</div>' +
             '<span style="font-size:.78rem; opacity:.75;">' + escapeHtmlLocal(dataTxt) + ' · ' + escapeHtmlLocal(professor ? (professor.full_name || '') : '(professor removido)') + ' · ' + escapeHtmlLocal(turma ? turma.name : '(turma removida)') + '</span>' +
             (avaliacoesTexto ? '<span style="font-size:.82rem;">' + escapeHtmlLocal(avaliacoesTexto) + '</span>' : '') +
             (r.observacoes ? '<span style="font-size:.8rem; opacity:.85;">' + escapeHtmlLocal(r.observacoes) + '</span>' : '') +
           '</div>';
         }).join('')
       : '<p class="report-line" style="opacity:.6;">Nenhum registro de classe ainda.</p>';
+  }
+
+  async function handleExcluirRegistroAluno(alunoId, nivelAulaId, dataAula, containerId){
+    if(!confirm('Excluir este registro de classe (' + formatDateBR(dataAula) + ')?\n\nNão apaga um Report Card já gerado, mas os dados desse dia saem da conta de frequência/avaliação se ele for gerado de novo.')) return;
+    const { error } = await dyseDeleteRegistroClasseAluno(alunoId, nivelAulaId, dataAula);
+    if(error){ alert('Não foi possível excluir: ' + error.message); return; }
+    const container = document.getElementById(containerId);
+    if(container) container.innerHTML = await renderHistoricoAulasHtml(alunoId, containerId);
+    // Atualiza a contagem "aulas registradas" da tabela por turma, se estiver na tela.
+    const turmaSelAtual = document.getElementById('regTurmaSelect');
+    if(turmaSelAtual && turmaSelAtual.value) await carregarRegistroTurmaBody(turmaSelAtual.value);
   }
 
   async function openAlunoHistoricoModal(alunoId){
@@ -3961,14 +3978,14 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('alunoHistoricoModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
 
-    const historicoHtml = await renderHistoricoAulasHtml(alunoId);
+    const historicoHtml = await renderHistoricoAulasHtml(alunoId, 'alunoHistoricoAulasWrap');
 
     document.getElementById('alunoHistoricoModalBody').innerHTML =
       '<div class="report-section-head">Report Cards</div>' +
       '<div id="alunoReportCardsList"></div>' +
       renderGerarReportCardForm() +
       '<div class="report-section-head">Registro de Classe (por aula)</div>' +
-      historicoHtml;
+      '<div id="alunoHistoricoAulasWrap">' + historicoHtml + '</div>';
 
     await renderAlunoReportCardsList(alunoId);
   }
@@ -4216,7 +4233,7 @@ body.dyse-modal-open{overflow:hidden;}
       REG_DETALHE_CARREGADO.add(alunoId);
       const bodyEl = document.getElementById('regDetalheBody-' + alunoId);
       bodyEl.innerHTML = '<p style="opacity:.6; padding:10px 0;">Carregando…</p>';
-      bodyEl.innerHTML = await renderHistoricoAulasHtml(alunoId);
+      bodyEl.innerHTML = await renderHistoricoAulasHtml(alunoId, 'regDetalheBody-' + alunoId);
     }
   }
 
