@@ -3914,16 +3914,10 @@ body.dyse-modal-open{overflow:hidden;}
 
   let CURRENT_ALUNO_HISTORICO_ID = null;
 
-  async function openAlunoHistoricoModal(alunoId){
-    const s = STUDENTS.find(x => x.id === alunoId);
-    if(!s) return;
-    CURRENT_ALUNO_HISTORICO_ID = alunoId;
-    document.getElementById('alunoHistoricoModalTitle').textContent = 'Histórico acadêmico — ' + (s.full_name || s.email || '');
-    document.getElementById('alunoHistoricoModalBody').innerHTML = '<p style="opacity:.6;">Carregando...</p>';
-    document.getElementById('alunoHistoricoModal').classList.add('open');
-    document.getElementById('alunoHistoricoModal').setAttribute('aria-hidden','false');
-    document.body.classList.add('dyse-modal-open');
-
+  /* Monta o HTML do "Registro de Classe (por aula)" de um aluno — usado
+     tanto no modal de histórico (Alunos → Registro de classe) quanto na
+     caixa suspensa da tela Registro de Classe → Turmas (clicar no nome). */
+  async function renderHistoricoAulasHtml(alunoId){
     await garantirNivelAulasCache();
     const registros = (await dyseListRegistrosClasse(alunoId))
       .map(r => ({ r, aula: NIVEL_AULAS_POR_ID[r.nivel_aula_id] || null }))
@@ -3933,7 +3927,7 @@ body.dyse-modal-open{overflow:hidden;}
     const diasPorAula = {};
     registros.forEach(({ r }) => { diasPorAula[r.nivel_aula_id] = (diasPorAula[r.nivel_aula_id] || 0) + 1; });
 
-    const historicoHtml = registros.length
+    return registros.length
       ? registros.map(({ r, aula }) => {
           const professor = TEACHERS.find(t => t.id === r.professor_id);
           const turma = TURMAS.find(t => t.id === r.turma_id);
@@ -3951,6 +3945,19 @@ body.dyse-modal-open{overflow:hidden;}
           '</div>';
         }).join('')
       : '<p class="report-line" style="opacity:.6;">Nenhum registro de classe ainda.</p>';
+  }
+
+  async function openAlunoHistoricoModal(alunoId){
+    const s = STUDENTS.find(x => x.id === alunoId);
+    if(!s) return;
+    CURRENT_ALUNO_HISTORICO_ID = alunoId;
+    document.getElementById('alunoHistoricoModalTitle').textContent = 'Histórico acadêmico — ' + (s.full_name || s.email || '');
+    document.getElementById('alunoHistoricoModalBody').innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+    document.getElementById('alunoHistoricoModal').classList.add('open');
+    document.getElementById('alunoHistoricoModal').setAttribute('aria-hidden','false');
+    document.body.classList.add('dyse-modal-open');
+
+    const historicoHtml = await renderHistoricoAulasHtml(alunoId);
 
     document.getElementById('alunoHistoricoModalBody').innerHTML =
       '<div class="report-section-head">Report Cards</div>' +
@@ -4140,8 +4147,14 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('regBulkFim').value = semestre === '1' ? metade : totalAulas;
   }
 
+  // Linha expansível: clicar no NOME do aluno abre/fecha uma caixa suspensa
+  // logo abaixo com o Registro de Classe (por aula) dele — mesmo padrão já
+  // usado em Financeiro → Pagamentos (tr.pag-row/pag-detalhe-row).
+  const REG_DETALHE_CARREGADO = new Set();
+
   async function carregarRegistroTurmaBody(turmaId){
     const body = document.getElementById('regTurmaBody');
+    REG_DETALHE_CARREGADO.clear();
     if(!REG_TURMA_STUDENTS.length){
       body.innerHTML = '<tr><td colspan="4" style="opacity:.6;">Essa turma ainda não tem alunos.</td></tr>';
       return;
@@ -4164,16 +4177,72 @@ body.dyse-modal-open{overflow:hidden;}
       const cardsTxt = meusCards.length
         ? meusCards.map(c => c.semestre + 'º sem. ' + reportCardStatusBadge(c.status)).join(' ')
         : '<span style="opacity:.5;">Nenhum</span>';
-      return '<tr>' +
-        '<td>' + escapeHtmlLocal(s.full_name || s.email) + (alunoPausadoGestao(s) ? ' <span class="pill-count pill-bad">pausado</span>' : '') + '</td>' +
+      return '<tr class="pag-row" onclick="toggleRegistroDetalhe(\'' + s.id + '\')">' +
+        '<td><span class="pag-chevron" id="regChevron-' + s.id + '">›</span>' + escapeHtmlLocal(s.full_name || s.email) + (alunoPausadoGestao(s) ? ' <span class="pill-count pill-bad">pausado</span>' : '') + '</td>' +
         '<td>' + registradas + ' / ' + (totalAulas || '?') + '</td>' +
         '<td>' + cardsTxt + '</td>' +
-        '<td><button type="button" class="btn btn-ghost btn-xs" onclick="openAlunoHistoricoModal(\'' + s.id + '\')">Ver / gerar</button></td>' +
+        '<td>' +
+          '<button type="button" class="btn btn-ghost btn-xs" onclick="event.stopPropagation(); openAlunoHistoricoModal(\'' + s.id + '\')">Ver</button> ' +
+          '<button type="button" class="btn btn-primary btn-xs" onclick="event.stopPropagation(); handleGerarReportCardAluno(\'' + s.id + '\', this)">Gerar</button>' +
+        '</td>' +
+      '</tr>' +
+      '<tr class="pag-detalhe-row" id="regDetalhe-' + s.id + '" style="display:none;">' +
+        '<td colspan="4"><div id="regDetalheBody-' + s.id + '"></div></td>' +
       '</tr>';
     }).join('');
   }
 
   function alunoPausadoGestao(s){ return s && s.situacao_financeira === 'pausado'; }
+
+  async function toggleRegistroDetalhe(alunoId){
+    const row = document.getElementById('regDetalhe-' + alunoId);
+    const chevron = document.getElementById('regChevron-' + alunoId);
+    if(!row) return;
+    const abrindo = row.style.display === 'none';
+    row.style.display = abrindo ? 'table-row' : 'none';
+    if(chevron) chevron.classList.toggle('open', abrindo);
+    if(abrindo && !REG_DETALHE_CARREGADO.has(alunoId)){
+      REG_DETALHE_CARREGADO.add(alunoId);
+      const bodyEl = document.getElementById('regDetalheBody-' + alunoId);
+      bodyEl.innerHTML = '<p style="opacity:.6; padding:10px 0;">Carregando…</p>';
+      bodyEl.innerHTML = await renderHistoricoAulasHtml(alunoId);
+    }
+  }
+
+  /* Atalho de "Gerar" por aluno: usa o mesmo semestre/intervalo de aulas já
+     preenchido no formulário "Gerar Report Card da turma inteira" ali em
+     cima, só que pra um aluno só — sem precisar abrir modal nenhum. */
+  async function handleGerarReportCardAluno(alunoId, btnEl){
+    const s = REG_TURMA_STUDENTS.find(x => x.id === alunoId);
+    const nome = s ? (s.full_name || s.email) : 'aluno';
+    const materiaSlug = REG_TURMA_NIVEL_SLUG;
+    const semestre = parseInt(document.getElementById('regBulkSemestre').value, 10);
+    const aulaInicio = parseInt(document.getElementById('regBulkInicio').value, 10);
+    const aulaFim = parseInt(document.getElementById('regBulkFim').value, 10);
+    const msg = document.getElementById('regTurmaMsg');
+    if(!materiaSlug || !aulaInicio || !aulaFim){
+      msg.style.color = '#c0392b';
+      msg.textContent = 'Preencha o semestre e o intervalo de aulas em "Gerar Report Card da turma inteira" (ali em cima) antes de gerar por aluno.';
+      return;
+    }
+    if(!confirm('Gerar o Report Card de ' + nome + ' — ' + semestre + 'º semestre (aulas ' + aulaInicio + '-' + aulaFim + ')?')) return;
+
+    const textoOriginal = btnEl.textContent;
+    btnEl.disabled = true; btnEl.textContent = 'Gerando…';
+    const { data, error } = await dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, aulaFim);
+    if(error){
+      btnEl.disabled = false; btnEl.textContent = textoOriginal;
+      msg.style.color = '#c0392b';
+      msg.textContent = nome + ': ' + error.message;
+      return;
+    }
+    const { error: iaError } = await dyseGerarAnaliseReportCardIA(data);
+    msg.style.color = iaError ? '#c0392b' : '#2e8b57';
+    msg.textContent = iaError
+      ? 'Report Card de ' + nome + ' criado, mas a análise de IA falhou — abra "Ver" e use "Tentar gerar agora".'
+      : 'Report Card de ' + nome + ' gerado!';
+    await carregarRegistroTurmaBody(document.getElementById('regTurmaSelect').value);
+  }
 
   async function handleGerarReportCardTurma(){
     const turmaId = document.getElementById('regTurmaSelect').value;
