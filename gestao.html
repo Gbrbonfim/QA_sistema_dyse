@@ -955,9 +955,10 @@ body.dyse-modal-open{overflow:hidden;}
 
     <!-- Sub: por turma — visão rápida de quem já tem registro e geração em lote -->
     <div id="regPanelTurmas">
-      <p class="gestao-hint" style="margin-bottom:12px;">Escolha a turma pra ver, de cada aluno, quantas aulas já foram registradas pela professora e os Report Cards já gerados — sem precisar abrir aluno por aluno.</p>
+      <p class="gestao-hint" style="margin-bottom:12px;">Escolha o professor e a turma pra ver, de cada aluno, quantas aulas já foram registradas e os Report Cards já gerados — sem precisar abrir aluno por aluno.</p>
       <div class="dash-filter">
-        <select id="regTurmaSelect" onchange="onRegTurmaChange()"></select>
+        <select id="regProfessorSelect" onchange="onRegProfessorChange()"></select>
+        <select id="regTurmaSelect" onchange="onRegTurmaChange()" disabled><option value="">Escolha o professor primeiro…</option></select>
         <select id="regNivelSelect" onchange="onRegNivelChange()" style="display:none;"></select>
       </div>
       <p id="regTurmaMsg" class="gestao-hint"></p>
@@ -4054,11 +4055,12 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   function initRegistroPanel(){
-    const selTurma = document.getElementById('regTurmaSelect');
-    if(!selTurma.dataset.filled){
-      selTurma.innerHTML = '<option value="">Escolha uma turma…</option>' +
-        TURMAS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('');
-      selTurma.dataset.filled = '1';
+    const selProf = document.getElementById('regProfessorSelect');
+    if(!selProf.dataset.filled){
+      const professoresOrdenados = TEACHERS.slice().sort((a, b) => (a.full_name || a.email || '').localeCompare(b.full_name || b.email || ''));
+      selProf.innerHTML = '<option value="">Escolha o professor…</option>' +
+        professoresOrdenados.map(p => '<option value="' + p.id + '">' + escapeHtmlLocal(p.full_name || p.email) + '</option>').join('');
+      selProf.dataset.filled = '1';
     }
     const filtroTurma = document.getElementById('rcListTurmaFiltro');
     if(!filtroTurma.dataset.filled){
@@ -4066,6 +4068,27 @@ body.dyse-modal-open{overflow:hidden;}
         TURMAS.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('');
       filtroTurma.dataset.filled = '1';
     }
+  }
+
+  // Cascata igual à do painel Turmas: primeiro escolhe o professor, só
+  // depois a turma (e só as turmas dele aparecem na segunda caixa) — evita
+  // uma lista só com TODAS as turmas da escola misturadas.
+  function onRegProfessorChange(){
+    const professorId = document.getElementById('regProfessorSelect').value;
+    const selTurma = document.getElementById('regTurmaSelect');
+    if(!professorId){
+      selTurma.innerHTML = '<option value="">Escolha o professor primeiro…</option>';
+      selTurma.disabled = true;
+      onRegTurmaChange();
+      return;
+    }
+    const turmaIds = new Set(TEACHER_TURMAS.filter(tt => tt.teacher_id === professorId).map(tt => tt.turma_id));
+    const turmasDoProfessor = TURMAS.filter(t => turmaIds.has(t.id)).slice().sort((a, b) => a.name.localeCompare(b.name));
+    selTurma.disabled = false;
+    selTurma.innerHTML = turmasDoProfessor.length
+      ? '<option value="">Escolha a turma…</option>' + turmasDoProfessor.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('')
+      : '<option value="">Esse professor não tem turma vinculada</option>';
+    onRegTurmaChange();
   }
 
   async function onRegTurmaChange(){
