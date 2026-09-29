@@ -2734,8 +2734,11 @@ body.dyse-modal-open{overflow:hidden;}
     if(!minhasTurmas.length) return '<p style="opacity:.6;">Você ainda não tem turma vinculada.</p>';
 
     const blocks = await Promise.all(minhasTurmas.map(async turma => {
+      // "toefl" tem total_aulas preenchido só pra poder aparecer como opção
+      // no Registro de Classe (seção 15.5 do schema) — não é um nível de
+      // verdade, fica de fora daqui (já tem seu próprio bloco de Atividades).
       const slugsDaTurma = allTurmaMaterias.filter(tm => tm.turma_id === turma.id).map(tm => tm.materia_slug)
-        .filter(slug => TURMA_MATERIAL_NIVEIS_CACHE[slug]); // só níveis com currículo (A1..C1) — TOEFL fica de fora
+        .filter(slug => slug !== 'toefl' && TURMA_MATERIAL_NIVEIS_CACHE[slug]);
       if(!slugsDaTurma.length){
         return '<details class="dyse-collapsible manage-course-block" id="turmaMatDet-' + turma.id + '">' +
           '<summary class="manage-course-title"><span>' + escapeHtmlLocal(turma.name) + '</span><span class="chevron">›</span></summary>' +
@@ -2747,13 +2750,15 @@ body.dyse-modal-open{overflow:hidden;}
       const statusPorAula = {};
       statusRows.forEach(r => { statusPorAula[r.nivel_aula_id] = r; });
 
-      const rowsHtml = slugsDaTurma.map((slug, i) => {
+      // Uma divisão clara por nível — um <details> aninhado por A1/A2/etc,
+      // não uma lista só misturando tudo (cada nível com sua própria contagem).
+      const nivelBlocksHtml = slugsDaTurma.map((slug, i) => {
         const nivel = TURMA_MATERIAL_NIVEIS_CACHE[slug];
-        return aulasPorNivel[i].map(aula => {
+        const rows = aulasPorNivel[i].map(aula => {
           const status = statusPorAula[aula.id];
           const ativo = (status && status.ativo != null) ? status.ativo : dyseAulaAtivaPadrao(aula.numero, nivel.total_aulas);
           return '<div class="manage-row">' +
-            '<div class="info"><b>' + String(aula.numero).padStart(2,'0') + '.</b> ' + escapeHtmlLocal(aula.topico) + ' <span style="opacity:.6;">(' + nivel.name + ')</span></div>' +
+            '<div class="info"><b>' + String(aula.numero).padStart(2,'0') + '.</b> ' + escapeHtmlLocal(aula.topico) + '</div>' +
             '<div class="manage-row-actions">' +
               '<label class="dyse-toggle">' +
                 '<input type="checkbox" ' + (ativo ? 'checked' : '') + ' onchange="toggleAulaAtivaTurma(\'' + turma.id + '\', \'' + aula.id + '\', this.checked)">' +
@@ -2762,11 +2767,15 @@ body.dyse-modal-open{overflow:hidden;}
             '</div>' +
           '</div>';
         }).join('');
+        return '<details class="dyse-collapsible dyse-collapsible-nested" id="turmaMatNivel-' + turma.id + '-' + slug + '">' +
+          '<summary><span>' + escapeHtmlLocal(nivel.name) + ' <span class="pill-count">' + aulasPorNivel[i].length + ' aulas</span></span><span class="chevron">›</span></summary>' +
+          '<div class="manage-course-body">' + (rows || '<p style="opacity:.6; font-size:.82rem; margin:0;">Nenhuma aula cadastrada ainda.</p>') + '</div>' +
+        '</details>';
       }).join('');
       const totalAulas = aulasPorNivel.reduce((s, arr) => s + arr.length, 0);
       return '<details class="dyse-collapsible manage-course-block" id="turmaMatDet-' + turma.id + '">' +
         '<summary class="manage-course-title"><span>' + escapeHtmlLocal(turma.name) + ' <span class="pill-count">' + totalAulas + ' aulas</span></span><span class="chevron">›</span></summary>' +
-        '<div class="manage-course-body">' + (rowsHtml || '<p style="opacity:.6;">Nenhuma aula cadastrada ainda.</p>') + '</div>' +
+        '<div class="manage-course-body">' + nivelBlocksHtml + '</div>' +
       '</details>';
     }));
     return blocks.join('');

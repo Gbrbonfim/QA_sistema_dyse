@@ -1374,7 +1374,11 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
      atividades da aula ainda estejam em produção. Devolve quantas aulas têm
      material (pra contagem de novidade). */
   async function carregarMapaMaterial(allowedSlugs, turmaId){
-    const niveis = (await dyseListNiveis()).filter(n => allowedSlugs.has(n.slug));
+    // "toefl" tem total_aulas preenchido só pra poder aparecer como opção no
+    // Registro de Classe (seção 15.5 do schema) — não é um nível de
+    // verdade, já tem seu próprio card fixo em COURSES; sem esse filtro ele
+    // vazava aqui como se fosse mais um nível da trilha (A1, A2...).
+    const niveis = (await dyseListNiveis()).filter(n => n.slug !== 'toefl' && allowedSlugs.has(n.slug));
     if(!niveis.length) return 0;
 
     const [aulasPorNivel, materialDaTurma, dadasPorNivel] = await Promise.all([
