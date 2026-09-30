@@ -1186,7 +1186,7 @@ async function dyseListSubstituicoesNoMes(mesStr, fimDoMesStr){
     .gte('data_aula', mesStr).lte('data_aula', fimDoMesStr);
   return error ? [] : (data || []);
 }
-async function dyseCreateSubstituicao(turmaId, dataAula, professorSubstitutoId, observacao, tipo){
+async function dyseCreateSubstituicao(turmaId, dataAula, professorSubstitutoId, observacao, tipo, aulasPrevistasOverride){
   const session = await dyseGetSession();
   const { data, error } = await sb.from('substituicoes_professor').upsert({
     turma_id: turmaId,
@@ -1194,6 +1194,7 @@ async function dyseCreateSubstituicao(turmaId, dataAula, professorSubstitutoId, 
     professor_substituto_id: professorSubstitutoId,
     observacao: observacao || null,
     tipo: tipo === 'extra' ? 'extra' : 'substituicao',
+    aulas_previstas_override: (tipo === 'extra' && Number(aulasPrevistasOverride) > 0) ? Math.round(Number(aulasPrevistasOverride)) : null,
     criado_por: session ? session.user.id : null
   }, { onConflict: 'turma_id,data_aula' }).select('*').maybeSingle();
   return { data, error };
@@ -1405,10 +1406,13 @@ async function dyseGerarMensalidadesDoMes(mes){
     }
 
     if(extras.length){
-      let previstas = dyseAulasPrevistasNoMes(turmaById[turmaId], mes);
+      // Prioridade: valor que a gestão confirmou/digitou no lançamento
+      // (aulas_previstas_override — mesmo se a turma não tiver dias_semana
+      // cadastrado). Sem override, cai pra grade semanal da turma; sem
+      // grade também, último recurso é contar aulas já lançadas no mês.
+      const overrideRow = extras.find(x => Number(x.aulas_previstas_override) > 0);
+      let previstas = overrideRow ? Number(overrideRow.aulas_previstas_override) : dyseAulasPrevistasNoMes(turmaById[turmaId], mes);
       if(!previstas){
-        // Turma sem dias_semana cadastrado (legado) — melhor aproximação
-        // disponível é contar as aulas já lançadas no mês pra essa turma.
         const sessoesTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
         previstas = new Set(sessoesTurma.map(s => s.data)).size || 1;
       }

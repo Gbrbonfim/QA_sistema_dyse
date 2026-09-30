@@ -3627,3 +3627,13 @@ alter table public.turma_aula_material add column if not exists ativo boolean;
 alter table public.substituicoes_professor add column if not exists tipo text not null default 'substituicao';
 alter table public.substituicoes_professor drop constraint if exists substituicoes_professor_tipo_check;
 alter table public.substituicoes_professor add constraint substituicoes_professor_tipo_check check (tipo in ('substituicao','extra'));
+
+-- 31.1) turma.dias_semana nem sempre está cadastrado (turma antiga, grade
+--       nunca preenchida) — sem isso dyseAulasPrevistasNoMes não tem como
+--       prever nada e cai num fallback ruim (conta aulas já lançadas em
+--       chamada, que é exatamente o número instável que a seção 31 queria
+--       evitar). aulas_previstas_override guarda o número que a gestão
+--       confirma/digita na hora de registrar a aula extra (o formulário já
+--       sugere automaticamente quando a grade da turma existe) — sempre
+--       tem prioridade sobre o cálculo automático quando preenchido.
+alter table public.substituicoes_professor add column if not exists aulas_previstas_override integer;

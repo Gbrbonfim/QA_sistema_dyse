@@ -1110,13 +1110,15 @@ body.dyse-modal-open{overflow:hidden;}
           Registre <b>antes de fechar o mês</b> e depois clique em "Atualizar mês" em Pagamentos.
         </p>
         <form class="gestao-form" onsubmit="return handleCreateSubstituicao(event)">
-          <div class="gestao-field" style="flex:1 1 180px;"><label>Tipo</label><select id="subTipo"><option value="substituicao">Substituição (cobre aula do titular)</option><option value="extra">Aula extra (não desconta do titular)</option></select></div>
-          <div class="gestao-field" style="flex:1 1 200px;"><label>Turma</label><select id="subTurma" required></select></div>
-          <div class="gestao-field" style="flex:1 1 150px;"><label>Data da aula</label><input type="date" id="subData" required></div>
+          <div class="gestao-field" style="flex:1 1 180px;"><label>Tipo</label><select id="subTipo" onchange="onSubCamposChange()"><option value="substituicao">Substituição (cobre aula do titular)</option><option value="extra">Aula extra (não desconta do titular)</option></select></div>
+          <div class="gestao-field" style="flex:1 1 200px;"><label>Turma</label><select id="subTurma" required onchange="onSubCamposChange()"></select></div>
+          <div class="gestao-field" style="flex:1 1 150px;"><label>Data da aula</label><input type="date" id="subData" required onchange="onSubCamposChange()"></div>
           <div class="gestao-field" style="flex:1 1 200px;"><label>Professor substituto</label><select id="subProfessor" required></select></div>
+          <div class="gestao-field" id="subPrevistasWrap" style="flex:1 1 200px; display:none;"><label>Aulas previstas no mês pra turma</label><input type="number" min="1" step="1" id="subPrevistas" placeholder="calculado pela grade da turma"></div>
           <div class="gestao-field" style="flex:1 1 220px;"><label>Observação (opcional)</label><input type="text" id="subObs" placeholder="Ex: Thaís de atestado"></div>
           <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
+        <p class="gestao-hint" id="subPrevistasHint" style="display:none;">Sugerido automaticamente pela grade semanal cadastrada na turma (dias/horário). Confira o número e corrija aqui se a turma estiver com a grade desatualizada — esse valor é o divisor do rateio da aula extra.</p>
         <div class="auth-msg" id="subMsg"></div>
       </div>
       <div style="overflow-x:auto;">
@@ -3845,8 +3847,11 @@ body.dyse-modal-open{overflow:hidden;}
       const t = TURMAS.find(x => x.id === s.turma_id);
       const p = TEACHERS.find(x => x.id === s.professor_substituto_id);
       const isExtra = s.tipo === 'extra';
+      const tipoHtml = isExtra
+        ? '<span class="turma-badge" style="background:#fff3da; color:#8a5a00;">Extra</span>' + (s.aulas_previstas_override ? '<div style="font-size:11px; opacity:.65; margin-top:2px;">' + s.aulas_previstas_override + ' aulas/mês</div>' : '')
+        : '<span class="turma-badge" style="background:#eef1f5; color:#556;">Substituição</span>';
       return '<tr>' +
-        '<td>' + (isExtra ? '<span class="turma-badge" style="background:#fff3da; color:#8a5a00;">Extra</span>' : '<span class="turma-badge" style="background:#eef1f5; color:#556;">Substituição</span>') + '</td>' +
+        '<td>' + tipoHtml + '</td>' +
         '<td>' + formatDateBR(String(s.data_aula || '').slice(0, 10)) + '</td>' +
         '<td>' + escapeHtmlLocal(t ? t.name : '(turma removida)') + '</td>' +
         '<td>' + escapeHtmlLocal(p ? (p.full_name || p.email || '') : '(professor removido)') + '</td>' +
@@ -3856,6 +3861,28 @@ body.dyse-modal-open{overflow:hidden;}
     }).join('') || '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhuma substituição registrada.</td></tr>';
   }
 
+  /* Aula extra: mostra/esconde o campo "Aulas previstas no mês" e sugere um
+     valor pela grade semanal cadastrada na turma (dyseAulasPrevistasNoMes).
+     Turma sem dias_semana cadastrado (grade incompleta) não sugere nada —
+     fica em branco, obrigando a gestão a conferir e digitar. */
+  function onSubCamposChange(){
+    const tipo = document.getElementById('subTipo').value;
+    const wrap = document.getElementById('subPrevistasWrap');
+    const hint = document.getElementById('subPrevistasHint');
+    const isExtra = tipo === 'extra';
+    wrap.style.display = isExtra ? 'flex' : 'none';
+    hint.style.display = isExtra ? 'block' : 'none';
+    if(!isExtra) return;
+    const turmaId = document.getElementById('subTurma').value;
+    const data = document.getElementById('subData').value;
+    const campo = document.getElementById('subPrevistas');
+    if(!turmaId || !data){ campo.value = ''; return; }
+    const turma = TURMAS.find(t => t.id === turmaId);
+    const mes = data.slice(0, 7);
+    const sugestao = dyseAulasPrevistasNoMes(turma, mes);
+    campo.value = sugestao || '';
+  }
+
   async function handleCreateSubstituicao(e){
     e.preventDefault();
     const tipo = document.getElementById('subTipo').value;
@@ -3863,8 +3890,10 @@ body.dyse-modal-open{overflow:hidden;}
     const data = document.getElementById('subData').value;
     const profId = document.getElementById('subProfessor').value;
     const obs = document.getElementById('subObs').value.trim();
+    const previstas = document.getElementById('subPrevistas').value;
     if(!turmaId || !data || !profId){ flashMsg('subMsg', 'Preencha turma, data e professor substituto.', false); return false; }
-    const { error } = await dyseCreateSubstituicao(turmaId, data, profId, obs, tipo);
+    if(tipo === 'extra' && !previstas){ flashMsg('subMsg', 'Preencha (ou confirme) as aulas previstas no mês pra turma.', false); return false; }
+    const { error } = await dyseCreateSubstituicao(turmaId, data, profId, obs, tipo, previstas);
     if(error){ flashMsg('subMsg', 'Não foi possível registrar: ' + error.message, false); return false; }
     document.getElementById('subObs').value = '';
     flashMsg('subMsg', (tipo === 'extra' ? 'Aula extra registrada.' : 'Substituição registrada.') + ' Vá em Pagamentos e clique em "Atualizar mês" pra refletir no rateio.', true);
