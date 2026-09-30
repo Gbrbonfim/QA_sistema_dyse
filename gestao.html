@@ -1106,24 +1106,30 @@ body.dyse-modal-open{overflow:hidden;}
         <div class="gestao-card-title">Registrar substituição</div>
         <p class="gestao-hint">
           <b>Substituição:</b> cobre uma aula já prevista do professor titular. A fatia daquele dia (1 de N aulas do mês) sai do pagamento do titular e vai pro substituto, no rateio do mês — o custo da turma não muda.<br>
-          <b>Aula extra:</b> aula A MAIS, fora da grade normal da turma. O titular mantém o valor cheio dele e o aluno continua pagando a mensalidade normal — o substituto recebe à parte, proporcional às aulas previstas no mês pra turma (grade semanal cadastrada). O custo extra sai só do caixa da escola.<br>
+          <b>Aula extra:</b> aula A MAIS, fora da grade normal da turma — escolha o(s) ALUNO(S) que de fato receberam essa aula (pode ser só 1, numa reposição individual, ou vários, numa aula extra pra turma toda). O titular mantém o valor cheio dele e o aluno continua pagando a mensalidade normal — o substituto recebe à parte, por aluno selecionado, proporcional às aulas previstas no mês pra turma (grade semanal cadastrada). O custo extra sai só do caixa da escola.<br>
           Registre <b>antes de fechar o mês</b> e depois clique em "Atualizar mês" em Pagamentos.
         </p>
         <form class="gestao-form" onsubmit="return handleCreateSubstituicao(event)">
           <div class="gestao-field" style="flex:1 1 180px;"><label>Tipo</label><select id="subTipo" onchange="onSubCamposChange()"><option value="substituicao">Substituição (cobre aula do titular)</option><option value="extra">Aula extra (não desconta do titular)</option></select></div>
-          <div class="gestao-field" style="flex:1 1 200px;"><label>Turma</label><select id="subTurma" required onchange="onSubCamposChange()"></select></div>
+          <div class="gestao-field" id="subTurmaWrap" style="flex:1 1 200px;"><label>Turma</label><select id="subTurma" onchange="onSubCamposChange()"></select></div>
           <div class="gestao-field" style="flex:1 1 150px;"><label>Data da aula</label><input type="date" id="subData" required onchange="onSubCamposChange()"></div>
           <div class="gestao-field" style="flex:1 1 200px;"><label>Professor substituto</label><select id="subProfessor" required></select></div>
           <div class="gestao-field" id="subPrevistasWrap" style="flex:1 1 200px; display:none;"><label>Aulas previstas no mês pra turma</label><input type="number" min="1" step="1" id="subPrevistas" placeholder="calculado pela grade da turma"></div>
           <div class="gestao-field" style="flex:1 1 220px;"><label>Observação (opcional)</label><input type="text" id="subObs" placeholder="Ex: Thaís de atestado"></div>
           <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
-        <p class="gestao-hint" id="subPrevistasHint" style="display:none;">Sugerido automaticamente pela grade semanal cadastrada na turma (dias/horário). Confira o número e corrija aqui se a turma estiver com a grade desatualizada — esse valor é o divisor do rateio da aula extra.</p>
+        <div class="gestao-field" id="subAlunoWrap" style="display:none; max-width:420px;">
+          <label>Aluno(s) que receberam a aula extra</label>
+          <input type="text" id="subAlunoBusca" placeholder="Buscar aluno pelo nome..." oninput="renderSubAlunoOpcoes()">
+          <div id="subAlunoOpcoes" style="max-height:160px; overflow-y:auto; border:1px solid var(--antique); border-radius:8px; margin-top:6px;"></div>
+          <div id="subAlunoSelecionados" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;"></div>
+        </div>
+        <p class="gestao-hint" id="subPrevistasHint" style="display:none;">Sugerido automaticamente pela grade semanal cadastrada na turma (dias/horário) do primeiro aluno selecionado. Confira o número e corrija aqui se a turma estiver com a grade desatualizada — esse valor é o divisor do rateio da aula extra.</p>
         <div class="auth-msg" id="subMsg"></div>
       </div>
       <div style="overflow-x:auto;">
         <table class="dash-table" id="substituicoesTable">
-          <thead><tr><th>Tipo</th><th>Data</th><th>Turma</th><th>Professor substituto</th><th>Observação</th><th>Ações</th></tr></thead>
+          <thead><tr><th>Tipo</th><th>Data</th><th>Turma</th><th>Aluno</th><th>Professor substituto</th><th>Observação</th><th>Ações</th></tr></thead>
           <tbody id="substituicoesBody"></tbody>
         </table>
       </div>
@@ -3826,10 +3832,12 @@ body.dyse-modal-open{overflow:hidden;}
 
   /* ---------- Substituições de professor ---------- */
   let SUBSTITUICOES = [];
+  let SUB_ALUNOS_SELECIONADOS = new Set();
 
   async function loadSubstituicoes(){
     if(!TURMAS || !TURMAS.length) TURMAS = await dyseListTurmas();
     if(!TEACHERS || !TEACHERS.length) TEACHERS = await dyseListProfilesByRole('teacher');
+    if(!STUDENTS || !STUDENTS.length) STUDENTS = await dyseListProfilesByRole('student');
     const selT = document.getElementById('subTurma');
     const selP = document.getElementById('subProfessor');
     selT.innerHTML = '<option value="">Selecione…</option>' +
@@ -3838,6 +3846,8 @@ body.dyse-modal-open{overflow:hidden;}
     selP.innerHTML = '<option value="">Selecione…</option>' +
       TEACHERS.slice().sort((a,b) => (a.full_name||'').localeCompare(b.full_name||''))
         .map(p => '<option value="' + p.id + '">' + escapeHtmlLocal(p.full_name || p.email || '') + '</option>').join('');
+    SUB_ALUNOS_SELECIONADOS = new Set();
+    onSubCamposChange();
     SUBSTITUICOES = await dyseListSubstituicoes();
     renderSubstituicoesTable();
   }
@@ -3847,6 +3857,7 @@ body.dyse-modal-open{overflow:hidden;}
       const t = TURMAS.find(x => x.id === s.turma_id);
       const p = TEACHERS.find(x => x.id === s.professor_substituto_id);
       const isExtra = s.tipo === 'extra';
+      const aluno = isExtra && s.aluno_id ? STUDENTS.find(x => x.id === s.aluno_id) : null;
       const tipoHtml = isExtra
         ? '<span class="turma-badge" style="background:#fff3da; color:#8a5a00;">Extra</span>' + (s.aulas_previstas_override ? '<div style="font-size:11px; opacity:.65; margin-top:2px;">' + s.aulas_previstas_override + ' aulas/mês</div>' : '')
         : '<span class="turma-badge" style="background:#eef1f5; color:#556;">Substituição</span>';
@@ -3854,49 +3865,123 @@ body.dyse-modal-open{overflow:hidden;}
         '<td>' + tipoHtml + '</td>' +
         '<td>' + formatDateBR(String(s.data_aula || '').slice(0, 10)) + '</td>' +
         '<td>' + escapeHtmlLocal(t ? t.name : '(turma removida)') + '</td>' +
+        '<td>' + (isExtra ? escapeHtmlLocal(aluno ? (aluno.full_name || aluno.email || '') : '(aluno removido)') : '<span style="opacity:.5;">turma toda</span>') + '</td>' +
         '<td>' + escapeHtmlLocal(p ? (p.full_name || p.email || '') : '(professor removido)') + '</td>' +
         '<td>' + escapeHtmlLocal(s.observacao || '') + '</td>' +
         '<td><button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteSubstituicao(' + s.id + ')">Remover</button></td>' +
       '</tr>';
-    }).join('') || '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhuma substituição registrada.</td></tr>';
+    }).join('') || '<tr><td colspan="7" style="text-align:center; opacity:.6;">Nenhuma substituição registrada.</td></tr>';
   }
 
-  /* Aula extra: mostra/esconde o campo "Aulas previstas no mês" e sugere um
-     valor pela grade semanal cadastrada na turma (dyseAulasPrevistasNoMes).
-     Turma sem dias_semana cadastrado (grade incompleta) não sugere nada —
-     fica em branco, obrigando a gestão a conferir e digitar. */
+  /* Aula extra é por ALUNO (não por turma inteira) — evita creditar o
+     substituto uma vez pra CADA aluno da turma quando só alguns de fato
+     tiveram a aula extra (ex.: reposição individual). Alterna Turma
+     (substituição) x busca de Aluno(s) (extra), e sugere "aulas previstas
+     no mês" pela grade semanal da turma do PRIMEIRO aluno selecionado —
+     turma sem dias_semana cadastrado (grade incompleta) não sugere nada,
+     obrigando a gestão a conferir e digitar. */
   function onSubCamposChange(){
     const tipo = document.getElementById('subTipo').value;
-    const wrap = document.getElementById('subPrevistasWrap');
-    const hint = document.getElementById('subPrevistasHint');
     const isExtra = tipo === 'extra';
-    wrap.style.display = isExtra ? 'flex' : 'none';
-    hint.style.display = isExtra ? 'block' : 'none';
+    document.getElementById('subTurmaWrap').style.display = isExtra ? 'none' : 'flex';
+    document.getElementById('subAlunoWrap').style.display = isExtra ? 'block' : 'none';
+    document.getElementById('subPrevistasWrap').style.display = isExtra ? 'flex' : 'none';
+    document.getElementById('subPrevistasHint').style.display = isExtra ? 'block' : 'none';
     if(!isExtra) return;
-    const turmaId = document.getElementById('subTurma').value;
+    renderSubAlunoOpcoes();
+    atualizarSugestaoPrevistas();
+  }
+
+  function atualizarSugestaoPrevistas(){
     const data = document.getElementById('subData').value;
     const campo = document.getElementById('subPrevistas');
-    if(!turmaId || !data){ campo.value = ''; return; }
-    const turma = TURMAS.find(t => t.id === turmaId);
-    const mes = data.slice(0, 7);
-    const sugestao = dyseAulasPrevistasNoMes(turma, mes);
+    const primeiroId = SUB_ALUNOS_SELECIONADOS.values().next().value;
+    const aluno = primeiroId ? STUDENTS.find(a => a.id === primeiroId) : null;
+    if(!aluno || !aluno.turma_id || !data){ campo.value = ''; return; }
+    const turma = TURMAS.find(t => t.id === aluno.turma_id);
+    const sugestao = dyseAulasPrevistasNoMes(turma, data.slice(0, 7));
     campo.value = sugestao || '';
+  }
+
+  function renderSubAlunoOpcoes(){
+    const termo = (document.getElementById('subAlunoBusca').value || '').trim().toLowerCase();
+    const opcoesEl = document.getElementById('subAlunoOpcoes');
+    if(!termo){
+      opcoesEl.innerHTML = '';
+    } else {
+      const lista = STUDENTS
+        .filter(a => (a.full_name || a.email || '').toLowerCase().includes(termo) && !SUB_ALUNOS_SELECIONADOS.has(a.id))
+        .sort((a,b) => (a.full_name||'').localeCompare(b.full_name||''))
+        .slice(0, 30);
+      opcoesEl.innerHTML = lista.length ? lista.map(a => {
+        const turma = TURMAS.find(t => t.id === a.turma_id);
+        return '<div style="padding:6px 10px; cursor:pointer; border-bottom:1px solid var(--antique);" onclick="toggleSubAluno(\'' + a.id + '\')">' +
+          escapeHtmlLocal(a.full_name || a.email || '') + (turma ? ' <span style="opacity:.6; font-size:.8em;">— ' + escapeHtmlLocal(turma.name || '') + '</span>' : ' <span style="opacity:.6; font-size:.8em;">— sem turma</span>') +
+        '</div>';
+      }).join('') : '<div style="padding:6px 10px; opacity:.6; font-size:.85em;">Nenhum aluno encontrado.</div>';
+    }
+    renderSubAlunoSelecionados();
+  }
+
+  function renderSubAlunoSelecionados(){
+    const ids = [...SUB_ALUNOS_SELECIONADOS];
+    document.getElementById('subAlunoSelecionados').innerHTML = ids.length ? ids.map(id => {
+      const a = STUDENTS.find(x => x.id === id);
+      return '<span class="turma-badge" style="background:#eef1f5; color:#334;">' + escapeHtmlLocal(a ? (a.full_name || a.email || '') : id) +
+        ' <button type="button" onclick="removerSubAluno(\'' + id + '\')" style="border:none; background:none; cursor:pointer; color:var(--bad); font-weight:bold; margin-left:4px;">×</button></span>';
+    }).join('') : '<span style="opacity:.55; font-size:.85em;">Nenhum aluno selecionado ainda.</span>';
+  }
+
+  function toggleSubAluno(alunoId){
+    SUB_ALUNOS_SELECIONADOS.add(alunoId);
+    document.getElementById('subAlunoBusca').value = '';
+    renderSubAlunoOpcoes();
+    atualizarSugestaoPrevistas();
+  }
+
+  function removerSubAluno(alunoId){
+    SUB_ALUNOS_SELECIONADOS.delete(alunoId);
+    renderSubAlunoOpcoes();
+    atualizarSugestaoPrevistas();
   }
 
   async function handleCreateSubstituicao(e){
     e.preventDefault();
     const tipo = document.getElementById('subTipo').value;
-    const turmaId = document.getElementById('subTurma').value;
     const data = document.getElementById('subData').value;
     const profId = document.getElementById('subProfessor').value;
     const obs = document.getElementById('subObs').value.trim();
-    const previstas = document.getElementById('subPrevistas').value;
-    if(!turmaId || !data || !profId){ flashMsg('subMsg', 'Preencha turma, data e professor substituto.', false); return false; }
-    if(tipo === 'extra' && !previstas){ flashMsg('subMsg', 'Preencha (ou confirme) as aulas previstas no mês pra turma.', false); return false; }
-    const { error } = await dyseCreateSubstituicao(turmaId, data, profId, obs, tipo, previstas);
-    if(error){ flashMsg('subMsg', 'Não foi possível registrar: ' + error.message, false); return false; }
+    if(!data || !profId){ flashMsg('subMsg', 'Preencha data e professor substituto.', false); return false; }
+
+    if(tipo === 'extra'){
+      const alunoIds = [...SUB_ALUNOS_SELECIONADOS];
+      const previstas = document.getElementById('subPrevistas').value;
+      if(!alunoIds.length){ flashMsg('subMsg', 'Selecione pelo menos 1 aluno que recebeu a aula extra.', false); return false; }
+      if(!previstas){ flashMsg('subMsg', 'Preencha (ou confirme) as aulas previstas no mês pra turma.', false); return false; }
+      const erros = [];
+      for(const alunoId of alunoIds){
+        const aluno = STUDENTS.find(a => a.id === alunoId);
+        const turmaId = aluno ? aluno.turma_id : null;
+        if(!turmaId){ erros.push((aluno ? aluno.full_name : alunoId) + ': sem turma vinculada.'); continue; }
+        const { error } = await dyseCreateSubstituicao(turmaId, data, profId, obs, 'extra', previstas, alunoId);
+        if(error) erros.push((aluno ? aluno.full_name : alunoId) + ': ' + error.message);
+      }
+      flashMsg('subMsg', erros.length
+        ? 'Alguns registros falharam — ' + erros.join(' · ')
+        : 'Aula extra registrada pra ' + alunoIds.length + ' aluno(s). Vá em Pagamentos e clique em "Atualizar mês" pra refletir no rateio.',
+        !erros.length);
+      SUB_ALUNOS_SELECIONADOS = new Set();
+      document.getElementById('subAlunoBusca').value = '';
+      renderSubAlunoOpcoes();
+    } else {
+      const turmaId = document.getElementById('subTurma').value;
+      if(!turmaId){ flashMsg('subMsg', 'Preencha a turma.', false); return false; }
+      const { error } = await dyseCreateSubstituicao(turmaId, data, profId, obs, 'substituicao');
+      if(error){ flashMsg('subMsg', 'Não foi possível registrar: ' + error.message, false); return false; }
+      flashMsg('subMsg', 'Substituição registrada. Vá em Pagamentos e clique em "Atualizar mês" pra refletir no rateio.', true);
+    }
+
     document.getElementById('subObs').value = '';
-    flashMsg('subMsg', (tipo === 'extra' ? 'Aula extra registrada.' : 'Substituição registrada.') + ' Vá em Pagamentos e clique em "Atualizar mês" pra refletir no rateio.', true);
     SUBSTITUICOES = await dyseListSubstituicoes();
     renderSubstituicoesTable();
     return false;
@@ -4809,16 +4894,21 @@ body.dyse-modal-open{overflow:hidden;}
       const totalDescontos = descontosDoProf.reduce((s,d) => s + Number(d.valor || 0), 0);
       const aPagar = Math.round((totalPrevisto - totalDescontos) * 100) / 100;
 
-      // Substituição: informativo (já está no Total previsto, não desconta de novo).
+      // Substituição/aula extra: informativo (já está no Total previsto,
+      // não desconta de novo). Aula extra NUNCA desconta do titular, então
+      // "Substituído em" só entra pra tipo='substituicao' — senão o titular
+      // aparece como se tivesse perdido uma aula que na verdade não perdeu.
       const turmasDoProf = new Set(TEACHER_TURMAS.filter(tt => tt.teacher_id === profId).map(tt => tt.turma_id));
-      const subsCoberto = PAGAMENTOS_SUBSTITUICOES.filter(s => turmasDoProf.has(s.turma_id) && s.professor_substituto_id !== profId);
-      const subsCobriu = PAGAMENTOS_SUBSTITUICOES.filter(s => s.professor_substituto_id === profId);
+      const subsCoberto = PAGAMENTOS_SUBSTITUICOES.filter(s => s.tipo !== 'extra' && turmasDoProf.has(s.turma_id) && s.professor_substituto_id !== profId);
+      const subsCobriu = PAGAMENTOS_SUBSTITUICOES.filter(s => s.tipo !== 'extra' && s.professor_substituto_id === profId);
+      const extrasDeu = PAGAMENTOS_SUBSTITUICOES.filter(s => s.tipo === 'extra' && s.professor_substituto_id === profId);
 
       const descPartes = descontosDoProf.map(d =>
         (DESCONTO_TIPO_LABELS[d.tipo] || d.tipo) + (d.descricao ? ' (' + d.descricao + ')' : '') + ': ' + formatMoney(Number(d.valor || 0))
       );
       if(subsCoberto.length) descPartes.push('Substituído em ' + subsCoberto.map(s => formatDateBR(String(s.data_aula).slice(0,10))).join(', ') + ' (já no previsto)');
       if(subsCobriu.length) descPartes.push('Cobriu ' + subsCobriu.map(s => formatDateBR(String(s.data_aula).slice(0,10))).join(', ') + ' (já no previsto)');
+      if(extrasDeu.length) descPartes.push('Aula extra em ' + extrasDeu.map(s => formatDateBR(String(s.data_aula).slice(0,10))).join(', ') + ' (já no previsto)');
       const descricaoTexto = descPartes.join(' · ');
 
       const modalidadesResumo = {};
@@ -4841,7 +4931,7 @@ body.dyse-modal-open{overflow:hidden;}
       const detalheLinhas = r.linhas.slice().sort((a,b) => (a.aluno_nome||'').localeCompare(b.aluno_nome||'')).map(l => {
         const mod = MODALIDADES.find(m => m.id === l.modalidade_id);
         return '<tr>' +
-          '<td>' + escapeHtmlLocal(l.aluno_nome || '(sem nome)') + '</td>' +
+          '<td>' + escapeHtmlLocal(l.aluno_nome || '(sem nome)') + (l.inclui_aula_extra ? ' <span class="turma-badge" style="background:#fff3da; color:#8a5a00; font-size:10px;">aula extra</span>' : '') + '</td>' +
           '<td>' + (mod ? escapeHtmlLocal(mod.name) : '-') + '</td>' +
           '<td>' + formatMoney(l.valor_pago_professor) + '</td>' +
         '</tr>';

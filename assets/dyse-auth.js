@@ -1186,17 +1186,28 @@ async function dyseListSubstituicoesNoMes(mesStr, fimDoMesStr){
     .gte('data_aula', mesStr).lte('data_aula', fimDoMesStr);
   return error ? [] : (data || []);
 }
-async function dyseCreateSubstituicao(turmaId, dataAula, professorSubstitutoId, observacao, tipo, aulasPrevistasOverride){
+/* tipo='substituicao' é por TURMA inteira (cobre a aula do titular pra
+   turma toda — 1 linha por turma+dia). tipo='extra' é por ALUNO (só quem
+   de fato recebeu a aula entra no rateio — 1 linha por aluno+dia, senão
+   TODO aluno da turma seria creditado quando só 1 teve reposição). Por
+   isso a chave de conflito muda com o tipo — ver seção 32 do schema
+   (chave_conflito resolve isso em texto simples porque índice único
+   parcial com predicado não é inferível pelo upsert do PostgREST). */
+async function dyseCreateSubstituicao(turmaId, dataAula, professorSubstitutoId, observacao, tipo, aulasPrevistasOverride, alunoId){
   const session = await dyseGetSession();
+  const isExtra = tipo === 'extra';
+  const chaveConflito = isExtra ? ('aluno:' + alunoId + ':' + dataAula) : ('turma:' + turmaId + ':' + dataAula);
   const { data, error } = await sb.from('substituicoes_professor').upsert({
     turma_id: turmaId,
     data_aula: dataAula,
     professor_substituto_id: professorSubstitutoId,
     observacao: observacao || null,
-    tipo: tipo === 'extra' ? 'extra' : 'substituicao',
-    aulas_previstas_override: (tipo === 'extra' && Number(aulasPrevistasOverride) > 0) ? Math.round(Number(aulasPrevistasOverride)) : null,
+    tipo: isExtra ? 'extra' : 'substituicao',
+    aluno_id: isExtra ? (alunoId || null) : null,
+    aulas_previstas_override: (isExtra && Number(aulasPrevistasOverride) > 0) ? Math.round(Number(aulasPrevistasOverride)) : null,
+    chave_conflito: chaveConflito,
     criado_por: session ? session.user.id : null
-  }, { onConflict: 'turma_id,data_aula' }).select('*').maybeSingle();
+  }, { onConflict: 'chave_conflito' }).select('*').maybeSingle();
   return { data, error };
 }
 
@@ -1262,8 +1273,19 @@ async function dyseGerarMensalidadesDoMes(mes){
   const turmaById = {};
   turmas.forEach(t => { turmaById[t.id] = t; });
 
+  // 'substituicao' continua por TURMA inteira (cobre a aula do titular pra
+  // turma toda). 'extra' é por ALUNO (seção 32 do schema) — só quem de
+  // fato recebeu a aula entra no rateio, não a turma toda.
   const subsPorTurma = {};
-  substituicoes.forEach(x => { (subsPorTurma[x.turma_id] = subsPorTurma[x.turma_id] || []).push(x); });
+  const extrasPorAluno = {};
+  substituicoes.forEach(x => {
+    if(x.tipo === 'extra'){
+      if(!x.aluno_id) return; // registro incompleto (legado) — ignora
+      (extrasPorAluno[x.aluno_id] = extrasPorAluno[x.aluno_id] || []).push(x);
+    } else {
+      (subsPorTurma[x.turma_id] = subsPorTurma[x.turma_id] || []).push(x);
+    }
+  });
 
   const modalidadeById = {};
   modalidades.forEach(m => { modalidadeById[m.id] = m; });
@@ -1338,24 +1360,27 @@ async function dyseGerarMensalidadesDoMes(mes){
     return sessoesDoMesCache;
   }
 
-  /* Substituição pontual (substituicoes_professor): um professor cobriu a
-     aula de outro num dia. Tira 1/N (N = dias de aula da turma no mês) da
-     linha do titular e cria uma linha pro substituto, na mesma taxa da
-     modalidade do aluno. Cost-neutral pra escola. Recebe as linhas-base do
-     aluno (com "_periodo" anexado) e devolve as linhas finais, sem "_periodo".
+  /* Substituição pontual (substituicoes_professor, tipo='substituicao'):
+     um professor cobriu a aula de outro num dia, pra TURMA inteira. Tira
+     1/N (N = dias de aula da turma no mês) da linha do titular e cria uma
+     linha pro substituto, na mesma taxa da modalidade do aluno.
+     Cost-neutral pra escola. Recebe as linhas-base do aluno (com
+     "_periodo" anexado) e devolve as linhas finais, sem "_periodo".
 
      Registros tipo='extra' (aula A MAIS, fora da grade normal — ver seção
-     31 do schema) NÃO entram nessa conta de N nem tiram nada do titular:
-     somam à parte pro substituto, proporcional às aulas PREVISTAS no mês
-     pra turma (dyseAulasPrevistasNoMes, pela grade semanal cadastrada —
-     não pelas aulas já lançadas, que inflariam com a própria aula extra). */
+     32 do schema) são por ALUNO, não por turma: só quem de fato recebeu a
+     aula entra no rateio (extrasPorAluno[alunoId], não subsPorTurma) —
+     senão todo aluno da turma seria creditado quando só 1 teve reposição.
+     NÃO entram na conta de N nem tiram nada do titular: somam à parte pro
+     substituto, proporcional às aulas PREVISTAS no mês pra turma
+     (dyseAulasPrevistasNoMes, pela grade semanal cadastrada — não pelas
+     aulas já lançadas, que inflariam com a própria aula extra). Cada linha
+     final carrega inclui_aula_extra pro relatório (Pagamentos) sinalizar. */
   async function aplicarSubstituicoesDoAluno(linhasDoAluno, alunoId){
-    const semPeriodo = arr => arr.map(l => { const c = Object.assign({}, l); delete c._periodo; return c; });
+    const semPeriodo = arr => arr.map(l => { const c = Object.assign({}, l); delete c._periodo; c.inclui_aula_extra = false; return c; });
     const turmaId = turmaIdPorAluno[alunoId];
-    if(!turmaId || !subsPorTurma[turmaId]) return semPeriodo(linhasDoAluno);
-    const subsDoMes = subsPorTurma[turmaId].filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
-    const subs = subsDoMes.filter(x => x.tipo !== 'extra');
-    const extras = subsDoMes.filter(x => x.tipo === 'extra');
+    const subs = (turmaId && subsPorTurma[turmaId] ? subsPorTurma[turmaId] : []).filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
+    const extras = (extrasPorAluno[alunoId] || []).filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
     if(!subs.length && !extras.length) return semPeriodo(linhasDoAluno);
 
     let saida;
@@ -1377,7 +1402,7 @@ async function dyseGerarMensalidadesDoMes(mes){
         const janFim = (per && per.data_fim && per.data_fim < fimDoMesStr) ? per.data_fim : fimDoMesStr;
         const subsAqui = subs.filter(x => (x.professor_substituto_id || null) !== (l.professor_id || null)
           && x.data_aula >= janIni && x.data_aula <= janFim);
-        const base = Object.assign({}, l); delete base._periodo;
+        const base = Object.assign({}, l); delete base._periodo; base.inclui_aula_extra = false;
         if(!subsAqui.length){ saida.push(base); return; }
 
         const rateCheia = per ? valorProfessorDoPeriodo(per) : Number(l.valor_pago_professor || 0);
@@ -1399,6 +1424,7 @@ async function dyseGerarMensalidadesDoMes(mes){
             professor_id: subId, modalidade_id: l.modalidade_id,
             valor_recebido: Math.round(recebCentavos * dias / N) / 100,
             valor_pago_professor: Math.round(rateCheia * dias / N * 100) / 100,
+            inclui_aula_extra: false,
             atualizado_em: new Date().toISOString()
           });
         });
@@ -1434,6 +1460,7 @@ async function dyseGerarMensalidadesDoMes(mes){
             aluno_id: alunoId, aluno_nome: l.aluno_nome, mes_competencia: mes,
             professor_id: subId, modalidade_id: l.modalidade_id,
             valor_recebido: 0, valor_pago_professor: valorExtra,
+            inclui_aula_extra: true,
             atualizado_em: new Date().toISOString()
           });
         });
@@ -1444,9 +1471,10 @@ async function dyseGerarMensalidadesDoMes(mes){
     const merged = {};
     saida.forEach(l => {
       const k = l.professor_id || '';
-      if(!merged[k]){ merged[k] = l; return; }
+      if(!merged[k]){ merged[k] = Object.assign({}, l, { inclui_aula_extra: !!l.inclui_aula_extra }); return; }
       merged[k].valor_recebido = Math.round((merged[k].valor_recebido + l.valor_recebido) * 100) / 100;
       merged[k].valor_pago_professor = Math.round((merged[k].valor_pago_professor + l.valor_pago_professor) * 100) / 100;
+      merged[k].inclui_aula_extra = merged[k].inclui_aula_extra || !!l.inclui_aula_extra;
     });
     return Object.values(merged);
   }
@@ -1652,7 +1680,9 @@ async function dyseAjustarPrevisaoPorSubstituicoes(linhas, turmaIdPorAluno){
     const meuId = session ? session.user.id : null;
     if(!meuId || !linhas || !linhas.length) return linhas || [];
 
-    const subs = await dyseListSubstituicoes(); // RLS: turmas do professor + onde substituiu
+    // tipo='extra' nunca desconta do titular (ver seção 31/32 do schema) —
+    // só tipo='substituicao' entra nessa conta de perda da previsão.
+    const subs = (await dyseListSubstituicoes()).filter(x => x.tipo !== 'extra'); // RLS: turmas do professor + onde substituiu
     if(!subs.length) return linhas;
     const subsPorTurma = {};
     subs.forEach(x => { (subsPorTurma[x.turma_id] = subsPorTurma[x.turma_id] || []).push(x); });

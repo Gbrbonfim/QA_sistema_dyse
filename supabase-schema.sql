@@ -3637,3 +3637,33 @@ alter table public.substituicoes_professor add constraint substituicoes_professo
 --       sugere automaticamente quando a grade da turma existe) — sempre
 --       tem prioridade sobre o cálculo automático quando preenchido.
 alter table public.substituicoes_professor add column if not exists aulas_previstas_override integer;
+
+-- ======================================================================
+-- 32) Aula extra por ALUNO, não por turma inteira + sinalização no relatório
+--     tipo='extra' era aplicado à turma inteira — todo aluno vinculado à
+--     turma recebia o crédito extra pro substituto, mesmo quando só 1 (ou
+--     alguns) alunos de fato tiveram aula extra (ex.: reposição individual
+--     porque um aluno específico estava de atestado). Agora tipo='extra'
+--     exige aluno_id: só ELE entra no rateio da aula extra do substituto.
+--     turma_id continua preenchido (derivado do aluno no momento do
+--     registro) só pra sugerir "aulas previstas" pela grade da turma.
+--     tipo='substituicao' não muda — continua por turma inteira (cobre a
+--     aula do titular pra turma toda).
+--     "chave_conflito" substitui o unique(turma_id,data_aula) original
+--     pra permitir 1 linha por (turma,dia) quando é cobertura E,
+--     simultaneamente, 1 linha por (aluno,dia) quando é aula extra —
+--     índice parcial com predicado não é inferível pelo upsert do
+--     PostgREST, então a chave é resolvida em texto simples.
+--     mensalidades.inclui_aula_extra sinaliza, pro relatório (Pagamentos),
+--     que aquela linha (aluno, mês, professor) inclui valor de aula extra.
+-- ======================================================================
+alter table public.substituicoes_professor add column if not exists aluno_id uuid references auth.users(id) on delete cascade;
+alter table public.substituicoes_professor add column if not exists chave_conflito text;
+update public.substituicoes_professor set chave_conflito = 'turma:' || turma_id || ':' || data_aula where chave_conflito is null and tipo <> 'extra';
+update public.substituicoes_professor set chave_conflito = 'aluno:' || coalesce(aluno_id::text, id::text) || ':' || data_aula where chave_conflito is null;
+alter table public.substituicoes_professor alter column chave_conflito set not null;
+alter table public.substituicoes_professor drop constraint if exists substituicoes_professor_turma_id_data_aula_key;
+alter table public.substituicoes_professor drop constraint if exists substituicoes_professor_chave_conflito_key;
+alter table public.substituicoes_professor add constraint substituicoes_professor_chave_conflito_key unique (chave_conflito);
+
+alter table public.mensalidades add column if not exists inclui_aula_extra boolean not null default false;
