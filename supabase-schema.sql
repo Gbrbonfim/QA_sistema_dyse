@@ -3608,3 +3608,22 @@ grant execute on function public.atualizar_link_meet_turma(uuid, text) to authen
 -- ======================================================================
 alter table public.turma_aula_material alter column material_url drop not null;
 alter table public.turma_aula_material add column if not exists ativo boolean;
+
+-- ======================================================================
+-- 31) Aula extra do professor substituto (não desconta do regente)
+--     substituicoes_professor.tipo: 'substituicao' (padrão, existente) cobre
+--     uma aula JÁ PREVISTA do regente — cost-neutral, tira a fatia do
+--     titular e dá pro substituto, como já era. 'extra' é uma aula A MAIS,
+--     fora da grade normal da turma: NÃO desconta nada do regente (ele
+--     mantém o valor cheio dele) nem muda o valor que o aluno paga — o
+--     substituto recebe, à parte, proporcional às aulas PREVISTAS no mês
+--     pra turma (contagem de quantas vezes o(s) dia_semana cadastrado em
+--     turmas.dias_semana cai no mês, não quantas aulas já foram lançadas
+--     em chamada — isso é o que fazia o rateio de uma mesma aula extra sair
+--     com valores diferentes pra alunos de turmas diferentes). Ver
+--     dyseAulasPrevistasNoMes / dyseGerarMensalidadesDoMes em dyse-auth.js.
+--     Decisão do usuário em 2026-09-30.
+-- ======================================================================
+alter table public.substituicoes_professor add column if not exists tipo text not null default 'substituicao';
+alter table public.substituicoes_professor drop constraint if exists substituicoes_professor_tipo_check;
+alter table public.substituicoes_professor add constraint substituicoes_professor_tipo_check check (tipo in ('substituicao','extra'));

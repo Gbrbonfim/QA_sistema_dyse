@@ -1186,16 +1186,37 @@ async function dyseListSubstituicoesNoMes(mesStr, fimDoMesStr){
     .gte('data_aula', mesStr).lte('data_aula', fimDoMesStr);
   return error ? [] : (data || []);
 }
-async function dyseCreateSubstituicao(turmaId, dataAula, professorSubstitutoId, observacao){
+async function dyseCreateSubstituicao(turmaId, dataAula, professorSubstitutoId, observacao, tipo){
   const session = await dyseGetSession();
   const { data, error } = await sb.from('substituicoes_professor').upsert({
     turma_id: turmaId,
     data_aula: dataAula,
     professor_substituto_id: professorSubstitutoId,
     observacao: observacao || null,
+    tipo: tipo === 'extra' ? 'extra' : 'substituicao',
     criado_por: session ? session.user.id : null
   }, { onConflict: 'turma_id,data_aula' }).select('*').maybeSingle();
   return { data, error };
+}
+
+/* Aulas PREVISTAS de uma turma num mês, pela grade semanal cadastrada
+   (turma.dias_semana — 'dom'..'sab'), não pelas aulas já lançadas em
+   chamada. Usada só pro rateio de aula EXTRA (ver seção 31 do schema):
+   precisa de um número estável, que não infla conforme o mês avança nem
+   é distorcido pela própria aula extra sendo contada como sessão. */
+function dyseAulasPrevistasNoMes(turma, mesStr){
+  const dias = (turma && turma.dias_semana) || [];
+  if(!dias.length) return 0;
+  const idx = { dom:0, seg:1, ter:2, qua:3, qui:4, sex:5, sab:6 };
+  const alvo = new Set(dias.map(d => idx[d]).filter(n => n !== undefined));
+  if(!alvo.size) return 0;
+  const [ano, mes] = mesStr.split('-').map(Number);
+  const ultimoDia = new Date(ano, mes, 0).getDate();
+  let previstas = 0;
+  for(let dia = 1; dia <= ultimoDia; dia++){
+    if(alvo.has(new Date(ano, mes - 1, dia).getDay())) previstas++;
+  }
+  return previstas;
 }
 async function dyseDeleteSubstituicao(id){
   const { error } = await sb.from('substituicoes_professor').delete().eq('id', id);
@@ -1228,13 +1249,17 @@ async function dyseMesFechado(mes){
 async function dyseGerarMensalidadesDoMes(mes){
   if(await dyseMesFechado(mes)) return { skipped: true };
 
-  const [historico, modalidades, valores, alunos, substituicoes] = await Promise.all([
+  const [historico, modalidades, valores, alunos, substituicoes, turmas] = await Promise.all([
     dyseListAlunoFinanceiroHistorico(),
     dyseListModalidades(),
     dyseListModalidadeValores(),
     dyseListProfilesByRole('student'),
-    dyseListSubstituicoesNoMes(mes, dyseFimDoMes(mes))
+    dyseListSubstituicoesNoMes(mes, dyseFimDoMes(mes)),
+    dyseListTurmas()
   ]);
+
+  const turmaById = {};
+  turmas.forEach(t => { turmaById[t.id] = t; });
 
   const subsPorTurma = {};
   substituicoes.forEach(x => { (subsPorTurma[x.turma_id] = subsPorTurma[x.turma_id] || []).push(x); });
@@ -1316,53 +1341,100 @@ async function dyseGerarMensalidadesDoMes(mes){
      aula de outro num dia. Tira 1/N (N = dias de aula da turma no mês) da
      linha do titular e cria uma linha pro substituto, na mesma taxa da
      modalidade do aluno. Cost-neutral pra escola. Recebe as linhas-base do
-     aluno (com "_periodo" anexado) e devolve as linhas finais, sem "_periodo". */
+     aluno (com "_periodo" anexado) e devolve as linhas finais, sem "_periodo".
+
+     Registros tipo='extra' (aula A MAIS, fora da grade normal — ver seção
+     31 do schema) NÃO entram nessa conta de N nem tiram nada do titular:
+     somam à parte pro substituto, proporcional às aulas PREVISTAS no mês
+     pra turma (dyseAulasPrevistasNoMes, pela grade semanal cadastrada —
+     não pelas aulas já lançadas, que inflariam com a própria aula extra). */
   async function aplicarSubstituicoesDoAluno(linhasDoAluno, alunoId){
     const semPeriodo = arr => arr.map(l => { const c = Object.assign({}, l); delete c._periodo; return c; });
     const turmaId = turmaIdPorAluno[alunoId];
     if(!turmaId || !subsPorTurma[turmaId]) return semPeriodo(linhasDoAluno);
-    const subs = subsPorTurma[turmaId].filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
-    if(!subs.length) return semPeriodo(linhasDoAluno);
+    const subsDoMes = subsPorTurma[turmaId].filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
+    const subs = subsDoMes.filter(x => x.tipo !== 'extra');
+    const extras = subsDoMes.filter(x => x.tipo === 'extra');
+    if(!subs.length && !extras.length) return semPeriodo(linhasDoAluno);
 
-    const sessoesTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
-    const datasAula = new Set(sessoesTurma.map(s => s.data));
-    subs.forEach(x => datasAula.add(x.data_aula));
-    const N = datasAula.size;
-    if(!N) return semPeriodo(linhasDoAluno);
+    let saida;
+    let N = 0;
+    if(subs.length){
+      const sessoesTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
+      const datasAula = new Set(sessoesTurma.map(s => s.data));
+      subs.forEach(x => datasAula.add(x.data_aula));
+      N = datasAula.size;
+    }
 
-    const saida = [];
-    linhasDoAluno.forEach(l => {
-      const per = l._periodo || null;
-      const janIni = (per && per.data_inicio > mes) ? per.data_inicio : mes;
-      const janFim = (per && per.data_fim && per.data_fim < fimDoMesStr) ? per.data_fim : fimDoMesStr;
-      const subsAqui = subs.filter(x => (x.professor_substituto_id || null) !== (l.professor_id || null)
-        && x.data_aula >= janIni && x.data_aula <= janFim);
-      const base = Object.assign({}, l); delete base._periodo;
-      if(!subsAqui.length){ saida.push(base); return; }
+    if(!N){
+      saida = semPeriodo(linhasDoAluno);
+    } else {
+      saida = [];
+      linhasDoAluno.forEach(l => {
+        const per = l._periodo || null;
+        const janIni = (per && per.data_inicio > mes) ? per.data_inicio : mes;
+        const janFim = (per && per.data_fim && per.data_fim < fimDoMesStr) ? per.data_fim : fimDoMesStr;
+        const subsAqui = subs.filter(x => (x.professor_substituto_id || null) !== (l.professor_id || null)
+          && x.data_aula >= janIni && x.data_aula <= janFim);
+        const base = Object.assign({}, l); delete base._periodo;
+        if(!subsAqui.length){ saida.push(base); return; }
 
-      const rateCheia = per ? valorProfessorDoPeriodo(per) : Number(l.valor_pago_professor || 0);
-      const recebCentavos = Math.round(Number(l.valor_recebido || 0) * 100);
-      const nMove = Math.min(subsAqui.length, N);
-      const recebMovido = Math.round(recebCentavos * nMove / N);
-      const pagoMovido = Math.round(rateCheia * nMove / N * 100) / 100;
+        const rateCheia = per ? valorProfessorDoPeriodo(per) : Number(l.valor_pago_professor || 0);
+        const recebCentavos = Math.round(Number(l.valor_recebido || 0) * 100);
+        const nMove = Math.min(subsAqui.length, N);
+        const recebMovido = Math.round(recebCentavos * nMove / N);
+        const pagoMovido = Math.round(rateCheia * nMove / N * 100) / 100;
 
-      base.valor_recebido = Math.max(0, recebCentavos - recebMovido) / 100;
-      base.valor_pago_professor = Math.max(0, Math.round((Number(l.valor_pago_professor || 0) - pagoMovido) * 100) / 100);
-      if(base.valor_recebido > 0 || base.valor_pago_professor > 0) saida.push(base);
+        base.valor_recebido = Math.max(0, recebCentavos - recebMovido) / 100;
+        base.valor_pago_professor = Math.max(0, Math.round((Number(l.valor_pago_professor || 0) - pagoMovido) * 100) / 100);
+        if(base.valor_recebido > 0 || base.valor_pago_professor > 0) saida.push(base);
 
-      const diasPorSub = {};
-      subsAqui.forEach(x => { diasPorSub[x.professor_substituto_id] = (diasPorSub[x.professor_substituto_id] || 0) + 1; });
-      Object.keys(diasPorSub).forEach(subId => {
-        const dias = diasPorSub[subId];
-        saida.push({
-          aluno_id: alunoId, aluno_nome: l.aluno_nome, mes_competencia: mes,
-          professor_id: subId, modalidade_id: l.modalidade_id,
-          valor_recebido: Math.round(recebCentavos * dias / N) / 100,
-          valor_pago_professor: Math.round(rateCheia * dias / N * 100) / 100,
-          atualizado_em: new Date().toISOString()
+        const diasPorSub = {};
+        subsAqui.forEach(x => { diasPorSub[x.professor_substituto_id] = (diasPorSub[x.professor_substituto_id] || 0) + 1; });
+        Object.keys(diasPorSub).forEach(subId => {
+          const dias = diasPorSub[subId];
+          saida.push({
+            aluno_id: alunoId, aluno_nome: l.aluno_nome, mes_competencia: mes,
+            professor_id: subId, modalidade_id: l.modalidade_id,
+            valor_recebido: Math.round(recebCentavos * dias / N) / 100,
+            valor_pago_professor: Math.round(rateCheia * dias / N * 100) / 100,
+            atualizado_em: new Date().toISOString()
+          });
         });
       });
-    });
+    }
+
+    if(extras.length){
+      let previstas = dyseAulasPrevistasNoMes(turmaById[turmaId], mes);
+      if(!previstas){
+        // Turma sem dias_semana cadastrado (legado) — melhor aproximação
+        // disponível é contar as aulas já lançadas no mês pra essa turma.
+        const sessoesTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
+        previstas = new Set(sessoesTurma.map(s => s.data)).size || 1;
+      }
+      linhasDoAluno.forEach(l => {
+        const per = l._periodo || null;
+        const janIni = (per && per.data_inicio > mes) ? per.data_inicio : mes;
+        const janFim = (per && per.data_fim && per.data_fim < fimDoMesStr) ? per.data_fim : fimDoMesStr;
+        const extrasAqui = extras.filter(x => x.data_aula >= janIni && x.data_aula <= janFim);
+        if(!extrasAqui.length) return;
+
+        const rateCheia = per ? valorProfessorDoPeriodo(per) : Number(l.valor_pago_professor || 0);
+        const diasPorSub = {};
+        extrasAqui.forEach(x => { diasPorSub[x.professor_substituto_id] = (diasPorSub[x.professor_substituto_id] || 0) + 1; });
+        Object.keys(diasPorSub).forEach(subId => {
+          const dias = diasPorSub[subId];
+          const valorExtra = Math.round(rateCheia * dias / previstas * 100) / 100;
+          if(valorExtra <= 0) return;
+          saida.push({
+            aluno_id: alunoId, aluno_nome: l.aluno_nome, mes_competencia: mes,
+            professor_id: subId, modalidade_id: l.modalidade_id,
+            valor_recebido: 0, valor_pago_professor: valorExtra,
+            atualizado_em: new Date().toISOString()
+          });
+        });
+      });
+    }
 
     // Junta linhas do mesmo professor (substituto que também é titular de outra fatia).
     const merged = {};

@@ -1104,8 +1104,13 @@ body.dyse-modal-open{overflow:hidden;}
     <div id="finPanelSubstituicoes" style="display:none;">
       <div class="gestao-card">
         <div class="gestao-card-title">Registrar substituição</div>
-        <p class="gestao-hint">Quando um professor cobre a aula de outro num dia específico. A fatia daquele dia (1 de N aulas do mês) sai do pagamento do professor titular e vai pro substituto, no rateio do mês — o custo da turma não muda. Registre <b>antes de fechar o mês</b> e depois clique em "Atualizar mês" em Pagamentos.</p>
+        <p class="gestao-hint">
+          <b>Substituição:</b> cobre uma aula já prevista do professor titular. A fatia daquele dia (1 de N aulas do mês) sai do pagamento do titular e vai pro substituto, no rateio do mês — o custo da turma não muda.<br>
+          <b>Aula extra:</b> aula A MAIS, fora da grade normal da turma. O titular mantém o valor cheio dele e o aluno continua pagando a mensalidade normal — o substituto recebe à parte, proporcional às aulas previstas no mês pra turma (grade semanal cadastrada). O custo extra sai só do caixa da escola.<br>
+          Registre <b>antes de fechar o mês</b> e depois clique em "Atualizar mês" em Pagamentos.
+        </p>
         <form class="gestao-form" onsubmit="return handleCreateSubstituicao(event)">
+          <div class="gestao-field" style="flex:1 1 180px;"><label>Tipo</label><select id="subTipo"><option value="substituicao">Substituição (cobre aula do titular)</option><option value="extra">Aula extra (não desconta do titular)</option></select></div>
           <div class="gestao-field" style="flex:1 1 200px;"><label>Turma</label><select id="subTurma" required></select></div>
           <div class="gestao-field" style="flex:1 1 150px;"><label>Data da aula</label><input type="date" id="subData" required></div>
           <div class="gestao-field" style="flex:1 1 200px;"><label>Professor substituto</label><select id="subProfessor" required></select></div>
@@ -1116,7 +1121,7 @@ body.dyse-modal-open{overflow:hidden;}
       </div>
       <div style="overflow-x:auto;">
         <table class="dash-table" id="substituicoesTable">
-          <thead><tr><th>Data</th><th>Turma</th><th>Professor substituto</th><th>Observação</th><th>Ações</th></tr></thead>
+          <thead><tr><th>Tipo</th><th>Data</th><th>Turma</th><th>Professor substituto</th><th>Observação</th><th>Ações</th></tr></thead>
           <tbody id="substituicoesBody"></tbody>
         </table>
       </div>
@@ -3839,27 +3844,30 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('substituicoesBody').innerHTML = SUBSTITUICOES.map(s => {
       const t = TURMAS.find(x => x.id === s.turma_id);
       const p = TEACHERS.find(x => x.id === s.professor_substituto_id);
+      const isExtra = s.tipo === 'extra';
       return '<tr>' +
+        '<td>' + (isExtra ? '<span class="turma-badge" style="background:#fff3da; color:#8a5a00;">Extra</span>' : '<span class="turma-badge" style="background:#eef1f5; color:#556;">Substituição</span>') + '</td>' +
         '<td>' + formatDateBR(String(s.data_aula || '').slice(0, 10)) + '</td>' +
         '<td>' + escapeHtmlLocal(t ? t.name : '(turma removida)') + '</td>' +
         '<td>' + escapeHtmlLocal(p ? (p.full_name || p.email || '') : '(professor removido)') + '</td>' +
         '<td>' + escapeHtmlLocal(s.observacao || '') + '</td>' +
         '<td><button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteSubstituicao(' + s.id + ')">Remover</button></td>' +
       '</tr>';
-    }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:.6;">Nenhuma substituição registrada.</td></tr>';
+    }).join('') || '<tr><td colspan="6" style="text-align:center; opacity:.6;">Nenhuma substituição registrada.</td></tr>';
   }
 
   async function handleCreateSubstituicao(e){
     e.preventDefault();
+    const tipo = document.getElementById('subTipo').value;
     const turmaId = document.getElementById('subTurma').value;
     const data = document.getElementById('subData').value;
     const profId = document.getElementById('subProfessor').value;
     const obs = document.getElementById('subObs').value.trim();
     if(!turmaId || !data || !profId){ flashMsg('subMsg', 'Preencha turma, data e professor substituto.', false); return false; }
-    const { error } = await dyseCreateSubstituicao(turmaId, data, profId, obs);
+    const { error } = await dyseCreateSubstituicao(turmaId, data, profId, obs, tipo);
     if(error){ flashMsg('subMsg', 'Não foi possível registrar: ' + error.message, false); return false; }
     document.getElementById('subObs').value = '';
-    flashMsg('subMsg', 'Substituição registrada. Vá em Pagamentos e clique em "Atualizar mês" pra refletir no rateio.', true);
+    flashMsg('subMsg', (tipo === 'extra' ? 'Aula extra registrada.' : 'Substituição registrada.') + ' Vá em Pagamentos e clique em "Atualizar mês" pra refletir no rateio.', true);
     SUBSTITUICOES = await dyseListSubstituicoes();
     renderSubstituicoesTable();
     return false;
