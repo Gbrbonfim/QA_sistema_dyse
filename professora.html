@@ -2623,7 +2623,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('finProfBody').innerHTML = linhas.length ? linhas.map(l => {
       const mod = MODALIDADES_CACHE.find(m => m.id === l.modalidade_id);
       return '<tr>' +
-        '<td data-label="Aluno">' + escapeHtmlLocal(l.aluno_nome || l.aluno_id) + '</td>' +
+        '<td data-label="Aluno">' + escapeHtmlLocal(l.aluno_nome || l.aluno_id) + (l.inclui_aula_extra ? ' <span style="display:inline-block; background:#fff3da; color:#8a5a00; font-size:10px; font-weight:800; padding:2px 8px; border-radius:999px;">aula extra</span>' : '') + '</td>' +
         '<td data-label="Modalidade">' + (mod ? escapeHtmlLocal(mod.name) : '-') + '</td>' +
         '<td data-label="Valor a receber">' + formatMoney(l.valor_pago_professor) + '</td>' +
       '</tr>';
