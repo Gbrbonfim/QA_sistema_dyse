@@ -1322,10 +1322,25 @@ async function dyseGerarMensalidadesDoMes(mes){
     if(cobreMesInteiro) return 1;
 
     const turmaId = turmaIdPorAluno[h.aluno_id];
-    if(!turmaId) return 1;
+    const saiuNoMeioDoMes = !!h.data_fim && h.data_fim < fimDoMesStr;
+    if(!turmaId && !saiuNoMeioDoMes) return 1;
 
-    const sessoesDaTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
-    if(!sessoesDaTurma.length) return 1;
+    let sessoesDaTurma;
+    if(turmaId){
+      sessoesDaTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
+      if(!sessoesDaTurma.length) return 1;
+    } else {
+      // Aluno SEM turma cujo vínculo fechou no meio do mês = cancelado/
+      // encerrado (dyseAplicarSituacaoNoPerfil zera profiles.turma_id na
+      // hora, e a turma não é historizada). Cair no valor cheio aqui pagava
+      // o mês INTEIRO ao professor de quem rescindiu no começo do mês. A
+      // turma de referência passa a ser a(s) em que o aluno apareceu na
+      // chamada neste mês; sem nenhuma chamada com ele no mês, não houve
+      // aula antes da saída — fator 0 (não gera pagamento).
+      const turmasDoAluno = await turmasComChamadaNoMes(h.aluno_id);
+      sessoesDaTurma = (await sessoesDoMes()).filter(s => turmasDoAluno.has(s.turma_id));
+      if(!sessoesDaTurma.length) return 0;
+    }
 
     const inicioJanela = h.data_inicio > mes ? h.data_inicio : mes;
     const fimJanela = (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr;
@@ -1358,6 +1373,16 @@ async function dyseGerarMensalidadesDoMes(mes){
   async function sessoesDoMes(){
     if(sessoesDoMesCache === null) sessoesDoMesCache = await dyseListSessoesDoMes(mes, fimDoMesStr);
     return sessoesDoMesCache;
+  }
+
+  // Turmas em que o aluno constou na chamada (sessao_presencas, presente ou
+  // não) em alguma aula deste mês — único rastro da turma de quem já foi
+  // tirado dela por cancelamento/encerramento.
+  async function turmasComChamadaNoMes(alunoId){
+    const { data } = await sb.from('sessao_presencas').select('sessao_id').eq('aluno_id', alunoId)
+      .order('sessao_id', { ascending: false });
+    const sessaoIds = new Set((data || []).map(p => p.sessao_id));
+    return new Set((await sessoesDoMes()).filter(s => sessaoIds.has(s.id)).map(s => s.turma_id));
   }
 
   /* Substituição pontual (substituicoes_professor, tipo='substituicao'):
@@ -1488,7 +1513,10 @@ async function dyseGerarMensalidadesDoMes(mes){
     if(periodos.length === 1){
       const h = periodos[0];
       const fator = await fatorProporcionalPeriodo(h);
-      linhasDoAluno.push({
+      // Sem turma e fator 0 = cancelou/encerrou antes de ter qualquer aula
+      // no mês: não entra no mês (a limpeza de órfãs abaixo apaga a linha
+      // já gerada, se houver).
+      if(fator > 0 || turmaIdPorAluno[alunoId]) linhasDoAluno.push({
         aluno_id: alunoId, aluno_nome: nomeAluno, mes_competencia: mes,
         professor_id: h.professor_id, modalidade_id: h.modalidade_id,
         valor_recebido: Number(h.valor_mensal_aluno || 0),
