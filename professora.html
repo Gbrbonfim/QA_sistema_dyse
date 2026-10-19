@@ -2738,6 +2738,7 @@ body.dyse-modal-open{overflow:hidden;}
      Um <details> por turma (não expandido por padrão — pode ter várias
      turmas com 44+ linhas cada). */
   let TURMA_MATERIAL_NIVEIS_CACHE = null; // cache: { [slug]: materia (com total_aulas) }
+  let PROFESSORA_PROFILE = null;
 
   async function renderTurmaMaterialBlocks(){
     if(!TURMA_MATERIAL_NIVEIS_CACHE){
@@ -2747,8 +2748,13 @@ body.dyse-modal-open{overflow:hidden;}
     const [myLinks, allTurmas, allTurmaMaterias] = await Promise.all([
       dyseListMyTurmas(), dyseListTurmas(), dyseListAllTurmaMaterias()
     ]);
+    // Gestão (admin/financeiro) gerencia o material de TODAS as turmas — a
+    // RLS de turma_aula_material já libera (is_admin). Sem isso, um login de
+    // gestão sem vínculo em teacher_turmas não via nada aqui, mesmo vendo
+    // todo o material no painel do aluno (que usa profiles.turma_id).
     const myIds = new Set(myLinks.map(l => l.turma_id));
-    const minhasTurmas = allTurmas.filter(t => myIds.has(t.id)).sort((a, b) => a.name.localeCompare(b.name));
+    const isGestao = dyseIsAdmin(PROFESSORA_PROFILE);
+    const minhasTurmas = allTurmas.filter(t => isGestao || myIds.has(t.id)).sort((a, b) => a.name.localeCompare(b.name));
     if(!minhasTurmas.length) return '<p style="opacity:.6;">Você ainda não tem turma vinculada.</p>';
 
     const blocks = await Promise.all(minhasTurmas.map(async turma => {
@@ -2920,6 +2926,7 @@ body.dyse-modal-open{overflow:hidden;}
     const session = await dyseRequireTeacher();
     if(!session) return;
     const profile = await dyseGetProfile(session);
+    PROFESSORA_PROFILE = profile;
     renderProfessoraChrome(session, profile);
     const hashPanel = location.hash.slice(1);
     showPanel(['results','manage','material','financeiro','turmas','reportcards','disponibilidade'].includes(hashPanel) ? hashPanel : 'turmas');
