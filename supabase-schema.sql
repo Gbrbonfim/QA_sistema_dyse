@@ -3667,3 +3667,672 @@ alter table public.substituicoes_professor drop constraint if exists substituico
 alter table public.substituicoes_professor add constraint substituicoes_professor_chave_conflito_key unique (chave_conflito);
 
 alter table public.mensalidades add column if not exists inclui_aula_extra boolean not null default false;
+
+-- ======================================================================
+-- 33) NÍVEL B1 — matéria "B1" e as 44 aulas do Registro de Classe
+--     (extraído de "Registro de Classe & Planner Pedagógico B1 · Mapa de
+--     44 Aulas · Modelo Institucional"). Mesma estrutura do A2 (seções 24,
+--     25, 27 e 28): mesmos eixos de avaliação, mesmos campos de "conteudo";
+--     a aula 44 (Apresentação Final de Nível, seção 6.4.3 do currículo) já
+--     entra com o layout de ficha por aluno. O deck e os slides usados em
+--     aula ficam no primeiro item de "pontos_atencao" — o link do material
+--     (slides) de cada aula é preenchido pela gestão no modal de Material.
+--     Revisões-teste (Forms feito em casa DEPOIS da aula): 9, 20, 30 e 43.
+--     Idempotente (ON CONFLICT DO NOTHING): nunca sobrescreve edição manual.
+-- ======================================================================
+insert into public.materias (slug, name, description, total_aulas, eixos_avaliacao)
+values ('b1', 'B1', 'Currículo do nível B1 (pré-intermediário) — 44 aulas.', 44, '["Tarefa Final","Speaking","Listening","Reading","Writing","Gramática"]'::jsonb)
+on conflict (slug) do nothing;
+
+insert into public.nivel_aulas (materia_slug, numero, topico, conteudo) values
+  ('b1', 1, $$Acolhimento — "Are you a language learner?" (o poliglota Ioannis Ikonomou)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Entrevistar um colega com as 15 perguntas essenciais (nome, origem, trabalho, línguas, rotina, fim de semana passado e próximo), devolvendo a pergunta (And you? / Where are YOU from?) e descrevendo pessoas, lugares e coisas com adjetivos.$$,
+    'estrutura_gramatical', $$Revisão diagnóstica da ordem das palavras em perguntas, já vista no A2: inversão com be/can e regra QuASI (Question word + Auxiliary + Subject + Infinitive), preposição no fim da pergunta. Adjetivos para descrever pessoas, lugares e coisas (peaceful, crowded, useful, confident, honest, shy...).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Are you a language learner?" — slides 2-29 (24-29 se houver tempo).$$,
+      $$Nota da coordenação: toda Aula 01 de qualquer nível (A1-C1) reserva os primeiros 10 minutos para acolhimento dos alunos e apresentação da Trilha Pedagógica do nível — ponto de partida (A2 concluído) e ponto de chegada (can-do statements de saída do B1, seção 5 do currículo). Ver seção 2.3. A partir do B1, a prática se organiza cada vez mais em tarefas integradoras (TSLT, seção 2.1).$$,
+      $$Condução (50 min): Acolhimento + Trilha Pedagógica (10 min) · Warm Up e Listening (10 min): associar línguas e cumprimentos e assistir ao vídeo de Ioannis, o hiperpoliglota (slides 2-7) · Grammar (12 min): ler o artigo, completar as 15 perguntas e relembrar be/can x do/does/did e QuASI (slides 8-17) — é revisão, não reexplicação · Vocabulary (6 min): adjetivos para pessoas e lugares (slides 18-22) · Talking Point (12 min) — Tarefa Final: fazer as 15 perguntas ao colega, devolvendo cada pergunta e usando os adjetivos (slide 23).$$,
+      $$Aula diagnóstica do B1: anotar no Registro quem ainda omite o auxiliar ou erra a inversão — é a base de todo o B1 (question tags e subject questions dependem disso).$$,
+      $$O deck é longo e não tem tarefa de casa: o acolhimento e a Tarefa Final não podem ser cortados; o listening da tradutora Laura e a entrevista com Ioannis (slides 24-29) ficam como extra se houver tempo. O slide 15 é só imagem.$$),
+    'foco_fonetico_som', $$Acento contrastivo ao devolver a pergunta: Where are YOU from?$$,
+    'foco_fonetico_erro', $$Devolver a pergunta com a mesma entonação plana da original, sem destacar o YOU, o que soa repetitivo.$$,
+    'foco_fonetico_correcao', $$Modelar o par A/B do slide 23 exagerando o acento em YOU e fazer drilling em cadeia com 3-4 perguntas.$$,
+    'tarefa_de_casa', $$Sem tarefa de casa nesta aula.$$
+  )),
+  ('b1', 2, $$Uma decisão importante — morar fora (o blog de Harris Cheng)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Discutir com um colega grandes decisões da vida (mudar de cidade, de país, de emprego) e, depois, fazer e responder às perguntas pessoais do slide 17 com in/on/at corretos (What time do you usually wake up at the weekend?).$$,
+    'estrutura_gramatical', $$Preposições de tempo e lugar in / on / at (revisão de A1/A2) a partir de frases reais do blog: in + meses, anos, cidades e espaços fechados; on + dias, datas e superfícies; at + horas, endereços e pontos específicos.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "An important decision" (parte 1 de 2) — slides 2-14, 17-18.$$,
+      $$Condução (50 min): Warm Up (5 min): morar fora — você gostaria? (slide 2) · Reading (18 min): prever o título, ler o blog de Harris Cheng (Hong Kong → Canadá) e localizar as informações a-g (slides 3-10) · Talking Point (7 min): grandes decisões da vida (slide 11) · Vocabulary (10 min): in/on/at nas frases do blog e regras (slides 12-14) · Speaking (10 min) — Tarefa Final: completar as perguntas com in/on/at e fazê-las ao colega, com respostas curtas e completas (slides 17-18).$$,
+      $$Preposições são revisão de A1/A2: não reexplicar do zero — usar as frases do blog e ir direto para a prática.$$,
+      $$Erros típicos: 'in the weekend' (britânico: at the weekend; americano: on the weekend — aceitar os dois), 'in Monday', 'at the bus'. O slide 14 é só imagem. Os exercícios de escolha (slides 15-16) vão para casa.$$),
+    'foco_fonetico_som', $$Formas fracas das preposições em chunks: at the weekend /ət ðə/, in the morning /ɪn ðə/.$$,
+    'foco_fonetico_erro', $$Preposição forte e separada do resto do chunk, deixando a frase 'picotada'.$$,
+    'foco_fonetico_correcao', $$Drilling do slide 15 (Test yourself: the morning → in the morning) encadeando a preposição.$$,
+    'tarefa_de_casa', $$Slides 15 e 16 (escolher in/on/at nas frases a-j).$$
+  )),
+  ('b1', 3, $$A moment that changed everything — past simple x past continuous$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Contar a um colega um momento real ou imaginário que mudou algo na sua vida, dizendo onde estava, o que estava fazendo, o que aconteceu e o que mudou — e depois escrever o parágrafo (6-8 frases).$$,
+    'estrutura_gramatical', $$Past simple (ação curta) x past continuous (ação longa/cenário) com when e while — revisão do A2, agora a serviço de uma narrativa pessoal mais longa. No B1, espera-se que o aluno conecte eventos em sequência lógica (can-do da seção 5).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "An important decision" (parte 2 de 2) — slides 19-25, 28.$$,
+      $$Condução (50 min): Retomada (5 min): conferir a tarefa de casa (in/on/at) e recontar em uma frase a decisão de Harris · Grammar (15 min): extrato do blog, regras de when/while e exercício de past simple x past continuous (slides 19-22) · Practice (10 min): continuar as frases com ideias próprias (slides 23-24) · Listening (8 min): vídeo de Kacie, que se mudou para Florença — primeira escuta e ideia principal (slide 25) · Writing (12 min) — Tarefa Final: contar oralmente o próprio 'momento que mudou tudo' e iniciar o parágrafo do slide 28.$$,
+      $$When + past simple / while + past continuous: o erro 'While I walked...' persiste do A2.$$,
+      $$A tarefa de casa (slides 26-27) inclui a segunda escuta do vídeo (V/F) e o Speaking 'A Moment That Changed Everything': orientar o aluno a gravar um áudio de 1 minuto contando sua história, para que a tarefa seja realmente feita em casa.$$),
+    'foco_fonetico_som', $$Formas fracas de was /wəz/ e were /wə/ e pausa entre a oração de fundo e a interrupção.$$,
+    'foco_fonetico_erro', $$Was/were fortes e frase corrida, sem destacar a ação que interrompe.$$,
+    'foco_fonetico_correcao', $$Modelar I was walking in the park | when my phone rang, marcando a pausa com uma barra no quadro.$$,
+    'tarefa_de_casa', $$Slides 26 e 27 (vídeo de Kacie — verdadeiro/falso — e Speaking 'A Moment That Changed Everything', gravado em áudio).$$
+  )),
+  ('b1', 4, $$Food, facts and fun — cafés da manhã pelo mundo e verbos de sentido$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Descrever comidas para o colega usando verbos de sentido (It looks delicious but it smells like cheese / It tastes a bit sour) e responder às perguntas do slide 17 sobre comidas e experiências.$$,
+    'estrutura_gramatical', $$Verbos de sentido (look, smell, taste, feel, sound) e seem + adjetivo (It tastes sweet) e + like + substantivo (It looks like lunch / It tastes like coconut water).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Food, facts and fun" (parte 1 de 2) — slides 2-7, 11-15, 17.$$,
+      $$Condução (50 min): Warm Up (7 min): weird food facts — verdadeiro ou falso? (slides 2-3) · Listening (13 min): crianças provando cafés da manhã pelo mundo — prever, assistir e associar frases (slides 4-6) · Talking Point (5 min): perguntas a-d (slide 7) · Vocabulary (15 min): verbos de sentido, quadro e regras (+ adjetivo / + like + substantivo) e exercício a-j (slides 11-15) · Speaking (10 min) — Tarefa Final: perguntas pessoais com verbos de sentido (slide 17).$$,
+      $$Erro típico: look + like + adjetivo ('It looks like delicious'). Sound para algo que ouvimos contar (It sounds delicious) é novidade. Feel aqui é textura/sensação física.$$,
+      $$O tema dos estereótipos (slides 8-10) e o jogo 'What am I eating?' (slide 18) ficam para a Aula 5.$$),
+    'foco_fonetico_som', $$Vogal curta de look /lʊk/ (≠ Luke /luːk/) e o /ð/ de smooth.$$,
+    'foco_fonetico_erro', $$Alongar a vogal de look e trocar /ð/ por /d/ ('smood').$$,
+    'foco_fonetico_correcao', $$Par mínimo look/Luke e drilling de chunks: It looks like... / It smells like...$$,
+    'tarefa_de_casa', $$Slide 16 (riscar a opção que não pode ser usada, a-i).$$
+  )),
+  ('b1', 5, $$Food Experience Passport — estereótipos e experiências com comida$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Preencher o 'Food Experience Passport': perguntar ao colega se já provou/fez determinadas coisas com comida (Have you ever...?) e aprofundar no past simple, descrevendo como era com verbos de sentido (It looked strange but tasted delicious).$$,
+    'estrutura_gramatical', $$Present perfect para experiências (revisão do A2): Have you ever + particípio? Yes, I have / No, I've never... — e detalhes no past simple (When did you try it?). Verbos de sentido da Aula 4 em uso.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Food, facts and fun" (parte 2 de 2) — slides 8-10, 18-23.$$,
+      $$Condução (50 min): Retomada (5 min): conferir a tarefa de casa (slide 16) · Game (8 min): 'What am I eating?' — adivinhar a comida pela textura e pelo sabor (slide 18) · Discussion (10 min): estereótipos sobre comida e cidades africanas (slides 8-10) · Grammar (12 min): present perfect para experiências — regras e exercício a-l (slides 19-22), como revisão · Speaking (15 min) — Tarefa Final: Food Experience Passport (slide 23).$$,
+      $$O present perfect é revisão: o foco é usá-lo com naturalidade na conversa e passar para o past simple nos detalhes ('I have tried it last year' é o erro típico).$$,
+      $$Conduzir os estereótipos com cuidado e brevidade. Tarefa no Flexge: verificar no início da Aula 6 quem concluiu.$$),
+    'foco_fonetico_som', $$Contração I've /aɪv/ e Have you ever /həvjuˈevə/ encadeado.$$,
+    'foco_fonetico_erro', $$Omitir o 've ('I tried sushi before') ou pronunciar have forte e separado.$$,
+    'foco_fonetico_correcao', $$Drilling de chunks do passaporte: I've never eaten... / I've tried... / Have you ever...? com contração.$$,
+    'tarefa_de_casa', $$Flexge (atividades indicadas pelo professor — seção 6.6 do currículo).$$
+  )),
+  ('b1', 6, $$Motivação para limpar a casa — o que você já fez hoje?$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Spot the difference: comparar duas imagens de uma casa e dizer ao colega o que a pessoa já fez, acabou de fazer e ainda não fez (In Picture A, she has already done the washing up...).$$,
+    'estrutura_gramatical', $$Present perfect para ações recentes e novidades ligadas ao agora, com just (acabou de), already (já, antes do esperado) e yet (ainda não / já? — em negativas e perguntas); posição dos advérbios.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Unlock your cleaning motivation" — slides 2, 5-14, 20-21 (extra: 18-19).$$,
+      $$Pré-aula: slides 3 e 4 (vocabulário de tarefas domésticas — lista e exercício de completar).$$,
+      $$Condução (50 min): Warm Up (5 min): fotos de tarefas domésticas e conferência rápida da preparação (slides 2 e 5) · Talking Point (5 min): ranking de tarefas (slide 6) · Listening (10 min): Brandon, o faxineiro profissional — V/F e discussão (slides 7-9) · Grammar (15 min): a lista de Julia, just/already/yet e regras (slides 10-13) · Practice (5 min): exercício 5 — diálogos (slide 14) · Speaking (10 min) — Tarefa Final: o que você já fez hoje? e Spot the difference (slides 20-21).$$,
+      $$Ponto central do eixo do B1 (seção 5). Erros típicos: yet em frases afirmativas, already no fim da frase e o uso do past simple com just ('I just cleaned', aceitável no inglês americano — aceitar, mas ensinar a forma com present perfect).$$,
+      $$Extra Practice (slides 18-19): só se houver tempo, antes da Tarefa Final.$$),
+    'foco_fonetico_som', $$Contrações e redução: I've just /aɪvˈdʒʌst/, She's already /ʃizɔːlˈredi/, Have you... yet? com subida final.$$,
+    'foco_fonetico_erro', $$Pronunciar have/has forte e sem contração; perguntas com yet sem entonação ascendente.$$,
+    'foco_fonetico_correcao', $$Drilling das frases de Julia com contração; marcar a seta de subida nas perguntas com yet.$$,
+    'tarefa_de_casa', $$Slides 15, 16 e 17 (completar os diálogos e reescrever frases com already/yet).$$
+  )),
+  ('b1', 7, $$There's nothing like it! — a família que esqueceu o primeiro dia de aula (The Middle)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Contar a um colega uma vez em que você (ou alguém) esqueceu uma data importante, usando pronomes indefinidos (Nobody remembered... / I couldn't find anything... / We didn't go anywhere).$$,
+    'estrutura_gramatical', $$Indefinite pronouns (somebody/anybody/nobody, something/anything/nothing, somewhere/anywhere/nowhere) em afirmativas, negativas e perguntas; any = 'qualquer um'; nobody/nothing com verbo afirmativo.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "There's nothing like it!" (parte 1 de 2) — slides 2-11, 13-14.$$,
+      $$Condução (50 min): Warm Up (5 min): o último dia de férias (slide 2) · Listening (12 min): cena de The Middle — a família que esqueceu a primeira semana de aula (slides 3-5) · Talking Point (6 min): você já esqueceu uma data importante? (slide 6) · Grammar (15 min): pronomes indefinidos — completar, regras, quadro +/-/? e any = 'qualquer' (slides 7-10); jogo rápido (slide 11) · Practice + Tarefa Final (12 min): nobody/nothing x negativas completas (slides 13-14) e relato oral da história do slide 6, agora com os pronomes.$$,
+      $$Dupla negação é o erro central ('I didn't see nobody') por interferência do português 'não vi ninguém'.$$,
+      $$Somebody em perguntas de oferta (Would you like something?) é exceção à regra — mencionar se surgir.$$),
+    'foco_fonetico_som', $$Acento na primeira parte dos pronomes compostos: SOMEbody, ANYthing, NOwhere.$$,
+    'foco_fonetico_erro', $$Acentuar a segunda parte ('someBODY', 'anyTHING').$$,
+    'foco_fonetico_correcao', $$Bater palmas na primeira sílaba dos pronomes e drilling em frases curtas (I didn't see ANYbody).$$,
+    'tarefa_de_casa', $$Slide 12 (completar com something, anything, nothing, somebody, anybody, nobody, somewhere, anywhere, nowhere).$$
+  )),
+  ('b1', 8, $$Plans that didn't happen — was going to e adjetivos -ed/-ing$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Entrevista em pares com as 10 perguntas do slide 24 (Did you do anything exciting...? Were you going to travel somewhere...?) e relato de 3 coisas que aprendeu sobre o colega, com adjetivos -ed/-ing para sentimentos.$$,
+    'estrutura_gramatical', $$Was/were going to para planos do passado que não aconteceram (be going to é revisão do A2). Adjetivos -ed (como a pessoa se sente: bored, excited) x -ing (o que causa o sentimento: boring, exciting).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "There's nothing like it!" (parte 2 de 2) — slides 15-21, 24-25.$$,
+      $$Condução (50 min): Retomada (5 min): conferir a tarefa de casa (slide 12) · Grammar (15 min): be going to (revisão) e was/were going to, regras e exercício (slides 15-18) · Practice (5 min): terminar as frases com ideias próprias (slide 19) · Vocabulary (10 min): adjetivos -ed/-ing no texto de Jordan sobre o primeiro dia de aula (slides 20-21) · Speaking (15 min) — Tarefa Final: entrevista das 10 perguntas e relato de 3 informações sobre o colega (slides 24-25).$$,
+      $$Was going to é novo para a maioria: contextualizar com exemplos reais (I was going to call you, but I forgot).$$,
+      $$Erro típico de -ed/-ing: 'I'm boring' querendo dizer 'estou entediado' — mostrar a diferença com humor. A regra e o exercício de -ed/-ing (slides 22-23) vão para casa.$$),
+    'foco_fonetico_som', $$Pronúncia do -ed nos adjetivos: frightened /d/, embarrassed /t/, interested /ɪd/; e was going to /wəz ˈɡəʊɪŋ tə/.$$,
+    'foco_fonetico_erro', $$Vogal extra em todo -ed ('embarras-sed') e was forte.$$,
+    'foco_fonetico_correcao', $$Revisar a regra dos três sons do -ed vista no A2 e fazer drilling com os adjetivos do texto de Jordan.$$,
+    'tarefa_de_casa', $$Slides 22 e 23 (regra dos adjetivos -ed/-ing e exercício de completar a-i).$$
+  )),
+  ('b1', 9, $$Revisão — Aulas 1 a 8$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Checklist de autoavaliação (can-do) com um colega: realizar em voz alta cada item dos slides 8-9 e marcar o que já consegue fazer com confiança.$$,
+    'estrutura_gramatical', $$Revisão integrada das Aulas 1-8: ordem das perguntas, in/on/at, past simple x continuous, verbos de sentido, present perfect (experiências e just/already/yet), indefinite pronouns, was going to, adjetivos -ed/-ing.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck Review (Class 10 — Review Classes 2-9) — slides 3-10.$$,
+      $$Nota da coordenação: revisão-teste (seção 6.3 do currículo) — o link do Google Forms só é enviado DEPOIS da aula. ATENÇÃO: o deck e o Forms foram criados para a grade antiga (Review Classes 2-9) e incluem conteúdo de aulas que saíram da grade (Commuting e Stronger, Faster, Fitter): pular o vocabulário de transporte (slide 3) e de esportes (slide 7) e desconsiderar os itens do checklist sobre deslocamento e exercícios físicos. Recomenda-se revisar o Forms para retirar questões de present simple x continuous/stative verbs, comparativos, superlativos e too/enough, que não foram trabalhados nesta grade.$$,
+      $$Condução (50 min): Abertura (3 min): explicar a dinâmica · Vocabulary review (15 min): verbos de sentido, tarefas domésticas e adjetivos -ed/-ing (slides 4-6) · Checklist can-do (25 min) — Tarefa Final: em duplas, realizar em voz alta cada item dos slides 8-9 (exceto os de conteúdo fora da grade) e marcar o que consegue fazer · Fechamento (7 min): jogo (slide 10) ou rodada em que cada aluno diz 1-2 itens em que ainda se sente inseguro; enviar o link do Forms.$$,
+      $$Primeira revisão-teste do B1 (seção 6.3). Usar o desempenho oral e o Forms feito em casa como dado para o Registro e para o critério de progressão (seção 6.4). Observar se o aluno conecta ideias (because, so, but, when) e não só produz frases isoladas.$$),
+    'foco_fonetico_som', $$Revisão: acento contrastivo em perguntas devolvidas, contrações do present perfect, formas fracas de was/were.$$,
+    'foco_fonetico_erro', $$Reincidência dos padrões já mapeados sob a pressão de uma conversa longa.$$,
+    'foco_fonetico_correcao', $$Não interromper; anotar no Registro e fazer, ao final, uma rodada coletiva com os 2-3 erros mais recorrentes.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (https://forms.gle/gKLrh5uRFTqHF7eB6), enviado e feito em casa DEPOIS da aula (seção 6.3).$$
+  )),
+  ('b1', 10, $$Why is it always raining? — o clima no Reino Unido e a previsão do tempo$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Ser repórter do tempo na TV: apresentar em 1-2 minutos a previsão de uma cidade a partir de um cartão, com vocabulário de clima e previsões com will/won't.$$,
+    'estrutura_gramatical', $$Will / won't + verbo para previsões (o que achamos, supomos ou sabemos sobre o futuro); I think / I don't think / I'm sure + will (e não 'I think it won't'). Vocabulário de previsão do tempo (clear skies, partly cloudy, showers, chance of rain, high/low, light breeze).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Why is it always raining?" — slides 2-7, 9-18, 22-24.$$,
+      $$Pré-aula: slide 8 (Talking Point: pensar nas respostas às perguntas a-f sobre o vídeo e o clima, para discutir no início da aula).$$,
+      $$Condução (50 min): Warm Up (4 min): previsão do tempo (slide 2) · Listening (12 min): vocabulário e vídeo 'Why is it always raining in the UK?' — V/F e o mapa da Corrente do Golfo (slides 3-7); discutir a preparação (slide 8) · Vocabulary + Listening (9 min): adjetivos de clima e previsão do Reino Unido (slides 9-11) · Grammar (13 min): will/won't para previsões, regras e exercícios (slides 12-18) · Speaking (12 min) — Tarefa Final: repórter do tempo na TV com os cartões de cidades (slides 22-23); jogo (slide 24) se houver tempo.$$,
+      $$Erros típicos: 'I think it won't rain' e will + to ('will to rain'). Will para previsão x going to (evidência, visto no A2) — só mencionar se surgir.$$,
+      $$A tarefa de casa inclui o slide 21 (Speaking and Writing): pedir que o aluno escreva a previsão de uma cidade e a leia em voz alta na Aula 11, como aquecimento.$$),
+    'foco_fonetico_som', $$Contração 'll: it'll /ˈɪtəl/, there'll, I'll e won't /wəʊnt/ x want /wɒnt/.$$,
+    'foco_fonetico_erro', $$Não contrair will ou confundir won't com want.$$,
+    'foco_fonetico_correcao', $$Par mínimo won't/want e drilling de frases do cartão com it'll.$$,
+    'tarefa_de_casa', $$Slides 19, 20 e 21 (diálogo 4, frases com will/won't e previsão escrita de uma cidade).$$
+  )),
+  ('b1', 11, $$Scenes you will never forget — frases famosas do cinema$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Reagir a problemas do colega oferecendo ajuda, prometendo ou decidindo na hora (Don't worry, I'll lend you some money. / Shall I get you some tissues?), com os cartões A/B.$$,
+    'estrutura_gramatical', $$Will / won't + verbo para decisões instantâneas, ofertas e promessas; Shall I / Shall we...? para oferecer ou sugerir. Contraste: nesses casos não se usa o presente ('I help you'). Verb phrases: make a decision, solve a problem, call sb back, pay for, take sb home, recommend.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Scenes you will never forget" — slides 2-14, 17-21.$$,
+      $$Condução (50 min): Warm Up (6 min): leitura de 1-2 previsões da tarefa de casa e filmes famosos (slides 2-3) · Reading (9 min): frases famosas do cinema — associar (slides 4-6) · Grammar (15 min): ouvir três conversas, oferta x decisão, regras de will e Shall, associação de situações e diálogos a-h (slides 7-14) · Vocabulary (8 min): apresentar as verb phrases oralmente a partir das imagens do slide 17 (o professor elicita os verbos) e fazer o exercício a-l (slides 18-19) · Speaking (12 min) — Tarefa Final: reagir com I'll aos cartões A/B (slide 20); jogo (slide 21) se houver tempo.$$,
+      $$Na Aula 10, will foi previsão; aqui ganha outras funções — nomear sempre a função. Erro típico: 'I help you' / 'I'm going to open the window' como oferta imediata. Shall é mais britânico e formal; no americano, Should I...? é comum.$$,
+      $$Os slides 15-16 (ouvir, completar e associar as verb phrases às imagens, com áudio) são a tarefa de casa: consolidam em casa o vocabulário que o professor apresentou oralmente no slide 17.$$),
+    'foco_fonetico_som', $$Contração I'll /aɪl/ (não 'ai-uiu') e won't /wəʊnt/.$$,
+    'foco_fonetico_erro', $$Omitir o 'll na fala rápida ('I call you tonight'), mudando a função para presente.$$,
+    'foco_fonetico_correcao', $$Drilling em pares problema-resposta dos slides 11 e 20, com o 'll audível.$$,
+    'tarefa_de_casa', $$Slides 15 e 16 (verb phrases: completar, ouvir e conferir).$$
+  )),
+  ('b1', 12, $$Campaign catastrophes — erros de tradução em campanhas globais$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Em pares, recontar ao colega uma história de campanha que deu errado (KFC na China ou Electrolux nos EUA) e depois responder às perguntas pessoais do Speaking usando os false friends corretamente (Have you ever pretended to enjoy something? Have you ever had a big argument...?).$$,
+    'estrutura_gramatical', $$Sem ponto gramatical novo: aula de vídeo, leitura e vocabulário. False friends para brasileiros: actually (≠ atualmente), pretend (≠ pretender), intend, realize, library (≠ livraria), sensible (≠ sensível), argument (≠ argumento), discussion, question x doubt.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Campaign catastrophes" (parte 1 de 2) — slides 2-13, 18-19.$$,
+      $$Condução (50 min): Warm Up (5 min): o que essas marcas fazem? (slide 2) · Vocabulary (3 min): glossário (slide 3) · Listening (10 min): o erro de tradução da Pepsi em Taiwan — perguntas (slides 4-6) · Reading (10 min): em pares, cada aluno lê uma história (KFC/Electrolux) e reconta ao colega (slides 7-8) · Talking Point (6 min): erros de tradução e diferenças culturais (slides 9-10) · Vocabulary (8 min): false friends — múltipla escolha (slides 11-13) · Speaking (8 min) — Tarefa Final: perguntas pessoais com os false friends (slides 18-19).$$,
+      $$Os false friends mais perigosos para brasileiros são actually, pretend, realize e argument: pedir ao aluno que crie um exemplo pessoal com cada um.$$,
+      $$O exercício de pares de palavras (slides 14-17) vai para casa — não fazer em aula. A revisão de tempos e a tarefa 'Fix the failed campaign' ficam para a Aula 13.$$),
+    'foco_fonetico_som', $$Actually /ˈæk.tʃu.ə.li/ e realize /ˈrɪə.laɪz/ — acento na primeira sílaba.$$,
+    'foco_fonetico_erro', $$Pronúncia 'aktuáli' e 'realáiz', influenciada pelo português.$$,
+    'foco_fonetico_correcao', $$Marcar a sílaba tônica e fazer drilling das palavras dentro das perguntas dos slides 18-19.$$,
+    'tarefa_de_casa', $$Slides 14, 15, 16 e 17 (escolher o false friend correto em cada par de frases).$$
+  )),
+  ('b1', 13, $$Fix the failed campaign! — revisão dos tempos verbais$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Writing'),
+    'tarefa_comunicativa', $$Em grupo, analisar a campanha fracassada da GlowBurger e apresentar à turma uma nova versão: o que deu errado (passado), o que a empresa está fazendo agora (presente contínuo) e o que fará (will/going to).$$,
+    'estrutura_gramatical', $$Revisão dos sete tempos/estruturas vistos até aqui (present simple e continuous, past simple e continuous, going to, will, present perfect) — reconhecer a função de cada um e combiná-los numa narrativa.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Campaign catastrophes" (parte 2 de 2) — slides 20-23, 26-29.$$,
+      $$Condução (50 min): Retomada (5 min): conferir a tarefa de casa (false friends) · Grammar (15 min): classificar as frases por tempo verbal e revisar o quadro dos sete tempos (slides 20-22) · Practice (5 min): completar perguntas com uma palavra (slide 23) · Writing and Speaking (22 min) — Tarefa Final: em grupos, analisar a campanha da GlowBurger, dizer o que deu errado e planejar e apresentar uma versão melhor (slides 26-28) · Fechamento (3 min): jogo (slide 29) se houver tempo.$$,
+      $$A revisão de tempos é reconhecimento e uso na tarefa, não reexplicação. Registrar quem ainda confunde present perfect com past simple — volta nas Aulas 24 e 38.$$,
+      $$A tarefa de casa (slides 24-26) inclui os diálogos com tempos verbais e o slide 26: pedir que cada aluno escreva, sozinho, a versão final da análise da campanha discutida em grupo.$$),
+    'foco_fonetico_som', $$Formas fracas de auxiliares em perguntas: What are we /wɒt ə wi/ doing? Did you /dɪdʒu/ see...?$$,
+    'foco_fonetico_erro', $$Auxiliares fortes e separados, deixando as perguntas lentas e artificiais.$$,
+    'foco_fonetico_correcao', $$Drilling das perguntas do slide 23 com ritmo natural, acentuando só as palavras de conteúdo.$$,
+    'tarefa_de_casa', $$Slides 24, 25 e 26 (diálogos com tempos verbais e versão escrita da análise da campanha).$$
+  )),
+  ('b1', 14, $$On the same page — hábitos de leitura$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Entrevista em fluxograma YES/NO sobre hábitos de leitura (Do you enjoy reading before bed? How much time do you spend reading?), usando verbos + gerúndio nas respostas.$$,
+    'estrutura_gramatical', $$Gerúndio depois de verbos (enjoy, finish, avoid, consider, feel like, spend time, stop, don't mind — revisão ampliada do A2), como sujeito da frase (Reading helps me...) e depois de preposições (interested in reading, thinking about moving). Contraste infinitivo x gerúndio (exercício 4).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "On the same page" — slides 2-8, 11-16.$$,
+      $$Condução (50 min): Warm Up (5 min): hábitos de leitura (slide 2) · Listening (10 min): dicas para criar o hábito da leitura (Kindle, audiobooks) e perguntas (slides 3-4) · Grammar (15 min): gerúndio — completar, regras, exercício 3 e infinitivo x gerúndio (slides 5-8) · Vocabulary (3 min): teste rápido dos verbos + gerúndio (slide 11) · Listening (7 min): quatro pessoas falam sobre leitura (slides 12-14) · Speaking (10 min) — Tarefa Final: fluxograma YES/NO (slide 15); jogo (slide 16) se houver tempo.$$,
+      $$Brasileiros usam o infinitivo como sujeito ('Read is important') e depois de preposições ('interested in read'). Start aceita as duas formas; stop muda o sentido (stop reading x stop to read) — mencionar só se surgir.$$,
+      $$A lista de verbos + gerúndio (slides 9-10) é a tarefa de casa; em aula, o professor apresenta os verbos rapidamente pelo teste do slide 11.$$),
+    'foco_fonetico_som', $$Terminação -ing /ɪŋ/ sem vogal final, especialmente como sujeito no início da frase.$$,
+    'foco_fonetico_erro', $$'Readingui is important' e acento deslocado.$$,
+    'foco_fonetico_correcao', $$Drilling de frases com o gerúndio como sujeito, modelando o /ŋ/ nasal.$$,
+    'tarefa_de_casa', $$Slides 9 e 10 (verbos + gerúndio: completar as frases com o verbo da lista).$$
+  )),
+  ('b1', 15, $$A dose of good advice — The Good Doctor e automedicação$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play entre amigos: um aluno descreve seus sintomas e o outro dá conselhos com should/shouldn't e I think you should / I don't think you should, indicando medicamentos e quando procurar um médico.$$,
+    'estrutura_gramatical', $$Should / shouldn't + verbo para conselhos e recomendações; I think you should / I don't think you should (forma mais suave, e não 'I think you shouldn't'). Vocabulário de saúde: cold, flu, cough, sore throat, fever, allergy; painkiller, syrup, antihistamine, antacid.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "A dose of good advice" — slides 2-8, 11-13, 17-20.$$,
+      $$Pré-aula: slides 9 e 10 (vocabulário de problemas de saúde e tratamentos — ouvir, ler e associar às imagens).$$,
+      $$Condução (50 min): Warm Up (4 min): médicos e séries médicas (slide 2) · Reading (10 min): sinopse de The Good Doctor, V/F e palavras (slides 3-5) · Listening (8 min): cena da série — ordenar falas (slides 6-7) · Discussion (4 min): autismo e conexão com os pacientes (slide 8) · Vocabulary (6 min): conferir a preparação e vocabulário de remédios com mini role-play médico-paciente (slide 11) · Grammar (8 min): should/shouldn't e I think you should — regras e exercício (slides 12-13) · Listening + Speaking (10 min) — Tarefa Final: Dr. Carter e os mitos da automedicação (slides 17-18) e conversa final (slides 19-20) com conselhos usando should.$$,
+      $$Tema sensível (saúde e autismo): tratar com respeito, sem piadas sobre o diagnóstico de Shaun. Deixar claro que os conselhos da aula não substituem orientação médica.$$,
+      $$Should + to ('You should to rest') é o erro mais comum. O role-play entre amigos (slide 15) está na tarefa de casa: sugerir que seja feito por mensagem de áudio com um colega da turma.$$),
+    'foco_fonetico_som', $$Should /ʃʊd/ com l mudo e shouldn't /ˈʃʊd.ənt/.$$,
+    'foco_fonetico_erro', $$Pronunciar o l ('shoul-d') ou 'shudínti'.$$,
+    'foco_fonetico_correcao', $$Modelar e fazer drilling com os conselhos do slide 10 (You should take a painkiller).$$,
+    'tarefa_de_casa', $$Slides 14, 15 e 16 (frases com I think you should / I don't think you should, role-play de conselhos e mitos sobre tratamentos).$$
+  )),
+  ('b1', 16, $$From TikTok to time clock — a Geração Z no trabalho$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading','Writing'),
+    'tarefa_comunicativa', $$Discutir regras e expectativas de trabalho entre gerações (What rules do new employees have to follow? What mustn't workers do in a meeting?) e criar uma regra que todos no local de trabalho deveriam seguir.$$,
+    'estrutura_gramatical', $$Have to (necessário/regra), don't have to (não é necessário), must (obrigação forte, muitas vezes do próprio falante), mustn't (proibido) — com atenção ao falso paralelo don't have to ≠ mustn't. Advérbios de modo (revisão do A2): politely, professionally, punctually.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "From TikTok to time clock" — slides 2-12, 14-22.$$,
+      $$Condução (50 min): Warm Up (4 min): definição de Gen Z e vídeo curto (slides 2-3) · Reading (12 min): artigo sobre gestores e a Geração Z — palavras e informações específicas (slides 4-9) · Talking Point (5 min): gerações no trabalho (slides 10-11) · Grammar (13 min): conversa de Alice e Jordan e regras de have to/must (slides 12, 14) e exercícios 5-7 (slides 15-17) · Vocabulary (5 min): advérbios de modo (slides 18-20) · Speaking (11 min) — Tarefa Final: Generations at work, 10 perguntas, e criação de uma regra para o local de trabalho (slide 21); jogo (slide 22) se houver tempo.$$,
+      $$Don't have to x mustn't é o erro conceitual central (em português, 'não precisa' x 'não pode'). Must não tem passado — no passado usa-se had to (mencionar se surgir).$$,
+      $$Tema geracional pode gerar generalizações: pedir que os alunos justifiquem com exemplos. O slide 13 (associar as frases do diálogo aos significados) vai para casa — em aula, ir direto da conversa às regras.$$),
+    'foco_fonetico_som', $$Have to /ˈhæftə/ (v vira f) e has to /ˈhæstə/; mustn't /ˈmʌsənt/ com o primeiro t mudo.$$,
+    'foco_fonetico_erro', $$'Hav tu' com v sonoro e 'mást-ent' pronunciando os dois t.$$,
+    'foco_fonetico_correcao', $$Drilling com as regras do diálogo (You have to arrive at 9. You mustn't use your phone).$$,
+    'tarefa_de_casa', $$Slide 13 (associar as frases do diálogo aos significados: regra, não necessário, proibido).$$
+  )),
+  ('b1', 17, $$Shall we eat out? — fome, fast food e convites$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play 'Why don't we grab a bite?': combinar onde comer em três situações, sugerindo (How about...? Why don't we...?) e aceitando, recusando educadamente ou hesitando (I'm not really up for that / I'm on the fence).$$,
+    'estrutura_gramatical', $$Estruturas de sugestão: Shall we / Should we + verbo; Why don't we + verbo; Let's + verbo; How about + -ing. Respostas: I'm in! / I'd rather not / I'm not up for / I'm on the fence / I'll pass on that. Linguagem informal: starving, grab a bite, my mouth is watering, stuffed.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Shall we eat out?" — slides 2-9, 12-21.$$,
+      $$Condução (50 min): Warm Up (6 min): quiz da fome — logos, coberturas, molhos (slides 2-4) · Listening (8 min): a mulher 'hangry' — associar conversas (slides 5-6) · Talking Point (4 min): perguntas a-e (slide 7) · Functional Language (10 min): sugerir e responder — aceitar, recusar e hesitar (slides 8-9); prática oral rápida (slide 12) · Vocabulary (4 min): gírias de comida e perguntas (slides 13-14) · Speaking (12 min) — Tarefa Final: role-play nas três situações A/B (slides 15-17) · Listening (6 min): Tom e Sarah (slides 18-20) se houver tempo; jogo (slide 21).$$,
+      $$Aula sem ponto gramatical novo: o foco é função comunicativa e registro informal. How about + -ing retoma o gerúndio da Aula 14.$$,
+      $$Ensinar que recusar diretamente ('No.') soa rude — por isso as fórmulas de recusa polida. Os exercícios escritos (slides 10-11) vão para casa.$$),
+    'foco_fonetico_som', $$Entonação amigável em sugestões: Why don't we ↗ grab a bite? e ligação em 'grab_a bite', 'I'm_in'.$$,
+    'foco_fonetico_erro', $$Entonação plana ou descendente, soando como ordem; 'Why don't we' pronunciado palavra por palavra.$$,
+    'foco_fonetico_correcao', $$Modelar as sugestões com sorriso na voz e fazer drilling das respostas de recusa polida.$$,
+    'tarefa_de_casa', $$Slides 10 e 11 (completar com uma palavra e reescrever as sugestões usando a palavra dada).$$
+  )),
+  ('b1', 18, $$How to make better decisions — cérebro, energia e escolhas$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Conversar sobre as próximas decisões: responder às perguntas do slide 16 (What will you do about your next big decision?) com duas possibilidades (I'm not sure. I might..., or I may...).$$,
+    'estrutura_gramatical', $$May / might + verbo para possibilidades não certas (might soa um pouco menos certo); might not não costuma ser contraído; contraste com will (certeza).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "How to make better decisions" (parte 1 de 2) — slides 2-13, 15-16.$$,
+      $$Condução (50 min): Warm Up (8 min): quiz 'decisivo ou indeciso?' e pontuação (slides 2-4) · Listening (12 min): vídeo sobre decisões (Obama e os ternos, Kahneman) — ideia principal e lacunas (slides 5-8) · Talking Point (6 min): decisões pequenas e grandes e o conselho principal (slides 9-10) · Grammar (12 min): may/might — marcar, significado e regras (slides 11-13) · Practice + Tarefa Final (12 min): I'm not sure. I might... (slide 15) e perguntas sobre as próximas decisões (slide 16).$$,
+      $$May/might + to ('might to go') e o uso de 'maybe will' (interferência de 'talvez vá') são os erros típicos. Maybe (advérbio, separado) x may be (verbo) — mostrar se surgir na escrita.$$),
+    'foco_fonetico_som', $$Might /maɪt/ e might not com o t final suave; may /meɪ/.$$,
+    'foco_fonetico_erro', $$Contrair might not ('mightn't') ou confundir might com make na fala.$$,
+    'foco_fonetico_correcao', $$Drilling das respostas do slide 15 com might e might not separados e claros.$$,
+    'tarefa_de_casa', $$Slide 14 (associar as frases com may/might, 1-8).$$
+  )),
+  ('b1', 19, $$Do or make? — collocations e o jogo 'Guess my sentence'$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Jogo 'Guess my sentence': ler a situação ao colega, que adivinha a frase com may/might, e depois contar uma decisão recente usando collocations de do/make (I made a big decision last year... I did some research...).$$,
+    'estrutura_gramatical', $$Collocations do x make (make a decision, make a mistake, make a difference, make sure; do research, do your best, do nothing, do the right thing, do exercise). May/might da Aula 18 em uso no jogo.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "How to make better decisions" (parte 2 de 2) — slides 17-20, 23-26.$$,
+      $$Condução (50 min): Retomada (5 min): conferir a tarefa de casa (slide 14) com 2-3 frases dos alunos · Vocabulary (15 min): do x make — completar collocations e exercício (slides 17-18); qual não combina? (slides 19-20) · Listening (5 min): corrigir oralmente as perguntas finais do listening de David (slide 23), retomando a tarefa da aula anterior ou antecipando a desta · Game (20 min) — Tarefa Final: Guess my sentence em pares A/B (slides 24-25) e relato de uma decisão recente com do/make · Fechamento (5 min): jogo (slide 26).$$,
+      $$Do x make é vocabulário: o que o aluno precisa é memorizar collocations, não regras.$$,
+      $$A tarefa de casa (slides 21-22) traz as perguntas pessoais sobre decisões e o início do listening de David; o slide 23 completa as perguntas desse listening — combinar com os alunos se ele será feito junto com a tarefa ou corrigido no início da Aula 20.$$),
+    'foco_fonetico_som', $$Vogais de do /duː/ x make /meɪk/ e ligação em 'make_a decision' /meɪkə/.$$,
+    'foco_fonetico_erro', $$'Make a' pronunciado separado e com vogal extra ('meiki a').$$,
+    'foco_fonetico_correcao', $$Drilling de collocations em chunks: make_a decision, make_a mistake, do_your best.$$,
+    'tarefa_de_casa', $$Slides 21 e 22 (perguntas pessoais sobre decisões e listening de David).$$
+  )),
+  ('b1', 20, $$Revisão — Aulas 10 a 19$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Checklist de autoavaliação (can-do) com um colega: realizar em voz alta cada item dos slides 9-10 e marcar o que já consegue fazer com confiança.$$,
+    'estrutura_gramatical', $$Revisão integrada das Aulas 10-19: will (previsões, ofertas, promessas), shall, false friends e tempos verbais, gerúndio, should, have to/must, sugestões, may/might, do/make.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck Review (Class 20 — Review Classes 11-19) — slides 3-11.$$,
+      $$Nota da coordenação: revisão-teste (seção 6.3 do currículo) — o link do Google Forms só é enviado DEPOIS da aula. O deck foi criado para a grade antiga (Review Classes 11-19), que incluía a aula 'Created... or just generated?' (infinitivo), retirada da grade: se o checklist ou o Forms trouxerem itens de infinitivo/IA, desconsiderá-los ou revisar o Forms.$$,
+      $$Condução (50 min): Abertura (3 min): explicar a dinâmica · Vocabulary review (15 min): clima, verb phrases, false friends, saúde, advérbios de modo e do/make (slides 3-8) · Checklist can-do (25 min) — Tarefa Final: em duplas, realizar em voz alta cada item dos slides 9-10 e marcar o que consegue fazer · Fechamento (7 min): jogo (slide 11) ou rodada em que cada aluno diz 1-2 itens em que ainda se sente inseguro; enviar o link do Forms.$$,
+      $$Segunda revisão-teste do B1. Observar especialmente don't have to x mustn't, will x going to e may/might sem to. Itens marcados como 'não consigo ainda' são dado para o Bloco C, não falha a esconder (seção 2.2).$$),
+    'foco_fonetico_som', $$Revisão: 'll, won't, should (l mudo), have to /hæftə/, might.$$,
+    'foco_fonetico_erro', $$Reincidência dos padrões já mapeados sob a pressão de uma conversa longa.$$,
+    'foco_fonetico_correcao', $$Não interromper; anotar no Registro e fazer, ao final, uma rodada coletiva com os 2-3 erros mais recorrentes.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (https://forms.gle/kRffSQEPZ7ZS6eMA7), enviado e feito em casa DEPOIS da aula (seção 6.3).$$
+  )),
+  ('b1', 21, $$Weird but true! — fatos científicos estranhos$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Jogo em pares: ler o início de uma frase científica com duas opções e o colega adivinhar a consequência correta (If you put metal in a microwave, it sparks), explicando depois outros fatos que conhece.$$,
+    'estrutura_gramatical', $$Zero conditional: If + present simple, present simple — para fatos, regras e coisas sempre verdadeiras (ciência e vida cotidiana); if = when nesse uso.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Weird but true!" — slides 2-13, 16.$$,
+      $$Condução (50 min): Warm Up (5 min): surpresas da ciência (slide 2) · Reading (12 min): introdução e infográfico com seis fatos estranhos (slides 3-5) · Grammar (15 min): zero conditional — regras, associar metades e escrever frases a-f (slides 6-9) · Speaking (15 min) — Tarefa Final: testar o colega com os cartões A/B (slides 10-13) · Fechamento (3 min): jogo (slide 16).$$,
+      $$Primeira condicional do B1 — introduz a lógica if + presente, que será contrastada com a primeira (Aula 22) e a segunda (Aula 23). Erro típico: will na oração com if ('If water will reach 100°C').$$,
+      $$O listening sobre Stephen Hawking (slides 14-15) é a tarefa de casa.$$),
+    'foco_fonetico_som', $$Vírgula = pausa quando a oração com if vem primeiro, e subida no fim da primeira parte.$$,
+    'foco_fonetico_erro', $$Frase corrida, sem pausa entre condição e resultado.$$,
+    'foco_fonetico_correcao', $$Ler duas frases do infográfico marcando a pausa e a subida: If you tickle a rat ↗ | it laughs ↘.$$,
+    'tarefa_de_casa', $$Slides 14 e 15 (listening sobre Stephen Hawking — corrigir as informações).$$
+  )),
+  ('b1', 22, $$The green wardrobe — fast fashion e trocas de roupa$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$First Conditional Race: completar frases sobre situações reais do futuro próximo (If I wake up early tomorrow..., I'll be tired if...), ler para o colega e votar nas ideias mais realistas, improváveis, engraçadas e preocupantes, justificando.$$,
+    'estrutura_gramatical', $$First conditional: If + present simple, will/won't + verbo — para situações possíveis e suas consequências; if na primeira ou na segunda oração (vírgula quando vem primeiro); imperativo ou can no lugar de will. Vocabulário de meio ambiente e moda (pollution, waste, fast fashion, throw away, sustainable, fit x suit).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "The green wardrobe" — slides 2, 5-15, 17-21.$$,
+      $$Pré-aula: slide 3 (vocabulário de meio ambiente — associar palavras e definições).$$,
+      $$Condução (50 min): Warm Up (4 min): enjoado das suas roupas? (slide 2) · Vocabulary (5 min): conferir a preparação e associar às imagens (slide 5) · Listening (14 min): documentário sobre a troca de roupas de Grace, partes 1-3 (slides 6-10) · Grammar (12 min): first conditional — ouvir e associar, regras e metades (slides 11-14) · Practice (5 min): exercício 7 a-m (slide 15) · Speaking (10 min) — Tarefa Final: First Conditional Race e votação (slides 17-20); jogo (slide 21) se houver tempo.$$,
+      $$Erro central: will nas duas orações ('If I will go, I will...'), por influência de 'se eu for'. Contrastar rapidamente com o zero conditional da Aula 21 (fato sempre verdadeiro x consequência de uma situação específica).$$,
+      $$O slide 4 repete o 3 — pular. O tema meio ambiente ativa o can-do de 'temas abstratos familiares' (seção 5).$$),
+    'foco_fonetico_som', $$Contração 'll depois de pronome e nome: you'll, we'll, people'll (informal).$$,
+    'foco_fonetico_erro', $$Omitir o 'll ('If you swap clothes, you save money') — muda para zero conditional.$$,
+    'foco_fonetico_correcao', $$Drilling das frases com o 'll audível e pausa depois da oração com if.$$,
+    'tarefa_de_casa', $$Slide 16 (completar as frases com a first conditional).$$
+  )),
+  ('b1', 23, $$Is it really a dream job? — o vlogger Drew Binsky e profissões incomuns$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Dream Jobs: escolher uma profissão incomum para o colega e imaginar como seria o dia a dia dele nesse emprego (If you were a panda nanny, you'd...), conferindo as hipóteses com ele.$$,
+    'estrutura_gramatical', $$Second conditional: If + past simple, would/wouldn't + verbo — para situações imaginárias ou hipotéticas; If I were you; could no lugar de would para possibilidades. Contraste com a first conditional (situação real x imaginária).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Is it really a dream job?" — slides 2-14, 16-18.$$,
+      $$Condução (50 min): Warm Up (4 min): o que você valoriza num trabalho? (slide 2) · Listening (10 min): um dia na vida de Drew Binsky — ordenar (slides 3-4) · Talking Point (4 min): perguntas a-d (slide 5) · Grammar (14 min): second conditional — marcar, analisar, regras (1st x 2nd) e metades (slides 6-8); exercícios (slides 9-11) · Listening (8 min): profissões incomuns (chocolate taster, panda nanny...) e If you could choose... (slides 12-14) · Speaking (10 min) — Tarefa Final: Dream Jobs (slide 16); writing 'My Dream Job' (slide 17) ou jogo (slide 18) se houver tempo.$$,
+      $$O contraste first x second conditional é o ponto que mais exige clareza: mesma estrutura de if, mas o grau de realidade muda o tempo verbal. Erro típico: would nas duas orações ('If I would have money...'). If I were é o padrão ensinado; If I was é comum no informal.$$,
+      $$O slide 15 (escolher um emprego do listening e completar situações) vai para casa e prepara a Tarefa Final do slide 16 — se a turma precisar, fazer a parte 1 oralmente antes do Dream Jobs.$$),
+    'foco_fonetico_som', $$Contração 'd: I'd /aɪd/, you'd, he'd — e wouldn't /ˈwʊd.ənt/ com l mudo.$$,
+    'foco_fonetico_erro', $$Omitir o 'd ('If I had money, I travel more') ou pronunciar o l de would.$$,
+    'foco_fonetico_correcao', $$Par mínimo I travel x I'd travel e drilling das frases do slide 8.$$,
+    'tarefa_de_casa', $$Slide 15 (escolher um emprego do listening e completar as situações com a second conditional).$$
+  )),
+  ('b1', 24, $$From clicks to causes — criadores digitais que usam a fama para o bem$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Mingle: entrevistar colegas sobre a vida digital — perguntar no present simple (Do you follow any YouTubers?) e, se a resposta for sim, aprofundar com How long have you...? e responder com for/since.$$,
+    'estrutura_gramatical', $$Present perfect para situações que começaram no passado e continuam agora, com for (período) e since (ponto de partida); How long have you...? Contraste com o present simple ('I follow her since 2019' é erro) e diferença de pronúncia since /sɪns/ x science.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "From clicks to causes" — slides 2-14, 18-22.$$,
+      $$Condução (50 min): Warm Up (4 min): fotos de influenciadores (slide 2) · Reading (12 min): quatro criadores (MrBeast, Charli D'Amelio, Emma Chamberlain, Mark Rober) e 'qual celebridade?' (slides 3-7) · Talking Point (4 min): perguntas a-c (slide 8) · Grammar (14 min): metades com for/since, perguntas, regras e How long (slides 9-12); How long questions a-h (slides 13-14) · Speaking (10 min) — Tarefa Final: mingle (slide 18) · Listening (6 min): quiz das plataformas — em que ano surgiram? (slides 19-21); jogo (slide 22) se houver tempo.$$,
+      $$Ponto do eixo do B1 ('present perfect consolidado, for/since'). Interferência forte do português: 'I live here for 5 years' / 'I am here since 2019'. For ≠ 'por' em todos os casos, e since não é 'desde que' causal aqui.$$,
+      $$Os slides 15-17 (respostas com for/since, recordar o artigo e montar perguntas no present simple + present perfect) vão para casa como consolidação escrita; para o mingle (slide 18), o professor elicita oralmente 3-4 perguntas-modelo antes de começar (Do you use TikTok? → How long have you used it?).$$),
+    'foco_fonetico_som', $$Since /sɪns/ x science /ˈsaɪ.əns/ (dica do slide 12) e contrações I've / she's.$$,
+    'foco_fonetico_erro', $$Pronunciar since como 'sáins' e não contrair has/have.$$,
+    'foco_fonetico_correcao', $$Par mínimo since/science e drilling das respostas com for/since (I've followed her for three years).$$,
+    'tarefa_de_casa', $$Slides 15, 16 e 17 (responder com for/since, recordar o artigo com How long e completar perguntas no present simple e no present perfect).$$
+  )),
+  ('b1', 25, $$City battles — Bruxelas x Chongqing$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play City Travel Agent: o viajante diz o que o preocupa ou interessa (I'm worried about crowded places) e o agente recomenda uma cidade comparando opções (Brussels is quieter than Chongqing, and people there are really nice to tourists).$$,
+    'estrutura_gramatical', $$Adjetivos e verbos + preposição (interested in, afraid of, worried about, nice to, famous for, different from, depend on, pay for, ask for, agree with, arrive in/at, spend on). Comparativos e superlativos (revisão do A2) a serviço da recomendação.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "City battles" — slides 2-12, 14-17.$$,
+      $$Condução (50 min): Warm Up (4 min): adjetivos para cidades (slide 2) · Listening (10 min): Bruxelas ('a mais chata') x Chongqing ('a mais emocionante') (slides 3-4) · Talking Point (4 min): perguntas a-d (slide 5) · Grammar (10 min): city battle facts e comparativos/superlativos — revisão rápida (slides 6-9) · Vocabulary (10 min): três viajantes e as preposições dependentes (slides 10-12) · Practice (4 min): exercício e perguntas (slides 14-15) · Speaking (8 min) — Tarefa Final: City Travel Agent com os cartões (slides 16-17).$$,
+      $$Comparativos e superlativos são revisão do A2 (as aulas de comparativos do B1 saíram da grade): não reexplicar do zero, mas garantir 5 minutos de retomada com o slide 8, porque eles voltam na Apresentação Final.$$,
+      $$As preposições dependentes não seguem regra: tratar como chunks. Erros típicos: 'different of', 'depend of', 'arrive to'.$$),
+    'foco_fonetico_som', $$Formas fracas das preposições em chunks: interested in /ɪn/, afraid of /əv/, famous for /fə/.$$,
+    'foco_fonetico_erro', $$Preposição forte e separada do adjetivo, quebrando o ritmo.$$,
+    'foco_fonetico_correcao', $$Drilling de chunks inteiros: I'm afraid_of heights / It's famous for_its food.$$,
+    'tarefa_de_casa', $$Slide 13 (escrever a preposição em cada círculo e ouvir para conferir).$$
+  )),
+  ('b1', 26, $$The most important people in my life — o discurso de Shivani$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Preparar e apresentar um pequeno discurso, como o de Shivani, sobre as pessoas mais importantes da sua vida, descrevendo personalidade e o papel de cada uma com pelo menos quatro relative clauses.$$,
+    'estrutura_gramatical', $$Defining relative clauses: who (pessoas), which (coisas), that (pessoas ou coisas), where (lugares, seguido de sujeito + verbo). Adjetivos de personalidade (reliable, supportive, easy-going, ambitious, independent, introverted, extroverted...).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "The most important people in my life" — slides 2-10, 12-19.$$,
+      $$Condução (50 min): Warm Up (4 min): pessoas importantes (slide 2) · Vocabulary (10 min): traços de personalidade — classificar, associar e escolher três adjetivos (slides 3-6) · Listening (10 min): discurso de Shivani — associar pessoas e papéis (slides 7-8) · Talking Point (5 min): perguntas a-c e trabalhadores 'blue-collar' (slides 9-10) · Grammar (12 min): relative clauses — extrato, regras e exercícios (slides 12-16) · Speaking (9 min) — Tarefa Final: preparar e apresentar o discurso com quatro relative clauses (slide 17); taboo/jogo (slides 18-19) se houver tempo.$$,
+      $$Erros típicos: which para pessoas, ausência do pronome relativo ('a person helps me') e where sem sujeito ('a place where learn').$$,
+      $$A discussão sobre trabalhadores 'blue-collar' pede sensibilidade: valorizar o respeito a todas as profissões; a pergunta do slide 11 ('as rodas de um relógio') vai para casa como reflexão escrita.$$),
+    'foco_fonetico_som', $$Acento em adjetivos de personalidade: reLIable, supPORtive, amBItious, indePENdent, INtroverted.$$,
+    'foco_fonetico_erro', $$Acentuar a última sílaba por analogia com o português ('ambiciÔS').$$,
+    'foco_fonetico_correcao', $$Marcar a sílaba tônica no quadro e fazer drilling dentro de frases (My mom is very supportive).$$,
+    'tarefa_de_casa', $$Slide 11 (responder por escrito: o que Shivani quer dizer com 'the wheels of a clock'? O que aconteceria sem esses trabalhadores?).$$
+  )),
+  ('b1', 27, $$Then vs now — ser pai e mãe nos anos 90 e hoje$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Completar os quadros sobre a própria infância (um brinquedo, uma banda, uma comida que não gostava...) e contar ao colega como as coisas eram e como são hoje, usando used to e didn't use to.$$,
+    'estrutura_gramatical', $$Used to / didn't use to + verbo para hábitos e estados do passado que mudaram; pergunta Did you use to...? (sem d em use na negativa e na interrogativa). Vocabulário de estilo e aparência (fringe, ponytail, baggy jeans, crossbody bag, beard).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Then vs. now" — slides 2-15, 20-21.$$,
+      $$Condução (50 min): Warm Up (4 min): que década é essa? (slide 2) · Listening (12 min): ser pai/mãe nos anos 90 x hoje — prever, conferir, palavras e ideias (slides 3-7) · Talking Point (5 min): perguntas a-f (slide 8) · Grammar (12 min): used to — significado, regras, pronúncia e exercício (slides 9-12) · Vocabulary + Speaking (8 min): estilo e aparência e comparar pessoas no passado e hoje (slides 13-15) · Speaking (9 min) — Tarefa Final: quadros da infância (slide 20); jogo (slide 21) se houver tempo.$$,
+      $$Used to é ponto do eixo do B1 (seção 5). Erros típicos: 'I use to' no passado afirmativo, 'didn't used to' e usar used to para uma única vez no passado. Não confundir com be used to (acostumado) — não ensinar agora.$$,
+      $$A leitura sobre millennials e os anos 90 (slides 16-19) é a tarefa de casa.$$),
+    'foco_fonetico_som', $$Used to pronunciado como uma palavra: /ˈjuːstə/ (dica do slide 10).$$,
+    'foco_fonetico_erro', $$'Iuzed tu' com d e to fortes.$$,
+    'foco_fonetico_correcao', $$Drilling de frases do quadro de infância com /ˈjuːstə/ encadeado.$$,
+    'tarefa_de_casa', $$Slides 16, 17, 18 e 19 (leitura: millennials e os anos 90 — extratos 1-4 e qual extrato fala de cada ideia).$$
+  )),
+  ('b1', 28, $$Same here! — fazer amigos na vida adulta$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Responder na hora às frases do professor e dos colegas dizendo que você é igual (So do I / Neither have I), escolhendo o auxiliar certo para cada tempo verbal (slide 19), e comentar uma semelhança descoberta.$$,
+    'estrutura_gramatical', $$So + auxiliar + sujeito (frase afirmativa) e Neither + auxiliar + sujeito (frase negativa); o auxiliar muda com o tempo da frase original (do/does, am/is/are, can, did/was, would, have/has, will).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Same here!" (parte 1 de 2) — slides 2-13, 17-19.$$,
+      $$Condução (50 min): Warm Up (5 min): é fácil fazer amigos depois de adulto? (slide 2) · Reading (14 min): folheto e artigo sobre o Friend Speed Dating — V/F, corrigir as falsas e discutir (slides 3-7) · Grammar (16 min): ouvir Lucy e Lucas, completar, perguntas e regras de So/Neither e dos auxiliares (slides 8-13) · Practice (10 min): responder a A dizendo que é igual (slides 17-18) · Listening + Tarefa Final (5 min): ouvir e reagir na hora (slide 19).$$,
+      $$Os erros típicos são a ordem ('So I do') e o auxiliar errado ('So do I' para 'I'm tired'). Me too / Me neither são aceitáveis no informal — mostrar que So/Neither são mais precisos.$$,
+      $$O exercício de completar auxiliares (slides 14-16) vai para casa. A Tarefa Final é curta porque o Speed Dating completo acontece na Aula 29.$$),
+    'foco_fonetico_som', $$Acento no sujeito final: So do I /səʊ du ˈaɪ/, Neither can I; neither /ˈnaɪðə/ ou /ˈniːðə/.$$,
+    'foco_fonetico_erro', $$Acentuar o auxiliar ('So DO I') ou pronunciar neither 'náider'.$$,
+    'foco_fonetico_correcao', $$Drilling rápido do slide 19 (ouvir e reagir) com o acento no I.$$,
+    'tarefa_de_casa', $$Slides 14, 15 e 16 (completar as respostas de B com o auxiliar correto).$$
+  )),
+  ('b1', 29, $$Friend Speed Dating — semelhanças e diferenças$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Friend Speed Dating: ler frases sobre si (gostos, rotina, experiências, habilidades, preferências) e o colega reagir na hora com So/Neither + auxiliar + I e um comentário; depois contar à turma uma semelhança e uma diferença.$$,
+    'estrutura_gramatical', $$So/Neither + auxiliar (revisão da Aula 28) em fala espontânea. Vocabulário para falar de semelhanças: identical, both, the same as, look like, similar to, different from.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Same here!" (parte 2 de 2) — slides 20-26.$$,
+      $$Condução (50 min): Retomada (5 min): conferir a tarefa de casa com respostas rápidas em cadeia · Speaking (25 min) — Tarefa Final: preparar as frases do Friend Speed Dating (slides 20-22), fazer as rodadas de 'encontros' trocando de par e reagir com So/Neither + comentário (slide 23); cada aluno conta à turma uma semelhança e uma diferença · Listening (12 min): a psicóloga social sobre amizades na vida adulta — ideia principal e V/F (slides 24-25) · Vocabulary (8 min): falar de semelhanças (slide 26).$$,
+      $$Aula centrada na fala: o professor circula e anota erros de auxiliar para a rodada final de correção. Em aula VIP, o professor faz o papel do 'par' do Speed Dating, alternando frases verdadeiras e falsas.$$,
+      $$A frase sobre 'alguém que você conhece' (slide 27) vai para casa e pode ser lida no início da Aula 30.$$),
+    'foco_fonetico_som', $$Ritmo da reação rápida: So_do I /səʊduˈaɪ/ e Neither_have I encadeados.$$,
+    'foco_fonetico_erro', $$Pausa longa antes de reagir e reação em português ('Eu também!').$$,
+    'foco_fonetico_correcao', $$Rodadas cronometradas de 1 minuto por par, com o professor modelando a reação imediata.$$,
+    'tarefa_de_casa', $$Slide 27 (completar as frases sobre você e alguém que você conhece usando o vocabulário de semelhanças).$$
+  )),
+  ('b1', 30, $$Revisão — Aulas 21 a 29$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Checklist de autoavaliação (can-do) com um colega: realizar em voz alta cada item do slide 9 e marcar o que já consegue fazer com confiança.$$,
+    'estrutura_gramatical', $$Revisão integrada das Aulas 21-29: zero, first e second conditional, present perfect com for/since, preposições dependentes, relative clauses, used to, So/Neither.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck Review (Class 30 — Review Classes 21-29) — slides 4-10.$$,
+      $$Nota da coordenação: revisão-teste (seção 6.3 do currículo) — o link do Google Forms só é enviado DEPOIS da aula. O deck foi criado para a grade antiga e começa pelo Lost & Found (aula 'Mine or yours?', retirada da grade): pular o slide 3 e desconsiderar o item do checklist sobre objetos perdidos. Se o Forms trouxer possessive pronouns, revisá-lo.$$,
+      $$Condução (50 min): Abertura (3 min): explicar a dinâmica; leitura de 1-2 frases da tarefa de casa (semelhanças) · Vocabulary review (15 min): meio ambiente, preposições dependentes, personalidade, aparência/used to e semelhanças (slides 4-8) · Checklist can-do (25 min) — Tarefa Final: em duplas, realizar em voz alta cada item do slide 9 e marcar o que consegue fazer · Fechamento (7 min): jogo (slide 10) ou rodada de itens em que ainda se sente inseguro; enviar o link do Forms.$$,
+      $$Terceira revisão-teste do B1. Observar com atenção o contraste first x second conditional e o present perfect com for/since em fala espontânea — são dois dos can-dos centrais do nível (seção 5).$$),
+    'foco_fonetico_som', $$Revisão: 'll e 'd nas condicionais, since /sɪns/, used to /ˈjuːstə/, acento em So do I.$$,
+    'foco_fonetico_erro', $$Reincidência dos padrões já mapeados sob a pressão de uma conversa longa.$$,
+    'foco_fonetico_correcao', $$Não interromper; anotar no Registro e fazer, ao final, uma rodada coletiva com os 2-3 erros mais recorrentes.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical (https://forms.gle/y46xBi4ZGX4D9bAQ6), enviado e feito em casa DEPOIS da aula (seção 6.3).$$
+  )),
+  ('b1', 31, $$The case of the missing contract — um caso ao estilo Sherlock Holmes$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Reading'),
+    'tarefa_comunicativa', $$Em pares, levantar hipóteses sobre o caso: fazer perguntas sobre os suspeitos (Who had access to the office? Who left early? What did Mr. ... do?) e decidir quem pegou o contrato, justificando.$$,
+    'estrutura_gramatical', $$Perguntas de sujeito (Who/What é quem faz a ação — sem do/does/did: Who entered the office?) x perguntas de objeto (com auxiliar: What did you do?). Revisão da ordem das perguntas da Aula 01.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "The case of the missing contract" (parte 1 de 2) — slides 2-9, 11-13.$$,
+      $$Condução (50 min): Warm Up (8 min): trailer de Sherlock, biografia e histórias de detetive (slides 2-4) · Reading and Listening (20 min): partes 1 e 2 da história — suspeitos, V/F e perguntas (slides 5-9) · Grammar (12 min): as perguntas de Sherlock, regras (use/don't use do) e sublinhar a pergunta correta (slides 11-13) · Tarefa Final (10 min): em pares, fazer perguntas de sujeito e de objeto sobre o caso e votar em quem pegou o contrato — sem ouvir o final.$$,
+      $$Erro central: auxiliar em pergunta de sujeito ('Who did enter?'), por generalização da regra QuASI da Aula 01.$$,
+      $$O final da história (parte 3, slide 10) é a tarefa de casa: o professor encerra a aula com o mistério em aberto ('cliffhanger'), o que motiva a tarefa. Conferir as hipóteses na Aula 32.$$),
+    'foco_fonetico_som', $$Entonação descendente em Wh-questions do detetive e acento no pronome interrogativo e no verbo: WHO ENtered the office?$$,
+    'foco_fonetico_erro', $$Subida no final das perguntas de detetive, soando inseguro.$$,
+    'foco_fonetico_correcao', $$Modelar as perguntas de Sherlock com entonação firme descendente; drilling em cadeia.$$,
+    'tarefa_de_casa', $$Slide 10 (ouvir a parte 3 da história e descobrir quem pegou o contrato).$$
+  )),
+  ('b1', 32, $$Solve the case! — role-play de detetive$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Role-play Solve the Case: o detetive faz pelo menos quatro perguntas (Who entered the room? What did you do at ten?) aos suspeitos, que inventam ações e desculpas, e decide quem é o responsável e por quê.$$,
+    'estrutura_gramatical', $$Perguntas de sujeito e de objeto no present simple e no past simple (revisão da Aula 31), em situação de investigação.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "The case of the missing contract" (parte 2 de 2) — slides 14-21.$$,
+      $$Condução (50 min): Retomada (6 min): quem pegou o contrato? Conferir a tarefa de casa e as hipóteses da aula anterior · Grammar (16 min): escrever as perguntas (slides 14-15) e fazer as perguntas de quiz no present/past simple, testando o colega (slides 16-17) · Role-play (28 min) — Tarefa Final: Solve the Case nos três casos — escritório, hotel e festa (slides 18-21), trocando os papéis de detetive e suspeito.$$,
+      $$Pergunta de sujeito com verbo na 3ª pessoa no presente (Who lives here?) é o ponto que mais escapa.$$,
+      $$A tarefa de casa é o slide 22 ('Play a game'): o professor indica o jogo e orienta como os alunos devem jogá-lo em casa (sozinhos ou com um colega), como revisão lúdica das perguntas de sujeito e de objeto.$$),
+    'foco_fonetico_som', $$Entonação descendente nas perguntas do detetive e ritmo firme: WHO LEFT the PARty FIRST?$$,
+    'foco_fonetico_erro', $$Subida no final de todas as perguntas e auxiliar acentuado.$$,
+    'foco_fonetico_correcao', $$Rodada de perguntas cronometrada: o professor modela, o aluno repete e depois cria a sua.$$,
+    'tarefa_de_casa', $$Slide 22 ('Play a game' — jogo de revisão das perguntas de sujeito e de objeto).$$
+  )),
+  ('b1', 33, $$The 5 a.m. Club — um ano acordando às cinco$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Contar ao colega a própria rotina da manhã e da noite com phrasal verbs (I usually get up at 7, but I hit snooze twice... I stay up late on Fridays) e comparar com a de Keltie.$$,
+    'estrutura_gramatical', $$Phrasal verbs em três tipos: sem objeto (wake up, get up, stay up, go out, go off); com objeto e separáveis (turn off/on/down/up, give up, pick up, put away, find out — pronome sempre no meio: turn it off); com objeto e inseparáveis (look for, look forward to, get on with, miss out on, run out of).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "The 5 a.m. Club" (parte 1 de 2) — slides 2-9, 11-13.$$,
+      $$Condução (50 min): Warm Up (5 min): você é uma pessoa matutina? (slide 2) · Reading (17 min): o experimento de Keltie O'Connor — introdução, jornada, o que ela diz e conclusões (slides 3-7) · Talking Point (6 min): perguntas a-e (slide 8) · Vocabulary & Grammar (17 min): phrasal verbs do texto (slide 9) e os três tipos, com a regra do pronome no meio (slides 11-13) · Tarefa Final (5 min): rotina da manhã e da noite com phrasal verbs, em pares.$$,
+      $$Phrasal verbs estão no eixo do B1: ensinar como vocabulário em contexto, não como listas. Erro central: pronome depois da partícula ('Turn off it'). Get up x wake up confundem porque o português usa 'acordar' para os dois.$$,
+      $$O exercício 'Can you remember...?' (slide 10) é a tarefa de casa.$$),
+    'foco_fonetico_som', $$Acento na partícula nos phrasal verbs: wake UP, turn it OFF, give UP.$$,
+    'foco_fonetico_erro', $$Acentuar o verbo ('TURN off') e ligar mal verbo e partícula ('turni-off').$$,
+    'foco_fonetico_correcao', $$Drilling de pares com pronome: Turn it off / Put them away / Wake me up, com acento na partícula.$$,
+    'tarefa_de_casa', $$Slide 10 (lembrar o phrasal verb da história para cada significado a-e).$$
+  )),
+  ('b1', 34, $$Can you join the 5 a.m. Club? — phrasal verbs em uso$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Questionário 'Can you join the 5 a.m. Club?': entrevistar o colega com perguntas cheias de phrasal verbs (Do you stay up late? Have you ever turned down an invitation because you were tired?) e decidir se ele conseguiria entrar para o clube.$$,
+    'estrutura_gramatical', $$Phrasal verbs da Aula 33 em uso; wake up nos dois tipos (sem objeto: I wake up at 6 / com objeto: Wake me up at 6).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "The 5 a.m. Club" (parte 2 de 2) — slides 14-15, 18-23.$$,
+      $$Condução (50 min): Retomada (5 min): conferir a tarefa de casa (slide 10) · Grammar (10 min): wake up nos dois tipos e sublinhar a forma correta (slides 14-15) · Listening (13 min): podcast do especialista em sono — múltipla escolha (slides 18-20) · Speaking (20 min) — Tarefa Final: questionário 'Can you join the 5 a.m. Club?' (slides 21-22) · Fechamento (2 min): jogo (slide 23) se houver tempo.$$,
+      $$Na fala, observar o pronome no meio dos separáveis (Turn it off) — é o que mais falha sob pressão. Os exercícios com it/them e com wake up (slides 16-17) são a tarefa de casa.$$),
+    'foco_fonetico_som', $$Acento na partícula e ligação: get_UP, stay_UP, turn_it_OFF.$$,
+    'foco_fonetico_erro', $$Acentuar o verbo e separar verbo e partícula.$$,
+    'foco_fonetico_correcao', $$Drilling das perguntas do questionário com acento na partícula.$$,
+    'tarefa_de_casa', $$Slides 16 e 17 (completar com it/them + partícula e com a forma correta de wake up).$$
+  )),
+  ('b1', 35, $$Before you share — notícias falsas e como identificá-las$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Em pares, contar ao colega duas notícias (uma real, uma inventada) e decidir juntos qual é falsa; depois, discutir e listar as regras que a dupla seguiria antes de compartilhar uma notícia online.$$,
+    'estrutura_gramatical', $$Sem ponto gramatical novo: aula de leitura, vocabulário e discussão. Vocabulário de mídia (headline, source, meme, quote, misleading information, sensationalist language, public figure, go viral, be skeptical, double-check). A voz passiva, que aparece nos textos, será sistematizada na Aula 36.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Before you share" (parte 1 de 2) — slides 2-11.$$,
+      $$Condução (50 min): Warm Up (14 min): em pares, cada aluno lê suas notícias (aluno A: slides 2-3; aluno B: slides 4-6), conta ao colega e a dupla decide qual é falsa · Discussion (6 min): por que algumas histórias se espalham tão rápido? (slide 7) · Vocabulary (16 min): palavras e imagens, collocations e expressões em negrito (slides 8-10) · Speaking (14 min) — Tarefa Final: perguntas do slide 11 e lista de regras da dupla antes de compartilhar uma notícia.$$,
+      $$Tema de mídia ativa o can-do 'participa de conversas sobre temas abstratos familiares (notícias)'. Sensationalist tem pronúncia difícil (transcrição no slide 9). Fake e misleading não são sinônimos exatos — explorar a diferença.$$,
+      $$O vídeo de Shayan Sardarizadeh (slides 12-14) é a tarefa de casa: avisar que o Talking Point do slide 15 abre a Aula 36 e depende do vídeo.$$),
+    'foco_fonetico_som', $$Sensationalist /senˈseɪ.ʃən.əl.ɪst/ e acento em SOURCE, HEADline, misLEADing.$$,
+    'foco_fonetico_erro', $$Acentuar a última sílaba e pronunciar 'sen-sa-cio-na-list' à portuguesa.$$,
+    'foco_fonetico_correcao', $$Separar em blocos (sen-SEI-shə-nə-list) e fazer drilling do chunk sensationalist language.$$,
+    'tarefa_de_casa', $$Slides 12, 13 e 14 (vídeo: as três dicas de Shayan Sardarizadeh para identificar notícias falsas — associar e responder).$$
+  )),
+  ('b1', 36, $$Fake or real? — a voz passiva nas notícias$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Role-play Fake or Real?: transformar oralmente frases da voz ativa para a passiva (The telephone was invented by Alexander Graham Bell) e o colega decidir se a informação é verdadeira ou falsa.$$,
+    'estrutura_gramatical', $$Voz passiva no presente (am/is/are + particípio) e no passado (was/were + particípio); by + agente quando importa quem fez; usos típicos em notícias (quando não sabemos quem fez, quando a pessoa não importa, quando o foco é a informação). Particípios irregulares revisados do A2.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Before you share" (parte 2 de 2) — slides 15-22, 25-28.$$,
+      $$Condução (50 min): Talking Point (7 min): conferir a tarefa de casa e discutir as dicas do vídeo (slide 15) · Grammar (18 min): frases verdadeiras com o quadro, ativa x passiva, regras de formação e de by (slides 16-20) · Practice (8 min): completar com a passiva no presente ou passado (slides 21-22) · Role-play (15 min) — Tarefa Final: Fake or Real? com os cartões A/B (slides 25-27) · Fechamento (2 min): jogo (slide 28) se houver tempo.$$,
+      $$A passiva está no eixo do B1 (presente e passado — seção 5). Erros típicos: omitir o be ('The video shared') e usar o particípio errado ('was spoke'). By + agente em excesso deixa a frase artificial — mostrar quando omitir.$$,
+      $$Os exercícios de reescrita (slides 23-24) são a tarefa de casa.$$),
+    'foco_fonetico_som', $$Formas fracas de was /wəz/ e were /wə/ e particípios -ed: shared /ʃeəd/, reported /rɪˈpɔːtɪd/.$$,
+    'foco_fonetico_erro', $$Was/were fortes e -ed com vogal extra em todos os verbos.$$,
+    'foco_fonetico_correcao', $$Drilling de manchetes na passiva com ritmo de notícia: The video was SHARED by THOUsands of USers.$$,
+    'tarefa_de_casa', $$Slides 23 e 24 (reescrever as frases na voz passiva começando pelas palavras em negrito).$$
+  )),
+  ('b1', 37, $$That's small talk, isn't it? — como puxar e manter uma conversa$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Role-play Make Small Talk em situações do dia a dia (vizinho, fila, colega antes de reunião, ponto de ônibus): iniciar a conversa, usar pelo menos uma question tag, reagir, manter a conversa e encerrá-la de forma educada.$$,
+    'estrutura_gramatical', $$Question tags: frase afirmativa + tag negativa e vice-versa, com o auxiliar do tempo da frase (isn't it, don't you, didn't it, can't we, haven't you); uso para checar concordância (entonação descendente) ou confirmar informação (entonação ascendente). Linguagem de small talk por tema e frases para concordar, manter e encerrar a conversa.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "That's small talk, isn't it?" — slides 2-17, 23-30 (extra: 19-22).$$,
+      $$Condução (50 min): Warm Up (3 min): tirinha sobre small talk (slide 2) · Listening and Reading (12 min): dicas do vídeo, associar conselhos aos diálogos, palavras e discussão (slides 3-8); ouvir e associar as quatro conversas (slide 9) só se houver tempo · Grammar (15 min): completar as tags, usos, regras, formação por tempo verbal e entonação ↘/↗ (slides 10-16) · Practice (3 min): ler em pares o primeiro diálogo com tags (slide 17) · Vocabulary (5 min): frases para concordar, manter e encerrar a conversa (slide 26) — os quadros por tema (slides 23-25) são lidos rapidamente, como repertório · Role-play (12 min) — Tarefa Final: Make Small Talk — escolher 2 das 4 situações e trocar os papéis (slides 27-30).$$,
+      $$Aula densa: priorizar a forma e a entonação das tags e o role-play. Question tags estão no eixo do B1. Erros: tag com o verbo principal ('You work here, don't work?'), mesma polaridade ('It's cold, is it?') e 'isn't it?' universal (influência do 'né?').$$,
+      $$O small talk tem forte componente cultural: brasileiros tendem a respostas longas ou a silêncios — discutir. Extra Practice (slides 19-22): só se houver tempo e se o professor quiser — antes do role-play.$$),
+    'foco_fonetico_som', $$Entonação das tags: descendente (↘) quando esperamos concordância; ascendente (↗) quando pedimos confirmação.$$,
+    'foco_fonetico_erro', $$Subir sempre no final, transformando todo comentário em pergunta insegura.$$,
+    'foco_fonetico_correcao', $$Setas no quadro nos exemplos do slide 16 e drilling contrastivo: Nice weather, isn't it? ↘ / The meeting starts at nine, doesn't it? ↗$$,
+    'tarefa_de_casa', $$Slide 18 (diálogo da sala de espera com question tags — completar e praticar a leitura).$$
+  )),
+  ('b1', 38, $$Lessons I've learned — memórias da escola e professores$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Contar a um colega uma experiência escolar marcante (positiva, negativa ou neutra): começar com o present perfect (Have you ever...? I've learned...) e dar os detalhes no past simple (When did it happen? It happened in...).$$,
+    'estrutura_gramatical', $$Present perfect (experiências, situações até agora, tempo não importa) x past simple (ações terminadas com tempo definido) — consolidação do contraste visto no A2 e nas Aulas 5, 6 e 24. Padrão de conversa: pergunta geral no present perfect, detalhes no past simple. Particípios de verbos frequentes.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "Lessons I've learned" — slides 2-14, 18-20.$$,
+      $$Condução (50 min): Warm Up (8 min): quiz da escola — vocabulário (homework, feedback, grade, report card, principal, essay) (slides 2-4) · Listening (8 min): o menino que agradece aos professores (slides 5-6) · Talking Point (5 min): perguntas a-e (slide 7) · Grammar (14 min): frases do vídeo, regras de uso e formação (slides 8-11) · Pronunciation (5 min): tabela de verbos, padrões e teste (slides 12-14) · Listening + Speaking (10 min) — Tarefa Final: quatro pessoas falam da escola (slide 18) e School Memories and Experiences (slide 19); jogo (slide 20) se houver tempo.$$,
+      $$Contraste que mais persiste em brasileiros: present perfect com marcador de tempo passado ('I have learned it last year'). Usar o Registro das Aulas 5, 6 e 24 para saber quem ainda precisa de apoio.$$,
+      $$Tema escola pode trazer memórias negativas: deixar o aluno escolher o que compartilhar.$$),
+    'foco_fonetico_som', $$Particípios irregulares: taught /tɔːt/, forgotten /fəˈɡɒtn/, grown /ɡrəʊn/, understood.$$,
+    'foco_fonetico_erro', $$Pronunciar o gh de taught e acentuar a primeira sílaba de forgotten.$$,
+    'foco_fonetico_correcao', $$Drilling das três colunas (teach – taught – taught) do slide 12.$$,
+    'tarefa_de_casa', $$Slides 15, 16 e 17 (completar as conversas com present perfect ou past simple).$$
+  )),
+  ('b1', 39, $$The story behind the lyrics — a história por trás das músicas$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Reading','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Recontar ao colega, sem olhar o texto, a história por trás de uma das músicas (Deep Purple, Adele ou Taylor Swift), usando expressões de tempo e o past perfect para o que tinha acontecido antes (Before she wrote the song, she had...).$$,
+    'estrutura_gramatical', $$Past perfect (had + particípio) para o que aconteceu antes de outro momento do passado; had not / hadn't; 'd = had ou would conforme o contexto. Expressões de tempo em narrativas: suddenly, immediately, by the time, later, at first, meanwhile, eventually.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "The story behind the lyrics" (parte 1 de 2) — slides 2-10, 12-16.$$,
+      $$Condução (50 min): Warm Up (5 min): por que os artistas escrevem músicas? (slide 2) · Reading (15 min): trechos das músicas e as histórias por trás delas (slides 3-6) · Reading (8 min): ordenar os eventos de cada história (slides 7-9) · Vocabulary (5 min): expressões de tempo (slide 10) · Grammar (12 min): o que aconteceu primeiro?, 'd, regras e metades (slides 12-16) · Tarefa Final (5 min): recontar uma das histórias ao colega com expressões de tempo e past perfect.$$,
+      $$Past perfect está no eixo do B1. Erros: usá-lo para qualquer passado 'distante' ('I had gone to Rio in 2010') e omiti-lo quando a sequência exige ('When the firefighters arrived, the casino burned down' muda o sentido).$$,
+      $$O exercício de associar as expressões de tempo aos significados (slide 11) vai para casa.$$),
+    'foco_fonetico_som', $$Contração 'd /d/ e had fraco /həd/: She'd already decided.$$,
+    'foco_fonetico_erro', $$Omitir o 'd na fala ('She already decided') ou pronunciar had forte.$$,
+    'foco_fonetico_correcao', $$Drilling com as frases do slide 16 contrastando 'd = had e 'd = would.$$,
+    'tarefa_de_casa', $$Slide 11 (associar as expressões de tempo aos seus significados).$$
+  )),
+  ('b1', 40, $$Before the song — imaginar e ouvir histórias reais (Tones and I, Ed Sheeran)$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Em pares, imaginar a história por trás de uma música (Dance Monkey ou The A Team) — quem é, qual é a situação e o que tinha acontecido antes —, ouvir a história real e comparar, usando past perfect e expressões de tempo.$$,
+    'estrutura_gramatical', $$Past simple x past perfect (revisão da Aula 39) em narrativa; expressões de tempo.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "The story behind the lyrics" (parte 2 de 2) — slides 17-20, 24-27.$$,
+      $$Condução (50 min): Retomada (5 min): conferir a tarefa de casa (slide 11) · Grammar (15 min): past simple ou past perfect (slides 17-18) e completar com ideias próprias (slide 19) · Speaking (10 min): conhecer as músicas e os artistas (slide 20) e imaginar oralmente, em pares, o que tinha acontecido antes · Listening (15 min) — Tarefa Final: ouvir as histórias reais, responder e-j (slides 24-25) e discutir qual surpreendeu mais (slide 26) · Fechamento (5 min): jogo (slide 27).$$,
+      $$A tarefa de casa (slides 21-23) fecha o ciclo: o aluno escreve as duas histórias imaginadas (slide 22) e responde às perguntas a-d sobre Tones and I (slide 23). O slide 21 repete a apresentação das músicas (slide 20). Se a turma for rápida, o professor pode começar as perguntas a-d em aula.$$),
+    'foco_fonetico_som', $$Ritmo de narrativa com had fraco e pausas nas expressões de tempo: By the time she got there, | the show had started.$$,
+    'foco_fonetico_erro', $$Had forte e frase sem pausa depois da expressão de tempo.$$,
+    'foco_fonetico_correcao', $$Ler duas frases do listening marcando a pausa e a forma fraca de had.$$,
+    'tarefa_de_casa', $$Slides 21, 22 e 23 (escrever as duas histórias imaginadas e responder às perguntas a-d).$$
+  )),
+  ('b1', 41, $$"I almost agree with you" — o que os britânicos dizem e o que querem dizer$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Writing'),
+    'tarefa_comunicativa', $$Find the lie: responder a perguntas pessoais (uma resposta inventada), relatar à turma as respostas do colega em reported speech (She said that she... / He told me...) e descobrir qual era a mentira.$$,
+    'estrutura_gramatical', $$Reported speech: mudança de pronomes e recuo dos tempos (present → past, present continuous → past continuous, will → would, can → could, past simple e present perfect → past perfect); say + frase x tell + pessoa + frase; that opcional.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "I almost agree with you" (parte 1 de 2) — slides 2-12, 15-17.$$,
+      $$Condução (50 min): Warm Up (4 min): tirinha de George Mikes (slide 2) · Listening (12 min): vídeo — o que os britânicos dizem x o que querem dizer — e completar os significados (slides 3-7) · Grammar (14 min): pronomes, recuo dos tempos e say x tell (slides 8-10) · Practice (8 min): passar para o discurso indireto a-h e say/tell (slides 11-12, 15) · Speaking (12 min) — Tarefa Final: Find the lie (slides 16-17).$$,
+      $$Reported speech está no eixo do B1 e é um dos can-dos de saída ('relata o que outras pessoas disseram'). Erros típicos: 'He said me', 'She told that' e não recuar o tempo. Na fala informal, o recuo nem sempre acontece quando a informação ainda é verdadeira — mas ensinar o padrão.$$,
+      $$O exercício inverso (de indireto para direto, slides 13-14) vai para casa.$$),
+    'foco_fonetico_som', $$Formas fracas em said that /sed ðət/ e told me /təʊld mi/.$$,
+    'foco_fonetico_erro', $$That forte (/ðæt/) e pausa depois de said.$$,
+    'foco_fonetico_correcao', $$Drilling de frases relatadas com ritmo contínuo: She said that she was TIRED.$$,
+    'tarefa_de_casa', $$Slides 13 e 14 (passar as frases do discurso indireto para o direto).$$
+  )),
+  ('b1', 42, $$British vs American food (and English) — Emily Blunt x Matt Damon$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Relatar à turma as opiniões de Emily e Matt sobre comida (Emily said that... / Matt told her that...) e discutir com quem concorda; depois, usar em pares pares de palavras BrE/AmE numa situação de turista (Can I have the bill? / Can I get the check?).$$,
+    'estrutura_gramatical', $$Reported speech em uso (revisão da Aula 41) para relatar opiniões. Diferenças entre inglês britânico e americano: vocabulário (flat/apartment, lift/elevator, holiday/vacation, queue/line, chips/fries, petrol/gas), ortografia (colour/color, centre/center) e pronúncia (water, schedule, tomato).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck "I almost agree with you" (parte 2 de 2) — slides 18-26, 28.$$,
+      $$Condução (50 min): Retomada (4 min): conferir a tarefa de casa (slides 13-14) · Listening and Speaking (18 min): comidas britânicas ou americanas?, vídeo de Emily Blunt e Matt Damon, nomear as comidas e relatar as opiniões (slides 18-21) · Discussion (5 min): melting pot e identidade (slide 22) · Vocabulary (18 min) — Tarefa Final: vocabulário, ortografia e pronúncia BrE x AmE e expressões do dia a dia, praticadas em pares numa mini-situação de turista (slides 23-26) · Fechamento (5 min): jogo (slide 28).$$,
+      $$Não há 'inglês certo': aceitar as duas variantes, mas pedir consistência dentro do mesmo texto escrito. A discussão sobre identidade e comida (slide 22) pode tocar em estereótipos culturais: conduzir com respeito.$$,
+      $$O Extra Challenge (slide 27 — diálogo de turistas em Londres ou Nova York) é a tarefa de casa e pode ser apresentado em áudio.$$),
+    'foco_fonetico_som', $$Pronúncia BrE x AmE: water /ˈwɔː.tə/ x /ˈwɑː.t̬ɚ/ (t flap), schedule /ˈʃedʒ.uːl/ x /ˈskedʒ.uːl/, tomato /təˈmɑː.təʊ/ x /təˈmeɪ.t̬oʊ/.$$,
+    'foco_fonetico_erro', $$Misturar as variantes dentro da mesma palavra ou achar que uma é 'errada'.$$,
+    'foco_fonetico_correcao', $$Ouvir e repetir os pares do slide 25 e perguntar qual variante o aluno ouve mais no dia a dia.$$,
+    'tarefa_de_casa', $$Slide 27 (Extra Challenge: criar um diálogo de turistas em Londres ou Nova York com vocabulário BrE/AmE).$$
+  )),
+  ('b1', 43, $$Revisão — Aulas 31 a 42$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Vocabulário funcional'),
+    'tarefa_comunicativa', $$Checklist de autoavaliação (can-do) com um colega: realizar em voz alta cada item dos slides 15-16 e marcar o que já consegue fazer com confiança.$$,
+    'estrutura_gramatical', $$Revisão integrada das Aulas 31-42: subject questions, phrasal verbs, voz passiva, question tags, present perfect x past simple, past perfect, reported speech (say/tell).$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Slides em aula: deck Review (Class 39 — Review Classes 31-38) — slides 9-12, 15-17.$$,
+      $$Nota da coordenação: revisão-teste (seção 6.3 do currículo) — a parte gramatical será um Google Forms (a ser incluído) com as perguntas dos slides 2-8, enviado DEPOIS da aula. O deck foi criado para a grade antiga e inclui conteúdo da aula 'Could you tell me the way?', retirada da grade: pular o mapa de direções (slides 13-14) e o item do checklist sobre pedir direções, e — na montagem do Forms — retirar as questões 26-28 (indirect questions), que não foram trabalhadas nesta grade.$$,
+      $$Condução (50 min): Abertura (3 min): explicar a dinâmica e anunciar a Apresentação Final da Aula 44 · Vocabulary review (14 min): phrasal verbs, mídia, BrE x AmE e particípios (slides 9-12) · Checklist can-do (25 min) — Tarefa Final: em duplas, realizar em voz alta os itens dos slides 15-16 (exceto pedir direções) e marcar o que consegue fazer · Fechamento (8 min): entregar e explicar o Guia do Aluno da Apresentação Final B1; jogo (slide 17) se houver tempo.$$,
+      $$Quarta revisão-teste do B1 e último dado antes da Apresentação Final. A entrega do Guia do Aluno nesta aula é obrigatória: o aluno precisa de uma semana para preparar o roteiro de tópicos dos cinco blocos.$$),
+    'foco_fonetico_som', $$Revisão: entonação das tags, acento na partícula dos phrasal verbs, 'd = had, said that /sed ðət/.$$,
+    'foco_fonetico_erro', $$Reincidência dos padrões já mapeados sob a pressão de uma conversa longa.$$,
+    'foco_fonetico_correcao', $$Não interromper; anotar no Registro e fazer, ao final, uma rodada coletiva com os 2-3 erros mais recorrentes.$$,
+    'tarefa_de_casa', $$Google Forms de revisão gramatical com as perguntas dos slides 2-8 (link a ser incluído), feito em casa DEPOIS da aula (seção 6.3) + preparação do roteiro da Apresentação Final com o Guia do Aluno.$$
+  )),
+  ('b1', 44, $$Apresentação Final de Nível — "My story so far: choices, changes and what ifs"$$, jsonb_build_object(
+    'habilidades', jsonb_build_array('Speaking','Listening'),
+    'tarefa_comunicativa', $$Parte A — apresentação individual (4-5 min) em cinco blocos, conectando as ideias com conectores e expressões de tempo: (1) uma história que me marcou; (2) antes e agora; (3) um tema que importa para mim; (4) e se...? — planos e hipóteses; (5) um conselho que recebi. Parte B — interação espontânea com o professor (2-3 min): uma situação do dia a dia sorteada na hora (combinar onde comer, pedir conselho na farmácia ou small talk com um desconhecido), com 4-5 perguntas não roteirizadas.$$,
+    'estrutura_gramatical', $$Bloco 1: past simple, past continuous e past perfect + expressões de tempo · Bloco 2: used to + present perfect com for/since · Bloco 3: opinião sobre tema abstrato (tecnologia, meio ambiente, saúde, notícias) com should/have to e voz passiva · Bloco 4: first e second conditional + may/might · Bloco 5: reported speech (say/tell). Parte B: sugestões e respostas polidas, should, question tags, So/Neither.$$,
+    'pontos_atencao', jsonb_build_array(
+      $$Material de apoio: Guia do Aluno da Apresentação Final B1 (entregue na Aula 43) · seção 6.4.3 do currículo.$$,
+      $$Nota da coordenação: pela seção 6.4 do currículo (critério 3), a Apresentação Final de Nível acontece na última aula regular do módulo. Tema, formato e rubrica do B1 estão na seção 6.4.3 do currículo (v0.7), no mesmo modelo do A1 (6.4.1) e do A2 (6.4.2): rubrica de 5 eixos — Cumprimento da Tarefa, Gramática do Nível, Coesão e Fluência, Interação (Parte B) e Vocabulário — na escala Bem / No processo / Não atingiu (= PP / P / R), com aprovação por 'Bem' ou 'No processo' em pelo menos 4 eixos, sem 'Não atingiu' em Cumprimento da Tarefa. A avaliação é registrada nas fichas individuais (Bloco B desta aula). Ao final, o professor agenda a Avaliação Final de Nível (critério 4).$$,
+      $$Pré-aula: na Aula 43, entregar o Guia do Aluno da Apresentação Final e orientar cada aluno a preparar um roteiro de tópicos (não um texto para ler) nos cinco blocos. Avisar que a Parte B é sorteada na hora e não precisa ser preparada.$$,
+      $$Condução (50 min): Abertura (5 min): recapitular o propósito da tarefa (mobilizar numa situação real o que foi aprendido no B1 — seção 6.4, critério 3) e sortear a ordem das apresentações · Apresentações individuais (35 min, tempo ajustável ao número de alunos): Parte A (4-5 min por aluno) seguida da Parte B (2-3 min de interação com o professor, com uma situação sorteada); o professor preenche a ficha individual durante e logo após cada apresentação — prioridade absoluta da aula · Perguntas dos colegas (5 min): uma pergunta de colega após algumas apresentações · Fechamento (5 min): feedback geral celebrando o percurso do B1, retomando a Trilha Pedagógica da Aula 01, e comunicação da data da Avaliação Final de Nível.$$,
+      $$A prioridade desta aula é 100% a Apresentação Final — não cortar tempo de apresentação para revisar. Em turma de 5 alunos, o tempo fica justo: controlar o relógio e, se necessário, dispensar a rodada de perguntas dos colegas. Em aula individual (VIP), a Parte A pode se estender (6-7 min) e a Parte B ter mais perguntas.$$,
+      $$No B1, espera-se coesão (sequência lógica, conectores e expressões de tempo) e opinião própria sobre temas abstratos — não apenas frases corretas isoladas.$$),
+    'foco_fonetico_som', $$Fluência e entonação natural na fala espontânea, integrando os padrões trabalhados no ano (contrações do present perfect, 'll e 'd nas condicionais, used to /ˈjuːstə/, entonação das question tags, acento na partícula dos phrasal verbs).$$,
+    'foco_fonetico_erro', $$Sob a pressão da apresentação, padrões já mapeados ao longo do ano podem reaparecer pontualmente — isso não deve ser tratado como reprovação automática, mas registrado com cuidado.$$,
+    'foco_fonetico_correcao', $$Não corrigir durante a apresentação — reservar observações para o feedback individual. Usar as fichas desta aula, somadas às revisões-teste (Aulas 9, 20, 30 e 43), como base para o Report Card (seção 6.2) e, se necessário, para o protocolo da seção 6.5.1.$$,
+    'tarefa_de_casa', $$Nenhuma tarefa de slides. Ao final da aula, o professor agenda a Avaliação Final de Nível (evento formal, fora da grade), comunicando ao aluno os componentes avaliados: gramática, vocabulário, listening e checklist oral de can-do (seção 6.4). Em caso de desempenho insatisfatório, aciona-se o protocolo da seção 6.5.1.$$,
+    'eixos_avaliacao', jsonb_build_array(
+      $$Bloco 1 · Uma história que me marcou$$, $$Bloco 2 · Antes e agora$$, $$Bloco 3 · Um tema que importa$$,
+      $$Bloco 4 · E se...?$$, $$Bloco 5 · Um conselho que recebi$$,
+      $$Cumprimento da Tarefa$$, $$Gramática do Nível$$, $$Coesão e Fluência$$, $$Interação (Parte B)$$, $$Vocabulário do nível$$
+    ),
+    'escala_avaliacao', jsonb_build_object('sim', 'Bem', 'parcial', 'No processo', 'nao', 'Não atingiu', 'nao_participou', 'Não participou'),
+    'rubrica_eixos', jsonb_build_array($$Cumprimento da Tarefa$$, $$Gramática do Nível$$, $$Coesão e Fluência$$, $$Interação (Parte B)$$, $$Vocabulário do nível$$),
+    'rubrica_obrigatorio', $$Cumprimento da Tarefa$$,
+    'rubrica_minimo', 4,
+    'layout', 'ficha_apresentacao',
+    'ficha', jsonb_build_object(
+      'titulo', $$Apresentação Final de Nível — Aula 44 · Nível B1 · "My story so far"$$,
+      'rubrica_titulo', $$Eixo (rubrica 6.4.3)$$,
+      'situacoes', jsonb_build_array($$Onde vamos comer?$$, $$Conselho na farmácia$$, $$Small talk$$),
+      'blocos', jsonb_build_array(
+        jsonb_build_object('eixo', $$Bloco 1 · Uma história que me marcou$$, 'nome', $$Uma história que me marcou$$,        'estruturas', $$past simple/continuous · past perfect · time expressions$$),
+        jsonb_build_object('eixo', $$Bloco 2 · Antes e agora$$,              'nome', $$Antes e agora$$,                     'estruturas', $$used to · present perfect + for/since$$),
+        jsonb_build_object('eixo', $$Bloco 3 · Um tema que importa$$,        'nome', $$Um tema que importa para mim$$,      'estruturas', $$opinião · should/have to · voz passiva$$),
+        jsonb_build_object('eixo', $$Bloco 4 · E se...?$$,                   'nome', $$E se...? Planos e hipóteses$$,       'estruturas', $$1st e 2nd conditional · may/might$$),
+        jsonb_build_object('eixo', $$Bloco 5 · Um conselho que recebi$$,     'nome', $$Um conselho que recebi$$,            'estruturas', $$reported speech (say/tell)$$)
+      ),
+      'rubrica', jsonb_build_array(
+        jsonb_build_object('eixo', $$Cumprimento da Tarefa$$, 'texto', $$Cumprimento da Tarefa (5 blocos da Parte A)$$),
+        jsonb_build_object('eixo', $$Gramática do Nível$$,    'texto', $$Gramática do Nível (condicionais, present perfect x past, used to, past perfect, passiva, reported speech)$$),
+        jsonb_build_object('eixo', $$Coesão e Fluência$$,     'texto', $$Coesão e Fluência (sequência lógica, conectores, expressões de tempo, pronúncia)$$),
+        jsonb_build_object('eixo', $$Interação (Parte B)$$,   'texto', $$Interação — Parte B (perguntas não roteirizadas e imprevisto)$$),
+        jsonb_build_object('eixo', $$Vocabulário do nível$$,  'texto', $$Vocabulário do nível (temas abstratos, phrasal verbs, collocations, false friends)$$)
+      ),
+      'criterio', $$Critério de aprovação (seção 6.4.3): "Bem" ou "No processo" em pelo menos 4 dos 5 eixos, sem nenhum "Não atingiu" em Cumprimento da Tarefa. Escala equivalente ao Report Card: Bem = PP · No processo = P · Não atingiu = R.$$
+    )
+  ))
+on conflict (materia_slug, numero) do nothing;
