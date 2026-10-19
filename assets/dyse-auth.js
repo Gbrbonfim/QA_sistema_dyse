@@ -2093,6 +2093,22 @@ async function dyseSetAulaAtivaTurma(turmaId, nivelAulaId, ativo){
   return { error };
 }
 
+/* Versão em lote do de cima ("ativar/desativar todas" de um nível) — um
+   único upsert em vez de uma requisição por aula. */
+async function dyseSetAulasAtivasTurma(turmaId, nivelAulaIds, ativo){
+  if(!nivelAulaIds || !nivelAulaIds.length) return { error: null };
+  const session = await dyseGetSession();
+  const agora = new Date().toISOString();
+  const { error } = await sb.from('turma_aula_material').upsert(nivelAulaIds.map(id => ({
+    turma_id: turmaId,
+    nivel_aula_id: id,
+    ativo: !!ativo,
+    atualizado_por: session ? session.user.id : null,
+    atualizado_em: agora
+  })), { onConflict: 'turma_id,nivel_aula_id' });
+  return { error };
+}
+
 /* ---------- [Gestão] ativar/desativar e excluir uma aula ----------
    Desativar tira a aula das telas de uso (ver dyseListNivelAulas) sem
    apagar nada. Excluir é bloqueado pelo próprio Postgres se já existir

@@ -2778,22 +2778,37 @@ body.dyse-modal-open{overflow:hidden;}
       // não uma lista só misturando tudo (cada nível com sua própria contagem).
       const nivelBlocksHtml = slugsDaTurma.map((slug, i) => {
         const nivel = TURMA_MATERIAL_NIVEIS_CACHE[slug];
+        const blocoId = 'turmaMatNivel-' + turma.id + '-' + slug;
+        let todasAtivas = true;
         const rows = aulasPorNivel[i].map(aula => {
           const status = statusPorAula[aula.id];
           const ativo = (status && status.ativo != null) ? status.ativo : dyseAulaAtivaPadrao(aula.numero, nivel.total_aulas);
+          if(!ativo) todasAtivas = false;
           return '<div class="manage-row">' +
             '<div class="info"><b>' + String(aula.numero).padStart(2,'0') + '.</b> ' + escapeHtmlLocal(aula.topico) + '</div>' +
             '<div class="manage-row-actions">' +
               '<label class="dyse-toggle">' +
-                '<input type="checkbox" ' + (ativo ? 'checked' : '') + ' onchange="toggleAulaAtivaTurma(\'' + turma.id + '\', \'' + aula.id + '\', this.checked)">' +
+                '<input type="checkbox" class="aula-ativa-toggle" data-aula-id="' + aula.id + '" ' + (ativo ? 'checked' : '') + ' onchange="toggleAulaAtivaTurma(\'' + turma.id + '\', \'' + aula.id + '\', this.checked, \'' + blocoId + '\')">' +
                 '<span class="slider"></span>' +
               '</label>' +
             '</div>' +
           '</div>';
         }).join('');
-        return '<details class="dyse-collapsible dyse-collapsible-nested" id="turmaMatNivel-' + turma.id + '-' + slug + '">' +
+        // Linha "todas as aulas" no topo do nível — ligada só quando todas
+        // estão ativas; acompanha os interruptores individuais.
+        const toggleTodas = rows ?
+          '<div class="manage-row" style="background:var(--paper-2, rgba(0,0,0,.03)); border-radius:10px; padding-left:10px; padding-right:10px;">' +
+            '<div class="info"><b>Ativar/desativar todas as aulas</b> <span style="opacity:.6;">(' + escapeHtmlLocal(nivel.name) + ')</span></div>' +
+            '<div class="manage-row-actions">' +
+              '<label class="dyse-toggle">' +
+                '<input type="checkbox" class="aula-todas-toggle" ' + (todasAtivas ? 'checked' : '') + ' onchange="toggleTodasAulasTurma(\'' + turma.id + '\', \'' + blocoId + '\', this)">' +
+                '<span class="slider"></span>' +
+              '</label>' +
+            '</div>' +
+          '</div>' : '';
+        return '<details class="dyse-collapsible dyse-collapsible-nested" id="' + blocoId + '">' +
           '<summary><span>' + escapeHtmlLocal(nivel.name) + ' <span class="pill-count">' + aulasPorNivel[i].length + ' aulas</span></span><span class="chevron">›</span></summary>' +
-          '<div class="manage-course-body">' + (rows || '<p style="opacity:.6; font-size:.82rem; margin:0;">Nenhuma aula cadastrada ainda.</p>') + '</div>' +
+          '<div class="manage-course-body">' + (rows ? toggleTodas + rows : '<p style="opacity:.6; font-size:.82rem; margin:0;">Nenhuma aula cadastrada ainda.</p>') + '</div>' +
         '</details>';
       }).join('');
       const totalAulas = aulasPorNivel.reduce((s, arr) => s + arr.length, 0);
@@ -2805,8 +2820,35 @@ body.dyse-modal-open{overflow:hidden;}
     return blocks.join('');
   }
 
-  async function toggleAulaAtivaTurma(turmaId, nivelAulaId, isChecked){
+  async function toggleAulaAtivaTurma(turmaId, nivelAulaId, isChecked, blocoId){
     await dyseSetAulaAtivaTurma(turmaId, nivelAulaId, isChecked);
+    if(blocoId) sincronizarToggleTodas(blocoId);
+  }
+
+  function sincronizarToggleTodas(blocoId){
+    const bloco = document.getElementById(blocoId);
+    if(!bloco) return;
+    const todas = bloco.querySelector('.aula-todas-toggle');
+    if(todas) todas.checked = [...bloco.querySelectorAll('.aula-ativa-toggle')].every(cb => cb.checked);
+  }
+
+  async function toggleTodasAulasTurma(turmaId, blocoId, el){
+    const bloco = document.getElementById(blocoId);
+    if(!bloco) return;
+    const ativo = el.checked;
+    const verbo = ativo ? 'ATIVAR' : 'DESATIVAR';
+    if(!confirm(verbo + ' todas as aulas deste nível para esta turma?')){ el.checked = !ativo; return; }
+    const caixas = [...bloco.querySelectorAll('.aula-ativa-toggle')];
+    const mudar = caixas.filter(cb => cb.checked !== ativo);
+    el.disabled = true;
+    const { error } = await dyseSetAulasAtivasTurma(turmaId, mudar.map(cb => cb.dataset.aulaId), ativo);
+    el.disabled = false;
+    if(error){
+      alert('Não foi possível atualizar as aulas: ' + error.message);
+      sincronizarToggleTodas(blocoId);
+      return;
+    }
+    mudar.forEach(cb => { cb.checked = ativo; });
   }
 
   /* ---------- Cabeçalho (sidebar + topbar) ----------
