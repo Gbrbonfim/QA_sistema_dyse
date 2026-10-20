@@ -493,6 +493,11 @@ async function dyseListMaterias(){
   return error ? [] : data;
 }
 
+async function dyseUpdateMateriaDescricao(slug, description){
+  const { error } = await sb.from('materias').update({ description: description || null }).eq('slug', slug);
+  return { error };
+}
+
 async function dyseDeleteMateria(slug){
   const { error } = await sb.from('materias').delete().eq('slug', slug);
   return { error };

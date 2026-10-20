@@ -555,7 +555,9 @@ body:not(.dyse-can-ver-financeiro) .fin-view-only{display:none !important;}
 .materia-slug-label{font-size:.66rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--seal-soft); opacity:.65; margin-right:6px;}
 .materia-name{font-size:1.1rem; font-weight:600; color:var(--seal); margin:4px 0 6px;}
 .materia-desc-label{font-size:.64rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--seal-soft); opacity:.55;}
-.materia-desc{font-size:.85rem; color:var(--seal-soft);}
+.materia-desc{font-size:.85rem; color:var(--seal-soft); cursor:text; border-radius:6px; padding:2px 4px; margin-left:-4px;}
+.materia-desc:hover{background:rgba(0,0,0,.04);}
+.materia-desc-input{width:100%; min-width:260px; font:inherit; font-size:.85rem; color:var(--seal-soft); padding:4px 8px; border:1px solid var(--seal-soft); border-radius:6px; background:#fff; outline:none;}
 .materia-stats{display:flex; gap:12px; flex-wrap:wrap; flex:none;}
 .materia-stat-box{background:var(--antique-soft); border-radius:var(--radius-sm); padding:12px 16px; min-width:130px;}
 .materia-stat-box .top{display:flex; align-items:center; gap:8px; color:var(--seal-soft);}
@@ -2316,7 +2318,7 @@ body.dyse-modal-open{overflow:hidden;}
             '<span class="materia-slug-label">SLUG</span><span class="turma-pill">' + escapeHtmlLocal(m.slug) + '</span>' +
             '<div class="materia-name">' + escapeHtmlLocal(m.name) + '</div>' +
             '<div class="materia-desc-label">DESCRIÇÃO</div>' +
-            '<div class="materia-desc">' + (m.description ? escapeHtmlLocal(m.description) : '-') + '</div>' +
+            '<div class="materia-desc" title="Clique para editar" onclick="editarMateriaDescricao(\'' + m.slug + '\', this)">' + (m.description ? escapeHtmlLocal(m.description) : '-') + '</div>' +
           '</div>' +
           '<div class="materia-stats">' + statsHtml + '</div>' +
         '</div>' +
@@ -2327,7 +2329,45 @@ body.dyse-modal-open{overflow:hidden;}
     }).join('') + '</div>';
   }
 
-  const ACTIVITY_URL_TEMPLATE = '/atividades/{course}/atividade_{num}.html';
+  function editarMateriaDescricao(slug, el){
+    const m = MATERIAS.find(x => x.slug === slug);
+    if(!m || el.querySelector('input')) return;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'materia-desc-input';
+    input.value = m.description || '';
+    input.placeholder = 'Descrição da matéria';
+    el.textContent = '';
+    el.appendChild(input);
+    input.focus();
+    input.select();
+
+    let finalizado = false;
+    const finalizar = async (salvar) => {
+      if(finalizado) return;
+      finalizado = true;
+      const nova = input.value.trim();
+      if(!salvar || nova === (m.description || '')){
+        renderMateriasTable();
+        return;
+      }
+      input.disabled = true;
+      const { error } = await dyseUpdateMateriaDescricao(slug, nova);
+      if(error){
+        alert('Não foi possível salvar a descrição: ' + error.message);
+      } else {
+        m.description = nova || null;
+      }
+      renderMateriasTable();
+    };
+    input.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){ e.preventDefault(); finalizar(true); }
+      else if(e.key === 'Escape'){ e.preventDefault(); finalizar(false); }
+    });
+    input.addEventListener('blur', () => finalizar(true));
+  }
+
+  const ACTIVITY_URL_TEMPLATE ='/atividades/{course}/atividade_{num}.html';
   function activityUrl(course, num){
     return ACTIVITY_URL_TEMPLATE.replace('{course}', course).replace('{num}', num);
   }
