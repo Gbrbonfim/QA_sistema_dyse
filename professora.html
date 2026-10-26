@@ -1655,8 +1655,18 @@ body.dyse-modal-open{overflow:hidden;}
   let REGISTRO_NIVEL_ESCOLHIDO = ''; // slug do material escolhido quando a turma tem mais de um
   let REGISTRO_NIVEL_TURMA = '';     // turma à qual a escolha acima pertence
 
+  // Cada carga do registro (turma/material/aula/dia) pega um número novo; uma
+  // carga mais antiga que ainda esteja esperando o banco desiste ao voltar, em
+  // vez de sobrescrever a tela com o material anterior (ex.: escolher B1 e
+  // aparecerem as aulas do A2).
+  let REGISTRO_SEQ = 0;
+
   async function onRegistroClasseNivelChange(){
     REGISTRO_NIVEL_ESCOLHIDO = document.getElementById('registroClasseNivelSelect').value;
+    // Tira da tela as aulas do material anterior enquanto o novo carrega.
+    document.getElementById('registroClasseWrap').style.display = 'none';
+    document.getElementById('registroClasseAulaSelect').innerHTML = '';
+    REGISTRO_AULAS_DA_TURMA = [];
     await carregarRegistroClasseDaTurma();
   }
   let REGISTRO_AULAS_DA_TURMA = [];
@@ -1795,7 +1805,9 @@ body.dyse-modal-open{overflow:hidden;}
     const temResultado = !!REGISTRO_CFG_AULA.rubrica_eixos && !usaFicha;
 
     const alunoIds = CHAMADA_STUDENTS.map(s => s.id);
+    const seq = ++REGISTRO_SEQ;
     const existentes = branco ? [] : await dyseListRegistrosClasseDaAula(alunoIds, aulaId, data);
+    if(seq !== REGISTRO_SEQ) return;
     const existentePorAluno = {};
     existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
 
@@ -1876,18 +1888,39 @@ body.dyse-modal-open{overflow:hidden;}
     const wrap = document.getElementById('registroClasseWrap');
     const semNivel = document.getElementById('registroClasseSemNivel');
     const nivelWrap = document.getElementById('registroClasseNivelWrap');
+    const seq = ++REGISTRO_SEQ;
     if(!turmaId){ wrap.style.display = 'none'; semNivel.style.display = 'none'; nivelWrap.style.display = 'none'; return; }
 
     // "Nível" (A1, A2...) é uma matéria com currículo (total_aulas
     // preenchido) vinculada à turma pelo mesmo turma_materias de
     // "Matérias liberadas" — não existe um campo separado pra isso.
     if(!REGISTRO_NIVEIS_CACHE.length) REGISTRO_NIVEIS_CACHE = await dyseListNiveis();
-    const turmaMaterias = await dyseListAllTurmaMaterias();
-    const niveisDaTurma = REGISTRO_NIVEIS_CACHE.filter(n => turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
+    const [turmaMaterias, materialTurma] = await Promise.all([dyseListAllTurmaMaterias(), dyseListTurmaAulaMaterial(turmaId)]);
+    if(seq !== REGISTRO_SEQ) return;
+    const vinculados = REGISTRO_NIVEIS_CACHE.filter(n => turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
+
+    // Só conta como material ativo da turma o nível com pelo menos uma aula
+    // ligada no "Gerenciar Material" (mesma regra de lá: turma_aula_material.ativo,
+    // ou o padrão dyseAulaAtivaPadrao). Nível vinculado mas todo desligado
+    // (ex.: A1/A2 de uma turma que já está no B1) não aparece aqui. O toefl não
+    // passa pelo Gerenciar Material, então segue sempre disponível.
+    const statusPorAula = {};
+    materialTurma.forEach(r => { statusPorAula[r.nivel_aula_id] = r; });
+    const aulasPorNivel = {};
+    (await Promise.all(vinculados.map(n => dyseListNivelAulas(n.slug)))).forEach((aulas, i) => { aulasPorNivel[vinculados[i].slug] = aulas; });
+    if(seq !== REGISTRO_SEQ) return;
+    const aulaAtiva = (aula, nivel) => {
+      const st = statusPorAula[aula.id];
+      return (st && st.ativo != null) ? st.ativo : dyseAulaAtivaPadrao(aula.numero, nivel.total_aulas);
+    };
+    const niveisDaTurma = vinculados.filter(n => n.slug === 'toefl' || aulasPorNivel[n.slug].some(a => aulaAtiva(a, n)));
 
     if(!niveisDaTurma.length){
       wrap.style.display = 'none';
       nivelWrap.style.display = 'none';
+      semNivel.textContent = vinculados.length
+        ? 'Nenhum material está ativo pra essa turma — ative as aulas do nível em "Gerenciar Material" pra usar o Registro de Classe.'
+        : 'Essa turma ainda não tem um nível acadêmico definido pela gestão — peça pra vincularem um nível a ela pra usar o Registro de Classe.';
       semNivel.style.display = 'block';
       return;
     }
@@ -1912,17 +1945,19 @@ body.dyse-modal-open{overflow:hidden;}
     wrap.style.display = 'block';
 
     // Critérios padrão de A1 a C1; só cai neles se o nível vier sem eixos cadastrados.
-    REGISTRO_EIXOS = (nivel.eixos_avaliacao && nivel.eixos_avaliacao.length) ? nivel.eixos_avaliacao : ["Tarefa Final", "Speaking", "Listening", "Reading", "Writing", "Gramática"];
-    REGISTRO_AULAS_DA_TURMA = await dyseListNivelAulas(nivel.slug);
+    const eixosNivel = (nivel.eixos_avaliacao && nivel.eixos_avaliacao.length) ? nivel.eixos_avaliacao : ["Tarefa Final", "Speaking", "Listening", "Reading", "Writing", "Gramática"];
+    REGISTRO_EIXOS = eixosNivel;
+    REGISTRO_AULAS_DA_TURMA = aulasPorNivel[nivel.slug];
 
     TURMA_AULA_MATERIAL = {};
-    (await dyseListTurmaAulaMaterial(turmaId)).forEach(r => { TURMA_AULA_MATERIAL[r.nivel_aula_id] = r.material_url; });
+    materialTurma.forEach(r => { TURMA_AULA_MATERIAL[r.nivel_aula_id] = r.material_url; });
 
     // Status ✓/⚠️ por aula: busca os registros de todos os alunos da turma
     // de uma vez (poucas chamadas — turma é pequena) pra marcar quais aulas
     // já têm registro completo. Conta ALUNO distinto (uma aula pode ter
     // vários dias/linhas por aluno).
     const registrosPorAluno = await Promise.all(CHAMADA_STUDENTS.map(s => dyseListRegistrosClasse(s.id)));
+    if(seq !== REGISTRO_SEQ) return;
     const registrosPorAula = {}; // nivel_aula_id -> Set(aluno_id)
     registrosPorAluno.flat().forEach(r => {
       (registrosPorAula[r.nivel_aula_id] = registrosPorAula[r.nivel_aula_id] || new Set()).add(r.aluno_id);
@@ -1995,13 +2030,16 @@ body.dyse-modal-open{overflow:hidden;}
     const aulaId = document.getElementById('registroClasseAulaSelect').value;
     const aula = REGISTRO_AULAS_DA_TURMA.find(a => a.id === aulaId);
     if(!aula) return;
+    const seq = ++REGISTRO_SEQ;
     renderRegistroClasseBlocoA(aula);
 
     // Datas já lançadas = datas do planner + datas com linha de aluno (planner
     // pode faltar) — nunca some com uma data já registrada.
-    REGISTRO_SESSOES_CACHE = await dyseListRegistroClasseSessoes(turmaId, aulaId);
+    const sessoes = await dyseListRegistroClasseSessoes(turmaId, aulaId);
     const alunoIds = CHAMADA_STUDENTS.map(s => s.id);
     const linhasAluno = await dyseListRegistrosClasseDaAula(alunoIds, aulaId);
+    if(seq !== REGISTRO_SEQ) return;
+    REGISTRO_SESSOES_CACHE = sessoes;
     const datas = new Set();
     REGISTRO_SESSOES_CACHE.forEach(s => { const d = String(s.data_aula || '').slice(0, 10); if(isDataOk(d)) datas.add(d); });
     linhasAluno.forEach(r => { const d = String(r.data_aula || '').slice(0, 10); if(isDataOk(d)) datas.add(d); });
