@@ -2776,6 +2776,33 @@ async function dyseListPagamentoProfessorHistorico(professorId, mes){
   return error ? [] : data;
 }
 
+/* Remove uma parcela registrada por engano (ex.: "Salvar pagamento" clicado 2x)
+   e realinha a linha de estado do mês com a parcela mais recente que sobrou —
+   ou apaga a linha (volta a "Pendente") se não sobrou nenhuma. */
+async function dyseDeletePagamentoProfessorHistorico(id, professorId, mes){
+  const { error } = await sb.from('pagamentos_professores_historico').delete().eq('id', id);
+  if(error) return { error };
+  const restantes = await dyseListPagamentoProfessorHistorico(professorId, mes); // mais recente primeiro
+  if(!restantes.length){
+    const { error: e2 } = await sb.from('pagamentos_professores').delete()
+      .eq('professor_id', professorId).eq('mes_competencia', mes);
+    return { error: e2 };
+  }
+  const ultima = restantes[0];
+  const session = await dyseGetSession();
+  const { error: e3 } = await sb.from('pagamentos_professores').upsert({
+    professor_id: professorId,
+    mes_competencia: mes,
+    status: ultima.status,
+    valor_pago: ultima.valor_pago,
+    data_pagamento: ultima.data_pagamento,
+    observacoes: ultima.observacoes,
+    atualizado_por: session ? session.user.id : null,
+    atualizado_em: new Date().toISOString()
+  }, { onConflict: 'professor_id,mes_competencia' });
+  return { error: e3 };
+}
+
 /* Histórico de pagamentos de TODOS os professores num mês — usado pra somar o
    "Total pago" (a linha de estado atual só guarda o último "Salvar", não a
    soma das parcelas do mês). */

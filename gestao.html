@@ -5201,13 +5201,24 @@ body.dyse-modal-open{overflow:hidden;}
       ? historico.map(h => {
           const valorTexto = h.valor_pago != null ? 'R$ ' + Number(h.valor_pago).toFixed(2).replace('.', ',') : 'sem valor';
           const quando = new Date(h.registrado_em).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
-          return '<div class="chip-toggle-row" style="flex-direction:column; align-items:flex-start; gap:2px;">' +
-            '<span class="name">' + (PAGAMENTO_STATUS_LABELS[h.status] || h.status) + ' · ' + valorTexto + (h.data_pagamento ? ' · pago em ' + formatDateBR(h.data_pagamento) : '') + '</span>' +
-            (h.observacoes ? '<span style="font-size:.82rem; opacity:.85;">' + escapeHtmlLocal(h.observacoes) + '</span>' : '') +
-            '<span style="font-size:.74rem; opacity:.6;">registrado em ' + quando + '</span>' +
+          return '<div class="chip-toggle-row" style="justify-content:space-between; align-items:flex-start; gap:8px;">' +
+            '<div style="display:flex; flex-direction:column; gap:2px;">' +
+              '<span class="name">' + (PAGAMENTO_STATUS_LABELS[h.status] || h.status) + ' · ' + valorTexto + (h.data_pagamento ? ' · pago em ' + formatDateBR(h.data_pagamento) : '') + '</span>' +
+              (h.observacoes ? '<span style="font-size:.82rem; opacity:.85;">' + escapeHtmlLocal(h.observacoes) + '</span>' : '') +
+              '<span style="font-size:.74rem; opacity:.6;">registrado em ' + quando + '</span>' +
+            '</div>' +
+            '<button type="button" class="btn btn-danger btn-xs" onclick="handleRemoverPagamentoHistorico(' + h.id + ', \'' + escapeHtmlLocal(valorTexto) + '\')">Remover</button>' +
           '</div>';
         }).join('')
       : '<p class="report-line" style="opacity:.6;">Nenhum pagamento registrado ainda neste mês.</p>';
+  }
+
+  async function handleRemoverPagamentoHistorico(id, valorTexto){
+    if(!confirm('Remover este pagamento de ' + valorTexto + '? Use só para lançamento duplicado ou feito por engano — ele sai do "Total pago" do mês.')) return;
+    const { error } = await dyseDeletePagamentoProfessorHistorico(id, CURRENT_PAGAMENTO_PROF_ID, PAGAMENTOS_MES_ATUAL);
+    if(error){ alert('Não foi possível remover o pagamento: ' + error.message); return; }
+    await renderPagamentoHistoricoList();
+    await loadPagamentosMes();
   }
 
   function closePagamentoModal(){
