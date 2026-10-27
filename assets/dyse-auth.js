@@ -1460,7 +1460,7 @@ async function dyseGerarMensalidadesDoMes(mes){
      aulas já lançadas, que inflariam com a própria aula extra). Cada linha
      final carrega inclui_aula_extra pro relatório (Pagamentos) sinalizar. */
   async function aplicarSubstituicoesDoAluno(linhasDoAluno, alunoId){
-    const semPeriodo = arr => arr.map(l => { const c = Object.assign({}, l); delete c._periodo; c.inclui_aula_extra = false; return c; });
+    const semPeriodo = arr => arr.map(l => { const c = Object.assign({}, l); delete c._periodo; delete c._datas; c.inclui_aula_extra = false; return c; });
     const turmaId = turmaIdPorAluno[alunoId];
     const subsManuais = (turmaId && subsPorTurma[turmaId] ? subsPorTurma[turmaId] : []).filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
     // Regra da gestão (out/2026): chamada lançada por OUTRO professor = ele
@@ -1499,9 +1499,10 @@ async function dyseGerarMensalidadesDoMes(mes){
         const janFim = (per && per.data_fim && per.data_fim < fimDoMesStr) ? per.data_fim : fimDoMesStr;
         const subsAqui = subs.filter(x => (x.professor_substituto_id || null) !== (l.professor_id || null)
           && x.data_aula >= janIni && x.data_aula <= janFim
-          && !(x._chamada && chamadaDe.has(x.data_aula + '|' + l.professor_id)))
+          && !(x._chamada && chamadaDe.has(x.data_aula + '|' + l.professor_id))
+          && (!l._datas || l._datas.includes(x.data_aula))) // troca de professor: só as aulas desta linha
           .filter((x, i, arr) => arr.findIndex(y => y.data_aula === x.data_aula) === i); // 1 aula por data
-        const base = Object.assign({}, l); delete base._periodo; base.inclui_aula_extra = false;
+        const base = Object.assign({}, l); delete base._periodo; delete base._datas; base.inclui_aula_extra = false;
         if(!subsAqui.length){ saida.push(base); return; }
 
         const rateCheia = per ? valorProfessorDoPeriodo(per) : Number(l.valor_pago_professor || 0);
@@ -1602,6 +1603,7 @@ async function dyseGerarMensalidadesDoMes(mes){
       // Mais de um período tocando o mês (troca de professor no meio do mês).
       const vencedor = periodos[0]; // mais recente — fallback e referência de valor_mensal_aluno
       let contagemPorProfessor = new Map(); // professor_id(ou null) -> nº de aulas na janela
+      const datasPorProfessor = new Map();  // professor_id(ou null) -> datas de aula que ficaram com ele
 
       {
         const sessoes = await sessoesDoMes();
@@ -1609,13 +1611,31 @@ async function dyseGerarMensalidadesDoMes(mes){
         // Mesmas datas do aluno que entra no meio do mês: agenda da turma +
         // chamadas lançadas (datasDeAulaDaTurma). Sem turma, só as chamadas.
         const datasRef = turmaAtual ? await datasDeAulaDaTurma(turmaAtual) : sessoes.map(s => String(s.data).slice(0, 10));
+        const janelaDe = h => [h.data_inicio > mes ? h.data_inicio : mes, (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr];
+        // Regras novas: cada aula vai pra UM período só, o mais recente que
+        // cobre a data (periodos[0] = mais recente). Vínculos sobrepostos —
+        // ex.: antigo até 26/10 e novo desde 07/10 — contavam a mesma aula
+        // pros dois e o mês passava de 100% (R$ 126,67 num mês de R$ 100).
+        // Meses antigos seguem contando cada janela inteira, como era.
+        const datasDoPeriodo = new Map();
+        datasRef.forEach(d => {
+          const h = regrasNovas
+            ? periodos.find(p => { const [ini, fim] = janelaDe(p); return d >= ini && d <= fim; })
+            : null;
+          if(!h) return;
+          (datasDoPeriodo.get(h) || datasDoPeriodo.set(h, []).get(h)).push(d);
+          const k = h.professor_id || null;
+          (datasPorProfessor.get(k) || datasPorProfessor.set(k, []).get(k)).push(d);
+        });
         periodos.forEach(h => {
           const profId = h.professor_id || null;
-          const ini = h.data_inicio > mes ? h.data_inicio : mes;
-          const fim = (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr;
+          const [ini, fim] = janelaDe(h);
           const naJanela = s => s.data >= ini && s.data <= fim;
-          let n = datasRef.filter(d => d >= ini && d <= fim).length;
-          if(!n) n = sessoes.filter(s => (s.professor_id || null) === profId && naJanela(s)).length;
+          const temAulaNaJanela = datasRef.some(d => d >= ini && d <= fim);
+          let n = regrasNovas ? (datasDoPeriodo.get(h) || []).length : datasRef.filter(d => d >= ini && d <= fim).length;
+          // Sem nenhuma aula da turma atual na janela (troca de turma junto
+          // com a de professor): conta as chamadas do próprio professor.
+          if(!n && !temAulaNaJanela) n = sessoes.filter(s => (s.professor_id || null) === profId && naJanela(s)).length;
           if(n) contagemPorProfessor.set(profId, (contagemPorProfessor.get(profId) || 0) + n);
         });
       }
@@ -1654,7 +1674,8 @@ async function dyseGerarMensalidadesDoMes(mes){
             professor_id: professorId, modalidade_id: periodo.modalidade_id,
             valor_recebido: valorRecebido, valor_pago_professor: valorProfessor,
             atualizado_em: new Date().toISOString(),
-            _periodo: periodo
+            _periodo: periodo,
+            _datas: datasPorProfessor.get(professorId) || null
           });
         });
       }
