@@ -1263,6 +1263,11 @@ async function dyseMesFechado(mes){
    troca de turma), cai nas aulas daquele professor em qualquer turma. Sem
    nenhuma aula registrada no mês, o período mais recente leva o mês inteiro
    — garante que a geração nunca fica vazia. */
+/* Mês a partir do qual valem as regras de rateio de out/2026: datas de aula
+   pela agenda da turma e chamada lançada por outro professor = aquela aula
+   vai pra quem lançou. Meses antes disso seguem o cálculo antigo. */
+const DYSE_REGRAS_RATEIO_DESDE = '2026-10-01';
+
 async function dyseGerarMensalidadesDoMes(mes){
   if(await dyseMesFechado(mes)) return { skipped: true };
 
@@ -1380,12 +1385,20 @@ async function dyseGerarMensalidadesDoMes(mes){
     return sessoesDoMesCache;
   }
 
-  /* Datas de aula da turma no mês = chamadas já lançadas + a agenda da turma
-     (turmas.dias_semana) DEPOIS da última chamada lançada, pulando feriado e
-     recesso do Calendário Letivo. Sem a agenda, quem entrava depois da última
-     chamada lançada ficava com 0 aula até a professora lançar a chamada (ex.:
-     aluna que começou 26/10 com chamadas só de 05 e 19/10 = R$ 0). Dia sem
-     chamada ANTES da última lançada continua contando como "não teve aula". */
+  /* Datas de aula da turma no mês = agenda da turma (turmas.dias_semana) do
+     mês inteiro, sem feriado/recesso do Calendário Letivo, + qualquer chamada
+     lançada (reposição, aula dada em feriado). Regra da gestão: aluno que
+     entra no meio/fim do mês paga ao professor o valor das aulas que tem a
+     partir dali pelo dia da semana dele — não depende de a chamada já estar
+     lançada (antes: aluna que começou 26/10 com chamadas só de 05 e 19/10
+     ficava com R$ 0). Turma sem dia da semana cadastrado usa só as chamadas.
+     O dia da agenda só entra em semana (seg-dom) SEM chamada lançada — aula
+     da semana dada/lançada em outro dia (ex.: turma de terça com chamada na
+     segunda) não vira 2 aulas na mesma semana. */
+  // Regras de out/2026 (agenda da turma + "quem lançou a chamada recebe")
+  // só valem dali em diante — mês anterior aberto (ex.: setembro, já pago)
+  // recalcula igual era, sem mexer no que já foi pago.
+  const regrasNovas = mes >= DYSE_REGRAS_RATEIO_DESDE;
   const DIA_SEMANA_IDX = { dom:0, seg:1, ter:2, qua:3, qui:4, sex:5, sab:6 };
   let diasSemAulaCache = null;
   async function diasSemAulaDoMes(){
@@ -1399,14 +1412,21 @@ async function dyseGerarMensalidadesDoMes(mes){
     const datas = new Set((await sessoesDoMes()).filter(s => s.turma_id === turmaId).map(s => String(s.data).slice(0, 10)));
     const turma = turmaById[turmaId];
     const diasDaSemana = ((turma && turma.dias_semana) || []).map(d => DIA_SEMANA_IDX[d]).filter(n => n != null);
-    if(diasDaSemana.length){
-      const ultimaLancada = [...datas].sort().pop() || '';
+    if(regrasNovas && diasDaSemana.length){
       const semAula = await diasSemAulaDoMes();
       const [y, m] = mes.split('-').map(Number);
+      // Segunda-feira da semana de uma data 'YYYY-MM-DD' (chave da semana).
+      const semanaDe = data => {
+        const [a, b, c] = data.split('-').map(Number);
+        const dt = new Date(Date.UTC(a, b - 1, c));
+        dt.setUTCDate(dt.getUTCDate() - ((dt.getUTCDay() + 6) % 7));
+        return dt.toISOString().slice(0, 10);
+      };
+      const semanasComChamada = new Set([...datas].map(semanaDe));
       const totalDias = Number(fimDoMesStr.slice(8, 10));
       for(let d = 1; d <= totalDias; d++){
         const data = mes.slice(0, 8) + String(d).padStart(2, '0');
-        if(data <= ultimaLancada || semAula.has(data)) continue;
+        if(semAula.has(data) || semanasComChamada.has(semanaDe(data))) continue;
         if(diasDaSemana.includes(new Date(Date.UTC(y, m - 1, d)).getUTCDay())) datas.add(data);
       }
     }
@@ -1442,16 +1462,30 @@ async function dyseGerarMensalidadesDoMes(mes){
   async function aplicarSubstituicoesDoAluno(linhasDoAluno, alunoId){
     const semPeriodo = arr => arr.map(l => { const c = Object.assign({}, l); delete c._periodo; c.inclui_aula_extra = false; return c; });
     const turmaId = turmaIdPorAluno[alunoId];
-    const subs = (turmaId && subsPorTurma[turmaId] ? subsPorTurma[turmaId] : []).filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
+    const subsManuais = (turmaId && subsPorTurma[turmaId] ? subsPorTurma[turmaId] : []).filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
+    // Regra da gestão (out/2026): chamada lançada por OUTRO professor = ele
+    // deu aquela aula e recebe por ela (mesma conta da substituição). A
+    // chamada do próprio titular não move nada (cai no filtro de subsAqui).
+    // Data que já tem substituição na aba Substituições fica com o registro
+    // manual, pra não pagar a mesma aula duas vezes.
+    let subsChamada = [];
+    if(regrasNovas && turmaId){
+      const datasManuais = new Set(subsManuais.map(x => String(x.data_aula).slice(0, 10)));
+      subsChamada = (await sessoesDoMes())
+        .filter(s => s.turma_id === turmaId && s.professor_id && !datasManuais.has(String(s.data).slice(0, 10)))
+        .map(s => ({ data_aula: String(s.data).slice(0, 10), professor_substituto_id: s.professor_id, _chamada: true }));
+    }
+    // Data em que o próprio titular da linha também lançou chamada fica com ele.
+    const chamadaDe = new Set(subsChamada.map(x => x.data_aula + '|' + x.professor_substituto_id));
+    const subs = subsManuais.concat(subsChamada);
     const extras = (extrasPorAluno[alunoId] || []).filter(x => x.data_aula >= mes && x.data_aula <= fimDoMesStr);
     if(!subs.length && !extras.length) return semPeriodo(linhasDoAluno);
 
     let saida;
     let N = 0;
     if(subs.length){
-      const sessoesTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
-      const datasAula = new Set(sessoesTurma.map(s => s.data));
-      subs.forEach(x => datasAula.add(x.data_aula));
+      const datasAula = new Set(await datasDeAulaDaTurma(turmaId));
+      subs.forEach(x => datasAula.add(String(x.data_aula).slice(0, 10)));
       N = datasAula.size;
     }
 
@@ -1464,7 +1498,9 @@ async function dyseGerarMensalidadesDoMes(mes){
         const janIni = (per && per.data_inicio > mes) ? per.data_inicio : mes;
         const janFim = (per && per.data_fim && per.data_fim < fimDoMesStr) ? per.data_fim : fimDoMesStr;
         const subsAqui = subs.filter(x => (x.professor_substituto_id || null) !== (l.professor_id || null)
-          && x.data_aula >= janIni && x.data_aula <= janFim);
+          && x.data_aula >= janIni && x.data_aula <= janFim
+          && !(x._chamada && chamadaDe.has(x.data_aula + '|' + l.professor_id)))
+          .filter((x, i, arr) => arr.findIndex(y => y.data_aula === x.data_aula) === i); // 1 aula por data
         const base = Object.assign({}, l); delete base._periodo; base.inclui_aula_extra = false;
         if(!subsAqui.length){ saida.push(base); return; }
 
@@ -1570,13 +1606,15 @@ async function dyseGerarMensalidadesDoMes(mes){
       {
         const sessoes = await sessoesDoMes();
         const turmaAtual = turmaIdPorAluno[alunoId];
-        const sessoesRef = turmaAtual ? sessoes.filter(s => s.turma_id === turmaAtual) : sessoes;
+        // Mesmas datas do aluno que entra no meio do mês: agenda da turma +
+        // chamadas lançadas (datasDeAulaDaTurma). Sem turma, só as chamadas.
+        const datasRef = turmaAtual ? await datasDeAulaDaTurma(turmaAtual) : sessoes.map(s => String(s.data).slice(0, 10));
         periodos.forEach(h => {
           const profId = h.professor_id || null;
           const ini = h.data_inicio > mes ? h.data_inicio : mes;
           const fim = (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr;
           const naJanela = s => s.data >= ini && s.data <= fim;
-          let n = sessoesRef.filter(naJanela).length;
+          let n = datasRef.filter(d => d >= ini && d <= fim).length;
           if(!n) n = sessoes.filter(s => (s.professor_id || null) === profId && naJanela(s)).length;
           if(n) contagemPorProfessor.set(profId, (contagemPorProfessor.get(profId) || 0) + n);
         });
