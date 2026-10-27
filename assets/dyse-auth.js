@@ -1330,10 +1330,10 @@ async function dyseGerarMensalidadesDoMes(mes){
     const saiuNoMeioDoMes = !!h.data_fim && h.data_fim < fimDoMesStr;
     if(!turmaId && !saiuNoMeioDoMes) return 1;
 
-    let sessoesDaTurma;
+    let datasAula;
     if(turmaId){
-      sessoesDaTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
-      if(!sessoesDaTurma.length) return 1;
+      datasAula = await datasDeAulaDaTurma(turmaId);
+      if(!datasAula.length) return 1;
     } else {
       // Aluno SEM turma cujo vínculo fechou no meio do mês = cancelado/
       // encerrado (dyseAplicarSituacaoNoPerfil zera profiles.turma_id na
@@ -1343,14 +1343,14 @@ async function dyseGerarMensalidadesDoMes(mes){
       // chamada neste mês; sem nenhuma chamada com ele no mês, não houve
       // aula antes da saída — fator 0 (não gera pagamento).
       const turmasDoAluno = await turmasComChamadaNoMes(h.aluno_id);
-      sessoesDaTurma = (await sessoesDoMes()).filter(s => turmasDoAluno.has(s.turma_id));
-      if(!sessoesDaTurma.length) return 0;
+      datasAula = (await sessoesDoMes()).filter(s => turmasDoAluno.has(s.turma_id)).map(s => String(s.data).slice(0, 10));
+      if(!datasAula.length) return 0;
     }
 
     const inicioJanela = h.data_inicio > mes ? h.data_inicio : mes;
     const fimJanela = (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr;
-    const dentroDaJanela = sessoesDaTurma.filter(s => s.data >= inicioJanela && s.data <= fimJanela).length;
-    return dentroDaJanela / sessoesDaTurma.length;
+    const dentroDaJanela = datasAula.filter(d => d >= inicioJanela && d <= fimJanela).length;
+    return dentroDaJanela / datasAula.length;
   }
 
   // Agrupa TODOS os períodos elegíveis (ativo + dentro das parcelas
@@ -1378,6 +1378,39 @@ async function dyseGerarMensalidadesDoMes(mes){
   async function sessoesDoMes(){
     if(sessoesDoMesCache === null) sessoesDoMesCache = await dyseListSessoesDoMes(mes, fimDoMesStr);
     return sessoesDoMesCache;
+  }
+
+  /* Datas de aula da turma no mês = chamadas já lançadas + a agenda da turma
+     (turmas.dias_semana) DEPOIS da última chamada lançada, pulando feriado e
+     recesso do Calendário Letivo. Sem a agenda, quem entrava depois da última
+     chamada lançada ficava com 0 aula até a professora lançar a chamada (ex.:
+     aluna que começou 26/10 com chamadas só de 05 e 19/10 = R$ 0). Dia sem
+     chamada ANTES da última lançada continua contando como "não teve aula". */
+  const DIA_SEMANA_IDX = { dom:0, seg:1, ter:2, qua:3, qui:4, sex:5, sab:6 };
+  let diasSemAulaCache = null;
+  async function diasSemAulaDoMes(){
+    if(diasSemAulaCache === null){
+      const dias = await dyseListCalendarioDias(Number(mes.slice(0, 4)));
+      diasSemAulaCache = new Set(dias.filter(d => d.tipo === 'feriado' || d.tipo === 'recesso').map(d => String(d.data).slice(0, 10)));
+    }
+    return diasSemAulaCache;
+  }
+  async function datasDeAulaDaTurma(turmaId){
+    const datas = new Set((await sessoesDoMes()).filter(s => s.turma_id === turmaId).map(s => String(s.data).slice(0, 10)));
+    const turma = turmaById[turmaId];
+    const diasDaSemana = ((turma && turma.dias_semana) || []).map(d => DIA_SEMANA_IDX[d]).filter(n => n != null);
+    if(diasDaSemana.length){
+      const ultimaLancada = [...datas].sort().pop() || '';
+      const semAula = await diasSemAulaDoMes();
+      const [y, m] = mes.split('-').map(Number);
+      const totalDias = Number(fimDoMesStr.slice(8, 10));
+      for(let d = 1; d <= totalDias; d++){
+        const data = mes.slice(0, 8) + String(d).padStart(2, '0');
+        if(data <= ultimaLancada || semAula.has(data)) continue;
+        if(diasDaSemana.includes(new Date(Date.UTC(y, m - 1, d)).getUTCDay())) datas.add(data);
+      }
+    }
+    return [...datas];
   }
 
   // Turmas em que o aluno constou na chamada (sessao_presencas, presente ou
