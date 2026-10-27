@@ -1087,7 +1087,7 @@ body.dyse-modal-open{overflow:hidden;}
       <div style="overflow-x:auto;">
         <table class="dash-table" id="pagamentosTable">
           <thead>
-            <tr><th>Professor</th><th>Alunos</th><th>Modalidades</th><th>Total previsto</th><th>Descontos</th><th>Descrição</th><th>A pagar</th><th>Total pago</th><th>Status</th><th>Data pagamento</th><th>Ações</th></tr>
+            <tr><th>Professor</th><th>Alunos</th><th>Modalidades</th><th>Total previsto</th><th>Extras</th><th>Descontos</th><th>Descrição</th><th>A pagar</th><th>Total pago</th><th>Status</th><th>Data pagamento</th><th>Ações</th></tr>
           </thead>
           <tbody id="pagamentosBody"></tbody>
         </table>
@@ -4879,21 +4879,24 @@ body.dyse-modal-open{overflow:hidden;}
   let PAGAMENTOS_CACHE = [];
 
   let PAGAMENTOS_DESCONTOS = [];
+  let PAGAMENTOS_EXTRAS = [];
   let PAGAMENTOS_SUBSTITUICOES = [];
 
   async function loadPagamentosMes(){
     const mes = monthInputToCompetencia(document.getElementById('pagamentosMes').value);
     PAGAMENTOS_MES_ATUAL = mes;
     await dyseGerarMensalidadesDoMes(mes);
-    const [mensalidades, pagamentos, historicoMes, descontos, substituicoes] = await Promise.all([
+    const [mensalidades, pagamentos, historicoMes, descontos, extras, substituicoes] = await Promise.all([
       dyseListMensalidades(mes),
       dyseListPagamentosProfessores(mes),
       dyseListPagamentosHistoricoMes(mes),
       dyseListDescontosProfessor(mes),
+      dyseListExtrasProfessor(mes),
       dyseListSubstituicoesNoMes(mes, dyseFimDoMes(mes))
     ]);
     PAGAMENTOS_CACHE = pagamentos;
     PAGAMENTOS_DESCONTOS = descontos;
+    PAGAMENTOS_EXTRAS = extras;
     PAGAMENTOS_SUBSTITUICOES = substituicoes;
     renderPagamentosTable(mensalidades, pagamentos, historicoMes);
   }
@@ -4907,6 +4910,8 @@ body.dyse-modal-open{overflow:hidden;}
       if(!m.professor_id) return;
       (porProfessor[m.professor_id] = porProfessor[m.professor_id] || []).push(m);
     });
+    // Professor só com pagamento extra no mês (ex.: só o Speaking Club) também entra.
+    PAGAMENTOS_EXTRAS.forEach(x => { porProfessor[x.professor_id] = porProfessor[x.professor_id] || []; });
 
     // "Total pago" = soma de todas as parcelas registradas no mês (a linha de
     // estado atual só guarda o último "Salvar").
@@ -4924,7 +4929,9 @@ body.dyse-modal-open{overflow:hidden;}
 
       const descontosDoProf = PAGAMENTOS_DESCONTOS.filter(d => d.professor_id === profId);
       const totalDescontos = descontosDoProf.reduce((s,d) => s + Number(d.valor || 0), 0);
-      const aPagar = Math.round((totalPrevisto - totalDescontos) * 100) / 100;
+      const extrasDoProf = PAGAMENTOS_EXTRAS.filter(x => x.professor_id === profId);
+      const totalExtras = extrasDoProf.reduce((s,x) => s + Number(x.valor || 0), 0);
+      const aPagar = Math.round((totalPrevisto + totalExtras - totalDescontos) * 100) / 100;
 
       // Substituição/aula extra: informativo (já está no Total previsto,
       // não desconta de novo). Aula extra NUNCA desconta do titular, então
@@ -4935,9 +4942,11 @@ body.dyse-modal-open{overflow:hidden;}
       const subsCobriu = PAGAMENTOS_SUBSTITUICOES.filter(s => s.tipo !== 'extra' && s.professor_substituto_id === profId);
       const extrasDeu = PAGAMENTOS_SUBSTITUICOES.filter(s => s.tipo === 'extra' && s.professor_substituto_id === profId);
 
-      const descPartes = descontosDoProf.map(d =>
+      const descPartes = extrasDoProf.map(x =>
+        '+ ' + (DYSE_EXTRA_TIPO_LABELS[x.tipo] || x.tipo) + (x.descricao ? ' (' + x.descricao + ')' : '') + ': ' + formatMoney(Number(x.valor || 0))
+      ).concat(descontosDoProf.map(d =>
         (DESCONTO_TIPO_LABELS[d.tipo] || d.tipo) + (d.descricao ? ' (' + d.descricao + ')' : '') + ': ' + formatMoney(Number(d.valor || 0))
-      );
+      ));
       if(subsCoberto.length) descPartes.push('Substituído em ' + subsCoberto.map(s => formatDateBR(String(s.data_aula).slice(0,10))).join(', ') + ' (já no previsto)');
       if(subsCobriu.length) descPartes.push('Cobriu ' + subsCobriu.map(s => formatDateBR(String(s.data_aula).slice(0,10))).join(', ') + ' (já no previsto)');
       if(extrasDeu.length) descPartes.push('Aula extra em ' + extrasDeu.map(s => formatDateBR(String(s.data_aula).slice(0,10))).join(', ') + ' (já no previsto)');
@@ -4952,7 +4961,7 @@ body.dyse-modal-open{overflow:hidden;}
       const modalidadesTexto = Object.keys(modalidadesResumo).map(n => n + ' (' + modalidadesResumo[n] + ')').join(', ');
       return {
         profId, professor, linhas, totalPrevisto, pagamento, modalidadesTexto,
-        totalDescontos, aPagar, descricaoTexto,
+        totalDescontos, extrasDoProf, totalExtras, aPagar, descricaoTexto,
         totalPago: pagoPorProfessor[profId] || 0,
         status: pagamento ? pagamento.status : 'pendente'
       };
@@ -4967,12 +4976,19 @@ body.dyse-modal-open{overflow:hidden;}
           '<td>' + (mod ? escapeHtmlLocal(mod.name) : '-') + '</td>' +
           '<td>' + formatMoney(l.valor_pago_professor) + '</td>' +
         '</tr>';
-      }).join('');
+      }).join('') + r.extrasDoProf.map(x =>
+        '<tr>' +
+          '<td>' + escapeHtmlLocal(x.descricao || '—') + ' <span class="turma-badge" style="background:#e6f4ea; color:#1e6b34; font-size:10px;">extra</span></td>' +
+          '<td>' + escapeHtmlLocal(DYSE_EXTRA_TIPO_LABELS[x.tipo] || x.tipo) + '</td>' +
+          '<td>' + formatMoney(Number(x.valor || 0)) + '</td>' +
+        '</tr>'
+      ).join('');
       return '<tr class="pag-row" onclick="togglePagamentoDetalhe(\'' + r.profId + '\')">' +
         '<td><span class="pag-chevron" id="pagChevron-' + r.profId + '">›</span>' + escapeHtmlLocal(r.professor ? (r.professor.full_name || '') : '(professor removido)') + '</td>' +
         '<td><span class="pill-count">' + r.linhas.length + '</span></td>' +
         '<td style="font-size:.78rem;">' + escapeHtmlLocal(r.modalidadesTexto) + '</td>' +
         '<td>' + formatMoney(r.totalPrevisto) + '</td>' +
+        '<td>' + (r.totalExtras > 0 ? '<span style="color:#1e6b34;">+ ' + formatMoney(r.totalExtras) + '</span>' : '-') + '</td>' +
         '<td>' + (r.totalDescontos > 0 ? '<span style="color:var(--bad);">− ' + formatMoney(r.totalDescontos) + '</span>' : '-') + '</td>' +
         '<td style="font-size:.76rem; max-width:220px; white-space:normal;">' + (r.descricaoTexto ? escapeHtmlLocal(r.descricaoTexto) : '-') + '</td>' +
         '<td><b>' + formatMoney(r.aPagar) + '</b></td>' +
@@ -4982,14 +4998,14 @@ body.dyse-modal-open{overflow:hidden;}
         '<td><button type="button" class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openPagamentoModal(\'' + r.profId + '\')">Registrar pagamento</button></td>' +
       '</tr>' +
       '<tr class="pag-detalhe-row" id="' + detalheId + '" style="display:none;">' +
-        '<td colspan="11">' +
+        '<td colspan="12">' +
           '<table class="dash-table" style="margin:0; box-shadow:none;">' +
             '<thead><tr><th>Aluno</th><th>Modalidade</th><th>Valor pago ao professor</th></tr></thead>' +
             '<tbody>' + detalheLinhas + '</tbody>' +
           '</table>' +
         '</td>' +
       '</tr>';
-    }).join('') : '<tr><td colspan="11" style="text-align:center; opacity:.6;">Nenhum aluno com mensalidade gerada para este mês ainda.</td></tr>';
+    }).join('') : '<tr><td colspan="12" style="text-align:center; opacity:.6;">Nenhum aluno com mensalidade gerada nem pagamento extra para este mês ainda.</td></tr>';
   }
 
   function togglePagamentoDetalhe(profId){
@@ -5020,6 +5036,21 @@ body.dyse-modal-open{overflow:hidden;}
         '<div class="gestao-field"><label>Observações</label><input type="text" id="pgObservacoes" value="' + escapeHtmlLocal(pagamento ? (pagamento.observacoes || '') : '') + '"></div>' +
         '<button type="submit" class="btn btn-primary">Salvar pagamento</button>' +
       '</form>' +
+      '<div class="report-section-head">Pagamentos extras</div>' +
+      '<p class="gestao-hint">Valor fixo que não vem de aluno (Speaking Club, bônus de coordenação, pagamento retroativo). "Todo mês" entra sozinho a partir deste mês até você encerrar; "Só este mês" vale uma vez. Não precisa mais criar aluno fake.</p>' +
+      '<form class="gestao-form" onsubmit="return handleAddExtraProfessor(event)">' +
+        '<div class="gestao-field" style="flex:1 1 150px;"><label>Tipo</label><select id="extraTipo">' +
+          Object.keys(DYSE_EXTRA_TIPO_LABELS).map(t => '<option value="' + t + '">' + DYSE_EXTRA_TIPO_LABELS[t] + '</option>').join('') +
+        '</select></div>' +
+        '<div class="gestao-field" style="flex:0 1 120px;"><label>Valor (R$)</label><input type="number" step="0.01" min="0" id="extraValor" required></div>' +
+        '<div class="gestao-field" style="flex:0 1 150px;"><label>Repetição</label><select id="extraRecorrencia">' +
+          '<option value="mensal">Todo mês</option>' +
+          '<option value="avulso">Só este mês</option>' +
+        '</select></div>' +
+        '<div class="gestao-field" style="flex:1 1 180px;"><label>Descrição (opcional)</label><input type="text" id="extraDescricao"></div>' +
+        '<button type="submit" class="btn btn-ghost btn-sm">+ Adicionar</button>' +
+      '</form>' +
+      '<div id="extrasProfList"><p class="report-line" style="opacity:.6;">Carregando...</p></div>' +
       '<div class="report-section-head">Descontos do mês</div>' +
       '<p class="gestao-hint">Ex.: plano de saúde. A substituição de aulas já entra no Total previsto pela aba Substituições, não precisa lançar aqui de novo.</p>' +
       '<form class="gestao-form" onsubmit="return handleAddDescontoProfessor(event)">' +
@@ -5038,8 +5069,87 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('pagamentoModal').classList.add('open');
     document.getElementById('pagamentoModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
+    await renderExtrasProfList();
     await renderDescontosProfList();
     await renderPagamentoHistoricoList();
+  }
+
+  // Selecionar o retroativo já sugere "Só este mês"; os outros, "Todo mês".
+  document.addEventListener('change', e => {
+    if(e.target && e.target.id === 'extraTipo'){
+      const rec = document.getElementById('extraRecorrencia');
+      if(rec) rec.value = e.target.value === 'pagamento_retroativo' ? 'avulso' : 'mensal';
+    }
+  });
+
+  function mesAnteriorCompetencia(mes){
+    const [y, m] = mes.split('-').map(Number);
+    return m === 1 ? (y - 1) + '-12-01' : y + '-' + String(m - 1).padStart(2, '0') + '-01';
+  }
+
+  async function renderExtrasProfList(){
+    const el = document.getElementById('extrasProfList');
+    if(!el) return;
+    const mes = PAGAMENTOS_MES_ATUAL;
+    const extras = (await dyseListExtrasProfessor(mes)).filter(x => x.professor_id === CURRENT_PAGAMENTO_PROF_ID);
+    const total = extras.reduce((s,x) => s + Number(x.valor || 0), 0);
+    el.innerHTML = extras.length
+      ? extras.map(x => {
+          const ini = String(x.mes_inicio).slice(0, 10);
+          const fim = x.mes_fim ? String(x.mes_fim).slice(0, 10) : null;
+          const vigencia = fim === ini ? 'só ' + formatMesLabel(ini) : 'desde ' + formatMesLabel(ini) + (fim ? ' até ' + formatMesLabel(fim) : ', todo mês');
+          // Nunca mexe em mês anterior: "remover" tira deste mês em diante
+          // (apaga só se o extra começou neste mês).
+          return '<div class="chip-toggle-row" style="justify-content:space-between; flex-wrap:wrap; gap:6px;">' +
+            '<span class="name">' + escapeHtmlLocal(DYSE_EXTRA_TIPO_LABELS[x.tipo] || x.tipo) + (x.descricao ? ' · ' + escapeHtmlLocal(x.descricao) : '') + ' · <b>' + formatMoney(Number(x.valor || 0)) + '</b> <span style="opacity:.6; font-size:.78rem;">(' + vigencia + ')</span></span>' +
+            '<span style="display:flex; gap:6px;">' +
+              (!fim ? '<button type="button" class="btn btn-ghost btn-xs" onclick="handleEncerrarExtraProfessor(' + x.id + ')">Encerrar após ' + formatMesLabel(mes) + '</button>' : '') +
+              '<button type="button" class="btn btn-danger btn-xs" onclick="handleRemoverExtraProfessor(' + x.id + ', \'' + ini + '\')">' + (ini === mes ? 'Remover' : 'Tirar a partir de ' + formatMesLabel(mes)) + '</button>' +
+            '</span>' +
+          '</div>';
+        }).join('') + '<p class="report-line" style="margin-top:6px;"><b>Total de extras: ' + formatMoney(total) + '</b></p>'
+      : '<p class="report-line" style="opacity:.6;">Nenhum pagamento extra neste mês.</p>';
+  }
+
+  async function handleAddExtraProfessor(e){
+    e.preventDefault();
+    const valor = parseFloat(document.getElementById('extraValor').value);
+    if(!(valor >= 0)) return false;
+    const mes = PAGAMENTOS_MES_ATUAL;
+    const { error } = await dyseCreateExtraProfessor(CURRENT_PAGAMENTO_PROF_ID, {
+      tipo: document.getElementById('extraTipo').value,
+      valor: valor,
+      descricao: document.getElementById('extraDescricao').value.trim() || null,
+      mes_inicio: mes,
+      mes_fim: document.getElementById('extraRecorrencia').value === 'avulso' ? mes : null
+    });
+    if(error){ alert('Não foi possível adicionar o extra: ' + error.message); return false; }
+    document.getElementById('extraValor').value = '';
+    document.getElementById('extraDescricao').value = '';
+    await renderExtrasProfList();
+    await loadPagamentosMes();
+    return false;
+  }
+
+  async function handleEncerrarExtraProfessor(id){
+    const mes = PAGAMENTOS_MES_ATUAL;
+    if(!confirm('Encerrar este pagamento extra? Ele continua valendo em ' + formatMesLabel(mes) + ' e para de entrar a partir do mês seguinte.')) return;
+    const { error } = await dyseEncerrarExtraProfessor(id, mes);
+    if(error){ alert('Não foi possível encerrar: ' + error.message); return; }
+    await renderExtrasProfList();
+    await loadPagamentosMes();
+  }
+
+  async function handleRemoverExtraProfessor(id, mesInicio){
+    const mes = PAGAMENTOS_MES_ATUAL;
+    const apagar = mesInicio === mes;
+    if(!confirm(apagar
+      ? 'Remover este pagamento extra?'
+      : 'Tirar este pagamento extra a partir de ' + formatMesLabel(mes) + '? Os meses anteriores continuam como estão.')) return;
+    const { error } = apagar ? await dyseDeleteExtraProfessor(id) : await dyseEncerrarExtraProfessor(id, mesAnteriorCompetencia(mes));
+    if(error){ alert('Não foi possível remover: ' + error.message); return; }
+    await renderExtrasProfList();
+    await loadPagamentosMes();
   }
 
   async function renderDescontosProfList(){
@@ -5148,9 +5258,10 @@ body.dyse-modal-open{overflow:hidden;}
 
   async function renderRelatorio(){
     const mes = RELATORIO_MES_ATUAL;
-    const [mensalidades, gastos] = await Promise.all([
+    const [mensalidades, gastos, extras] = await Promise.all([
       dyseListMensalidades(mes),
-      dyseListGastos(null, mes)
+      dyseListGastos(null, mes),
+      dyseListExtrasProfessor(mes)
     ]);
 
     const profFiltro = document.getElementById('relatorioProfessor').value;
@@ -5188,6 +5299,27 @@ body.dyse-modal-open{overflow:hidden;}
       };
     });
 
+    // Pagamentos extras (Speaking Club, bônus...) são custo sem aluno nem
+    // receita: entram como linha própria com lucro negativo e ficam fora da
+    // contagem de alunos (alunoId null).
+    linhas = linhas.concat(extras.map(x => {
+      const professor = TEACHERS.find(t => t.id === x.professor_id);
+      const valor = Number(x.valor || 0);
+      return {
+        alunoId: null,
+        alunoNome: 'Extra · ' + (DYSE_EXTRA_TIPO_LABELS[x.tipo] || x.tipo) + (x.descricao ? ' (' + x.descricao + ')' : ''),
+        professorNome: professor ? (professor.full_name || '') : '-',
+        professorId: x.professor_id,
+        modalidadeNome: DYSE_EXTRA_TIPO_LABELS[x.tipo] || x.tipo,
+        modalidadeId: null,
+        valorRecebido: 0,
+        valorPagoProfessor: valor,
+        totalGastos: 0,
+        lucro: -valor,
+        margem: 0
+      };
+    }));
+
     if(profFiltro) linhas = linhas.filter(l => l.professorId === profFiltro);
     if(modFiltro) linhas = linhas.filter(l => l.modalidadeId === modFiltro);
     if(alunoFiltro) linhas = linhas.filter(l => l.alunoNome.toLowerCase().includes(alunoFiltro));
@@ -5218,7 +5350,7 @@ body.dyse-modal-open{overflow:hidden;}
     const totalGastos = linhas.reduce((s,l) => s+l.totalGastos, 0);
     const lucroTotal = linhas.reduce((s,l) => s+l.lucro, 0);
     const margemGeral = totalRecebido > 0 ? (lucroTotal/totalRecebido*100) : 0;
-    const qtdAlunos = new Set(linhas.map(l => l.alunoId)).size; // conta alunos distintos, não linhas (um aluno rateado gera 2+ linhas no mês)
+    const qtdAlunos = new Set(linhas.filter(l => l.alunoId).map(l => l.alunoId)).size; // conta alunos distintos, não linhas (um aluno rateado gera 2+ linhas no mês); extras não são aluno
     const ticketMedio = qtdAlunos ? totalRecebido/qtdAlunos : 0;
     const custoMedio = qtdAlunos ? (totalPagoProf+totalGastos)/qtdAlunos : 0;
     const lucroMedio = qtdAlunos ? lucroTotal/qtdAlunos : 0;
@@ -5259,7 +5391,7 @@ body.dyse-modal-open{overflow:hidden;}
     // Os 6 meses são independentes entre si — dispara tudo de uma vez em vez
     // de esperar um mês terminar pra só então pedir o próximo.
     const porMes = await Promise.all(meses.map(async mes => {
-      const [mensalidadesMes, gastosMes] = await Promise.all([dyseListMensalidades(mes), dyseListGastos(null, mes)]);
+      const [mensalidadesMes, gastosMes, extrasMes] = await Promise.all([dyseListMensalidades(mes), dyseListGastos(null, mes), dyseListExtrasProfessor(mes)]);
       const gastosPorAluno = {};
       gastosMes.forEach(g => { (gastosPorAluno[g.aluno_id] = gastosPorAluno[g.aluno_id] || []).push(g); });
       const mensalidadesPorAlunoMes = {};
@@ -5273,6 +5405,8 @@ body.dyse-modal-open{overflow:hidden;}
       Object.keys(mensalidadesPorAlunoMes).forEach(alunoId => {
         lucro += dyseLucroPorAluno(mensalidadesPorAlunoMes[alunoId], gastosPorAluno[alunoId] || []).lucroTotal;
       });
+      // Pagamentos extras: custo sem receita.
+      extrasMes.forEach(x => { pago += Number(x.valor || 0); lucro -= Number(x.valor || 0); });
       return { receita, pago, lucro };
     }));
     const receitas = porMes.map(x => x.receita);

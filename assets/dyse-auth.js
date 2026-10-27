@@ -2719,6 +2719,54 @@ async function dyseDeleteDescontoProfessor(id){
   return { error };
 }
 
+/* ---------- Pagamentos extras ao professor (valor fixo, sem aluno) ----------
+   Speaking Club / bônus de coordenação / retroativo. Vigência por mês:
+   mes_inicio até mes_fim (null = todo mês até encerrar). Meses no formato
+   'YYYY-MM-01', então comparar como string já ordena certo. */
+const DYSE_EXTRA_TIPO_LABELS = { speaking_club: 'Speaking Club', bonus_coordenadora: 'Bônus coordenadora', pagamento_retroativo: 'Pagamento retroativo' };
+
+function dyseExtraVigenteNoMes(extra, mes){
+  const ini = String(extra.mes_inicio || '').slice(0, 10);
+  const fim = extra.mes_fim ? String(extra.mes_fim).slice(0, 10) : null;
+  return ini <= mes && (!fim || fim >= mes);
+}
+async function dyseListExtrasProfessor(mes){
+  let q = sb.from('extras_professor').select('*').order('criado_em', { ascending: false });
+  if(mes) q = q.lte('mes_inicio', mes).or('mes_fim.is.null,mes_fim.gte.' + mes);
+  const { data, error } = await q;
+  return error ? [] : data;
+}
+async function dyseListMyExtras(){
+  const session = await dyseGetSession();
+  if(!session) return [];
+  const { data, error } = await sb
+    .from('extras_professor')
+    .select('*')
+    .eq('professor_id', session.user.id);
+  return error ? [] : data;
+}
+async function dyseCreateExtraProfessor(professorId, campos){
+  const session = await dyseGetSession();
+  const { data, error } = await sb.from('extras_professor').insert({
+    professor_id: professorId,
+    tipo: campos.tipo,
+    valor: campos.valor,
+    descricao: campos.descricao || null,
+    mes_inicio: campos.mes_inicio,
+    mes_fim: campos.mes_fim || null,
+    criado_por: session ? session.user.id : null
+  }).select('*').maybeSingle();
+  return { data, error };
+}
+async function dyseEncerrarExtraProfessor(id, mesFim){
+  const { error } = await sb.from('extras_professor').update({ mes_fim: mesFim }).eq('id', id);
+  return { error };
+}
+async function dyseDeleteExtraProfessor(id){
+  const { error } = await sb.from('extras_professor').delete().eq('id', id);
+  return { error };
+}
+
 /* ---------- Fechamento mensal ---------- */
 async function dyseListFechamentos(){
   const { data, error } = await sb.from('fechamentos_mensais').select('*').order('mes_competencia', { ascending: false });

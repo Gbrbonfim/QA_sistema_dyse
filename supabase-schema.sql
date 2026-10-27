@@ -4336,3 +4336,46 @@ insert into public.nivel_aulas (materia_slug, numero, topico, conteudo) values
     )
   ))
 on conflict (materia_slug, numero) do nothing;
+
+-- ======================================================================
+-- 34) PAGAMENTOS EXTRAS ao professor (valor fixo, sem aluno)
+--     Speaking Club, bônus de coordenação, pagamento retroativo — antes
+--     lançados criando um "aluno fake" (que ainda contava como receita e
+--     como aluno ativo). Espelho de descontos_professor (seção 23), mas com
+--     vigência: vale de mes_inicio até mes_fim (null = todo mês até
+--     encerrar; avulso = mes_fim igual a mes_inicio).
+--     Aba Pagamentos: "A pagar" = Total previsto + Extras − Descontos.
+-- ======================================================================
+create table if not exists public.extras_professor (
+  id bigint generated always as identity primary key,
+  professor_id uuid not null references auth.users(id) on delete cascade,
+  tipo text not null check (tipo in ('speaking_club','bonus_coordenadora','pagamento_retroativo')),
+  valor numeric(10,2) not null check (valor >= 0),
+  descricao text,
+  mes_inicio date not null,
+  mes_fim date,
+  criado_por uuid references auth.users(id) on delete set null,
+  criado_em timestamptz default now(),
+  check (mes_fim is null or mes_fim >= mes_inicio)
+);
+
+create index if not exists idx_extras_professor_prof
+  on public.extras_professor (professor_id, mes_inicio);
+
+alter table public.extras_professor enable row level security;
+
+drop policy if exists "gestao gerencia extras professor" on public.extras_professor;
+create policy "gestao gerencia extras professor"
+  on public.extras_professor for all
+  using (public.is_financeiro())
+  with check (public.is_financeiro());
+
+drop policy if exists "professor ve os proprios extras" on public.extras_professor;
+create policy "professor ve os proprios extras"
+  on public.extras_professor for select
+  using (professor_id = auth.uid());
+
+drop trigger if exists trg_audit_extras_professor on public.extras_professor;
+create trigger trg_audit_extras_professor
+  after insert or update or delete on public.extras_professor
+  for each row execute procedure public.log_financeiro_auditoria();

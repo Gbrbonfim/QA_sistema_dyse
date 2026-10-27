@@ -2589,12 +2589,14 @@ body.dyse-modal-open{overflow:hidden;}
   async function loadFinanceiroProfessor(){
     const mes = monthInputToCompetencia(document.getElementById('finProfMes').value);
     if(!MODALIDADES_CACHE.length) MODALIDADES_CACHE = await dyseListModalidades();
-    const [todasMensalidades, pagamentos, historicoPag, descontos] = await Promise.all([
+    const [todasMensalidades, pagamentos, historicoPag, descontos, extras] = await Promise.all([
       dyseListMyMensalidades(),
       dyseListMyPagamentos(),
       dyseListMyPagamentoHistorico(),
-      dyseListMyDescontos()
+      dyseListMyDescontos(),
+      dyseListMyExtras()
     ]);
+    const extrasMes = extras.filter(x => dyseExtraVigenteNoMes(x, mes));
     const totalPagoMes = historicoPag
       .filter(h => h.mes_competencia === mes && h.status !== 'cancelado' && h.valor_pago != null)
       .reduce((s,h) => s + Number(h.valor_pago), 0);
@@ -2610,17 +2612,18 @@ body.dyse-modal-open{overflow:hidden;}
       if(previsao.length){ doMes = previsao; isPrevisao = true; }
     }
     document.getElementById('finProfPrevisaoNote').style.display = isPrevisao ? 'block' : 'none';
-    renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes), isPrevisao, totalPagoMes, descontosMes);
-    renderFinanceiroTabela(doMes, isPrevisao);
-    await renderFinanceiroHistorico(todasMensalidades, pagamentos, historicoPag);
+    renderFinanceiroKpis(doMes, pagamentos.find(p => p.mes_competencia === mes), isPrevisao, totalPagoMes, descontosMes, extrasMes);
+    renderFinanceiroTabela(doMes, isPrevisao, extrasMes);
+    await renderFinanceiroHistorico(todasMensalidades, pagamentos, historicoPag, extras);
   }
 
   const DESCONTO_TIPO_LABELS_PROF = { plano_saude: 'Plano de saúde', substituicao_aulas: 'Substituição de aulas', outro: 'Outro' };
 
-  function renderFinanceiroKpis(linhas, pagamento, isPrevisao, totalPagoMes, descontosMes){
+  function renderFinanceiroKpis(linhas, pagamento, isPrevisao, totalPagoMes, descontosMes, extrasMes){
     const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
     const totalDescontos = (descontosMes || []).reduce((s,d) => s + Number(d.valor || 0), 0);
-    const aPagar = Math.round((totalPrevisto - totalDescontos) * 100) / 100;
+    const totalExtras = (extrasMes || []).reduce((s,x) => s + Number(x.valor || 0), 0);
+    const aPagar = Math.round((totalPrevisto + totalExtras - totalDescontos) * 100) / 100;
     const porModalidade = {};
     linhas.forEach(l => {
       const mod = MODALIDADES_CACHE.find(m => m.id === l.modalidade_id);
@@ -2636,6 +2639,7 @@ body.dyse-modal-open{overflow:hidden;}
       ['Total de alunos', String(linhas.length)],
       ['Por modalidade', modalidadesTexto],
       ['Total previsto', formatMoney(totalPrevisto)],
+      ['Extras', totalExtras > 0 ? '+ ' + formatMoney(totalExtras) : '-'],
       ['Descontos', totalDescontos > 0 ? '− ' + formatMoney(totalDescontos) : '-'],
       ['A pagar', formatMoney(aPagar)],
       ['Total pago', totalPagoMes > 0 ? formatMoney(totalPagoMes) : '-'],
@@ -2648,16 +2652,24 @@ body.dyse-modal-open{overflow:hidden;}
     ).join('');
   }
 
-  function renderFinanceiroTabela(linhas, isPrevisao){
+  function renderFinanceiroTabela(linhas, isPrevisao, extrasMes){
+    extrasMes = extrasMes || [];
     document.getElementById('finProfTableSummary').textContent = 'Detalhamento por aluno' + (isPrevisao ? ' — previsão' : '') + ' (' + linhas.length + ')';
-    document.getElementById('finProfBody').innerHTML = linhas.length ? linhas.map(l => {
+    const linhasExtras = extrasMes.map(x =>
+      '<tr>' +
+        '<td data-label="Aluno">' + escapeHtmlLocal(x.descricao || '—') + ' <span style="display:inline-block; background:#e6f4ea; color:#1e6b34; font-size:10px; font-weight:800; padding:2px 8px; border-radius:999px;">extra</span></td>' +
+        '<td data-label="Modalidade">' + escapeHtmlLocal(DYSE_EXTRA_TIPO_LABELS[x.tipo] || x.tipo) + '</td>' +
+        '<td data-label="Valor a receber">' + formatMoney(Number(x.valor || 0)) + '</td>' +
+      '</tr>'
+    ).join('');
+    document.getElementById('finProfBody').innerHTML = (linhas.length || extrasMes.length) ? linhas.map(l => {
       const mod = MODALIDADES_CACHE.find(m => m.id === l.modalidade_id);
       return '<tr>' +
         '<td data-label="Aluno">' + escapeHtmlLocal(l.aluno_nome || l.aluno_id) + (l.inclui_aula_extra ? ' <span style="display:inline-block; background:#fff3da; color:#8a5a00; font-size:10px; font-weight:800; padding:2px 8px; border-radius:999px;">aula extra</span>' : '') + '</td>' +
         '<td data-label="Modalidade">' + (mod ? escapeHtmlLocal(mod.name) : '-') + '</td>' +
         '<td data-label="Valor a receber">' + formatMoney(l.valor_pago_professor) + '</td>' +
       '</tr>';
-    }).join('') : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhum aluno neste mês.</td></tr>';
+    }).join('') + linhasExtras : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhum aluno neste mês.</td></tr>';
   }
 
   /* Mistura os meses com mensalidade REAL já gerada (mais confiável — pode
@@ -2666,7 +2678,7 @@ body.dyse-modal-open{overflow:hidden;}
      "visitou" em Pagamentos/Relatório (sem isso, um mês contratado ficava
      simplesmente ausente da lista até a gestão abrir ele). Mês com dado
      real nunca é substituído pela previsão. */
-  async function renderFinanceiroHistorico(todasMensalidades, pagamentos, historicoPag){
+  async function renderFinanceiroHistorico(todasMensalidades, pagamentos, historicoPag, extras){
     historicoPag = historicoPag || [];
     const pagoPorMes = {};
     historicoPag.forEach(h => {
@@ -2681,12 +2693,23 @@ body.dyse-modal-open{overflow:hidden;}
       if(mesesReais.has(p.mes_competencia)) return;
       (linhasPorMes[p.mes_competencia] = linhasPorMes[p.mes_competencia] || []).push(p);
     });
+    // Meses com pagamento extra (ex.: só Speaking Club) também aparecem —
+    // do início do extra até o fim dele ou o mês atual, o que vier primeiro.
+    (extras || []).forEach(x => {
+      const limite = x.mes_fim && String(x.mes_fim).slice(0, 10) < dyseMesCompetencia() ? String(x.mes_fim).slice(0, 10) : dyseMesCompetencia();
+      let [y, m] = String(x.mes_inicio).slice(0, 10).split('-').map(Number);
+      for(let mes = String(x.mes_inicio).slice(0, 10); mes <= limite; mes = y + '-' + String(m).padStart(2, '0') + '-01'){
+        linhasPorMes[mes] = linhasPorMes[mes] || [];
+        if(m === 12){ y++; m = 1; } else { m++; }
+      }
+    });
 
     const meses = Object.keys(linhasPorMes).sort((a,b) => b.localeCompare(a));
     document.getElementById('finProfHistoricoBody').innerHTML = meses.length ? meses.map(mes => {
       const linhas = linhasPorMes[mes];
-      const isPrevisaoDoMes = !mesesReais.has(mes);
-      const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0);
+      const isPrevisaoDoMes = !mesesReais.has(mes) && linhas.length > 0;
+      const totalExtrasMes = (extras || []).filter(x => dyseExtraVigenteNoMes(x, mes)).reduce((s,x) => s + Number(x.valor || 0), 0);
+      const totalPrevisto = linhas.reduce((s,l) => s + Number(l.valor_pago_professor), 0) + totalExtrasMes;
       const pagamento = pagamentos.find(p => p.mes_competencia === mes);
       return '<tr>' +
         '<td>' + formatMesLabel(mes) + (isPrevisaoDoMes ? ' <span style="opacity:.55; font-size:.72rem;">(previsão)</span>' : '') + '</td>' +
