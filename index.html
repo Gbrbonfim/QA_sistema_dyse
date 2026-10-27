@@ -1077,6 +1077,26 @@
     window.addEventListener('resize', queueVisibilityCheck);
   })();
 
+  // Google Analytics: um evento "clique_botao" por clique em link/botão da
+  // página de vendas — com o texto do botão, o destino e a seção onde ele
+  // está, pra ver quais chamadas (WhatsApp de cada plano, Quanto custa,
+  // Área do Aluno...) as pessoas mais usam. Só esta página tem o GA; o
+  // painel do aluno/professor e as atividades não são medidos.
+  (function(){
+    document.addEventListener('click', function(e){
+      const el = e.target.closest('a, button');
+      if(!el || typeof gtag !== 'function') return;
+      const texto = (el.getAttribute('aria-label') || el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 100);
+      const secao = el.closest('section, header, footer, nav');
+      gtag('event', 'clique_botao', {
+        botao: texto,
+        destino: el.getAttribute('href') || '',
+        secao: secao ? (secao.id || (secao.classList.contains('hero') ? 'hero' : secao.tagName.toLowerCase())) : '',
+        transport_type: 'beacon'
+      });
+    });
+  })();
+
 </script>
 </body>
 </html>
