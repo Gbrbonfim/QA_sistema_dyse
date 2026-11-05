@@ -3924,14 +3924,15 @@ body.dyse-modal-open{overflow:hidden;}
     atualizarSugestaoPrevistas();
   }
 
-  function atualizarSugestaoPrevistas(){
+  async function atualizarSugestaoPrevistas(){
     const data = document.getElementById('subData').value;
     const campo = document.getElementById('subPrevistas');
     const primeiroId = SUB_ALUNOS_SELECIONADOS.values().next().value;
     const aluno = primeiroId ? STUDENTS.find(a => a.id === primeiroId) : null;
     if(!aluno || !aluno.turma_id || !data){ campo.value = ''; return; }
     const turma = TURMAS.find(t => t.id === aluno.turma_id);
-    const sugestao = dyseAulasPrevistasNoMes(turma, data.slice(0, 7));
+    const diasSemAula = await dyseDiasSemAulaDoAno(data.slice(0, 4));
+    const sugestao = dyseAulasPrevistasNoMes(turma, data.slice(0, 7), diasSemAula);
     campo.value = sugestao || '';
   }
 

@@ -1220,8 +1220,10 @@ async function dyseCreateSubstituicao(turmaId, dataAula, professorSubstitutoId, 
    (turma.dias_semana — 'dom'..'sab'), não pelas aulas já lançadas em
    chamada. Usada só pro rateio de aula EXTRA (ver seção 31 do schema):
    precisa de um número estável, que não infla conforme o mês avança nem
-   é distorcido pela própria aula extra sendo contada como sessão. */
-function dyseAulasPrevistasNoMes(turma, mesStr){
+   é distorcido pela própria aula extra sendo contada como sessão.
+   diasSemAula (opcional): Set de 'YYYY-MM-DD' de feriado/recesso do
+   Calendário Letivo — esses dias não contam como aula prevista. */
+function dyseAulasPrevistasNoMes(turma, mesStr, diasSemAula){
   const dias = (turma && turma.dias_semana) || [];
   if(!dias.length) return 0;
   const idx = { dom:0, seg:1, ter:2, qua:3, qui:4, sex:5, sab:6 };
@@ -1231,9 +1233,18 @@ function dyseAulasPrevistasNoMes(turma, mesStr){
   const ultimoDia = new Date(ano, mes, 0).getDate();
   let previstas = 0;
   for(let dia = 1; dia <= ultimoDia; dia++){
+    const data = mesStr.slice(0, 7) + '-' + String(dia).padStart(2, '0');
+    if(diasSemAula && diasSemAula.has(data)) continue;
     if(alvo.has(new Date(ano, mes - 1, dia).getDay())) previstas++;
   }
   return previstas;
+}
+
+/* Set de 'YYYY-MM-DD' marcados como feriado/recesso no Calendário Letivo
+   do ano — dias sem aula pra qualquer conta de aulas do mês. */
+async function dyseDiasSemAulaDoAno(ano){
+  const dias = await dyseListCalendarioDias(Number(ano));
+  return new Set(dias.filter(d => d.tipo === 'feriado' || d.tipo === 'recesso').map(d => String(d.data).slice(0, 10)));
 }
 async function dyseDeleteSubstituicao(id){
   const { error } = await sb.from('substituicoes_professor').delete().eq('id', id);
@@ -1346,9 +1357,13 @@ async function dyseGerarMensalidadesDoMes(mes){
       // o mês INTEIRO ao professor de quem rescindiu no começo do mês. A
       // turma de referência passa a ser a(s) em que o aluno apareceu na
       // chamada neste mês; sem nenhuma chamada com ele no mês, não houve
-      // aula antes da saída — fator 0 (não gera pagamento).
+      // aula antes da saída — fator 0 (não gera pagamento). O total do mês
+      // vem da agenda dessa turma (datasDeAulaDaTurma), não só das chamadas
+      // já lançadas: cancelada em 04/11 com só a chamada de 03/11 lançada
+      // dava 1/1 = mês cheio, em vez de 1 das 4 terças de novembro.
       const turmasDoAluno = await turmasComChamadaNoMes(h.aluno_id);
-      datasAula = (await sessoesDoMes()).filter(s => turmasDoAluno.has(s.turma_id)).map(s => String(s.data).slice(0, 10));
+      if(!turmasDoAluno.size) return 0;
+      datasAula = [...new Set((await Promise.all([...turmasDoAluno].map(datasDeAulaDaTurma))).flat())];
       if(!datasAula.length) return 0;
     }
 
@@ -1402,10 +1417,7 @@ async function dyseGerarMensalidadesDoMes(mes){
   const DIA_SEMANA_IDX = { dom:0, seg:1, ter:2, qua:3, qui:4, sex:5, sab:6 };
   let diasSemAulaCache = null;
   async function diasSemAulaDoMes(){
-    if(diasSemAulaCache === null){
-      const dias = await dyseListCalendarioDias(Number(mes.slice(0, 4)));
-      diasSemAulaCache = new Set(dias.filter(d => d.tipo === 'feriado' || d.tipo === 'recesso').map(d => String(d.data).slice(0, 10)));
-    }
+    if(diasSemAulaCache === null) diasSemAulaCache = await dyseDiasSemAulaDoAno(mes.slice(0, 4));
     return diasSemAulaCache;
   }
   async function datasDeAulaDaTurma(turmaId){
@@ -1537,7 +1549,8 @@ async function dyseGerarMensalidadesDoMes(mes){
       // cadastrado). Sem override, cai pra grade semanal da turma; sem
       // grade também, último recurso é contar aulas já lançadas no mês.
       const overrideRow = extras.find(x => Number(x.aulas_previstas_override) > 0);
-      let previstas = overrideRow ? Number(overrideRow.aulas_previstas_override) : dyseAulasPrevistasNoMes(turmaById[turmaId], mes);
+      let previstas = overrideRow ? Number(overrideRow.aulas_previstas_override)
+        : dyseAulasPrevistasNoMes(turmaById[turmaId], mes, regrasNovas ? await diasSemAulaDoMes() : null);
       if(!previstas){
         const sessoesTurma = (await sessoesDoMes()).filter(s => s.turma_id === turmaId);
         previstas = new Set(sessoesTurma.map(s => s.data)).size || 1;
@@ -1609,8 +1622,17 @@ async function dyseGerarMensalidadesDoMes(mes){
         const sessoes = await sessoesDoMes();
         const turmaAtual = turmaIdPorAluno[alunoId];
         // Mesmas datas do aluno que entra no meio do mês: agenda da turma +
-        // chamadas lançadas (datasDeAulaDaTurma). Sem turma, só as chamadas.
-        const datasRef = turmaAtual ? await datasDeAulaDaTurma(turmaAtual) : sessoes.map(s => String(s.data).slice(0, 10));
+        // chamadas lançadas (datasDeAulaDaTurma). Sem turma (cancelado/
+        // encerrado), regras novas usam a agenda da(s) turma(s) em que ele
+        // constou na chamada do mês; meses antigos seguem só as chamadas.
+        let datasRef;
+        if(turmaAtual) datasRef = await datasDeAulaDaTurma(turmaAtual);
+        else {
+          const turmasDoAluno = regrasNovas ? await turmasComChamadaNoMes(alunoId) : new Set();
+          datasRef = turmasDoAluno.size
+            ? [...new Set((await Promise.all([...turmasDoAluno].map(datasDeAulaDaTurma))).flat())]
+            : sessoes.map(s => String(s.data).slice(0, 10));
+        }
         const janelaDe = h => [h.data_inicio > mes ? h.data_inicio : mes, (h.data_fim && h.data_fim < fimDoMesStr) ? h.data_fim : fimDoMesStr];
         // Regras novas: cada aula vai pra UM período só, o mais recente que
         // cobre a data (periodos[0] = mais recente). Vínculos sobrepostos —
