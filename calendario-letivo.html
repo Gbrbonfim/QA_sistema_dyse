@@ -42,6 +42,7 @@ html:not(.dyse-auth-ready) body{visibility:hidden;}
 .sidebar-item{display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:var(--radius-sm); color:var(--antique-soft); font-weight:600; font-size:.9rem; background:transparent; border:none; cursor:pointer; text-align:left; width:100%; transition:.15s; text-decoration:none; position:relative;}
 .sidebar-badge{margin-left:auto; flex:none; min-width:18px; height:18px; padding:0 5px; border-radius:999px; background:var(--gamboge); color:var(--seal); font-size:.68rem; font-weight:800; display:flex; align-items:center; justify-content:center; line-height:1;}
 .sidebar-item.active .sidebar-badge{background:var(--amaranth); color:#fff;}
+.sidebar-badge[hidden]{display:none !important;}
 .sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
 .sidebar-item:hover{background:rgba(255,255,255,.12);}
 .sidebar-item.active{background:#fff; color:var(--amaranth);}
@@ -578,6 +579,11 @@ button.cal-day:hover{outline:2px solid var(--amaranth); outline-offset:-2px; z-i
     const session = await dyseRequireAuth();
     if(!session) return;
     const profile = await dyseGetProfile(session);
+    // Aluno vê o calendário dentro da própria Área do Aluno (aba do menu).
+    if(!dyseIsAdmin(profile) && !dyseIsTeacher(profile)){
+      location.replace('/area-do-aluno.html#calendario');
+      return;
+    }
     CAN_EDIT = dyseIsAdmin(profile);
 
     document.getElementById('topbarSub').textContent = CAN_EDIT

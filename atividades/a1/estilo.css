@@ -369,6 +369,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:4px 18px 18px;}
   display:flex; align-items:center; justify-content:center; line-height:1;
 }
 .sidebar-item.active .sidebar-badge{background:var(--amaranth); color:#fff;}
+.sidebar-badge[hidden]{display:none !important;}
 .sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
 .sidebar-item:hover{background:rgba(255,255,255,.12);}
 .sidebar-item.active{background:#fff; color:var(--amaranth);}
