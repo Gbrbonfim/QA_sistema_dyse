@@ -38,6 +38,7 @@
 .card-title, .rc-summary-txt h3, .manage-course-title, .level-group-title, .material-nivel-title{
   font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.1rem !important;
 }
+.course-card.concluida .course-card-cta:disabled{opacity:1; cursor:default;}
 .course-card.bloqueada{opacity:.55; filter:blur(1.5px) grayscale(.3); pointer-events:none; user-select:none;}
 .course-card-name, .course-folder-name{
   font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.05rem !important;
@@ -1414,14 +1415,34 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         "<button type=\"button\" class=\"btn btn-primary course-card-cta\" disabled>Em breve</button></div>";
     };
 
+    // Card de nível já concluído (anterior ao nível atual da turma).
+    const cardConcluido = (slug) => {
+      const nome = (AREA_CTX.materias[slug] && AREA_CTX.materias[slug].name) || slug.toUpperCase();
+      return "<div class=\"course-card concluida\" style=\"border-left-color:var(--ok);\">" +
+        "<div class=\"course-card-top\"><div><h3 class=\"course-card-name\">" + escapeHtmlLocal(nome) + "</h3>" +
+        "<p class=\"course-card-desc\">Nível concluído. Parabéns por essa etapa da sua trilha!</p></div>" +
+        "<div class=\"course-card-icon\" style=\"background:#E3F5E9; color:var(--ok);\">" + COURSE_ICON_SVG + "</div></div>" +
+        "<div class=\"course-card-stats\"><div class=\"course-card-stats-icon\">" + STATS_ICON_SVG + "</div>" +
+        "<div class=\"course-card-stats-text\"><span>✓ Nível concluído</span><div class=\"course-card-bar\"><span style=\"width:100%; background:var(--ok);\"></span></div></div>" +
+        "<div class=\"course-card-pct\">100%</div></div>" +
+        "<button type=\"button\" class=\"btn btn-primary course-card-cta\" style=\"background:var(--ok);\" disabled>Concluído ✓</button></div>";
+    };
+
     // Trilha de aprendizagem: A1 → A2 → B1 → B2 → C1, sempre visível — o que a turma
     // ainda não tem liberado aparece desfocado. Depois vêm os demais cursos (TOEFL...),
     // que só aparecem quando liberados.
     const TRILHA = ["a1", "a2", "b1", "b2", "c1"];
     const nivelPorSlug = {};
     AREA_CTX.niveis.forEach(n => { nivelPorSlug[n.slug] = n; });
+    // Níveis ANTERIORES ao nível atual da turma contam como concluídos (100%),
+    // mesmo que o aluno não tenha feito com a gente — ex.: quem entrou na DYSE
+    // já no B1 tem A1 e A2 completos na trilha.
+    const idxsLiberados = TRILHA.map((s, i) => nivelPorSlug[s] ? i : -1).filter(i => i >= 0);
+    const idxNivelAtual = idxsLiberados.length ? Math.min(...idxsLiberados) : -1;
+    const nivelConcluido = (slug) => !nivelPorSlug[slug] && TRILHA.indexOf(slug) < idxNivelAtual;
     for(const slug of TRILHA){
-      cards.push(nivelPorSlug[slug] ? await cardDoNivel(nivelPorSlug[slug]) : cardBloqueado(slug));
+      cards.push(nivelPorSlug[slug] ? await cardDoNivel(nivelPorSlug[slug])
+        : (nivelConcluido(slug) ? cardConcluido(slug) : cardBloqueado(slug)));
     }
     for(const nivel of AREA_CTX.niveis){
       if(!TRILHA.includes(nivel.slug)) cards.push(await cardDoNivel(nivel));
@@ -1434,7 +1455,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const segs = TRILHA.map(slug => {
       const aulasN = AREA_CTX.aulasNivel[slug] || [];
       const dadasN = AREA_CTX.aulasDadas[slug] || new Set();
-      const feitas = Math.min(AULAS_POR_NIVEL, aulasN.filter(a => dadasN.has(a.id)).length);
+      const feitas = nivelConcluido(slug) ? AULAS_POR_NIVEL
+        : Math.min(AULAS_POR_NIVEL, aulasN.filter(a => dadasN.has(a.id)).length);
       feitasTotal += feitas;
       const nome = (AREA_CTX.materias[slug] && AREA_CTX.materias[slug].name) || slug.toUpperCase();
       return "<div class=\"trilha-geral-seg\" title=\"" + escapeHtmlLocal(nome) + ": " + feitas + "/" + AULAS_POR_NIVEL + " aulas\">" +
