@@ -118,6 +118,7 @@ body::before{
   display:flex; align-items:center; justify-content:center; line-height:1;
 }
 .sidebar-item.active .sidebar-badge{background:var(--amaranth); color:#fff;}
+.sidebar-badge[hidden]{display:none !important;} /* sem isso o display:flex acima vence o atributo hidden e aparece "0" */
 @media (max-width:900px){
   .sidebar-badge{position:absolute; top:4px; right:4px; margin:0;}
 }
@@ -1116,6 +1117,20 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     atualizarBadges();
   }
 
+  // Antes da contagem real terminar: mostra os selinhos calculados com os
+  // contadores salvos no último acesso (mesmo cálculo das outras telas).
+  function pintarBadgesDoCache(uid){
+    if(AREA_CTX.countsReady) return;
+    const deltas = dyseAlunoBadgeDeltas(uid);
+    VIEWS.forEach(key => {
+      const el = document.querySelector('.sidebar-badge[data-badge="' + key + '"]');
+      if(!el) return;
+      const novo = deltas[key] || 0;
+      el.hidden = novo === 0;
+      el.textContent = novo > 9 ? '9+' : String(novo);
+    });
+  }
+
   function atualizarBadges(){
     if(!AREA_CTX.countsReady) return; // só depois que a IIFE contou tudo
     const seen = getSeen();
@@ -1306,6 +1321,13 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     SEEN_KEY = 'dyse_aluno_seen_' + session.user.id;
     renderAlunoChrome(session, profile);
 
+    // Notificações do menu: pinta na hora com o último valor conhecido (cache do
+    // navegador) e já dispara, em paralelo, as buscas mais lentas (cobranças do
+    // Asaas e Report Cards) — antes elas só começavam depois de montar os cursos.
+    pintarBadgesDoCache(session.user.id);
+    const cobrancasP = renderMinhasCobrancas().catch(e => { console.error(e); return []; });
+    const reportCardsP = renderMeusReportCards(session.user.id).catch(e => { console.error(e); return []; });
+
     const wrap = document.getElementById('coursesWrap');
 
     // Sem turma vinculada, a gestão ainda não decidiu o que esse aluno pode
@@ -1478,8 +1500,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '</div>' +
         '</div>';
 
-    const cobrancas = await renderMinhasCobrancas();
-    const reportCards = await renderMeusReportCards(session.user.id);
+    const [cobrancas, reportCards] = await Promise.all([cobrancasP, reportCardsP]);
 
     // Contadores pras notificações do menu
     AREA_CTX.counts.atividades = kpiAtividadesLiberadas + nMaterial;
