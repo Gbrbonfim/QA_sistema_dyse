@@ -419,6 +419,34 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .dyse-blocked-card h2{font-family:var(--font-display); color:var(--bad); font-size:1.5rem; margin:0 0 10px;}
 .dyse-blocked-card p{color:var(--seal-soft); font-size:.95rem; line-height:1.5; margin:0 0 22px;}
 
+/* ---------- VÍDEO DE BOAS-VINDAS OBRIGATÓRIO (1º acesso) ---------- */
+#dyseTutorialGate{
+  display:none; position:fixed; inset:0; z-index:9997; background:rgba(58,29,16,.82);
+  align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(6px);
+}
+#dyseTutorialGate.show{display:flex;}
+body.dyse-tutorial-aberto{overflow:hidden;}
+.dyse-tut-card{
+  background:#fff; border-radius:var(--radius-lg); box-shadow:var(--shadow-card);
+  width:min(980px,100%); max-height:100%; overflow:auto; padding:clamp(18px,3vw,30px);
+  border-top:8px solid var(--amaranth);
+}
+.dyse-tut-head h2{font-family:var(--font-body); font-weight:600; font-size:1.3rem; color:var(--amaranth); margin:0 0 4px;}
+.dyse-tut-head p{color:var(--seal-soft); font-size:.92rem; line-height:1.5; margin:0 0 14px;}
+.dyse-tut-video{position:relative; border-radius:var(--radius-md); overflow:hidden; background:#000; aspect-ratio:16/9;}
+.dyse-tut-video video{width:100%; height:100%; display:block;}
+.dyse-tut-play{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+  background:rgba(58,29,16,.45); color:#fff; border:none; cursor:pointer; font-family:var(--font-body);
+  font-size:1.15rem; font-weight:600;
+}
+.dyse-tut-play span{width:72px; height:72px; border-radius:50%; background:var(--amaranth); display:flex; align-items:center; justify-content:center; font-size:1.6rem;}
+.dyse-tut-foot{display:flex; align-items:center; gap:14px; margin-top:14px; flex-wrap:wrap;}
+.dyse-tut-bar{flex:1; min-width:160px; height:8px; border-radius:99px; background:var(--antique); overflow:hidden;}
+.dyse-tut-bar span{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--orangered),var(--amaranth)); transition:width .3s linear;}
+.dyse-tut-status{font-size:.85rem; color:var(--seal-soft); min-width:110px;}
+#dyseTutContinuar[disabled]{opacity:.45; cursor:not-allowed;}
+
 
 /* ---------- AUTH FORM (login / signup pages) ---------- */
 .auth-shell{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
@@ -845,6 +873,27 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   </div>
 </div>
 
+<div id="dyseTutorialGate" role="dialog" aria-modal="true" aria-labelledby="dyseTutTitulo">
+  <div class="dyse-tut-card">
+    <div class="dyse-tut-head">
+      <h2 id="dyseTutTitulo">Bem-vindo(a) à sua Área do Aluno! 🎓</h2>
+      <p>Antes de começar, assista ao vídeo rápido que mostra como usar o seu painel. Ele é liberado assim que o vídeo terminar.</p>
+    </div>
+    <div class="dyse-tut-video">
+      <video id="dyseTutVideo" playsinline preload="metadata" poster="assets/video/boas-vindas-area-do-aluno.jpg"
+             controlslist="nodownload noplaybackrate" disablepictureinpicture>
+        <source src="assets/video/boas-vindas-area-do-aluno.mp4" type="video/mp4">
+      </video>
+      <button type="button" class="dyse-tut-play" id="dyseTutPlay"><span>▶</span> Assistir ao vídeo</button>
+    </div>
+    <div class="dyse-tut-foot">
+      <div class="dyse-tut-bar"><span id="dyseTutBar"></span></div>
+      <div class="dyse-tut-status" id="dyseTutStatus">0:00 de 2:08</div>
+      <button type="button" class="btn btn-primary" id="dyseTutContinuar" disabled>Ir para o meu painel →</button>
+    </div>
+  </div>
+</div>
+
 <div class="app-shell">
   <aside class="sidebar">
     <div class="sidebar-brand">
@@ -1161,6 +1210,60 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     ).join('');
   }
 
+  /* ---------- Vídeo de boas-vindas obrigatório ----------
+     Aparece no 1º acesso do aluno (profiles.tutorial_boas_vindas_em NULL) e
+     cobre a tela toda até o vídeo terminar: não dá pra fechar, adiantar nem
+     acelerar. Ao final grava no perfil e libera o botão de seguir. */
+  function abrirTutorialBoasVindas(session){
+    const gate = document.getElementById('dyseTutorialGate');
+    const video = document.getElementById('dyseTutVideo');
+    const playBtn = document.getElementById('dyseTutPlay');
+    const bar = document.getElementById('dyseTutBar');
+    const status = document.getElementById('dyseTutStatus');
+    const continuar = document.getElementById('dyseTutContinuar');
+    let maxVisto = 0, concluido = false;
+
+    const fmt = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+    const atualizar = () => {
+      const dur = video.duration || 0;
+      if(dur) bar.style.width = Math.min(100, (maxVisto / dur) * 100) + '%';
+      if(!concluido) status.textContent = fmt(maxVisto) + ' de ' + (dur ? fmt(dur) : '2:08');
+    };
+
+    gate.classList.add('show');
+    document.body.classList.add('dyse-tutorial-aberto');
+
+    playBtn.addEventListener('click', () => {
+      video.controls = true;
+      playBtn.style.display = 'none';
+      video.play().catch(() => { playBtn.style.display = 'flex'; });
+    });
+    video.addEventListener('timeupdate', () => {
+      if(!video.seeking && video.currentTime > maxVisto && video.currentTime - maxVisto < 2) maxVisto = video.currentTime;
+      atualizar();
+    });
+    // Não deixa pular pra frente: volta pro ponto mais longe já assistido.
+    video.addEventListener('seeking', () => {
+      if(video.currentTime > maxVisto + 0.5) video.currentTime = maxVisto;
+    });
+    video.addEventListener('ratechange', () => { if(video.playbackRate !== 1) video.playbackRate = 1; });
+    video.addEventListener('ended', async () => {
+      if(!video.duration || maxVisto < video.duration - 2) return; // terminou "pulando": não conta
+      concluido = true;
+      maxVisto = video.duration; atualizar();
+      status.textContent = 'Vídeo concluído ✓';
+      continuar.disabled = false;
+      try{ if(document.fullscreenElement) await document.exitFullscreen(); }catch(e){}
+      dyseMarcarTutorialVisto(session);
+    });
+    continuar.addEventListener('click', () => {
+      if(!concluido) return;
+      video.pause();
+      gate.classList.remove('show');
+      document.body.classList.remove('dyse-tutorial-aberto');
+    });
+  }
+
   (async () => {
     const session = await dyseRequireAuth();
     if(!session) return;
@@ -1187,6 +1290,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       document.getElementById('dyseBlockedGate').classList.add('show');
       return;
     }
+
+    // 1º acesso: vídeo de boas-vindas obrigatório por cima do painel, que
+    // segue carregando por trás e só fica utilizável ao fim do vídeo.
+    if(dyseAlunoPrecisaTutorial(profile)) abrirTutorialBoasVindas(session);
 
     SEEN_KEY = 'dyse_aluno_seen_' + session.user.id;
     renderAlunoChrome(session, profile);

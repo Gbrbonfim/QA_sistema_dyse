@@ -126,9 +126,44 @@ async function dyseRequireAuth(){
     location.href = '/login.html?next=' + next;
     return null;
   }
-  await dyseGetProfile(session); // garante que o perfil existe (autocorreção), em toda página protegida
+  const profile = await dyseGetProfile(session); // garante que o perfil existe (autocorreção), em toda página protegida
+
+  // Vídeo de boas-vindas obrigatório: aluno que ainda não assistiu não entra
+  // em nenhuma outra página (atividades, calendário...) — volta pra Área do
+  // Aluno, que mostra o vídeo e só libera o painel ao final dele.
+  if(dyseAlunoPrecisaTutorial(profile) && !location.pathname.startsWith('/area-do-aluno')){
+    location.href = '/area-do-aluno.html';
+    return null;
+  }
+
   document.documentElement.classList.add('dyse-auth-ready');
   return session;
+}
+
+/* ---------- Vídeo de boas-vindas da Área do Aluno ----------
+   Só vale pra aluno de verdade (gestão e professoras não passam por isso).
+   profiles.tutorial_boas_vindas_em fica NULL até o aluno ver o vídeo inteiro;
+   o localStorage cobre o caso raro de a gravação no banco falhar, pra ele
+   não ficar preso num loop no mesmo navegador. */
+function dyseAlunoPrecisaTutorial(profile){
+  if(!profile) return false;
+  if(dyseIsAdmin(profile) || dyseIsTeacher(profile)) return false;
+  if(profile.tutorial_boas_vindas_em) return false;
+  try{ if(localStorage.getItem('dyse_tutorial_visto_' + profile.id)) return false; }catch(e){}
+  return true;
+}
+
+async function dyseMarcarTutorialVisto(session){
+  if(!session) return;
+  try{ localStorage.setItem('dyse_tutorial_visto_' + session.user.id, '1'); }catch(e){}
+  try{
+    const { error } = await sb.from('profiles')
+      .update({ tutorial_boas_vindas_em: new Date().toISOString() })
+      .eq('id', session.user.id);
+    if(error) console.error('dyseMarcarTutorialVisto:', error);
+  }catch(e){
+    console.error('dyseMarcarTutorialVisto:', e);
+  }
 }
 
 /* Bloqueia a página caso o usuário não seja professor(a). */

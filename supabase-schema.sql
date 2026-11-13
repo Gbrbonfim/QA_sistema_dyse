@@ -57,6 +57,12 @@ alter table public.profiles add column if not exists also_teacher boolean not nu
 -- area-do-aluno.html bloqueiam admin/teacher por padrão, ver lá).
 alter table public.profiles add column if not exists also_student boolean not null default false;
 
+-- Vídeo de boas-vindas da Área do Aluno: NULL = o aluno ainda não assistiu.
+-- Enquanto for NULL, area-do-aluno.html cobre o painel com o vídeo e as
+-- outras páginas protegidas mandam de volta pra lá (dyseRequireAuth). O
+-- próprio aluno grava a data ao terminar (policy "atualizar o próprio perfil").
+alter table public.profiles add column if not exists tutorial_boas_vindas_em timestamptz;
+
 alter table public.profiles enable row level security;
 
 -- ----------------------------------------------------------------------
