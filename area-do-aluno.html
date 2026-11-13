@@ -877,7 +877,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   <div class="dyse-tut-card">
     <div class="dyse-tut-head">
       <h2 id="dyseTutTitulo">Bem-vindo(a) à sua Área do Aluno! 🎓</h2>
-      <p>Antes de começar, assista ao vídeo rápido que mostra como usar o seu painel. Ele é liberado assim que o vídeo terminar.</p>
+      <p>Antes de começar, assista ao vídeo rápido que mostra como usar o seu painel. Se preferir, você pode pular e ir direto.</p>
     </div>
     <div class="dyse-tut-video">
       <video id="dyseTutVideo" playsinline preload="metadata" poster="assets/video/boas-vindas-area-do-aluno.jpg"
@@ -889,6 +889,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     <div class="dyse-tut-foot">
       <div class="dyse-tut-bar"><span id="dyseTutBar"></span></div>
       <div class="dyse-tut-status" id="dyseTutStatus">0:00 de 2:08</div>
+      <button type="button" class="btn btn-ghost" id="dyseTutPular">Pular vídeo</button>
       <button type="button" class="btn btn-primary" id="dyseTutContinuar" disabled>Ir para o meu painel →</button>
     </div>
   </div>
@@ -1256,11 +1257,17 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       try{ if(document.fullscreenElement) await document.exitFullscreen(); }catch(e){}
       dyseMarcarTutorialVisto(session);
     });
-    continuar.addEventListener('click', () => {
-      if(!concluido) return;
+    const fechar = () => {
       video.pause();
       gate.classList.remove('show');
       document.body.classList.remove('dyse-tutorial-aberto');
+    };
+    continuar.addEventListener('click', () => { if(concluido) fechar(); });
+    // Pular: libera o painel na hora e marca como visto (não volta a aparecer).
+    document.getElementById('dyseTutPular').addEventListener('click', async () => {
+      try{ if(document.fullscreenElement) await document.exitFullscreen(); }catch(e){}
+      fechar();
+      if(!concluido){ concluido = true; dyseMarcarTutorialVisto(session); }
     });
   }
 
