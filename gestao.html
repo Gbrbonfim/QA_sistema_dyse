@@ -820,10 +820,10 @@ body.dyse-modal-open{overflow:hidden;}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Z"/><path d="M16 7V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2"/><path d="M18 14h.01"/></svg>
         <span>Financeiro</span>
       </button>
-      <a class="sidebar-item" href="/calendario-letivo.html">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <button type="button" class="sidebar-item" id="tabCalendario" onclick="showPanel('calendario')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>
         <span>Calendário Letivo</span>
-      </a>
+      </button>
     </nav>
     <div class="sidebar-footer">
       <a class="sidebar-help" href="https://wa.me/554187207973" target="_blank" rel="noopener">
@@ -1033,6 +1033,9 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 
   <!-- ---------- FINANCEIRO ---------- -->
+  <!-- ---------- CALENDÁRIO LETIVO ---------- -->
+  <div id="panelCalendario" style="display:none;"><div id="calendarioWrap"></div></div>
+
   <div id="panelFinanceiro" style="display:none;">
     <div class="auth-tabs fin-subtabs">
       <button type="button" class="auth-tab active" id="finTabModalidades" onclick="showFinPanel('modalidades')">Modalidades</button>
@@ -1500,6 +1503,7 @@ body.dyse-modal-open{overflow:hidden;}
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
 <script src="/assets/dyse-auth.js"></script>
+<script src="/assets/dyse-calendario.js"></script>
 <script>
   let TURMAS = [], MATERIAS = [], STUDENTS = [], TEACHERS = [], TURMA_MATERIAS = [], TEACHER_TURMAS = [], MATERIA_ACTIVITIES_DB = [], DISPONIBILIDADE = [];
   let MODALIDADES = [], MODALIDADE_VALORES = [], ALUNO_FIN_HISTORICO = [], NIVEIS = [], CONTAS = [];
@@ -1566,6 +1570,10 @@ body.dyse-modal-open{overflow:hidden;}
     financeiro: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Z"/><path d="M16 7V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2"/><path d="M18 14h.01"/></svg>',
       title: 'Financeiro', subtitle: 'Modalidades, pagamentos, relatórios e fechamento financeiro.', action: ''
+    },
+    calendario: {
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>',
+      title: 'Calendário Letivo', subtitle: 'Clique num dia para marcar feriado, recesso, reposição etc. Libere o ano quando quiser que alunos e professores vejam.', action: ''
     }
   };
 
@@ -1575,7 +1583,7 @@ body.dyse-modal-open{overflow:hidden;}
     // fica bloqueada e cai em "alunos".
     if(which === 'financeiro' && !document.body.classList.contains('dyse-can-financeiro')) which = 'alunos';
     if(location.hash.slice(1) !== which) history.replaceState(null, '', '#' + which);
-    ['turmas','materias','alunos','registro','professores','contas','financeiro'].forEach(p => {
+    ['turmas','materias','alunos','registro','professores','contas','financeiro','calendario'].forEach(p => {
       document.getElementById('tab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('panel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
     });
@@ -1586,6 +1594,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('pageHeaderAction').innerHTML = meta.action;
     if(which === 'financeiro') showFinPanel('modalidades');
     if(which === 'registro') initRegistroPanel();
+    if(which === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: true });
   }
   function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
@@ -6027,7 +6036,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.body.classList.toggle('dyse-can-ver-financeiro', dyseIsAdmin(profile));
     renderGestaoChrome(session, profile);
     const hashPanel = location.hash.slice(1);
-    showPanel(['turmas','materias','alunos','registro','professores','contas','financeiro'].includes(hashPanel) ? hashPanel : 'turmas');
+    showPanel(['turmas','materias','alunos','registro','professores','contas','financeiro','calendario'].includes(hashPanel) ? hashPanel : 'turmas');
     await loadAll();
     carregarAvisos();
   })();

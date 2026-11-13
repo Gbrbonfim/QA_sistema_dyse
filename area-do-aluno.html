@@ -421,49 +421,6 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .dyse-blocked-card h2{font-family:var(--font-display); color:var(--bad); font-size:1.5rem; margin:0 0 10px;}
 .dyse-blocked-card p{color:var(--seal-soft); font-size:.95rem; line-height:1.5; margin:0 0 22px;}
 
-/* ---------- CALENDÁRIO LETIVO (view dentro da Área do Aluno, só leitura) ---------- */
-#viewCalendario{
-  --tipo-recesso:#EB6424; --tipo-feriado:#F0A224; --tipo-reposicao:#D03B55;
-  --tipo-retorno_conversacao:#FCABAF; --tipo-inicio_semestre:#3A1D10;
-  --ink-recesso:#D94E12; --ink-feriado:#C07E12; --ink-reposicao:#C42E48; --ink-retorno_conversacao:#D2637D;
-}
-#viewCalendario .cal-toolbar{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:22px;}
-#viewCalendario select{border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:8px 12px; font-family:var(--font-body); font-size:.9rem; color:var(--seal); background:#fff;}
-#viewCalendario .cal-layout{display:grid; grid-template-columns:230px 1fr; gap:20px; align-items:start;}
-@media (max-width:1000px){ #viewCalendario .cal-layout{grid-template-columns:1fr;} }
-#viewCalendario .side-card{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:20px; margin-bottom:20px;}
-#viewCalendario .side-card h3{margin:0 0 14px; font-size:1rem; color:var(--seal);}
-#viewCalendario .legend-row{display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:.85rem;}
-#viewCalendario .legend-dot{width:16px; height:16px; border-radius:5px; flex:none;}
-#viewCalendario .info-row{display:flex; flex-direction:column; gap:2px; margin-bottom:12px;}
-#viewCalendario .info-row label{font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--seal-soft);}
-#viewCalendario .info-row .val{font-size:.95rem; font-weight:600;}
-#viewCalendario .months-grid{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:26px 24px;}
-@media (max-width:1400px){ #viewCalendario .months-grid{grid-template-columns:repeat(3, minmax(0,1fr));} }
-@media (max-width:1000px){ #viewCalendario .months-grid{grid-template-columns:repeat(2, minmax(0,1fr));} }
-@media (max-width:560px){ #viewCalendario .months-grid{grid-template-columns:1fr;} }
-#viewCalendario .cal-panel{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:22px 20px;}
-#viewCalendario .month{background:transparent; max-width:210px; width:100%; margin-inline:auto;}
-#viewCalendario .month h4{margin:0 0 6px; text-align:center; font-size:.7rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--seal);}
-#viewCalendario .dow{display:grid; grid-template-columns:repeat(7,1fr);}
-#viewCalendario .dow span{text-align:center; font-size:.54rem; font-weight:700; color:var(--amaranth); padding:2px 0;}
-#viewCalendario .dow span:first-child, #viewCalendario .dow span:last-child{background:#fdf2f4;}
-#viewCalendario .days{display:grid; grid-template-columns:repeat(7,1fr);}
-#viewCalendario .cal-day{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; position:relative; font-size:.64rem; font-weight:500; color:var(--seal);}
-#viewCalendario .days > .cal-day:not(.empty):nth-child(7n+1), #viewCalendario .days > .cal-day:not(.empty):nth-child(7n){background:#fdf2f4;}
-#viewCalendario .cal-day.empty{visibility:hidden;}
-#viewCalendario .cal-day.tipo-recesso{color:var(--ink-recesso); font-weight:800;}
-#viewCalendario .cal-day.tipo-feriado{color:var(--ink-feriado); font-weight:800;}
-#viewCalendario .cal-day.tipo-reposicao{color:var(--ink-reposicao); font-weight:800;}
-#viewCalendario .cal-day.tipo-retorno_conversacao{color:var(--ink-retorno_conversacao); font-weight:800;}
-#viewCalendario .cal-day.tipo-inicio_semestre{background:var(--tipo-inicio_semestre); color:#fff; font-weight:800; border-radius:4px;}
-#viewCalendario .cal-day.today{outline:1.5px dashed var(--amaranth); outline-offset:-2px;}
-#viewCalendario .cal-day.has-note::after{content:"*"; position:absolute; top:0; right:2px; font-size:.6rem; line-height:1;}
-#viewCalendario .month-notes{margin-top:6px; font-size:.58rem; color:var(--seal-soft); line-height:1.45;}
-#viewCalendario .month-notes div{margin-bottom:1px;}
-#viewCalendario .locked-box{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:40px 28px; text-align:center; color:var(--seal-soft);}
-#viewCalendario .locked-box strong{display:block; font-size:1.05rem; color:var(--seal); margin-bottom:6px;}
-
 /* ---------- VÍDEO DE BOAS-VINDAS OBRIGATÓRIO (1º acesso) ---------- */
 #dyseTutorialGate{
   display:none; position:fixed; inset:0; z-index:9997; background:rgba(58,29,16,.82);
@@ -1058,11 +1015,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
             <p>Feriados, recessos, reposições e o início de cada semestre.</p>
           </div>
         </div>
-        <div class="cal-toolbar">
-          <label for="anoSelect" style="font-weight:700; font-size:.85rem;">Ano letivo</label>
-          <select id="anoSelect" onchange="onCalAnoChange()"></select>
-        </div>
-        <div id="calBody"><p class="card-instructions" style="opacity:.6;">Carregando...</p></div>
+        <div id="calendarioWrap"></div>
       </div>
 
       <footer class="content-footer">
@@ -1075,6 +1028,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/assets/dyse-auth.js"></script>
+<script src="/assets/dyse-calendario.js"></script>
 <script>
 
   const NOTICE_MESSAGES = {
@@ -1156,7 +1110,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     document.getElementById('viewFinanceiro').style.display = view === 'financeiro' ? 'block' : 'none';
     document.getElementById('viewCalendario').style.display = view === 'calendario' ? 'block' : 'none';
     if(view === 'atividades') voltarCursos();
-    else if(view === 'calendario') carregarCalendarioAluno();
+    else if(view === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: false });
     else marcarVisto(view); // ver a seção = "li as novidades dela"
     const hash = view === 'atividades' ? '' : '#' + view;
     if(hash !== location.hash) history.replaceState(null, '', hash || location.pathname);
@@ -1164,78 +1118,6 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   }
   window.addEventListener('hashchange', () => mostrarView(location.hash.replace('#', '')));
 
-
-  /* ---------- Calendário Letivo (só leitura, dentro da Área do Aluno) ----------
-     Mesma lógica/visual de calendario-letivo.html, sem a edição da gestão. */
-  const CAL_MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const CAL_DOW = ['D','S','T','Q','Q','S','S'];
-  const CAL_TIPOS = { feriado:'Feriado', recesso:'Recesso / férias', reposicao:'Reposição de aulas', retorno_conversacao:'Retorno das aulas de conversação', inicio_semestre:'Início do semestre' };
-  const CAL = { ano: new Date().getFullYear(), config: null, dias: {}, carregado: false };
-  const calPad = n => n < 10 ? '0' + n : '' + n;
-  const calIso = (y, m, d) => y + '-' + calPad(m + 1) + '-' + calPad(d);
-
-  async function carregarCalendarioAluno(){
-    if(CAL.carregado) return;
-    CAL.carregado = true;
-    const atual = new Date().getFullYear();
-    const anos = []; for(let y = atual - 1; y <= atual + 2; y++) anos.push(y);
-    document.getElementById('anoSelect').innerHTML = anos.map(y => '<option value="' + y + '"' + (y === CAL.ano ? ' selected' : '') + '>' + y + '</option>').join('');
-    await carregarAnoCalendario();
-  }
-  async function onCalAnoChange(){
-    CAL.ano = parseInt(document.getElementById('anoSelect').value, 10);
-    document.getElementById('calBody').innerHTML = '<p class="card-instructions" style="opacity:.6;">Carregando...</p>';
-    await carregarAnoCalendario();
-  }
-  async function carregarAnoCalendario(){
-    const ano = CAL.ano;
-    let config = null, dias = [];
-    try{ [config, dias] = await Promise.all([dyseGetCalendarioConfig(ano), dyseListCalendarioDias(ano)]); }catch(e){ console.error(e); }
-    if(ano !== CAL.ano) return; // trocou de ano no meio
-    CAL.config = config; CAL.dias = {};
-    (dias || []).forEach(d => { CAL.dias[d.data] = { tipo: d.tipo, titulo: d.titulo || '' }; });
-    renderCalendarioAluno();
-  }
-  function renderCalendarioAluno(){
-    const body = document.getElementById('calBody');
-    const c = CAL.config;
-    if(!c || !c.publicado){
-      body.innerHTML = '<div class="locked-box"><strong>Calendário de ' + CAL.ano + ' ainda não foi liberado</strong>Assim que a gestão publicar, ele aparece aqui.</div>';
-      return;
-    }
-    const legenda = '<div class="side-card"><h3>Legenda</h3>' + Object.keys(CAL_TIPOS).map(t =>
-      '<div class="legend-row"><span class="legend-dot" style="background:var(--tipo-' + t + ');"></span>' + CAL_TIPOS[t] + '</div>').join('') + '</div>';
-    const linhas = [['Início do ano letivo', c.inicio_ano], ['Término do ano letivo', c.fim_ano], ['Total de dias letivos', c.total_dias_letivos],
-      ['Total de semanas letivas', c.total_semanas_letivas], ['Observação', c.observacao]].filter(l => l[1]);
-    const info = linhas.length ? '<div class="side-card"><h3>Informações importantes</h3>' + linhas.map(l =>
-      '<div class="info-row"><label>' + l[0] + '</label><span class="val">' + escapeHtmlLocal(l[1]) + '</span></div>').join('') + '</div>' : '';
-    body.innerHTML = '<div class="cal-layout"><div>' + legenda + info + '</div>' +
-      '<div class="cal-panel"><div class="months-grid">' + CAL_MESES.map((_, m) => mesCalendarioHtml(m)).join('') + '</div></div></div>';
-  }
-  function mesCalendarioHtml(m){
-    const ano = CAL.ano, primeiro = new Date(ano, m, 1).getDay(), nDias = new Date(ano, m + 1, 0).getDate();
-    const t = new Date(), hoje = calIso(t.getFullYear(), t.getMonth(), t.getDate());
-    let cells = '';
-    for(let i = 0; i < primeiro; i++) cells += '<div class="cal-day empty"></div>';
-    for(let d = 1; d <= nDias; d++){
-      const key = calIso(ano, m, d), mark = CAL.dias[key], cls = ['cal-day'];
-      if(mark){ cls.push('marked', 'tipo-' + mark.tipo); if(mark.titulo) cls.push('has-note'); }
-      if(key === hoje) cls.push('today');
-      const title = mark ? ' title="' + escapeHtmlLocal(mark.titulo || CAL_TIPOS[mark.tipo]) + '"' : '';
-      cells += '<div class="' + cls.join(' ') + '"' + title + '>' + d + '</div>';
-    }
-    const notas = []; let run = null;
-    const flush = () => { if(!run) return; const label = run.titulo || CAL_TIPOS[run.tipo];
-      notas.push('<div>' + (run.ini === run.fim ? run.ini : run.ini + ' a ' + run.fim) + ' — ' + escapeHtmlLocal(label) + '</div>'); run = null; };
-    for(let d = 1; d <= nDias; d++){
-      const mk = CAL.dias[calIso(ano, m, d)];
-      if(mk && run && mk.tipo === run.tipo && (mk.titulo || '') === run.titulo){ run.fim = d; continue; }
-      flush(); if(mk) run = { tipo: mk.tipo, titulo: mk.titulo || '', ini: d, fim: d };
-    }
-    flush();
-    return '<div class="month"><h4>' + CAL_MESES[m] + '</h4><div class="dow">' + CAL_DOW.map(x => '<span>' + x + '</span>').join('') + '</div>' +
-      '<div class="days">' + cells + '</div>' + (notas.length ? '<div class="month-notes">' + notas.join('') + '</div>' : '') + '</div>';
-  }
 
   /* ---------- Notificações "algo novo" no menu (por navegador) ---------- */
   const AREA_CTX = { doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, niveis: [], aulasNivel: {}, aulasDadas: {} };
