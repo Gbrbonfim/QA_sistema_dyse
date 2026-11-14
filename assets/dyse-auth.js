@@ -142,20 +142,22 @@ async function dyseRequireAuth(){
 
 /* ---------- Vídeo de boas-vindas da Área do Aluno ----------
    Só vale pra aluno de verdade (gestão e professoras não passam por isso).
-   profiles.tutorial_boas_vindas_em fica NULL até o aluno ver o vídeo inteiro;
-   o localStorage cobre o caso raro de a gravação no banco falhar, pra ele
-   não ficar preso num loop no mesmo navegador. */
+   profiles.tutorial_boas_vindas_em fica NULL até o aluno ver o vídeo inteiro.
+   O banco é a fonte da verdade (zerar a coluna faz o vídeo voltar). O
+   sessionStorage só cobre o caso raro de a gravação no banco falhar, pra o
+   aluno não ficar preso num loop durante a mesma sessão do navegador. */
 function dyseAlunoPrecisaTutorial(profile){
   if(!profile) return false;
   if(dyseIsAdmin(profile) || dyseIsTeacher(profile)) return false;
   if(profile.tutorial_boas_vindas_em) return false;
-  try{ if(localStorage.getItem('dyse_tutorial_visto_' + profile.id)) return false; }catch(e){}
+  try{ if(sessionStorage.getItem('dyse_tutorial_visto_' + profile.id)) return false; }catch(e){}
   return true;
 }
 
 async function dyseMarcarTutorialVisto(session){
   if(!session) return;
-  try{ localStorage.setItem('dyse_tutorial_visto_' + session.user.id, '1'); }catch(e){}
+  try{ sessionStorage.setItem('dyse_tutorial_visto_' + session.user.id, '1'); }catch(e){}
+  try{ localStorage.removeItem('dyse_tutorial_visto_' + session.user.id); }catch(e){}
   try{
     const { error } = await sb.from('profiles')
       .update({ tutorial_boas_vindas_em: new Date().toISOString() })
