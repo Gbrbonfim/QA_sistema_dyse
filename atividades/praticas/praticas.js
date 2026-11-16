@@ -538,7 +538,12 @@
       const session = await dyseRequireAuth(); if(!session) return;
       const ok = await dyseRequirePraticaLiberada(cfg.course, cfg.aula, cfg.num); if(!ok) return;
       const profile = await dyseGetProfile(session);
-      S.staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
+      // Modo de teste (não salva) só pra gestão/professora abrindo uma
+      // atividade que NÃO foi liberada pra ela mesma. Se foi liberada pra
+      // essa conta (ex: gestão que também é aluno), funciona como aluno.
+      const ehStaff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
+      const liberadaPraMim = (await dyseMinhasPraticasLiberadas()).has(cfg.course + ':' + cfg.aula + ':' + cfg.num);
+      S.staff = ehStaff && !liberadaPraMim;
       document.title = 'DYSE · ' + S.info.nivelNome + ' · Aula ' + String(cfg.aula).padStart(2, '0') + ' · ' + S.info.atividade.titulo;
       montarTopo();
       modalIntro();

@@ -1245,7 +1245,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const publishedSet = await dyseGetPublishedSet(course.id);
     const groups = []; const gi = {};
     course.activities.forEach(a => {
-      if(!AREA_CTX.staff && !publishedSet.has(a.num)) return; // aluno só vê o liberado
+      if(!publishedSet.has(a.num)) return; // só o liberado (gestão/professora também, quando está como aluno)
       const code = (a.level || '').split(' · ')[0];
       if(!(code in gi)){ gi[code] = groups.length; groups.push({ label: a.level || '', items: [] }); }
       groups[gi[code]].items.push(a);
@@ -1254,7 +1254,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     return groups.map(g =>
       '<div class="level-group"><div class="level-group-title">' + escapeHtmlLocal((g.label.split(' · ')[1]) || g.label) + '</div>' +
       '<div class="dash-grid">' + g.items.map(a => {
-        const lib = AREA_CTX.staff || publishedSet.has(a.num);
+        const lib = publishedSet.has(a.num);
         const done = AREA_CTX.doneMap[course.id + ':1:' + a.num];
         const badge = done ? '<span class="dash-badge done">Enviada</span>' : '';
         return lib
