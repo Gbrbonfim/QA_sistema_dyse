@@ -57,7 +57,7 @@
     document.body.innerHTML =
       '<div class="px-top" id="pxTop"><div class="px-top-row">' +
         '<button class="px-close" title="Sair" onclick="DysePratica.sair()">✕</button>' +
-        '<div class="px-title">' + esc(S.info.atividade.titulo) + '</div>' +
+        '<div class="px-title"><span class="px-mark">dyse</span><b>' + esc(S.info.atividade.titulo) + '</b><small>' + esc(S.info.nivelNome) + ' · Aula ' + String(S.cfg.aula).padStart(2, '0') + ' · ' + esc(S.info.atividade.tipo) + '</small></div>' +
         '<div class="px-streak" id="pxStreak"></div>' +
       '</div>' +
       '<div class="px-bar" id="pxBar">' + Array.from({length: n}, () => '<span></span>').join('') + '</div>' +
@@ -123,7 +123,7 @@
   }
   function mostrarRevisao(main, correta, tentativas){
     main.insertAdjacentHTML('beforeend',
-      '<div class="px-ctx" style="margin-top:20px;"><div style="font-weight:700; color:#7B5BE0; margin-bottom:4px;">A resposta correta é</div>' +
+      '<div class="px-ctx" style="margin-top:20px;"><div style="font-weight:700; color:var(--amaranth); margin-bottom:4px;">A resposta correta é</div>' +
       '<div style="font-size:1.05rem; font-weight:600;">' + esc(correta) + '</div>' +
       '<div style="font-weight:700; color:var(--bad); margin:10px 0 4px;">Suas tentativas</div>' +
       tentativas.map(t => '<div style="text-decoration:line-through; opacity:.8;">' + esc(t) + '</div>').join('') + '</div>');
@@ -336,11 +336,11 @@
   function gauge(nota){
     const ang = -90 + 180 * Math.max(0, Math.min(1, nota));
     return '<svg class="px-gauge" viewBox="0 0 120 70">' +
-      '<path d="M10 60 A50 50 0 0 1 43 13" stroke="#F08A8A" stroke-width="10" fill="none"/>' +
-      '<path d="M45 12 A50 50 0 0 1 76 12" stroke="#F3C64F" stroke-width="10" fill="none"/>' +
-      '<path d="M78 13 A50 50 0 0 1 110 60" stroke="#3CC79A" stroke-width="10" fill="none"/>' +
-      '<g transform="rotate(' + ang + ' 60 60)"><line x1="60" y1="60" x2="60" y2="22" stroke="#2E4A7D" stroke-width="4" stroke-linecap="round"/></g>' +
-      '<circle cx="60" cy="60" r="7" fill="#2E4A7D"/></svg>';
+      '<path d="M10 60 A50 50 0 0 1 43 13" stroke="#FCABAF" stroke-width="10" fill="none"/>' +
+      '<path d="M45 12 A50 50 0 0 1 76 12" stroke="#F0A224" stroke-width="10" fill="none"/>' +
+      '<path d="M78 13 A50 50 0 0 1 110 60" stroke="#2E8B57" stroke-width="10" fill="none"/>' +
+      '<g transform="rotate(' + ang + ' 60 60)"><line x1="60" y1="60" x2="60" y2="22" stroke="#3A1D10" stroke-width="4" stroke-linecap="round"/></g>' +
+      '<circle cx="60" cy="60" r="7" fill="#3A1D10"/></svg>';
   }
   function desenharFrase(item, cores, revelar){
     const tokens = item.frase.split(/\s+/);
@@ -441,8 +441,8 @@
   function compare(item){
     if(!S.cur.audioUrl) return;
     $('#pxCompare').innerHTML = '<div style="text-align:center; font-size:.85rem; color:var(--seal-soft); margin-top:16px;">Compare sua pronúncia</div>' +
-      '<div class="px-compare"><div class="box">Eu<br><button style="background:#3CC79A" onclick="DysePratica._playEu()">▶</button></div>' +
-      '<div class="box">Original<br><button style="background:#2E4A7D" onclick="DysePratica._playOrig()">▶</button></div></div>';
+      '<div class="px-compare"><div class="box">Eu<br><button style="background:var(--ok)" onclick="DysePratica._playEu()">▶</button></div>' +
+      '<div class="box">Original<br><button style="background:var(--amaranth)" onclick="DysePratica._playOrig()">▶</button></div></div>';
   }
 
   /* ---------- modais ---------- */
