@@ -925,6 +925,18 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 
   <div id="panelManage" style="display:none;">
+    <details class="dyse-collapsible manage-course-block" open style="margin-bottom:22px;">
+      <summary class="manage-course-title"><span>Atividades por aluno</span><span class="chevron">›</span></summary>
+      <div class="manage-course-body">
+        <p style="color:var(--seal-soft); font-size:.85rem; margin:0 0 12px;">
+          O aluno vê todas as atividades do nível dele, mas só faz as que você liberar <b>para ele</b>. Escolha o aluno e ligue as atividades. Em <b>👁 Visualizar</b> você testa a atividade antes (seu resultado não é salvo).
+        </p>
+        <div class="dash-filter" style="margin-bottom:10px;">
+          <select id="praticaAlunoSel" onchange="renderPraticasAluno()"><option value="">Carregando alunos...</option></select>
+        </div>
+        <div id="praticasAlunoBox"></div>
+      </div>
+    </details>
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
       Clique em <b>👁 Visualizar</b> para abrir e revisar a atividade antes de liberar — como professora, você sempre consegue acessar qualquer atividade, mesmo oculta dos alunos. Ative o interruptor para liberar aos alunos, ou desative para escondê-la novamente.
     </p>
@@ -1136,10 +1148,11 @@ body.dyse-modal-open{overflow:hidden;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/assets/dyse-auth.js"></script>
 <script src="/assets/dyse-calendario.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
 <script>
   let ALL_RESULTS = [];
   let TURMA_NAME_BY_USER = {}; // user_id -> nome da turma (ou "-" se sem turma)
-  const COURSE_NAMES = {'toefl':'TOEFL iBT'}; // só o TOEFL ainda tem atividade de verdade
+  const COURSE_NAMES = {'toefl':'TOEFL iBT', 'ativ-a1':'A1 · Atividades'};
 
   function renderTable(){
     const nameFilter = document.getElementById('filterName').value.trim().toLowerCase();
@@ -1438,7 +1451,7 @@ body.dyse-modal-open{overflow:hidden;}
     },
     manage:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>',
-      title:'Gerenciar Atividades', subtitle:'Libere ou oculte as atividades do TOEFL que os alunos podem acessar.'
+      title:'Gerenciar Atividades', subtitle:'Libere as atividades para cada aluno e as do TOEFL.'
     },
     material:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
@@ -2739,7 +2752,104 @@ body.dyse-modal-open{overflow:hidden;}
     // renderTurmaMaterialBlocks(), montado à parte por turma).
   ];
 
+  /* ---------- Atividades por aluno (cursos "ativ-<nivel>", estilo Flexge) ----------
+     O nível do aluno = nível(is) que a gestão vinculou à turma dele. A
+     professora liga/desliga cada atividade PARA AQUELE ALUNO
+     (aluno_atividades_liberadas). Lista de alunos já vem filtrada pelas
+     turmas dela (RLS de profiles). */
+  const PRATICAS_CTX = { alunos: [], turmas: {}, turmaMaterias: [] };
+  async function loadPraticasAlunos(){
+    const sel = document.getElementById('praticaAlunoSel');
+    const [alunos, turmas, tms] = await Promise.all([dyseListProfilesByRole('student'), dyseListTurmas(), dyseListAllTurmaMaterias()]);
+    PRATICAS_CTX.alunos = alunos.filter(a => a.turma_id);
+    PRATICAS_CTX.turmas = {}; turmas.forEach(t => PRATICAS_CTX.turmas[t.id] = t);
+    PRATICAS_CTX.turmaMaterias = tms;
+    const atual = sel.value;
+    const porTurma = {};
+    PRATICAS_CTX.alunos.forEach(a => { const t = PRATICAS_CTX.turmas[a.turma_id]; const nome = t ? t.name : 'Sem turma'; (porTurma[nome] = porTurma[nome] || []).push(a); });
+    sel.innerHTML = '<option value="">Escolha um aluno…</option>' + Object.keys(porTurma).sort().map(nome =>
+      '<optgroup label="' + escapeHtmlLocal(nome) + '">' + porTurma[nome].map(a =>
+        '<option value="' + a.id + '">' + escapeHtmlLocal(a.full_name || a.email || a.id) + '</option>').join('') + '</optgroup>').join('');
+    if(!PRATICAS_CTX.alunos.length) sel.innerHTML = '<option value="">Nenhum aluno com turma vinculada</option>';
+    if(atual) sel.value = atual;
+    renderPraticasAluno();
+  }
+
+  async function renderPraticasAluno(){
+    const box = document.getElementById('praticasAlunoBox');
+    const alunoId = document.getElementById('praticaAlunoSel').value;
+    if(!alunoId){ box.innerHTML = ''; return; }
+    const aluno = PRATICAS_CTX.alunos.find(a => a.id === alunoId);
+    const slugs = PRATICAS_CTX.turmaMaterias.filter(tm => tm.turma_id === aluno.turma_id).map(tm => tm.materia_slug)
+      .filter(slug => window.DYSE_PRATICAS && DYSE_PRATICAS[slug]);
+    if(!slugs.length){
+      box.innerHTML = '<p style="opacity:.7; font-size:.85rem;">O nível da turma deste aluno ainda não tem atividades prontas.</p>';
+      return;
+    }
+    box.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+    const [liberadas, resultados] = await Promise.all([dysePraticasLiberadasDoAluno(alunoId), dyseResultadosPraticasDoAluno(alunoId)]);
+    const resMap = {}; resultados.forEach(r => resMap[r.course + ':' + r.aula + ':' + r.activity_num] = r);
+    box.innerHTML = slugs.map(slug => {
+      const nivel = DYSE_PRATICAS[slug];
+      return nivel.aulas.map(aula => {
+        const chaves = aula.atividades.map(at => nivel.course + ':' + aula.aula + ':' + at.num);
+        const todas = chaves.every(c => liberadas.has(c));
+        const rows = aula.atividades.map(at => {
+          const chave = nivel.course + ':' + aula.aula + ':' + at.num;
+          const r = resMap[chave];
+          let res = '<span style="opacity:.5; font-size:.76rem;">Ainda não fez</span>';
+          if(r && r.meta && r.meta.total){
+            const itens = (r.meta.itens || []).map(it => {
+              const ic = it.status === 'ok' ? '✅' : it.status === 'warn' ? '🟠' : it.status === 'skip' ? '⏭' : '❌';
+              const tent = it.status === 'ok' ? '' : ' <span style="opacity:.65;">(' + escapeHtmlLocal((it.tentativas || []).join(' | ') || 'sem resposta') + ')</span>';
+              return '<div style="font-size:.78rem; padding:2px 0;">' + ic + ' ' + escapeHtmlLocal(it.correta) + tent + '</div>';
+            }).join('');
+            res = '<details style="font-size:.78rem;"><summary style="cursor:pointer;"><b>' + r.meta.acertos + '/' + r.meta.total + '</b> corretas · ' +
+              (r.meta.acertos_primeira != null ? r.meta.acertos_primeira + ' de primeira · ' : '') + (r.meta.pontos || 0) + ' pts · ' +
+              new Date(r.updated_at).toLocaleDateString('pt-BR') + '</summary><div style="margin-top:6px;">' + itens + '</div></details>';
+          }
+          return '<div class="manage-row">' +
+            '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) +
+              ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span><div>' + res + '</div></div>' +
+            '<div class="manage-row-actions">' +
+              '<a class="btn btn-preview" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '" target="_blank" rel="noopener">👁 Visualizar</a>' +
+              '<label class="dyse-toggle"><input type="checkbox" class="pratica-toggle" data-course="' + nivel.course + '" data-aula="' + aula.aula + '" data-num="' + at.num + '" ' +
+                (liberadas.has(chave) ? 'checked' : '') + ' onchange="togglePraticaAluno(this)"><span class="slider"></span></label>' +
+            '</div></div>';
+        }).join('');
+        return '<div style="margin-bottom:14px;"><div style="font-weight:600; font-size:.92rem; margin:6px 0 4px;">' + escapeHtmlLocal(nivel.nome) + ' · Aula ' +
+            String(aula.aula).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.titulo) + '</div>' +
+          '<div class="manage-row" style="background:var(--paper-2, rgba(0,0,0,.03)); border-radius:10px; padding-left:10px; padding-right:10px;">' +
+            '<div class="info"><b>Liberar todas desta aula</b> para ' + escapeHtmlLocal(aluno.full_name || 'o aluno') + '</div>' +
+            '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" ' + (todas ? 'checked' : '') +
+              ' onchange="togglePraticaAulaToda(this)"><span class="slider"></span></label></div></div>' +
+          '<div class="pratica-aula-rows">' + rows + '</div></div>';
+      }).join('');
+    }).join('');
+  }
+
+  async function togglePraticaAluno(input){
+    const alunoId = document.getElementById('praticaAlunoSel').value;
+    input.disabled = true;
+    const { error } = await dyseSetPraticaAluno(alunoId, input.dataset.course, +input.dataset.aula, +input.dataset.num, input.checked);
+    input.disabled = false;
+    if(error){ input.checked = !input.checked; alert('Não foi possível salvar. Tente de novo.'); }
+  }
+
+  async function togglePraticaAulaToda(input){
+    const alunoId = document.getElementById('praticaAlunoSel').value;
+    const toggles = input.closest('div[style*="margin-bottom:14px"]').querySelectorAll('.pratica-toggle');
+    input.disabled = true;
+    for(const t of toggles){
+      if(t.checked === input.checked) continue;
+      const { error } = await dyseSetPraticaAluno(alunoId, t.dataset.course, +t.dataset.aula, +t.dataset.num, input.checked);
+      if(!error) t.checked = input.checked;
+    }
+    input.disabled = false;
+  }
+
   async function loadManagePanel(){
+    loadPraticasAlunos();
     const container = document.getElementById('manageCourses');
     container.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
     const blocksToefl = [];
