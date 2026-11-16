@@ -912,6 +912,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       <a href="#" class="sidebar-item" data-view="praticas" onclick="mostrarView('praticas', event)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span>Atividades</span>
+        <span class="sidebar-badge" data-badge="praticas" hidden></span>
       </a>
       <a href="#" class="sidebar-item" data-view="reportcard" onclick="mostrarView('reportcard', event)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="12" y2="11"/></svg>
@@ -1272,6 +1273,32 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
      o que a gestão vinculou à turma). Só abre as que a professora liberou
      PRA ESTE ALUNO (aluno_atividades_liberadas); as outras ficam com cadeado. */
   const PRATICA_ICONES = { 'Escute e escolha': '🎧', 'Monte a frase': '🧩', 'Qual é a próxima fala?': '💬', 'Escute e grave': '🎙️', 'Make a Choice': '✅' };
+  /* Bolinha do menu "Atividades": quantas atividades liberadas pra este
+     aluno ele ainda não concluiu (some quando faz todas). */
+  function pintarBadgePraticas(niveis, liberadas){
+    const el = document.querySelector('.sidebar-badge[data-badge="praticas"]');
+    if(!el) return;
+    let pendentes = 0;
+    niveis.forEach(slug => {
+      const nivel = DYSE_PRATICAS[slug];
+      nivel.aulas.forEach(aula => aula.atividades.forEach(at => {
+        const chave = nivel.course + ':' + aula.aula + ':' + at.num;
+        const res = AREA_CTX.doneMap[chave];
+        if(liberadas.has(chave) && !(res && res.status === 'concluida')) pendentes++;
+      }));
+    });
+    el.hidden = pendentes === 0;
+    el.textContent = pendentes > 9 ? '9+' : String(pendentes);
+  }
+  async function contarPraticasPendentes(){
+    await AREA_PRONTO;
+    if(AREA_CTX.semTurma) return;
+    const niveis = Object.keys(window.DYSE_PRATICAS || {}).filter(slug => AREA_CTX.allowedSlugs.has(slug));
+    if(!niveis.length) return;
+    pintarBadgePraticas(niveis, await dyseMinhasPraticasLiberadas());
+  }
+  contarPraticasPendentes();
+
   async function renderPraticas(){
     const wrap = document.getElementById('praticasWrap');
     wrap.innerHTML = '<p class="card-instructions" style="opacity:.6;">Carregando...</p>';
@@ -1286,12 +1313,15 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       return;
     }
     const liberadas = await dyseMinhasPraticasLiberadas();
+    pintarBadgePraticas(niveis, liberadas);
     wrap.innerHTML = niveis.map(slug => {
       const nivel = DYSE_PRATICAS[slug];
       return nivel.aulas.map(aula => {
         const cards = aula.atividades.map(at => {
           const chave = nivel.course + ':' + aula.aula + ':' + at.num;
-          const lib = AREA_CTX.staff || liberadas.has(chave);
+          // Só a liberação da professora PARA ESTE ALUNO conta — inclusive em
+          // conta de gestão/professora que também é aluno.
+          const lib = liberadas.has(chave);
           const res = AREA_CTX.doneMap[chave];
           const ic = PRATICA_ICONES[at.tipo] || '📝';
           const corpo = '<div class="n">' + ic + ' ' + String(at.num).padStart(2, '0') + '</div>' +
