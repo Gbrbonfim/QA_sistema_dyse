@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /backups/
+
+Sitemap: https://doyouspeakenglish.com.br/sitemap.xml
