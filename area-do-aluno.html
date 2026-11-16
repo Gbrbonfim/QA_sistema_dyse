@@ -909,6 +909,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         <span>Meus cursos</span>
         <span class="sidebar-badge" data-badge="atividades" hidden></span>
       </a>
+      <a href="#" class="sidebar-item" data-view="praticas" onclick="mostrarView('praticas', event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>Atividades</span>
+      </a>
       <a href="#" class="sidebar-item" data-view="reportcard" onclick="mostrarView('reportcard', event)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="12" y2="11"/></svg>
         <span>Report Card</span>
@@ -977,6 +981,20 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         </div>
       </div>
 
+      <!-- ===== Atividades (estilo Flexge, liberadas por aluno) ===== -->
+      <div id="viewPraticas" style="display:none;">
+        <div class="page-header">
+          <div class="page-header-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div class="page-header-text">
+            <h2>Atividades</h2>
+            <p>Todas as atividades do seu nível. As coloridas já foram liberadas pela sua professora; as com cadeado chegam em breve.</p>
+          </div>
+        </div>
+        <div id="praticasWrap"><p class="card-instructions" style="opacity:.6;">Carregando...</p></div>
+      </div>
+
       <!-- ===== Report Card ===== -->
       <div id="viewReportCard" style="display:none;">
         <div class="page-header">
@@ -1029,6 +1047,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/assets/dyse-auth.js"></script>
 <script src="/assets/dyse-calendario.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
 <script>
 
   const NOTICE_MESSAGES = {
@@ -1043,7 +1062,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       document.getElementById('pageNotice').style.display = 'block';
       document.getElementById('pageNotice').classList.add('show');
       // limpa o parâmetro da URL pra não reaparecer se a pessoa atualizar a página
-      history.replaceState(null, '', location.pathname);
+      history.replaceState(null, '', location.pathname + location.hash);
     }
   })();
 
@@ -1102,14 +1121,16 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   const VIEWS = ['atividades', 'reportcard', 'financeiro'];
   function mostrarView(view, ev){
     if(ev) ev.preventDefault();
-    if(VIEWS.indexOf(view) === -1 && view !== 'calendario') view = 'atividades';
+    if(VIEWS.indexOf(view) === -1 && view !== 'calendario' && view !== 'praticas') view = 'atividades';
     document.querySelectorAll('.sidebar-item[data-view]').forEach(el =>
       el.classList.toggle('active', el.dataset.view === view));
     document.getElementById('viewAtividades').style.display = view === 'atividades' ? 'block' : 'none';
     document.getElementById('viewReportCard').style.display = view === 'reportcard' ? 'block' : 'none';
     document.getElementById('viewFinanceiro').style.display = view === 'financeiro' ? 'block' : 'none';
     document.getElementById('viewCalendario').style.display = view === 'calendario' ? 'block' : 'none';
+    document.getElementById('viewPraticas').style.display = view === 'praticas' ? 'block' : 'none';
     if(view === 'atividades') voltarCursos();
+    else if(view === 'praticas') renderPraticas();
     else if(view === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: false });
     else marcarVisto(view); // ver a seção = "li as novidades dela"
     const hash = view === 'atividades' ? '' : '#' + view;
@@ -1120,7 +1141,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
 
   /* ---------- Notificações "algo novo" no menu (por navegador) ---------- */
-  const AREA_CTX = { doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, niveis: [], aulasNivel: {}, aulasDadas: {} };
+  let AREA_PRONTO_RESOLVE;
+  const AREA_PRONTO = new Promise(r => { AREA_PRONTO_RESOLVE = r; });
+  const AREA_CTX = { allowedSlugs: new Set(), semTurma: false, doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, niveis: [], aulasNivel: {}, aulasDadas: {} };
   let SEEN_KEY = 'dyse_aluno_seen';
 
   function getSeen(){ try{ return JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; }catch(e){ return {}; } }
@@ -1244,6 +1267,53 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     ).join('');
   }
 
+  /* ---------- Atividades (estilo Flexge) ----------
+     Mostra TODAS as atividades do(s) nível(is) da turma do aluno (o nível é
+     o que a gestão vinculou à turma). Só abre as que a professora liberou
+     PRA ESTE ALUNO (aluno_atividades_liberadas); as outras ficam com cadeado. */
+  const PRATICA_ICONES = { 'Escute e escolha': '🎧', 'Monte a frase': '🧩', 'Qual é a próxima fala?': '💬', 'Escute e grave': '🎙️', 'Make a Choice': '✅' };
+  async function renderPraticas(){
+    const wrap = document.getElementById('praticasWrap');
+    wrap.innerHTML = '<p class="card-instructions" style="opacity:.6;">Carregando...</p>';
+    await AREA_PRONTO;
+    if(AREA_CTX.semTurma){
+      wrap.innerHTML = '<p class="card-instructions">Você ainda não está em uma turma. Assim que a coordenação vincular você, as atividades do seu nível aparecem aqui.</p>';
+      return;
+    }
+    const niveis = Object.keys(window.DYSE_PRATICAS || {}).filter(slug => AREA_CTX.allowedSlugs.has(slug));
+    if(!niveis.length){
+      wrap.innerHTML = '<p class="card-instructions">As atividades do seu nível ainda estão sendo preparadas. Assim que ficarem prontas, aparecem aqui.</p>';
+      return;
+    }
+    const liberadas = await dyseMinhasPraticasLiberadas();
+    wrap.innerHTML = niveis.map(slug => {
+      const nivel = DYSE_PRATICAS[slug];
+      return nivel.aulas.map(aula => {
+        const cards = aula.atividades.map(at => {
+          const chave = nivel.course + ':' + aula.aula + ':' + at.num;
+          const lib = AREA_CTX.staff || liberadas.has(chave);
+          const res = AREA_CTX.doneMap[chave];
+          const ic = PRATICA_ICONES[at.tipo] || '📝';
+          const corpo = '<div class="n">' + ic + ' ' + String(at.num).padStart(2, '0') + '</div>' +
+            '<div class="t">' + escapeHtmlLocal(at.titulo) + '</div>' +
+            '<div class="l">' + escapeHtmlLocal(at.tipo) + ' · ' + escapeHtmlLocal(at.treina) + '</div>' +
+            '<div class="l">⏱ ' + escapeHtmlLocal(at.minutos) + ' min · até ' + (at.pontos + 70) + ' pts</div>';
+          if(!lib){
+            return '<div class="dash-card locked" title="Aguardando a professora liberar"><span class="dash-badge locked">🔒 Bloqueada</span>' + corpo + '</div>';
+          }
+          let badge = '<span class="dash-badge pending">Liberada</span>';
+          if(res && res.status === 'concluida' && res.meta && res.meta.total){
+            badge = '<span class="dash-badge done">✓ ' + res.meta.acertos + '/' + res.meta.total + (res.meta.pontos ? ' · ' + res.meta.pontos + ' pts' : '') + '</span>';
+          }
+          return '<a class="dash-card" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '">' + badge + corpo + '</a>';
+        }).join('');
+        return '<div class="level-group"><div class="level-group-title">' + escapeHtmlLocal(nivel.nome) + ' · Aula ' +
+          String(aula.aula).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.titulo) + '</div>' +
+          '<div class="dash-grid">' + cards + '</div></div>';
+      }).join('');
+    }).join('');
+  }
+
   /* ---------- Vídeo de boas-vindas obrigatório ----------
      Aparece no 1º acesso do aluno (profiles.tutorial_boas_vindas_em NULL) e
      cobre a tela toda até o vídeo terminar: não dá pra fechar, adiantar nem
@@ -1350,6 +1420,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     // Sem turma vinculada, a gestão ainda não decidiu o que esse aluno pode
     // ver — não dá pra saber quais matérias mostrar, então nenhuma aparece.
     if(!profile || !profile.turma_id){
+      AREA_CTX.semTurma = true; AREA_PRONTO_RESOLVE();
       wrap.innerHTML =
         '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
           '<div class="course-folder-icon">🗂️</div>' +
@@ -1373,6 +1444,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     results.forEach(r => doneMap[r.course + ":" + (r.aula || 1) + ":" + r.activity_num] = r);
     AREA_CTX.doneMap = doneMap;
     AREA_CTX.staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
+    AREA_CTX.allowedSlugs = allowedSlugs;
+    AREA_PRONTO_RESOLVE();
 
     // Nome/descrição de cada curso vêm do que a gestão cadastrou em Matérias.
     AREA_CTX.materias = {};

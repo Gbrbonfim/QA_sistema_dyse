@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 01 · Countries</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Conteúdo: slide "Class 01 and 02: The World of English" — Vocabulary: Countries (Listen and repeat / Write the words under the flags) */
+DysePratica.iniciar({
+ "course": "ativ-a1",
+ "aula": 1,
+ "num": 1,
+ "tipo": "imagem",
+ "instrucao": "Escute o país e escolha a bandeira certa",
+ "itens": [
+  {
+   "audioTexto": "Brazil",
+   "opcoes": [
+    {
+     "label": "Brazil",
+     "img": "https://flagcdn.com/w320/br.png"
+    },
+    {
+     "label": "Japan",
+     "img": "https://flagcdn.com/w320/jp.png"
+    },
+    {
+     "label": "India",
+     "img": "https://flagcdn.com/w320/in.png"
+    },
+    {
+     "label": "The USA",
+     "img": "https://flagcdn.com/w320/us.png"
+    }
+   ],
+   "certa": 0
+  },
+  {
+   "audioTexto": "Japan",
+   "opcoes": [
+    {
+     "label": "France",
+     "img": "https://flagcdn.com/w320/fr.png"
+    },
+    {
+     "label": "England",
+     "img": "https://flagcdn.com/w320/gb-eng.png"
+    },
+    {
+     "label": "Brazil",
+     "img": "https://flagcdn.com/w320/br.png"
+    },
+    {
+     "label": "Japan",
+     "img": "https://flagcdn.com/w320/jp.png"
+    }
+   ],
+   "certa": 3
+  },
+  {
+   "audioTexto": "Italy",
+   "opcoes": [
+    {
+     "label": "Spain",
+     "img": "https://flagcdn.com/w320/es.png"
+    },
+    {
+     "label": "France",
+     "img": "https://flagcdn.com/w320/fr.png"
+    },
+    {
+     "label": "Italy",
+     "img": "https://flagcdn.com/w320/it.png"
+    },
+    {
+     "label": "Germany",
+     "img": "https://flagcdn.com/w320/de.png"
+    }
+   ],
+   "certa": 2
+  },
+  {
+   "audioTexto": "Switzerland",
+   "opcoes": [
+    {
+     "label": "Germany",
+     "img": "https://flagcdn.com/w320/de.png"
+    },
+    {
+     "label": "Switzerland",
+     "img": "https://flagcdn.com/w320/ch.png"
+    },
+    {
+     "label": "Canada",
+     "img": "https://flagcdn.com/w320/ca.png"
+    },
+    {
+     "label": "Italy",
+     "img": "https://flagcdn.com/w320/it.png"
+    }
+   ],
+   "certa": 1
+  },
+  {
+   "audioTexto": "France",
+   "opcoes": [
+    {
+     "label": "France",
+     "img": "https://flagcdn.com/w320/fr.png"
+    },
+    {
+     "label": "Japan",
+     "img": "https://flagcdn.com/w320/jp.png"
+    },
+    {
+     "label": "China",
+     "img": "https://flagcdn.com/w320/cn.png"
+    },
+    {
+     "label": "Canada",
+     "img": "https://flagcdn.com/w320/ca.png"
+    }
+   ],
+   "certa": 0
+  },
+  {
+   "audioTexto": "India",
+   "opcoes": [
+    {
+     "label": "France",
+     "img": "https://flagcdn.com/w320/fr.png"
+    },
+    {
+     "label": "The USA",
+     "img": "https://flagcdn.com/w320/us.png"
+    },
+    {
+     "label": "Japan",
+     "img": "https://flagcdn.com/w320/jp.png"
+    },
+    {
+     "label": "India",
+     "img": "https://flagcdn.com/w320/in.png"
+    }
+   ],
+   "certa": 3
+  },
+  {
+   "audioTexto": "China",
+   "opcoes": [
+    {
+     "label": "Brazil",
+     "img": "https://flagcdn.com/w320/br.png"
+    },
+    {
+     "label": "France",
+     "img": "https://flagcdn.com/w320/fr.png"
+    },
+    {
+     "label": "China",
+     "img": "https://flagcdn.com/w320/cn.png"
+    },
+    {
+     "label": "England",
+     "img": "https://flagcdn.com/w320/gb-eng.png"
+    }
+   ],
+   "certa": 2
+  },
+  {
+   "audioTexto": "Germany",
+   "opcoes": [
+    {
+     "label": "England",
+     "img": "https://flagcdn.com/w320/gb-eng.png"
+    },
+    {
+     "label": "Germany",
+     "img": "https://flagcdn.com/w320/de.png"
+    },
+    {
+     "label": "Spain",
+     "img": "https://flagcdn.com/w320/es.png"
+    },
+    {
+     "label": "Switzerland",
+     "img": "https://flagcdn.com/w320/ch.png"
+    }
+   ],
+   "certa": 1
+  },
+  {
+   "audioTexto": "England",
+   "opcoes": [
+    {
+     "label": "England",
+     "img": "https://flagcdn.com/w320/gb-eng.png"
+    },
+    {
+     "label": "Italy",
+     "img": "https://flagcdn.com/w320/it.png"
+    },
+    {
+     "label": "China",
+     "img": "https://flagcdn.com/w320/cn.png"
+    },
+    {
+     "label": "Spain",
+     "img": "https://flagcdn.com/w320/es.png"
+    }
+   ],
+   "certa": 0
+  },
+  {
+   "audioTexto": "The USA",
+   "opcoes": [
+    {
+     "label": "India",
+     "img": "https://flagcdn.com/w320/in.png"
+    },
+    {
+     "label": "Canada",
+     "img": "https://flagcdn.com/w320/ca.png"
+    },
+    {
+     "label": "Italy",
+     "img": "https://flagcdn.com/w320/it.png"
+    },
+    {
+     "label": "The USA",
+     "img": "https://flagcdn.com/w320/us.png"
+    }
+   ],
+   "certa": 3
+  }
+ ]
+});
+</script>
+</body>
+</html>

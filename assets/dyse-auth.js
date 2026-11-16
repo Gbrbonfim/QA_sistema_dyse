@@ -473,6 +473,72 @@ async function dyseRequirePublished(course, activityNum, aula = 1){
 }
 
 /* ======================================================================
+   ATIVIDADES (estilo Flexge, cursos "ativ-<nivel>") — liberação POR ALUNO
+   Tabela aluno_atividades_liberadas (seção 35 do schema). O aluno vê todas
+   as atividades do nível da turma dele, mas só faz as liberadas pra ele.
+   ====================================================================== */
+
+/* Aluno logado: Set "course:aula:num" das atividades liberadas pra ele. */
+async function dyseMinhasPraticasLiberadas(){
+  const session = await dyseGetSession();
+  if(!session) return new Set();
+  const { data, error } = await sb
+    .from('aluno_atividades_liberadas')
+    .select('course, aula, activity_num, liberada')
+    .eq('aluno_id', session.user.id);
+  if(error || !data) return new Set();
+  return new Set(data.filter(r => r.liberada).map(r => r.course + ':' + r.aula + ':' + r.activity_num));
+}
+
+/* [Professora] liberações de UM aluno: Set "course:aula:num". */
+async function dysePraticasLiberadasDoAluno(alunoId){
+  const { data, error } = await sb
+    .from('aluno_atividades_liberadas')
+    .select('course, aula, activity_num, liberada')
+    .eq('aluno_id', alunoId);
+  if(error || !data) return new Set();
+  return new Set(data.filter(r => r.liberada).map(r => r.course + ':' + r.aula + ':' + r.activity_num));
+}
+
+/* [Professora] libera/bloqueia uma atividade pra um aluno. */
+async function dyseSetPraticaAluno(alunoId, course, aula, activityNum, liberada){
+  const session = await dyseGetSession();
+  const { error } = await sb
+    .from('aluno_atividades_liberadas')
+    .upsert({
+      aluno_id: alunoId, course: course, aula: aula, activity_num: activityNum,
+      liberada: !!liberada, liberada_por: session ? session.user.id : null,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'aluno_id,course,aula,activity_num' });
+  return { error };
+}
+
+/* [Professora] resultados de UM aluno nos cursos de atividade. */
+async function dyseResultadosPraticasDoAluno(alunoId){
+  const { data, error } = await sb
+    .from('activity_results')
+    .select('course, aula, activity_num, status, meta, updated_at')
+    .eq('user_id', alunoId)
+    .like('course', 'ativ-%');
+  return error ? [] : (data || []);
+}
+
+/* Página de atividade: professora/gestão sempre entram (pra revisar);
+   aluno só se a atividade estiver liberada PRA ELE. */
+async function dyseRequirePraticaLiberada(course, aula, activityNum){
+  const session = await dyseGetSession();
+  if(!session) return false;
+  const profile = await dyseGetProfile(session);
+  if(dyseIsTeacher(profile) || dyseIsAdmin(profile)) return true;
+  const set = await dyseMinhasPraticasLiberadas();
+  if(!set.has(course + ':' + aula + ':' + activityNum)){
+    location.href = '/area-do-aluno.html?notice=locked#praticas';
+    return false;
+  }
+  return true;
+}
+
+/* ======================================================================
    GESTÃO — turmas, matérias e permissões (usado por /gestao.html e,
    pra leitura, também por /professora.html e /area-do-aluno.html)
    ====================================================================== */
