@@ -1016,6 +1016,13 @@ body.dyse-modal-open{overflow:hidden;}
       </table>
     </div>
 
+    <div id="turmaMaterialExtraWrap" style="display:none;">
+      <hr style="border:none; border-top:2px solid #f0e3d2; margin:32px 0 24px;">
+      <p style="font-family:var(--font-body); font-weight:600; font-size:1.1rem; color:var(--amaranth); margin-bottom:6px;">Material extra</p>
+      <p style="color:var(--seal-soft); font-size:.85rem; margin-bottom:14px;">Material de reforço desta turma (não tem Registro de Classe). Abra os slides de cada item e, se quiser, salve o link da cópia desta turma — é esse link que o aluno abre. Em branco, o aluno vê o material base.</p>
+      <div id="turmaMaterialExtraBody"></div>
+    </div>
+
     <hr style="border:none; border-top:2px solid #f0e3d2; margin:32px 0 24px;">
     <p style="font-family:var(--font-body); font-weight:600; font-size:1.1rem; color:var(--amaranth); margin-bottom:6px;">Registro de Classe</p>
     <p id="registroClasseSemNivel" style="color:var(--seal-soft); font-size:.85rem; display:none;">
@@ -1918,6 +1925,7 @@ body.dyse-modal-open{overflow:hidden;}
     const semNivel = document.getElementById('registroClasseSemNivel');
     const nivelWrap = document.getElementById('registroClasseNivelWrap');
     const seq = ++REGISTRO_SEQ;
+    carregarMaterialExtraDaTurma(turmaId); // seção própria, independente do Registro de Classe
     if(!turmaId){ wrap.style.display = 'none'; semNivel.style.display = 'none'; nivelWrap.style.display = 'none'; return; }
 
     // "Nível" (A1, A2...) é uma matéria com currículo (total_aulas
@@ -2041,6 +2049,70 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('registroClasseBlocoA').innerHTML = materialLink + linhas.map(([label, val]) =>
       '<p style="margin:0 0 10px;"><b style="color:var(--seal); font-size:.8rem; text-transform:uppercase; letter-spacing:.03em; display:block; margin-bottom:2px;">' + escapeHtmlLocal(label) + '</b><span style="font-size:.88rem;">' + escapeHtmlLocal(val) + '</span></p>'
     ).join('');
+  }
+
+  /* ---------- Material extra da turma (materias.sem_registro) ----------
+     Material de reforço (ex: "Material Black Friday") liberado pra turma
+     em Matérias liberadas. Não tem Registro de Classe, mas o professor
+     precisa abrir os slides e salvar a cópia da turma (turma_aula_material)
+     — é o link que o aluno abre. Mesma regra de cópia/base das aulas. */
+  let MATERIAL_EXTRA_SEQ = 0;
+  let MATERIAL_EXTRA_NIVEIS = null;
+
+  async function carregarMaterialExtraDaTurma(turmaId){
+    const wrap = document.getElementById('turmaMaterialExtraWrap');
+    const body = document.getElementById('turmaMaterialExtraBody');
+    const seq = ++MATERIAL_EXTRA_SEQ;
+    if(!turmaId){ wrap.style.display = 'none'; return; }
+    if(!MATERIAL_EXTRA_NIVEIS) MATERIAL_EXTRA_NIVEIS = (await dyseListNiveis()).filter(n => n.sem_registro);
+    const [turmaMaterias, materialTurma] = await Promise.all([dyseListAllTurmaMaterias(), dyseListTurmaAulaMaterial(turmaId)]);
+    if(seq !== MATERIAL_EXTRA_SEQ) return;
+    const extras = MATERIAL_EXTRA_NIVEIS.filter(n => turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
+    if(!extras.length){ wrap.style.display = 'none'; body.innerHTML = ''; return; }
+    const itensPorExtra = await Promise.all(extras.map(n => dyseListNivelAulas(n.slug)));
+    if(seq !== MATERIAL_EXTRA_SEQ) return;
+    const statusPorAula = {};
+    materialTurma.forEach(r => { statusPorAula[r.nivel_aula_id] = r; });
+
+    body.innerHTML = extras.map((n, i) => {
+      const itens = itensPorExtra[i];
+      const rows = itens.length ? itens.map(item => {
+        const st = statusPorAula[item.id] || {};
+        const base = (item.material_url || '').trim();
+        const copia = (st.material_url || '').trim();
+        const efetivo = copia || base;
+        const visivel = (st.ativo != null) ? st.ativo : dyseAulaAtivaPadrao(item.numero, n.total_aulas, true);
+        return '<div class="manage-row" style="flex-wrap:wrap; gap:8px;">' +
+          '<div class="info"><b>' + String(item.numero).padStart(2,'0') + '.</b> ' + escapeHtmlLocal(item.topico) +
+            (visivel ? '' : ' <span style="font-size:.72rem; opacity:.7;">(oculto pro aluno — ligue em Gerenciar Material)</span>') +
+            '<div style="font-size:.72rem; color:var(--seal-soft);">' + (copia ? 'Aluno abre a cópia desta turma' : (base ? 'Aluno abre o material base' : 'Sem link ainda')) + '</div>' +
+          '</div>' +
+          '<div class="manage-row-actions" style="flex-wrap:wrap; gap:8px;">' +
+            (efetivo ? '<a class="btn btn-preview" href="' + escapeHtmlLocal(efetivo) + '" target="_blank" rel="noopener">↗ Abrir</a>' : '') +
+            (base && copia && base !== copia ? '<a href="' + escapeHtmlLocal(base) + '" target="_blank" rel="noopener" style="font-size:.74rem; color:var(--seal-soft);">base ↗</a>' : '') +
+            '<input type="url" id="extraLinkTurma-' + item.id + '" placeholder="Link da cópia desta turma (opcional)" value="' + escapeHtmlLocal(copia) + '" style="width:260px; max-width:100%; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.8rem;">' +
+            '<button type="button" class="btn btn-ghost btn-xs" onclick="salvarLinkMaterialExtraTurma(\'' + turmaId + '\', \'' + item.id + '\')">Salvar</button>' +
+            '<span id="extraLinkMsg-' + item.id + '" style="font-size:.74rem; color:var(--seal-soft);"></span>' +
+          '</div>' +
+        '</div>';
+      }).join('') : '<p style="opacity:.6; font-size:.82rem; margin:0;">A gestão ainda não cadastrou itens neste material.</p>';
+      return '<details class="dyse-collapsible manage-course-block" open style="margin-bottom:12px;">' +
+        '<summary class="manage-course-title"><span>' + escapeHtmlLocal(n.name) + ' <span class="pill-count">' + itens.length + '</span></span><span class="chevron">›</span></summary>' +
+        '<div class="manage-course-body">' + rows + '</div>' +
+      '</details>';
+    }).join('');
+    wrap.style.display = 'block';
+  }
+
+  async function salvarLinkMaterialExtraTurma(turmaId, aulaId){
+    const url = (document.getElementById('extraLinkTurma-' + aulaId).value || '').trim();
+    const msg = document.getElementById('extraLinkMsg-' + aulaId);
+    if(msg) msg.textContent = 'Salvando...';
+    const { error } = await dyseSetTurmaAulaMaterial(turmaId, aulaId, url);
+    if(error){ if(msg) msg.textContent = 'Erro: ' + error.message; return; }
+    await carregarMaterialExtraDaTurma(turmaId);
+    const m2 = document.getElementById('extraLinkMsg-' + aulaId);
+    if(m2){ m2.textContent = 'Salvo ✓'; setTimeout(() => { m2.textContent = ''; }, 2000); }
   }
 
   async function salvarMaterialCopiaTurma(aulaId){
