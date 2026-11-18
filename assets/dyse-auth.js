@@ -706,6 +706,30 @@ async function dyseCreateNivelAula(materiaSlug, numero, topico, materialUrl){
   return { data, error };
 }
 
+/* ---------- [Gestão] criar um MATERIAL EXTRA ----------
+   Material extra (ex: "Material Black Friday") é uma matéria com itens
+   numerados (nivel_aulas: título + link do slide), igual a um nível — mesma
+   tela de Material, mesma liberação por turma (Matérias liberadas), mesma
+   visão do aluno. Única diferença: "sem_registro" = true, então NÃO aparece
+   no Registro de Classe nem no Report Card (é reforço, não currículo).
+   total_aulas = 0 só pra ele entrar na lista de matérias com aulas
+   (dyseListNiveis); os itens ficam todos ativos por padrão (ver
+   dyseAulaAtivaPadrao). Slug gerado do nome, com sufixo se já existir. */
+async function dyseCreateMaterialExtraMateria(nome, descricao){
+  const base = (nome || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'material';
+  const { data: existentes } = await sb.from('materias').select('slug').like('slug', base + '%');
+  const usados = new Set((existentes || []).map(r => r.slug));
+  let slug = base, n = 2;
+  while(usados.has(slug)) slug = base + '-' + (n++);
+  const { data, error } = await sb
+    .from('materias')
+    .insert({ slug: slug, name: nome, description: descricao || null, total_aulas: 0, sem_registro: true })
+    .select('*')
+    .maybeSingle();
+  return { data, error };
+}
+
 /* ======================================================================
    FINANCEIRO — modalidades/valores, vínculo financeiro do aluno,
    mensalidades, pagamentos, gastos e fechamento mensal.
@@ -2178,7 +2202,10 @@ async function dyseListTurmaAulaMaterial(turmaId){
    padrão quando "ativo" ainda é null (true pras 44 aulas de sempre, false
    pra qualquer aula que a gestão adicionar depois; essa só fica visível
    quando o professor ligar o interruptor pra cada turma). */
-function dyseAulaAtivaPadrao(aulaNumero, totalAulasNivel){
+/* "semRegistro" (material extra, ver dyseCreateMaterialExtraMateria): todo
+   item já nasce visível — não existe "aula original x adicionada depois". */
+function dyseAulaAtivaPadrao(aulaNumero, totalAulasNivel, semRegistro){
+  if(semRegistro) return true;
   return !!totalAulasNivel && aulaNumero <= totalAulasNivel;
 }
 

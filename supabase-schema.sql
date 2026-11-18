@@ -4379,3 +4379,17 @@ drop trigger if exists trg_audit_extras_professor on public.extras_professor;
 create trigger trg_audit_extras_professor
   after insert or update or delete on public.extras_professor
   for each row execute procedure public.log_financeiro_auditoria();
+
+-- ======================================================================
+-- 36) MATERIAL EXTRA — matéria "sem registro de classe"
+--     Ex: "Material Black Friday": uma matéria com itens numerados
+--     (nivel_aulas: título + link do slide), igual a um nível — mesma tela
+--     de Material na gestão, mesma liberação por turma (turma_materias),
+--     mesmo "Gerenciar Material" do professor, mesma visão do aluno. A ÚNICA
+--     diferença é materias.sem_registro = true: não aparece no Registro de
+--     Classe nem no Report Card (é reforço, não currículo). Criada pelo
+--     botão "+ Novo material extra" (gestao.html, aba Material), com
+--     total_aulas = 0 (só pra entrar na lista de matérias com aulas); os
+--     itens já nascem visíveis pro aluno (dyseAulaAtivaPadrao).
+-- ======================================================================
+alter table public.materias add column if not exists sem_registro boolean not null default false;

@@ -1886,7 +1886,8 @@ body.dyse-modal-open{overflow:hidden;}
     // "Nível" (A1, A2...) é uma matéria com currículo (total_aulas
     // preenchido) vinculada à turma pelo mesmo turma_materias de
     // "Matérias liberadas" — não existe um campo separado pra isso.
-    if(!REGISTRO_NIVEIS_CACHE.length) REGISTRO_NIVEIS_CACHE = await dyseListNiveis();
+    // Material extra (materias.sem_registro) não tem Registro de Classe — fica de fora.
+    if(!REGISTRO_NIVEIS_CACHE.length) REGISTRO_NIVEIS_CACHE = (await dyseListNiveis()).filter(n => !n.sem_registro);
     const [turmaMaterias, materialTurma] = await Promise.all([dyseListAllTurmaMaterias(), dyseListTurmaAulaMaterial(turmaId)]);
     if(seq !== REGISTRO_SEQ) return;
     const vinculados = REGISTRO_NIVEIS_CACHE.filter(n => turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
@@ -2835,7 +2836,7 @@ body.dyse-modal-open{overflow:hidden;}
         let todasAtivas = true;
         const rows = aulasPorNivel[i].map(aula => {
           const status = statusPorAula[aula.id];
-          const ativo = (status && status.ativo != null) ? status.ativo : dyseAulaAtivaPadrao(aula.numero, nivel.total_aulas);
+          const ativo = (status && status.ativo != null) ? status.ativo : dyseAulaAtivaPadrao(aula.numero, nivel.total_aulas, nivel.sem_registro);
           if(!ativo) todasAtivas = false;
           return '<div class="manage-row">' +
             '<div class="info"><b>' + String(aula.numero).padStart(2,'0') + '.</b> ' + escapeHtmlLocal(aula.topico) + '</div>' +

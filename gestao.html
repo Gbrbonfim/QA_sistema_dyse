@@ -1500,10 +1500,10 @@ body.dyse-modal-open{overflow:hidden;}
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.js"></script>
 <script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/a1/manifest.js"></script>
 <script>
   let TURMAS = [], MATERIAS = [], STUDENTS = [], TEACHERS = [], TURMA_MATERIAS = [], TEACHER_TURMAS = [], MATERIA_ACTIVITIES_DB = [], DISPONIBILIDADE = [];
   let MODALIDADES = [], MODALIDADE_VALORES = [], ALUNO_FIN_HISTORICO = [], NIVEIS = [], CONTAS = [];
-
   /* Atividades de cada matéria — mesma lista fixa usada em professora.html e
      area-do-aluno.html (o conteúdo delas é feito à mão no código, não vem
      do banco). Serve só pra esta tela saber que nomes mostrar; a matéria
@@ -1511,11 +1511,22 @@ body.dyse-modal-open{overflow:hidden;}
      botão "Gerenciar atividades". */
   const MATERIA_ACTIVITY_NAMES = {
     toefl: [{num:1, theme:'Rotina Diária'},{num:2, theme:'Viagens e Turismo'},{num:3, theme:'Alimentação e Saúde'},{num:4, theme:'Compras e Dinheiro'},{num:5, theme:'Meio Ambiente'},{num:6, theme:'Tecnologia'},{num:7, theme:'Educação'},{num:8, theme:'Trabalho e Carreira'},{num:9, theme:'Cultura e Mídia'},{num:10, theme:'Ciência'},{num:11, theme:'História'},{num:12, theme:'Psicologia'},{num:13, theme:'Negócios e Economia'},{num:14, theme:'Questões Globais'},{num:15, theme:'Artes e Literatura'},{num:16, theme:'Revisão Geral'}],
-    // Atividades complementares do A1 — só a Aula 01 (piloto) tem os 15
-    // arquivos prontos em /atividades/a1/ por enquanto; as aulas 02-44
-    // entram aqui conforme forem produzidas (num continua: aula 2 = 16-30 etc.).
-    a1: [{num:1, theme:'Aula 01 · Vocabulário — Países e Nacionalidades'},{num:2, theme:'Aula 01 · Complete o Diálogo de Apresentação'},{num:3, theme:'Aula 01 · Pronúncia — Linking'},{num:4, theme:'Aula 01 · Vídeo — Apresentações ao Redor do Mundo'},{num:5, theme:'Aula 01 · Meu Cartão de Apresentação'},{num:6, theme:'Aula 01 · De Onde Você É?'},{num:7, theme:'Aula 01 · Vídeo — Sotaques e Países'},{num:8, theme:'Aula 01 · Monte a Pergunta'},{num:9, theme:'Aula 01 · Pronúncia — o som de "TH"'},{num:10, theme:'Aula 01 · Vídeo — Role-play de Apresentação'},{num:11, theme:'Aula 01 · Speaking — Grave sua Apresentação'},{num:12, theme:'Aula 01 · Leitura — Primeiro Dia de Aula'},{num:13, theme:'Aula 01 · Vídeo — Erros Comuns de Pronúncia'},{num:14, theme:'Aula 01 · Revisão — Quiz Rápido'},{num:15, theme:'Aula 01 · Vídeo — Prática Final: Apresente-se!'}]
+    // Atividades complementares do A1 — vêm do manifesto (atividades/a1/manifest.js),
+    // a mesma fonte usada pela lista do aluno e pelo painel do professor: cada
+    // aula tem suas próprias atividades (aula + num), não uma lista única.
+    a1: Object.keys(AULAS_MANIFEST).map(Number).sort((x, y) => x - y).flatMap(aula =>
+      AULAS_MANIFEST[aula].map(a => ({ aula: aula, num: a.num, theme: a.titulo }))
+    )
   };
+
+  /* Liberação gestão→professor de UMA atividade. Sem linha em
+     materia_activities o banco trata como LIBERADA (activity_released_to_teachers
+     devolve true) — a tela segue a mesma regra pra não mostrar "desligado"
+     algo que o professor já enxerga. */
+  function materiaActivityReleased(slug, aula, num){
+    const row = MATERIA_ACTIVITIES_DB.find(ma => ma.materia_slug === slug && (ma.aula || 1) === (aula || 1) && ma.activity_num === num);
+    return row ? !!row.released_to_teachers : true;
+  }
 
   const PANEL_META = {
     turmas: {
@@ -1525,7 +1536,8 @@ body.dyse-modal-open{overflow:hidden;}
     },
     materias: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
-      title: 'Matérias', subtitle: 'Gerencie as matérias, atividades e material de cada nível.', action: ''
+      title: 'Matérias', subtitle: 'Gerencie as matérias, atividades e material de cada nível.',
+      action: '<button type="button" class="btn btn-primary" onclick="criarMaterialExtra()" title="Material de reforço com links numerados — aparece pro aluno como os outros, mas não entra no Registro de Classe">+ Novo material extra</button>'
     },
     alunos: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
@@ -1647,7 +1659,9 @@ body.dyse-modal-open{overflow:hidden;}
     ]);
     // "Nível" (A1, A2...) é uma matéria com currículo — reconhecida por ter
     // total_aulas preenchido (matérias comuns, tipo TOEFL, ficam sem isso).
-    NIVEIS = MATERIAS.filter(m => m.total_aulas != null);
+    // Material extra (sem_registro) tem itens em nivel_aulas mas NÃO é nível:
+    // fica fora de filtros de nível, Registro de Classe e Report Card.
+    NIVEIS = MATERIAS.filter(m => m.total_aulas != null && !m.sem_registro);
     renderTurmasTable();
     renderMateriasTable();
     populateAlunosFiltros();
@@ -2258,7 +2272,6 @@ body.dyse-modal-open{overflow:hidden;}
     // Pra mostrar "X aulas com material cadastrado" real (não inventado),
     // reaproveita o mesmo cache de nivel_aulas usado no Histórico acadêmico.
     await garantirNivelAulasCache();
-
     const busca = (document.getElementById('filterMateriaBusca').value || '').trim().toLowerCase();
     const materiasFiltradas = MATERIAS.filter(m => {
       if(!busca) return true;
@@ -2281,15 +2294,21 @@ body.dyse-modal-open{overflow:hidden;}
       const turmaCount = TURMA_MATERIAS.filter(tm => tm.materia_slug === m.slug).length;
       const activities = MATERIA_ACTIVITY_NAMES[m.slug];
       const releasedCount = activities
-        ? MATERIA_ACTIVITIES_DB.filter(ma => ma.materia_slug === m.slug && ma.released_to_teachers).length
+        ? activities.filter(a => materiaActivityReleased(m.slug, a.aula, a.num)).length
         : 0;
-
       const statsHtml =
         materiaStatBox(MATERIA_TURMAS_ICON_SVG, turmaCount, 'turmas usando', null) +
         (activities
           ? materiaStatBox(MATERIA_ATIVIDADES_ICON_SVG, releasedCount + '/' + activities.length, 'atividades', (releasedCount / activities.length) * 100)
           : '') +
-        (m.total_aulas
+        (m.sem_registro
+          ? (() => {
+              // Material extra: não tem "total de aulas" do currículo — mostra quantos itens já têm link.
+              const itens = Object.values(NIVEL_AULAS_POR_ID).filter(a => a.materia_slug === m.slug);
+              const comLink = itens.filter(a => a.material_url).length;
+              return materiaStatBox(MATERIA_ICON_SVG, comLink + '/' + itens.length, 'itens com link', itens.length ? (comLink / itens.length) * 100 : 0);
+            })()
+          : m.total_aulas
           ? (() => {
               const aulasComMaterial = Object.values(NIVEL_AULAS_POR_ID).filter(a => a.materia_slug === m.slug && a.material_url).length;
               return materiaStatBox(MATERIA_ICON_SVG, aulasComMaterial + '/' + m.total_aulas, 'aulas com material', (aulasComMaterial / m.total_aulas) * 100);
@@ -2299,8 +2318,11 @@ body.dyse-modal-open{overflow:hidden;}
       const activitiesBtn = activities
         ? '<button type="button" class="btn btn-primary btn-sm" onclick="openMateriaModal(\'' + m.slug + '\')">Atividades →</button>'
         : '';
-      const materialBtn = m.total_aulas
-        ? '<button type="button" class="btn btn-ghost btn-sm" onclick="openCurriculoModal(\'' + m.slug + '\')">Material →</button>'
+      const materialBtn = (m.total_aulas || m.sem_registro)
+        ? '<button type="button" class="btn ' + (m.sem_registro ? 'btn-primary' : 'btn-ghost') + ' btn-sm" onclick="openCurriculoModal(\'' + m.slug + '\')">Material →</button>'
+        : '';
+      const extraPill = m.sem_registro
+        ? ' <span class="turma-pill" style="background:#FDF0DD; color:#CE8613;" title="Não entra no Registro de Classe nem no Report Card">Material extra · sem registro</span>'
         : '';
 
       return '<div class="materia-card">' +
@@ -2308,7 +2330,7 @@ body.dyse-modal-open{overflow:hidden;}
           '<div class="materia-icon" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + MATERIA_ICON_SVG + '</div>' +
           '<div class="materia-info">' +
             '<span class="materia-slug-label">SLUG</span><span class="turma-pill">' + escapeHtmlLocal(m.slug) + '</span>' +
-            '<div class="materia-name">' + escapeHtmlLocal(m.name) + '</div>' +
+            '<div class="materia-name">' + escapeHtmlLocal(m.name) + extraPill + '</div>' +
             '<div class="materia-desc-label">DESCRIÇÃO</div>' +
             '<div class="materia-desc" title="Clique para editar" onclick="editarMateriaDescricao(\'' + m.slug + '\', this)">' + (m.description ? escapeHtmlLocal(m.description) : '-') + '</div>' +
           '</div>' +
@@ -2369,32 +2391,81 @@ body.dyse-modal-open{overflow:hidden;}
     const activities = MATERIA_ACTIVITY_NAMES[slug];
     if(!m || !activities) return;
     document.getElementById('materiaModalTitle').textContent = m.name;
-
-    document.getElementById('materiaModalBody').innerHTML =
-      '<p class="report-line" style="margin-bottom:14px;">Clique na seta pra ver a atividade. O toggle controla se ela ' +
-      'fica disponível pro professor publicar/ocultar pros alunos dele em "Gerenciar atividades" — desmarcada, nem ' +
-      'aparece como opção pra ele.</p>' +
-      activities.map(a => {
-        const row = MATERIA_ACTIVITIES_DB.find(ma => ma.materia_slug === slug && ma.activity_num === a.num);
-        const on = row ? !!row.released_to_teachers : false;
-        const rowId = 'activity-preview-' + slug + '-' + a.num;
-        return '<div class="activity-row">' +
-          '<div class="activity-row-head">' +
-            '<button type="button" class="activity-caret" onclick="toggleActivityPreview(\'' + slug + '\', ' + a.num + ', this)">▸</button>' +
-            '<span class="name">' + String(a.num).padStart(2,'0') + '. ' + escapeHtmlLocal(a.theme) + '</span>' +
-            '<label class="dyse-toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleMateriaActivity(\'' + slug + '\', ' + a.num + ', this.checked, this)"><span class="slider"></span></label>' +
-          '</div>' +
-          '<div class="activity-preview" id="' + rowId + '"></div>' +
-        '</div>';
-      }).join('');
+    renderMateriaModalBody(slug);
 
     document.getElementById('materiaModal').classList.add('open');
     document.getElementById('materiaModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
   }
 
-  function toggleActivityPreview(slug, activityNum, caretEl){
-    const box = document.getElementById('activity-preview-' + slug + '-' + activityNum);
+  function materiaActivityRowHtml(slug, a){
+    const aula = a.aula || 1;
+    const on = materiaActivityReleased(slug, aula, a.num);
+    return '<div class="activity-row">' +
+      '<div class="activity-row-head">' +
+        '<button type="button" class="activity-caret" onclick="toggleActivityPreview(\'' + slug + '\', ' + a.num + ', this, ' + aula + ')">▸</button>' +
+        '<span class="name">' + String(a.num).padStart(2,'0') + '. ' + escapeHtmlLocal(a.theme) + '</span>' +
+        '<label class="dyse-toggle"><input type="checkbox" ' + (on?'checked':'') + ' onchange="toggleMateriaActivity(\'' + slug + '\', ' + a.num + ', this.checked, this, ' + aula + ')"><span class="slider"></span></label>' +
+      '</div>' +
+      '<div class="activity-preview" id="activity-preview-' + slug + '-' + aula + '-' + a.num + '"></div>' +
+    '</div>';
+  }
+
+  function renderMateriaModalBody(slug){
+    const activities = MATERIA_ACTIVITY_NAMES[slug] || [];
+    const intro = '<p class="report-line" style="margin-bottom:14px;">Clique na seta pra ver a atividade. O toggle controla se ela ' +
+      'fica disponível pro professor publicar/ocultar pros alunos dele em "Gerenciar atividades" — desmarcada, nem ' +
+      'aparece como opção pra ele.</p>';
+    const temAulas = activities.some(a => a.aula);
+    if(!temAulas){
+      document.getElementById('materiaModalBody').innerHTML = intro + activities.map(a => materiaActivityRowHtml(slug, a)).join('');
+      return;
+    }
+    // Matéria com atividades por aula (A1): um bloco recolhível por aula.
+    const porAula = {};
+    activities.forEach(a => (porAula[a.aula] = porAula[a.aula] || []).push(a));
+    const topicoPorAula = {};
+    Object.values(NIVEL_AULAS_POR_ID || {}).forEach(na => { if(na.materia_slug === slug) topicoPorAula[na.numero] = na.topico; });
+    const openSet = new Set([...document.querySelectorAll('#materiaModalBody details[open]')].map(d => d.dataset.aula));
+    document.getElementById('materiaModalBody').innerHTML = intro +
+      Object.keys(porAula).map(Number).sort((x, y) => x - y).map(aula => {
+        const lista = porAula[aula];
+        const liberadas = lista.filter(a => materiaActivityReleased(slug, aula, a.num)).length;
+        return '<details class="dyse-collapsible dyse-collapsible-nested" data-aula="' + aula + '"' + (openSet.has(String(aula)) ? ' open' : '') + '>' +
+          '<summary>' +
+            '<span class="summary-left"><span class="chevron">›</span>Aula ' + String(aula).padStart(2,'0') + (topicoPorAula[aula] ? ' — ' + escapeHtmlLocal(topicoPorAula[aula]) : '') + '</span>' +
+            '<span style="font-size:.76rem; opacity:.75; white-space:nowrap; font-weight:600;">' + liberadas + '/' + lista.length + ' liberadas</span>' +
+          '</summary>' +
+          '<div class="dyse-collapsible-body">' +
+            '<div style="display:flex; gap:8px; margin-bottom:8px;">' +
+              '<button type="button" class="btn btn-ghost btn-xs" onclick="setAulaActivitiesReleased(\'' + slug + '\', ' + aula + ', true)">Liberar todas</button>' +
+              '<button type="button" class="btn btn-ghost btn-xs" onclick="setAulaActivitiesReleased(\'' + slug + '\', ' + aula + ', false)">Bloquear todas</button>' +
+            '</div>' +
+            lista.map(a => materiaActivityRowHtml(slug, a)).join('') +
+          '</div>' +
+        '</details>';
+      }).join('');
+  }
+
+  async function setAulaActivitiesReleased(slug, aula, released){
+    const lista = (MATERIA_ACTIVITY_NAMES[slug] || []).filter(a => (a.aula || 1) === aula);
+    const results = await Promise.all(lista.map(a => dyseSetMateriaActivityReleased(slug, a.num, released, aula)));
+    const erro = results.find(r => r.error);
+    if(erro){ alert('Não foi possível salvar: ' + erro.error.message); }
+    lista.forEach((a, i) => { if(!results[i].error) guardarMateriaActivityLocal(slug, aula, a.num, released); });
+    renderMateriaModalBody(slug);
+    renderMateriasTable();
+  }
+
+  function guardarMateriaActivityLocal(slug, aula, num, released){
+    const existing = MATERIA_ACTIVITIES_DB.find(ma => ma.materia_slug === slug && (ma.aula || 1) === aula && ma.activity_num === num);
+    if(existing) existing.released_to_teachers = released;
+    else MATERIA_ACTIVITIES_DB.push({ materia_slug: slug, aula: aula, activity_num: num, released_to_teachers: released });
+  }
+
+  function toggleActivityPreview(slug, activityNum, caretEl, aula){
+    aula = aula || 1;
+    const box = document.getElementById('activity-preview-' + slug + '-' + aula + '-' + activityNum);
     if(!box) return;
     const opening = !box.classList.contains('open');
     box.classList.toggle('open', opening);
@@ -2403,7 +2474,7 @@ body.dyse-modal-open{overflow:hidden;}
     // carrega o iframe só na primeira vez que abrir (evita 16 iframes de uma vez)
     if(opening && !box.dataset.loaded){
       box.dataset.loaded = '1';
-      const url = activityUrl(slug, activityNum);
+      const url = slug === 'a1' ? dyseUrlAtividadeA1(aula, activityNum) : activityUrl(slug, activityNum);
       box.innerHTML = '<iframe src="' + url + '" loading="lazy" title="Preview da atividade"></iframe>' +
         '<a class="open-tab" href="' + url + '" target="_blank" rel="noopener">↗ Abrir em outra aba</a>';
     }
@@ -2427,15 +2498,21 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('curriculoModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
 
+    CURRICULO_SLUG_ATUAL = slug;
     if(!CURRICULO_AULAS_CACHE[slug]) CURRICULO_AULAS_CACHE[slug] = await dyseListNivelAulas(slug, true);
     renderCurriculoModalBody(slug);
   }
+  let CURRICULO_SLUG_ATUAL = null;
 
   function renderCurriculoModalBody(slug){
     const aulas = CURRICULO_AULAS_CACHE[slug] || [];
     const proximoNumero = aulas.length ? (aulas[aulas.length - 1].numero + 1) : 1;
+    const materia = MATERIAS.find(x => x.slug === slug) || {};
+    const extra = !!materia.sem_registro;
     document.getElementById('curriculoModalBody').innerHTML =
-      '<p class="report-line" style="margin-bottom:14px;">Cole aqui o link do Google Slides/Drive <b>base (modelo)</b> de cada aula. Cada turma pode ter uma cópia própria com as anotações dela — quem cadastra a cópia é o professor, na tela do Registro de Classe. Turma sem cópia usa este material base. A professora vê no Plano da Aula e o aluno vê depois que a aula for registrada em nome dele.</p>' +
+      (extra
+        ? '<p class="report-line" style="margin-bottom:14px;"><b>Material extra</b> — cadastre cada item (1, 2, 3...) com o título e o link do slide. Funciona igual ao material das aulas: libere pra turma em <b>Turmas → Matérias liberadas</b> e o aluno vê "' + escapeHtmlLocal(materia.name || '') + '" no painel dele, com os links numerados. O professor pode ligar/desligar item por turma em "Gerenciar Material". A única diferença: <b>não entra no Registro de Classe</b> nem no Report Card.</p>'
+        : '<p class="report-line" style="margin-bottom:14px;">Cole aqui o link do Google Slides/Drive <b>base (modelo)</b> de cada aula. Cada turma pode ter uma cópia própria com as anotações dela — quem cadastra a cópia é o professor, na tela do Registro de Classe. Turma sem cópia usa este material base. A professora vê no Plano da Aula e o aluno vê depois que a aula for registrada em nome dele.</p>') +
       (aulas.length
         ? aulas.map(a =>
             '<div class="curriculo-row" style="' + (a.ativo === false ? 'opacity:.55;' : '') + '">' +
@@ -2448,12 +2525,12 @@ body.dyse-modal-open{overflow:hidden;}
               '<span class="curriculo-status" id="curriculo-status-' + a.id + '"></span>' +
             '</div>'
           ).join('')
-        : '<p class="report-line" style="opacity:.6;">Nenhuma aula cadastrada pra essa matéria ainda.</p>') +
+        : '<p class="report-line" style="opacity:.6;">' + (extra ? 'Nenhum item cadastrado ainda — adicione o primeiro abaixo.' : 'Nenhuma aula cadastrada pra essa matéria ainda.') + '</p>') +
       '<form class="gestao-form-row" onsubmit="return handleAddNivelAula(\'' + slug + '\', event)" style="margin-top:18px; padding-top:16px; border-top:1px solid #e4d4c4; display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end;">' +
         '<div class="gestao-field" style="flex:0 1 90px;"><label>Número</label><input type="number" min="1" id="newAulaNumero" value="' + proximoNumero + '" required></div>' +
-        '<div class="gestao-field" style="flex:2 1 220px;"><label>Tópico</label><input type="text" id="newAulaTopico" placeholder="Ex: Rotina Diária" required></div>' +
-        '<div class="gestao-field" style="flex:2 1 220px;"><label>Link do material (opcional)</label><input type="url" id="newAulaMaterialUrl" placeholder="https://..."></div>' +
-        '<button type="submit" class="btn btn-primary">+ Adicionar aula</button>' +
+        '<div class="gestao-field" style="flex:2 1 220px;"><label>' + (extra ? 'Título' : 'Tópico') + '</label><input type="text" id="newAulaTopico" placeholder="' + (extra ? 'Ex: Slides parte 1' : 'Ex: Rotina Diária') + '" required></div>' +
+        '<div class="gestao-field" style="flex:2 1 220px;"><label>Link do material' + (extra ? '' : ' (opcional)') + '</label><input type="url" id="newAulaMaterialUrl" placeholder="https://..."' + (extra ? ' required' : '') + '></div>' +
+        '<button type="submit" class="btn btn-primary">' + (extra ? '+ Adicionar item' : '+ Adicionar aula') + '</button>' +
       '</form>' +
       '<p class="report-line" id="curriculoAddMsg" style="margin-top:8px;"></p>';
   }
@@ -2527,19 +2604,46 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('curriculoModal').classList.remove('open');
     document.getElementById('curriculoModal').setAttribute('aria-hidden','true');
     document.body.classList.remove('dyse-modal-open');
+    // Sincroniza o cache usado nos cards (itens/aulas com material) com o que mudou no modal.
+    const slug = CURRICULO_SLUG_ATUAL;
+    if(slug && NIVEL_AULAS_POR_ID && CURRICULO_AULAS_CACHE[slug]){
+      Object.keys(NIVEL_AULAS_POR_ID).forEach(id => { if(NIVEL_AULAS_POR_ID[id].materia_slug === slug) delete NIVEL_AULAS_POR_ID[id]; });
+      CURRICULO_AULAS_CACHE[slug].forEach(a => { NIVEL_AULAS_POR_ID[a.id] = a; });
+      renderMateriasTable();
+    }
   }
 
-  async function toggleMateriaActivity(slug, activityNum, enabled, checkboxEl){
-    const { error } = await dyseSetMateriaActivityReleased(slug, activityNum, enabled);
+  async function toggleMateriaActivity(slug, activityNum, enabled, checkboxEl, aula){
+    aula = aula || 1;
+    const { error } = await dyseSetMateriaActivityReleased(slug, activityNum, enabled, aula);
     if(error){
       alert('Não foi possível salvar: ' + error.message);
       if(checkboxEl) checkboxEl.checked = !enabled;
       return;
     }
-    const existing = MATERIA_ACTIVITIES_DB.find(ma => ma.materia_slug === slug && ma.activity_num === activityNum);
-    if(existing) existing.released_to_teachers = enabled;
-    else MATERIA_ACTIVITIES_DB.push({ materia_slug: slug, activity_num: activityNum, released_to_teachers: enabled });
+    guardarMateriaActivityLocal(slug, aula, activityNum, enabled);
+    if((MATERIA_ACTIVITY_NAMES[slug] || []).some(a => a.aula)) renderMateriaModalBody(slug); // atualiza o "X/Y liberadas" da aula
     renderMateriasTable();
+  }
+
+  /* "+ Novo material extra" — cria uma matéria sem registro de classe (ex:
+     "Material Black Friday") e já abre o modal de Material pra cadastrar os
+     itens numerados (título + link). Libera pra turma igual qualquer matéria
+     (Turmas → Matérias liberadas). Ver dyseCreateMaterialExtraMateria. */
+  async function criarMaterialExtra(){
+    const nome = (prompt('Nome do material extra (ex: Material Black Friday):') || '').trim();
+    if(!nome) return;
+    const { data, error } = await dyseCreateMaterialExtraMateria(nome);
+    if(error || !data){
+      alert('Não foi possível criar: ' + (error ? error.message : 'sem resposta do banco') +
+        (error && /sem_registro/.test(error.message) ? '\n\nFalta rodar a seção 36 do supabase-schema.sql no Supabase.' : ''));
+      return;
+    }
+    MATERIAS.push(data);
+    MATERIAS.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    renderMateriasTable();
+    renderTurmasTable(); // aparece em "Matérias liberadas" das turmas
+    openCurriculoModal(data.slug);
   }
 
   async function handleDeleteMateria(slug){
@@ -4067,7 +4171,9 @@ body.dyse-modal-open{overflow:hidden;}
   async function garantirNivelAulasCache(){
     if(NIVEL_AULAS_POR_ID) return;
     NIVEL_AULAS_POR_ID = {};
-    const listas = await Promise.all(NIVEIS.map(n => dyseListNivelAulas(n.slug, true)));
+    // Inclui os materiais extras (sem_registro) — o card de Matérias conta os itens deles também.
+    const comAulas = MATERIAS.filter(m => m.total_aulas != null);
+    const listas = await Promise.all(comAulas.map(n => dyseListNivelAulas(n.slug, true)));
     listas.flat().forEach(a => { NIVEL_AULAS_POR_ID[a.id] = a; });
   }
 

@@ -1113,7 +1113,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     // Trilha de aprendizagem: TODAS as aulas ficam visíveis; só as que já têm
     // material liberado são clicáveis, as demais aparecem desfocadas e travadas.
     const dadas = AREA_CTX.aulasDadas[slug] || new Set();
-    return "<p class=\"trilha-intro\">Sua trilha de aprendizagem: as aulas em destaque já têm material liberado; as desfocadas ainda vão chegar.</p>" +
+    const extra = !!(AREA_CTX.materias[slug] && AREA_CTX.materias[slug].sem_registro);
+    return "<p class=\"trilha-intro\">" + (extra
+        ? "Material de reforço: clique em cada item pra abrir os slides."
+        : "Sua trilha de aprendizagem: as aulas em destaque já têm material liberado; as desfocadas ainda vão chegar.") + "</p>" +
       aulas.map(aula => {
         const url = AREA_CTX.materialPorAulaId[aula.id];
         const num = String(aula.numero).padStart(2, "0");
@@ -1280,6 +1283,13 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           totalCount ? Math.round((publishedCount / totalCount) * 100) : 0);
       }
       const aulas = AREA_CTX.aulasNivel[nivel.slug] || [];
+      if(nivel.sem_registro){
+        // Material extra: sem aula ministrada/registro — o card conta os itens liberados.
+        const liberados = aulas.filter(a => AREA_CTX.materialPorAulaId[a.id]).length;
+        return cardCurso(nivel.slug, nivel.name, nivel.description || "Material de reforço com os slides.", accent,
+          liberados + " " + (liberados === 1 ? "material disponível" : "materiais disponíveis"),
+          aulas.length ? Math.round((liberados / aulas.length) * 100) : 0);
+      }
       const dadas = AREA_CTX.aulasDadas[nivel.slug] || new Set();
       const ministradas = aulas.filter(a => dadas.has(a.id)).length;
       const pct = aulas.length ? Math.round((ministradas / aulas.length) * 100) : 0;
@@ -1391,7 +1401,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         // Segundo interruptor (por turma, da professora): sem decisão
         // explícita (ativo null/sem linha), usa o padrão por número da
         // aula — ver dyseAulaAtivaPadrao em dyse-auth.js.
-        const ativo = (status && status.ativo != null) ? status.ativo : dyseAulaAtivaPadrao(a.numero, n.total_aulas);
+        const ativo = (status && status.ativo != null) ? status.ativo : dyseAulaAtivaPadrao(a.numero, n.total_aulas, n.sem_registro);
         const url = ativo ? ((status && status.material_url) || a.material_url || '').trim() : '';
         if(url){
           AREA_CTX.materialPorAulaId[a.id] = url;
