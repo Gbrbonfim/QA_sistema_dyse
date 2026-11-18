@@ -841,10 +841,10 @@ body.dyse-modal-open{overflow:hidden;}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Z"/><path d="M16 7V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2"/><path d="M18 14h.01"/></svg>
         <span>Financeiro</span>
       </button>
-      <a class="sidebar-item" href="/calendario-letivo.html">
+      <button type="button" class="sidebar-item" id="tabCalendario" onclick="showPanel('calendario')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>
         <span>Calendário Letivo</span>
-      </a>
+      </button>
     </nav>
     <div class="sidebar-footer">
       <a class="sidebar-help" href="https://wa.me/554187207973" target="_blank" rel="noopener">
@@ -925,6 +925,18 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 
   <div id="panelManage" style="display:none;">
+    <details class="dyse-collapsible manage-course-block" open style="margin-bottom:22px;">
+      <summary class="manage-course-title"><span>Atividades por aluno</span><span class="chevron">›</span></summary>
+      <div class="manage-course-body">
+        <p style="color:var(--seal-soft); font-size:.85rem; margin:0 0 12px;">
+          O aluno vê todas as atividades do nível dele, mas só faz as que você liberar <b>para ele</b>. Escolha o aluno e ligue as atividades. Em <b>👁 Visualizar</b> você testa a atividade antes (seu resultado não é salvo).
+        </p>
+        <div class="dash-filter" style="margin-bottom:10px;">
+          <select id="praticaAlunoSel" onchange="renderPraticasAluno()"><option value="">Carregando alunos...</option></select>
+        </div>
+        <div id="praticasAlunoBox"></div>
+      </div>
+    </details>
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
       Clique em <b>👁 Visualizar</b> para abrir e revisar a atividade antes de liberar — como professora, você sempre consegue acessar qualquer atividade, mesmo oculta dos alunos. Ative o interruptor para liberar aos alunos, ou desative para escondê-la novamente.
     </p>
@@ -1067,6 +1079,9 @@ body.dyse-modal-open{overflow:hidden;}
     <div id="reportCardsListaProfessora"></div>
   </div>
 
+  <!-- ---------- CALENDÁRIO LETIVO ---------- -->
+  <div id="panelCalendario" style="display:none;"><div id="calendarioWrap"></div></div>
+
   <div id="panelDisponibilidade" style="display:none;">
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
       Marque os horários da semana em que você está livre pra dar aula — clique numa célula pra
@@ -1132,10 +1147,25 @@ body.dyse-modal-open{overflow:hidden;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/assets/dyse-auth.js"></script>
+<script src="/assets/dyse-calendario.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
 <script>
   let ALL_RESULTS = [];
   let TURMA_NAME_BY_USER = {}; // user_id -> nome da turma (ou "-" se sem turma)
-  const COURSE_NAMES = {'toefl':'TOEFL iBT'}; // só o TOEFL ainda tem atividade de verdade
+  const COURSE_NAMES = {'toefl':'TOEFL iBT', 'ativ-a1':'A1 · Atividades'};
+
+  // Atividades novas ("ativ-<nivel>", estilo Flexge) são por AULA: a mesma
+  // "Atividade 01" existe em cada aula — por isso a chave/rótulo levam a aula.
+  function ehPraticaCourse(c){ return typeof c === 'string' && c.indexOf('ativ-') === 0; }
+  function resultActKey(r){ return r.course + '|' + (ehPraticaCourse(r.course) ? (r.aula || 1) + ':' : '') + r.activity_num; }
+  function resultActLabel(r){
+    const at = 'Atividade ' + String(r.activity_num).padStart(2,'0');
+    return ehPraticaCourse(r.course) ? 'Aula ' + String(r.aula || 1).padStart(2,'0') + ' · ' + at : at;
+  }
+  function resultNota(r){
+    const m = r.meta || {};
+    return (ehPraticaCourse(r.course) && m.total) ? ' <span class="pill-count" title="acertos / pontos">' + m.acertos + '/' + m.total + ' · ' + (m.pontos || 0) + ' pts</span>' : '';
+  }
 
   function renderTable(){
     const nameFilter = document.getElementById('filterName').value.trim().toLowerCase();
@@ -1144,7 +1174,7 @@ body.dyse-modal-open{overflow:hidden;}
     const rows = ALL_RESULTS.filter(r => {
       const nameOk = !nameFilter || (r.student_name||'').toLowerCase().includes(nameFilter);
       const courseOk = !courseFilter || r.course === courseFilter;
-      const actOk = !actFilter || String(r.activity_num) === actFilter;
+      const actOk = !actFilter || resultActKey(r) === actFilter;
       return nameOk && courseOk && actOk;
     });
     document.getElementById('resultsBody').innerHTML = rows.map((r,i) => {
@@ -1155,7 +1185,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<td>' + (r.student_email||'-') + '</td>' +
         '<td>' + (TURMA_NAME_BY_USER[r.user_id] || '-') + '</td>' +
         '<td>' + courseName + '</td>' +
-        '<td>Atividade ' + String(r.activity_num).padStart(2,'0') + ' — ' + (r.activity_theme||'') + '</td>' +
+        '<td>' + resultActLabel(r) + ' — ' + escapeHtml(r.activity_theme||'') + resultNota(r) + '</td>' +
         '<td>' + date + '</td>' +
         '<td><button class="btn btn-ghost" style="padding:6px 14px; font-size:.78rem;" onclick="openReport(' + i + ')">Ver relatório</button></td>' +
       '</tr>';
@@ -1405,7 +1435,7 @@ body.dyse-modal-open{overflow:hidden;}
   function openReport(i){
     const r = window.__filteredRows[i];
     const date = r.updated_at ? new Date(r.updated_at).toLocaleString('pt-BR') : '';
-    document.getElementById('modalEyebrow').textContent = (COURSE_NAMES[r.course] || r.course) + ' · Atividade ' + String(r.activity_num).padStart(2,'0') + (date ? ' · Enviado em ' + date : '');
+    document.getElementById('modalEyebrow').textContent = (COURSE_NAMES[r.course] || r.course) + ' · ' + resultActLabel(r) + (date ? ' · Enviado em ' + date : '');
     document.getElementById('modalTitle').textContent = r.student_name || r.student_email || 'Aluno(a)';
     document.getElementById('modalBody').innerHTML = buildReportHtml(r.report_text);
     document.getElementById('reportModal').classList.add('open');
@@ -1434,7 +1464,7 @@ body.dyse-modal-open{overflow:hidden;}
     },
     manage:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>',
-      title:'Gerenciar Atividades', subtitle:'Libere ou oculte as atividades do TOEFL que os alunos podem acessar.'
+      title:'Gerenciar Atividades', subtitle:'Libere as atividades para cada aluno e as do TOEFL.'
     },
     material:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
@@ -1455,6 +1485,10 @@ body.dyse-modal-open{overflow:hidden;}
     disponibilidade:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
       title:'Disponibilidade', subtitle:'Marque os horários da semana em que você está livre pra dar aula.'
+    },
+    calendario:{
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>',
+      title:'Calendário Letivo', subtitle:'Feriados, recessos, reposições e o início de cada semestre.'
     }
   };
 
@@ -1467,6 +1501,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('tabTurmas').classList.toggle('active', which==='turmas');
     document.getElementById('tabReportCards').classList.toggle('active', which==='reportcards');
     document.getElementById('tabDisponibilidade').classList.toggle('active', which==='disponibilidade');
+    document.getElementById('tabCalendario').classList.toggle('active', which==='calendario');
     document.getElementById('panelResults').style.display = which==='results' ? 'block' : 'none';
     document.getElementById('panelManage').style.display = which==='manage' ? 'block' : 'none';
     document.getElementById('panelMaterial').style.display = which==='material' ? 'block' : 'none';
@@ -1474,6 +1509,8 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('panelTurmas').style.display = which==='turmas' ? 'block' : 'none';
     document.getElementById('panelReportCards').style.display = which==='reportcards' ? 'block' : 'none';
     document.getElementById('panelDisponibilidade').style.display = which==='disponibilidade' ? 'block' : 'none';
+    document.getElementById('panelCalendario').style.display = which==='calendario' ? 'block' : 'none';
+    if(which === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: false });
     const meta = PANEL_META[which];
     document.getElementById('pageHeaderIcon').innerHTML = meta.icon;
     document.getElementById('pageHeaderTitle').textContent = meta.title;
@@ -2729,7 +2766,104 @@ body.dyse-modal-open{overflow:hidden;}
     // renderTurmaMaterialBlocks(), montado à parte por turma).
   ];
 
+  /* ---------- Atividades por aluno (cursos "ativ-<nivel>", estilo Flexge) ----------
+     O nível do aluno = nível(is) que a gestão vinculou à turma dele. A
+     professora liga/desliga cada atividade PARA AQUELE ALUNO
+     (aluno_atividades_liberadas). Lista de alunos já vem filtrada pelas
+     turmas dela (RLS de profiles). */
+  const PRATICAS_CTX = { alunos: [], turmas: {}, turmaMaterias: [] };
+  async function loadPraticasAlunos(){
+    const sel = document.getElementById('praticaAlunoSel');
+    const [alunos, turmas, tms] = await Promise.all([dyseListProfilesByRole('student'), dyseListTurmas(), dyseListAllTurmaMaterias()]);
+    PRATICAS_CTX.alunos = alunos.filter(a => a.turma_id);
+    PRATICAS_CTX.turmas = {}; turmas.forEach(t => PRATICAS_CTX.turmas[t.id] = t);
+    PRATICAS_CTX.turmaMaterias = tms;
+    const atual = sel.value;
+    const porTurma = {};
+    PRATICAS_CTX.alunos.forEach(a => { const t = PRATICAS_CTX.turmas[a.turma_id]; const nome = t ? t.name : 'Sem turma'; (porTurma[nome] = porTurma[nome] || []).push(a); });
+    sel.innerHTML = '<option value="">Escolha um aluno…</option>' + Object.keys(porTurma).sort().map(nome =>
+      '<optgroup label="' + escapeHtmlLocal(nome) + '">' + porTurma[nome].map(a =>
+        '<option value="' + a.id + '">' + escapeHtmlLocal(a.full_name || a.email || a.id) + '</option>').join('') + '</optgroup>').join('');
+    if(!PRATICAS_CTX.alunos.length) sel.innerHTML = '<option value="">Nenhum aluno com turma vinculada</option>';
+    if(atual) sel.value = atual;
+    renderPraticasAluno();
+  }
+
+  async function renderPraticasAluno(){
+    const box = document.getElementById('praticasAlunoBox');
+    const alunoId = document.getElementById('praticaAlunoSel').value;
+    if(!alunoId){ box.innerHTML = ''; return; }
+    const aluno = PRATICAS_CTX.alunos.find(a => a.id === alunoId);
+    const slugs = PRATICAS_CTX.turmaMaterias.filter(tm => tm.turma_id === aluno.turma_id).map(tm => tm.materia_slug)
+      .filter(slug => window.DYSE_PRATICAS && DYSE_PRATICAS[slug]);
+    if(!slugs.length){
+      box.innerHTML = '<p style="opacity:.7; font-size:.85rem;">O nível da turma deste aluno ainda não tem atividades prontas.</p>';
+      return;
+    }
+    box.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+    const [liberadas, resultados] = await Promise.all([dysePraticasLiberadasDoAluno(alunoId), dyseResultadosPraticasDoAluno(alunoId)]);
+    const resMap = {}; resultados.forEach(r => resMap[r.course + ':' + r.aula + ':' + r.activity_num] = r);
+    box.innerHTML = slugs.map(slug => {
+      const nivel = DYSE_PRATICAS[slug];
+      return nivel.aulas.map(aula => {
+        const chaves = aula.atividades.map(at => nivel.course + ':' + aula.aula + ':' + at.num);
+        const todas = chaves.every(c => liberadas.has(c));
+        const rows = aula.atividades.map(at => {
+          const chave = nivel.course + ':' + aula.aula + ':' + at.num;
+          const r = resMap[chave];
+          let res = '<span style="opacity:.5; font-size:.76rem;">Ainda não fez</span>';
+          if(r && r.meta && r.meta.total){
+            const itens = (r.meta.itens || []).map(it => {
+              const ic = it.status === 'ok' ? '✅' : it.status === 'warn' ? '🟠' : it.status === 'skip' ? '⏭' : '❌';
+              const tent = it.status === 'ok' ? '' : ' <span style="opacity:.65;">(' + escapeHtmlLocal((it.tentativas || []).join(' | ') || 'sem resposta') + ')</span>';
+              return '<div style="font-size:.78rem; padding:2px 0;">' + ic + ' ' + escapeHtmlLocal(it.correta) + tent + '</div>';
+            }).join('');
+            res = '<details style="font-size:.78rem;"><summary style="cursor:pointer;"><b>' + r.meta.acertos + '/' + r.meta.total + '</b> corretas · ' +
+              (r.meta.acertos_primeira != null ? r.meta.acertos_primeira + ' de primeira · ' : '') + (r.meta.pontos || 0) + ' pts · ' +
+              new Date(r.updated_at).toLocaleDateString('pt-BR') + '</summary><div style="margin-top:6px;">' + itens + '</div></details>';
+          }
+          return '<div class="manage-row">' +
+            '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) +
+              ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span><div>' + res + '</div></div>' +
+            '<div class="manage-row-actions">' +
+              '<a class="btn btn-preview" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '" target="_blank" rel="noopener">👁 Visualizar</a>' +
+              '<label class="dyse-toggle"><input type="checkbox" class="pratica-toggle" data-course="' + nivel.course + '" data-aula="' + aula.aula + '" data-num="' + at.num + '" ' +
+                (liberadas.has(chave) ? 'checked' : '') + ' onchange="togglePraticaAluno(this)"><span class="slider"></span></label>' +
+            '</div></div>';
+        }).join('');
+        return '<div style="margin-bottom:14px;"><div style="font-weight:600; font-size:.92rem; margin:6px 0 4px;">' + escapeHtmlLocal(nivel.nome) + ' · Aula ' +
+            String(aula.aula).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.titulo) + '</div>' +
+          '<div class="manage-row" style="background:var(--paper-2, rgba(0,0,0,.03)); border-radius:10px; padding-left:10px; padding-right:10px;">' +
+            '<div class="info"><b>Liberar todas desta aula</b> para ' + escapeHtmlLocal(aluno.full_name || 'o aluno') + '</div>' +
+            '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" ' + (todas ? 'checked' : '') +
+              ' onchange="togglePraticaAulaToda(this)"><span class="slider"></span></label></div></div>' +
+          '<div class="pratica-aula-rows">' + rows + '</div></div>';
+      }).join('');
+    }).join('');
+  }
+
+  async function togglePraticaAluno(input){
+    const alunoId = document.getElementById('praticaAlunoSel').value;
+    input.disabled = true;
+    const { error } = await dyseSetPraticaAluno(alunoId, input.dataset.course, +input.dataset.aula, +input.dataset.num, input.checked);
+    input.disabled = false;
+    if(error){ input.checked = !input.checked; alert('Não foi possível salvar. Tente de novo.'); }
+  }
+
+  async function togglePraticaAulaToda(input){
+    const alunoId = document.getElementById('praticaAlunoSel').value;
+    const toggles = input.closest('div[style*="margin-bottom:14px"]').querySelectorAll('.pratica-toggle');
+    input.disabled = true;
+    for(const t of toggles){
+      if(t.checked === input.checked) continue;
+      const { error } = await dyseSetPraticaAluno(alunoId, t.dataset.course, +t.dataset.aula, +t.dataset.num, input.checked);
+      if(!error) t.checked = input.checked;
+    }
+    input.disabled = false;
+  }
+
   async function loadManagePanel(){
+    loadPraticasAlunos();
     const container = document.getElementById('manageCourses');
     container.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
     const blocksToefl = [];
@@ -3025,15 +3159,14 @@ body.dyse-modal-open{overflow:hidden;}
     PROFESSORA_PROFILE = profile;
     renderProfessoraChrome(session, profile);
     const hashPanel = location.hash.slice(1);
-    showPanel(['results','manage','material','financeiro','turmas','reportcards','disponibilidade'].includes(hashPanel) ? hashPanel : 'turmas');
+    showPanel(['results','manage','material','financeiro','turmas','reportcards','disponibilidade','calendario'].includes(hashPanel) ? hashPanel : 'turmas');
 
     // As duas buscas são independentes — dispara junto em vez de esperar uma
     // pra só então começar a outra (a segunda nem depende da primeira).
     const turmasInfoPromise = loadMyTurmasInfo();
-    // Só TOEFL tem atividade de verdade (A1-C1 usam Material, aba
-    // "Gerenciar Material") — sem esse filtro, envios antigos do A1 ainda
-    // apareceriam misturados aqui.
-    ALL_RESULTS = (await dyseListAllResults()).filter(r => r.course === 'toefl');
+    // TOEFL + atividades novas por nível ("ativ-a1"...). Os envios antigos do
+    // A1 (course "a1", atividades/a1/) continuam de fora de propósito.
+    ALL_RESULTS = (await dyseListAllResults()).filter(r => r.course === 'toefl' || ehPraticaCourse(r.course));
     await turmasInfoPromise;
     loadManagePanel();
     loadMaterialPanel();
@@ -3049,13 +3182,16 @@ body.dyse-modal-open{overflow:hidden;}
     });
 
     const actSelect = document.getElementById('filterActivity');
-    const nums = [...new Set(ALL_RESULTS.map(r=>r.activity_num))].sort((a,b)=>a-b);
-    nums.forEach(n => {
-      const opt = document.createElement('option');
-      opt.value = n;
-      opt.textContent = 'Atividade ' + String(n).padStart(2,'0');
-      actSelect.appendChild(opt);
-    });
+    const acts = {};
+    ALL_RESULTS.forEach(r => { acts[resultActKey(r)] = r; });
+    Object.keys(acts)
+      .sort((x, y) => { const a = acts[x], b = acts[y]; return a.course.localeCompare(b.course) || ((a.aula || 1) - (b.aula || 1)) || (a.activity_num - b.activity_num); })
+      .forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = (COURSE_NAMES[acts[k].course] || acts[k].course) + ' · ' + resultActLabel(acts[k]);
+        actSelect.appendChild(opt);
+      });
 
     renderTable();
   })();

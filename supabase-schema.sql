@@ -57,6 +57,12 @@ alter table public.profiles add column if not exists also_teacher boolean not nu
 -- area-do-aluno.html bloqueiam admin/teacher por padrão, ver lá).
 alter table public.profiles add column if not exists also_student boolean not null default false;
 
+-- Vídeo de boas-vindas da Área do Aluno: NULL = o aluno ainda não assistiu.
+-- Enquanto for NULL, area-do-aluno.html cobre o painel com o vídeo e as
+-- outras páginas protegidas mandam de volta pra lá (dyseRequireAuth). O
+-- próprio aluno grava a data ao terminar (policy "atualizar o próprio perfil").
+alter table public.profiles add column if not exists tutorial_boas_vindas_em timestamptz;
+
 alter table public.profiles enable row level security;
 
 -- ----------------------------------------------------------------------
@@ -4379,6 +4385,72 @@ drop trigger if exists trg_audit_extras_professor on public.extras_professor;
 create trigger trg_audit_extras_professor
   after insert or update or delete on public.extras_professor
   for each row execute procedure public.log_financeiro_auditoria();
+
+
+-- ----------------------------------------------------------------------
+-- 35) ATIVIDADES (estilo Flexge) — liberação POR ALUNO
+--     Cursos de prática por nível usam a chave "ativ-<nivel>" (ex:
+--     "ativ-a1"), separada das atividades antigas do A1 ("a1"). O aluno vê
+--     TODAS as atividades do(s) nível(is) da turma dele, mas só consegue
+--     fazer as que a professora liberou PARA ELE (não por turma, não geral).
+-- ----------------------------------------------------------------------
+create table if not exists public.aluno_atividades_liberadas (
+  aluno_id      uuid not null references public.profiles(id) on delete cascade,
+  course        text not null,
+  aula          int  not null,
+  activity_num  int  not null,
+  liberada      boolean not null default true,
+  liberada_por  uuid references public.profiles(id) on delete set null,
+  updated_at    timestamptz not null default now(),
+  primary key (aluno_id, course, aula, activity_num)
+);
+create index if not exists idx_aluno_ativ_lib_course on public.aluno_atividades_liberadas (course, aula);
+
+alter table public.aluno_atividades_liberadas enable row level security;
+
+drop policy if exists "aluno ve as proprias liberacoes" on public.aluno_atividades_liberadas;
+create policy "aluno ve as proprias liberacoes"
+  on public.aluno_atividades_liberadas for select
+  using (aluno_id = auth.uid() or public.is_teacher() or public.is_admin());
+
+drop policy if exists "professora libera atividade por aluno" on public.aluno_atividades_liberadas;
+create policy "professora libera atividade por aluno"
+  on public.aluno_atividades_liberadas for all
+  using (public.is_teacher() or public.is_admin())
+  with check (public.is_teacher() or public.is_admin());
+
+-- Trava no banco: para cursos "ativ-*" o aluno só grava resultado se a
+-- atividade estiver liberada pra ELE. Demais cursos (TOEFL, A1 antigo)
+-- seguem exatamente a regra de antes (published_activities).
+create or replace function public.enforce_activity_published()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if public.is_teacher() or public.is_admin() then
+    return new;
+  end if;
+  if new.course like 'ativ-%' then
+    if not exists (
+      select 1 from public.aluno_atividades_liberadas l
+      where l.aluno_id = new.user_id and l.course = new.course and l.aula = new.aula
+        and l.activity_num = new.activity_num and l.liberada = true
+    ) then
+      raise exception 'Atividade não liberada para este aluno.';
+    end if;
+    return new;
+  end if;
+  if not exists (
+    select 1 from public.published_activities pa
+    where pa.course = new.course and pa.aula = new.aula
+      and pa.activity_num = new.activity_num and pa.is_published = true
+  ) then
+    raise exception 'Atividade não liberada para este aluno.';
+  end if;
+  return new;
+end;
+$$;
 
 -- ======================================================================
 -- 36) MATERIAL EXTRA — matéria "sem registro de classe"

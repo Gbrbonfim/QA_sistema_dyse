@@ -38,6 +38,7 @@
 .card-title, .rc-summary-txt h3, .manage-course-title, .level-group-title, .material-nivel-title{
   font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.1rem !important;
 }
+.course-card.concluida .course-card-cta:disabled{opacity:1; cursor:default;}
 .course-card.bloqueada{opacity:.55; filter:blur(1.5px) grayscale(.3); pointer-events:none; user-select:none;}
 .course-card-name, .course-folder-name{
   font-family:var(--font-body) !important; font-weight:600 !important; letter-spacing:normal !important; font-size:1.05rem !important;
@@ -117,6 +118,7 @@ body::before{
   display:flex; align-items:center; justify-content:center; line-height:1;
 }
 .sidebar-item.active .sidebar-badge{background:var(--amaranth); color:#fff;}
+.sidebar-badge[hidden]{display:none !important;} /* sem isso o display:flex acima vence o atributo hidden e aparece "0" */
 @media (max-width:900px){
   .sidebar-badge{position:absolute; top:4px; right:4px; margin:0;}
 }
@@ -418,6 +420,34 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .dyse-blocked-icon{font-size:2.6rem; margin-bottom:10px;}
 .dyse-blocked-card h2{font-family:var(--font-display); color:var(--bad); font-size:1.5rem; margin:0 0 10px;}
 .dyse-blocked-card p{color:var(--seal-soft); font-size:.95rem; line-height:1.5; margin:0 0 22px;}
+
+/* ---------- VÍDEO DE BOAS-VINDAS OBRIGATÓRIO (1º acesso) ---------- */
+#dyseTutorialGate{
+  display:none; position:fixed; inset:0; z-index:9997; background:rgba(58,29,16,.82);
+  align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(6px);
+}
+#dyseTutorialGate.show{display:flex;}
+body.dyse-tutorial-aberto{overflow:hidden;}
+.dyse-tut-card{
+  background:#fff; border-radius:var(--radius-lg); box-shadow:var(--shadow-card);
+  width:min(980px,100%); max-height:100%; overflow:auto; padding:clamp(18px,3vw,30px);
+  border-top:8px solid var(--amaranth);
+}
+.dyse-tut-head h2{font-family:var(--font-body); font-weight:600; font-size:1.3rem; color:var(--amaranth); margin:0 0 4px;}
+.dyse-tut-head p{color:var(--seal-soft); font-size:.92rem; line-height:1.5; margin:0 0 14px;}
+.dyse-tut-video{position:relative; border-radius:var(--radius-md); overflow:hidden; background:#000; aspect-ratio:16/9;}
+.dyse-tut-video video{width:100%; height:100%; display:block;}
+.dyse-tut-play{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+  background:rgba(58,29,16,.45); color:#fff; border:none; cursor:pointer; font-family:var(--font-body);
+  font-size:1.15rem; font-weight:600;
+}
+.dyse-tut-play span{width:72px; height:72px; border-radius:50%; background:var(--amaranth); display:flex; align-items:center; justify-content:center; font-size:1.6rem;}
+.dyse-tut-foot{display:flex; align-items:center; gap:14px; margin-top:14px; flex-wrap:wrap;}
+.dyse-tut-bar{flex:1; min-width:160px; height:8px; border-radius:99px; background:var(--antique); overflow:hidden;}
+.dyse-tut-bar span{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--orangered),var(--amaranth)); transition:width .3s linear;}
+.dyse-tut-status{font-size:.85rem; color:var(--seal-soft); min-width:110px;}
+#dyseTutContinuar[disabled]{opacity:.45; cursor:not-allowed;}
 
 
 /* ---------- AUTH FORM (login / signup pages) ---------- */
@@ -845,6 +875,28 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   </div>
 </div>
 
+<div id="dyseTutorialGate" role="dialog" aria-modal="true" aria-labelledby="dyseTutTitulo">
+  <div class="dyse-tut-card">
+    <div class="dyse-tut-head">
+      <h2 id="dyseTutTitulo">Bem-vindo(a) à sua Área do Aluno! 🎓</h2>
+      <p>Antes de começar, assista ao vídeo rápido que mostra como usar o seu painel. Se preferir, você pode pular e ir direto.</p>
+    </div>
+    <div class="dyse-tut-video">
+      <video id="dyseTutVideo" playsinline preload="metadata" poster="assets/video/boas-vindas-area-do-aluno.jpg"
+             controlslist="nodownload noplaybackrate" disablepictureinpicture>
+        <source src="assets/video/boas-vindas-area-do-aluno.mp4" type="video/mp4">
+      </video>
+      <button type="button" class="dyse-tut-play" id="dyseTutPlay"><span>▶</span> Assistir ao vídeo</button>
+    </div>
+    <div class="dyse-tut-foot">
+      <div class="dyse-tut-bar"><span id="dyseTutBar"></span></div>
+      <div class="dyse-tut-status" id="dyseTutStatus">0:00 de 2:08</div>
+      <button type="button" class="btn btn-ghost" id="dyseTutPular">Pular vídeo</button>
+      <button type="button" class="btn btn-primary" id="dyseTutContinuar" disabled>Ir para o meu painel →</button>
+    </div>
+  </div>
+</div>
+
 <div class="app-shell">
   <aside class="sidebar">
     <div class="sidebar-brand">
@@ -857,6 +909,11 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         <span>Meus cursos</span>
         <span class="sidebar-badge" data-badge="atividades" hidden></span>
       </a>
+      <a href="#" class="sidebar-item" data-view="praticas" onclick="mostrarView('praticas', event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>Atividades</span>
+        <span class="sidebar-badge" data-badge="praticas" hidden></span>
+      </a>
       <a href="#" class="sidebar-item" data-view="reportcard" onclick="mostrarView('reportcard', event)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="12" y2="11"/></svg>
         <span>Report Card</span>
@@ -867,7 +924,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         <span>Financeiro</span>
         <span class="sidebar-badge" data-badge="financeiro" hidden></span>
       </a>
-      <a href="/calendario-letivo.html" class="sidebar-item">
+      <a href="#" class="sidebar-item" data-view="calendario" onclick="mostrarView('calendario', event)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span>Calendário Letivo</span>
       </a>
@@ -925,6 +982,20 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         </div>
       </div>
 
+      <!-- ===== Atividades (estilo Flexge, liberadas por aluno) ===== -->
+      <div id="viewPraticas" style="display:none;">
+        <div class="page-header">
+          <div class="page-header-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div class="page-header-text">
+            <h2>Atividades</h2>
+            <p>Todas as atividades do seu nível. As coloridas já foram liberadas pela sua professora; as com cadeado chegam em breve.</p>
+          </div>
+        </div>
+        <div id="praticasWrap"><p class="card-instructions" style="opacity:.6;">Carregando...</p></div>
+      </div>
+
       <!-- ===== Report Card ===== -->
       <div id="viewReportCard" style="display:none;">
         <div class="page-header">
@@ -953,6 +1024,19 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         <div class="wrap" style="max-width:100%; margin:0; padding:0;" id="cobrancasWrap"><p class="card-instructions" style="opacity:.6;">Carregando...</p></div>
       </div>
 
+      <div id="viewCalendario" style="display:none;">
+        <div class="page-header">
+          <div class="page-header-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="page-header-text">
+            <h2>Calendário Letivo</h2>
+            <p>Feriados, recessos, reposições e o início de cada semestre.</p>
+          </div>
+        </div>
+        <div id="calendarioWrap"></div>
+      </div>
+
       <footer class="content-footer">
         <span class="fmark">dyse</span>
         Do You Speak English?* &middot; Área do Aluno
@@ -963,6 +1047,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/assets/dyse-auth.js"></script>
+<script src="/assets/dyse-calendario.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
 <script>
 
   const NOTICE_MESSAGES = {
@@ -977,7 +1063,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       document.getElementById('pageNotice').style.display = 'block';
       document.getElementById('pageNotice').classList.add('show');
       // limpa o parâmetro da URL pra não reaparecer se a pessoa atualizar a página
-      history.replaceState(null, '', location.pathname);
+      history.replaceState(null, '', location.pathname + location.hash);
     }
   })();
 
@@ -1036,13 +1122,17 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   const VIEWS = ['atividades', 'reportcard', 'financeiro'];
   function mostrarView(view, ev){
     if(ev) ev.preventDefault();
-    if(VIEWS.indexOf(view) === -1) view = 'atividades';
+    if(VIEWS.indexOf(view) === -1 && view !== 'calendario' && view !== 'praticas') view = 'atividades';
     document.querySelectorAll('.sidebar-item[data-view]').forEach(el =>
       el.classList.toggle('active', el.dataset.view === view));
     document.getElementById('viewAtividades').style.display = view === 'atividades' ? 'block' : 'none';
     document.getElementById('viewReportCard').style.display = view === 'reportcard' ? 'block' : 'none';
     document.getElementById('viewFinanceiro').style.display = view === 'financeiro' ? 'block' : 'none';
+    document.getElementById('viewCalendario').style.display = view === 'calendario' ? 'block' : 'none';
+    document.getElementById('viewPraticas').style.display = view === 'praticas' ? 'block' : 'none';
     if(view === 'atividades') voltarCursos();
+    else if(view === 'praticas') renderPraticas();
+    else if(view === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: false });
     else marcarVisto(view); // ver a seção = "li as novidades dela"
     const hash = view === 'atividades' ? '' : '#' + view;
     if(hash !== location.hash) history.replaceState(null, '', hash || location.pathname);
@@ -1050,8 +1140,11 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   }
   window.addEventListener('hashchange', () => mostrarView(location.hash.replace('#', '')));
 
+
   /* ---------- Notificações "algo novo" no menu (por navegador) ---------- */
-  const AREA_CTX = { doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, niveis: [], aulasNivel: {}, aulasDadas: {} };
+  let AREA_PRONTO_RESOLVE;
+  const AREA_PRONTO = new Promise(r => { AREA_PRONTO_RESOLVE = r; });
+  const AREA_CTX = { allowedSlugs: new Set(), semTurma: false, doneMap: {}, staff: false, counts: { atividades: 0, reportcard: 0, financeiro: 0 }, materialPorAulaId: {}, niveis: [], aulasNivel: {}, aulasDadas: {} };
   let SEEN_KEY = 'dyse_aluno_seen';
 
   function getSeen(){ try{ return JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; }catch(e){ return {}; } }
@@ -1063,6 +1156,20 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     s[key] = AREA_CTX.counts[key] || 0;
     setSeen(s);
     atualizarBadges();
+  }
+
+  // Antes da contagem real terminar: mostra os selinhos calculados com os
+  // contadores salvos no último acesso (mesmo cálculo das outras telas).
+  function pintarBadgesDoCache(uid){
+    if(AREA_CTX.countsReady) return;
+    const deltas = dyseAlunoBadgeDeltas(uid);
+    VIEWS.forEach(key => {
+      const el = document.querySelector('.sidebar-badge[data-badge="' + key + '"]');
+      if(!el) return;
+      const novo = deltas[key] || 0;
+      el.hidden = novo === 0;
+      el.textContent = novo > 9 ? '9+' : String(novo);
+    });
   }
 
   function atualizarBadges(){
@@ -1141,7 +1248,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const publishedSet = await dyseGetPublishedSet(course.id);
     const groups = []; const gi = {};
     course.activities.forEach(a => {
-      if(!AREA_CTX.staff && !publishedSet.has(a.num)) return; // aluno só vê o liberado
+      if(!publishedSet.has(a.num)) return; // só o liberado (gestão/professora também, quando está como aluno)
       const code = (a.level || '').split(' · ')[0];
       if(!(code in gi)){ gi[code] = groups.length; groups.push({ label: a.level || '', items: [] }); }
       groups[gi[code]].items.push(a);
@@ -1150,7 +1257,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     return groups.map(g =>
       '<div class="level-group"><div class="level-group-title">' + escapeHtmlLocal((g.label.split(' · ')[1]) || g.label) + '</div>' +
       '<div class="dash-grid">' + g.items.map(a => {
-        const lib = AREA_CTX.staff || publishedSet.has(a.num);
+        const lib = publishedSet.has(a.num);
         const done = AREA_CTX.doneMap[course.id + ':1:' + a.num];
         const badge = done ? '<span class="dash-badge done">Enviada</span>' : '';
         return lib
@@ -1162,6 +1269,142 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
               '<div class="l">🔒 Em breve</div></div>';
       }).join('') + '</div></div>'
     ).join('');
+  }
+
+  /* ---------- Atividades (estilo Flexge) ----------
+     Mostra TODAS as atividades do(s) nível(is) da turma do aluno (o nível é
+     o que a gestão vinculou à turma). Só abre as que a professora liberou
+     PRA ESTE ALUNO (aluno_atividades_liberadas); as outras ficam com cadeado. */
+  const PRATICA_ICONES = { 'Escute e escolha': '🎧', 'Monte a frase': '🧩', 'Qual é a próxima fala?': '💬', 'Escute e grave': '🎙️', 'Make a Choice': '✅' };
+  /* Bolinha do menu "Atividades": quantas atividades liberadas pra este
+     aluno ele ainda não concluiu (some quando faz todas). */
+  function pintarBadgePraticas(niveis, liberadas){
+    const el = document.querySelector('.sidebar-badge[data-badge="praticas"]');
+    if(!el) return;
+    let pendentes = 0;
+    niveis.forEach(slug => {
+      const nivel = DYSE_PRATICAS[slug];
+      nivel.aulas.forEach(aula => aula.atividades.forEach(at => {
+        const chave = nivel.course + ':' + aula.aula + ':' + at.num;
+        const res = AREA_CTX.doneMap[chave];
+        if(liberadas.has(chave) && !(res && res.status === 'concluida')) pendentes++;
+      }));
+    });
+    el.hidden = pendentes === 0;
+    el.textContent = pendentes > 9 ? '9+' : String(pendentes);
+  }
+  async function contarPraticasPendentes(){
+    await AREA_PRONTO;
+    if(AREA_CTX.semTurma) return;
+    const niveis = Object.keys(window.DYSE_PRATICAS || {}).filter(slug => AREA_CTX.allowedSlugs.has(slug));
+    if(!niveis.length) return;
+    pintarBadgePraticas(niveis, await dyseMinhasPraticasLiberadas());
+  }
+  contarPraticasPendentes();
+
+  async function renderPraticas(){
+    const wrap = document.getElementById('praticasWrap');
+    wrap.innerHTML = '<p class="card-instructions" style="opacity:.6;">Carregando...</p>';
+    await AREA_PRONTO;
+    if(AREA_CTX.semTurma){
+      wrap.innerHTML = '<p class="card-instructions">Você ainda não está em uma turma. Assim que a coordenação vincular você, as atividades do seu nível aparecem aqui.</p>';
+      return;
+    }
+    const niveis = Object.keys(window.DYSE_PRATICAS || {}).filter(slug => AREA_CTX.allowedSlugs.has(slug));
+    if(!niveis.length){
+      wrap.innerHTML = '<p class="card-instructions">As atividades do seu nível ainda estão sendo preparadas. Assim que ficarem prontas, aparecem aqui.</p>';
+      return;
+    }
+    const liberadas = await dyseMinhasPraticasLiberadas();
+    pintarBadgePraticas(niveis, liberadas);
+    wrap.innerHTML = niveis.map(slug => {
+      const nivel = DYSE_PRATICAS[slug];
+      return nivel.aulas.map(aula => {
+        const cards = aula.atividades.map(at => {
+          const chave = nivel.course + ':' + aula.aula + ':' + at.num;
+          // Só a liberação da professora PARA ESTE ALUNO conta — inclusive em
+          // conta de gestão/professora que também é aluno.
+          const lib = liberadas.has(chave);
+          const res = AREA_CTX.doneMap[chave];
+          const ic = PRATICA_ICONES[at.tipo] || '📝';
+          const corpo = '<div class="n">' + ic + ' ' + String(at.num).padStart(2, '0') + '</div>' +
+            '<div class="t">' + escapeHtmlLocal(at.titulo) + '</div>' +
+            '<div class="l">' + escapeHtmlLocal(at.tipo) + ' · ' + escapeHtmlLocal(at.treina) + '</div>' +
+            '<div class="l">⏱ ' + escapeHtmlLocal(at.minutos) + ' min · até ' + (at.pontos + 70) + ' pts</div>';
+          if(!lib){
+            return '<div class="dash-card locked" title="Aguardando a professora liberar"><span class="dash-badge locked">🔒 Bloqueada</span>' + corpo + '</div>';
+          }
+          let badge = '<span class="dash-badge pending">Liberada</span>';
+          if(res && res.status === 'concluida' && res.meta && res.meta.total){
+            badge = '<span class="dash-badge done">✓ ' + res.meta.acertos + '/' + res.meta.total + (res.meta.pontos ? ' · ' + res.meta.pontos + ' pts' : '') + '</span>';
+          }
+          return '<a class="dash-card" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '">' + badge + corpo + '</a>';
+        }).join('');
+        return '<div class="level-group"><div class="level-group-title">' + escapeHtmlLocal(nivel.nome) + ' · Aula ' +
+          String(aula.aula).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.titulo) + '</div>' +
+          '<div class="dash-grid">' + cards + '</div></div>';
+      }).join('');
+    }).join('');
+  }
+
+  /* ---------- Vídeo de boas-vindas obrigatório ----------
+     Aparece no 1º acesso do aluno (profiles.tutorial_boas_vindas_em NULL) e
+     cobre a tela toda até o vídeo terminar: não dá pra fechar, adiantar nem
+     acelerar. Ao final grava no perfil e libera o botão de seguir. */
+  function abrirTutorialBoasVindas(session){
+    const gate = document.getElementById('dyseTutorialGate');
+    const video = document.getElementById('dyseTutVideo');
+    const playBtn = document.getElementById('dyseTutPlay');
+    const bar = document.getElementById('dyseTutBar');
+    const status = document.getElementById('dyseTutStatus');
+    const continuar = document.getElementById('dyseTutContinuar');
+    let maxVisto = 0, concluido = false;
+
+    const fmt = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+    const atualizar = () => {
+      const dur = video.duration || 0;
+      if(dur) bar.style.width = Math.min(100, (maxVisto / dur) * 100) + '%';
+      if(!concluido) status.textContent = fmt(maxVisto) + ' de ' + (dur ? fmt(dur) : '2:08');
+    };
+
+    gate.classList.add('show');
+    document.body.classList.add('dyse-tutorial-aberto');
+
+    playBtn.addEventListener('click', () => {
+      video.controls = true;
+      playBtn.style.display = 'none';
+      video.play().catch(() => { playBtn.style.display = 'flex'; });
+    });
+    video.addEventListener('timeupdate', () => {
+      if(!video.seeking && video.currentTime > maxVisto && video.currentTime - maxVisto < 2) maxVisto = video.currentTime;
+      atualizar();
+    });
+    // Não deixa pular pra frente: volta pro ponto mais longe já assistido.
+    video.addEventListener('seeking', () => {
+      if(video.currentTime > maxVisto + 0.5) video.currentTime = maxVisto;
+    });
+    video.addEventListener('ratechange', () => { if(video.playbackRate !== 1) video.playbackRate = 1; });
+    video.addEventListener('ended', async () => {
+      if(!video.duration || maxVisto < video.duration - 2) return; // terminou "pulando": não conta
+      concluido = true;
+      maxVisto = video.duration; atualizar();
+      status.textContent = 'Vídeo concluído ✓';
+      continuar.disabled = false;
+      try{ if(document.fullscreenElement) await document.exitFullscreen(); }catch(e){}
+      dyseMarcarTutorialVisto(session);
+    });
+    const fechar = () => {
+      video.pause();
+      gate.classList.remove('show');
+      document.body.classList.remove('dyse-tutorial-aberto');
+    };
+    continuar.addEventListener('click', () => { if(concluido) fechar(); });
+    // Pular: libera o painel na hora e marca como visto (não volta a aparecer).
+    document.getElementById('dyseTutPular').addEventListener('click', async () => {
+      try{ if(document.fullscreenElement) await document.exitFullscreen(); }catch(e){}
+      fechar();
+      if(!concluido){ concluido = true; dyseMarcarTutorialVisto(session); }
+    });
   }
 
   (async () => {
@@ -1191,14 +1434,26 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       return;
     }
 
+    // 1º acesso: vídeo de boas-vindas obrigatório por cima do painel, que
+    // segue carregando por trás e só fica utilizável ao fim do vídeo.
+    if(dyseAlunoPrecisaTutorial(profile)) abrirTutorialBoasVindas(session);
+
     SEEN_KEY = 'dyse_aluno_seen_' + session.user.id;
     renderAlunoChrome(session, profile);
+
+    // Notificações do menu: pinta na hora com o último valor conhecido (cache do
+    // navegador) e já dispara, em paralelo, as buscas mais lentas (cobranças do
+    // Asaas e Report Cards) — antes elas só começavam depois de montar os cursos.
+    pintarBadgesDoCache(session.user.id);
+    const cobrancasP = renderMinhasCobrancas().catch(e => { console.error(e); return []; });
+    const reportCardsP = renderMeusReportCards(session.user.id).catch(e => { console.error(e); return []; });
 
     const wrap = document.getElementById('coursesWrap');
 
     // Sem turma vinculada, a gestão ainda não decidiu o que esse aluno pode
     // ver — não dá pra saber quais matérias mostrar, então nenhuma aparece.
     if(!profile || !profile.turma_id){
+      AREA_CTX.semTurma = true; AREA_PRONTO_RESOLVE();
       wrap.innerHTML =
         '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
           '<div class="course-folder-icon">🗂️</div>' +
@@ -1222,6 +1477,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     results.forEach(r => doneMap[r.course + ":" + (r.aula || 1) + ":" + r.activity_num] = r);
     AREA_CTX.doneMap = doneMap;
     AREA_CTX.staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
+    AREA_CTX.allowedSlugs = allowedSlugs;
+    AREA_PRONTO_RESOLVE();
 
     // Nome/descrição de cada curso vêm do que a gestão cadastrou em Matérias.
     AREA_CTX.materias = {};
@@ -1310,14 +1567,34 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         "<button type=\"button\" class=\"btn btn-primary course-card-cta\" disabled>Em breve</button></div>";
     };
 
+    // Card de nível já concluído (anterior ao nível atual da turma).
+    const cardConcluido = (slug) => {
+      const nome = (AREA_CTX.materias[slug] && AREA_CTX.materias[slug].name) || slug.toUpperCase();
+      return "<div class=\"course-card concluida\" style=\"border-left-color:var(--gamboge);\">" +
+        "<div class=\"course-card-top\"><div><h3 class=\"course-card-name\">" + escapeHtmlLocal(nome) + "</h3>" +
+        "<p class=\"course-card-desc\">Nível concluído. Parabéns por essa etapa da sua trilha!</p></div>" +
+        "<div class=\"course-card-icon\" style=\"background:#FDEFD3; color:var(--gamboge-dark);\">" + COURSE_ICON_SVG + "</div></div>" +
+        "<div class=\"course-card-stats\"><div class=\"course-card-stats-icon\">" + STATS_ICON_SVG + "</div>" +
+        "<div class=\"course-card-stats-text\"><span>🏆 Nível concluído</span><div class=\"course-card-bar\"><span style=\"width:100%; background:linear-gradient(90deg,var(--gamboge),var(--orangered));\"></span></div></div>" +
+        "<div class=\"course-card-pct\">100%</div></div>" +
+        "<button type=\"button\" class=\"btn btn-secondary course-card-cta\" disabled>Concluído ✓</button></div>";
+    };
+
     // Trilha de aprendizagem: A1 → A2 → B1 → B2 → C1, sempre visível — o que a turma
     // ainda não tem liberado aparece desfocado. Depois vêm os demais cursos (TOEFL...),
     // que só aparecem quando liberados.
     const TRILHA = ["a1", "a2", "b1", "b2", "c1"];
     const nivelPorSlug = {};
     AREA_CTX.niveis.forEach(n => { nivelPorSlug[n.slug] = n; });
+    // Níveis ANTERIORES ao nível atual da turma contam como concluídos (100%),
+    // mesmo que o aluno não tenha feito com a gente — ex.: quem entrou na DYSE
+    // já no B1 tem A1 e A2 completos na trilha.
+    const idxsLiberados = TRILHA.map((s, i) => nivelPorSlug[s] ? i : -1).filter(i => i >= 0);
+    const idxNivelAtual = idxsLiberados.length ? Math.min(...idxsLiberados) : -1;
+    const nivelConcluido = (slug) => !nivelPorSlug[slug] && TRILHA.indexOf(slug) < idxNivelAtual;
     for(const slug of TRILHA){
-      cards.push(nivelPorSlug[slug] ? await cardDoNivel(nivelPorSlug[slug]) : cardBloqueado(slug));
+      cards.push(nivelPorSlug[slug] ? await cardDoNivel(nivelPorSlug[slug])
+        : (nivelConcluido(slug) ? cardConcluido(slug) : cardBloqueado(slug)));
     }
     for(const nivel of AREA_CTX.niveis){
       if(!TRILHA.includes(nivel.slug)) cards.push(await cardDoNivel(nivel));
@@ -1330,7 +1607,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const segs = TRILHA.map(slug => {
       const aulasN = AREA_CTX.aulasNivel[slug] || [];
       const dadasN = AREA_CTX.aulasDadas[slug] || new Set();
-      const feitas = Math.min(AULAS_POR_NIVEL, aulasN.filter(a => dadasN.has(a.id)).length);
+      const feitas = nivelConcluido(slug) ? AULAS_POR_NIVEL
+        : Math.min(AULAS_POR_NIVEL, aulasN.filter(a => dadasN.has(a.id)).length);
       feitasTotal += feitas;
       const nome = (AREA_CTX.materias[slug] && AREA_CTX.materias[slug].name) || slug.toUpperCase();
       return "<div class=\"trilha-geral-seg\" title=\"" + escapeHtmlLocal(nome) + ": " + feitas + "/" + AULAS_POR_NIVEL + " aulas\">" +
@@ -1352,8 +1630,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '</div>' +
         '</div>';
 
-    const cobrancas = await renderMinhasCobrancas();
-    const reportCards = await renderMeusReportCards(session.user.id);
+    const [cobrancas, reportCards] = await Promise.all([cobrancasP, reportCardsP]);
 
     // Contadores pras notificações do menu
     AREA_CTX.counts.atividades = kpiAtividadesLiberadas + nMaterial;

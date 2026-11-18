@@ -126,9 +126,46 @@ async function dyseRequireAuth(){
     location.href = '/login.html?next=' + next;
     return null;
   }
-  await dyseGetProfile(session); // garante que o perfil existe (autocorreção), em toda página protegida
+  const profile = await dyseGetProfile(session); // garante que o perfil existe (autocorreção), em toda página protegida
+
+  // Vídeo de boas-vindas obrigatório: aluno que ainda não assistiu não entra
+  // em nenhuma outra página (atividades, calendário...) — volta pra Área do
+  // Aluno, que mostra o vídeo e só libera o painel ao final dele.
+  if(dyseAlunoPrecisaTutorial(profile) && !location.pathname.startsWith('/area-do-aluno')){
+    location.href = '/area-do-aluno.html';
+    return null;
+  }
+
   document.documentElement.classList.add('dyse-auth-ready');
   return session;
+}
+
+/* ---------- Vídeo de boas-vindas da Área do Aluno ----------
+   Só vale pra aluno de verdade (gestão e professoras não passam por isso).
+   profiles.tutorial_boas_vindas_em fica NULL até o aluno ver o vídeo inteiro.
+   O banco é a fonte da verdade (zerar a coluna faz o vídeo voltar). O
+   sessionStorage só cobre o caso raro de a gravação no banco falhar, pra o
+   aluno não ficar preso num loop durante a mesma sessão do navegador. */
+function dyseAlunoPrecisaTutorial(profile){
+  if(!profile) return false;
+  if(dyseIsAdmin(profile) || dyseIsTeacher(profile)) return false;
+  if(profile.tutorial_boas_vindas_em) return false;
+  try{ if(sessionStorage.getItem('dyse_tutorial_visto_' + profile.id)) return false; }catch(e){}
+  return true;
+}
+
+async function dyseMarcarTutorialVisto(session){
+  if(!session) return;
+  try{ sessionStorage.setItem('dyse_tutorial_visto_' + session.user.id, '1'); }catch(e){}
+  try{ localStorage.removeItem('dyse_tutorial_visto_' + session.user.id); }catch(e){}
+  try{
+    const { error } = await sb.from('profiles')
+      .update({ tutorial_boas_vindas_em: new Date().toISOString() })
+      .eq('id', session.user.id);
+    if(error) console.error('dyseMarcarTutorialVisto:', error);
+  }catch(e){
+    console.error('dyseMarcarTutorialVisto:', e);
+  }
 }
 
 /* Bloqueia a página caso o usuário não seja professor(a). */
@@ -430,6 +467,72 @@ async function dyseRequirePublished(course, activityNum, aula = 1){
   const published = await dyseGetPublishedSet(course, aula);
   if(!published.has(activityNum)){
     location.href = '/area-do-aluno.html?notice=locked';
+    return false;
+  }
+  return true;
+}
+
+/* ======================================================================
+   ATIVIDADES (estilo Flexge, cursos "ativ-<nivel>") — liberação POR ALUNO
+   Tabela aluno_atividades_liberadas (seção 35 do schema). O aluno vê todas
+   as atividades do nível da turma dele, mas só faz as liberadas pra ele.
+   ====================================================================== */
+
+/* Aluno logado: Set "course:aula:num" das atividades liberadas pra ele. */
+async function dyseMinhasPraticasLiberadas(){
+  const session = await dyseGetSession();
+  if(!session) return new Set();
+  const { data, error } = await sb
+    .from('aluno_atividades_liberadas')
+    .select('course, aula, activity_num, liberada')
+    .eq('aluno_id', session.user.id);
+  if(error || !data) return new Set();
+  return new Set(data.filter(r => r.liberada).map(r => r.course + ':' + r.aula + ':' + r.activity_num));
+}
+
+/* [Professora] liberações de UM aluno: Set "course:aula:num". */
+async function dysePraticasLiberadasDoAluno(alunoId){
+  const { data, error } = await sb
+    .from('aluno_atividades_liberadas')
+    .select('course, aula, activity_num, liberada')
+    .eq('aluno_id', alunoId);
+  if(error || !data) return new Set();
+  return new Set(data.filter(r => r.liberada).map(r => r.course + ':' + r.aula + ':' + r.activity_num));
+}
+
+/* [Professora] libera/bloqueia uma atividade pra um aluno. */
+async function dyseSetPraticaAluno(alunoId, course, aula, activityNum, liberada){
+  const session = await dyseGetSession();
+  const { error } = await sb
+    .from('aluno_atividades_liberadas')
+    .upsert({
+      aluno_id: alunoId, course: course, aula: aula, activity_num: activityNum,
+      liberada: !!liberada, liberada_por: session ? session.user.id : null,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'aluno_id,course,aula,activity_num' });
+  return { error };
+}
+
+/* [Professora] resultados de UM aluno nos cursos de atividade. */
+async function dyseResultadosPraticasDoAluno(alunoId){
+  const { data, error } = await sb
+    .from('activity_results')
+    .select('course, aula, activity_num, status, meta, updated_at')
+    .eq('user_id', alunoId)
+    .like('course', 'ativ-%');
+  return error ? [] : (data || []);
+}
+
+/* Página de atividade: professora/gestão sempre entram (pra revisar);
+   aluno só se a atividade estiver liberada PRA ELE. */
+async function dyseRequirePraticaLiberada(course, aula, activityNum){
+  const session = await dyseGetSession();
+  if(!session) return false;
+  const profile = await dyseGetProfile(session);
+  if(dyseIsTeacher(profile) || dyseIsAdmin(profile)) return true;
+  const set = await dyseMinhasPraticasLiberadas();
+  if(!set.has(course + ':' + aula + ':' + activityNum)){
+    location.href = '/area-do-aluno.html?notice=locked#praticas';
     return false;
   }
   return true;
