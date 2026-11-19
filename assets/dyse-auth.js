@@ -2294,11 +2294,29 @@ async function dyseUpdateNivelAulaMaterial(nivelAulaId, url){
    depois vem desativado); true/false = decisão explícita do professor. */
 async function dyseListTurmaAulaMaterial(turmaId){
   if(!turmaId) return [];
+  // select('*'): inclui ministrada_em (material extra, seção 37) sem quebrar
+  // se a coluna ainda não existir no banco.
   const { data, error } = await sb
     .from('turma_aula_material')
-    .select('nivel_aula_id, material_url, ativo')
+    .select('*')
     .eq('turma_id', turmaId);
   return error ? [] : data;
+}
+
+/* Material extra (materias.sem_registro): não tem Registro de Classe, então
+   o professor marca o item como "aula ministrada" pra turma — é isso que faz
+   a barra de progresso do aluno andar. data = 'YYYY-MM-DD' ou null (desmarca).
+   Upsert só com ministrada_em: não mexe no link nem no "ativo" da linha. */
+async function dyseSetTurmaAulaMinistrada(turmaId, nivelAulaId, data){
+  const session = await dyseGetSession();
+  const { error } = await sb.from('turma_aula_material').upsert({
+    turma_id: turmaId,
+    nivel_aula_id: nivelAulaId,
+    ministrada_em: data || null,
+    atualizado_por: session ? session.user.id : null,
+    atualizado_em: new Date().toISOString()
+  }, { onConflict: 'turma_id,nivel_aula_id' });
+  return { error };
 }
 
 /* numero <= total_aulas do nível: aula "original" do currículo — é esse o

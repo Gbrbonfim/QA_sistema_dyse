@@ -2081,6 +2081,8 @@ body.dyse-modal-open{overflow:hidden;}
         const copia = (st.material_url || '').trim();
         const efetivo = copia || base;
         const visivel = (st.ativo != null) ? st.ativo : dyseAulaAtivaPadrao(item.numero, n.total_aulas, true);
+        const ministrada = st.ministrada_em ? String(st.ministrada_em).slice(0, 10) : '';
+        const ministradaBR = ministrada ? ministrada.split('-').reverse().join('/') : '';
         return '<div class="manage-row" style="flex-wrap:wrap; gap:8px;">' +
           '<div class="info"><b>' + String(item.numero).padStart(2,'0') + '.</b> ' + escapeHtmlLocal(item.topico) +
             (visivel ? '' : ' <span style="font-size:.72rem; opacity:.7;">(oculto pro aluno — ligue em Gerenciar Material)</span>') +
@@ -2091,6 +2093,10 @@ body.dyse-modal-open{overflow:hidden;}
             (base && copia && base !== copia ? '<a href="' + escapeHtmlLocal(base) + '" target="_blank" rel="noopener" style="font-size:.74rem; color:var(--seal-soft);">base ↗</a>' : '') +
             '<input type="url" id="extraLinkTurma-' + item.id + '" placeholder="Link da cópia desta turma (opcional)" value="' + escapeHtmlLocal(copia) + '" style="width:260px; max-width:100%; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.8rem;">' +
             '<button type="button" class="btn btn-ghost btn-xs" onclick="salvarLinkMaterialExtraTurma(\'' + turmaId + '\', \'' + item.id + '\')">Salvar</button>' +
+            '<label style="display:inline-flex; align-items:center; gap:6px; font-size:.78rem; font-weight:600; color:var(--seal); cursor:pointer;" title="Faz a barra de progresso do aluno andar">' +
+              '<input type="checkbox" style="width:auto;" ' + (ministrada ? 'checked' : '') + ' onchange="marcarMaterialExtraMinistrado(\'' + turmaId + '\', \'' + item.id + '\', this)">' +
+              'Aula ministrada' + (ministradaBR ? ' <span style="font-weight:400; opacity:.7;">(' + ministradaBR + ')</span>' : '') +
+            '</label>' +
             '<span id="extraLinkMsg-' + item.id + '" style="font-size:.74rem; color:var(--seal-soft);"></span>' +
           '</div>' +
         '</div>';
@@ -2101,6 +2107,22 @@ body.dyse-modal-open{overflow:hidden;}
       '</details>';
     }).join('');
     wrap.style.display = 'block';
+  }
+
+  async function marcarMaterialExtraMinistrado(turmaId, aulaId, input){
+    const hoje = new Date();
+    const data = input.checked
+      ? hoje.getFullYear() + '-' + String(hoje.getMonth() + 1).padStart(2, '0') + '-' + String(hoje.getDate()).padStart(2, '0')
+      : null;
+    input.disabled = true;
+    const { error } = await dyseSetTurmaAulaMinistrada(turmaId, aulaId, data);
+    if(error){
+      input.disabled = false;
+      input.checked = !input.checked;
+      alert('Não foi possível salvar: ' + error.message + (/ministrada_em/.test(error.message) ? '\n\nFalta rodar a seção 37 do supabase-schema.sql no Supabase.' : ''));
+      return;
+    }
+    await carregarMaterialExtraDaTurma(turmaId);
   }
 
   async function salvarLinkMaterialExtraTurma(turmaId, aulaId){

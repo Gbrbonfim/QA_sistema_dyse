@@ -4465,3 +4465,13 @@ $$;
 --     itens já nascem visíveis pro aluno (dyseAulaAtivaPadrao).
 -- ======================================================================
 alter table public.materias add column if not exists sem_registro boolean not null default false;
+
+-- ======================================================================
+-- 37) MATERIAL EXTRA — "aula ministrada" por turma
+--     Material extra (seção 36) não tem Registro de Classe, então a barra
+--     de progresso do aluno anda pelo que o professor marca como "aula
+--     ministrada" na seção Material extra da tela Turmas. Fica na mesma
+--     linha de turma_aula_material (turma + item), já liberada por RLS pro
+--     professor da turma (escrita) e pro aluno da turma (leitura).
+-- ======================================================================
+alter table public.turma_aula_material add column if not exists ministrada_em date;

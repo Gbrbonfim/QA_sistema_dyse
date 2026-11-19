@@ -1540,13 +1540,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           totalCount ? Math.round((publishedCount / totalCount) * 100) : 0);
       }
       const aulas = AREA_CTX.aulasNivel[nivel.slug] || [];
-      if(nivel.sem_registro){
-        // Material extra: sem aula ministrada/registro — o card conta os itens liberados.
-        const liberados = aulas.filter(a => AREA_CTX.materialPorAulaId[a.id]).length;
-        return cardCurso(nivel.slug, nivel.name, nivel.description || "Material de reforço com os slides.", accent,
-          liberados + " " + (liberados === 1 ? "material disponível" : "materiais disponíveis"),
-          aulas.length ? Math.round((liberados / aulas.length) * 100) : 0);
-      }
+      // Material extra (sem_registro) usa o mesmo card: "aulasDadas" dele vem do
+      // "Aula ministrada" marcado pelo professor (ver carregarMapaMaterial) —
+      // começa em 0% e sobe a cada item ministrado.
       const dadas = AREA_CTX.aulasDadas[nivel.slug] || new Set();
       const ministradas = aulas.filter(a => dadas.has(a.id)).length;
       const pct = aulas.length ? Math.round((ministradas / aulas.length) * 100) : 0;
@@ -1672,7 +1668,11 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     AREA_CTX.niveis = niveis;
     niveis.forEach((n, i) => {
       AREA_CTX.aulasNivel[n.slug] = aulasPorNivel[i];
-      AREA_CTX.aulasDadas[n.slug] = new Set(dadasPorNivel[i]);
+      // Material extra não tem Registro de Classe: "aula dada" = item que o
+      // professor marcou como ministrado pra turma (turma_aula_material.ministrada_em).
+      AREA_CTX.aulasDadas[n.slug] = n.sem_registro
+        ? new Set(aulasPorNivel[i].filter(a => statusPorAula[a.id] && statusPorAula[a.id].ministrada_em).map(a => a.id))
+        : new Set(dadasPorNivel[i]);
       aulasPorNivel[i].forEach(a => {
         const status = statusPorAula[a.id];
         // Segundo interruptor (por turma, da professora): sem decisão
