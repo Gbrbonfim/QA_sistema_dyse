@@ -236,6 +236,8 @@ async function dyseRequireAdmin(){
 }
 
 async function dyseLogout(){
+  // o próximo login aplica de novo o idioma padrão de quem entrar
+  try{ sessionStorage.removeItem('dyse_idioma_aplicado'); }catch(e){}
   await sb.auth.signOut();
   location.href = '/login.html';
 }
@@ -629,8 +631,7 @@ async function dyseRenderRankingAtividades(container){
   const linhas = top.length ? top.map(r =>
     '<div class="dy-rank-row' + (r.posicao <= 3 ? ' podio p' + r.posicao : '') + (r.eu ? ' eu' : '') + '">' +
       '<span class="pos">' + medalha(r.posicao) + '</span>' +
-      '<span class="who">' + (r.nome ? esc(r.nome) : (r.eu ? 'Você' : 'Aluno(a) ' + r.posicao + 'º lugar')) +
-        '<small>' + r.atividades + ' atividade' + (r.atividades === 1 ? '' : 's') + ' concluída' + (r.atividades === 1 ? '' : 's') + '</small></span>' +
+      '<span class="who">' + (r.nome ? esc(r.nome) : (r.eu ? 'Você' : 'Aluno(a) ' + r.posicao + 'º lugar')) + '</span>' +
       '<span class="pts">' + r.pontos + ' <small>pts</small></span>' +
     '</div>').join('')
     : '<p style="opacity:.7; padding:10px 4px;">Ninguém pontuou ainda. As primeiras atividades concluídas aparecem aqui.</p>';
@@ -3372,3 +3373,163 @@ async function dyseSetCalendarioIntervalo(ano, iniISO, fimISO, tipo, titulo){
   const { error } = await sb.from('calendario_letivo_dias').upsert(linhas, { onConflict: 'data' });
   return { error };
 }
+
+/* ======================================================================
+   IDIOMA — botão "English / Português" (tradução automática do Google)
+   Só nos painéis com menu lateral (aluno, professor, gestão): as páginas
+   de exercício já são em inglês e ficam de fora (a tradução mexeria no
+   texto que a correção lê). A escolha fica no cookie "googtrans" do
+   próprio Google, então vale pra todas as telas até trocar de novo.
+   ====================================================================== */
+function dyseIdiomaAtual(){
+  return /(?:^|;\s*)googtrans=\/pt\/en/.test(document.cookie) ? 'en' : 'pt';
+}
+
+/* Liga/desliga a tradução no navegador (cookie do Google) e recarrega. */
+function dyseAplicarIdioma(idioma){
+  const host = location.hostname;
+  const dominios = ['', 'domain=' + host + ';'];
+  if(host.split('.').length > 1) dominios.push('domain=.' + host.split('.').slice(-2).join('.') + ';');
+  if(idioma === 'en'){
+    document.cookie = 'googtrans=/pt/en; path=/';
+  } else {
+    dominios.forEach(d => { document.cookie = 'googtrans=; ' + d + 'path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'; });
+  }
+  location.reload();
+}
+
+/* Botão de idioma: pergunta se a troca vira o padrão do usuário (salvo no
+   cadastro de login dele — auth user_metadata.idioma — vale em qualquer
+   aparelho) ou se é só agora. */
+function dyseTrocarIdioma(){
+  const novo = dyseIdiomaAtual() === 'en' ? 'pt' : 'en';
+  const nomeIdioma = novo === 'en' ? 'inglês' : 'português';
+  const old = document.getElementById('dyseIdiomaDlg'); if(old) old.remove();
+  const dlg = document.createElement('div');
+  dlg.id = 'dyseIdiomaDlg';
+  dlg.className = 'notranslate';
+  dlg.setAttribute('translate', 'no');
+  dlg.setAttribute('role', 'dialog');
+  dlg.setAttribute('aria-modal', 'true');
+  dlg.setAttribute('aria-labelledby', 'dyseIdiomaTit');
+  dlg.innerHTML =
+    '<div class="dyse-idioma-card">' +
+      '<div class="dyse-idioma-ic"><span class="msr" aria-hidden="true">translate</span></div>' +
+      '<h3 id="dyseIdiomaTit">Mudar para ' + nomeIdioma + '</h3>' +
+      '<p>Quer que o sistema abra sempre em ' + nomeIdioma + ' quando você entrar?</p>' +
+      '<div class="dyse-idioma-acoes">' +
+        '<button type="button" data-r="sempre" class="dyse-idioma-pri">Sempre em ' + nomeIdioma + '</button>' +
+        '<button type="button" data-r="agora">Só agora</button>' +
+        '<button type="button" data-r="cancelar" class="dyse-idioma-link">Cancelar</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(dlg);
+  const fechar = () => dlg.remove();
+  dlg.addEventListener('click', ev => { if(ev.target === dlg) fechar(); });
+  document.addEventListener('keydown', function esc(ev){ if(ev.key === 'Escape'){ fechar(); document.removeEventListener('keydown', esc); } });
+  dlg.querySelector('[data-r="cancelar"]').addEventListener('click', fechar);
+  dlg.querySelector('[data-r="agora"]').addEventListener('click', () => dyseAplicarIdioma(novo));
+  dlg.querySelector('[data-r="sempre"]').addEventListener('click', async ev => {
+    ev.target.disabled = true;
+    ev.target.textContent = 'Salvando...';
+    try{
+      const { error } = await sb.auth.updateUser({ data: { idioma: novo } });
+      if(error) console.error('Idioma padrão:', error);
+    }catch(e){ console.error('Idioma padrão:', e); }
+    try{ sessionStorage.setItem('dyse_idioma_aplicado', '1'); }catch(e){}
+    dyseAplicarIdioma(novo);
+  });
+  dlg.querySelector('[data-r="sempre"]').focus();
+}
+
+/* Ao entrar: aplica o idioma padrão salvo no usuário, uma vez por sessão do
+   navegador (assim o "Só agora" continua valendo enquanto ele navega). */
+async function dyseAplicarIdiomaPadrao(){
+  let ja = false;
+  try{ ja = sessionStorage.getItem('dyse_idioma_aplicado') === '1'; }catch(e){}
+  if(ja) return;
+  try{ sessionStorage.setItem('dyse_idioma_aplicado', '1'); }catch(e){}
+  try{
+    const { data } = await sb.auth.getSession();
+    const meta = data && data.session && data.session.user && data.session.user.user_metadata;
+    const padrao = meta && meta.idioma;
+    if((padrao === 'en' || padrao === 'pt') && padrao !== dyseIdiomaAtual()) dyseAplicarIdioma(padrao);
+  }catch(e){ console.error('Idioma padrão:', e); }
+}
+
+(function dyseMontarIdioma(){
+  function montar(){
+    const footers = document.querySelectorAll('.sidebar-footer');
+    if(!footers.length) return;   // só nos painéis
+    const en = dyseIdiomaAtual() === 'en';
+    const rotulo = en ? 'Português' : 'English';
+    const dica = en ? 'Voltar para português' : 'Translate the system to English';
+
+    const css = document.createElement('style');
+    css.textContent =
+      // esconde a barra/balões do Google e não deixa a página "pular"
+      'iframe.skiptranslate, .goog-te-banner-frame, #goog-gt-tt, .goog-te-balloon-frame, #google_translate_element{display:none !important;}' +
+      'body{top:0 !important; position:static !important;}' +
+      '.goog-text-highlight{background:none !important; box-shadow:none !important;}' +
+      'button.dyse-lang-btn{width:100%; border:none; font-family:inherit; text-align:left; cursor:pointer;}' +
+      // pergunta "sempre ou só agora" (diálogo Material)
+      '#dyseIdiomaDlg{position:fixed; inset:0; z-index:9999; background:rgba(58,29,16,.45); display:flex; align-items:center; justify-content:center; padding:16px; font-family:Poppins, Arial, sans-serif;}' +
+      '.dyse-idioma-card{background:#fff; border-radius:24px; padding:24px; width:100%; max-width:360px; box-shadow:0 20px 50px rgba(58,29,16,.3); text-align:center; color:#3A1D10;}' +
+      '.dyse-idioma-ic{width:48px; height:48px; border-radius:14px; background:#FCE4E4; color:#D03B55; display:inline-flex; align-items:center; justify-content:center; margin-bottom:10px;}' +
+      '.dyse-idioma-ic .msr{font-size:26px; vertical-align:0;}' +
+      '.dyse-idioma-card h3{margin:0 0 6px; font-size:1.1rem; font-weight:600;}' +
+      '.dyse-idioma-card p{margin:0 0 18px; font-size:.9rem; line-height:1.45; color:#562915;}' +
+      '.dyse-idioma-acoes{display:flex; flex-direction:column; gap:8px;}' +
+      '.dyse-idioma-acoes button{min-height:46px; border-radius:999px; border:1.5px solid #EFDCCB; background:#fff; color:#3A1D10; font:inherit; font-weight:600; font-size:.92rem; cursor:pointer;}' +
+      '.dyse-idioma-acoes button:hover{background:#FFF3E6;}' +
+      '.dyse-idioma-acoes button:focus{outline:none;} .dyse-idioma-acoes button:focus-visible{outline:3px solid rgba(208,59,85,.35); outline-offset:2px;}' +
+      '.dyse-idioma-acoes .dyse-idioma-pri{background:#D03B55; border-color:#D03B55; color:#fff;}' +
+      '.dyse-idioma-acoes .dyse-idioma-pri:hover{background:#B22C44;}' +
+      '.dyse-idioma-acoes .dyse-idioma-link{border:none; background:none; color:#562915; font-weight:500; min-height:40px;}';
+    document.head.appendChild(css);
+    dyseAplicarIdiomaPadrao();
+
+    footers.forEach(f => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      // mesma moldura do "Precisa de ajuda?", logo acima dele
+      b.className = 'sidebar-help dyse-lang-btn notranslate';
+      b.setAttribute('translate', 'no');
+      b.title = dica;
+      b.innerHTML = '<span class="sidebar-help-icon"><span class="msr" aria-hidden="true">translate</span></span>' +
+        '<span><b>' + rotulo + '</b>' + (en ? 'Voltar para português' : 'Translate the system') + '</span>';
+      b.addEventListener('click', dyseTrocarIdioma);
+      f.insertBefore(b, f.querySelector('.sidebar-help') || f.firstChild);
+    });
+    // celular do aluno: ícone ao lado de Suporte/Sair
+    document.querySelectorAll('.mob-actions').forEach(m => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'mob-icon-btn notranslate';
+      b.setAttribute('translate', 'no');
+      b.setAttribute('aria-label', dica);
+      b.title = rotulo;
+      b.innerHTML = '<span class="msr" aria-hidden="true">translate</span>';
+      b.addEventListener('click', dyseTrocarIdioma);
+      m.insertBefore(b, m.firstChild);
+    });
+    // marca "dyse" (logo em texto) nunca é traduzida
+    document.querySelectorAll('.fmark').forEach(el => { el.classList.add('notranslate'); el.setAttribute('translate', 'no'); });
+
+    if(!en) return;
+    const alvo = document.createElement('div');
+    alvo.id = 'google_translate_element';
+    document.body.appendChild(alvo);
+    window.dyseGoogleTradutorPronto = function(){
+      try{
+        new google.translate.TranslateElement({ pageLanguage: 'pt', includedLanguages: 'en', autoDisplay: false }, 'google_translate_element');
+      }catch(e){ console.error('Tradução:', e); }
+    };
+    const s = document.createElement('script');
+    s.src = 'https://translate.google.com/translate_a/element.js?cb=dyseGoogleTradutorPronto';
+    s.async = true;
+    document.head.appendChild(s);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar);
+  else montar();
+})();

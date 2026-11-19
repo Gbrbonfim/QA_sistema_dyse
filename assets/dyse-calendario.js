@@ -120,15 +120,46 @@
   .dyse-cal .month-notes{font-size:.8rem; margin-top:12px; padding-top:10px; border-top:1px dashed #eee0cf;}
 }
 .dyse-cal-backdrop.open{display:block;}
+.dyse-cal .cal-print{display:none;}
+.dyse-cal .print-wrap{position:relative;}
+.dyse-cal .print-menu{position:absolute; right:0; top:calc(100% + 6px); z-index:50; min-width:250px; background:#fff; border-radius:14px;
+  box-shadow:0 12px 32px rgba(58,29,16,.18); padding:6px;}
+.dyse-cal .print-menu[hidden]{display:none;}
+.dyse-cal .print-menu button{display:flex; align-items:center; gap:12px; width:100%; min-height:48px; padding:10px 12px; border:none; background:none;
+  border-radius:10px; text-align:left; cursor:pointer; color:var(--seal, #3A1D10); font:inherit;}
+.dyse-cal .print-menu button:hover, .dyse-cal .print-menu button:focus-visible{background:#FFF3E6; outline:none;}
+.dyse-cal .print-menu .msr{font-size:22px; color:var(--amaranth, #D03B55); flex:none;}
+.dyse-cal .print-menu b{display:block; font-size:.9rem; font-weight:600;}
+.dyse-cal .print-menu small{display:block; font-size:.75rem; opacity:.7;}
+#dyseCalPrintRoot{display:none;}
+/* Impressão: uma cópia solta no <body> (sem a altura travada da tela), pra
+   o calendário completo poder ocupar quantas páginas precisar. */
 @media print{
-  body *{visibility:hidden !important;}
-  .dyse-cal.dyse-cal-imprimindo, .dyse-cal.dyse-cal-imprimindo *{visibility:visible !important;}
-  .dyse-cal.dyse-cal-imprimindo{position:absolute; left:0; top:0; width:100%;}
-  .dyse-cal .cal-toolbar, .dyse-cal .info-note{display:none !important;}
-  .dyse-cal .cal-layout{display:block;}
-  .dyse-cal .months-grid{grid-template-columns:repeat(4,1fr); gap:14px;}
-  .dyse-cal .cal-panel{box-shadow:none; padding:0;}
-  .dyse-cal .side-card{box-shadow:none; border:1px solid #ddd; page-break-inside:avoid;}
+  html.dyse-cal-printing, html.dyse-cal-printing body{height:auto !important; overflow:visible !important; background:#fff !important;}
+  html.dyse-cal-printing body > *:not(#dyseCalPrintRoot){display:none !important;}
+  html.dyse-cal-printing #dyseCalPrintRoot{display:block !important; color:#3A1D10; font-family:'Poppins', Arial, sans-serif;}
+  #dyseCalPrintRoot *{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  #dyseCalPrintRoot .p-titulo{font-size:16pt; font-weight:700; margin:0 0 12pt;}
+
+  /* Calendário completo: os 12 meses em grade (também no celular) */
+  #dyseCalPrintRoot .legend-card{display:flex !important; flex-wrap:wrap; gap:4pt 14pt; background:none; box-shadow:none; padding:0; margin:0 0 12pt;}
+  #dyseCalPrintRoot .legend-card h3{display:none;}
+  #dyseCalPrintRoot .legend-row{margin:0; font-size:9pt;}
+  #dyseCalPrintRoot .months-grid{display:grid !important; grid-template-columns:repeat(3,1fr) !important; gap:12pt 16pt;}
+  #dyseCalPrintRoot .months-grid .month{display:block !important; max-width:none; page-break-inside:avoid; break-inside:avoid;}
+  #dyseCalPrintRoot .month h4{display:block !important;}
+  #dyseCalPrintRoot .cal-day.today{background:none !important; color:inherit !important; outline:none !important; font-weight:inherit;}
+  #dyseCalPrintRoot .month-notes{font-size:8pt;}
+
+  /* Lista do mês */
+  #dyseCalPrintRoot .cal-print{display:block; color:#000;}
+  .dyse-cal .cal-print h2{font-size:16pt; font-weight:600; margin:0 0 14pt;}
+  .dyse-cal .cal-print table{width:100%; border-collapse:collapse; font-size:11pt;}
+  .dyse-cal .cal-print th{text-align:left; font-weight:600; border-bottom:1.5pt solid #000; padding:6pt 8pt 6pt 0;}
+  .dyse-cal .cal-print td{border-bottom:.5pt solid #bbb; padding:7pt 8pt 7pt 0; vertical-align:top;}
+  .dyse-cal .cal-print .p-data{white-space:nowrap; width:1%;}
+  .dyse-cal .cal-print .p-tipo{white-space:nowrap; width:1%; padding-right:16pt;}
+  .dyse-cal .cal-print tr{page-break-inside:avoid;}
 }`;
 
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -160,7 +191,13 @@
         '<span data-cal="pub"></span>' +
         '<span data-cal="msg" class="msg"></span>' +
         '<span class="spacer"></span>' +
-        '<button type="button" class="btn btn-ghost" data-cal="print">Imprimir</button>' +
+        '<div class="print-wrap">' +
+          '<button type="button" class="btn btn-ghost" data-cal="print" aria-haspopup="menu" aria-expanded="false">Imprimir</button>' +
+          '<div class="print-menu" data-cal="printMenu" role="menu" hidden>' +
+            '<button type="button" role="menuitem" data-modo="lista"><span class="msr" aria-hidden="true">format_list_bulleted</span><span><b>Lista do mês</b><small>Só os apontamentos do mês aberto</small></span></button>' +
+            '<button type="button" role="menuitem" data-modo="ano"><span class="msr" aria-hidden="true">calendar_month</span><span><b>Calendário completo</b><small>Os 12 meses do ano</small></span></button>' +
+          '</div>' +
+        '</div>' +
       '</div>' +
       '<div data-cal="body"><p style="opacity:.6;">Carregando...</p></div>';
     const $ = k => container.querySelector('[data-cal="' + k + '"]');
@@ -435,11 +472,69 @@
       $('body').innerHTML = '<p style="opacity:.6;">Carregando...</p>';
       carregarAno();
     });
-    $('print').addEventListener('click', () => {
-      container.classList.add('dyse-cal-imprimindo');
+    /* ---------- Impressão: lista simples com os apontamentos do mês aberto ---------- */
+    const DIAS_SEMANA = ['dom','seg','ter','qua','qui','sex','sáb'];
+    function listaImpressaoHtml(){
+      const ano = st.ano, m = st.mes, nDias = new Date(ano, m + 1, 0).getDate();
+      const dt = d => pad(d) + '/' + pad(m + 1) + ' (' + DIAS_SEMANA[new Date(ano, m, d).getDay()] + ')';
+      const itens = []; let run = null;
+      const flush = () => {
+        if(!run) return;
+        const tipo = TIPOS[run.tipo] || '';
+        const texto = run.titulo && run.titulo !== tipo ? run.titulo : '';
+        itens.push('<tr><td class="p-data">' + (run.ini === run.fim ? dt(run.ini) : dt(run.ini) + ' a ' + dt(run.fim)) + '</td>' +
+          '<td class="p-tipo">' + esc(tipo) + '</td><td>' + esc(texto) + '</td></tr>');
+        run = null;
+      };
+      for(let d = 1; d <= nDias; d++){
+        const mk = st.dias[iso(ano, m, d)];
+        if(mk && run && mk.tipo === run.tipo && (mk.titulo || '') === run.titulo){ run.fim = d; continue; }
+        flush();
+        if(mk) run = { tipo: mk.tipo, titulo: mk.titulo || '', ini: d, fim: d };
+      }
+      flush();
+      return '<h2>' + MESES[m] + ' ' + ano + '</h2>' +
+        (itens.length
+          ? '<table><thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th></tr></thead><tbody>' + itens.join('') + '</tbody></table>'
+          : '<p>Nenhum apontamento neste mês.</p>');
+    }
+    // modo: 'lista' (apontamentos do mês aberto) ou 'ano' (os 12 meses em grade)
+    let modoEscolhido = null, tituloOriginal = null;
+    function prepararImpressao(){
+      // só quando o calendário está na tela (as outras abas imprimem normal)
+      if(!container.offsetParent || !container.querySelector('.months-grid')) return;
+      const modo = modoEscolhido || 'lista';   // Ctrl+P do navegador = lista
+      const titulo = 'Calendário Letivo DYSE ' + st.ano;
+      let root = document.getElementById('dyseCalPrintRoot');
+      if(!root){ root = document.createElement('div'); root.id = 'dyseCalPrintRoot'; document.body.appendChild(root); }
+      root.className = 'dyse-cal';
+      root.innerHTML = '<h1 class="p-titulo">' + titulo + '</h1>' + (modo === 'lista'
+        ? '<div class="cal-print">' + listaImpressaoHtml() + '</div>'
+        : legendaHtml() + '<div class="months-grid">' + MESES.map((_, m) => mesHtml(m)).join('') + '</div>');
+      document.documentElement.classList.add('dyse-cal-printing');
+      // o título da aba vira o cabeçalho da impressão e o nome do PDF
+      if(tituloOriginal === null){ tituloOriginal = document.title; document.title = titulo; }
+    }
+    function limparImpressao(){
+      modoEscolhido = null;
+      document.documentElement.classList.remove('dyse-cal-printing');
+      if(tituloOriginal !== null){ document.title = tituloOriginal; tituloOriginal = null; }
+    }
+    window.addEventListener('beforeprint', prepararImpressao);
+    window.addEventListener('afterprint', limparImpressao);
+
+    const menu = $('printMenu');
+    const abrirMenu = abrir => { menu.hidden = !abrir; $('print').setAttribute('aria-expanded', abrir ? 'true' : 'false'); };
+    $('print').addEventListener('click', ev => { ev.stopPropagation(); abrirMenu(menu.hidden); });
+    document.addEventListener('click', ev => { if(!menu.hidden && !menu.contains(ev.target)) abrirMenu(false); });
+    document.addEventListener('keydown', ev => { if(ev.key === 'Escape') abrirMenu(false); });
+    menu.querySelectorAll('[data-modo]').forEach(b => b.addEventListener('click', () => {
+      abrirMenu(false);
+      modoEscolhido = b.dataset.modo;
+      prepararImpressao();
       window.print();
-      setTimeout(() => container.classList.remove('dyse-cal-imprimindo'), 500);
-    });
+      setTimeout(limparImpressao, 500);
+    }));
 
     montarAnos();
     carregarAno();

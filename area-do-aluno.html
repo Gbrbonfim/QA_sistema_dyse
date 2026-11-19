@@ -191,6 +191,16 @@ body::before{
 .sidebar-item .nav-ic{font-size:20px; vertical-align:0; flex:none; opacity:.9; font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24;}
 .sidebar-item.active .nav-ic{opacity:1; font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24;}
 
+/* Cartão de aviso (estado vazio): ícone em quadrado rosado + divisória + texto. */
+.empty-card{display:flex; align-items:center; gap:18px; background:#fff; border-radius:22px; padding:22px 24px;
+  box-shadow:0 10px 28px rgba(58,29,16,.08);}
+.empty-card-icon{flex:none; width:56px; height:56px; border-radius:16px; background:#FCE4E4; color:var(--seal);
+  display:flex; align-items:center; justify-content:center;}
+.empty-card-icon .msr{font-size:30px; vertical-align:0;}
+.empty-card-txt{display:flex; flex-direction:column; gap:4px; min-width:0; padding-left:18px; border-left:1px solid #EFDCCB;}
+.empty-card-txt b{font-size:1.05rem; font-weight:600; line-height:1.3; color:var(--seal);}
+.empty-card-txt span{font-size:.85rem; line-height:1.45; color:var(--seal-soft); opacity:.85;}
+
 /* Saudação/ações da barra superior: só existem no celular. */
 .mob-greet, .mob-actions{display:none;}
 
@@ -199,7 +209,8 @@ body::before{
    em ícone à direita, toque ≥ 44px) e a navegação como abas roláveis numa
    linha só — o conteúdo aparece logo na primeira dobra da tela. */
 @media (max-width:900px){
-  .app-shell{flex-direction:column; height:auto; overflow:visible;}
+  /* min-height da tela toda: o conteúdo cresce e o rodapé fica sempre no fim da tela */
+  .app-shell{flex-direction:column; height:auto; min-height:100vh; min-height:100dvh; overflow:visible;}
   .sidebar{width:100%; height:auto; overflow-y:visible; padding:10px 16px 18px;
     background:linear-gradient(160deg, #DC4A65 0%, var(--amaranth) 48%, #B42B45 100%);
     border-radius:0 0 22px 22px; box-shadow:0 8px 24px rgba(178,44,68,.28);}
@@ -231,10 +242,25 @@ body::before{
   .topbar{padding:10px 16px;}
   .topbar-greeting{display:none;}
   .topbar.so-aluno{display:none;}
+  .content-footer{padding:28px 16px 4px; font-size:.68rem; opacity:.6;}
+  .content-footer .fmark{font-size:1rem; margin-bottom:2px;}
   .content{padding:18px 16px 48px;}
-  .page-header{gap:12px; margin-bottom:16px;}
-  .page-header-icon{width:44px; height:44px;}
-  .page-header-text h2{font-size:1.2rem;}
+  /* Cabeçalho da página: ícone + título/subtítulo, na mesma margem dos cartões. */
+  /* Ícone à esquerda; título e descrição empilhados e alinhados entre si. */
+  .page-header{display:flex; align-items:center; gap:12px; flex-wrap:nowrap; margin:4px 0 14px;}
+  .page-header-icon{width:40px; height:40px; flex:none; margin:0;}
+  .page-header-icon svg{width:20px; height:20px;}
+  .page-header-text{flex:1 1 auto; min-width:0;}
+  .page-header-text h2{font-size:1.2rem !important; line-height:1.25; margin:0 0 2px;}
+  .page-header-text p{font-size:.76rem; line-height:1.35; opacity:.75; margin:0;}
+
+  /* Aviso (estado vazio) compacto */
+  .empty-card{gap:14px; padding:14px 16px; border-radius:16px; box-shadow:0 4px 14px rgba(58,29,16,.06);}
+  .empty-card-icon{width:44px; height:44px; border-radius:12px;}
+  .empty-card-icon .msr{font-size:24px;}
+  .empty-card-txt{padding-left:0; border-left:none; gap:2px;}
+  .empty-card-txt b{font-size:.95rem;}
+  .empty-card-txt span{font-size:.8rem; line-height:1.4;}
 }
 
 /* ---------- STEPPER ---------- */
@@ -1111,6 +1137,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
   // Ícone Material Symbols Rounded (Google) — a plataforma não usa emoji.
   function MI(nome){ return '<span class="msr" aria-hidden="true">' + nome + '</span>'; }
+  // Aviso de "estado vazio" — o mesmo cartão em todas as abas.
+  function avisoVazio(icone, titulo, texto){
+    return '<div class="empty-card"><div class="empty-card-icon">' + MI(icone) + '</div><div class="empty-card-txt"><b>' + titulo + '</b><span>' + texto + '</span></div></div>';
+  }
 
   const NOTICE_MESSAGES = {
     'locked': 'Essa atividade ainda não foi liberada pela professora. Assim que ela liberar, o card aparece colorido e você pode clicar nele.',
@@ -1373,12 +1403,12 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     wrap.innerHTML = '<p class="card-instructions" style="opacity:.6;">Carregando...</p>';
     await AREA_PRONTO;
     if(AREA_CTX.semTurma){
-      wrap.innerHTML = '<p class="card-instructions">Você ainda não está em uma turma. Assim que a coordenação vincular você, as atividades do seu nível aparecem aqui.</p>';
+      wrap.innerHTML = avisoVazio('folder_open', 'Você ainda não está em uma turma.', 'Assim que a coordenação vincular você, as atividades do seu nível aparecem aqui.');
       return;
     }
     const niveis = Object.keys(window.DYSE_PRATICAS || {}).filter(slug => AREA_CTX.allowedSlugs.has(slug));
     if(!niveis.length){
-      wrap.innerHTML = '<p class="card-instructions">As atividades do seu nível ainda estão sendo preparadas. Assim que ficarem prontas, aparecem aqui.</p>';
+      wrap.innerHTML = avisoVazio('hourglass_empty', 'Atividades em preparação.', 'Assim que as atividades do seu nível ficarem prontas, elas aparecem aqui.');
       return;
     }
     const [liberadas, refazer] = await Promise.all([dyseMinhasPraticasLiberadas(), dyseMinhasPraticasRefazer()]);
@@ -1521,42 +1551,36 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
     const wrap = document.getElementById('coursesWrap');
 
-    // Sem turma vinculada, a gestão ainda não decidiu o que esse aluno pode
-    // ver — não dá pra saber quais matérias mostrar, então nenhuma aparece.
-    if(!profile || !profile.turma_id){
-      AREA_CTX.semTurma = true; AREA_PRONTO_RESOLVE();
-      wrap.innerHTML =
-        '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
-          '<div class="course-folder-icon">' + MI('folder_open') + '</div>' +
-          '<div class="course-folder-info">' +
-            '<div class="course-folder-name">Você ainda não está em uma turma</div>' +
-            '<div class="course-folder-desc">Fale com a coordenação pra ser vinculado(a) a uma turma — assim que isso acontecer, os cursos liberados pra sua turma aparecem aqui.</div>' +
-          '</div>' +
-        '</div>';
-      return;
-    }
-
-    const allTurmaMaterias = await dyseListAllTurmaMaterias();
-    const allowedSlugs = new Set(
-      allTurmaMaterias.filter(tm => tm.turma_id === profile.turma_id).map(tm => tm.materia_slug)
-    );
-
-    renderMeetCard(await dyseGetTurmaPorId(profile.turma_id));
-
-    const results = await dyseListMyResults();
+    // Sem turma vinculada: nenhuma matéria liberada, mas a trilha A1→C1
+    // aparece mesmo assim (tudo travado, 0%), com o aviso logo acima.
+    const semTurma = !profile || !profile.turma_id;
     const doneMap = {}; // "course:aula:num" -> resultado
-    results.forEach(r => doneMap[r.course + ":" + (r.aula || 1) + ":" + r.activity_num] = r);
-    AREA_CTX.doneMap = doneMap;
-    AREA_CTX.staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
-    AREA_CTX.allowedSlugs = allowedSlugs;
-    AREA_PRONTO_RESOLVE();
-
-    // Nome/descrição de cada curso vêm do que a gestão cadastrou em Matérias.
+    let nMaterial = 0;
     AREA_CTX.materias = {};
-    (await dyseListMaterias()).forEach(m => { AREA_CTX.materias[m.slug] = m; });
+    if(semTurma){
+      AREA_CTX.semTurma = true; AREA_PRONTO_RESOLVE();
+      (await dyseListMaterias()).forEach(m => { AREA_CTX.materias[m.slug] = m; });
+    } else {
+      const allTurmaMaterias = await dyseListAllTurmaMaterias();
+      const allowedSlugs = new Set(
+        allTurmaMaterias.filter(tm => tm.turma_id === profile.turma_id).map(tm => tm.materia_slug)
+      );
 
-    // Mapa de material das aulas (usado dentro de cada aula, na visão do curso)
-    const nMaterial = await carregarMapaMaterial(allowedSlugs, profile.turma_id);
+      renderMeetCard(await dyseGetTurmaPorId(profile.turma_id));
+
+      const results = await dyseListMyResults();
+      results.forEach(r => doneMap[r.course + ":" + (r.aula || 1) + ":" + r.activity_num] = r);
+      AREA_CTX.doneMap = doneMap;
+      AREA_CTX.staff = dyseIsTeacher(profile) || dyseIsAdmin(profile);
+      AREA_CTX.allowedSlugs = allowedSlugs;
+      AREA_PRONTO_RESOLVE();
+
+      // Nome/descrição de cada curso vêm do que a gestão cadastrou em Matérias.
+      (await dyseListMaterias()).forEach(m => { AREA_CTX.materias[m.slug] = m; });
+
+      // Mapa de material das aulas (usado dentro de cada aula, na visão do curso)
+      nMaterial = await carregarMapaMaterial(allowedSlugs, profile.turma_id);
+    }
 
     // Paleta/ícone por curso — alterna pela posição, mesma ideia do
     // dyseColorForSlug usado em gestao.html, só que sem depender dele aqui.
@@ -1618,7 +1642,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       const ministradas = aulas.filter(a => dadas.has(a.id)).length;
       const pct = aulas.length ? Math.round((ministradas / aulas.length) * 100) : 0;
       return cardCurso(nivel.slug, nivel.name, nivel.description || "Abra uma aula pra ver o material liberado.", accent,
-        ministradas + "/" + aulas.length + " aulas ministradas", pct);
+        "Progresso do nível", pct);
     };
 
     // Card travado: nível da trilha que a turma ainda não tem liberado.
@@ -1678,16 +1702,23 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         : Math.min(AULAS_POR_NIVEL, aulasN.filter(a => dadasN.has(a.id)).length);
       feitasTotal += feitas;
       const nome = (AREA_CTX.materias[slug] && AREA_CTX.materias[slug].name) || slug.toUpperCase();
-      return "<div class=\"trilha-geral-seg\" title=\"" + escapeHtmlLocal(nome) + ": " + feitas + "/" + AULAS_POR_NIVEL + " aulas\">" +
+      return "<div class=\"trilha-geral-seg\" title=\"" + escapeHtmlLocal(nome) + ": " + Math.round((feitas / AULAS_POR_NIVEL) * 100) + "%\">" +
         "<div class=\"trilha-track\"><span style=\"width:" + Math.round((feitas / AULAS_POR_NIVEL) * 100) + "%;\"></span></div>" +
         "<span class=\"lbl\">" + escapeHtmlLocal(nome) + "</span></div>";
     });
     const totalTrilha = TRILHA.length * AULAS_POR_NIVEL;
     const trilhaGeralHtml = "<div class=\"trilha-geral\"><div class=\"trilha-geral-top\"><span><b>Sua trilha de aprendizagem</b> — A1 ao C1</span>" +
-      "<span><b>" + Math.round((feitasTotal / totalTrilha) * 100) + "%</b> · " + feitasTotal + " de " + totalTrilha + " aulas</span></div>" +
+      "<span><b>" + Math.round((feitasTotal / totalTrilha) * 100) + "%</b></span></div>" +
       "<div class=\"trilha-geral-bar\">" + segs.join("") + "</div></div>";
 
-    wrap.innerHTML = cards.length
+    const avisoSemTurma = semTurma
+      ? '<div style="margin-top:16px;">' + avisoVazio('folder_open', 'Você ainda não está em uma turma.', 'Assim que a coordenação vincular você, seus cursos são liberados aqui.') + '</div>'
+      : '';
+    // Sem turma: só a barra da trilha + o aviso embaixo (os cards dos níveis
+    // só aparecem depois que o aluno estiver numa turma).
+    wrap.innerHTML = semTurma
+      ? trilhaGeralHtml + avisoSemTurma
+      : cards.length
       ? trilhaGeralHtml + '<div class="course-folder-grid">' + cards.join('') + '</div>'
       : '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
           '<div class="course-folder-icon">' + MI('folder_open') + '</div>' +
@@ -1810,7 +1841,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       dyseListMaterias()
     ]);
     if(!cards.length){
-      wrap.innerHTML = '<div class="rc-empty">Seu Report Card aparece aqui assim que a professora liberar o primeiro, ao fim de um semestre.</div>';
+      wrap.innerHTML = avisoVazio('description', 'Nenhum Report Card ainda.', 'Ele aparece aqui quando a professora liberar, ao fim do semestre.');
       return [];
     }
 
@@ -1989,7 +2020,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     let cobrancas = [];
     try{ cobrancas = await dyseListMinhasCobrancas(); }catch(e){ cobrancas = []; }
     if(!cobrancas.length){
-      wrap.innerHTML = '<div class="rc-empty">Nenhuma cobrança registrada. Suas mensalidades pagas fora do sistema não aparecem aqui.</div>';
+      wrap.innerHTML = avisoVazio('receipt_long', 'Nenhuma cobrança por aqui.', 'Mensalidades pagas fora do sistema não aparecem nesta lista.');
       return [];
     }
 
