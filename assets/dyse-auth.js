@@ -592,8 +592,8 @@ async function dyseRenderRankingAtividades(container){
   const { data, error } = await dyseRankingAtividades();
   const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
   if(error){
-    container.innerHTML = '<p style="opacity:.75;">Não foi possível carregar o ranking agora.' +
-      (/ranking_atividades/.test(error.message || '') ? ' (Falta rodar a seção 38 do supabase-schema.sql no Supabase.)' : '') + '</p>';
+    console.error('ranking_atividades:', error);
+    container.innerHTML = '<p style="opacity:.75;">Não foi possível carregar o ranking agora. Tente de novo em instantes.</p>';
     return;
   }
   const top = data.filter(r => r.posicao <= 5);
@@ -628,8 +628,7 @@ async function dyseRenderRankingAtividades(container){
       '.dy-rank-how{font-size:.8rem; color:#562915; opacity:.8; margin-top:14px; line-height:1.6;}' +
     '</style>' +
     '<div class="dy-rank"><div class="dy-rank-card">' + linhas + '</div>' + minha +
-      '<p class="dy-rank-how"><b>Como pontua:</b> acerto de primeira 10 pts · acerto na 2ª tentativa 5 pts · Combo DYSE (3 acertos seguidos de primeira) +5 · atividade perfeita +20. ' +
-      (top.some(r => r.nome) ? 'Os nomes do top 5 aparecem só pra gestão — alunos e professores veem só a pontuação.' : 'Os nomes não aparecem — só a pontuação.') + '</p></div>';
+      '<p class="dy-rank-how"><b>Como pontua:</b> acerto de primeira 10 pts · acerto na 2ª tentativa 5 pts · Combo DYSE (3 acertos seguidos de primeira) +5 · atividade perfeita +20.</p></div>';
 }
 
 /* ======================================================================

@@ -1604,7 +1604,7 @@ body.dyse-modal-open{overflow:hidden;}
     },
     ranking: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
-      title: 'Ranking atividades', subtitle: 'Top 5 de pontos nas atividades. Só a gestão vê os nomes — alunos e professores veem só a pontuação.', action: ''
+      title: 'Ranking atividades', subtitle: 'As maiores pontuações nas atividades.', action: ''
     }
   };
 
@@ -2675,8 +2675,8 @@ body.dyse-modal-open{overflow:hidden;}
     if(!nome) return;
     const { data, error } = await dyseCreateMaterialExtraMateria(nome);
     if(error || !data){
-      alert('Não foi possível criar: ' + (error ? error.message : 'sem resposta do banco') +
-        (error && /sem_registro/.test(error.message) ? '\n\nFalta rodar a seção 36 do supabase-schema.sql no Supabase.' : ''));
+      if(error) console.error('criarMaterialExtra:', error);
+      alert('Não foi possível criar o material agora. Tente de novo em instantes.');
       return;
     }
     MATERIAS.push(data);
