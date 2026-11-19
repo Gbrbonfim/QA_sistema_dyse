@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block');
 /* DYSE · Atividades — visual próprio da marca ("caderno DYSE")
    Paleta e tipografia do site: amaranth / gamboge / orangered / seal /
    antique, Poppins no texto e Lobster só na marca "dyse".
@@ -23,6 +24,27 @@ body::before{content:""; position:fixed; inset:0; pointer-events:none; z-index:0
     radial-gradient(circle at 96% 30%, rgba(208,59,85,0.12) 0, transparent 36%),
     radial-gradient(circle at 40% 100%, rgba(235,100,36,0.10) 0, transparent 45%);}
 button{font-family:inherit;}
+
+/* Ícones: Material Symbols Rounded (Google) — o site não usa emoji. */
+.msr{font-family:'Material Symbols Rounded'; font-weight:500; font-style:normal; font-size:1.25em; line-height:1; letter-spacing:normal; text-transform:none; display:inline-block; white-space:nowrap; direction:ltr; vertical-align:-.22em; -webkit-font-smoothing:antialiased; font-variation-settings:'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24; user-select:none;}
+.msr.tick{font-size:1.05em; vertical-align:-.25em;}
+.px-streak .msr{font-size:1.15em; margin-right:3px; font-variation-settings:'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 20;}
+.px-banner .ic .msr{font-size:22px; font-variation-settings:'FILL' 0, 'wght' 700, 'GRAD' 0, 'opsz' 24;}
+.px-act .i .msr{font-size:20px; vertical-align:middle;}
+.px-act .i{display:inline-flex;}
+.cv-ic .msr{font-size:42px; color:#fff;}
+.cv-chips span{display:inline-flex; align-items:center; gap:4px;}
+.cv-chips .msr{font-size:16px; vertical-align:0;}
+.px-btn .msr{font-size:20px; vertical-align:-5px; margin-left:4px;}
+.px-res-line .ic .msr{font-size:22px; color:var(--amaranth);}
+.px-review .st .msr{font-size:16px; font-variation-settings:'FILL' 0, 'wght' 700, 'GRAD' 0, 'opsz' 20;}
+.px-res-hero .ring b .msr{font-size:40px;}
+.px-scene .card .msr{font-size:52px; color:var(--amaranth);}
+.px-note .msr{font-size:18px; color:var(--gamboge-dark); margin-right:4px;}
+.px-compare .box .msr{width:32px; height:32px; border-radius:50%; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:20px;}
+.px-compare .box.eu .msr{background:var(--ok);} .px-compare .box.orig .msr{background:var(--amaranth);}
+.px-phone-top .ic .msr{font-size:22px; color:#fff; opacity:.8;}
+.px-phone-bar .snd .msr{font-size:18px;}
 
 #dyseAuthGate{position:fixed; inset:0; background:var(--antique); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:999; color:var(--amaranth); font-family:var(--font-display); font-size:1.8rem;}
 .dyse-spinner{width:38px; height:38px; border:4px solid var(--antique-soft); border-top-color:var(--amaranth); border-radius:50%; animation:spin 1s linear infinite; margin-bottom:10px;}
@@ -51,9 +73,9 @@ button{font-family:inherit;}
 .px-bar span{counter-increment:px;}
 .px-bar{counter-reset:px;}
 .px-bar span.cur::after{background:var(--amaranth); border-color:var(--amaranth); color:#fff; transform:scale(1.18); box-shadow:0 0 0 4px rgba(208,59,85,.15);}
-.px-bar span.ok::after{background:var(--ok); border-color:var(--ok); color:#fff; content:"✓";}
+.px-bar span.ok::after{background:var(--ok); border-color:var(--ok); color:#fff; content:"check"; font-family:'Material Symbols Rounded'; font-size:14px; font-weight:700;}
 .px-bar span.warn::after{background:var(--gamboge); border-color:var(--gamboge); color:#fff;}
-.px-bar span.bad::after{background:var(--bad); border-color:var(--bad); color:#fff; content:"✕";}
+.px-bar span.bad::after{background:var(--bad); border-color:var(--bad); color:#fff; content:"close"; font-family:'Material Symbols Rounded'; font-size:14px; font-weight:700;}
 .px-bar span.ok::before,.px-bar span.warn::before,.px-bar span.bad::before{background:var(--cherry);}
 
 /* ---------- Área central: card de caderno ---------- */
@@ -139,7 +161,7 @@ button{font-family:inherit;}
 @keyframes blink{0%,80%,100%{opacity:.3; transform:translateY(0)}40%{opacity:1; transform:translateY(-3px)}}
 @keyframes pop{from{opacity:0; transform:translateY(6px) scale(.97)}to{opacity:1; transform:none}}
 .px-phone-bar{display:flex; align-items:center; gap:10px; background:#fff; padding:9px 12px; font-size:.78rem; color:#A8927D;}
-.px-phone-bar span:first-child{flex:1; background:var(--antique-soft); border-radius:999px; padding:7px 14px;}
+.px-phone-bar > span:first-child{flex:1; background:var(--antique-soft); border-radius:999px; padding:7px 14px;}
 .px-phone-bar .snd{width:34px; height:34px; border-radius:50%; background:var(--amaranth); color:#fff; display:flex; align-items:center; justify-content:center;}
 
 /* Fala: cartão de gravador */
@@ -162,8 +184,6 @@ button{font-family:inherit;}
 .px-compare-t{text-align:center; font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--seal-soft); margin-top:18px;}
 .px-compare{display:flex; gap:12px; justify-content:center; margin-top:10px;}
 .px-compare .box{display:flex; align-items:center; gap:10px; border:2px solid var(--line); background:#fff; border-radius:999px; padding:6px 16px 6px 6px; font-size:.82rem; font-weight:600; color:var(--seal); cursor:pointer;}
-.px-compare .box span{width:32px; height:32px; border-radius:50%; color:#fff; display:flex; align-items:center; justify-content:center; font-size:.8rem;}
-.px-compare .box.eu span{background:var(--ok);} .px-compare .box.orig span{background:var(--amaranth);}
 
 /* Revisão depois do 2º erro */
 .px-review-box{margin-top:22px; border-radius:var(--radius-md); background:#fff; border:2px solid var(--line); padding:14px 18px;}
@@ -251,7 +271,7 @@ button{font-family:inherit;}
 .px-next > div{flex:1; display:flex; flex-direction:column; line-height:1.3;}
 .px-next small{font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--amaranth);}
 .px-next b{font-size:1.05rem; margin:2px 0;}
-.px-next span{font-size:.78rem; color:var(--seal-soft);}
+.px-next > div > span{font-size:.78rem; color:var(--seal-soft);}
 .px-next.done{border-color:var(--ok);} .px-next.done small{text-transform:none; letter-spacing:0; font-weight:500; color:var(--seal-soft); font-size:.82rem;}
 .px-staff-note{position:relative; z-index:1; max-width:760px; margin:14px auto 0; font-size:.76rem; text-align:center; background:#FFF8EC; border:1px dashed var(--gamboge); border-radius:999px; padding:6px 12px; color:var(--seal-soft);}
 

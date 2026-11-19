@@ -799,6 +799,8 @@ body.dyse-modal-open{overflow:hidden;}
 .ficha-ap .resultado input{width:auto;}
 .ficha-ap textarea{display:block; width:100%; min-height:90px; resize:vertical; border:2px solid #eee0cf; border-radius:8px; padding:8px 10px; font-family:var(--font-body); font-size:.82rem;}
 </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block">
+<style>.msr{font-family:'Material Symbols Rounded'; font-weight:500; font-style:normal; font-size:1.25em; line-height:1; display:inline-block; vertical-align:-.22em; white-space:nowrap; letter-spacing:normal; text-transform:none; -webkit-font-smoothing:antialiased; font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24; user-select:none;}</style>
 </head>
 <body>
 <div id="dyseAuthGate">
@@ -852,7 +854,7 @@ body.dyse-modal-open{overflow:hidden;}
     </nav>
     <div class="sidebar-footer">
       <a class="sidebar-help" href="https://wa.me/554187207973" target="_blank" rel="noopener">
-        <span class="sidebar-help-icon">🎧</span>
+        <span class="sidebar-help-icon"><span class="msr" aria-hidden="true">support_agent</span></span>
         <span><b>Precisa de ajuda?</b>Fale com o suporte <span class="arrow">→</span></span>
       </a>
       <div class="sidebar-user" id="sidebarUser"></div>
@@ -866,7 +868,7 @@ body.dyse-modal-open{overflow:hidden;}
   <div class="main-area">
     <header class="topbar">
       <div class="topbar-greeting">
-        <h1 id="topbarGreeting">Olá! 👋</h1>
+        <h1 id="topbarGreeting">Olá!</h1>
         <p>Acompanhe seus alunos e registre suas aulas.</p>
       </div>
       <div class="topbar-right">
@@ -933,7 +935,7 @@ body.dyse-modal-open{overflow:hidden;}
       <summary class="manage-course-title"><span>Atividades por aluno</span><span class="chevron">›</span></summary>
       <div class="manage-course-body">
         <p style="color:var(--seal-soft); font-size:.85rem; margin:0 0 12px;">
-          O aluno vê todas as atividades do nível dele, mas só faz as que você liberar <b>para ele</b>. Escolha o aluno e ligue as atividades. Em <b>👁 Visualizar</b> você testa a atividade antes (seu resultado não é salvo).
+          O aluno vê todas as atividades do nível dele, mas só faz as que você liberar <b>para ele</b>. Escolha o aluno e ligue as atividades. Em <b>Visualizar</b> você testa a atividade antes (seu resultado não é salvo).
         </p>
         <div class="dash-filter" style="margin-bottom:10px;">
           <select id="praticaAlunoSel" onchange="renderPraticasAluno()"><option value="">Carregando alunos...</option></select>
@@ -942,7 +944,7 @@ body.dyse-modal-open{overflow:hidden;}
       </div>
     </details>
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
-      Clique em <b>👁 Visualizar</b> para abrir e revisar a atividade antes de liberar — como professora, você sempre consegue acessar qualquer atividade, mesmo oculta dos alunos. Ative o interruptor para liberar aos alunos, ou desative para escondê-la novamente.
+      Clique em <b>Visualizar</b> para abrir e revisar a atividade antes de liberar — como professora, você sempre consegue acessar qualquer atividade, mesmo oculta dos alunos. Ative o interruptor para liberar aos alunos, ou desative para escondê-la novamente.
     </p>
     <div id="manageCourses"></div>
   </div>
@@ -962,7 +964,7 @@ body.dyse-modal-open{overflow:hidden;}
       <input type="month" id="finProfMes" onchange="loadFinanceiroProfessor()">
     </div>
     <p id="finProfPrevisaoNote" style="display:none; background:var(--antique-soft); color:var(--seal-soft); border-radius:var(--radius-sm); padding:10px 14px; font-size:.8rem; margin-bottom:16px;">
-      ⚠️ Este mês ainda não foi gerado oficialmente pela gestão — os valores abaixo são uma previsão baseada no seu vínculo atual e podem mudar.
+      <span class="msr" aria-hidden="true">info</span> Este mês ainda não foi gerado oficialmente pela gestão — os valores abaixo são uma previsão baseada no seu vínculo atual e podem mudar.
     </p>
     <div class="kpi-grid" id="finProfKpis"></div>
     <details class="dyse-collapsible">
@@ -998,7 +1000,7 @@ body.dyse-modal-open{overflow:hidden;}
     <p id="chamadaMsg" style="font-size:.82rem; margin:8px 0; color:var(--seal-soft);"></p>
 
     <div id="meetLinkWrap" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; margin:4px 0 16px; padding:12px 14px; background:#fff8f0; border:2px solid #eee0cf; border-radius:var(--radius-sm);">
-      <label for="meetLinkInput" style="font-weight:700; font-size:.82rem; color:var(--seal); flex:0 0 auto;">🔗 Link do Google Meet da turma</label>
+      <label for="meetLinkInput" style="font-weight:700; font-size:.82rem; color:var(--seal); flex:0 0 auto;"><span class="msr" aria-hidden="true">link</span> Link do Google Meet da turma</label>
       <input type="url" id="meetLinkInput" placeholder="https://meet.google.com/xxx-xxxx-xxx" style="flex:1 1 260px; min-width:0; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:8px 12px; font-family:var(--font-body); font-size:.85rem;">
       <button type="button" class="btn btn-ghost" style="padding:8px 16px; font-size:.82rem;" onclick="salvarLinkMeetTurma()">Salvar link</button>
       <span id="meetLinkMsg" style="font-size:.78rem; color:var(--seal-soft); flex-basis:100%;"></span>
@@ -1151,7 +1153,7 @@ body.dyse-modal-open{overflow:hidden;}
 <div id="iaOverlay" class="ia-overlay">
   <div class="ia-overlay-card" id="iaOverlayCard">
     <div class="dyse-spinner"></div>
-    <span class="ia-err-icon">⚠️</span>
+    <span class="ia-err-icon"><span class="msr" aria-hidden="true">error</span></span>
     <p id="iaOverlayMsg">Gerando a análise com IA…</p>
     <button type="button" class="btn btn-ghost ia-overlay-close" onclick="iaOverlayHide()">Fechar</button>
   </div>
@@ -1162,6 +1164,8 @@ body.dyse-modal-open{overflow:hidden;}
 <script src="/assets/dyse-calendario.js"></script>
 <script src="/atividades/praticas/catalogo.js"></script>
 <script>
+  // Ícone Material Symbols Rounded (Google) — a plataforma não usa emoji.
+  function MI(nome){ return '<span class="msr" aria-hidden="true">' + nome + '</span>'; }
   let ALL_RESULTS = [];
   let TURMA_NAME_BY_USER = {}; // user_id -> nome da turma (ou "-" se sem turma)
   const COURSE_NAMES = {'toefl':'TOEFL iBT', 'ativ-a1':'A1 · Atividades'};
@@ -1223,7 +1227,7 @@ body.dyse-modal-open{overflow:hidden;}
     const info = document.getElementById('myTurmasInfo');
     info.innerHTML = myTurmas.length
       ? '<b>Turmas com acesso:</b> ' + myTurmas.map(t => t.name).join(', ')
-      : '⚠️ Você ainda não tem nenhuma turma vinculada — peça à gestão pra te vincular a uma turma. Até lá, nenhum resultado aparece aqui.';
+      : MI('info') + ' Você ainda não tem nenhuma turma vinculada — peça à gestão pra te vincular a uma turma. Até lá, nenhum resultado aparece aqui.';
   }
 
   /* ---------- Link de pré-visualização de atividade ----------
@@ -1294,10 +1298,10 @@ body.dyse-modal-open{overflow:hidden;}
     let clean = str;
     let badge = null, badgeText = '', expected = '';
     if(/[✓✔]\s*Correta/i.test(clean) || /\[\s*correta\s*\]/i.test(clean)){
-      badge = 'ok'; badgeText = '✓ Correta';
+      badge = 'ok'; badgeText = 'Correta';
       clean = clean.replace(/[✓✔]\s*Correta/i, '').replace(/\[\s*correta\s*\]/i, '').trim();
     } else if(/[✗✘]\s*Incorreta/i.test(clean) || /\[\s*incorreta/i.test(clean)){
-      badge = 'bad'; badgeText = '✗ Incorreta';
+      badge = 'bad'; badgeText = 'Incorreta';
       const em = clean.match(/esperado:\s*"([^"]*)"/i);
       if(em) expected = em[1];
       clean = clean.replace(/[✗✘]\s*Incorreta/i, '').replace(/\[\s*incorreta[^\]]*\]/i, '').trim();
@@ -1368,7 +1372,7 @@ body.dyse-modal-open{overflow:hidden;}
           return '<div class="grammar-item ' + (g.ok ? 'ok' : 'bad') + '">' +
             '<div class="grammar-q"><b>' + g.n + '.</b> ' + escapeHtmlLocal(g.question) + '</div>' +
             '<div class="grammar-a">' +
-              '<span class="tag ' + (g.ok ? 'ok' : 'bad') + '">' + (g.ok ? '✓ Correta' : '✗ Incorreta') + '</span> ' +
+              '<span class="tag ' + (g.ok ? 'ok' : 'bad') + '">' + (g.ok ? MI('check') + ' Correta' : MI('close') + ' Incorreta') + '</span> ' +
               (g.ok
                 ? 'aluno respondeu: <b>"' + escapeHtmlLocal(g.student) + '"</b>'
                 : 'aluno: <span class="wrong-word">"' + escapeHtmlLocal(g.student || '(em branco)') + '"</span> → correto: <span class="right-word">"' + escapeHtmlLocal(g.correct) + '"</span>') +
@@ -1430,7 +1434,7 @@ body.dyse-modal-open{overflow:hidden;}
     const sectionsHtml = sections.map((s, idx) => {
       const sc = sectionScoreInfo(s);
       const cls = sc ? scoreClass(sc.correct, sc.total) : null;
-      const scoreLabel = sc ? (sc.total === 1 ? (sc.correct === 1 ? '✓ Correta' : '✗ Incorreta') : (sc.correct + '/' + sc.total + ' corretas')) : '';
+      const scoreLabel = sc ? (sc.total === 1 ? (sc.correct === 1 ? 'Correta' : 'Incorreta') : (sc.correct + '/' + sc.total + ' corretas')) : '';
       const startsOpen = idx < 3 || (sc && sc.correct < sc.total); // abre seções problemáticas por padrão
       return '<div class="report-section' + (startsOpen ? '' : ' collapsed') + '">' +
         '<button type="button" class="report-section-head" onclick="this.closest(\'.report-section\').classList.toggle(\'collapsed\')">' +
@@ -1914,7 +1918,7 @@ body.dyse-modal-open{overflow:hidden;}
     // Layout de tabela (colunas): mostra o resultado na célula.
     const cel = document.querySelector('#registroClasseBody td[data-resultado="' + alunoId + '"]');
     if(cel){
-      cel.textContent = !completo ? '—' : (aprovado ? '✓ Aprovado' : 'Encaminhar p/ 6.5.1');
+      cel.textContent = !completo ? '—' : (aprovado ? 'Aprovado' : 'Encaminhar p/ 6.5.1');
       cel.style.color = !completo ? '' : (aprovado ? '#2e7d32' : '#b3261e');
     }
     // Layout de ficha: sugere o resultado marcando a opção (a professora ainda pode trocar).
@@ -2002,7 +2006,7 @@ body.dyse-modal-open{overflow:hidden;}
     TURMA_AULA_MATERIAL = {};
     materialTurma.forEach(r => { TURMA_AULA_MATERIAL[r.nivel_aula_id] = r.material_url; });
 
-    // Status ✓/⚠️ por aula: busca os registros de todos os alunos da turma
+    // Status completo/parcial por aula: busca os registros de todos os alunos da turma
     // de uma vez (poucas chamadas — turma é pequena) pra marcar quais aulas
     // já têm registro completo. Conta ALUNO distinto (uma aula pode ter
     // vários dias/linhas por aluno).
@@ -2018,7 +2022,7 @@ body.dyse-modal-open{overflow:hidden;}
     const valorAnterior = sel.value;
     sel.innerHTML = REGISTRO_AULAS_DA_TURMA.map(a => {
       const feitos = (registrosPorAula[a.id] || new Set()).size;
-      const status = !feitos ? '' : (feitos >= totalRegistravel ? ' ✓' : ' ⚠️');
+      const status = !feitos ? '' : (feitos >= totalRegistravel ? ' · registrada' : ' · parcial');
       return '<option value="' + a.id + '">' + String(a.numero).padStart(2,'0') + '. ' + escapeHtmlLocal(a.topico) + status + '</option>';
     }).join('');
     if(REGISTRO_AULAS_DA_TURMA.some(a => a.id === valorAnterior)) sel.value = valorAnterior;
@@ -2147,7 +2151,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(error){ if(msg) msg.textContent = 'Erro: ' + error.message; return; }
     await carregarMaterialExtraDaTurma(turmaId);
     const m2 = document.getElementById('extraLinkMsg-' + aulaId);
-    if(m2){ m2.textContent = 'Salvo ✓'; setTimeout(() => { m2.textContent = ''; }, 2000); }
+    if(m2){ m2.textContent = 'Salvo'; setTimeout(() => { m2.textContent = ''; }, 2000); }
   }
 
   async function salvarMaterialCopiaTurma(aulaId){
@@ -2229,7 +2233,7 @@ body.dyse-modal-open{overflow:hidden;}
     REGISTRO_DATA_ATUAL = data;
     renderRegistroClasseDias();
     msg.textContent = 'Registro de ' + formatDateBR(data) + ' salvo!';
-    await carregarRegistroClasseDaTurma(); // atualiza os indicadores ✓/⚠️ do seletor de aula
+    await carregarRegistroClasseDaTurma(); // atualiza os indicadores do seletor de aula
     // carregarRegistroClasseDaTurma refaz REGISTRO_DATAS via onRegistroClasseAulaChange;
     // volta o professor pro registro que ele estava editando.
     REGISTRO_DATA_ATUAL = data;
@@ -2549,7 +2553,7 @@ body.dyse-modal-open{overflow:hidden;}
       '<div class="report-section-head">B · Frequência</div>' +
       '<p class="report-line">' + (freq.aulas_presentes ?? '-') + ' de ' + (freq.aulas_previstas ?? '-') + ' aulas (' + (freq.percentual ?? '-') + '%) — critério mínimo 75%: ' +
       (freq.criterio_atingido ? '<b style="color:var(--ok);">Atingido</b>' : '<b style="color:var(--bad);">Não atingido</b>') + '</p>' +
-      (freq.aulas_sem_registro ? '<p class="report-line">⚠️ ' + freq.aulas_sem_registro + ' aula(s) do período ainda sem Registro de Classe lançado.</p>' : '');
+      (freq.aulas_sem_registro ? '<p class="report-line">' + MI('info') + ' ' + freq.aulas_sem_registro + ' aula(s) do período ainda sem Registro de Classe lançado.</p>' : '');
 
     // Bloco C — análise de desenvolvimento por IA (substitui os selects PP/P/R).
     const ia = d.analise_ia;
@@ -2564,7 +2568,7 @@ body.dyse-modal-open{overflow:hidden;}
         (ia.por_eixo || []).map((e, i) =>
           pfCampo(escapeHtmlLocal(e.eixo), '<textarea data-ia-eixo="' + i + '" style="' + iaTextareaStyle + '">' + escapeHtmlLocal(e.texto || '') + '</textarea>')
         ).join('') +
-        '<div class="btn-row" style="margin-top:6px;"><button type="button" class="btn btn-ghost btn-xs" onclick="handleRefazerAnaliseIA()">↻ Refazer análise (IA)</button></div>';
+        '<div class="btn-row" style="margin-top:6px;"><button type="button" class="btn btn-ghost btn-xs" onclick="handleRefazerAnaliseIA()">' + MI('refresh') + ' Refazer análise (IA)</button></div>';
     } else {
       blocoEixos =
         '<div class="report-section-head">C · Análise de desenvolvimento (IA)</div>' +
@@ -2921,7 +2925,7 @@ body.dyse-modal-open{overflow:hidden;}
           let res = '<span style="opacity:.5; font-size:.76rem;">Ainda não fez</span>';
           if(r && r.meta && r.meta.total){
             const itens = (r.meta.itens || []).map(it => {
-              const ic = it.status === 'ok' ? '✅' : it.status === 'warn' ? '🟠' : it.status === 'skip' ? '⏭' : '❌';
+              const ic = MI(it.status === 'ok' ? 'check_circle' : it.status === 'warn' ? 'error' : it.status === 'skip' ? 'skip_next' : 'cancel');
               const tent = it.status === 'ok' ? '' : ' <span style="opacity:.65;">(' + escapeHtmlLocal((it.tentativas || []).join(' | ') || 'sem resposta') + ')</span>';
               return '<div style="font-size:.78rem; padding:2px 0;">' + ic + ' ' + escapeHtmlLocal(it.correta) + tent + '</div>';
             }).join('');
@@ -2934,15 +2938,15 @@ body.dyse-modal-open{overflow:hidden;}
           if(r && r.status === 'concluida'){
             const jaLiberado = refazer[chave] && new Date(refazer[chave]) > new Date(r.updated_at);
             refazerBtn = jaLiberado
-              ? '<span style="font-size:.74rem; font-weight:600; color:var(--gamboge-dark, #CE8613);">↻ Refazer liberado</span>'
-              : '<button type="button" class="btn btn-ghost" style="padding:6px 12px; font-size:.74rem;" onclick="liberarRefazerPratica(\'' + nivel.course + '\', ' + aula.aula + ', ' + at.num + ', this)">↻ Liberar refazer</button>';
+              ? '<span style="font-size:.74rem; font-weight:600; color:var(--gamboge-dark, #CE8613);">' + MI('replay') + ' Refazer liberado</span>'
+              : '<button type="button" class="btn btn-ghost" style="padding:6px 12px; font-size:.74rem;" onclick="liberarRefazerPratica(\'' + nivel.course + '\', ' + aula.aula + ', ' + at.num + ', this)">' + MI('replay') + ' Liberar refazer</button>';
           }
           return '<div class="manage-row">' +
             '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) +
               ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span><div>' + res + '</div></div>' +
             '<div class="manage-row-actions">' +
               refazerBtn +
-              '<a class="btn btn-preview" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '" target="_blank" rel="noopener">👁 Visualizar</a>' +
+              '<a class="btn btn-preview" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a>' +
               '<label class="dyse-toggle"><input type="checkbox" class="pratica-toggle" data-course="' + nivel.course + '" data-aula="' + aula.aula + '" data-num="' + at.num + '" ' +
                 (liberadas.has(chave) ? 'checked' : '') + ' onchange="togglePraticaAluno(this)"><span class="slider"></span></label>' +
             '</div></div>';
@@ -3011,14 +3015,14 @@ body.dyse-modal-open{overflow:hidden;}
           return '<div class="manage-row">' +
             '<div class="info"><b>' + String(a.num).padStart(2,'0') + '.</b> ' + a.theme + ' <span style="opacity:.6;">(' + a.level + ')</span></div>' +
             '<div class="manage-row-actions">' +
-              '<span style="font-size:.76rem; color:var(--seal-soft); opacity:.75;">🔒 Aguardando liberação da gestão</span>' +
+              '<span style="font-size:.76rem; color:var(--seal-soft); opacity:.75;">' + MI('lock') + ' Aguardando liberação da gestão</span>' +
             '</div>' +
           '</div>';
         }
         return '<div class="manage-row">' +
           '<div class="info"><b>' + String(a.num).padStart(2,'0') + '.</b> ' + a.theme + ' <span style="opacity:.6;">(' + a.level + ')</span></div>' +
           '<div class="manage-row-actions">' +
-            '<a class="btn btn-preview" href="' + activityUrl(course.id, a.num) + '" target="_blank" rel="noopener">👁 Visualizar</a>' +
+            '<a class="btn btn-preview" href="' + activityUrl(course.id, a.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a>' +
             '<label class="dyse-toggle">' +
               '<input type="checkbox" ' + (isOn ? 'checked' : '') + ' onchange="togglePublish(\'' + course.id + '\', ' + a.num + ', this.checked)">' +
               '<span class="slider"></span>' +
@@ -3178,7 +3182,7 @@ body.dyse-modal-open{overflow:hidden;}
     const meta = session.user.user_metadata || {};
     const fullName = meta.full_name || session.user.email;
     const firstName = (fullName || '').trim().split(/\s+/)[0] || 'Professor(a)';
-    document.getElementById('topbarGreeting').textContent = 'Olá, ' + firstName + '! 👋';
+    document.getElementById('topbarGreeting').textContent = 'Olá, ' + firstName + '!';
 
     const alsoStudent = !!(profile && profile.also_student);
     const userIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';

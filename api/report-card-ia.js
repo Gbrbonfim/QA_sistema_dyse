@@ -166,7 +166,7 @@ async function run(req, res){
     'NUNCA escreva sobre o aluno em terceira pessoa. Proibido: "' + (primeiroNome || 'O aluno') + ' apresentou...", "a aluna demonstra...", "o aluno conseguiu...", "ele ainda precisa...". Se qualquer trecho falar SOBRE o aluno, reescreva para falar COM o aluno.\n' +
     (primeiroNome ? 'Pode chamar pelo primeiro nome (' + primeiroNome + ') no começo, com carinho.\n' : '') +
     '\n# TOM\n' +
-    'Caloroso, de parceria e acompanhamento. Comece sempre reconhecendo algo concreto e verdadeiro que você viu de bom. Fale das dificuldades com acolhimento, sempre como "o que vamos desenvolver juntos no próximo período", nunca como falha, nota baixa ou veredito. Pode encerrar com uma frase de incentivo e o emoji 💙.\n\n' +
+    'Caloroso, de parceria e acompanhamento. Comece sempre reconhecendo algo concreto e verdadeiro que você viu de bom. Fale das dificuldades com acolhimento, sempre como "o que vamos desenvolver juntos no próximo período", nunca como falha, nota baixa ou veredito. Pode encerrar com uma frase de incentivo. Não use emoji.\n\n' +
     '# PROIBIÇÕES\n' +
     '- NÃO use travessão nem hífen como pontuação (—, –, -). Ligue as ideias com vírgula, ponto e conectivos ("e", "mas", "porque", "por isso").\n' +
     '- NÃO use números, porcentagens, contagem de aulas ou de habilidades, nem termos técnicos de avaliação ("parcial", "PP", "P", "R", "cobertura", "amostras", "eixo", "critério"). Os dados abaixo são só pra você saber O QUE dizer, não para citar.\n' +
@@ -174,7 +174,7 @@ async function run(req, res){
     '- Pode citar conteúdos concretos de forma natural ("o som do TH", "o verbo to be", "se apresentar em inglês") quando ajudar o aluno a entender.\n\n' +
     '# FORMATO DA RESPOSTA\n' +
     'Responda SOMENTE com um objeto JSON válido (sem texto fora dele, sem cercas de código). Todos os campos falam COM o aluno, em "você", sem travessão/hífen:\n' +
-    '{"resumo_geral": "2 a 4 parágrafos curtos, como uma carta da escola pra você: primeiro o que foi bem neste período, depois com acolhimento o que vamos desenvolver juntos, fechando com incentivo pro próximo período (pode usar 💙)", ' +
+    '{"resumo_geral": "2 a 4 parágrafos curtos, como uma carta da escola pra você: primeiro o que foi bem neste período, depois com acolhimento o que vamos desenvolver juntos, fechando com incentivo pro próximo período (sem emoji)", ' +
     '"por_eixo": [{"eixo": "<nome exato da habilidade>", "nivel": "forte" quando essa habilidade já é um ponto forte seu no período, ou "desenvolvimento" quando ainda é algo que vamos trabalhar juntos, "texto": "2 a 3 frases dirigidas a você sobre essa habilidade: o que você já faz bem e/ou qual vai ser o nosso próximo passo, de forma encorajadora"}], ' +
     '"pontos_fortes": "1 a 3 frases celebrando de forma específica o que você mais mandou bem", ' +
     '"pontos_desenvolvimento": "1 a 3 frases acolhedoras sobre o que vamos trabalhar juntos no próximo período", ' +

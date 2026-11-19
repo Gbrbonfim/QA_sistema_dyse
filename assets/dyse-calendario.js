@@ -130,7 +130,7 @@
         '<span data-cal="pub"></span>' +
         '<span data-cal="msg" class="msg"></span>' +
         '<span class="spacer"></span>' +
-        '<button type="button" class="btn btn-ghost" data-cal="print">🖨 Imprimir</button>' +
+        '<button type="button" class="btn btn-ghost" data-cal="print">Imprimir</button>' +
       '</div>' +
       '<div data-cal="body"><p style="opacity:.6;">Carregando...</p></div>';
     const $ = k => container.querySelector('[data-cal="' + k + '"]');

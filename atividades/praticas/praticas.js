@@ -30,6 +30,8 @@
 
   /* ---------- utilidades ---------- */
   const $ = sel => document.querySelector(sel);
+  // Ícone Material Symbols Rounded (Google) — o site não usa emoji.
+  const I = (nome, cls) => '<span class="msr' + (cls ? ' ' + cls : '') + '" aria-hidden="true">' + nome + '</span>';
   const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
   function shuffle(arr, seed){
     const a = arr.slice(); let s = seed || 7;
@@ -81,7 +83,7 @@
     const foot = $('#pxFoot'), b = $('#pxBanner');
     if(foot) foot.className = 'px-foot' + (tipo ? ' ' + tipo : '');
     if(!tipo){ b.className = 'px-banner'; b.innerHTML = ''; return; }
-    const ic = tipo === 'ok' ? '✓' : tipo === 'warn' ? '!' : '✕';
+    const ic = tipo === 'ok' ? I('check') : tipo === 'warn' ? I('priority_high') : I('close');
     const titulo = tipo === 'ok' ? 'Muito bem!' : tipo === 'warn' ? 'Quase lá' : 'Não foi dessa vez';
     b.className = 'px-banner ' + tipo;
     b.innerHTML = '<span class="ic">' + ic + '</span><span class="tx"><b>' + titulo + '</b>' + esc(texto) + '</span>';
@@ -89,7 +91,7 @@
   function pintarStreak(pop){
     const el = $('#pxStreak');
     if(S.streak < 2){ el.className = 'px-streak'; el.textContent = ''; return; }
-    el.textContent = '🔥 ' + S.streak + ' seguidas';
+    el.innerHTML = I('local_fire_department') + S.streak + ' seguidas';
     el.className = 'px-streak on' + (S.streak >= 9 ? ' lv3' : S.streak >= 6 ? ' lv2' : '') + (pop ? ' pop' : '');
     if(pop) setTimeout(() => el.classList.remove('pop'), 250);
   }
@@ -125,9 +127,9 @@
   }
   function botoesFim(item, comTraduzir){
     const l = [];
-    if(item.audio !== false) l.push({ id: 'ouvirFim', ic: '▶', label: 'Escutar' });
-    if(comTraduzir && item.traducao) l.push({ id: 'traduzir', ic: '文A', label: 'Traduzir' });
-    l.push({ id: 'avancar', ic: '→', label: 'Avançar', cls: 'primary' });
+    if(item.audio !== false) l.push({ id: 'ouvirFim', ic: I('play_arrow'), label: 'Escutar' });
+    if(comTraduzir && item.traducao) l.push({ id: 'traduzir', ic: I('translate'), label: 'Traduzir' });
+    l.push({ id: 'avancar', ic: I('arrow_forward'), label: 'Avançar', cls: 'primary' });
     on('ouvirFim', () => falar(item.completa || item.audioTexto || ''));
     on('traduzir', () => modalTraducao(item.completa, item.traducao));
     on('avancar', avancar);
@@ -162,7 +164,7 @@
     item.completa = item.audioTexto;
     on('ouvir', () => falar(item.audioTexto));
     on('ouvirLento', () => falar(item.audioTexto, 0.6));
-    acoes([{ id: 'ouvirLento', ic: '🐢', label: 'Devagar' }, { id: 'ouvir', ic: '▶', label: 'Escutar', cls: 'primary' }]);
+    acoes([{ id: 'ouvirLento', ic: I('slow_motion_video'), label: 'Devagar' }, { id: 'ouvir', ic: I('play_arrow'), label: 'Escutar', cls: 'primary' }]);
     setTimeout(() => falar(item.audioTexto), 350);
   }
   function clicarImagem(k){
@@ -200,19 +202,19 @@
     let topo = '';
     if(item.chat){
       // Conversa no formato de app de mensagens: cabeçalho do contato, balões
-      // com horário e ✓✓, e a próxima fala "digitando…" até o aluno responder.
+      // com horário e confirmação de leitura, e a próxima fala "digitando…" até o aluno responder.
       const nomes = [];
       item.chat.concat([{ quem: item.quemProximo }]).forEach(c => { if(c.quem && nomes.indexOf(c.quem) < 0) nomes.push(c.quem); });
       const hora = k => '10:' + String(12 + k).padStart(2, '0');
       topo = '<div class="px-phone">' +
         '<div class="px-phone-top"><span class="av">' + esc((nomes[0] || '?').charAt(0)) + '</span>' +
-          '<div class="who"><b>' + esc(nomes.join(' & ')) + '</b><small>online</small></div><span class="ic">📞</span></div>' +
+          '<div class="who"><b>' + esc(nomes.join(' & ')) + '</b><small>online</small></div><span class="ic">' + I('call') + '</span></div>' +
         '<div class="px-chat">' + '<div class="px-day">HOJE</div>' + item.chat.map((c, k) =>
           '<div class="px-bubble ' + (c.lado || 'a') + '"><b>' + esc(c.quem) + '</b>' + esc(c.texto) +
-          '<i class="tm">' + hora(k) + ((c.lado || 'a') === 'b' ? ' ✓✓' : '') + '</i></div>').join('') +
+          '<i class="tm">' + hora(k) + ((c.lado || 'a') === 'b' ? ' ' + I('done_all', 'tick') : '') + '</i></div>').join('') +
         '<div class="px-bubble ' + (item.ladoProximo || 'a') + ' next" id="pxNext"><b>' + esc(item.quemProximo || '') + '</b>' +
           '<span class="typing"><span></span><span></span><span></span></span></div></div>' +
-        '<div class="px-phone-bar"><span>Escolha a resposta abaixo…</span><span class="snd">➤</span></div></div>';
+        '<div class="px-phone-bar"><span>Escolha a resposta abaixo…</span><span class="snd">' + I('send') + '</span></div></div>';
       S.cur.horaProx = hora(item.chat.length);
     }
     main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Selecione uma opção para completar a frase') + '</p>' + topo +
@@ -220,7 +222,7 @@
       '<div class="px-opts">' + item.opcoes.map((o, k) =>
         '<button type="button" class="px-opt" id="pxOpt' + k + '" onclick="DysePratica._sel(' + k + ')"><span class="dot">' + 'ABCDEFGH'[k] + '</span><span>' + esc(o) + '</span></button>').join('') + '</div>';
     on('validar', validarEscolha);
-    acoes([{ id: 'validar', ic: '✓', label: 'Validar', cls: 'primary', disabled: true }]);
+    acoes([{ id: 'validar', ic: I('check'), label: 'Validar', cls: 'primary', disabled: true }]);
   }
   function selecionar(k){
     if(S.res[S.i]) return;
@@ -240,7 +242,7 @@
     if(k === item.certa){
       b.classList.add('ok');
       if(item.frase) $('#pxSent').innerHTML = frasePreenchida(item, item.opcoes[k], 'ok');
-      if(item.chat){ const n = $('#pxNext'); n.classList.remove('next'); n.innerHTML = '<b>' + esc(item.quemProximo || '') + '</b>' + esc(item.opcoes[k]) + '<i class="tm">' + (S.cur.horaProx || '') + ((item.ladoProximo || 'a') === 'b' ? ' ✓✓' : '') + '</i>'; }
+      if(item.chat){ const n = $('#pxNext'); n.classList.remove('next'); n.innerHTML = '<b>' + esc(item.quemProximo || '') + '</b>' + esc(item.opcoes[k]) + '<i class="tm">' + (S.cur.horaProx || '') + ((item.ladoProximo || 'a') === 'b' ? ' ' + I('done_all', 'tick') : '') + '</i>'; }
       document.querySelectorAll('.px-opt').forEach(el => el.disabled = true);
       fecharItem(S.cur.tentativas.length === 1 ? 'ok' : 'warn');
       banner('ok', 'Você acertou!'); botoesFim(item, true);
@@ -272,7 +274,7 @@
       '<div class="px-slots" id="pxSlots"></div><div class="px-bank" id="pxBank"></div>';
     desenharMontar();
     on('validar', validarMontar);
-    acoes([{ id: 'validar', ic: '✓', label: 'Validar', cls: 'primary', disabled: true }]);
+    acoes([{ id: 'validar', ic: I('check'), label: 'Validar', cls: 'primary', disabled: true }]);
   }
   function desenharMontar(cores){
     const item = S.cfg.itens[S.i];
@@ -380,10 +382,10 @@
     item.completa = item.frase;
     const main = $('#pxMain');
     main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Escute e grave') + '</p>' +
-      '<div class="px-scene"><div class="card">' + esc(item.emoji || '🗣️') + '</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>' +
+      '<div class="px-scene"><div class="card">' + I('record_voice_over') + '</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>' +
       '<div class="px-words" id="pxWords"></div>' +
       '<div id="pxGauge"></div><div class="px-heard" id="pxHeard"></div>' +
-      (item.nota ? '<p class="px-note">💡 ' + esc(item.nota) + '</p>' : '') +
+      (item.nota ? '<p class="px-note">' + I('lightbulb') + esc(item.nota) + '</p>' : '') +
       '<div id="pxCompare"></div>' +
       (SR ? '' : '<div class="px-ctx" style="margin-top:16px;">Seu navegador não reconhece a voz. Abra esta atividade no <b>Google Chrome</b> ou no <b>Edge</b> para gravar. Você pode ouvir e pular as frases.</div>');
     desenharFrase(item, null, false);
@@ -399,14 +401,14 @@
     on('traduzir', () => modalTraducao(item.frase, item.traducao));
     on('avancar', avancar);
     if(depois === 'ok'){
-      acoes([{ id: 'traduzir', ic: '文A', label: 'Traduzir' }, { id: 'gravar', ic: '🎙', label: 'Regravar' }, { id: 'avancar', ic: '→', label: 'Avançar', cls: 'primary' }]);
+      acoes([{ id: 'traduzir', ic: I('translate'), label: 'Traduzir' }, { id: 'gravar', ic: I('mic'), label: 'Regravar' }, { id: 'avancar', ic: I('arrow_forward'), label: 'Avançar', cls: 'primary' }]);
     } else if(depois === 'retry'){
-      const l = [{ id: 'traduzir', ic: '文A', label: 'Traduzir' }, { id: 'gravar', ic: '🎙', label: 'Regravar', cls: 'rec' }];
-      if(S.cur.falhas >= MAX_FALA_TRIES) l.push({ id: 'pular', ic: '⏭', label: 'Pular' });
+      const l = [{ id: 'traduzir', ic: I('translate'), label: 'Traduzir' }, { id: 'gravar', ic: I('mic'), label: 'Regravar', cls: 'rec' }];
+      if(S.cur.falhas >= MAX_FALA_TRIES) l.push({ id: 'pular', ic: I('skip_next'), label: 'Pular' });
       acoes(l);
     } else {
-      const l = [{ id: 'ouvir', ic: '▶', label: 'Escutar' }, { id: 'gravar', ic: '🎙', label: 'Gravar', cls: 'rec', disabled: !SR }, { id: 'leitura', ic: '👁', label: 'Leitura' }];
-      if(!SR) l.push({ id: 'pular', ic: '⏭', label: 'Pular' });
+      const l = [{ id: 'ouvir', ic: I('play_arrow'), label: 'Escutar' }, { id: 'gravar', ic: I('mic'), label: 'Gravar', cls: 'rec', disabled: !SR }, { id: 'leitura', ic: I('visibility'), label: 'Leitura' }];
+      if(!SR) l.push({ id: 'pular', ic: I('skip_next'), label: 'Pular' });
       acoes(l);
     }
   }
@@ -418,7 +420,7 @@
     if(btn){
       btn.classList.add('rec', 'on');
       const i = btn.querySelector('.i'), t = btn.querySelector('.tag');
-      if(i) i.textContent = '■'; if(t) t.textContent = 'Parar';
+      if(i) i.innerHTML = I('stop'); if(t) t.textContent = 'Parar';
     }
     $('#pxHeard').textContent = 'Fale agora…';
     $('#pxMain').classList.add('gravando');
@@ -473,8 +475,8 @@
   function compare(item){
     if(!S.cur.audioUrl) return;
     $('#pxCompare').innerHTML = '<div class="px-compare-t">Compare sua pronúncia</div>' +
-      '<div class="px-compare"><button class="box eu" onclick="DysePratica._playEu()"><span>▶</span>Minha voz</button>' +
-      '<button class="box orig" onclick="DysePratica._playOrig()"><span>▶</span>Original</button></div>';
+      '<div class="px-compare"><button class="box eu" onclick="DysePratica._playEu()">' + I('play_arrow') + 'Minha voz</button>' +
+      '<button class="box orig" onclick="DysePratica._playOrig()">' + I('play_arrow') + 'Original</button></div>';
   }
 
   /* ---------- modais ---------- */
@@ -492,17 +494,17 @@
   function modalIntro(){
     const at = S.info.atividade;
     const m = modal(
-      '<div class="cv-side"><span class="cv-mark">dyse</span><span class="cv-ic">' + (at.microfone ? '🎙️' : '✏️') + '</span>' +
+      '<div class="cv-side"><span class="cv-mark">dyse</span><span class="cv-ic">' + I(at.microfone ? 'mic' : 'edit_note') + '</span>' +
         '<span class="cv-lv">' + esc(S.info.nivelNome) + '<br>Aula ' + String(S.cfg.aula).padStart(2, '0') + '</span></div>' +
       '<div class="cv-body">' +
         '<div class="px-m-kicker">' + esc(at.tipo) + '</div>' +
         '<h2>' + esc(at.titulo) + '</h2>' +
         '<div class="meta">' + esc(S.info.aulaInfo.titulo) + '</div>' +
-        '<div class="cv-chips"><span>⏱ ' + esc(at.minutos) + ' min</span><span>📋 ' + S.cfg.itens.length + ' questões</span>' +
-          (at.microfone ? '<span>🎙 Usa microfone</span>' : '') +
-          (S.refazendo ? '<span style="background:#FDF0DD; color:#CE8613;">↻ Treino · não soma no ranking</span>' : '') + '</div>' +
+        '<div class="cv-chips"><span>' + I('schedule') + esc(at.minutos) + ' min</span><span>' + I('checklist') + S.cfg.itens.length + ' questões</span>' +
+          (at.microfone ? '<span>' + I('mic') + 'Usa microfone</span>' : '') +
+          (S.refazendo ? '<span style="background:#FDF0DD; color:#CE8613;">' + I('replay') + 'Treino · não soma no ranking</span>' : '') + '</div>' +
         '<div class="cv-grid"><div><small>Você vai treinar</small><b>' + esc(at.treina) + '</b></div><div class="pts"><small>Ganhe até</small><b>' + dysePraticaPontosMax(S.cfg.itens.length) + ' pts</b></div></div>' +
-        '<button class="px-btn">Começar →</button>' +
+        '<button class="px-btn">Começar ' + I('arrow_forward') + '</button>' +
       '</div>', 'cover');
     m.querySelector('button').onclick = () => { m.remove(); renderItem(); };
   }
@@ -557,10 +559,10 @@
       const url = dysePraticaUrl(prox.nivel, prox.aula, prox.num);
       return '<div class="px-next"><div><small>Próxima atividade liberada</small><b>' + esc(prox.titulo) + '</b>' +
           '<span id="pxNextCount">Abrindo em <i>10</i>s…</span></div>' +
-          '<a class="px-btn" href="' + url + '" style="width:auto; margin:0; padding:12px 22px; text-decoration:none;">Ir agora →</a></div>' +
+          '<a class="px-btn" href="' + url + '" style="width:auto; margin:0; padding:12px 22px; text-decoration:none;">Ir agora ' + I('arrow_forward') + '</a></div>' +
         '<button class="px-btn ghost" onclick="DysePratica._ficar(\'' + voltar + '\')">Voltar para Atividades</button>';
     }
-    return '<div class="px-next done"><div><b>Você fez todas as atividades liberadas! 🎉</b><small>Quando a professora liberar novas, elas aparecem no seu menu Atividades.</small></div></div>' +
+    return '<div class="px-next done"><div><b>Você fez todas as atividades liberadas!</b><small>Quando a professora liberar novas, elas aparecem no seu menu Atividades.</small></div></div>' +
       '<button class="px-btn" onclick="location.href=\'' + voltar + '\'">Voltar para Atividades</button>';
   }
 
@@ -573,7 +575,7 @@
 
     const linhas = itens.map((it, k) => {
       const r = S.res[k] || { status: 'skip', tentativas: [] };
-      const ic = r.status === 'ok' ? '✅' : r.status === 'warn' ? '🟠' : r.status === 'skip' ? '⏭' : '❌';
+      const ic = r.status === 'ok' ? 'certo de primeira' : r.status === 'warn' ? 'certo na 2ª tentativa' : r.status === 'skip' ? 'pulou' : 'errou';
       return (k + 1) + '. ' + it.completa + ' — ' + ic + (r.status === 'ok' ? '' : ' (tentativas: ' + (r.tentativas.join(' | ') || 'nenhuma') + ')');
     });
     const resumo = 'Acertos de primeira: ' + p.primeira + '/' + n + ' · Acertos totais: ' + acertos + '/' + n + ' · Pontos DYSE: ' + p.total + '/' + p.max;
@@ -597,17 +599,17 @@
     const prec = p.primeira / n;
     $('#pxMain').outerHTML = '<div class="px-result" id="pxMain">' + salvo +
       '<div class="px-res-hero"><span class="px-mark">dyse</span><div class="ring" style="--p:' + pctAcerto + '"><b>' + acertos + '/' + n + '</b><small>corretas</small></div>' +
-        '<h2>' + (p.perfeita ? 'Perfeita! 🏆' : prec >= 0.7 ? 'Mandou bem!' : 'Bom treino!') + '</h2><p>' + esc(S.info.atividade.titulo) + ' · Aula ' + String(S.cfg.aula).padStart(2, '0') + '</p></div>' +
+        '<h2>' + (p.perfeita ? 'Perfeita!' : prec >= 0.7 ? 'Mandou bem!' : 'Bom treino!') + '</h2><p>' + esc(S.info.atividade.titulo) + ' · Aula ' + String(S.cfg.aula).padStart(2, '0') + '</p></div>' +
       '<div class="px-res-total" style="margin-bottom:16px;"><span>' + (S.refazendo ? 'Pontos do treino' : 'Pontos DYSE') +
         '<small style="display:block; font-size:.72rem; opacity:.7; font-weight:500;">de ' + p.max + ' possíveis · ' +
         (S.refazendo ? 'no ranking continua valendo a 1ª vez' + (S.pontosOriginais != null ? ' (' + S.pontosOriginais + ' pts)' : '') : 'contam no Ranking') +
         '</small></span><b>' + p.total + ' pts</b></div>' +
       linksFim(prox) +
       '<div class="px-res-card" style="margin-top:16px;"><h3>Como você pontuou</h3>' +
-        '<div class="px-res-line"><div class="ic">🎯</div><div class="txt">Acertos de primeira<small>' + p.primeira + ' × ' + DYSE_PONTOS.primeira + ' pts</small></div><div class="pts">+' + p.det.primeira + '</div></div>' +
-        '<div class="px-res-line"><div class="ic">🔁</div><div class="txt">Acertos na 2ª tentativa<small>' + p.segunda + ' × ' + DYSE_PONTOS.segunda + ' pts</small></div><div class="pts">+' + p.det.segunda + '</div></div>' +
-        '<div class="px-res-line"><div class="ic">🔥</div><div class="txt">Combo DYSE<small>' + p.combos + ' combo' + (p.combos === 1 ? '' : 's') + ' de ' + DYSE_PONTOS.comboACada + ' acertos seguidos</small></div><div class="pts">+' + p.det.combo + '</div></div>' +
-        '<div class="px-res-line"><div class="ic">🏆</div><div class="txt">Atividade perfeita<small>' + (p.perfeita ? 'Tudo de primeira!' : 'Acerte tudo de primeira pra ganhar') + '</small></div><div class="pts">+' + p.det.perfeita + '</div></div>' +
+        '<div class="px-res-line"><div class="ic">' + I('target') + '</div><div class="txt">Acertos de primeira<small>' + p.primeira + ' × ' + DYSE_PONTOS.primeira + ' pts</small></div><div class="pts">+' + p.det.primeira + '</div></div>' +
+        '<div class="px-res-line"><div class="ic">' + I('replay') + '</div><div class="txt">Acertos na 2ª tentativa<small>' + p.segunda + ' × ' + DYSE_PONTOS.segunda + ' pts</small></div><div class="pts">+' + p.det.segunda + '</div></div>' +
+        '<div class="px-res-line"><div class="ic">' + I('local_fire_department') + '</div><div class="txt">Combo DYSE<small>' + p.combos + ' combo' + (p.combos === 1 ? '' : 's') + ' de ' + DYSE_PONTOS.comboACada + ' acertos seguidos</small></div><div class="pts">+' + p.det.combo + '</div></div>' +
+        '<div class="px-res-line"><div class="ic">' + I('emoji_events') + '</div><div class="txt">Atividade perfeita<small>' + (p.perfeita ? 'Tudo de primeira!' : 'Acerte tudo de primeira pra ganhar') + '</small></div><div class="pts">+' + p.det.perfeita + '</div></div>' +
       '</div>' +
       '<div class="px-res-card"><h3>Seu relatório: ' + acertos + ' de ' + n + ' corretas</h3><ul class="px-review">' +
         itens.map((it, k) => {
@@ -615,7 +617,7 @@
           const st = r.status;
           const sub = st === 'ok' ? 'Acertou de primeira' : st === 'warn' ? 'Acertou na 2ª tentativa' + (r.tentativas.length > 1 ? ' · antes: ' + r.tentativas.slice(0, -1).join(' | ') : '')
             : st === 'skip' ? 'Pulada' : 'Sua resposta: ' + r.tentativas.join(' | ');
-          return '<li><span class="st ' + st + '">' + (st === 'ok' ? '✓' : st === 'warn' ? '!' : st === 'skip' ? '–' : '✕') + '</span><div>' + esc(it.completa) + '<small>' + esc(sub) + '</small></div></li>';
+          return '<li><span class="st ' + st + '">' + (st === 'ok' ? I('check') : st === 'warn' ? I('priority_high') : st === 'skip' ? I('remove') : I('close')) + '</span><div>' + esc(it.completa) + '<small>' + esc(sub) + '</small></div></li>';
         }).join('') + '</ul></div>' +
     '</div>';
     window.scrollTo(0, 0);
@@ -645,7 +647,7 @@
         '<div class="px-title"><b>' + esc(S.info.atividade.titulo) + '</b><small>' + esc(S.info.nivelNome) + ' · Aula ' + String(S.cfg.aula).padStart(2, '0') + '</small></div>' +
         '<button class="px-close" onclick="location.href=\'/area-do-aluno.html#praticas\'">Sair</button></div></header>' +
       '<div class="px-result">' +
-        '<div class="px-res-hero"><span class="px-mark">dyse</span><div class="ring" style="--p:' + (m.total ? Math.round((m.acertos / m.total) * 100) : 100) + '"><b>' + (m.total ? m.acertos + '/' + m.total : '✓') + '</b><small>corretas</small></div>' +
+        '<div class="px-res-hero"><span class="px-mark">dyse</span><div class="ring" style="--p:' + (m.total ? Math.round((m.acertos / m.total) * 100) : 100) + '"><b>' + (m.total ? m.acertos + '/' + m.total : I('check')) + '</b><small>corretas</small></div>' +
           '<h2>Atividade concluída</h2><p>Você já fez esta atividade' + (m.pontos != null ? ' e ganhou <b>' + m.pontos + ' pts</b>' : '') + '. Pra refazer, peça à sua professora.</p></div>' +
         linksFim(prox) +
       '</div>';

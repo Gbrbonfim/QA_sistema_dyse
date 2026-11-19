@@ -251,7 +251,7 @@ async function dyseRenderAuthBar(containerId){
   if(!links.length || alsoStudent) links.push('<a href="/area-do-aluno.html" class="dyse-auth-link">Painel do aluno</a>');
 
   el.innerHTML =
-    '<span class="dyse-auth-name">👤 ' + escapeHtml(name) + '</span>' +
+    '<span class="dyse-auth-name">' + escapeHtml(name) + '</span>' +
     links.join('') +
     '<button type="button" class="dyse-auth-logout" onclick="dyseLogout()">Sair</button>';
 }
@@ -598,7 +598,9 @@ async function dyseRenderRankingAtividades(container){
   }
   const top = data.filter(r => r.posicao <= 5);
   const eu = data.find(r => r.eu);
-  const medalha = p => p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : p + 'º';
+  const medalha = p => p <= 3
+    ? '<span class="msr" aria-hidden="true" style="font-size:30px; font-variation-settings:\'FILL\' 1,\'wght\' 500,\'GRAD\' 0,\'opsz\' 40; color:' + (p === 1 ? '#E0A100' : p === 2 ? '#9AA3AD' : '#B8733D') + ';">workspace_premium</span>'
+    : p + 'º';
   const linhas = top.length ? top.map(r =>
     '<div class="dy-rank-row' + (r.posicao <= 3 ? ' podio p' + r.posicao : '') + (r.eu ? ' eu' : '') + '">' +
       '<span class="pos">' + medalha(r.posicao) + '</span>' +
@@ -609,7 +611,7 @@ async function dyseRenderRankingAtividades(container){
     : '<p style="opacity:.7; padding:10px 4px;">Ninguém pontuou ainda. As primeiras atividades concluídas aparecem aqui.</p>';
   const minha = eu && eu.posicao > 5
     ? '<div class="dy-rank-me">Sua posição: <b>' + eu.posicao + 'º</b> com <b>' + eu.pontos + ' pts</b> — continue fazendo as atividades pra subir!</div>'
-    : (eu ? '<div class="dy-rank-me top">Você está no top 5! 🎉</div>' : '');
+    : (eu ? '<div class="dy-rank-me top">Você está no top 5!</div>' : '');
   container.innerHTML =
     '<style>' +
       '.dy-rank{max-width:640px;}' +

@@ -548,6 +548,8 @@ h1.title, .card-title, .dash-card .n, .level-group-title, .course-folder-name,
 }
 
 </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block">
+<style>.msr{font-family:'Material Symbols Rounded'; font-weight:500; font-style:normal; font-size:1.25em; line-height:1; display:inline-block; vertical-align:-.22em; white-space:nowrap; letter-spacing:normal; text-transform:none; -webkit-font-smoothing:antialiased; font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24; user-select:none;}</style>
 </head>
 <body>
 <div id="dyseAuthGate">
@@ -588,7 +590,7 @@ h1.title, .card-title, .dash-card .n, .level-group-title, .course-folder-name,
     </nav>
     <div class="sidebar-footer">
       <a class="sidebar-help" href="https://wa.me/554187207973" target="_blank" rel="noopener">
-        <span class="sidebar-help-icon">🎧</span>
+        <span class="sidebar-help-icon"><span class="msr" aria-hidden="true">support_agent</span></span>
         <span><b>Precisa de ajuda?</b>Fale com o suporte <span class="arrow">→</span></span>
       </a>
       <div class="sidebar-user" id="sidebarUser"></div>
@@ -690,14 +692,14 @@ h1.title, .card-title, .dash-card .n, .level-group-title, .course-folder-name,
 
         if(!isPublished){
           return '<div class="dash-card locked">' +
-            '<span class="dash-badge locked">🔒 Em breve</span>' +
+            '<span class="dash-badge locked">Em breve</span>' +
             '<div class="n">' + String(a.num).padStart(2,'0') + '</div>' +
             '<div class="t">' + a.theme + '</div>' +
             '<div class="l">' + a.level + '</div>' +
           '</div>';
         }
         const badge = done
-          ? '<span class="dash-badge done">✓ Enviada</span>'
+          ? '<span class="dash-badge done">Enviada</span>'
           : '<span class="dash-badge pending">Pendente</span>';
         return '<a class="dash-card" href="/atividades/' + COURSE.id + '/atividade_' + a.num + '.html">' +
           badge +

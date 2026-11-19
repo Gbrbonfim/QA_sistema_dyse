@@ -9,6 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/atividades/a1/estilo.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block">
+<style>.msr{font-family:'Material Symbols Rounded'; font-weight:500; font-style:normal; font-size:1.25em; line-height:1; display:inline-block; vertical-align:-.22em; white-space:nowrap; letter-spacing:normal; text-transform:none; -webkit-font-smoothing:antialiased; font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24; user-select:none;}</style>
 </head>
 <body>
 <div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
@@ -46,7 +48,7 @@
     </nav>
     <div class="sidebar-footer">
       <a class="sidebar-help" href="https://wa.me/554187207973" target="_blank" rel="noopener">
-        <span class="sidebar-help-icon">🎧</span>
+        <span class="sidebar-help-icon"><span class="msr" aria-hidden="true">support_agent</span></span>
         <span><b>Precisa de ajuda?</b>Fale com o suporte <span class="arrow">→</span></span>
       </a>
       <div class="sidebar-user" id="sidebarUser"></div>
@@ -190,7 +192,7 @@ function renderChrome(session, profile){
         : '<div class="dash-card" style="opacity:.5; cursor:default;">' +
             '<div class="n">' + String(a.num).padStart(2, '0') + '</div>' +
             '<div class="t">' + a.titulo + '</div>' +
-            '<div class="l">🔒 Ainda não liberada</div>' +
+            '<div class="l">Ainda não liberada</div>' +
           '</div>';
     }).join('') + '</div>';
   };
