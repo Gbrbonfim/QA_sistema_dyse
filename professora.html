@@ -833,6 +833,10 @@ body.dyse-modal-open{overflow:hidden;}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
         <span>Resultados</span>
       </button>
+      <button type="button" class="sidebar-item" id="tabRanking" onclick="showPanel('ranking')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+        <span>Ranking atividades</span>
+      </button>
       <button type="button" class="sidebar-item" id="tabDisponibilidade" onclick="showPanel('disponibilidade')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span>Disponibilidade</span>
@@ -1087,6 +1091,8 @@ body.dyse-modal-open{overflow:hidden;}
 
   <!-- ---------- CALENDÁRIO LETIVO ---------- -->
   <div id="panelCalendario" style="display:none;"><div id="calendarioWrap"></div></div>
+
+  <div id="panelRanking" style="display:none;"><div id="rankingWrap"></div></div>
 
   <div id="panelDisponibilidade" style="display:none;">
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
@@ -1495,6 +1501,10 @@ body.dyse-modal-open{overflow:hidden;}
     calendario:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>',
       title:'Calendário Letivo', subtitle:'Feriados, recessos, reposições e o início de cada semestre.'
+    },
+    ranking:{
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
+      title:'Ranking atividades', subtitle:'As maiores pontuações nas atividades. Sem nomes — só os pontos.'
     }
   };
 
@@ -1516,7 +1526,10 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('panelReportCards').style.display = which==='reportcards' ? 'block' : 'none';
     document.getElementById('panelDisponibilidade').style.display = which==='disponibilidade' ? 'block' : 'none';
     document.getElementById('panelCalendario').style.display = which==='calendario' ? 'block' : 'none';
+    document.getElementById('tabRanking').classList.toggle('active', which==='ranking');
+    document.getElementById('panelRanking').style.display = which==='ranking' ? 'block' : 'none';
     if(which === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: false });
+    if(which === 'ranking') dyseRenderRankingAtividades(document.getElementById('rankingWrap'));
     const meta = PANEL_META[which];
     document.getElementById('pageHeaderIcon').innerHTML = meta.icon;
     document.getElementById('pageHeaderTitle').textContent = meta.title;
@@ -2894,7 +2907,7 @@ body.dyse-modal-open{overflow:hidden;}
       return;
     }
     box.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
-    const [liberadas, resultados] = await Promise.all([dysePraticasLiberadasDoAluno(alunoId), dyseResultadosPraticasDoAluno(alunoId)]);
+    const [liberadas, resultados, refazer] = await Promise.all([dysePraticasLiberadasDoAluno(alunoId), dyseResultadosPraticasDoAluno(alunoId), dysePraticasRefazerDoAluno(alunoId)]);
     const resMap = {}; resultados.forEach(r => resMap[r.course + ':' + r.aula + ':' + r.activity_num] = r);
     box.innerHTML = slugs.map(slug => {
       const nivel = DYSE_PRATICAS[slug];
@@ -2915,10 +2928,19 @@ body.dyse-modal-open{overflow:hidden;}
               (r.meta.acertos_primeira != null ? r.meta.acertos_primeira + ' de primeira · ' : '') + (r.meta.pontos || 0) + ' pts · ' +
               new Date(r.updated_at).toLocaleDateString('pt-BR') + '</summary><div style="margin-top:6px;">' + itens + '</div></details>';
           }
+          // O aluno não refaz sozinho: a professora libera UMA nova tentativa por vez.
+          let refazerBtn = '';
+          if(r && r.status === 'concluida'){
+            const jaLiberado = refazer[chave] && new Date(refazer[chave]) > new Date(r.updated_at);
+            refazerBtn = jaLiberado
+              ? '<span style="font-size:.74rem; font-weight:600; color:var(--gamboge-dark, #CE8613);">↻ Refazer liberado</span>'
+              : '<button type="button" class="btn btn-ghost" style="padding:6px 12px; font-size:.74rem;" onclick="liberarRefazerPratica(\'' + nivel.course + '\', ' + aula.aula + ', ' + at.num + ', this)">↻ Liberar refazer</button>';
+          }
           return '<div class="manage-row">' +
             '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) +
               ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span><div>' + res + '</div></div>' +
             '<div class="manage-row-actions">' +
+              refazerBtn +
               '<a class="btn btn-preview" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '" target="_blank" rel="noopener">👁 Visualizar</a>' +
               '<label class="dyse-toggle"><input type="checkbox" class="pratica-toggle" data-course="' + nivel.course + '" data-aula="' + aula.aula + '" data-num="' + at.num + '" ' +
                 (liberadas.has(chave) ? 'checked' : '') + ' onchange="togglePraticaAluno(this)"><span class="slider"></span></label>' +
@@ -2933,6 +2955,19 @@ body.dyse-modal-open{overflow:hidden;}
           '<div class="pratica-aula-rows">' + rows + '</div></div>';
       }).join('');
     }).join('');
+  }
+
+  async function liberarRefazerPratica(course, aula, num, btn){
+    const alunoId = document.getElementById('praticaAlunoSel').value;
+    if(!alunoId) return;
+    btn.disabled = true;
+    const { error } = await dyseLiberarRefazerPratica(alunoId, course, aula, num);
+    if(error){
+      btn.disabled = false;
+      alert('Não foi possível liberar: ' + error.message + (/refazer_liberado_em/.test(error.message) ? '\n\nFalta rodar a seção 38 do supabase-schema.sql no Supabase.' : ''));
+      return;
+    }
+    renderPraticasAluno();
   }
 
   async function togglePraticaAluno(input){
@@ -3252,7 +3287,7 @@ body.dyse-modal-open{overflow:hidden;}
     PROFESSORA_PROFILE = profile;
     renderProfessoraChrome(session, profile);
     const hashPanel = location.hash.slice(1);
-    showPanel(['results','manage','material','financeiro','turmas','reportcards','disponibilidade','calendario'].includes(hashPanel) ? hashPanel : 'turmas');
+    showPanel(['results','manage','material','financeiro','turmas','reportcards','disponibilidade','calendario','ranking'].includes(hashPanel) ? hashPanel : 'turmas');
 
     // As duas buscas são independentes — dispara junto em vez de esperar uma
     // pra só então começar a outra (a segunda nem depende da primeira).

@@ -4475,3 +4475,83 @@ alter table public.materias add column if not exists sem_registro boolean not nu
 --     professor da turma (escrita) e pro aluno da turma (leitura).
 -- ======================================================================
 alter table public.turma_aula_material add column if not exists ministrada_em date;
+
+-- ======================================================================
+-- 38) ATIVIDADES — refazer só com liberação da professora + Ranking
+--     a) aluno_atividades_liberadas.refazer_liberado_em: a professora libera
+--        o aluno a refazer UMA atividade já concluída. Vale enquanto essa data
+--        for mais recente que o resultado salvo; ao refazer, o resultado fica
+--        mais novo e a liberação se consome sozinha.
+--     b) Trava no banco: aluno não regrava uma atividade "ativ-*" já concluída
+--        sem essa liberação (professora/gestão continuam sem trava).
+--     c) ranking_atividades(): soma dos pontos DYSE (meta.pontos) das
+--        atividades concluídas, por aluno. Todos veem a pontuação do top 5;
+--        o NOME só vem pra gestão (is_admin). Quem chama recebe também a
+--        própria linha (posição) se estiver fora do top 5.
+-- ======================================================================
+alter table public.aluno_atividades_liberadas add column if not exists refazer_liberado_em timestamptz;
+
+create or replace function public.enforce_activity_published()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if public.is_teacher() or public.is_admin() then
+    return new;
+  end if;
+  if new.course like 'ativ-%' then
+    if not exists (
+      select 1 from public.aluno_atividades_liberadas l
+      where l.aluno_id = new.user_id and l.course = new.course and l.aula = new.aula
+        and l.activity_num = new.activity_num and l.liberada = true
+    ) then
+      raise exception 'Atividade não liberada para este aluno.';
+    end if;
+    if TG_OP = 'UPDATE' and old.status = 'concluida' and not exists (
+      select 1 from public.aluno_atividades_liberadas l
+      where l.aluno_id = new.user_id and l.course = new.course and l.aula = new.aula
+        and l.activity_num = new.activity_num
+        and l.refazer_liberado_em is not null and l.refazer_liberado_em > old.updated_at
+    ) then
+      raise exception 'Atividade já concluída. Peça à professora para liberar refazer.';
+    end if;
+    return new;
+  end if;
+  if not exists (
+    select 1 from public.published_activities pa
+    where pa.course = new.course and pa.aula = new.aula
+      and pa.activity_num = new.activity_num and pa.is_published = true
+  ) then
+    raise exception 'Atividade não liberada para este aluno.';
+  end if;
+  return new;
+end;
+$$;
+
+create or replace function public.ranking_atividades()
+returns table(posicao int, pontos int, atividades int, nome text, eu boolean)
+language sql
+stable
+security definer set search_path = public
+as $$
+  with tot as (
+    select r.user_id,
+           sum(case when (r.meta->>'pontos') ~ '^[0-9]+$' then (r.meta->>'pontos')::int else 0 end)::int as pontos,
+           count(*)::int as atividades
+    from public.activity_results r
+    where r.course like 'ativ-%' and r.status = 'concluida'
+    group by r.user_id
+  ), rk as (
+    select user_id, pontos, atividades, (rank() over (order by pontos desc))::int as posicao from tot
+  )
+  select rk.posicao, rk.pontos, rk.atividades,
+         case when public.is_admin() and rk.posicao <= 5 then p.full_name else null end as nome,
+         (rk.user_id = auth.uid()) as eu
+  from rk
+  left join public.profiles p on p.id = rk.user_id
+  where rk.posicao <= 5 or rk.user_id = auth.uid()
+  order by rk.posicao, rk.pontos desc;
+$$;
+
+grant execute on function public.ranking_atividades() to authenticated;

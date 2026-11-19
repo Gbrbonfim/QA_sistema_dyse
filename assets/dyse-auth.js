@@ -538,6 +538,100 @@ async function dyseRequirePraticaLiberada(course, aula, activityNum){
   return true;
 }
 
+/* ---------- Refazer atividade (só com liberação da professora) ----------
+   aluno_atividades_liberadas.refazer_liberado_em (seção 38): o aluno pode
+   refazer uma atividade concluída se essa data for MAIS RECENTE que o
+   resultado salvo (activity_results.updated_at). Ao refazer e salvar, o
+   resultado fica mais novo e o refazer "se consome" sozinho. O banco barra
+   a regravação sem liberação (trigger enforce_activity_published). */
+
+/* Aluno logado: { "course:aula:num": refazer_liberado_em }. */
+async function dyseMinhasPraticasRefazer(){
+  const session = await dyseGetSession();
+  if(!session) return {};
+  const { data, error } = await sb.from('aluno_atividades_liberadas').select('*').eq('aluno_id', session.user.id);
+  const map = {};
+  if(!error && data) data.forEach(r => { if(r.refazer_liberado_em) map[r.course + ':' + r.aula + ':' + r.activity_num] = r.refazer_liberado_em; });
+  return map;
+}
+
+/* [Professora] mesma coisa, de UM aluno. */
+async function dysePraticasRefazerDoAluno(alunoId){
+  const { data, error } = await sb.from('aluno_atividades_liberadas').select('*').eq('aluno_id', alunoId);
+  const map = {};
+  if(!error && data) data.forEach(r => { if(r.refazer_liberado_em) map[r.course + ':' + r.aula + ':' + r.activity_num] = r.refazer_liberado_em; });
+  return map;
+}
+
+/* [Professora] libera o aluno a refazer UMA atividade (uma vez). */
+async function dyseLiberarRefazerPratica(alunoId, course, aula, activityNum){
+  const session = await dyseGetSession();
+  const { error } = await sb.from('aluno_atividades_liberadas').upsert({
+    aluno_id: alunoId, course: course, aula: aula, activity_num: activityNum,
+    liberada: true, refazer_liberado_em: new Date().toISOString(),
+    liberada_por: session ? session.user.id : null, updated_at: new Date().toISOString()
+  }, { onConflict: 'aluno_id,course,aula,activity_num' });
+  return { error };
+}
+
+/* ---------- Ranking de atividades ----------
+   RPC ranking_atividades() (seção 38): soma dos pontos DYSE (meta.pontos)
+   das atividades concluídas, por aluno. Devolve o top 5 + a linha de quem
+   está olhando (se for aluno fora do top 5). O nome só vem preenchido pra
+   gestão (is_admin), e só no top 5 — pra todo o resto, é anônimo. */
+async function dyseRankingAtividades(){
+  const { data, error } = await sb.rpc('ranking_atividades');
+  return { data: data || [], error };
+}
+
+/* Monta o ranking dentro de "container" — mesma tela no painel do aluno,
+   da professora e da gestão. */
+async function dyseRenderRankingAtividades(container){
+  if(!container) return;
+  container.innerHTML = '<p style="opacity:.6;">Carregando ranking...</p>';
+  const { data, error } = await dyseRankingAtividades();
+  const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
+  if(error){
+    container.innerHTML = '<p style="opacity:.75;">Não foi possível carregar o ranking agora.' +
+      (/ranking_atividades/.test(error.message || '') ? ' (Falta rodar a seção 38 do supabase-schema.sql no Supabase.)' : '') + '</p>';
+    return;
+  }
+  const top = data.filter(r => r.posicao <= 5);
+  const eu = data.find(r => r.eu);
+  const medalha = p => p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : p + 'º';
+  const linhas = top.length ? top.map(r =>
+    '<div class="dy-rank-row' + (r.posicao <= 3 ? ' podio p' + r.posicao : '') + (r.eu ? ' eu' : '') + '">' +
+      '<span class="pos">' + medalha(r.posicao) + '</span>' +
+      '<span class="who">' + (r.nome ? esc(r.nome) : (r.eu ? 'Você' : 'Aluno(a) ' + r.posicao + 'º lugar')) +
+        '<small>' + r.atividades + ' atividade' + (r.atividades === 1 ? '' : 's') + ' concluída' + (r.atividades === 1 ? '' : 's') + '</small></span>' +
+      '<span class="pts">' + r.pontos + ' <small>pts</small></span>' +
+    '</div>').join('')
+    : '<p style="opacity:.7; padding:10px 4px;">Ninguém pontuou ainda. As primeiras atividades concluídas aparecem aqui.</p>';
+  const minha = eu && eu.posicao > 5
+    ? '<div class="dy-rank-me">Sua posição: <b>' + eu.posicao + 'º</b> com <b>' + eu.pontos + ' pts</b> — continue fazendo as atividades pra subir!</div>'
+    : (eu ? '<div class="dy-rank-me top">Você está no top 5! 🎉</div>' : '');
+  container.innerHTML =
+    '<style>' +
+      '.dy-rank{max-width:640px;}' +
+      '.dy-rank-card{background:#fff; border-radius:22px; box-shadow:0 12px 32px rgba(58,29,16,.10); padding:10px 14px; margin-bottom:14px;}' +
+      '.dy-rank-row{display:flex; align-items:center; gap:14px; padding:12px 8px; border-bottom:1px dashed #F1DCC6;}' +
+      '.dy-rank-row:last-child{border-bottom:none;}' +
+      '.dy-rank-row .pos{width:42px; height:42px; border-radius:14px; background:#FFF3E6; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1rem; color:#562915; flex:none;}' +
+      '.dy-rank-row.podio .pos{font-size:1.5rem; background:transparent;}' +
+      '.dy-rank-row.p1{background:linear-gradient(90deg,#FDF0DD,transparent); border-radius:14px;}' +
+      '.dy-rank-row .who{flex:1; font-weight:600; color:#3A1D10; line-height:1.25;}' +
+      '.dy-rank-row .who small{display:block; font-weight:500; font-size:.74rem; color:#562915; opacity:.7;}' +
+      '.dy-rank-row .pts{font-weight:800; font-size:1.2rem; color:#CE8613;} .dy-rank-row .pts small{font-size:.7rem; font-weight:600;}' +
+      '.dy-rank-row.eu{box-shadow:inset 0 0 0 2px #D03B55; border-radius:14px;}' +
+      '.dy-rank-me{background:#3A1D10; color:#FFF3E6; border-radius:999px; padding:12px 18px; font-size:.88rem;} .dy-rank-me b{color:#F0A224;}' +
+      '.dy-rank-me.top{background:#E3F4EA; color:#2E8B57;}' +
+      '.dy-rank-how{font-size:.8rem; color:#562915; opacity:.8; margin-top:14px; line-height:1.6;}' +
+    '</style>' +
+    '<div class="dy-rank"><div class="dy-rank-card">' + linhas + '</div>' + minha +
+      '<p class="dy-rank-how"><b>Como pontua:</b> acerto de primeira 10 pts · acerto na 2ª tentativa 5 pts · Combo DYSE (3 acertos seguidos de primeira) +5 · atividade perfeita +20. ' +
+      (top.some(r => r.nome) ? 'Os nomes do top 5 aparecem só pra gestão — alunos e professores veem só a pontuação.' : 'Os nomes não aparecem — só a pontuação.') + '</p></div>';
+}
+
 /* ======================================================================
    GESTÃO — turmas, matérias e permissões (usado por /gestao.html e,
    pra leitura, também por /professora.html e /area-do-aluno.html)

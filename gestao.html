@@ -824,6 +824,10 @@ body.dyse-modal-open{overflow:hidden;}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>
         <span>Calendário Letivo</span>
       </button>
+      <button type="button" class="sidebar-item" id="tabRanking" onclick="showPanel('ranking')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+        <span>Ranking atividades</span>
+      </button>
     </nav>
     <div class="sidebar-footer">
       <a class="sidebar-help" href="https://wa.me/554187207973" target="_blank" rel="noopener">
@@ -1035,6 +1039,9 @@ body.dyse-modal-open{overflow:hidden;}
   <!-- ---------- FINANCEIRO ---------- -->
   <!-- ---------- CALENDÁRIO LETIVO ---------- -->
   <div id="panelCalendario" style="display:none;"><div id="calendarioWrap"></div></div>
+
+  <!-- ---------- RANKING DE ATIVIDADES ---------- -->
+  <div id="panelRanking" style="display:none;"><div id="rankingWrap"></div></div>
 
   <div id="panelFinanceiro" style="display:none;">
     <div class="auth-tabs fin-subtabs">
@@ -1594,6 +1601,10 @@ body.dyse-modal-open{overflow:hidden;}
     calendario: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>',
       title: 'Calendário Letivo', subtitle: 'Clique num dia para marcar feriado, recesso, reposição etc. Libere o ano quando quiser que alunos e professores vejam.', action: ''
+    },
+    ranking: {
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
+      title: 'Ranking atividades', subtitle: 'Top 5 de pontos nas atividades. Só a gestão vê os nomes — alunos e professores veem só a pontuação.', action: ''
     }
   };
 
@@ -1603,7 +1614,7 @@ body.dyse-modal-open{overflow:hidden;}
     // fica bloqueada e cai em "alunos".
     if(which === 'financeiro' && !document.body.classList.contains('dyse-can-financeiro')) which = 'alunos';
     if(location.hash.slice(1) !== which) history.replaceState(null, '', '#' + which);
-    ['turmas','materias','alunos','registro','professores','contas','financeiro','calendario'].forEach(p => {
+    ['turmas','materias','alunos','registro','professores','contas','financeiro','calendario','ranking'].forEach(p => {
       document.getElementById('tab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('panel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
     });
@@ -1615,6 +1626,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(which === 'financeiro') showFinPanel('modalidades');
     if(which === 'registro') initRegistroPanel();
     if(which === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: true });
+    if(which === 'ranking') dyseRenderRankingAtividades(document.getElementById('rankingWrap'));
   }
   function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
@@ -6161,7 +6173,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.body.classList.toggle('dyse-can-ver-financeiro', dyseIsAdmin(profile));
     renderGestaoChrome(session, profile);
     const hashPanel = location.hash.slice(1);
-    showPanel(['turmas','materias','alunos','registro','professores','contas','financeiro','calendario'].includes(hashPanel) ? hashPanel : 'turmas');
+    showPanel(['turmas','materias','alunos','registro','professores','contas','financeiro','calendario','ranking'].includes(hashPanel) ? hashPanel : 'turmas');
     await loadAll();
     carregarAvisos();
   })();

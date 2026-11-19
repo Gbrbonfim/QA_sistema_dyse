@@ -914,6 +914,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         <span>Atividades</span>
         <span class="sidebar-badge" data-badge="praticas" hidden></span>
       </a>
+      <a href="#" class="sidebar-item" data-view="ranking" onclick="mostrarView('ranking', event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+        <span>Ranking atividades</span>
+      </a>
       <a href="#" class="sidebar-item" data-view="reportcard" onclick="mostrarView('reportcard', event)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="12" y2="11"/></svg>
         <span>Report Card</span>
@@ -994,6 +998,20 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           </div>
         </div>
         <div id="praticasWrap"><p class="card-instructions" style="opacity:.6;">Carregando...</p></div>
+      </div>
+
+      <!-- ===== Ranking de atividades ===== -->
+      <div id="viewRanking" style="display:none;">
+        <div class="page-header">
+          <div class="page-header-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+          </div>
+          <div class="page-header-text">
+            <h2>Ranking atividades</h2>
+            <p>As maiores pontuações nas atividades da DYSE. Sem nomes — só os pontos.</p>
+          </div>
+        </div>
+        <div id="rankingWrap"></div>
       </div>
 
       <!-- ===== Report Card ===== -->
@@ -1122,7 +1140,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
   const VIEWS = ['atividades', 'reportcard', 'financeiro'];
   function mostrarView(view, ev){
     if(ev) ev.preventDefault();
-    if(VIEWS.indexOf(view) === -1 && view !== 'calendario' && view !== 'praticas') view = 'atividades';
+    if(VIEWS.indexOf(view) === -1 && view !== 'calendario' && view !== 'praticas' && view !== 'ranking') view = 'atividades';
+    document.getElementById('viewRanking').style.display = view === 'ranking' ? 'block' : 'none';
+    if(view === 'ranking') dyseRenderRankingAtividades(document.getElementById('rankingWrap'));
     document.querySelectorAll('.sidebar-item[data-view]').forEach(el =>
       el.classList.toggle('active', el.dataset.view === view));
     document.getElementById('viewAtividades').style.display = view === 'atividades' ? 'block' : 'none';
@@ -1133,7 +1153,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     if(view === 'atividades') voltarCursos();
     else if(view === 'praticas') renderPraticas();
     else if(view === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: false });
-    else marcarVisto(view); // ver a seção = "li as novidades dela"
+    else if(view !== 'ranking') marcarVisto(view); // ver a seção = "li as novidades dela"
     const hash = view === 'atividades' ? '' : '#' + view;
     if(hash !== location.hash) history.replaceState(null, '', hash || location.pathname);
     window.scrollTo(0, 0);
@@ -1315,7 +1335,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       wrap.innerHTML = '<p class="card-instructions">As atividades do seu nível ainda estão sendo preparadas. Assim que ficarem prontas, aparecem aqui.</p>';
       return;
     }
-    const liberadas = await dyseMinhasPraticasLiberadas();
+    const [liberadas, refazer] = await Promise.all([dyseMinhasPraticasLiberadas(), dyseMinhasPraticasRefazer()]);
     pintarBadgePraticas(niveis, liberadas);
     wrap.innerHTML = niveis.map(slug => {
       const nivel = DYSE_PRATICAS[slug];
@@ -1330,15 +1350,20 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           const corpo = '<div class="n">' + ic + ' ' + String(at.num).padStart(2, '0') + '</div>' +
             '<div class="t">' + escapeHtmlLocal(at.titulo) + '</div>' +
             '<div class="l">' + escapeHtmlLocal(at.tipo) + ' · ' + escapeHtmlLocal(at.treina) + '</div>' +
-            '<div class="l">⏱ ' + escapeHtmlLocal(at.minutos) + ' min · até ' + (at.pontos + 70) + ' pts</div>';
+            '<div class="l">⏱ ' + escapeHtmlLocal(at.minutos) + ' min · até ' + dysePraticaPontosMax(at.questoes) + ' pts</div>';
           if(!lib){
             return '<div class="dash-card locked" title="Aguardando a professora liberar"><span class="dash-badge locked">🔒 Bloqueada</span>' + corpo + '</div>';
           }
-          let badge = '<span class="dash-badge pending">Liberada</span>';
-          if(res && res.status === 'concluida' && res.meta && res.meta.total){
-            badge = '<span class="dash-badge done">✓ ' + res.meta.acertos + '/' + res.meta.total + (res.meta.pontos ? ' · ' + res.meta.pontos + ' pts' : '') + '</span>';
+          // Concluída: o aluno não refaz sozinho — só se a professora liberar refazer.
+          if(res && res.status === 'concluida'){
+            const podeRefazer = refazer[chave] && new Date(refazer[chave]) > new Date(res.updated_at);
+            const nota = (res.meta && res.meta.total) ? res.meta.acertos + '/' + res.meta.total + (res.meta.pontos != null ? ' · ' + res.meta.pontos + ' pts' : '') : 'Feita';
+            if(podeRefazer){
+              return '<a class="dash-card" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '"><span class="dash-badge pending">↻ Refazer liberado</span>' + corpo + '</a>';
+            }
+            return '<div class="dash-card" style="cursor:default;" title="Concluída — pra refazer, peça à professora"><span class="dash-badge done">✓ ' + nota + '</span>' + corpo + '</div>';
           }
-          return '<a class="dash-card" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '">' + badge + corpo + '</a>';
+          return '<a class="dash-card" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '"><span class="dash-badge pending">Liberada</span>' + corpo + '</a>';
         }).join('');
         return '<div class="level-group"><div class="level-group-title">' + escapeHtmlLocal(nivel.nome) + ' · Aula ' +
           String(aula.aula).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.titulo) + '</div>' +
