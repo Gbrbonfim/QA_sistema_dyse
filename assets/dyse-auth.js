@@ -3375,6 +3375,89 @@ async function dyseSetCalendarioIntervalo(ano, iniISO, fimISO, tipo, titulo){
 }
 
 /* ======================================================================
+   TROCA DE PAINEL — seletor "Gestão · Professor · Aluno"
+   Pra quem tem mais de um papel. Controle segmentado (Material): o painel
+   em que a pessoa está fica preenchido; os outros são links. Recebe a
+   lista [{ href, active }] montada por cada painel e devolve o HTML ('' se
+   só houver um painel).
+   ====================================================================== */
+const DYSE_PAINEIS = {
+  '/gestao.html':        { label: 'Gestão',    icon: 'admin_panel_settings' },
+  '/professora.html':    { label: 'Professor', icon: 'co_present' },
+  '/area-do-aluno.html': { label: 'Aluno',     icon: 'school' }
+};
+function dyseHtmlTrocaPainel(links){
+  if(!document.getElementById('dyPainelSwitchCss')){
+    const css = document.createElement('style');
+    css.id = 'dyPainelSwitchCss';
+    css.textContent =
+      '.dy-painel-switch{display:inline-flex; align-items:center; gap:2px; padding:4px; background:#fff; border:1px solid #F1E4D6; border-radius:999px; box-shadow:0 2px 10px rgba(58,29,16,.06);}' +
+      '.dy-ps-item{display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:36px; padding:0 14px; border-radius:999px; font-size:.82rem; font-weight:600; color:#562915; text-decoration:none; white-space:nowrap; transition:background .15s, color .15s; -webkit-tap-highlight-color:transparent;}' +
+      '.dy-ps-item .msr{font-size:18px; vertical-align:0;}' +
+      '.dy-ps-item:hover{background:#FFF3E6;}' +
+      '.dy-ps-item.on{background:#D03B55; color:#fff; box-shadow:0 2px 8px rgba(208,59,85,.35); cursor:default;}' +
+      '.dy-ps-item.on .msr{font-variation-settings:\'FILL\' 1;}' +
+      '.dy-ps-item:focus-visible{outline:3px solid rgba(208,59,85,.35); outline-offset:2px;}' +
+      '@media (max-width:900px){.dy-painel-switch{display:flex; width:100%;} .dy-ps-item{flex:1 1 0; min-width:0; min-height:40px; padding:0 8px;}}';
+    document.head.appendChild(css);
+  }
+  if(!links || links.length < 2) return '';
+  return '<div class="dy-painel-switch" role="navigation" aria-label="Trocar de painel">' + links.map(l => {
+    const p = DYSE_PAINEIS[l.href] || { label: l.label || '', icon: 'dashboard' };
+    return '<a href="' + l.href + '" class="dy-ps-item' + (l.active ? ' on' : '') + '"' + (l.active ? ' aria-current="page"' : '') + '>' +
+      '<span class="msr" aria-hidden="true">' + p.icon + '</span><span>' + p.label + '</span></a>';
+  }).join('') + '</div>';
+}
+
+/* ======================================================================
+   SINO DE AVISOS NO CELULAR — sobe pro topo vermelho, ao lado do Sair
+   (no computador continua na barra de cima). Move o próprio elemento, então
+   o painel de avisos e o contador seguem funcionando igual.
+   ====================================================================== */
+(function dyseSinoNoTopoCelular(){
+  function montar(){
+    const sino = document.querySelector('.avisos-wrap');
+    const acoes = document.querySelector('.mob-actions');
+    if(!sino || !acoes) return;
+    const css = document.createElement('style');
+    css.textContent =
+      '.mob-actions .avisos-wrap{display:inline-flex;}' +
+      '.mob-actions .topbar-bell{width:44px; height:44px; border:none !important; background:transparent !important; box-shadow:none !important; color:#fff !important; border-radius:50%;}' +
+      '.mob-actions .topbar-bell:hover, .mob-actions .topbar-bell:active{background:rgba(255,255,255,.16) !important;}' +
+      '.mob-actions .topbar-bell svg{width:22px; height:22px;}' +
+      // TEM AVISO NÃO LIDO: sino em destaque (balança de tempos em tempos,
+      // anel pulsando e contador amarelo) — no topo vermelho e no computador
+      '@keyframes dyseSinoBalanca{0%,84%,100%{transform:rotate(0)}87%{transform:rotate(16deg)}90%{transform:rotate(-14deg)}93%{transform:rotate(10deg)}96%{transform:rotate(-6deg)}}' +
+      '@keyframes dyseSinoAnel{0%{box-shadow:0 0 0 0 rgba(240,162,36,.75)}70%{box-shadow:0 0 0 10px rgba(240,162,36,0)}100%{box-shadow:0 0 0 0 rgba(240,162,36,0)}}' +
+      '.topbar-bell.tem-aviso{position:relative; background:#D03B55 !important; border-color:#D03B55 !important; color:#fff !important; animation:dyseSinoAnel 1.8s ease-out infinite;}' +
+      '.mob-actions .topbar-bell.tem-aviso{background:rgba(255,255,255,.22) !important;}' +
+      '.topbar-bell.tem-aviso svg{animation:dyseSinoBalanca 3.5s ease-in-out infinite; transform-origin:50% 10%;}' +
+      '.topbar-bell.tem-aviso .avisos-badge, .topbar-bell.tem-aviso .topbar-bell-badge{display:flex !important; align-items:center; justify-content:center; top:-3px; right:-3px; min-width:20px; height:20px; padding:0 5px; border-radius:999px; background:#F0A224 !important; color:#3A1D10 !important; font-size:.7rem; font-weight:800; line-height:1; border:2px solid #fff; box-shadow:0 2px 6px rgba(58,29,16,.3);}' +
+      '@media (prefers-reduced-motion:reduce){.topbar-bell.tem-aviso, .topbar-bell.tem-aviso svg{animation:none;}}' +
+      // painel de avisos no celular: largura da tela, logo abaixo do topo
+      '.mob-actions .avisos-panel{position:fixed; top:64px; left:12px; right:12px; width:auto; z-index:200;}' +
+      // barra de cima sem nada (sem seletor de painel e sem sino): some
+      '@media (max-width:900px){.topbar:has(.topbar-links:empty):not(:has(.avisos-wrap)){display:none;}}';
+    document.head.appendChild(css);
+    const marcador = document.createComment('lugar do sino');
+    sino.parentNode.insertBefore(marcador, sino);
+    const mq = window.matchMedia('(max-width:900px)');
+    const aplicar = () => {
+      if(mq.matches){
+        const sair = acoes.lastElementChild;
+        if(sino.parentNode !== acoes) acoes.insertBefore(sino, sair);
+      } else if(sino.parentNode === acoes){
+        marcador.parentNode.insertBefore(sino, marcador.nextSibling);
+      }
+    };
+    aplicar();
+    if(mq.addEventListener) mq.addEventListener('change', aplicar); else if(mq.addListener) mq.addListener(aplicar);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar);
+  else montar();
+})();
+
+/* ======================================================================
    IDIOMA — botão "English / Português" (tradução automática do Google)
    Só nos painéis com menu lateral (aluno, professor, gestão): as páginas
    de exercício já são em inglês e ficam de fora (a tradução mexeria no

@@ -239,9 +239,11 @@ body::before{
   .sidebar-footer{display:none;}
 
   .main-area{height:auto; overflow-y:visible;}
-  .topbar{padding:10px 16px;}
+  .topbar{padding:14px 16px 0; background:transparent; border-bottom:none;}
   .topbar-greeting{display:none;}
   .topbar.so-aluno{display:none;}
+  .topbar-right{width:100%; margin:0;}
+  .topbar-links{flex:1 1 auto; min-width:0; gap:0;}
   .content-footer{padding:28px 16px 4px; font-size:.68rem; opacity:.6;}
   .content-footer .fmark{font-size:1rem; margin-bottom:2px;}
   .content{padding:18px 16px 48px;}
@@ -1203,9 +1205,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     links.push({ href:'/area-do-aluno.html', label:'Meus cursos', icon:listIcon, active:true });
     // Aluno comum só teria o atalho "Meus cursos" (repetido no menu): no celular a barra some.
     document.querySelector('.topbar').classList.toggle('so-aluno', links.length === 1);
-    document.getElementById('topbarLinks').innerHTML = links.map(l =>
-      '<a href="' + l.href + '" class="topbar-link' + (l.active ? ' active' : '') + '">' + l.icon + '<span>' + l.label + '</span></a>'
-    ).join('');
+    document.getElementById('topbarLinks').innerHTML = dyseHtmlTrocaPainel(links);
 
     const initials = (fullName || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'U';
     document.getElementById('sidebarUser').innerHTML =

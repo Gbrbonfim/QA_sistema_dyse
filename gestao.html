@@ -252,9 +252,24 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   .sidebar-footer{display:none;}
 
   .main-area{height:auto; overflow-y:visible;}
-  .topbar{padding:10px 16px 0; background:transparent; border-bottom:none;}
+  .topbar{padding:14px 16px 0; background:transparent; border-bottom:none;}
   .topbar-greeting{display:none;}
-  .content{padding:10px 16px 48px;}
+  .topbar-right{width:100%; flex-wrap:nowrap; gap:10px; margin:0;}
+  .topbar-links{flex:1 1 auto; min-width:0; gap:0;}
+  .content{padding:14px 16px 48px;}
+  /* cabeçalho das abas: ícone + título/descrição + ação, tudo numa linha
+     (ação à direita, centralizada na altura) */
+  /* ícone, título e ação alinhados na linha do título (40px); a descrição
+     fica embaixo do título, começando onde ele começa */
+  .page-header{flex-wrap:nowrap; align-items:flex-start; gap:12px; margin:0 0 14px;}
+  .page-header-icon{width:40px; height:40px;}
+  .page-header-icon svg{width:20px; height:20px;}
+  .page-header-text{flex:1 1 0; min-width:0;}
+  .page-header-text h2{font-size:1.2rem; line-height:40px; margin:0;}
+  .page-header-text p{font-size:.76rem; line-height:1.35; opacity:.75; margin-top:-2px;}
+  .page-header-action{flex:none; margin-left:auto; min-height:40px; display:flex; align-items:center;}
+  .page-header-action .btn{padding:9px 14px; font-size:.8rem; white-space:nowrap;}
+  .page-header-action-row{flex-wrap:nowrap; gap:6px;}
 }
 
 /* ---------- CARDS / FORMS ---------- */
@@ -482,6 +497,11 @@ body:not(.dyse-can-ver-financeiro) .fin-view-only{display:none !important;}
   font-family:var(--font-body); font-size:.85rem;
 }
 .result-count{font-size:.82rem; color:var(--seal-soft); opacity:.8; margin:0 0 12px;}
+/* Situação (Todos/Ativos/Com vagas/Sem vagas) dentro do menu Filtrar */
+.filter-menu .turma-status-chips{flex-wrap:wrap !important; overflow:visible !important; margin:0 !important; padding:0 !important; gap:6px !important; min-width:250px;}
+/* botão Filtrar com filtro ligado: ponto de destaque */
+.filter-dropdown .btn.tem-filtro{position:relative; color:var(--amaranth);}
+.filter-dropdown .btn.tem-filtro::after{content:''; position:absolute; top:6px; right:6px; width:8px; height:8px; border-radius:50%; background:var(--amaranth);}
 
 .turma-status-chips{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
 .turma-status-chip{
@@ -493,6 +513,60 @@ body:not(.dyse-can-ver-financeiro) .fin-view-only{display:none !important;}
 }
 .turma-status-chip.active{background:var(--amaranth); border-color:var(--amaranth); color:#fff;}
 .turma-status-chip.active .count{background:rgba(255,255,255,.25); color:#fff;}
+
+/* Celular (fica DEPOIS das regras acima pra valer por cima delas) */
+@media (max-width:900px){
+  /* ações só pelo computador (ex.: importar/exportar CSV) */
+  .so-pc{display:none !important;}
+  /* menu Filtrar: cartão flutuante no meio da tela, fundo escurecido */
+  .filter-menu{position:fixed; left:16px; right:16px; top:50%; transform:translateY(-50%); min-width:0; max-height:calc(100dvh - 48px); overflow-y:auto;
+    border-radius:20px; padding:18px; z-index:300; box-shadow:0 0 0 100vmax rgba(58,29,16,.45), 0 20px 50px rgba(58,29,16,.3);}
+  .filter-menu .turma-status-chips{min-width:0;}
+
+  /* Registro de Classe → Gerar Report Card da turma: 3 campos numa linha,
+     botão largo embaixo */
+  .reg-bulk-form{display:grid !important; grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px !important; align-items:end;}
+  .reg-bulk-form .gestao-field{flex:none !important; min-width:0;}
+  .reg-bulk-form .gestao-field select, .reg-bulk-form .gestao-field input{width:100%;}
+  .reg-bulk-form > .btn{grid-column:1 / -1; width:100%; justify-content:center;}
+  .reg-bulk-hint{font-size:.72rem; line-height:1.4; opacity:.75;}
+
+  /* Registro de Classe → alunos da turma em cartões */
+  .reg-turma-table, .reg-turma-table tbody{display:block; background:transparent; box-shadow:none; border-radius:0;}
+  .reg-turma-table thead{display:none;}
+  .reg-turma-table tr.pag-row{display:grid; grid-template-columns:1fr auto; gap:2px 12px; align-items:center; background:#fff;
+    border-radius:16px; padding:14px 14px 14px 16px; margin-top:10px; box-shadow:0 4px 14px rgba(58,29,16,.06);}
+  .reg-turma-table tr.pag-row td{display:block; padding:0; border:none; background:none; font-size:.78rem; color:var(--seal-soft);}
+  .reg-turma-table tr.pag-row td:first-child{grid-column:1; font-size:.95rem; font-weight:700; color:var(--seal);}
+  .reg-turma-table tr.pag-row td[data-label]{grid-column:1;}
+  .reg-turma-table tr.pag-row td[data-label]::before{content:attr(data-label) ': '; font-weight:600;}
+  .reg-turma-table tr.pag-row td.reg-acoes{grid-column:2; grid-row:1 / span 3; display:flex; flex-direction:column; gap:6px;}
+  .reg-turma-table tr.pag-row td:first-child{display:flex; align-items:center;}
+  /* aulas/report cards alinhados com o nome (depois da seta) */
+  .reg-turma-table tr.pag-row td[data-label]{padding-left:38px;}
+  .reg-turma-table tr.pag-row td.reg-acoes .btn{min-width:72px; justify-content:center;}
+  /* registro aberto do aluno: cartão branco logo abaixo do cartão dele */
+  .reg-turma-table tr.pag-detalhe-row[style*="table-row"]{display:block !important;}
+  .reg-turma-table tr.pag-detalhe-row td{display:block; margin-top:6px; padding:6px 16px; border:none !important;
+    background:#fff !important; border-radius:16px; box-shadow:0 4px 14px rgba(58,29,16,.06); overflow-wrap:anywhere;}
+  .reg-turma-table tr.pag-detalhe-row:hover td{background:#fff !important;}
+  .reg-turma-table tr.pag-detalhe-row .chip-toggle-row{background:transparent !important; padding:12px 0 !important; margin:0 !important;
+    border:none !important; border-bottom:1px solid #f6ece0 !important; border-radius:0 !important;}
+  .reg-turma-table tr.pag-detalhe-row .chip-toggle-row:last-child{border-bottom:none !important;}
+  .reg-turma-table tr:not(.pag-row):not(.pag-detalhe-row) td{display:block; border:none; padding:12px 4px;}
+  /* busca + Filtrar lado a lado */
+  .search-filter-bar{flex-wrap:nowrap; gap:8px;}
+  .search-input-wrap{flex:1 1 0;}
+  .search-input-wrap input{padding:12px 12px 12px 40px; font-size:.85rem; text-overflow:ellipsis;}
+  .search-input-wrap svg{left:14px;}
+  .filter-dropdown .btn{padding:10px 14px;}
+  .filter-dropdown .btn svg:last-child{display:none;}
+  /* filtros de status lado a lado: uma linha que desliza pro lado */
+  .turma-status-chips{flex-wrap:nowrap; overflow-x:auto; gap:8px; margin:0 -16px 14px; padding:2px 16px 4px; scrollbar-width:none;}
+  .turma-status-chips::-webkit-scrollbar{display:none;}
+  .turma-status-chip{flex:none; white-space:nowrap; padding:5px 11px; gap:6px; font-size:.76rem; border-width:1.5px;}
+  .turma-status-chip .count{font-size:.68rem; padding:1px 7px;}
+}
 
 /* ---------- LISTA DE TURMAS (cards) ---------- */
 .turmas-card-list{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); overflow:hidden;}
@@ -524,6 +598,24 @@ body:not(.dyse-can-ver-financeiro) .fin-view-only{display:none !important;}
 }
 .turma-student-chip span:last-child{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
 .turma-actions{display:flex; align-items:center; justify-content:flex-end; gap:8px; flex:none; flex-wrap:wrap;}
+
+/* Turma (cartão enxuto dentro do grupo do professor) */
+.tr-clean{padding:14px 8px 14px 18px; border-bottom:1px solid #f6ece0;}
+/* grupo aberto: lista das turmas com respiro igual nos lados e embaixo */
+details.dyse-collapsible > .dyse-collapsible-body > .turma-group-body{margin:2px 2px 4px;}
+.tr-clean:last-child{border-bottom:none;}
+.tr-top{display:flex; align-items:center; gap:8px; min-width:0;}
+.tr-nome{font-weight:700; font-size:.95rem; color:var(--seal); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.tr-nivel{flex:none; font-size:.68rem; font-weight:800; padding:2px 8px; border-radius:999px;}
+.tr-menu{margin-left:auto; border:none !important; background:none !important; width:40px; height:40px;}
+.tr-menu .msr{font-size:22px; vertical-align:0;}
+.tr-info{display:flex; align-items:center; gap:6px; margin-top:4px; font-size:.8rem; color:var(--seal-soft); min-width:0; padding-right:12px;}
+.tr-info .msr{flex:none; font-size:16px; opacity:.6; vertical-align:0;}
+.tr-info span:last-child{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;}
+.tr-foot{margin-top:6px; font-size:.74rem; color:var(--seal-soft); opacity:.85;}
+.tr-ok{color:var(--ok); font-weight:700;}
+.tr-bad{color:var(--bad); font-weight:700;}
+.tr-warn{color:var(--gamboge-dark); font-weight:700;}
 
 /* ---------- MENU DE AÇÕES DA LINHA (botão "..." / kebab) ----------
    Um único menu "portal" no final do <body> (não um por linha) posicionado
@@ -611,6 +703,11 @@ details.dyse-collapsible > summary:hover{background:var(--antique-soft);}
 details.dyse-collapsible > summary .chevron{transition:transform .2s; opacity:.55; flex:none; font-size:1rem;}
 details.dyse-collapsible[open] > summary .chevron{transform:rotate(90deg);}
 details.dyse-collapsible > summary .summary-left{display:flex; align-items:center; gap:10px; min-width:0;}
+details.dyse-collapsible > summary .msr.chevron{font-size:22px;}
+/* grupo (professor): nome em cima, "N turmas · N alunos" embaixo */
+.tg-info{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.tg-info .turma-group-name{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.25;}
+.tg-meta{font-size:.78rem; font-weight:500; color:var(--seal-soft); opacity:.8;}
 details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 details.dyse-collapsible.dyse-collapsible-nested{box-shadow:none; border:1px solid #f0e3d2; margin-bottom:8px;}
 details.dyse-collapsible.dyse-collapsible-nested > summary{padding:10px 14px; font-size:.82rem;}
@@ -622,6 +719,10 @@ tr.pag-row{cursor:pointer;}
 tr.pag-row:hover{background:var(--antique-soft);}
 .pag-chevron{display:inline-block; transition:transform .2s; opacity:.55; margin-right:8px;}
 .pag-chevron.open{transform:rotate(90deg);}
+/* Registro de Classe: seta de expandir em destaque (círculo, gira ao abrir) */
+.pag-chevron.reg-chev{width:28px; height:28px; border-radius:50%; background:#FCE4E9; color:var(--amaranth); opacity:1;
+  display:inline-flex; align-items:center; justify-content:center; font-size:22px; vertical-align:middle; margin-right:10px;}
+.pag-chevron.reg-chev.open{background:var(--amaranth); color:#fff;}
 tr.pag-detalhe-row td{background:#faf3ea; padding:0 14px 14px;}
 tr.pag-detalhe-row .dash-table{box-shadow:none;}
 tr.pag-detalhe-row .dash-table th{background:transparent; color:var(--seal-soft); font-size:.72rem;}
@@ -783,7 +884,11 @@ body.dyse-modal-open{overflow:hidden;}
 .report-line{font-size:.85rem; color:var(--seal-soft);}
 
 @media (max-width:640px){
-  .report-modal-panel{margin:0; width:100%; max-width:100%; max-height:100dvh; border-radius:0;}
+  /* modal flutuante: centralizado, com margem em volta e cantos arredondados */
+  .report-modal.open{display:flex; align-items:center; justify-content:center; padding:16px;}
+  .report-modal-panel{margin:0; width:100%; max-width:100%; max-height:calc(100dvh - 32px); border-radius:22px;}
+  .report-modal-header{padding:18px 18px 14px;}
+  .report-modal-body{padding:16px 18px 22px;}
   section.gestao-card{padding:20px 16px;}
   .dash-filter input, .dash-filter select{width:100%;}
   .gestao-form:not(.gestao-form-col){flex-direction:column; align-items:stretch;}
@@ -901,7 +1006,7 @@ body.dyse-modal-open{overflow:hidden;}
         <div class="page-header-icon" id="pageHeaderIcon"></div>
         <div class="page-header-text">
           <h2 id="pageHeaderTitle">Turmas</h2>
-          <p id="pageHeaderSubtitle">Visualize, crie e gerencie todas as turmas da escola.</p>
+          <p id="pageHeaderSubtitle"></p>
         </div>
         <div class="page-header-action" id="pageHeaderAction"></div>
       </div>
@@ -914,18 +1019,19 @@ body.dyse-modal-open{overflow:hidden;}
             <input type="text" id="filterTurmaBusca" placeholder="Filtrar por nome da turma, descrição ou professor..." oninput="renderTurmasTable()">
           </div>
           <div class="filter-dropdown">
-            <button type="button" class="btn btn-ghost" onclick="toggleTurmaFilterMenu(event)">
+            <button type="button" class="btn btn-ghost" id="turmaFilterBtn" onclick="toggleTurmaFilterMenu(event)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
               Filtrar
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="filter-menu" id="turmaFilterMenu">
+              <label>Situação</label>
+              <div class="turma-status-chips" id="turmaStatusChips"></div>
               <label>Nível</label>
               <select id="filterTurmaNivel" onchange="renderTurmasTable()"><option value="">Todos os níveis</option></select>
             </div>
           </div>
         </div>
-        <div class="turma-status-chips" id="turmaStatusChips"></div>
         <p class="result-count" id="turmasCount"></p>
         <div id="turmasList"></div>
       </div>
@@ -944,32 +1050,51 @@ body.dyse-modal-open{overflow:hidden;}
 
   <!-- ---------- ALUNOS ---------- -->
   <div id="panelAlunos" style="display:none;">
-    <p class="alunos-hint" style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
+    <p class="alunos-hint so-pc" style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
       Pra colocar ou tirar um aluno de uma turma (acesso a conteúdo), vá na aba <b>Turmas</b> → <b>Editar</b>
       da turma desejada.
       <span class="fin-only">O vínculo <b>financeiro</b> (modalidade, professor responsável, valor) é editado aqui, pelo botão "Editar financeiro" de cada aluno.</span>
     </p>
-    <div class="dash-filter">
-      <input type="text" id="filterAlunoName" placeholder="Filtrar por nome ou e-mail..." oninput="renderAlunosTable()">
-      <select id="filterAlunoTurma" onchange="renderAlunosTable()"><option value="">Todas as turmas</option></select>
-      <select id="filterAlunoModalidade" class="fin-view-only" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
-      <select id="filterAlunoProfessor" class="fin-view-only" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
-      <select id="filterAlunoSituacao" class="fin-view-only" onchange="renderAlunosTable()">
-        <option value="">Todas as situações</option>
-        <option value="ativo">Ativo</option>
-        <option value="pausado">Pausado</option>
-        <option value="cancelado">Cancelado</option>
-        <option value="encerrado">Encerrado</option>
-        <option value="sem-vinculo">Sem vínculo financeiro</option>
-      </select>
-      <select id="filterAlunoContrato" class="fin-view-only" onchange="renderAlunosTable()">
-        <option value="">Todos os contratos</option>
-        <option value="vencendo">Vencendo em 30 dias</option>
-        <option value="vencido">Vencido</option>
-        <option value="sem-data">Sem data de fim definida</option>
-      </select>
+    <!-- Busca + Filtrar (mesmo padrão da aba Turmas): os filtros ficam no menu -->
+    <div class="search-filter-bar">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="filterAlunoName" placeholder="Buscar por nome ou e-mail..." oninput="renderAlunosTable()">
+      </div>
+      <div class="filter-dropdown">
+        <button type="button" class="btn btn-ghost" id="alunoFilterBtn" onclick="toggleFilterMenu(event, 'alunoFilterMenu')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          Filtrar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="filter-menu" id="alunoFilterMenu">
+          <label class="fin-view-only">Situação</label>
+          <div class="turma-status-chips fin-view-only" id="alunoStatusChips"></div>
+          <!-- a situação é escolhida pelos botões acima (este select guarda o valor) -->
+          <select id="filterAlunoSituacao" onchange="renderAlunosTable()" hidden>
+            <option value="">Todas as situações</option>
+            <option value="ativo">Ativo</option>
+            <option value="pausado">Pausado</option>
+            <option value="cancelado">Cancelado</option>
+            <option value="encerrado">Encerrado</option>
+            <option value="sem-vinculo">Sem vínculo financeiro</option>
+          </select>
+          <label>Turma</label>
+          <select id="filterAlunoTurma" onchange="renderAlunosTable()"><option value="">Todas as turmas</option></select>
+          <label class="fin-view-only">Modalidade</label>
+          <select id="filterAlunoModalidade" class="fin-view-only" onchange="renderAlunosTable()"><option value="">Todas as modalidades</option></select>
+          <label class="fin-view-only">Professor</label>
+          <select id="filterAlunoProfessor" class="fin-view-only" onchange="renderAlunosTable()"><option value="">Todos os professores</option></select>
+          <label class="fin-view-only">Contrato</label>
+          <select id="filterAlunoContrato" class="fin-view-only" onchange="renderAlunosTable()">
+            <option value="">Todos os contratos</option>
+            <option value="vencendo">Vencendo em 30 dias</option>
+            <option value="vencido">Vencido</option>
+            <option value="sem-data">Sem data de fim definida</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <div class="turma-status-chips fin-view-only" id="alunoStatusChips"></div>
     <p class="result-count" id="alunosCount"></p>
     <div id="alunosTableWrap"></div>
   </div>
@@ -993,18 +1118,18 @@ body.dyse-modal-open{overflow:hidden;}
 
       <div id="regBulkWrap" style="display:none; margin:14px 0; padding:14px 16px; background:var(--antique-soft); border-radius:var(--radius-sm);">
         <p style="font-weight:700; font-size:.85rem; color:var(--seal); margin-bottom:10px;">Gerar Report Card da turma inteira</p>
-        <div class="gestao-form" style="align-items:flex-end;">
+        <div class="gestao-form reg-bulk-form" style="align-items:flex-end;">
           <div class="gestao-field" style="flex:0 0 110px;"><label>Semestre</label><select id="regBulkSemestre" onchange="onRegBulkSemestreChange()"><option value="1">1º</option><option value="2">2º</option></select></div>
           <div class="gestao-field" style="flex:0 0 90px;"><label>Aula início</label><input type="number" min="1" id="regBulkInicio"></div>
           <div class="gestao-field" style="flex:0 0 90px;"><label>Aula fim</label><input type="number" min="1" id="regBulkFim"></div>
           <button type="button" class="btn btn-primary" onclick="handleGerarReportCardTurma()">Gerar pra turma toda</button>
         </div>
-        <p class="gestao-hint">Gera (ou atualiza, se ainda estiver em rascunho) um Report Card por aluno da turma, um de cada vez — inclusive de quem ainda não tem nenhum registro no período. Pode levar alguns minutos com a turma cheia (a análise por IA de cada um leva até 1 min).</p>
+        <p class="gestao-hint reg-bulk-hint">Gera (ou atualiza, se ainda estiver em rascunho) um Report Card por aluno da turma, um de cada vez — inclusive de quem ainda não tem nenhum registro no período. Pode levar alguns minutos com a turma cheia (a análise por IA de cada um leva até 1 min).</p>
         <p class="auth-msg" id="regBulkMsg"></p>
       </div>
 
       <div style="overflow-x:auto;">
-        <table class="dash-table">
+        <table class="dash-table reg-turma-table">
           <thead><tr><th>Aluno</th><th>Aulas registradas</th><th>Report Cards</th><th>Ações</th></tr></thead>
           <tbody id="regTurmaBody"></tbody>
         </table>
@@ -1188,7 +1313,7 @@ body.dyse-modal-open{overflow:hidden;}
         </table>
       </div>
       <div class="btn-row" style="margin-top:16px;">
-        <button type="button" class="btn btn-ghost btn-sm" onclick="exportarRelatorioCSV()">⬇ CSV</button>
+        <button type="button" class="btn btn-ghost btn-sm so-pc" onclick="exportarRelatorioCSV()">⬇ CSV</button>
         <button type="button" class="btn btn-ghost btn-sm" onclick="exportarRelatorioExcel()">⬇ Excel</button>
         <button type="button" class="btn btn-ghost btn-sm" onclick="exportarRelatorioPDF()">⬇ PDF</button>
       </div>
@@ -1581,7 +1706,7 @@ body.dyse-modal-open{overflow:hidden;}
   const PANEL_META = {
     turmas: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-      title: 'Turmas', subtitle: 'Visualize, crie e gerencie todas as turmas da escola.',
+      title: 'Turmas', subtitle: '',
       action: '<button type="button" class="btn btn-primary" onclick="openTurmaCreateModal()">+ Criar turma</button>'
     },
     materias: {
@@ -1591,11 +1716,12 @@ body.dyse-modal-open{overflow:hidden;}
     },
     alunos: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-      title: 'Alunos', subtitle: 'Cadastre, acompanhe e gerencie os alunos da escola.',
+      title: 'Alunos', subtitle: '',
       action: '<div class="page-header-action-row">' +
         '<button type="button" class="btn btn-primary" onclick="openStudentCreateModal()">+ Cadastrar aluno</button>' +
-        '<button type="button" class="btn btn-primary" onclick="openCsvImportModal()">Importar CSV</button>' +
-        '<span class="info-tip" tabindex="0" aria-label="Como montar o CSV de importação">ⓘ' +
+        // importar CSV: só no computador
+        '<button type="button" class="btn btn-primary so-pc" onclick="openCsvImportModal()">Importar CSV</button>' +
+        '<span class="info-tip so-pc" tabindex="0" aria-label="Como montar o CSV de importação">ⓘ' +
           '<span class="info-tip-bubble">' +
             'Primeira linha = cabeçalho, com estas colunas (nesta ordem ou por nome — só <code>nome</code> e <code>email</code> são obrigatórios):<br>' +
             '<code>nome,email,modalidade,professor_email,valor_mensal,valor_professor,data_inicio,parcelas,contrato_inicio,contrato_fim</code><br><br>' +
@@ -1652,7 +1778,9 @@ body.dyse-modal-open{overflow:hidden;}
     const meta = PANEL_META[which];
     document.getElementById('pageHeaderIcon').innerHTML = meta.icon;
     document.getElementById('pageHeaderTitle').textContent = meta.title;
-    document.getElementById('pageHeaderSubtitle').textContent = meta.subtitle;
+    const sub = document.getElementById('pageHeaderSubtitle');
+    sub.textContent = meta.subtitle || '';
+    sub.hidden = !meta.subtitle;
     document.getElementById('pageHeaderAction').innerHTML = meta.action;
     if(which === 'financeiro') showFinPanel('modalidades');
     if(which === 'registro') initRegistroPanel();
@@ -1937,6 +2065,11 @@ body.dyse-modal-open{overflow:hidden;}
         c.label + '<span class="count">' + contagens[c.key] + '</span>' +
       '</button>'
     ).join('');
+    // Filtrar destacado quando há situação ou nível escolhido
+    const nivelSel = document.getElementById('filterTurmaNivel');
+    const ligado = (TURMA_STATUS_FILTER && TURMA_STATUS_FILTER !== 'todos') || !!(nivelSel && nivelSel.value);
+    const btn = document.getElementById('turmaFilterBtn');
+    if(btn) btn.classList.toggle('tem-filtro', ligado);
   }
 
   function renderTurmasTable(){
@@ -2018,35 +2151,32 @@ body.dyse-modal-open{overflow:hidden;}
         : '<span class="empty">Nenhum aluno nesta turma.</span>';
 
       const schedule = formatTurmaSchedule(t);
-      return '<div class="turma-row">' +
-        '<div class="turma-avatar" style="background:' + avatarColorTurma.bg + '; color:' + avatarColorTurma.fg + ';">' + TURMA_USERS_ICON + '</div>' +
-        '<div class="turma-main">' +
-          '<div class="name">' + escapeHtmlLocal(t.name) + '</div>' +
-          '<div class="meta">' + (t.description ? escapeHtmlLocal(t.description) : 'Sem descrição') +
-            (schedule ? ' <span class="turma-schedule">· ' + escapeHtmlLocal(schedule) + '</span>' : '') +
-          '</div>' +
+      // Cartão enxuto: nome + nível + menu ⋮ (Editar/Excluir); embaixo
+      // horário, alunos e um resumo em texto (alunos · matérias · vagas).
+      const quando = [t.description, schedule].filter(Boolean).join(' · ');
+      const nomesAlunos = alunosDaTurma.map(s => s.full_name || s.email || '').filter(Boolean);
+      const vagasTxt = vagas === null ? ''
+        : (vagas > 0 ? '<span class="tr-ok">' + vagas + ' vaga' + (vagas === 1 ? '' : 's') + '</span>' : '<span class="tr-bad">Sem vagas</span>');
+      return '<div class="tr-clean">' +
+        '<div class="tr-top">' +
+          '<span class="tr-nome">' + escapeHtmlLocal(t.name) + '</span>' +
+          (nivel ? '<span class="tr-nivel" style="background:' + nivelBadge.bg + '; color:' + nivelBadge.fg + ';">' + escapeHtmlLocal(nivel.name) + '</span>' : '') +
+          '<button type="button" class="btn-kebab tr-menu" onclick="openTurmaActionsMenu(event, \'' + t.id + '\')" aria-label="Ações da turma ' + escapeHtmlLocal(t.name) + '"><span class="msr" aria-hidden="true">more_vert</span></button>' +
         '</div>' +
-        '<div class="turma-badges">' +
-          '<span class="turma-pill">' + materiasCount + ' matéria' + (materiasCount === 1 ? '' : 's') + '</span>' +
-          '<span class="turma-pill">' + alunosDaTurma.length + ' aluno' + (alunosDaTurma.length === 1 ? '' : 's') + '</span>' +
-          (nivel ? '<span class="turma-badge" style="background:' + nivelBadge.bg + '; color:' + nivelBadge.fg + ';">' + escapeHtmlLocal(nivel.name) + '</span>' : '') +
-          vagasBadge +
-        '</div>' +
-        '<div class="turma-students">' + studentsHtml + '</div>' +
-        '<div class="turma-actions">' +
-          '<button type="button" class="btn btn-ghost btn-xs" onclick="openTurmaEditModal(\'' + t.id + '\')">Editar</button>' +
-          '<button type="button" class="btn btn-danger btn-xs" onclick="handleDeleteTurma(\'' + t.id + '\')">Excluir</button>' +
-        '</div>' +
+        (quando ? '<div class="tr-info"><span class="msr" aria-hidden="true">schedule</span><span>' + escapeHtmlLocal(quando) + '</span></div>' : '') +
+        '<div class="tr-info" title="' + escapeHtmlLocal(nomesAlunos.join(', ')) + '"><span class="msr" aria-hidden="true">group</span><span>' +
+          (nomesAlunos.length ? escapeHtmlLocal(nomesAlunos.join(', ')) : '<i>Nenhum aluno nesta turma</i>') + '</span></div>' +
+        '<div class="tr-foot">' + alunosDaTurma.length + ' aluno' + (alunosDaTurma.length === 1 ? '' : 's') +
+          ' · ' + materiasCount + ' matéria' + (materiasCount === 1 ? '' : 's') + (vagasTxt ? ' · ' + vagasTxt : '') + '</div>' +
       '</div>';
     }).join('');
 
     return '<details class="dyse-collapsible">' +
       '<summary><span class="summary-left">' +
         '<span class="turma-group-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</span>' +
-        '<span class="turma-group-name">' + (professor ? escapeHtmlLocal(professor.full_name || '(sem nome)') : 'Sem professor responsável') + '</span>' +
-        '<span class="pill-count">' + itens.length + ' turma' + (itens.length === 1 ? '' : 's') + '</span>' +
-        '<span class="pill-count">' + totalAlunos + ' aluno' + (totalAlunos === 1 ? '' : 's') + '</span>' +
-      '</span><span class="chevron">›</span></summary>' +
+        '<span class="tg-info"><span class="turma-group-name">' + (professor ? escapeHtmlLocal(professor.full_name || '(sem nome)') : 'Sem professor responsável') + '</span>' +
+        '<span class="tg-meta">' + itens.length + ' turma' + (itens.length === 1 ? '' : 's') + ' · ' + totalAlunos + ' aluno' + (totalAlunos === 1 ? '' : 's') + '</span></span>' +
+      '</span><span class="msr chevron" aria-hidden="true">chevron_right</span></summary>' +
       '<div class="dyse-collapsible-body"><div class="turmas-card-list turma-group-body">' + rowsHtml + '</div></div>' +
     '</details>';
   }
@@ -3226,6 +3356,11 @@ body.dyse-modal-open{overflow:hidden;}
           d.label + '<span class="count">' + d.n + '</span>' +
         '</button>'
       ).join('');
+    // Filtrar destacado quando algum filtro está ligado
+    const ligado = ['filterAlunoSituacao','filterAlunoTurma','filterAlunoModalidade','filterAlunoProfessor','filterAlunoContrato']
+      .some(id => { const s = document.getElementById(id); return s && s.value; });
+    const btn = document.getElementById('alunoFilterBtn');
+    if(btn) btn.classList.toggle('tem-filtro', ligado);
   }
 
   function renderAlunosTable(){
@@ -3310,9 +3445,9 @@ body.dyse-modal-open{overflow:hidden;}
     return '<details class="dyse-collapsible">' +
       '<summary><span class="summary-left">' +
         '<span class="turma-group-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</span>' +
-        '<span class="turma-group-name">' + (professor ? escapeHtmlLocal(professor.full_name || '(sem nome)') : 'Sem professor responsável') + '</span>' +
-        '<span class="pill-count">' + itens.length + ' aluno' + (itens.length === 1 ? '' : 's') + '</span>' +
-      '</span><span class="chevron">›</span></summary>' +
+        '<span class="tg-info"><span class="turma-group-name">' + (professor ? escapeHtmlLocal(professor.full_name || '(sem nome)') : 'Sem professor responsável') + '</span>' +
+        '<span class="tg-meta">' + itens.length + ' aluno' + (itens.length === 1 ? '' : 's') + '</span></span>' +
+      '</span><span class="msr chevron" aria-hidden="true">chevron_right</span></summary>' +
       '<div class="dyse-collapsible-body"><div class="turmas-card-list turma-group-body">' + rowsHtml + '</div></div>' +
     '</details>';
   }
@@ -3339,16 +3474,28 @@ body.dyse-modal-open{overflow:hidden;}
         ? '<span class="turma-badge fin-view-only" style="background:#fff3d6; color:var(--gamboge-dark);">Contrato vencendo</span>'
         : '');
 
-    return '<div class="turma-row">' +
-      '<div class="turma-avatar" style="background:' + avatarColor.bg + '; color:' + avatarColor.fg + ';">' + escapeHtmlLocal(initials) + '</div>' +
-      '<div class="turma-main">' +
-        '<div class="name">' + (s.turma_id ? '' : '<span class="no-turma">● </span>') + escapeHtmlLocal(s.full_name || '(sem nome)') + '</div>' +
-        '<div class="meta">' + escapeHtmlLocal(s.email || '-') + '</div>' +
+    // Cartão enxuto (mesmo padrão das turmas): nome + situação + menu ⋮;
+    // embaixo e-mail, turma (e modalidade/professor pra quem vê financeiro)
+    // e, se houver, o alerta de contrato.
+    const situacaoTag = situacao
+      ? '<span class="tr-nivel" style="' + (situacaoCores[situacao] || 'background:#fbeceb; color:var(--bad);') + '">' + escapeHtmlLocal(capitalize(situacao)) + '</span>'
+      : '';
+    const turmaTxt = (turma ? escapeHtmlLocal(turma.name) : '<span class="tr-bad">Sem turma</span>') +
+      (modalidade ? '<span class="fin-view-only"> · ' + escapeHtmlLocal(modalidade.name) + '</span>' : '') +
+      ((!groupedByProfessor && professor) ? '<span class="fin-view-only"> · ' + escapeHtmlLocal(professor.full_name || '') + '</span>' : '');
+    const contratoTxt = dyseContratoPassaNoFiltro(periodo, 'vencido')
+      ? '<div class="tr-foot fin-view-only"><span class="tr-bad">Contrato vencido</span></div>'
+      : (dyseContratoPassaNoFiltro(periodo, 'vencendo')
+        ? '<div class="tr-foot fin-view-only"><span class="tr-warn">Contrato vencendo</span></div>'
+        : '');
+    return '<div class="tr-clean">' +
+      '<div class="tr-top">' +
+        '<span class="tr-nome">' + escapeHtmlLocal(s.full_name || '(sem nome)') + '</span>' + situacaoTag +
+        '<button type="button" class="btn-kebab tr-menu" onclick="openAlunoActionsMenu(event, \'' + s.id + '\')" aria-label="Ações do aluno ' + escapeHtmlLocal(s.full_name || '') + '"><span class="msr" aria-hidden="true">more_vert</span></button>' +
       '</div>' +
-      '<div class="turma-badges">' + turmaBadge + modalidadeBadge + professorBadge + situacaoBadge + contratoBadge + '</div>' +
-      '<div class="turma-actions">' +
-        '<button type="button" class="btn-kebab" onclick="openAlunoActionsMenu(event, \'' + s.id + '\')" aria-label="Mais ações">⋯</button>' +
-      '</div>' +
+      '<div class="tr-info"><span class="msr" aria-hidden="true">mail</span><span>' + escapeHtmlLocal(s.email || '-') + '</span></div>' +
+      '<div class="tr-info"><span class="msr" aria-hidden="true">groups</span><span>' + turmaTxt + '</span></div>' +
+      contratoTxt +
     '</div>';
   }
 
@@ -4538,11 +4685,10 @@ body.dyse-modal-open{overflow:hidden;}
         ? meusCards.map(c => c.semestre + 'º sem. ' + reportCardStatusBadge(c.status)).join(' ')
         : '<span style="opacity:.5;">Nenhum</span>';
       return '<tr class="pag-row" onclick="toggleRegistroDetalhe(\'' + s.id + '\')">' +
-        '<td><span class="pag-chevron" id="regChevron-' + s.id + '">›</span>' + escapeHtmlLocal(s.full_name || s.email) + (alunoPausadoGestao(s) ? ' <span class="pill-count pill-bad">pausado</span>' : '') + '</td>' +
-        '<td>' + registradas + ' / ' + (totalAulas || '?') + '</td>' +
-        '<td>' + cardsTxt + '</td>' +
-        '<td>' +
-          '<button type="button" class="btn btn-ghost btn-xs" onclick="event.stopPropagation(); openAlunoHistoricoModal(\'' + s.id + '\')">Ver</button> ' +
+        '<td><span class="pag-chevron reg-chev msr" id="regChevron-' + s.id + '" aria-hidden="true">chevron_right</span>' + escapeHtmlLocal(s.full_name || s.email) + (alunoPausadoGestao(s) ? ' <span class="pill-count pill-bad">pausado</span>' : '') + '</td>' +
+        '<td data-label="Aulas registradas">' + registradas + ' / ' + (totalAulas || '?') + '</td>' +
+        '<td data-label="Report Cards">' + cardsTxt + '</td>' +
+        '<td class="reg-acoes">' +
           '<button type="button" class="btn btn-primary btn-xs" onclick="event.stopPropagation(); handleGerarReportCardAluno(\'' + s.id + '\', this)">Gerar</button>' +
         '</td>' +
       '</tr>' +
@@ -6051,9 +6197,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(dyseIsAdmin(profile)) links.push({ href:'/gestao.html', label:'Painel da gestão', icon:userIcon, active:true });
     if(dyseIsTeacher(profile)) links.push({ href:'/professora.html', label:'Painel do professor', icon:userIcon, active:false });
     if(!links.length || alsoStudent) links.push({ href:'/area-do-aluno.html', label:'Painel do aluno', icon:listIcon, active:false });
-    document.getElementById('topbarLinks').innerHTML = links.map(l =>
-      '<a href="' + l.href + '" class="topbar-link' + (l.active ? ' active' : '') + '">' + l.icon + '<span>' + l.label + '</span></a>'
-    ).join('');
+    document.getElementById('topbarLinks').innerHTML = dyseHtmlTrocaPainel(links);
 
     const role = String((profile && profile.role) || 'admin').trim().toLowerCase();
     const roleLabel = ROLE_LABELS_SIDEBAR[role] || 'Gestor';
@@ -6080,6 +6224,7 @@ body.dyse-modal-open{overflow:hidden;}
     const badge = document.getElementById('avisosBadge');
     badge.textContent = naoLidos > 9 ? '9+' : String(naoLidos);
     badge.classList.toggle('show', naoLidos > 0);
+    const sino = badge.closest('.topbar-bell'); if(sino) sino.classList.toggle('tem-aviso', naoLidos > 0);
   }
 
   function renderAvisosList(){
@@ -6140,13 +6285,16 @@ body.dyse-modal-open{overflow:hidden;}
     if(wrap && !wrap.contains(event.target)) document.getElementById('avisosPanel').classList.remove('open');
   });
 
-  function toggleTurmaFilterMenu(event){
+  function toggleTurmaFilterMenu(event){ toggleFilterMenu(event, 'turmaFilterMenu'); }
+  function toggleFilterMenu(event, id){
     event.stopPropagation();
-    document.getElementById('turmaFilterMenu').classList.toggle('open');
+    document.querySelectorAll('.filter-menu.open').forEach(m => { if(m.id !== id) m.classList.remove('open'); });
+    document.getElementById(id).classList.toggle('open');
   }
   document.addEventListener('click', (event) => {
-    const menu = document.getElementById('turmaFilterMenu');
-    if(menu && !menu.contains(event.target)) menu.classList.remove('open');
+    // composedPath: o chip clicado é redesenhado no clique, mas o menu fica aberto
+    const caminho = event.composedPath();
+    document.querySelectorAll('.filter-menu.open').forEach(m => { if(!caminho.includes(m)) m.classList.remove('open'); });
   });
 
   /* ---------- Menu de ações "..." de uma linha (aluno, etc.) ----------
@@ -6184,13 +6332,19 @@ body.dyse-modal-open{overflow:hidden;}
   });
   document.addEventListener('scroll', () => closeRowMenu(), true);
 
+  function openTurmaActionsMenu(event, id){
+    const html =
+      '<button type="button" onclick="closeRowMenu(); openTurmaEditModal(\'' + id + '\')">Editar turma</button>' +
+      '<button type="button" class="danger" onclick="closeRowMenu(); handleDeleteTurma(\'' + id + '\')">Excluir turma</button>';
+    toggleRowMenu(event, html);
+  }
+
   function openAlunoActionsMenu(event, id){
     const s = STUDENTS.find(x => x.id === id);
     if(!s) return;
     const html =
       '<button type="button" onclick="closeRowMenu(); openAlunoEditModal(\'' + id + '\')">Editar dados</button>' +
       '<button type="button" class="fin-only" onclick="closeRowMenu(); openAlunoFinModal(\'' + id + '\')">Editar financeiro</button>' +
-      '<button type="button" onclick="closeRowMenu(); openAlunoHistoricoModal(\'' + id + '\')">Registro de classe</button>' +
       '<button type="button" onclick="closeRowMenu(); handleReenviarAcesso(\'' + escapeHtmlLocal(s.email || '') + '\')"' + (s.email ? '' : ' disabled') + '>Reenviar acesso</button>' +
       '<button type="button" onclick="closeRowMenu(); handleDefinirSenhaTemporaria(\'' + id + '\')">Definir senha temporária</button>' +
       '<button type="button" class="danger" onclick="closeRowMenu(); handleExcluirAluno(\'' + id + '\')">Excluir</button>';
