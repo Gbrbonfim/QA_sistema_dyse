@@ -562,6 +562,32 @@ body.dyse-tutorial-aberto{overflow:hidden;}
 
 /* ---------- COURSE FOLDER (área do aluno) ---------- */
 .course-folder-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(360px,1fr)); gap:18px;}
+
+/* Cartão de curso compacto (Meus cursos): ícone + nome + % + barra fina,
+   o cartão inteiro é o toque; travado = apagado com cadeado. */
+.cc-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:10px;}
+.cc{display:flex; align-items:center; gap:14px; width:100%; padding:14px 12px 14px 16px; background:#fff; border:none; border-radius:16px;
+  box-shadow:0 4px 14px rgba(58,29,16,.06); text-align:left; font-family:inherit; color:var(--seal); cursor:pointer;
+  transition:transform .12s, box-shadow .15s; -webkit-tap-highlight-color:transparent;}
+.cc:hover{box-shadow:0 8px 22px rgba(58,29,16,.10);}
+.cc:active{transform:scale(.985);}
+.cc:focus-visible{outline:3px solid rgba(208,59,85,.35); outline-offset:2px;}
+.cc-ic{flex:none; width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;}
+.cc-ic .msr{font-size:24px; vertical-align:0;}
+.cc-body{display:block; flex:1 1 auto; min-width:0;}
+.cc-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px;}
+.cc-nome{font-size:1rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.cc-pct{flex:none; font-size:.85rem; font-weight:700;}
+.cc-bar{display:block; height:6px; border-radius:999px; background:#F1E4D6; overflow:hidden; margin-top:8px;}
+.cc-bar span{display:block; height:100%; border-radius:999px;}
+.cc-sub{display:block; font-size:.75rem; line-height:1.4; color:var(--seal-soft); opacity:.75; margin-top:6px;}
+.cc-sub + .cc-sub{margin-top:2px;}
+.cc-go{flex:none; font-size:24px; color:var(--seal-soft); opacity:.55;}
+.cc.travado{cursor:default; box-shadow:none; background:rgba(255,255,255,.55);}
+.cc.travado .cc-nome, .cc.travado .cc-pct, .cc.travado .cc-ic{opacity:.5;}
+.cc.travado:active, .cc.concluido:active{transform:none;}
+.cc.concluido{cursor:default;}
+.cc.concluido .cc-go{color:#CE8613; opacity:1;}
 .course-folder{
   display:flex; align-items:center; gap:16px; background:#fff; border-radius:var(--radius-lg);
   padding:24px; box-shadow:var(--shadow-card); text-decoration:none; color:var(--seal);
@@ -1297,11 +1323,17 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     window.scrollTo(0, 0);
     const mat = AREA_CTX.materias[courseId] || {};
     const cNome = mat.name || (course ? course.name : courseId);
-    const cDesc = mat.description || 'Abra uma aula pra ver o material liberado pela professora.';
+    // Subtítulo: nos níveis, a explicação da trilha (a descrição da matéria já
+    // aparece no cartão do curso, não repete aqui); no TOEFL, a descrição.
+    const ehAtividades = !!(course && course.activities);
+    const cDesc = ehAtividades ? (mat.description || '').trim()
+      : (mat.sem_registro
+          ? 'Material de reforço: toque em cada item pra abrir os slides.'
+          : 'Sua trilha de aprendizagem: as aulas em destaque já têm material liberado; as desfocadas ainda vão chegar.');
     document.getElementById('cursoPaneHeader').innerHTML =
       '<div class="page-header-icon">' + CURSO_ICON + '</div>' +
       '<div class="page-header-text"><h2>' + escapeHtmlLocal(cNome) + '</h2>' +
-      '<p>' + escapeHtmlLocal(cDesc) + '</p></div>';
+      (cDesc ? '<p>' + escapeHtmlLocal(cDesc) + '</p>' : '') + '</div>';
     const body = document.getElementById('cursoPaneBody');
     body.innerHTML = '<p class="card-instructions" style="opacity:.6;">Carregando...</p>';
     // TOEFL: lista de atividades. Demais níveis (A1, A2...): aulas + material.
@@ -1316,11 +1348,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     // Trilha de aprendizagem: TODAS as aulas ficam visíveis; só as que já têm
     // material liberado são clicáveis, as demais aparecem desfocadas e travadas.
     const dadas = AREA_CTX.aulasDadas[slug] || new Set();
-    const extra = !!(AREA_CTX.materias[slug] && AREA_CTX.materias[slug].sem_registro);
-    return "<p class=\"trilha-intro\">" + (extra
-        ? "Material de reforço: clique em cada item pra abrir os slides."
-        : "Sua trilha de aprendizagem: as aulas em destaque já têm material liberado; as desfocadas ainda vão chegar.") + "</p>" +
-      aulas.map(aula => {
+    return aulas.map(aula => {
         const url = AREA_CTX.materialPorAulaId[aula.id];
         const num = String(aula.numero).padStart(2, "0");
         const dada = dadas.has(aula.id) ? "<span class=\"dada\">" + MI('check_circle') + " Aula dada</span>" : "";
@@ -1593,25 +1621,22 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const COURSE_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>';
     const STATS_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>';
 
+    // Cartão compacto: o cartão inteiro abre o curso. "sub" é uma linha
+    // opcional embaixo da barra (ex.: TOEFL, atividades liberadas/enviadas).
+    const cartaoCompacto = (o) =>
+      '<' + (o.id ? 'button type="button" onclick="abrirCurso(\'' + o.id + '\')"' : 'div aria-disabled="true"') +
+        ' class="cc' + (o.id ? '' : ' travado') + '"' + (o.id ? ' aria-label="Abrir ' + escapeHtmlLocal(o.nome) + ', ' + o.pct + '%"' : '') + '>' +
+        '<span class="cc-ic" style="background:' + o.bg + '; color:' + o.fg + ';">' + MI(o.icone || 'menu_book') + '</span>' +
+        '<span class="cc-body">' +
+          '<span class="cc-top"><span class="cc-nome">' + escapeHtmlLocal(o.nome) + '</span><span class="cc-pct" style="color:' + o.fg + ';">' + o.pct + '%</span></span>' +
+          '<span class="cc-bar"><span style="width:' + o.pct + '%; background:' + o.fg + ';"></span></span>' +
+          (o.desc ? '<span class="cc-sub">' + escapeHtmlLocal(o.desc) + '</span>' : '') +
+          (o.sub ? '<span class="cc-sub">' + o.sub + '</span>' : '') +
+        '</span>' +
+        '<span class="msr cc-go" aria-hidden="true">' + (o.fim || 'chevron_right') + '</span>' +
+      '</' + (o.id ? 'button' : 'div') + '>';
     const cardCurso = (id, nome, desc, accent, statsHtml, pct) =>
-      '<div class="course-card" style="border-left-color:' + accent.border + ';">' +
-        '<div class="course-card-top">' +
-          '<div>' +
-            '<h3 class="course-card-name" style="color:' + accent.text + ';">' + escapeHtmlLocal(nome) + '</h3>' +
-            '<p class="course-card-desc">' + escapeHtmlLocal(desc) + '</p>' +
-          '</div>' +
-          '<div class="course-card-icon" style="background:' + accent.bg + '; color:' + accent.fg + ';">' + COURSE_ICON_SVG + '</div>' +
-        '</div>' +
-        '<div class="course-card-stats">' +
-          '<div class="course-card-stats-icon">' + STATS_ICON_SVG + '</div>' +
-          '<div class="course-card-stats-text">' +
-            '<span>' + statsHtml + '</span>' +
-            '<div class="course-card-bar"><span style="width:' + pct + '%;"></span></div>' +
-          '</div>' +
-          '<div class="course-card-pct">' + pct + '%</div>' +
-        '</div>' +
-        '<button type="button" class="btn btn-primary course-card-cta" onclick="abrirCurso(\'' + id + '\')">Acessar curso →</button>' +
-      '</div>';
+      cartaoCompacto({ id: id, nome: nome, desc: desc, bg: accent.bg, fg: accent.fg, pct: pct, sub: statsHtml });
 
     const cards = [];
     // Todo curso (A1, A2, TOEFL...) é uma matéria com currículo: o card mostra o
@@ -1630,7 +1655,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         const publishedCount = course.activities.filter(a => publishedSet.has(a.num)).length;
         const doneCount = course.activities.filter(a => doneMap[course.id + ":1:" + a.num]).length;
         kpiAtividadesLiberadas += publishedCount;
-        return cardCurso(course.id, nivel.name || course.name, nivel.description || course.description, accent,
+        return cardCurso(course.id, nivel.name || course.name, (nivel.description || '').trim(), accent,
           publishedCount + "/" + totalCount + " liberadas &middot; " + doneCount + " enviadas",
           totalCount ? Math.round((publishedCount / totalCount) * 100) : 0);
       }
@@ -1641,34 +1666,21 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       const dadas = AREA_CTX.aulasDadas[nivel.slug] || new Set();
       const ministradas = aulas.filter(a => dadas.has(a.id)).length;
       const pct = aulas.length ? Math.round((ministradas / aulas.length) * 100) : 0;
-      return cardCurso(nivel.slug, nivel.name, nivel.description || "Abra uma aula pra ver o material liberado.", accent,
-        "Progresso do nível", pct);
+      return cardCurso(nivel.slug, nivel.name, (nivel.description || '').trim(), accent,
+        "", pct);
     };
 
     // Card travado: nível da trilha que a turma ainda não tem liberado.
     const cardBloqueado = (slug) => {
       const nome = (AREA_CTX.materias[slug] && AREA_CTX.materias[slug].name) || slug.toUpperCase();
-      return "<div class=\"course-card bloqueada\" aria-disabled=\"true\" style=\"border-left-color:var(--seal-soft);\">" +
-        "<div class=\"course-card-top\"><div><h3 class=\"course-card-name\">" + escapeHtmlLocal(nome) + "</h3>" +
-        "<p class=\"course-card-desc\">Próximo passo da sua trilha de aprendizagem.</p></div>" +
-        "<div class=\"course-card-icon\" style=\"background:#EFE2D2; color:#6b5a45;\">" + COURSE_ICON_SVG + "</div></div>" +
-        "<div class=\"course-card-stats\"><div class=\"course-card-stats-icon\">" + STATS_ICON_SVG + "</div>" +
-        "<div class=\"course-card-stats-text\"><span>" + MI('lock') + " Ainda não liberado</span><div class=\"course-card-bar\"><span style=\"width:0%;\"></span></div></div>" +
-        "<div class=\"course-card-pct\">0%</div></div>" +
-        "<button type=\"button\" class=\"btn btn-primary course-card-cta\" disabled>Em breve</button></div>";
+      return cartaoCompacto({ nome: nome, bg: '#EFE2D2', fg: '#6b5a45', pct: 0, sub: 'Próximo passo da sua trilha', fim: 'lock' });
     };
 
     // Card de nível já concluído (anterior ao nível atual da turma).
     const cardConcluido = (slug) => {
       const nome = (AREA_CTX.materias[slug] && AREA_CTX.materias[slug].name) || slug.toUpperCase();
-      return "<div class=\"course-card concluida\" style=\"border-left-color:var(--gamboge);\">" +
-        "<div class=\"course-card-top\"><div><h3 class=\"course-card-name\">" + escapeHtmlLocal(nome) + "</h3>" +
-        "<p class=\"course-card-desc\">Nível concluído. Parabéns por essa etapa da sua trilha!</p></div>" +
-        "<div class=\"course-card-icon\" style=\"background:#FDEFD3; color:var(--gamboge-dark);\">" + COURSE_ICON_SVG + "</div></div>" +
-        "<div class=\"course-card-stats\"><div class=\"course-card-stats-icon\">" + STATS_ICON_SVG + "</div>" +
-        "<div class=\"course-card-stats-text\"><span>" + MI('emoji_events') + " Nível concluído</span><div class=\"course-card-bar\"><span style=\"width:100%; background:linear-gradient(90deg,var(--gamboge),var(--orangered));\"></span></div></div>" +
-        "<div class=\"course-card-pct\">100%</div></div>" +
-        "<button type=\"button\" class=\"btn btn-secondary course-card-cta\" disabled>Concluído</button></div>";
+      return cartaoCompacto({ nome: nome, bg: '#FDEFD3', fg: '#CE8613', pct: 100, sub: 'Nível concluído', icone: 'emoji_events', fim: 'check_circle' })
+        .replace('class="cc travado"', 'class="cc concluido"');
     };
 
     // Trilha de aprendizagem: A1 → A2 → B1 → B2 → C1, sempre visível — o que a turma
@@ -1719,7 +1731,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     wrap.innerHTML = semTurma
       ? trilhaGeralHtml + avisoSemTurma
       : cards.length
-      ? trilhaGeralHtml + '<div class="course-folder-grid">' + cards.join('') + '</div>'
+      ? trilhaGeralHtml + '<div class="cc-grid">' + cards.join('') + '</div>'
       : '<div class="course-folder" style="border-left-color:var(--seal-soft); cursor:default;">' +
           '<div class="course-folder-icon">' + MI('folder_open') + '</div>' +
           '<div class="course-folder-info">' +
