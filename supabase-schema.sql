@@ -4555,3 +4555,70 @@ as $$
 $$;
 
 grant execute on function public.ranking_atividades() to authenticated;
+
+-- ======================================================================
+-- 39) RANKING HONESTO — pontos congelados na 1ª conclusão
+--     activity_results.pontos_ranking guarda os pontos DYSE da PRIMEIRA vez
+--     que o aluno concluiu a atividade "ativ-*". Quem preenche é o trigger
+--     (não o app): refazer — mesmo liberado pela professora — vira só treino,
+--     não soma nem troca pontos no ranking. O app até manda meta.pontos da
+--     nova tentativa (pro boletim/professora), mas pontos_ranking não muda.
+-- ======================================================================
+alter table public.activity_results add column if not exists pontos_ranking int;
+
+-- Backfill: resultados já concluídos ganham o valor atual como "1ª vez".
+update public.activity_results
+set pontos_ranking = case when (meta->>'pontos') ~ '^[0-9]+$' then (meta->>'pontos')::int else 0 end
+where course like 'ativ-%' and status = 'concluida' and pontos_ranking is null;
+
+create or replace function public.congela_pontos_ranking()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if new.course not like 'ativ-%' then
+    return new;
+  end if;
+  if TG_OP = 'UPDATE' and old.pontos_ranking is not null then
+    new.pontos_ranking := old.pontos_ranking;   -- já pontuou uma vez: nunca muda
+  elsif new.status = 'concluida' then
+    new.pontos_ranking := case when (new.meta->>'pontos') ~ '^[0-9]+$' then (new.meta->>'pontos')::int else 0 end;
+  else
+    new.pontos_ranking := null;
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_congela_pontos_ranking on public.activity_results;
+create trigger trg_congela_pontos_ranking
+  before insert or update on public.activity_results
+  for each row execute procedure public.congela_pontos_ranking();
+
+create or replace function public.ranking_atividades()
+returns table(posicao int, pontos int, atividades int, nome text, eu boolean)
+language sql
+stable
+security definer set search_path = public
+as $$
+  with tot as (
+    select r.user_id,
+           sum(coalesce(r.pontos_ranking, 0))::int as pontos,
+           count(*)::int as atividades
+    from public.activity_results r
+    where r.course like 'ativ-%' and r.status = 'concluida'
+    group by r.user_id
+  ), rk as (
+    select user_id, pontos, atividades, (rank() over (order by pontos desc))::int as posicao from tot
+  )
+  select rk.posicao, rk.pontos, rk.atividades,
+         case when public.is_admin() and rk.posicao <= 5 then p.full_name else null end as nome,
+         (rk.user_id = auth.uid()) as eu
+  from rk
+  left join public.profiles p on p.id = rk.user_id
+  where rk.posicao <= 5 or rk.user_id = auth.uid()
+  order by rk.posicao, rk.pontos desc;
+$$;
+
+grant execute on function public.ranking_atividades() to authenticated;

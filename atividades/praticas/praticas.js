@@ -499,7 +499,8 @@
         '<h2>' + esc(at.titulo) + '</h2>' +
         '<div class="meta">' + esc(S.info.aulaInfo.titulo) + '</div>' +
         '<div class="cv-chips"><span>⏱ ' + esc(at.minutos) + ' min</span><span>📋 ' + S.cfg.itens.length + ' questões</span>' +
-          (at.microfone ? '<span>🎙 Usa microfone</span>' : '') + '</div>' +
+          (at.microfone ? '<span>🎙 Usa microfone</span>' : '') +
+          (S.refazendo ? '<span style="background:#FDF0DD; color:#CE8613;">↻ Treino · não soma no ranking</span>' : '') + '</div>' +
         '<div class="cv-grid"><div><small>Você vai treinar</small><b>' + esc(at.treina) + '</b></div><div class="pts"><small>Ganhe até</small><b>' + dysePraticaPontosMax(S.cfg.itens.length) + ' pts</b></div></div>' +
         '<button class="px-btn">Começar →</button>' +
       '</div>', 'cover');
@@ -597,7 +598,10 @@
     $('#pxMain').outerHTML = '<div class="px-result" id="pxMain">' + salvo +
       '<div class="px-res-hero"><span class="px-mark">dyse</span><div class="ring" style="--p:' + pctAcerto + '"><b>' + acertos + '/' + n + '</b><small>corretas</small></div>' +
         '<h2>' + (p.perfeita ? 'Perfeita! 🏆' : prec >= 0.7 ? 'Mandou bem!' : 'Bom treino!') + '</h2><p>' + esc(S.info.atividade.titulo) + ' · Aula ' + String(S.cfg.aula).padStart(2, '0') + '</p></div>' +
-      '<div class="px-res-total" style="margin-bottom:16px;"><span>Pontos DYSE<small style="display:block; font-size:.72rem; opacity:.7; font-weight:500;">de ' + p.max + ' possíveis · contam no Ranking</small></span><b>' + p.total + ' pts</b></div>' +
+      '<div class="px-res-total" style="margin-bottom:16px;"><span>' + (S.refazendo ? 'Pontos do treino' : 'Pontos DYSE') +
+        '<small style="display:block; font-size:.72rem; opacity:.7; font-weight:500;">de ' + p.max + ' possíveis · ' +
+        (S.refazendo ? 'no ranking continua valendo a 1ª vez' + (S.pontosOriginais != null ? ' (' + S.pontosOriginais + ' pts)' : '') : 'contam no Ranking') +
+        '</small></span><b>' + p.total + ' pts</b></div>' +
       linksFim(prox) +
       '<div class="px-res-card" style="margin-top:16px;"><h3>Como você pontuou</h3>' +
         '<div class="px-res-line"><div class="ic">🎯</div><div class="txt">Acertos de primeira<small>' + p.primeira + ' × ' + DYSE_PONTOS.primeira + ' pts</small></div><div class="pts">+' + p.det.primeira + '</div></div>' +
@@ -668,6 +672,12 @@
         const liberadoEm = refazer[cfg.course + ':' + cfg.aula + ':' + cfg.num];
         const podeRefazer = res && liberadoEm && new Date(liberadoEm) > new Date(res.updated_at);
         if(res && res.status === 'concluida' && !podeRefazer){ await telaJaConcluida(res); return; }
+        // Refazer liberado pela professora: vale como treino — o ranking guarda
+        // só os pontos da 1ª conclusão (o banco congela, seção 39).
+        if(res && res.status === 'concluida' && podeRefazer){
+          S.refazendo = true;
+          S.pontosOriginais = res.pontos_ranking != null ? res.pontos_ranking : (res.meta && res.meta.pontos);
+        }
       }
       montarTopo();
       modalIntro();
