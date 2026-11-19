@@ -2751,7 +2751,7 @@ body.dyse-modal-open{overflow:hidden;}
     const email = document.getElementById('newStudentEmail').value.trim();
     if(!full_name || !email) return false;
 
-    const session = await dyseGetSession();
+    const session = await dyseSessaoParaServidor(); if(!session) return false;
     const btn = e.target.querySelector('button[type="submit"]');
     btn.disabled = true;
     const skipEmail = document.getElementById('newStudentSkipEmail').checked;
@@ -2802,7 +2802,7 @@ body.dyse-modal-open{overflow:hidden;}
     const email = document.getElementById('newTeacherEmail').value.trim();
     if(!full_name || !email) return false;
 
-    const session = await dyseGetSession();
+    const session = await dyseSessaoParaServidor(); if(!session) return false;
     const btn = e.target.querySelector('button[type="submit"]');
     btn.disabled = true;
     const skipEmail = document.getElementById('newTeacherSkipEmail').checked;
@@ -3024,7 +3024,7 @@ body.dyse-modal-open{overflow:hidden;}
 
     const btn = document.getElementById('btnImportarCSV');
     btn.disabled = true;
-    const session = await dyseGetSession();
+    const session = await dyseSessaoParaServidor(); if(!session) return false;
 
     for(let i = 0; i < linhas.length; i++){
       const linha = linhas[i];
@@ -3743,7 +3743,7 @@ body.dyse-modal-open{overflow:hidden;}
     const email = document.getElementById('alunoEditEmail').value.trim();
     if(!full_name || !email || !CURRENT_ALUNO_EDIT_ID) return false;
 
-    const session = await dyseGetSession();
+    const session = await dyseSessaoParaServidor(); if(!session) return false;
     try{
       const resp = await fetch('/api/update-student', {
         method: 'POST',
@@ -3779,7 +3779,7 @@ body.dyse-modal-open{overflow:hidden;}
     const nome = professor ? (professor.full_name || professor.email || '') : id;
     if(!confirm('Entrar na conta de "' + nome + '"?\n\nVocê vai SAIR da sua conta de gestão neste navegador e entrar como esse professor. Pra voltar, é só fazer login de novo.')) return;
 
-    const session = await dyseGetSession();
+    const session = await dyseSessaoParaServidor(); if(!session) return false;
     try{
       const resp = await fetch('/api/impersonate', {
         method: 'POST',
@@ -3804,7 +3804,7 @@ body.dyse-modal-open{overflow:hidden;}
     const nome = pessoa ? (pessoa.full_name || pessoa.email || '') : id;
     if(!confirm('Gerar uma senha temporária nova para "' + nome + '"? A senha atual dele(a) deixa de funcionar imediatamente.')) return;
 
-    const session = await dyseGetSession();
+    const session = await dyseSessaoParaServidor(); if(!session) return false;
     try{
       const resp = await fetch('/api/set-temp-password', {
         method: 'POST',
@@ -3831,7 +3831,7 @@ body.dyse-modal-open{overflow:hidden;}
     const nome = aluno ? (aluno.full_name || aluno.email || '') : id;
     if(!confirm('Excluir definitivamente "' + nome + '"? Isso remove a conta de login dele (não só o cadastro) e não pode ser desfeito.')) return;
 
-    const session = await dyseGetSession();
+    const session = await dyseSessaoParaServidor(); if(!session) return false;
     try{
       const resp = await fetch('/api/delete-student', {
         method: 'POST',
@@ -3854,7 +3854,7 @@ body.dyse-modal-open{overflow:hidden;}
     const nome = professor ? (professor.full_name || professor.email || '') : id;
     if(!confirm('Excluir definitivamente "' + nome + '"? Isso remove a conta de login dele(a) (não só o cadastro) e não pode ser desfeito.')) return;
 
-    const session = await dyseGetSession();
+    const session = await dyseSessaoParaServidor(); if(!session) return false;
     try{
       // Mesmo endpoint usado pra excluir aluno — a exclusão é feita direto
       // no Supabase Auth (auth.admin.deleteUser) e não depende da role de

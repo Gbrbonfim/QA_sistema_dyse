@@ -2411,7 +2411,7 @@ body.dyse-modal-open{overflow:hidden;}
 
   async function handleAceitarSugestao(sugestaoId){
     if(!confirm('Aceitar essa mudança de horário?')) return;
-    const session = await dyseGetSession();
+    const session = await dyseSessaoParaServidor(); if(!session) return;
     try{
       const resp = await fetch('/api/aceitar-horario-sugestao', {
         method: 'POST',

@@ -49,6 +49,31 @@ async function dyseGetSession(){
   return data.session;
 }
 
+/* Sessão garantida pra chamar as funções do servidor (/api/*).
+   O navegador pode guardar um login que o servidor já encerrou (ex.: saiu
+   da conta em outro lugar, trocou de conta várias vezes no mesmo
+   navegador) — aí a tela segue funcionando, mas o servidor responde
+   "Sessão inválida ou expirada". Aqui conferimos o login no servidor e,
+   se precisar, renovamos. Se não der pra renovar, avisa a pessoa e leva
+   pro login (devolve null; quem chamou só precisa parar). */
+async function dyseSessaoParaServidor(){
+  const { data } = await sb.auth.getSession();
+  let session = data.session;
+  if(session){
+    const { error } = await sb.auth.getUser();
+    if(!error) return session;
+    const r = await sb.auth.refreshSession();
+    if(r && r.data && r.data.session){
+      const check = await sb.auth.getUser();
+      if(!check.error) return r.data.session;
+    }
+  }
+  alert('Sua sessão expirou. Entre de novo para continuar.');
+  try{ await sb.auth.signOut({ scope: 'local' }); }catch(e){}
+  location.href = '/login.html';
+  return null;
+}
+
 /* Checagem de cargo tolerante a maiúsculas/espaços extras, caso o valor
    salvo no banco não esteja perfeitamente igual a "teacher". Também vale
    pra quem tem o flag "also_teacher" (ex: um admin que também dá aula —
@@ -1328,7 +1353,7 @@ function dyseAlunoRenderBadges(uid){
 /* POST numa função serverless autenticada com o token do Supabase.
    Devolve { data } em sucesso ou { error: { message } }. */
 async function dyseApiPost(path, body){
-  const session = await dyseGetSession();
+  const session = await dyseSessaoParaServidor();
   if(!session) return { error: { message: 'Sessão expirada. Entre de novo.' } };
   let resp;
   try{
@@ -2819,7 +2844,7 @@ async function dyseListReportCards(alunoId){
    Na 1ª geração também pré-preenche pontos fortes / de desenvolvimento /
    considerações se ainda estiverem vazios (o professor edita depois). */
 async function dyseGerarAnaliseReportCardIA(reportCard){
-  const session = await dyseGetSession();
+  const session = await dyseSessaoParaServidor();
   if(!session) return { error: { message: 'Sessão expirada.' } };
   let resp;
   try{

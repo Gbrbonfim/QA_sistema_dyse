@@ -90,6 +90,35 @@
 .dyse-cal-pop-actions{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;}
 .dyse-cal-pop-actions .btn{padding:8px 12px; font-size:.82rem;}
 .dyse-cal-backdrop{position:fixed; inset:0; z-index:8999; display:none;}
+/* Navegação mês a mês: só no celular (no computador aparece o ano inteiro). */
+.dyse-cal .mes-nav{display:none;}
+@media (max-width:760px){
+  .dyse-cal .cal-toolbar{gap:10px; margin-bottom:16px;}
+  .dyse-cal .cal-layout{display:flex; flex-direction:column; align-items:stretch; gap:14px;}
+  /* Ordem no celular: legenda (só texto) → calendário → informações. */
+  .dyse-cal .cal-side{display:contents;}
+  .dyse-cal .legend-card{order:0; background:none; box-shadow:none; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:6px 14px;}
+  .dyse-cal .legend-card h3{display:none;}
+  .dyse-cal .legend-card .legend-row{margin:0; gap:6px; font-size:.78rem; color:var(--seal-soft);}
+  .dyse-cal .legend-card .legend-dot{width:10px; height:10px; border-radius:50%;}
+  .dyse-cal .cal-layout > .cal-panel{order:1;}
+  .dyse-cal .info-card{order:2; margin-bottom:0;}
+  .dyse-cal .cal-panel{padding:14px 14px 18px;}
+  .dyse-cal .mes-nav{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px;}
+  .dyse-cal .mes-nav b{font-size:1.05rem; font-weight:700; color:var(--seal); text-align:center; flex:1;}
+  .dyse-cal .mes-nav button{width:44px; height:44px; border-radius:50%; border:2px solid #eee0cf; background:#fff; color:var(--amaranth); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent;}
+  .dyse-cal .mes-nav button:active{background:#fdf2f4;}
+  .dyse-cal .mes-nav button:disabled{opacity:.35; cursor:default;}
+  .dyse-cal .mes-nav svg{width:22px; height:22px;}
+  .dyse-cal .months-grid{display:block;}
+  .dyse-cal .months-grid .month{display:none; max-width:none;}
+  .dyse-cal .months-grid .month.atual{display:block;}
+  .dyse-cal .month h4{display:none;}
+  .dyse-cal .dow span{font-size:.72rem; padding:6px 0;}
+  .dyse-cal .cal-day{font-size:.95rem; border-radius:10px;}
+  .dyse-cal .cal-day.today{outline:none; background:var(--amaranth) !important; color:#fff; font-weight:800;}
+  .dyse-cal .month-notes{font-size:.8rem; margin-top:12px; padding-top:10px; border-top:1px dashed #eee0cf;}
+}
 .dyse-cal-backdrop.open{display:block;}
 @media print{
   body *{visibility:hidden !important;}
@@ -120,7 +149,8 @@
     container.dataset.calMontado = '1';
     injetarCss();
     const canEdit = !!(opts && opts.canEdit);
-    const st = { ano: new Date().getFullYear(), config: null, dias: {}, popDate: null };
+    // mes = mês em destaque no celular (começa no mês atual).
+    const st = { ano: new Date().getFullYear(), mes: new Date().getMonth(), config: null, dias: {}, popDate: null };
 
     container.classList.add('dyse-cal');
     container.innerHTML =
@@ -210,9 +240,10 @@
       }
       body.innerHTML =
         '<div class="cal-layout">' +
-          '<div>' + legendaHtml() + infoHtml() + '</div>' +
-          '<div class="cal-panel"><div class="months-grid">' + MESES.map((_, m) => mesHtml(m)).join('') + '</div></div>' +
+          '<div class="cal-side">' + legendaHtml() + infoHtml() + '</div>' +
+          '<div class="cal-panel">' + mesNavHtml() + '<div class="months-grid">' + MESES.map((_, m) => mesHtml(m)).join('') + '</div></div>' +
         '</div>';
+      ligarMesNav();
       if(canEdit){
         body.querySelectorAll('button.cal-day[data-date]').forEach(b => b.addEventListener('click', ev => abrirPop(ev, b.dataset.date)));
         const salvar = body.querySelector('[data-cal="salvarInfo"]');
@@ -220,8 +251,61 @@
       }
     }
 
+    /* ---------- Celular: um mês por vez, com setas e arrastar pro lado ---------- */
+    const SETA_ESQ = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>';
+    const SETA_DIR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>';
+    function anosDisponiveis(){ return Array.from($('ano').options).map(o => parseInt(o.value, 10)); }
+    function mesNavHtml(){
+      return '<div class="mes-nav">' +
+        '<button type="button" data-cal="mesPrev" aria-label="Mês anterior">' + SETA_ESQ + '</button>' +
+        '<b data-cal="mesTitulo" aria-live="polite"></b>' +
+        '<button type="button" data-cal="mesNext" aria-label="Próximo mês">' + SETA_DIR + '</button>' +
+      '</div>';
+    }
+    function mostrarMes(){
+      container.querySelectorAll('.months-grid .month').forEach((el, i) => el.classList.toggle('atual', i === st.mes));
+      const t = $('mesTitulo'); if(t) t.textContent = MESES[st.mes] + ' ' + st.ano;
+      const anos = anosDisponiveis();
+      const prev = $('mesPrev'), next = $('mesNext');
+      if(prev) prev.disabled = st.mes === 0 && st.ano <= Math.min.apply(null, anos);
+      if(next) next.disabled = st.mes === 11 && st.ano >= Math.max.apply(null, anos);
+    }
+    function irMes(delta){
+      let m = st.mes + delta, ano = st.ano;
+      if(m < 0){ m = 11; ano--; } else if(m > 11){ m = 0; ano++; }
+      if(ano !== st.ano){
+        if(anosDisponiveis().indexOf(ano) < 0) return; // fora dos anos da lista
+        st.mes = m;
+        st.ano = ano;
+        $('ano').value = String(ano);
+        $('body').innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+        carregarAno();
+        return;
+      }
+      st.mes = m;
+      mostrarMes();
+    }
+    function ligarMesNav(){
+      const prev = $('mesPrev'), next = $('mesNext');
+      if(prev) prev.addEventListener('click', () => irMes(-1));
+      if(next) next.addEventListener('click', () => irMes(1));
+      // arrastar o dedo pro lado também troca de mês
+      const grid = container.querySelector('.months-grid');
+      let x0 = null, y0 = null;
+      if(grid){
+        grid.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+        grid.addEventListener('touchend', e => {
+          if(x0 === null) return;
+          const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+          x0 = null;
+          if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) irMes(dx < 0 ? 1 : -1);
+        }, { passive: true });
+      }
+      mostrarMes();
+    }
+
     function legendaHtml(){
-      return '<div class="side-card"><h3>Legenda</h3>' + Object.keys(TIPOS).map(t =>
+      return '<div class="side-card legend-card"><h3>Legenda</h3>' + Object.keys(TIPOS).map(t =>
         '<div class="legend-row"><span class="legend-dot" style="background:var(--tipo-' + t + ');"></span>' + TIPOS[t] + '</div>').join('') + '</div>';
     }
 
@@ -230,14 +314,14 @@
       const campos = [['inicio_ano','Início do ano letivo'],['fim_ano','Término do ano letivo'],['total_dias_letivos','Total de dias letivos'],
         ['total_semanas_letivas','Total de semanas letivas'],['observacao','Observação']];
       if(canEdit){
-        return '<div class="side-card"><h3>Informações importantes</h3>' +
+        return '<div class="side-card info-card"><h3>Informações importantes</h3>' +
           campos.map(([k, l]) => '<div class="info-row"><label>' + l + '</label><input type="text" data-info="' + k + '" value="' + esc(c[k] || '') + '"></div>').join('') +
           '<button type="button" class="btn btn-primary" style="width:100%; margin-top:6px;" data-cal="salvarInfo">Salvar informações</button>' +
           '<div class="info-note">Este quadro é preenchido à mão. As datas marcadas nos meses não recalculam esses totais automaticamente.</div></div>';
       }
       const linhas = campos.filter(([k]) => c[k]);
       if(!linhas.length) return '';
-      return '<div class="side-card"><h3>Informações importantes</h3>' +
+      return '<div class="side-card info-card"><h3>Informações importantes</h3>' +
         linhas.map(([k, l]) => '<div class="info-row"><label>' + l + '</label><span class="val">' + esc(c[k]) + '</span></div>').join('') + '</div>';
     }
 
@@ -347,6 +431,7 @@
 
     $('ano').addEventListener('change', () => {
       st.ano = parseInt($('ano').value, 10);
+      st.mes = st.ano === new Date().getFullYear() ? new Date().getMonth() : 0;
       $('body').innerHTML = '<p style="opacity:.6;">Carregando...</p>';
       carregarAno();
     });

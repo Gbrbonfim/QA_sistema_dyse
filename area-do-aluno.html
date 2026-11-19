@@ -119,9 +119,6 @@ body::before{
 }
 .sidebar-item.active .sidebar-badge{background:var(--amaranth); color:#fff;}
 .sidebar-badge[hidden]{display:none !important;} /* sem isso o display:flex acima vence o atributo hidden e aparece "0" */
-@media (max-width:900px){
-  .sidebar-badge{position:absolute; top:4px; right:4px; margin:0;}
-}
 .sidebar-item svg{flex:none; width:19px; height:19px; opacity:.85;}
 .sidebar-item:hover{background:rgba(255,255,255,.12);}
 .sidebar-item.active{background:#fff; color:var(--amaranth);}
@@ -190,19 +187,54 @@ body::before{
 .content-footer{margin-top:auto; text-align:center; padding:48px 20px 6px; font-size:.8rem; color:var(--seal-soft); opacity:.7;}
 .content-footer .fmark{font-family:var(--font-display); font-size:1.3rem; color:var(--amaranth); display:block; margin-bottom:4px;}
 
+/* Ícones do menu: Material Symbols (contorno; preenchido no item ativo). */
+.sidebar-item .nav-ic{font-size:20px; vertical-align:0; flex:none; opacity:.9; font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24;}
+.sidebar-item.active .nav-ic{opacity:1; font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24;}
+
+/* Saudação/ações da barra superior: só existem no celular. */
+.mob-greet, .mob-actions{display:none;}
+
+/* ---------- Celular: barra superior compacta + abas roláveis ----------
+   Padrão Material: app bar fixa no topo (logo + saudação à esquerda, ações
+   em ícone à direita, toque ≥ 44px) e a navegação como abas roláveis numa
+   linha só — o conteúdo aparece logo na primeira dobra da tela. */
 @media (max-width:900px){
   .app-shell{flex-direction:column; height:auto; overflow:visible;}
-  .sidebar{width:100%; height:auto; overflow-y:visible; padding:16px 16px 14px;}
-  .sidebar-brand{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .sidebar{width:100%; height:auto; overflow-y:visible; padding:10px 16px 18px;
+    background:linear-gradient(160deg, #DC4A65 0%, var(--amaranth) 48%, #B42B45 100%);
+    border-radius:0 0 22px 22px; box-shadow:0 8px 24px rgba(178,44,68,.28);}
+  .sidebar-brand{display:flex; align-items:center; gap:12px; margin:0 0 10px; min-height:48px;}
+  .sidebar-logo{height:24px; margin:0; flex:none;}
   .sidebar-tagline{display:none;}
-  .sidebar-nav{display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;}
-  .sidebar-item{flex-direction:column; text-align:center; font-size:.68rem; padding:10px 4px; gap:4px;}
-  .sidebar-footer{flex-direction:row; flex-wrap:wrap; margin-top:14px;}
-  .sidebar-help{flex:1 1 200px;}
-  .sidebar-user{flex:1 1 160px;}
+  .mob-greet{display:block; flex:1 1 auto; min-width:0; padding-left:12px; border-left:1px solid rgba(255,255,255,.35); font-weight:600; font-size:1rem; line-height:1.2; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .mob-actions{display:flex; align-items:center; gap:2px; flex:none; margin-right:-6px;}
+  .mob-icon-btn{width:44px; height:44px; border-radius:50%; border:none; background:transparent; color:#fff; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; -webkit-tap-highlight-color:transparent;}
+  .mob-icon-btn:active, .mob-icon-btn:hover{background:rgba(255,255,255,.16);}
+  .mob-icon-btn .msr{font-size:24px; vertical-align:0;}
+
+  /* Menu: grade de cartões (Material) — ícone em cima, nome embaixo,
+     superfície translúcida com borda sutil; o ativo é branco e elevado. */
+  .sidebar-nav{display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;}
+  .sidebar-item{flex-direction:column; justify-content:center; text-align:center; gap:6px; min-height:80px; padding:12px 6px;
+    font-size:.78rem; font-weight:600; line-height:1.2; color:#fff; border-radius:14px;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.24);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18); transition:background .15s, transform .12s, box-shadow .15s;
+    -webkit-tap-highlight-color:transparent;}
+  .sidebar-item:hover{background:rgba(255,255,255,.22);}
+  .sidebar-item:active{transform:scale(.97);}
+  .sidebar-item .nav-ic{font-size:26px;}
+  .sidebar-item.active{background:#fff; color:var(--amaranth); border-color:#fff; box-shadow:0 6px 16px rgba(58,29,16,.22);}
+  .sidebar-badge{position:absolute; top:6px; right:6px; margin:0;}
+  .sidebar-footer{display:none;}
+
   .main-area{height:auto; overflow-y:visible;}
-  .topbar{padding:16px 20px;}
-  .content{padding:20px 16px 48px;}
+  .topbar{padding:10px 16px;}
+  .topbar-greeting{display:none;}
+  .topbar.so-aluno{display:none;}
+  .content{padding:18px 16px 48px;}
+  .page-header{gap:12px; margin-bottom:16px;}
+  .page-header-icon{width:44px; height:44px;}
+  .page-header-text h2{font-size:1.2rem;}
 }
 
 /* ---------- STEPPER ---------- */
@@ -904,34 +936,40 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     <div class="sidebar-brand">
       <img src="assets/images/brand/dyse-logo-white.png" alt="DYSE" class="sidebar-logo">
       <div class="sidebar-tagline">Do You Speak English?*<br>Área do Aluno</div>
+      <!-- Só no celular: saudação ao lado da logo + ações em ícone (barra superior compacta) -->
+      <div class="mob-greet" id="mobGreeting">Olá!</div>
+      <div class="mob-actions">
+        <a class="mob-icon-btn" href="https://wa.me/554187207973" target="_blank" rel="noopener" aria-label="Falar com o suporte" title="Suporte"><span class="msr" aria-hidden="true">support_agent</span></a>
+        <button type="button" class="mob-icon-btn" onclick="dyseLogout()" aria-label="Sair" title="Sair"><span class="msr" aria-hidden="true">logout</span></button>
+      </div>
     </div>
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" aria-label="Menu principal">
       <a href="#" class="sidebar-item active" data-view="atividades" onclick="mostrarView('atividades', event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+        <span class="msr nav-ic" aria-hidden="true">menu_book</span>
         <span>Meus cursos</span>
         <span class="sidebar-badge" data-badge="atividades" hidden></span>
       </a>
       <a href="#" class="sidebar-item" data-view="praticas" onclick="mostrarView('praticas', event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span class="msr nav-ic" aria-hidden="true">check_box</span>
         <span>Atividades</span>
         <span class="sidebar-badge" data-badge="praticas" hidden></span>
       </a>
       <a href="#" class="sidebar-item" data-view="ranking" onclick="mostrarView('ranking', event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+        <span class="msr nav-ic" aria-hidden="true">trophy</span>
         <span>Ranking atividades</span>
       </a>
       <a href="#" class="sidebar-item" data-view="reportcard" onclick="mostrarView('reportcard', event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="12" y2="11"/></svg>
+        <span class="msr nav-ic" aria-hidden="true">description</span>
         <span>Report Card</span>
         <span class="sidebar-badge" data-badge="reportcard" hidden></span>
       </a>
       <a href="#" class="sidebar-item" data-view="financeiro" onclick="mostrarView('financeiro', event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <span class="msr nav-ic" aria-hidden="true">credit_card</span>
         <span>Financeiro</span>
         <span class="sidebar-badge" data-badge="financeiro" hidden></span>
       </a>
       <a href="#" class="sidebar-item" data-view="calendario" onclick="mostrarView('calendario', event)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="msr nav-ic" aria-hidden="true">calendar_month</span>
         <span>Calendário Letivo</span>
       </a>
     </nav>
@@ -1099,6 +1137,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const fullName = meta.full_name || session.user.email;
     const firstName = (fullName || '').trim().split(/\s+/)[0] || 'Aluno(a)';
     document.getElementById('topbarGreeting').textContent = 'Olá, ' + firstName + '!';
+    document.getElementById('mobGreeting').textContent = 'Olá, ' + firstName + '!';
 
     const userIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
     const listIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>';
@@ -1106,6 +1145,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     if(dyseIsAdmin(profile)) links.push({ href:'/gestao.html', label:'Painel da gestão', icon:userIcon, active:false });
     if(dyseIsTeacher(profile)) links.push({ href:'/professora.html', label:'Painel do professor', icon:userIcon, active:false });
     links.push({ href:'/area-do-aluno.html', label:'Meus cursos', icon:listIcon, active:true });
+    // Aluno comum só teria o atalho "Meus cursos" (repetido no menu): no celular a barra some.
+    document.querySelector('.topbar').classList.toggle('so-aluno', links.length === 1);
     document.getElementById('topbarLinks').innerHTML = links.map(l =>
       '<a href="' + l.href + '" class="topbar-link' + (l.active ? ' active' : '') + '">' + l.icon + '<span>' + l.label + '</span></a>'
     ).join('');
