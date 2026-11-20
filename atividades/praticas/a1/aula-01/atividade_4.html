@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DYSE · A1 · Aula 01 · Pronunciation</title>
+<title>DYSE · A1 · Aula 01 · Say it right</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,76 +17,37 @@
 <script src="/atividades/praticas/catalogo.js"></script>
 <script src="/atividades/praticas/praticas.js"></script>
 <script>
-/* Conteúdo: slide "Class 01 and 02: The World of English" — Pronunciation 2 (Listen and practice the sentences) + frases do diálogo */
+/* Class 01 · Fala
+   Alinhado ao slide "Class 01 and 02: The World of English" — Pronunciation (frases de
+   apresentação, ligação "meet you") e Vocabulary: Countries. Conteúdo NOVO: outros países e
+   outras frases com as mesmas estruturas. 20 questões: 10 países + 10 frases.
+   "aceita": palavras que o reconhecimento de voz confunde por terem o mesmo som. */
+const PAIS = 'Escute e grave o nome do país';
 DysePratica.iniciar({
- "course": "ativ-a1",
- "aula": 1,
- "num": 4,
- "tipo": "fala",
- "instrucao": "Escute e grave a frase inteira",
- "itens": [
-  {
-   "frase": "What's your name?",
-   "dica": 1,
-   "traducao": "Qual é o seu nome?",
-   "emoji": "🙋"
-  },
-  {
-   "frase": "Nice to meet you!",
-   "dica": 0,
-   "traducao": "Prazer em te conhecer!",
-   "emoji": "🤝",
-   "nota": "Em \"meet you\" os sons se ligam: fala-se quase \"mee-tchu\"."
-  },
-  {
-   "frase": "Nice to meet you too.",
-   "dica": 4,
-   "traducao": "Prazer em te conhecer também.",
-   "emoji": "🤝"
-  },
-  {
-   "frase": "And you?",
-   "dica": 0,
-   "traducao": "E você?",
-   "emoji": "👉"
-  },
-  {
-   "frase": "See you later.",
-   "dica": 2,
-   "traducao": "Até mais tarde.",
-   "emoji": "👋"
-  },
-  {
-   "frase": "Thank you!",
-   "dica": 0,
-   "traducao": "Obrigado(a)!",
-   "emoji": "🙏"
-  },
-  {
-   "frase": "Where are you from?",
-   "dica": 3,
-   "traducao": "De onde você é?",
-   "emoji": "🌍"
-  },
-  {
-   "frase": "I'm from Brazil.",
-   "dica": 2,
-   "traducao": "Eu sou do Brasil.",
-   "emoji": "🌎"
-  },
-  {
-   "frase": "My name is Tom.",
-   "dica": 3,
-   "traducao": "Meu nome é Tom.",
-   "emoji": "🧑"
-  },
-  {
-   "frase": "Bye, Tom!",
-   "dica": 1,
-   "traducao": "Tchau, Tom!",
-   "emoji": "👋"
-  }
- ]
+  course: 'ativ-a1', aula: 1, num: 4, tipo: 'fala',
+  instrucao: 'Escute e grave a frase inteira',
+  itens: [
+    { instrucao: PAIS, frase: 'Argentina', traducao: 'Argentina' },
+    { instrucao: PAIS, frase: 'Mexico', traducao: 'México' },
+    { instrucao: PAIS, frase: 'Portugal', traducao: 'Portugal' },
+    { instrucao: PAIS, frase: 'Australia', traducao: 'Austrália' },
+    { instrucao: PAIS, frase: 'Ireland', traducao: 'Irlanda', aceita: { island: 'ireland' } },
+    { instrucao: PAIS, frase: 'Chile', traducao: 'Chile', nota: 'Em inglês fala-se "tchí-li".', aceita: { chilly: 'chile', chili: 'chile', chilli: 'chile' } },
+    { instrucao: PAIS, frase: 'Colombia', traducao: 'Colômbia', aceita: { columbia: 'colombia' } },
+    { instrucao: PAIS, frase: 'Peru', traducao: 'Peru' },
+    { instrucao: PAIS, frase: 'Greece', traducao: 'Grécia', aceita: { grease: 'greece', grace: 'greece' } },
+    { instrucao: PAIS, frase: 'Egypt', traducao: 'Egito' },
+    { frase: "Hi! I'm Sofia.", dica: 0, traducao: 'Oi! Eu sou a Sofia.', aceita: { sophia: 'sofia' } },
+    { frase: "What's your name?", dica: 1, traducao: 'Qual é o seu nome?' },
+    { frase: 'My name is Diego.', dica: 1, traducao: 'Meu nome é Diego.' },
+    { frase: 'Nice to meet you, Mia.', dica: 0, traducao: 'Prazer em te conhecer, Mia.', nota: 'Lembre da ligação: "meet you" soa quase "mee-tchu".' },
+    { frase: 'Nice to meet you too, Sam.', dica: 4, traducao: 'Prazer em te conhecer também, Sam.', aceita: { two: 'too' } },
+    { frase: 'Where are you from, Lucas?', dica: 0, traducao: 'De onde você é, Lucas?' },
+    { frase: "I'm from Mexico. And you?", dica: 3, traducao: 'Eu sou do México. E você?' },
+    { frase: 'Oh, Chile is beautiful!', dica: 3, traducao: 'Ah, o Chile é lindo!', aceita: { chilly: 'chile', chili: 'chile', chilli: 'chile' } },
+    { frase: 'Thank you! Peru is nice too.', dica: 0, traducao: 'Obrigado! O Peru também é legal.', aceita: { two: 'too' } },
+    { frase: 'Bye, Emma! See you later.', dica: 3, traducao: 'Tchau, Emma! Até mais.' }
+  ]
 });
 </script>
 </body>

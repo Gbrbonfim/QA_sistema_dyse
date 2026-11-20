@@ -285,4 +285,8 @@ button{font-family:inherit;}
   .px-modal.cover{flex-direction:column;} .cv-side{flex:0 0 auto; flex-direction:row; padding:14px 18px;} .cv-side::after{display:none;}
   .cv-ic{width:56px; height:56px; font-size:1.8rem;}
   .px-bar span::after{width:18px; height:18px; font-size:.55rem;}
+  /* Atividades longas (20+ questões): bolinhas menores, sem número. */
+  .px-bar.many span{min-width:0;}
+  .px-bar.many span::after{width:9px; height:9px; font-size:0;}
+  .px-bar.many span.ok::after,.px-bar.many span.bad::after{font-size:0;}
 }

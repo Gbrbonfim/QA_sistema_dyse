@@ -562,6 +562,32 @@ body.dyse-tutorial-aberto{overflow:hidden;}
 }
 .dash-card.locked:hover{transform:none; box-shadow:var(--shadow-card);}
 
+/* ---------- ATIVIDADES (lista enxuta por aula) ---------- */
+.pr-aula{margin:22px 0 30px;}
+.pr-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px;}
+.pr-head small{display:block; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--amaranth);}
+.pr-head h3{margin:2px 0 0; font-size:1.12rem; font-weight:700; color:var(--seal); line-height:1.25;}
+.pr-count{font-size:.8rem; font-weight:700; color:var(--seal-soft); white-space:nowrap;}
+.pr-prog{height:6px; border-radius:999px; background:rgba(58,29,16,.08); margin:10px 0 18px; overflow:hidden;}
+.pr-prog i{display:block; height:100%; background:var(--amaranth); border-radius:inherit; transition:width .3s;}
+.pr-part{font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--seal-soft); opacity:.7; margin:16px 4px 8px;}
+.pr-list{background:#fff; border-radius:var(--radius-md); box-shadow:0 4px 18px rgba(58,29,16,.07); overflow:hidden;}
+.pr-row{display:flex; align-items:center; gap:12px; padding:13px 14px; text-decoration:none; color:var(--seal); transition:background .15s;}
+.pr-row + .pr-row{border-top:1px solid rgba(58,29,16,.07);}
+a.pr-row:hover{background:var(--antique-soft);}
+.pr-ic{flex:0 0 38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:#FCE8EB; color:var(--amaranth);}
+.pr-ic .msr{font-size:20px;}
+.pr-txt{flex:1; min-width:0;}
+.pr-txt b{display:block; font-size:.92rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.pr-txt small{display:block; font-size:.74rem; color:var(--seal-soft); opacity:.7; margin-top:1px;}
+.pr-st{flex:0 0 auto; display:inline-flex; align-items:center; gap:2px; font-size:.76rem; font-weight:700; color:#B9A693;}
+.pr-st .msr{font-size:18px;}
+.pr-st.go{color:var(--amaranth);}
+.pr-st.ok{color:var(--ok);}
+.pr-row.done .pr-ic{background:#EAF7EE; color:var(--ok);}
+.pr-row.locked .pr-ic{background:#F3ECE4; color:#B9A693;}
+.pr-row.locked .pr-txt{opacity:.55;}
+
 /* ---------- COURSE FOLDER (área do aluno) ---------- */
 .course-folder-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(360px,1fr)); gap:18px;}
 
@@ -1088,7 +1114,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           </div>
           <div class="page-header-text">
             <h2>Atividades</h2>
-            <p>Todas as atividades do seu nível. As coloridas já foram liberadas pela sua professora; as com cadeado chegam em breve.</p>
+            <p>Sua professora libera as atividades depois de cada aula.</p>
           </div>
         </div>
         <div id="praticasWrap"><p class="card-instructions" style="opacity:.6;">Carregando...</p></div>
@@ -1444,34 +1470,48 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     wrap.innerHTML = niveis.map(slug => {
       const nivel = DYSE_PRATICAS[slug];
       return nivel.aulas.map(aula => {
-        const cards = aula.atividades.map(at => {
+        // Lista enxuta: uma linha por atividade (ícone · título · habilidade e
+        // tempo · estado à direita), agrupada por Class 01 / Class 02.
+        let feitas = 0;
+        const linha = at => {
           const chave = nivel.course + ':' + aula.aula + ':' + at.num;
           // Só a liberação da professora PARA ESTE ALUNO conta — inclusive em
           // conta de gestão/professora que também é aluno.
           const lib = liberadas.has(chave);
           const res = AREA_CTX.doneMap[chave];
-          const ic = MI(PRATICA_ICONES[at.tipo] || 'edit_note');
-          const corpo = '<div class="n">' + ic + ' ' + String(at.num).padStart(2, '0') + '</div>' +
-            '<div class="t">' + escapeHtmlLocal(at.titulo) + '</div>' +
-            '<div class="l">' + escapeHtmlLocal(at.tipo) + ' · ' + escapeHtmlLocal(at.treina) + '</div>' +
-            '<div class="l">⏱ ' + escapeHtmlLocal(at.minutos) + ' min · até ' + dysePraticaPontosMax(at.questoes) + ' pts</div>';
+          const meta = escapeHtmlLocal(String(at.treina || '').split(' · ')[0]) + ' · ' + escapeHtmlLocal(String(at.minutos).replace(/\s/g, '')) + ' min · ' + dysePraticaPontosMax(at.questoes) + ' pts';
+          const miolo = st => '<span class="pr-ic">' + MI(PRATICA_ICONES[at.tipo] || 'edit_note') + '</span>' +
+            '<span class="pr-txt"><b>' + escapeHtmlLocal(at.titulo) + '</b><small>' + meta + '</small></span>' + st;
           if(!lib){
-            return '<div class="dash-card locked" title="Aguardando a professora liberar"><span class="dash-badge locked">' + MI('lock') + ' Bloqueada</span>' + corpo + '</div>';
+            return '<div class="pr-row locked" title="Aguardando a professora liberar">' + miolo('<span class="pr-st">' + MI('lock') + '</span>') + '</div>';
           }
           // Concluída: o aluno não refaz sozinho — só se a professora liberar refazer.
           if(res && res.status === 'concluida'){
+            feitas++;
+            const url = dysePraticaUrl(slug, aula.aula, at.num);
             const podeRefazer = refazer[chave] && new Date(refazer[chave]) > new Date(res.updated_at);
-            const nota = (res.meta && res.meta.total) ? res.meta.acertos + '/' + res.meta.total + (res.meta.pontos != null ? ' · ' + res.meta.pontos + ' pts' : '') : 'Feita';
             if(podeRefazer){
-              return '<a class="dash-card" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '"><span class="dash-badge pending">↻ Refazer liberado</span>' + corpo + '</a>';
+              return '<a class="pr-row" href="' + url + '">' + miolo('<span class="pr-st go">' + MI('replay') + ' Refazer</span>') + '</a>';
             }
-            return '<div class="dash-card" style="cursor:default;" title="Concluída — pra refazer, peça à professora"><span class="dash-badge done">' + MI('check') + ' ' + nota + '</span>' + corpo + '</div>';
+            const pts = res.meta && res.meta.pontos != null ? res.meta.pontos + ' pts' : 'Feita';
+            return '<div class="pr-row done" title="Concluída — pra refazer, peça à professora">' + miolo('<span class="pr-st ok">' + MI('check') + ' ' + pts + '</span>') + '</div>';
           }
-          return '<a class="dash-card" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '"><span class="dash-badge pending">Liberada</span>' + corpo + '</a>';
-        }).join('');
-        return '<div class="level-group"><div class="level-group-title">' + escapeHtmlLocal(nivel.nome) + ' · Aula ' +
-          String(aula.aula).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.titulo) + '</div>' +
-          '<div class="dash-grid">' + cards + '</div></div>';
+          return '<a class="pr-row" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '">' + miolo('<span class="pr-st go">Fazer ' + MI('chevron_right') + '</span>') + '</a>';
+        };
+        const partes = [];
+        aula.atividades.forEach(at => {
+          const p = at.parte || '';
+          let g = partes.find(x => x.nome === p);
+          if(!g){ g = { nome: p, itens: [] }; partes.push(g); }
+          g.itens.push(at);
+        });
+        const grupos = partes.map(g => (g.nome ? '<div class="pr-part">' + escapeHtmlLocal(g.nome) + '</div>' : '') +
+          '<div class="pr-list">' + g.itens.map(linha).join('') + '</div>').join('');
+        const total = aula.atividades.length;
+        const titulo = String(aula.titulo).split(' · ').pop();
+        return '<section class="pr-aula"><div class="pr-head"><div><small>' + escapeHtmlLocal(nivel.nome) + ' · Aula ' + String(aula.aula).padStart(2, '0') + '</small>' +
+          '<h3>' + escapeHtmlLocal(titulo) + '</h3></div><span class="pr-count">' + feitas + '/' + total + '</span></div>' +
+          '<div class="pr-prog"><i style="width:' + Math.round(feitas / total * 100) + '%"></i></div>' + grupos + '</section>';
       }).join('');
     }).join('');
   }

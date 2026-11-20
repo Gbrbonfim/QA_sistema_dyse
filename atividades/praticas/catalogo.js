@@ -16,12 +16,19 @@ window.DYSE_PRATICAS = {
       {
         aula: 1,
         titulo: 'Class 01 and 02 · The World of English',
+        // PowerPoint que dura 2 aulas = 10 atividades: 5 por aula, uma por
+        // habilidade (Escuta, Escrita, Leitura, Fala, Gramática). Mínimo 10 min cada.
         atividades: [
-          { num: 1, titulo: 'Countries', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '4 - 6', questoes: 10 },
-          { num: 2, titulo: 'Where are you from?', tipo: 'Monte a frase', treina: 'Escrita · Estrutura', minutos: '5 - 7', questoes: 10 },
-          { num: 3, titulo: 'Ana and Tom', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '5 - 7', questoes: 10 },
-          { num: 4, titulo: 'Pronunciation', tipo: 'Escute e grave', treina: 'Fala · Pronúncia', minutos: '6 - 8', questoes: 10, microfone: true },
-          { num: 5, titulo: 'Verb to be', tipo: 'Make a Choice', treina: 'Gramática', minutos: '4 - 6', questoes: 10 }
+          { num: 1, parte: 'Class 01', titulo: 'More countries', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 01', titulo: 'Nice to meet you!', tipo: 'Monte a frase', treina: 'Escrita · Estrutura', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 01', titulo: 'Emma and Lucas', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 01', titulo: 'Say it right', tipo: 'Escute e grave', treina: 'Fala · Pronúncia', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 01', titulo: 'Verb to be', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 02', titulo: 'Famous people', tipo: 'Escute e escolha', treina: 'Escuta · Frases', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 02', titulo: "He's, She's, They're", tipo: 'Monte a frase', treina: 'Escrita · Pronomes', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 02', titulo: 'Role-Play', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 02', titulo: 'Present a famous person', tipo: 'Escute e grave', treina: 'Fala · Apresentação', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 02', titulo: 'Subject pronouns', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
       }
     ]

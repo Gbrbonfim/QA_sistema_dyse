@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 01 · Famous people</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 02 · Escuta
+   Alinhado ao slide "Class 01 and 02: The World of English" — to be + subject pronouns
+   (He's / She's / They're / We're…) e Writing and Speaking ("He's Bill Gates. He's from the USA.").
+   Conteúdo NOVO: outras pessoas e outros famosos (fatos verdadeiros). 24 questões. */
+const PAIS = { ar: 'Argentina', mx: 'Mexico', pt: 'Portugal', au: 'Australia', ie: 'Ireland', cl: 'Chile', co: 'Colombia', pe: 'Peru', kr: 'South Korea', eg: 'Egypt', gr: 'Greece', se: 'Sweden',
+  br: 'Brazil', jp: 'Japan', it: 'Italy', ch: 'Switzerland', fr: 'France', 'in': 'India', cn: 'China', de: 'Germany', 'gb-eng': 'England', us: 'The USA', ca: 'Canada', es: 'Spain' };
+const op = (...cs) => cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' }));
+const FAMOSO = 'Escute sobre a pessoa famosa e escolha o país dela';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 1, num: 6, tipo: 'imagem',
+  instrucao: 'Escute a frase e escolha a bandeira do país',
+  itens: [
+    { audioTexto: 'Sofia and Leo are from Argentina.', opcoes: op('ar', 'gr', 'se', 'pe'), certa: 0 },
+    { audioTexto: 'Mia is from Ireland.', opcoes: op('it', 'ie', 'mx', 'in'), certa: 1 },
+    { audioTexto: 'Sam and I are from Australia.', opcoes: op('gb-eng', 'us', 'au', 'ca'), certa: 2 },
+    { audioTexto: 'Lucas is from Portugal.', opcoes: op('es', 'br', 'eg', 'pt'), certa: 3 },
+    { audioTexto: "They're from Mexico.", opcoes: op('mx', 'it', 'ie', 'co'), certa: 0 },
+    { audioTexto: "She's from Colombia.", opcoes: op('pe', 'co', 'cl', 'ar'), certa: 1 },
+    { audioTexto: "We're from Chile.", opcoes: op('us', 'kr', 'cl', 'cn'), certa: 2 },
+    { audioTexto: "He's from Greece.", opcoes: op('se', 'ar', 'fr', 'gr'), certa: 3 },
+    { audioTexto: "You're from Egypt.", opcoes: op('eg', 'de', 'pe', 'co'), certa: 0 },
+    { audioTexto: "They're from South Korea.", opcoes: op('jp', 'kr', 'cn', 'ch'), certa: 1 },
+    { audioTexto: "She's from Sweden.", opcoes: op('ch', 'gr', 'se', 'de'), certa: 2 },
+    { audioTexto: "He's from Peru.", opcoes: op('ca', 'ch', 'eg', 'pe'), certa: 3 },
+    { instrucao: FAMOSO, audioTexto: "She's Shakira. She's from Colombia.", opcoes: op('co', 'mx', 'ar', 'pe'), certa: 0 },
+    { instrucao: FAMOSO, audioTexto: "He's Lionel Messi. He's from Argentina.", opcoes: op('gr', 'ar', 'se', 'pt'), certa: 1 },
+    { instrucao: FAMOSO, audioTexto: "He's Cristiano Ronaldo. He's from Portugal.", opcoes: op('es', 'br', 'pt', 'it'), certa: 2 },
+    { instrucao: FAMOSO, audioTexto: "They're BTS. They're from South Korea.", opcoes: op('jp', 'cn', 'ch', 'kr'), certa: 3 },
+    { instrucao: FAMOSO, audioTexto: "She's Taylor Swift. She's from the USA.", opcoes: op('us', 'au', 'gb-eng', 'ca'), certa: 0 },
+    { instrucao: FAMOSO, audioTexto: "He's Ed Sheeran. He's from England.", opcoes: op('ie', 'gb-eng', 'us', 'au'), certa: 1 },
+    { instrucao: FAMOSO, audioTexto: "He's Justin Bieber. He's from Canada.", opcoes: op('us', 'ch', 'ca', 'pe'), certa: 2 },
+    { instrucao: FAMOSO, audioTexto: "He's Mohamed Salah. He's from Egypt.", opcoes: op('pe', 'de', 'co', 'eg'), certa: 3 },
+    { instrucao: FAMOSO, audioTexto: "She's Anitta. She's from Brazil.", opcoes: op('br', 'pt', 'ar', 'co'), certa: 0 },
+    { instrucao: FAMOSO, audioTexto: "He's Hugh Jackman. He's from Australia.", opcoes: op('gb-eng', 'au', 'ie', 'us'), certa: 1 },
+    { instrucao: FAMOSO, audioTexto: "She's Salma Hayek. She's from Mexico.", opcoes: op('it', 'ie', 'mx', 'in'), certa: 2 },
+    { audioTexto: "This is Mia. She's from Ireland.", opcoes: op('in', 'it', 'mx', 'ie'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

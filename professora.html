@@ -2987,7 +2987,7 @@ body.dyse-modal-open{overflow:hidden;}
               : '<button type="button" class="btn btn-ghost" style="padding:6px 12px; font-size:.74rem;" onclick="liberarRefazerPratica(\'' + nivel.course + '\', ' + aula.aula + ', ' + at.num + ', this)">' + MI('replay') + ' Liberar refazer</button>';
           }
           return '<div class="manage-row">' +
-            '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) +
+            '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + (at.parte ? '<span style="opacity:.6;">' + escapeHtmlLocal(at.parte) + ' ·</span> ' : '') + escapeHtmlLocal(at.titulo) +
               ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span><div>' + res + '</div></div>' +
             '<div class="manage-row-actions">' +
               refazerBtn +

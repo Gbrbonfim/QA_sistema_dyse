@@ -66,7 +66,7 @@
         '<div class="px-streak" id="pxStreak"></div>' +
         '<button class="px-close" title="Sair da atividade" onclick="DysePratica.sair()">Sair</button>' +
       '</div>' +
-      '<div class="px-bar" id="pxBar">' + Array.from({length: n}, (_, k) => '<span>' + (k + 1) + '</span>').join('') + '</div></header>' +
+      '<div class="px-bar' + (n > 12 ? ' many' : '') + '" id="pxBar">' + Array.from({length: n}, (_, k) => '<span>' + (k + 1) + '</span>').join('') + '</div></header>' +
       (S.staff ? '<div class="px-staff-note">Modo professora: você pode testar à vontade, o resultado não é salvo.</div>' : '') +
       '<main class="px-main" id="pxMain"></main>' +
       '<footer class="px-foot" id="pxFoot"><div class="px-banner" id="pxBanner"></div><div class="px-actions" id="pxActions"></div></footer>';
@@ -150,6 +150,8 @@
     pintarBarra();
     const item = S.cfg.itens[S.i];
     ({ imagem: renderImagem, escolha: renderEscolha, montar: renderMontar, fala: renderFala })[S.cfg.tipo](item);
+    // Instrução própria da questão (quando a atividade mistura formatos).
+    if(item.instrucao){ const p = $('#pxMain .px-instr'); if(p) p.textContent = item.instrucao; }
     $('#pxMain').insertAdjacentHTML('afterbegin', '<div class="px-qtag">Questão ' + (S.i + 1) + ' <span>de ' + S.cfg.itens.length + '</span></div>');
     window.scrollTo(0, 0);
   }
@@ -341,7 +343,10 @@
   }
   // Avalia cada palavra exibida contra o que o reconhecimento ouviu.
   function avaliarFala(item, ouvido){
-    const heard = norm(ouvido);
+    // item.aceita: palavras que o reconhecimento costuma trocar por outra de
+    // mesmo som (ex.: "too" ouvido como "two") — contam como a esperada.
+    const aceita = item.aceita || {};
+    const heard = norm(ouvido).map(h => aceita[h] || h);
     const pool = heard.slice();
     const tokens = item.frase.split(/\s+/);
     const cores = tokens.map(tok => {

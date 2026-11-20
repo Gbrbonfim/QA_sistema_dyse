@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 01 · He's, She's, They're</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 02 · Escrita
+   Alinhado ao slide "Class 01 and 02: The World of English" — Grammar Point 4 (rewrite using a
+   subject pronoun and contractions) e Writing and Speaking (write about famous people).
+   Conteúdo NOVO: outras pessoas e outros famosos. 20 questões. */
+const RW = 'Reescreva com pronome + contração:';
+const FAMOSO = 'Escreva sobre a pessoa famosa:';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 1, num: 7, tipo: 'montar',
+  instrucao: 'Clique nas palavras e monte a frase (uma palavra sobra)',
+  itens: [
+    { contexto: RW + ' "Diego is from Mexico."', palavras: ["He's", 'from', 'Mexico'], isca: ['His'], fim: '.', traducao: 'Ele é do México.' },
+    { contexto: RW + ' "Mia is from Ireland."', palavras: ["She's", 'from', 'Ireland'], isca: ["He's"], fim: '.', traducao: 'Ela é da Irlanda.' },
+    { contexto: RW + ' "Sofia and Leo are from Argentina."', palavras: ["They're", 'from', 'Argentina'], isca: ['Their'], fim: '.', traducao: 'Eles são da Argentina.' },
+    { contexto: RW + ' "Sam and I are from Australia."', palavras: ["We're", 'from', 'Australia'], isca: ['Were'], fim: '.', traducao: 'Nós somos da Austrália.' },
+    { contexto: RW + ' "Lucas is from Portugal."', palavras: ["He's", 'from', 'Portugal'], isca: ["She's"], fim: '.', traducao: 'Ele é de Portugal.' },
+    { contexto: RW + ' "You and Emma are students."', palavras: ["You're", 'students'], isca: ['Your'], fim: '.', traducao: 'Vocês são alunos.' },
+    { contexto: RW + ' "Emma is from Australia."', palavras: ["She's", 'from', 'Australia'], isca: ['She'], fim: '.', traducao: 'Ela é da Austrália.' },
+    { contexto: RW + ' "Leo is a student."', palavras: ["He's", 'a', 'student'], isca: ['His'], fim: '.', traducao: 'Ele é aluno.' },
+    { contexto: RW + ' "Mia and I are students."', palavras: ["We're", 'students'], isca: ["They're"], fim: '.', traducao: 'Nós somos alunos.' },
+    { contexto: FAMOSO + ' Shakira (1/2)', palavras: ["She's", 'Shakira'], isca: ["He's"], fim: '.', traducao: 'Ela é a Shakira.' },
+    { contexto: FAMOSO + ' Shakira (2/2)', palavras: ["She's", 'from', 'Colombia'], isca: ["They're"], fim: '.', traducao: 'Ela é da Colômbia.' },
+    { contexto: FAMOSO + ' Lionel Messi (1/2)', palavras: ["He's", 'Lionel', 'Messi'], isca: ["She's"], fim: '.', traducao: 'Ele é o Lionel Messi.' },
+    { contexto: FAMOSO + ' Lionel Messi (2/2)', palavras: ["He's", 'from', 'Argentina'], isca: ["We're"], fim: '.', traducao: 'Ele é da Argentina.' },
+    { contexto: FAMOSO + ' BTS (1/2)', palavras: ["They're", 'BTS'], isca: ["It's"], fim: '.', traducao: 'Eles são o BTS.' },
+    { contexto: FAMOSO + ' BTS (2/2)', palavras: ["They're", 'from', 'South', 'Korea'], isca: ["He's"], fim: '.', traducao: 'Eles são da Coreia do Sul.' },
+    { contexto: FAMOSO + ' Ed Sheeran (1/2)', palavras: ["He's", 'Ed', 'Sheeran'], isca: ["She's"], fim: '.', traducao: 'Ele é o Ed Sheeran.' },
+    { contexto: FAMOSO + ' Ed Sheeran (2/2)', palavras: ["He's", 'from', 'England'], isca: ["You're"], fim: '.', traducao: 'Ele é da Inglaterra.' },
+    { contexto: 'Escreva sobre você:', palavras: ["I'm", 'a', 'student'], isca: ["I's"], fim: '.', traducao: 'Eu sou aluno(a).' },
+    { palavras: ["We're", 'from', 'Chile'], isca: ['Were'], fim: '.', traducao: 'Nós somos do Chile.' },
+    { palavras: ["You're", 'from', 'Peru'], isca: ['Your'], fim: '.', traducao: 'Você é do Peru.' }
+  ]
+});
+</script>
+</body>
+</html>

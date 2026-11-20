@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 01 · Role-Play</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 02 · Leitura
+   Alinhado ao slide "Class 01 and 02: The World of English" — Role-Play ("practice the dialogue,
+   changing countries and names"). Conteúdo NOVO: o roteiro da aula com outras pessoas e países
+   (Mia / Ireland, Diego / Mexico, Sofia / Argentina, Sam / Australia).
+   20 questões: 2 conversas × 10 falas. As opções erradas trocam nome ou país — é preciso ler com atenção. */
+function roteiro(a, paisA, b, paisB){
+  return [
+    [a, "Hi! What's your name?"],
+    [b, 'My name is ' + b + ". What's your name?"],
+    [a, "I'm " + a + '. Nice to meet you!'],
+    [b, 'Nice to meet you too, ' + a + '.'],
+    [a, 'Where are you from?'],
+    [b, "I'm from " + paisB + '. And you?'],
+    [a, "I'm from " + paisA + '.'],
+    [b, 'Oh, ' + paisA + ' is beautiful!'],
+    [a, 'Thank you! ' + paisB + ' is nice too.'],
+    [b, 'Yes, it is. See you later, ' + a + '!'],
+    [a, 'Bye, ' + b + '!']
+  ];
+}
+// Questão k da conversa D: mostra as k primeiras falas e pede a próxima.
+function prox(D, k, opcoes, certa, traducao){
+  const A = D[0][0], lado = q => q === A ? 'a' : 'b';
+  return {
+    chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+    quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+  };
+}
+const C1 = roteiro('Mia', 'Ireland', 'Diego', 'Mexico');
+const C2 = roteiro('Sofia', 'Argentina', 'Sam', 'Australia');
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 1, num: 8, tipo: 'escolha',
+  instrucao: 'Leia a conversa e escolha a próxima fala',
+  itens: [
+    prox(C1, 1, ["My name is Mia. What's your name?", "I'm from Mexico. And you?", "My name is Diego. What's your name?"], 2, 'Meu nome é Diego. Qual é o seu nome?'),
+    prox(C1, 2, ["I'm Mia. Nice to meet you!", "I'm Diego. Nice to meet you!", 'Bye, Diego!'], 0, 'Eu sou a Mia. Prazer em te conhecer!'),
+    prox(C1, 3, ['Nice to meet you too, Diego.', 'Nice to meet you too, Mia.', 'See you later, Mia!'], 1, 'Prazer em te conhecer também, Mia.'),
+    prox(C1, 4, ["What's your name?", 'Oh, Ireland is beautiful!', 'Where are you from?'], 2, 'De onde você é?'),
+    prox(C1, 5, ["I'm from Mexico. And you?", "I'm from Ireland. And you?", 'Yes, it is.'], 0, 'Eu sou do México. E você?'),
+    prox(C1, 6, ["I'm from Mexico.", "I'm from Ireland.", 'Thank you!'], 1, 'Eu sou da Irlanda.'),
+    prox(C1, 7, ['Oh, Mexico is beautiful!', 'Bye, Mia!', 'Oh, Ireland is beautiful!'], 2, 'Ah, a Irlanda é linda!'),
+    prox(C1, 8, ['Thank you! Mexico is nice too.', 'Thank you! Ireland is nice too.', 'Nice to meet you too.'], 0, 'Obrigada! O México também é legal.'),
+    prox(C1, 9, ['Where are you from?', 'Yes, it is. See you later, Mia!', 'See you later, Diego!'], 1, 'Sim, é. Até mais, Mia!'),
+    prox(C1, 10, ['Bye, Mia!', "Hi! What's your name?", 'Bye, Diego!'], 2, 'Tchau, Diego!'),
+    prox(C2, 1, ["My name is Sam. What's your name?", "My name is Sofia. What's your name?", "I'm from Australia. And you?"], 0, 'Meu nome é Sam. Qual é o seu nome?'),
+    prox(C2, 2, ["I'm Sam. Nice to meet you!", "I'm Sofia. Nice to meet you!", 'Nice to meet you too, Sam.'], 1, 'Eu sou a Sofia. Prazer em te conhecer!'),
+    prox(C2, 3, ['Bye, Sofia!', 'Nice to meet you too, Sam.', 'Nice to meet you too, Sofia.'], 2, 'Prazer em te conhecer também, Sofia.'),
+    prox(C2, 4, ['Where are you from?', "I'm from Argentina.", 'Oh, Argentina is beautiful!'], 0, 'De onde você é?'),
+    prox(C2, 5, ["I'm from Argentina. And you?", "I'm from Australia. And you?", "What's your name?"], 1, 'Eu sou da Austrália. E você?'),
+    prox(C2, 6, ["I'm from Australia.", 'See you later, Sam!', "I'm from Argentina."], 2, 'Eu sou da Argentina.'),
+    prox(C2, 7, ['Oh, Argentina is beautiful!', 'Oh, Australia is beautiful!', 'Thank you!'], 0, 'Ah, a Argentina é linda!'),
+    prox(C2, 8, ['Thank you! Argentina is nice too.', 'Thank you! Australia is nice too.', 'Nice to meet you!'], 1, 'Obrigada! A Austrália também é legal.'),
+    prox(C2, 9, ['Yes, it is. See you later, Sam!', "I'm Sofia.", 'Yes, it is. See you later, Sofia!'], 2, 'Sim, é. Até mais, Sofia!'),
+    prox(C2, 10, ['Bye, Sam!', 'Bye, Sofia!', 'Nice to meet you too.'], 0, 'Tchau, Sam!')
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 01 · Subject pronouns</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 02 · Gramática
+   Alinhado ao slide "Class 01 and 02: The World of English" — Grammar Point: to be affirmative /
+   subject pronouns. Conteúdo NOVO: outras pessoas, famosos e países.
+   24 questões: 12 "qual pronome + contração substitui?" e 12 "am, is ou are?". */
+const PRON = 'Troque pelo pronome com contração';
+const VERBO = 'Complete com o verbo to be: am, is ou are';
+const P = (frase, opcoes, certa, traducao) => ({ instrucao: PRON, frase, opcoes, certa, traducao });
+const V = (frase, certa, traducao) => ({ instrucao: VERBO, frase, opcoes: ['am', 'is', 'are'], certa, traducao });
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 1, num: 10, tipo: 'escolha',
+  instrucao: PRON,
+  itens: [
+    P('Diego is from Mexico. → ___ from Mexico.', ["He's", "She's", "They're"], 0, 'Ele é do México.'),
+    V('Diego ___ from Mexico.', 1, 'O Diego é do México.'),
+    P('Mia is from Ireland. → ___ from Ireland.', ["He's", "She's", "It's"], 1, 'Ela é da Irlanda.'),
+    V('Sofia and Leo ___ from Argentina.', 2, 'Sofia e Leo são da Argentina.'),
+    P('Sofia and Leo are from Argentina. → ___ from Argentina.', ["We're", "He's", "They're"], 2, 'Eles são da Argentina.'),
+    V('I ___ from Brazil.', 0, 'Eu sou do Brasil.'),
+    P('Sam and I are from Australia. → ___ from Australia.', ["We're", "They're", "I'm"], 0, 'Nós somos da Austrália.'),
+    V('Mia ___ from Ireland.', 1, 'A Mia é da Irlanda.'),
+    P('You and Emma are students. → ___ students.', ["They're", "You're", "We're"], 1, 'Vocês são alunos.'),
+    V('Sam and I ___ from Australia.', 2, 'Eu e o Sam somos da Austrália.'),
+    P('Lucas is from Portugal. → ___ from Portugal.', ["She's", "It's", "He's"], 2, 'Ele é de Portugal.'),
+    V('I ___ a student.', 0, 'Eu sou aluno(a).'),
+    P('Shakira is from Colombia. → ___ from Colombia.', ["She's", "He's", "They're"], 0, 'Ela é da Colômbia.'),
+    V('Shakira ___ from Colombia.', 1, 'A Shakira é da Colômbia.'),
+    P('BTS are from South Korea. → ___ from South Korea.', ["It's", "They're", "He's"], 1, 'Eles são da Coreia do Sul.'),
+    V('BTS ___ from South Korea.', 2, 'O BTS é da Coreia do Sul.'),
+    P('Messi is from Argentina. → ___ from Argentina.', ["She's", "We're", "He's"], 2, 'Ele é da Argentina.'),
+    V('Lucas ___ from Portugal.', 1, 'O Lucas é de Portugal.'),
+    P('Taylor Swift is from the USA. → ___ from the USA.', ["She's", "He's", "You're"], 0, 'Ela é dos Estados Unidos.'),
+    V('You and Emma ___ students.', 2, 'Você e a Emma são alunos.'),
+    P('Ireland is beautiful. → ___ beautiful.', ["She's", "It's", "They're"], 1, 'É linda.'),
+    V('I ___ Sofia.', 0, 'Eu sou a Sofia.'),
+    P('Emma and Sam are from Australia. → ___ from Australia.', ["He's", "We're", "They're"], 2, 'Eles são da Austrália.'),
+    V('Mexico ___ beautiful.', 1, 'O México é lindo.')
+  ]
+});
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DYSE · A1 · Aula 01 · Ana and Tom</title>
+<title>DYSE · A1 · Aula 01 · Emma and Lucas</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,430 +17,54 @@
 <script src="/atividades/praticas/catalogo.js"></script>
 <script src="/atividades/praticas/praticas.js"></script>
 <script>
-/* Conteúdo: slide "Class 01 and 02: The World of English" — Listening: dialogue Ana and Tom (order the sentences) */
+/* Class 01 · Leitura
+   Alinhado ao slide "Class 01 and 02: The World of English" — diálogo de apresentação (nome,
+   país, "Nice to meet you", "See you later"). Conteúdo NOVO: outro diálogo (Emma e Lucas),
+   com as mesmas estruturas da aula. 20 questões: 10 de "próxima fala" + 10 de compreensão. */
+const D = [
+  ['Lucas', "Hi! What's your name?"],
+  ['Emma', "Hi! I'm Emma. And you?"],
+  ['Lucas', 'My name is Lucas. Nice to meet you, Emma!'],
+  ['Emma', 'Nice to meet you too, Lucas.'],
+  ['Lucas', 'Where are you from?'],
+  ['Emma', "I'm from Australia. And you?"],
+  ['Lucas', "I'm from Portugal."],
+  ['Emma', 'Oh, Portugal is beautiful!'],
+  ['Lucas', 'Thank you! Australia is nice too.'],
+  ['Emma', 'Yes, it is. See you later, Lucas!'],
+  ['Lucas', 'Bye, Emma!']
+];
+const lado = q => q === 'Lucas' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+const LER = 'Leia o diálogo de Emma e Lucas e complete';
 DysePratica.iniciar({
- "course": "ativ-a1",
- "aula": 1,
- "num": 3,
- "tipo": "escolha",
- "instrucao": "Leia a conversa e escolha a próxima fala",
- "itens": [
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    }
-   ],
-   "quemProximo": "Tom",
-   "ladoProximo": "b",
-   "opcoes": [
-    "Thank you! Canada is nice too.",
-    "Oh, Brazil is beautiful!",
-    "My name is Tom. What's your name?"
-   ],
-   "certa": 2,
-   "completa": "My name is Tom. What's your name?",
-   "traducao": "Meu nome é Tom. Qual é o seu nome?"
-  },
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "My name is Tom. What's your name?",
-     "lado": "b"
-    }
-   ],
-   "quemProximo": "Ana",
-   "ladoProximo": "a",
-   "opcoes": [
-    "I'm from Canada. And you?",
-    "I'm Ana. Nice to meet you!",
-    "Yes, it is. See you later, Ana!"
-   ],
-   "certa": 1,
-   "completa": "I'm Ana. Nice to meet you!",
-   "traducao": "Eu sou a Ana. Prazer em te conhecer!"
-  },
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "My name is Tom. What's your name?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm Ana. Nice to meet you!",
-     "lado": "a"
-    }
-   ],
-   "quemProximo": "Tom",
-   "ladoProximo": "b",
-   "opcoes": [
-    "Nice to meet you too, Ana.",
-    "I'm from Brazil.",
-    "Bye, Tom!"
-   ],
-   "certa": 0,
-   "completa": "Nice to meet you too, Ana.",
-   "traducao": "Prazer em te conhecer também, Ana."
-  },
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "My name is Tom. What's your name?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm Ana. Nice to meet you!",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Nice to meet you too, Ana.",
-     "lado": "b"
-    }
-   ],
-   "quemProximo": "Ana",
-   "ladoProximo": "a",
-   "opcoes": [
-    "Oh, Brazil is beautiful!",
-    "Yes, it is. See you later, Ana!",
-    "Where are you from?"
-   ],
-   "certa": 2,
-   "completa": "Where are you from?",
-   "traducao": "De onde você é?"
-  },
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "My name is Tom. What's your name?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm Ana. Nice to meet you!",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Nice to meet you too, Ana.",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "Where are you from?",
-     "lado": "a"
-    }
-   ],
-   "quemProximo": "Tom",
-   "ladoProximo": "b",
-   "opcoes": [
-    "Bye, Tom!",
-    "I'm from Canada. And you?",
-    "I'm Ana. Nice to meet you!"
-   ],
-   "certa": 1,
-   "completa": "I'm from Canada. And you?",
-   "traducao": "Eu sou do Canadá. E você?"
-  },
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "My name is Tom. What's your name?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm Ana. Nice to meet you!",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Nice to meet you too, Ana.",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "Where are you from?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "I'm from Canada. And you?",
-     "lado": "b"
-    }
-   ],
-   "quemProximo": "Ana",
-   "ladoProximo": "a",
-   "opcoes": [
-    "I'm from Brazil.",
-    "My name is Tom. What's your name?",
-    "Nice to meet you too, Ana."
-   ],
-   "certa": 0,
-   "completa": "I'm from Brazil.",
-   "traducao": "Eu sou do Brasil."
-  },
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "My name is Tom. What's your name?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm Ana. Nice to meet you!",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Nice to meet you too, Ana.",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "Where are you from?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "I'm from Canada. And you?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm from Brazil.",
-     "lado": "a"
-    }
-   ],
-   "quemProximo": "Tom",
-   "ladoProximo": "b",
-   "opcoes": [
-    "I'm Ana. Nice to meet you!",
-    "Bye, Tom!",
-    "Oh, Brazil is beautiful!"
-   ],
-   "certa": 2,
-   "completa": "Oh, Brazil is beautiful!",
-   "traducao": "Ah, o Brasil é lindo!"
-  },
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "My name is Tom. What's your name?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm Ana. Nice to meet you!",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Nice to meet you too, Ana.",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "Where are you from?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "I'm from Canada. And you?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm from Brazil.",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Oh, Brazil is beautiful!",
-     "lado": "b"
-    }
-   ],
-   "quemProximo": "Ana",
-   "ladoProximo": "a",
-   "opcoes": [
-    "I'm from Canada. And you?",
-    "Thank you! Canada is nice too.",
-    "Hi! What's your name?"
-   ],
-   "certa": 1,
-   "completa": "Thank you! Canada is nice too.",
-   "traducao": "Obrigada! O Canadá também é legal."
-  },
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "My name is Tom. What's your name?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm Ana. Nice to meet you!",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Nice to meet you too, Ana.",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "Where are you from?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "I'm from Canada. And you?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm from Brazil.",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Oh, Brazil is beautiful!",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "Thank you! Canada is nice too.",
-     "lado": "a"
-    }
-   ],
-   "quemProximo": "Tom",
-   "ladoProximo": "b",
-   "opcoes": [
-    "Yes, it is. See you later, Ana!",
-    "I'm Ana. Nice to meet you!",
-    "I'm from Brazil."
-   ],
-   "certa": 0,
-   "completa": "Yes, it is. See you later, Ana!",
-   "traducao": "Sim, é. Até mais, Ana!"
-  },
-  {
-   "chat": [
-    {
-     "quem": "Ana",
-     "texto": "Hi! What's your name?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "My name is Tom. What's your name?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm Ana. Nice to meet you!",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Nice to meet you too, Ana.",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "Where are you from?",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "I'm from Canada. And you?",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "I'm from Brazil.",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Oh, Brazil is beautiful!",
-     "lado": "b"
-    },
-    {
-     "quem": "Ana",
-     "texto": "Thank you! Canada is nice too.",
-     "lado": "a"
-    },
-    {
-     "quem": "Tom",
-     "texto": "Yes, it is. See you later, Ana!",
-     "lado": "b"
-    }
-   ],
-   "quemProximo": "Ana",
-   "ladoProximo": "a",
-   "opcoes": [
-    "Where are you from?",
-    "My name is Tom. What's your name?",
-    "Bye, Tom!"
-   ],
-   "certa": 2,
-   "completa": "Bye, Tom!",
-   "traducao": "Tchau, Tom!"
-  }
- ]
+  course: 'ativ-a1', aula: 1, num: 3, tipo: 'escolha',
+  instrucao: 'Leia a conversa e escolha a próxima fala',
+  itens: [
+    prox(1, ["Hi! I'm Emma. And you?", 'Oh, Portugal is beautiful!', "I'm from Australia. And you?"], 0, 'Oi! Eu sou a Emma. E você?'),
+    prox(2, ["I'm from Portugal.", 'My name is Lucas. Nice to meet you, Emma!', 'Bye, Emma!'], 1, 'Meu nome é Lucas. Prazer em te conhecer, Emma!'),
+    prox(3, ['See you later, Lucas!', 'Thank you! Australia is nice too.', 'Nice to meet you too, Lucas.'], 2, 'Prazer em te conhecer também, Lucas.'),
+    prox(4, ['Where are you from?', "What's your name?", 'Yes, it is.'], 0, 'De onde você é?'),
+    prox(5, ["I'm from Portugal. And you?", "I'm from Australia. And you?", 'Nice to meet you too.'], 1, 'Eu sou da Austrália. E você?'),
+    prox(6, ["I'm from Australia.", 'Bye, Emma!', "I'm from Portugal."], 2, 'Eu sou de Portugal.'),
+    prox(7, ['Oh, Portugal is beautiful!', 'Oh, Australia is beautiful!', "Hi! What's your name?"], 0, 'Ah, Portugal é lindo!'),
+    prox(8, ['Thank you! Portugal is nice too.', 'Thank you! Australia is nice too.', 'Where are you from?'], 1, 'Obrigado! A Austrália também é legal.'),
+    prox(9, ['Yes, it is. See you later, Emma!', "I'm Emma.", 'Yes, it is. See you later, Lucas!'], 2, 'Sim, é. Até mais, Lucas!'),
+    prox(10, ['Bye, Emma!', 'Bye, Lucas!', 'Nice to meet you!'], 0, 'Tchau, Emma!'),
+    { instrucao: LER, frase: 'Emma is from ___.', opcoes: ['Portugal', 'Australia', 'Argentina'], certa: 1, traducao: 'A Emma é da Austrália.' },
+    { instrucao: LER, frase: 'Lucas is from ___.', opcoes: ['Portugal', 'Australia', 'Peru'], certa: 0, traducao: 'O Lucas é de Portugal.' },
+    { instrucao: LER, frase: '___ is from Australia.', opcoes: ['Lucas', 'Emma'], certa: 1, traducao: 'A Emma é da Austrália.' },
+    { instrucao: LER, frase: '___ is from Portugal.', opcoes: ['Lucas', 'Emma'], certa: 0, traducao: 'O Lucas é de Portugal.' },
+    { instrucao: LER, frase: 'Emma says: "Oh, ___ is beautiful!"', opcoes: ['Australia', 'Mexico', 'Portugal'], certa: 2, traducao: 'Emma diz: "Ah, Portugal é lindo!"' },
+    { instrucao: LER, frase: 'Lucas says: "Thank you! ___ is nice too."', opcoes: ['Australia', 'Portugal', 'Ireland'], certa: 0, traducao: 'Lucas diz: "Obrigado! A Austrália também é legal."' },
+    { instrucao: LER, frase: '___ says: "Where are you from?"', opcoes: ['Emma', 'Lucas'], certa: 1, traducao: 'O Lucas pergunta: "De onde você é?"' },
+    { instrucao: LER, frase: '___ says: "See you later, Lucas!"', opcoes: ['Emma', 'Lucas'], certa: 0, traducao: 'A Emma diz: "Até mais, Lucas!"' },
+    { instrucao: LER, frase: 'Emma: "Hi! I\'m Emma. ___ you?"', opcoes: ['Nice', 'And', 'Where'], certa: 1, traducao: 'Emma: "Oi! Eu sou a Emma. E você?"' },
+    { instrucao: LER, frase: 'Lucas: "My ___ is Lucas."', opcoes: ['from', 'later', 'name'], certa: 2, traducao: 'Lucas: "Meu nome é Lucas."' }
+  ]
 });
 </script>
 </body>

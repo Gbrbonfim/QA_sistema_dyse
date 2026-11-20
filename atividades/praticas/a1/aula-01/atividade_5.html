@@ -17,115 +17,41 @@
 <script src="/atividades/praticas/catalogo.js"></script>
 <script src="/atividades/praticas/praticas.js"></script>
 <script>
-/* Conteúdo: slide "Class 01 and 02: The World of English" — Grammar Point 3 (Complete with the verb to be. Use contractions.) */
+/* Class 01 · Gramática
+   Alinhado ao slide "Class 01 and 02: The World of English" — Grammar Point: to be affirmative
+   (contrações 'm / 's / 're). Conteúdo NOVO: outras frases e pessoas. 24 questões:
+   16 de completar a contração + 8 de achar a frase correta. */
+const C = ["'m", "'s", "'re"];
+const CERTA = 'Qual frase está correta?';
 DysePratica.iniciar({
- "course": "ativ-a1",
- "aula": 1,
- "num": 5,
- "tipo": "escolha",
- "instrucao": "Complete com o verbo to be (contração). Ex.: Hello! I'm Olivia.",
- "itens": [
-  {
-   "frase": "He___ Pedro.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 1,
-   "traducao": "Ele é o Pedro."
-  },
-  {
-   "frase": "He's Pedro and she___ Ana.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 1,
-   "traducao": "Ele é o Pedro e ela é a Ana."
-  },
-  {
-   "frase": "We___ from Brazil.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 2,
-   "traducao": "Nós somos do Brasil."
-  },
-  {
-   "frase": "It___ a reality show.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 1,
-   "traducao": "É um reality show."
-  },
-  {
-   "frase": "They___ from Canada.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 2,
-   "traducao": "Eles são do Canadá."
-  },
-  {
-   "frase": "You___ a student.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 2,
-   "traducao": "Você é um(a) aluno(a)."
-  },
-  {
-   "frase": "I___ from Japan.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 0,
-   "traducao": "Eu sou do Japão."
-  },
-  {
-   "frase": "She___ a teacher.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 1,
-   "traducao": "Ela é professora."
-  },
-  {
-   "frase": "They___ from France.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 2,
-   "traducao": "Eles são da França."
-  },
-  {
-   "frase": "He___ Adam.",
-   "opcoes": [
-    "'m",
-    "'s",
-    "'re"
-   ],
-   "certa": 1,
-   "traducao": "Ele é o Adam."
-  }
- ]
+  course: 'ativ-a1', aula: 1, num: 5, tipo: 'escolha',
+  instrucao: 'Complete com o verbo to be (contração)',
+  itens: [
+    { frase: 'I___ Sofia.', opcoes: C, certa: 0, traducao: 'Eu sou a Sofia.' },
+    { frase: 'She___ from Mexico.', opcoes: C, certa: 1, traducao: 'Ela é do México.' },
+    { frase: 'We___ from Chile.', opcoes: C, certa: 2, traducao: 'Nós somos do Chile.' },
+    { frase: 'He___ Diego.', opcoes: C, certa: 1, traducao: 'Ele é o Diego.' },
+    { frase: 'They___ from Greece.', opcoes: C, certa: 2, traducao: 'Eles são da Grécia.' },
+    { frase: 'You___ from Ireland.', opcoes: C, certa: 2, traducao: 'Você é da Irlanda.' },
+    { frase: 'Sweden? It___ beautiful!', opcoes: C, certa: 1, traducao: 'A Suécia? É linda!' },
+    { frase: 'I___ from Peru.', opcoes: C, certa: 0, traducao: 'Eu sou do Peru.' },
+    { frase: 'She___ Mia.', opcoes: C, certa: 1, traducao: 'Ela é a Mia.' },
+    { frase: 'They___ from Colombia.', opcoes: C, certa: 2, traducao: 'Eles são da Colômbia.' },
+    { frase: 'He___ from Egypt.', opcoes: C, certa: 1, traducao: 'Ele é do Egito.' },
+    { frase: 'We___ students.', opcoes: C, certa: 2, traducao: 'Nós somos alunos.' },
+    { frase: 'I___ from Australia.', opcoes: C, certa: 0, traducao: 'Eu sou da Austrália.' },
+    { frase: 'You___ Lucas.', opcoes: C, certa: 2, traducao: 'Você é o Lucas.' },
+    { frase: 'Portugal? It___ nice!', opcoes: C, certa: 1, traducao: 'Portugal? É legal!' },
+    { frase: 'She___ from Argentina.', opcoes: C, certa: 1, traducao: 'Ela é da Argentina.' },
+    { instrucao: CERTA, opcoes: ["I'm from Egypt.", "I's from Egypt.", "I're from Egypt."], certa: 0, traducao: 'Eu sou do Egito.' },
+    { instrucao: CERTA, opcoes: ["He're from Chile.", "He's from Chile.", "He'm from Chile."], certa: 1, traducao: 'Ele é do Chile.' },
+    { instrucao: CERTA, opcoes: ["We's from Mexico.", "We'm from Mexico.", "We're from Mexico."], certa: 2, traducao: 'Nós somos do México.' },
+    { instrucao: CERTA, opcoes: ["They're from Sweden.", "They's from Sweden.", "They'm from Sweden."], certa: 0, traducao: 'Eles são da Suécia.' },
+    { instrucao: CERTA, opcoes: ["She'm Emma.", "She's Emma.", "She're Emma."], certa: 1, traducao: 'Ela é a Emma.' },
+    { instrucao: CERTA, opcoes: ["You's from Peru.", "You'm from Peru.", "You're from Peru."], certa: 2, traducao: 'Você é do Peru.' },
+    { instrucao: CERTA, opcoes: ["It's beautiful!", "It're beautiful!", "It'm beautiful!"], certa: 0, traducao: 'É lindo!' },
+    { instrucao: CERTA, opcoes: ["I'm Lucas. I's from Portugal.", "I'm Lucas. I'm from Portugal.", "I'm Lucas. I're from Portugal."], certa: 1, traducao: 'Eu sou o Lucas. Eu sou de Portugal.' }
+  ]
 });
 </script>
 </body>

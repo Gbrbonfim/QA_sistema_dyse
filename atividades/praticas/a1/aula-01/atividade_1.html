@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DYSE · A1 · Aula 01 · Countries</title>
+<title>DYSE · A1 · Aula 01 · More countries</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,235 +17,43 @@
 <script src="/atividades/praticas/catalogo.js"></script>
 <script src="/atividades/praticas/praticas.js"></script>
 <script>
-/* Conteúdo: slide "Class 01 and 02: The World of English" — Vocabulary: Countries (Listen and repeat / Write the words under the flags) */
+/* Class 01 · Escuta + Vocabulário
+   Alinhado ao slide "Class 01 and 02: The World of English" — Vocabulary: Countries + "I'm from…".
+   Conteúdo NOVO: o aluno já fez as 12 bandeiras do slide com a professora; aqui são outros
+   12 países (os do slide aparecem só como opção errada, de revisão). 24 questões. */
+const PAIS = { ar: 'Argentina', mx: 'Mexico', pt: 'Portugal', au: 'Australia', ie: 'Ireland', cl: 'Chile', co: 'Colombia', pe: 'Peru', kr: 'South Korea', eg: 'Egypt', gr: 'Greece', se: 'Sweden',
+  br: 'Brazil', jp: 'Japan', it: 'Italy', ch: 'Switzerland', fr: 'France', 'in': 'India', cn: 'China', de: 'Germany', 'gb-eng': 'England', us: 'The USA', ca: 'Canada', es: 'Spain' };
+const op = (...cs) => cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' }));
+const FRASE = 'Escute a frase e escolha a bandeira do país';
 DysePratica.iniciar({
- "course": "ativ-a1",
- "aula": 1,
- "num": 1,
- "tipo": "imagem",
- "instrucao": "Escute o país e escolha a bandeira certa",
- "itens": [
-  {
-   "audioTexto": "Brazil",
-   "opcoes": [
-    {
-     "label": "Brazil",
-     "img": "https://flagcdn.com/w320/br.png"
-    },
-    {
-     "label": "Japan",
-     "img": "https://flagcdn.com/w320/jp.png"
-    },
-    {
-     "label": "India",
-     "img": "https://flagcdn.com/w320/in.png"
-    },
-    {
-     "label": "The USA",
-     "img": "https://flagcdn.com/w320/us.png"
-    }
-   ],
-   "certa": 0
-  },
-  {
-   "audioTexto": "Japan",
-   "opcoes": [
-    {
-     "label": "France",
-     "img": "https://flagcdn.com/w320/fr.png"
-    },
-    {
-     "label": "England",
-     "img": "https://flagcdn.com/w320/gb-eng.png"
-    },
-    {
-     "label": "Brazil",
-     "img": "https://flagcdn.com/w320/br.png"
-    },
-    {
-     "label": "Japan",
-     "img": "https://flagcdn.com/w320/jp.png"
-    }
-   ],
-   "certa": 3
-  },
-  {
-   "audioTexto": "Italy",
-   "opcoes": [
-    {
-     "label": "Spain",
-     "img": "https://flagcdn.com/w320/es.png"
-    },
-    {
-     "label": "France",
-     "img": "https://flagcdn.com/w320/fr.png"
-    },
-    {
-     "label": "Italy",
-     "img": "https://flagcdn.com/w320/it.png"
-    },
-    {
-     "label": "Germany",
-     "img": "https://flagcdn.com/w320/de.png"
-    }
-   ],
-   "certa": 2
-  },
-  {
-   "audioTexto": "Switzerland",
-   "opcoes": [
-    {
-     "label": "Germany",
-     "img": "https://flagcdn.com/w320/de.png"
-    },
-    {
-     "label": "Switzerland",
-     "img": "https://flagcdn.com/w320/ch.png"
-    },
-    {
-     "label": "Canada",
-     "img": "https://flagcdn.com/w320/ca.png"
-    },
-    {
-     "label": "Italy",
-     "img": "https://flagcdn.com/w320/it.png"
-    }
-   ],
-   "certa": 1
-  },
-  {
-   "audioTexto": "France",
-   "opcoes": [
-    {
-     "label": "France",
-     "img": "https://flagcdn.com/w320/fr.png"
-    },
-    {
-     "label": "Japan",
-     "img": "https://flagcdn.com/w320/jp.png"
-    },
-    {
-     "label": "China",
-     "img": "https://flagcdn.com/w320/cn.png"
-    },
-    {
-     "label": "Canada",
-     "img": "https://flagcdn.com/w320/ca.png"
-    }
-   ],
-   "certa": 0
-  },
-  {
-   "audioTexto": "India",
-   "opcoes": [
-    {
-     "label": "France",
-     "img": "https://flagcdn.com/w320/fr.png"
-    },
-    {
-     "label": "The USA",
-     "img": "https://flagcdn.com/w320/us.png"
-    },
-    {
-     "label": "Japan",
-     "img": "https://flagcdn.com/w320/jp.png"
-    },
-    {
-     "label": "India",
-     "img": "https://flagcdn.com/w320/in.png"
-    }
-   ],
-   "certa": 3
-  },
-  {
-   "audioTexto": "China",
-   "opcoes": [
-    {
-     "label": "Brazil",
-     "img": "https://flagcdn.com/w320/br.png"
-    },
-    {
-     "label": "France",
-     "img": "https://flagcdn.com/w320/fr.png"
-    },
-    {
-     "label": "China",
-     "img": "https://flagcdn.com/w320/cn.png"
-    },
-    {
-     "label": "England",
-     "img": "https://flagcdn.com/w320/gb-eng.png"
-    }
-   ],
-   "certa": 2
-  },
-  {
-   "audioTexto": "Germany",
-   "opcoes": [
-    {
-     "label": "England",
-     "img": "https://flagcdn.com/w320/gb-eng.png"
-    },
-    {
-     "label": "Germany",
-     "img": "https://flagcdn.com/w320/de.png"
-    },
-    {
-     "label": "Spain",
-     "img": "https://flagcdn.com/w320/es.png"
-    },
-    {
-     "label": "Switzerland",
-     "img": "https://flagcdn.com/w320/ch.png"
-    }
-   ],
-   "certa": 1
-  },
-  {
-   "audioTexto": "England",
-   "opcoes": [
-    {
-     "label": "England",
-     "img": "https://flagcdn.com/w320/gb-eng.png"
-    },
-    {
-     "label": "Italy",
-     "img": "https://flagcdn.com/w320/it.png"
-    },
-    {
-     "label": "China",
-     "img": "https://flagcdn.com/w320/cn.png"
-    },
-    {
-     "label": "Spain",
-     "img": "https://flagcdn.com/w320/es.png"
-    }
-   ],
-   "certa": 0
-  },
-  {
-   "audioTexto": "The USA",
-   "opcoes": [
-    {
-     "label": "India",
-     "img": "https://flagcdn.com/w320/in.png"
-    },
-    {
-     "label": "Canada",
-     "img": "https://flagcdn.com/w320/ca.png"
-    },
-    {
-     "label": "Italy",
-     "img": "https://flagcdn.com/w320/it.png"
-    },
-    {
-     "label": "The USA",
-     "img": "https://flagcdn.com/w320/us.png"
-    }
-   ],
-   "certa": 3
-  }
- ]
+  course: 'ativ-a1', aula: 1, num: 1, tipo: 'imagem',
+  instrucao: 'Escute o país e escolha a bandeira certa',
+  itens: [
+    { audioTexto: 'Argentina', opcoes: op('ar', 'mx', 'pt', 'au'), certa: 0 },
+    { audioTexto: 'Mexico', opcoes: op('co', 'mx', 'pe', 'cl'), certa: 1 },
+    { audioTexto: 'Portugal', opcoes: op('es', 'br', 'pt', 'gr'), certa: 2 },
+    { audioTexto: 'Australia', opcoes: op('ie', 'se', 'gb-eng', 'au'), certa: 3 },
+    { audioTexto: 'Ireland', opcoes: op('ie', 'it', 'mx', 'in'), certa: 0 },
+    { audioTexto: 'Chile', opcoes: op('us', 'cl', 'cn', 'kr'), certa: 1 },
+    { audioTexto: 'Colombia', opcoes: op('eg', 'ar', 'co', 'pe'), certa: 2 },
+    { audioTexto: 'Peru', opcoes: op('ca', 'ch', 'se', 'pe'), certa: 3 },
+    { audioTexto: 'South Korea', opcoes: op('kr', 'jp', 'cn', 'gr'), certa: 0 },
+    { audioTexto: 'Egypt', opcoes: op('de', 'eg', 'pe', 'gr'), certa: 1 },
+    { audioTexto: 'Greece', opcoes: op('ar', 'se', 'gr', 'fr'), certa: 2 },
+    { audioTexto: 'Sweden', opcoes: op('ch', 'gr', 'de', 'se'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "Hi! I'm Sofia. I'm from Argentina.", opcoes: op('gr', 'ar', 'se', 'ie'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "Where are you from? I'm from Colombia.", opcoes: op('pe', 'mx', 'co', 'cl'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "My name is Diego. I'm from Mexico.", opcoes: op('it', 'ie', 'co', 'mx'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "I'm from Portugal.", opcoes: op('pt', 'es', 'br', 'eg'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "Hello! I'm Mia. I'm from Ireland.", opcoes: op('in', 'ie', 'it', 'mx'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "I'm from South Korea. And you?", opcoes: op('jp', 'cn', 'kr', 'ch'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "Nice to meet you! I'm from Greece.", opcoes: op('ar', 'fr', 'se', 'gr'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "I'm Sam. I'm from Australia.", opcoes: op('au', 'gb-eng', 'us', 'ca'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "I'm from Peru.", opcoes: op('ca', 'pe', 'ch', 'eg'), certa: 1 },
+    { instrucao: FRASE, audioTexto: 'Oh, Egypt is beautiful!', opcoes: op('de', 'pe', 'eg', 'co'), certa: 2 },
+    { instrucao: FRASE, audioTexto: 'Thank you! Chile is nice too.', opcoes: op('us', 'cn', 'ie', 'cl'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "I'm from Sweden. See you later!", opcoes: op('se', 'ch', 'gr', 'ar'), certa: 0 }
+  ]
 });
 </script>
 </body>
