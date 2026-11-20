@@ -422,14 +422,16 @@
     const nota = cores.reduce((s, c) => s + (c === 'ok' ? 1 : c === 'warn' ? 0.5 : 0), 0) / cores.length;
     return { cores: cores, nota: nota };
   }
-  function gauge(nota){
-    const ang = -90 + 180 * Math.max(0, Math.min(1, nota));
-    return '<svg class="px-gauge" viewBox="0 0 120 70">' +
-      '<path d="M10 60 A50 50 0 0 1 43 13" stroke="#FCABAF" stroke-width="10" fill="none"/>' +
-      '<path d="M45 12 A50 50 0 0 1 76 12" stroke="#F0A224" stroke-width="10" fill="none"/>' +
-      '<path d="M78 13 A50 50 0 0 1 110 60" stroke="#2E8B57" stroke-width="10" fill="none"/>' +
-      '<g transform="rotate(' + ang + ' 60 60)"><line x1="60" y1="60" x2="60" y2="22" stroke="#3A1D10" stroke-width="4" stroke-linecap="round"/></g>' +
-      '<circle cx="60" cy="60" r="7" fill="#3A1D10"/></svg>';
+  /* Nota da pronúncia — cartão próprio da DYSE: porcentagem grande, rótulo e
+     10 "degraus" que acendem em sequência na cor do nível. */
+  function notaFala(nota){
+    const n = Math.max(0, Math.min(1, nota));
+    const pct = Math.round(n * 100), cheios = Math.round(n * 10);
+    const nv = n >= 0.9 ? ['ok', 'Excelente!'] : n >= PASS_FALA ? ['ok', 'Muito bom!'] : n >= 0.4 ? ['mid', 'Quase lá'] : ['low', 'Vamos de novo'];
+    return '<div class="px-score ' + nv[0] + '"><div class="num">' + pct + '<small>%</small></div>' +
+      '<div class="info"><b>' + nv[1] + '</b><div class="seg">' +
+      Array.from({ length: 10 }, (_, k) => '<i class="' + (k < cheios ? 'on' : '') + '" style="animation-delay:' + (k * 45) + 'ms"></i>').join('') +
+      '</div><small>sua pronúncia</small></div></div>';
   }
   function desenharFrase(item, cores, revelar){
     const tokens = item.frase.split(/\s+/);
@@ -457,82 +459,133 @@
   function acoesFala(item, depois){
     on('ouvir', () => falar(item.frase));
     on('ouvirLento', () => falar(item.frase, 0.6));
-    on('gravar', () => gravar(item));
+    on('gravar', () => {});   // gravação é por "segurar" (ligarSegurar), não por clique
     on('leitura', () => { S.cur.leitura = true; desenharFrase(item, S.cur.ultCores, false); });
     on('pular', () => { fecharItem('skip', { nota: S.cur.melhor || 0 }); avancar(); });
     on('traduzir', () => modalTraducao(item.frase, item.traducao));
     on('avancar', avancar);
     if(depois === 'ok'){
-      acoes([{ id: 'traduzir', ic: I('translate'), label: 'Traduzir' }, { id: 'gravar', ic: I('mic'), label: 'Regravar' }, { id: 'avancar', ic: I('arrow_forward'), label: 'Avançar', cls: 'primary' }]);
+      acoes([{ id: 'traduzir', ic: I('translate'), label: 'Traduzir' }, { id: 'gravar', ic: I('mic'), label: 'Segure e regrave' }, { id: 'avancar', ic: I('arrow_forward'), label: 'Avançar', cls: 'primary' }]);
     } else if(depois === 'retry'){
-      const l = [{ id: 'traduzir', ic: I('translate'), label: 'Traduzir' }, { id: 'gravar', ic: I('mic'), label: 'Regravar', cls: 'rec' }];
+      const l = [{ id: 'traduzir', ic: I('translate'), label: 'Traduzir' }, { id: 'gravar', ic: I('mic'), label: 'Segure e regrave', cls: 'rec' }];
       if(S.cur.falhas >= MAX_FALA_TRIES) l.push({ id: 'pular', ic: I('skip_next'), label: 'Pular' });
       acoes(l);
     } else {
-      const l = [{ id: 'ouvir', ic: I('play_arrow'), label: 'Escutar' }, { id: 'gravar', ic: I('mic'), label: 'Gravar', cls: 'rec', disabled: !SR }, { id: 'leitura', ic: I('visibility'), label: 'Leitura' }];
+      const l = [{ id: 'ouvir', ic: I('play_arrow'), label: 'Escutar' }, { id: 'gravar', ic: I('mic'), label: 'Segure e fale', cls: 'rec', disabled: !SR }, { id: 'leitura', ic: I('visibility'), label: 'Leitura' }];
       if(!SR) l.push({ id: 'pular', ic: I('skip_next'), label: 'Pular' });
       acoes(l);
     }
+    ligarSegurar(item);
   }
-  async function gravar(item){
+
+  /* ---------- Gravação: SEGURE o botão enquanto fala e SOLTE para avaliar ----------
+     Mouse, toque e teclado (Espaço/Enter segurados). O reconhecimento roda em
+     modo contínuo enquanto o botão estiver pressionado; em paralelo o
+     MediaRecorder guarda a voz para o "Compare sua pronúncia". */
+  function ligarSegurar(item){
+    const btn = $('#pxAct_gravar');
+    if(!btn || btn.disabled) return;
+    btn.classList.add('hold');
+    btn.removeAttribute('onclick');
+    btn.addEventListener('contextmenu', e => e.preventDefault());
+    btn.addEventListener('pointerdown', e => {
+      if(e.button > 0) return;
+      e.preventDefault();
+      try{ btn.setPointerCapture(e.pointerId); }catch(_){}
+      iniciarGravacao(item);
+    });
+    ['pointerup', 'pointercancel'].forEach(t => btn.addEventListener(t, e => { e.preventDefault(); pararGravacao(); }));
+    btn.addEventListener('keydown', e => { if((e.key === ' ' || e.key === 'Enter') && !e.repeat){ e.preventDefault(); iniciarGravacao(item); } });
+    btn.addEventListener('keyup', e => { if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); pararGravacao(); } });
+  }
+  function botaoGravando(on){
+    const btn = $('#pxAct_gravar'); if(!btn) return;
+    btn.classList.toggle('on', on);
+    const i = btn.querySelector('.i'), t = btn.querySelector('.tag');
+    if(on){ btn.dataset.label = t ? t.textContent : ''; if(t) t.textContent = 'Solte p/ enviar'; }
+    else if(t && btn.dataset.label) t.textContent = btn.dataset.label;
+    if(i) i.innerHTML = I(on ? 'graphic_eq' : 'mic');
+  }
+  async function iniciarGravacao(item){
     if(!SR || S.cur.gravando) return;
     pararAudio();
+    const G = S.cur.grav = { item: item, soltou: false, inicio: Date.now(), chunks: [], resultados: [], recorder: null, stream: null, rec: null };
     S.cur.gravando = true;
-    const btn = $('#pxAct_gravar');
-    if(btn){
-      btn.classList.add('rec', 'on');
-      const i = btn.querySelector('.i'), t = btn.querySelector('.tag');
-      if(i) i.innerHTML = I('stop'); if(t) t.textContent = 'Parar';
-    }
-    $('#pxHeard').textContent = 'Fale agora…';
+    botaoGravando(true);
+    $('#pxHeard').textContent = 'Fale agora e solte o botão no fim…';
     $('#pxMain').classList.add('gravando');
     // grava a própria voz em paralelo, pro "Compare sua pronúncia"
-    let recorder = null, chunks = [], stream = null;
     try{
-      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      recorder = new MediaRecorder(stream); recorder.ondataavailable = e => chunks.push(e.data); recorder.start();
-    }catch(e){ recorder = null; }
-    const rec = new SR();
-    rec.lang = 'en-US'; rec.interimResults = true; rec.maxAlternatives = 3; rec.continuous = false;
-    let finais = [];
+      G.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      G.recorder = new MediaRecorder(G.stream);
+      G.recorder.ondataavailable = e => { if(e.data && e.data.size) G.chunks.push(e.data); };
+      G.recorder.start();
+    }catch(e){ G.recorder = null; }
+    if(G.soltou){ encerrarGravacao(G, true); return; }   // soltou antes de o microfone abrir
+    const rec = G.rec = new SR();
+    rec.lang = 'en-US'; rec.interimResults = true; rec.maxAlternatives = 3; rec.continuous = true;
     rec.onresult = ev => {
-      const r = ev.results[ev.results.length - 1];
-      const alts = Array.from(r).map(a => a.transcript);
-      if(r.isFinal) finais = alts;
-      const parcial = avaliarFala(item, alts[0]);
+      G.resultados = Array.from(ev.results);
+      const parcial = avaliarFala(item, G.resultados.map(r => r[0].transcript).join(' '));
       desenharFrase(item, parcial.cores.map(c => c === 'ok' ? 'ok' : null), false);
     };
-    rec.onerror = ev => { if(ev.error === 'not-allowed') $('#pxHeard').textContent = 'Permita o uso do microfone no navegador para gravar.'; };
-    rec.onend = () => {
-      S.cur.gravando = false;
-      $('#pxMain').classList.remove('gravando');
-      if(recorder && recorder.state !== 'inactive'){ recorder.onstop = () => { S.cur.audioUrl = URL.createObjectURL(new Blob(chunks)); compare(item); }; recorder.stop(); }
-      if(stream) stream.getTracks().forEach(t => t.stop());
-      if(!finais.length){
-        $('#pxHeard').textContent = 'Não consegui ouvir. Toque em Gravar e fale mais perto do microfone.';
-        acoesFala(item, S.cur.tentativas.length ? 'retry' : false);
-        return;
-      }
-      let best = null;
-      finais.forEach(t => { const a = avaliarFala(item, t); if(!best || a.nota > best.nota) best = Object.assign(a, { texto: t }); });
-      S.cur.tentativas.push(best.texto);
-      S.cur.ultCores = best.cores;
-      S.cur.melhor = Math.max(S.cur.melhor || 0, best.nota);
-      $('#pxHeard').textContent = 'Ouvi: “' + best.texto + '”';
-      desenharFrase(item, best.cores, true);
-      $('#pxGauge').innerHTML = gauge(best.nota);
-      if(best.nota >= PASS_FALA){
-        if(!S.res[S.i]) fecharItem(S.cur.falhas === 0 && !S.cur.leitura ? 'ok' : 'warn', { nota: best.nota });
-        else S.res[S.i].nota = Math.max(S.res[S.i].nota || 0, best.nota);
-        banner('ok', 'Você foi muito bem!'); acoesFala(item, 'ok');
-      } else {
-        S.cur.falhas++;
-        if(!S.res[S.i]) banner('warn', 'Vamos tentar melhorar? Ouça o original e regrave.');
-        acoesFala(item, S.res[S.i] ? 'ok' : 'retry');
-      }
-    };
-    try{ rec.start(); }catch(e){ S.cur.gravando = false; }
-    on('gravar', () => { try{ rec.stop(); }catch(e){} });
+    rec.onerror = ev => { if(ev.error === 'not-allowed' || ev.error === 'service-not-allowed') G.semPermissao = true; };
+    rec.onend = () => encerrarGravacao(G, false);
+    try{ rec.start(); }catch(e){ encerrarGravacao(G, true); }
+  }
+  function pararGravacao(){
+    const G = S.cur && S.cur.grav;
+    if(!G || G.soltou) return;
+    G.soltou = true;
+    if(Date.now() - G.inicio < 350) G.curto = true;   // só um toque: não é gravação
+    if(G.rec){ try{ G.rec.stop(); }catch(e){ encerrarGravacao(G, false); } }
+  }
+  function encerrarGravacao(G, abortou){
+    if(G.encerrada) return;
+    G.encerrada = true;
+    const item = G.item;
+    S.cur.gravando = false;
+    botaoGravando(false);
+    $('#pxMain').classList.remove('gravando');
+    // Para o gravador e só DEPOIS libera o microfone (no iPhone, parar o
+    // microfone antes perde a gravação). Blob com o tipo certo pra tocar no Safari.
+    if(G.recorder && G.recorder.state !== 'inactive'){
+      G.recorder.onstop = () => {
+        if(G.stream) G.stream.getTracks().forEach(t => t.stop());
+        if(abortou || G.curto || !G.chunks.length) return;
+        if(S.cur.audioUrl) URL.revokeObjectURL(S.cur.audioUrl);
+        S.cur.audioUrl = URL.createObjectURL(new Blob(G.chunks, { type: G.recorder.mimeType || 'audio/mp4' }));
+        compare(item);
+      };
+      G.recorder.stop();
+    } else if(G.stream) G.stream.getTracks().forEach(t => t.stop());
+
+    const R = G.resultados;
+    const finais = !R.length ? [] : R.length === 1 ? Array.from(R[0]).map(a => a.transcript) : [R.map(r => r[0].transcript).join(' ')];
+    if(G.semPermissao || abortou || G.curto || !finais.length){
+      $('#pxHeard').textContent = G.semPermissao ? 'Permita o uso do microfone no navegador para gravar.'
+        : (G.curto || abortou) ? 'Segure o botão enquanto fala e solte quando terminar.'
+        : 'Não consegui ouvir. Segure o botão e fale mais perto do microfone.';
+      acoesFala(item, S.res[S.i] ? 'ok' : S.cur.tentativas.length ? 'retry' : false);
+      return;
+    }
+    let best = null;
+    finais.forEach(t => { const a = avaliarFala(item, t); if(!best || a.nota > best.nota) best = Object.assign(a, { texto: t }); });
+    S.cur.tentativas.push(best.texto);
+    S.cur.ultCores = best.cores;
+    S.cur.melhor = Math.max(S.cur.melhor || 0, best.nota);
+    $('#pxHeard').textContent = 'Ouvi: “' + best.texto + '”';
+    desenharFrase(item, best.cores, true);
+    $('#pxGauge').innerHTML = notaFala(best.nota);
+    if(best.nota >= PASS_FALA){
+      if(!S.res[S.i]) fecharItem(S.cur.falhas === 0 && !S.cur.leitura ? 'ok' : 'warn', { nota: best.nota });
+      else S.res[S.i].nota = Math.max(S.res[S.i].nota || 0, best.nota);
+      banner('ok', 'Você foi muito bem!'); acoesFala(item, 'ok');
+    } else {
+      S.cur.falhas++;
+      if(!S.res[S.i]) banner('warn', 'Vamos tentar melhorar? Ouça o original e regrave.');
+      acoesFala(item, S.res[S.i] ? 'ok' : 'retry');
+    }
   }
   function compare(item){
     if(!S.cur.audioUrl) return;
