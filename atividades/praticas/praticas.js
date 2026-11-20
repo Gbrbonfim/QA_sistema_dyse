@@ -39,7 +39,52 @@
     return a;
   }
 
-  /* ---------- áudio: voz do navegador em inglês ---------- */
+  /* ---------- áudio gravado (ElevenLabs) ----------
+     As frases ficam em /atividades/praticas/audio/<chave>.mp3, geradas uma vez
+     pelo scripts/gerar-audios.ps1. audio/manifest.js lista as que existem
+     (window.DYSE_AUDIOS). Sem o arquivo, cai na voz do navegador (abaixo).
+     Voz "f" (feminina) por padrão; "m" quando quem fala é um personagem homem. */
+  const HOMENS = ['Lucas', 'Diego', 'Sam', 'Leo', 'Tom', 'Pedro', 'Charles', 'Anthony', 'Mike', 'Paul'];
+  function vozPara(texto, quem){
+    if(quem) return HOMENS.indexOf(quem) >= 0 ? 'm' : 'f';
+    const m = /(?:I'm|My name is) ([A-Z][a-z]+)/.exec(texto || '');
+    return m && HOMENS.indexOf(m[1]) >= 0 ? 'm' : 'f';
+  }
+  function chaveAudio(texto, voz){
+    const s = voz + '|' + String(texto || '').trim();
+    let h = 0x811c9dc5;
+    for(const ch of s){ h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; }
+    return voz + '-' + h.toString(16).padStart(8, '0');
+  }
+  (function carregarManifesto(){
+    const s = document.createElement('script');
+    s.src = '/atividades/praticas/audio/manifest.js';
+    s.onerror = () => {};
+    document.head.appendChild(s);
+  })();
+  let AUDIO_ATUAL = null;
+  function pararAudio(){
+    if(AUDIO_ATUAL){ try{ AUDIO_ATUAL.pause(); }catch(e){} AUDIO_ATUAL = null; }
+    if(window.speechSynthesis) speechSynthesis.cancel();
+  }
+  /* Texto que o motor fala em cada item (o mesmo que o script de geração usa). */
+  /* O que é falado em voz alta e por quem. Em "Make a Choice" a frase completa
+     pode ter apoio visual que não se lê: "A → B" (fala B), "I am = I'm" (fala
+     I'm), 'Lucas says: "…"' (fala só a citação, na voz do Lucas). */
+  function falaDoItem(tipo, item){
+    if(tipo === 'imagem') return { texto: item.audioTexto, quem: null };
+    if(tipo === 'fala') return { texto: item.frase, quem: null };
+    if(tipo === 'montar') return { texto: item.completa || (item.palavras.join(' ') + (item.fim || '')), quem: null };
+    let t = String(item.completa || (item.frase ? item.frase.replace('___', item.opcoes[item.certa]) : item.opcoes[item.certa]));
+    let quem = item.quemProximo || null;
+    if(t.indexOf(' → ') >= 0) t = t.split(' → ').pop();
+    else if(t.indexOf(' = ') >= 0) t = t.split(' = ').pop();
+    const cit = /^([A-Z][a-z]+)(?: says)?: "(.+)"$/.exec(t);
+    if(cit){ quem = cit[1]; t = cit[2]; }
+    return { texto: t.trim(), quem: quem };
+  }
+
+  /* ---------- áudio: voz do navegador em inglês (reserva) ---------- */
   let VOZ = null;
   function escolherVoz(){
     const vs = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
@@ -47,7 +92,19 @@
        || vs.find(v => /en-US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
   }
   if(window.speechSynthesis){ escolherVoz(); speechSynthesis.onvoiceschanged = escolherVoz; }
-  function falar(texto, rate){
+  function falar(texto, rate, quem){
+    pararAudio();
+    const chave = chaveAudio(texto, vozPara(texto, quem));
+    if(window.DYSE_AUDIOS && window.DYSE_AUDIOS[chave]){
+      const a = new Audio('/atividades/praticas/audio/' + chave + '.mp3');
+      a.playbackRate = rate && rate < 0.8 ? 0.75 : 1;   // "Devagar" sem distorcer a voz
+      AUDIO_ATUAL = a;
+      a.play().catch(() => falarNavegador(texto, rate));
+      return;
+    }
+    falarNavegador(texto, rate);
+  }
+  function falarNavegador(texto, rate){
     if(!window.speechSynthesis) return;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(texto);
@@ -120,7 +177,7 @@
     pintarBarra();
   }
   function avancar(){
-    if(window.speechSynthesis) speechSynthesis.cancel();
+    pararAudio();
     S.i++;
     if(S.i >= S.cfg.itens.length) return finalizar();
     renderItem();
@@ -130,7 +187,7 @@
     if(item.audio !== false) l.push({ id: 'ouvirFim', ic: I('play_arrow'), label: 'Escutar' });
     if(comTraduzir && item.traducao) l.push({ id: 'traduzir', ic: I('translate'), label: 'Traduzir' });
     l.push({ id: 'avancar', ic: I('arrow_forward'), label: 'Avançar', cls: 'primary' });
-    on('ouvirFim', () => falar(item.completa || item.audioTexto || ''));
+    on('ouvirFim', () => { const f = falaDoItem(S.cfg.tipo, item); falar(f.texto, null, f.quem); });
     on('traduzir', () => modalTraducao(item.completa, item.traducao));
     on('avancar', avancar);
     acoes(l);
@@ -419,7 +476,7 @@
   }
   async function gravar(item){
     if(!SR || S.cur.gravando) return;
-    if(window.speechSynthesis) speechSynthesis.cancel();
+    pararAudio();
     S.cur.gravando = true;
     const btn = $('#pxAct_gravar');
     if(btn){
@@ -573,7 +630,7 @@
 
   /* ---------- final: pontos, revisão e salvar ---------- */
   async function finalizar(){
-    if(window.speechSynthesis) speechSynthesis.cancel();
+    pararAudio();
     const itens = S.cfg.itens, n = itens.length;
     const p = calcularPontos();
     const acertos = p.primeira + p.segunda;
@@ -694,6 +751,8 @@
     _img: clicarImagem, _sel: selecionar, _slot: porNoSlot, _unslot: tirarDoSlot,
     _ficar(url){ if(CONTAGEM) clearInterval(CONTAGEM); location.href = url; },
     _playEu(){ if(S.cur && S.cur.audioUrl) new Audio(S.cur.audioUrl).play(); },
-    _playOrig(){ const it = S.cfg.itens[S.i]; falar(it.frase); }
+    _playOrig(){ const it = S.cfg.itens[S.i]; falar(it.frase); },
+    // Usado pelo scripts/gerar-audios.ps1 pra listar as frases de cada atividade.
+    _audios(cfg){ return cfg.itens.map(it => { const f = falaDoItem(cfg.tipo, it); const v = vozPara(f.texto, f.quem); return { texto: String(f.texto).trim(), voz: v, chave: chaveAudio(f.texto, v) }; }); }
   };
 })();

@@ -39,7 +39,6 @@ const prox = (k, opcoes, certa, traducao) => ({
   chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
   quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
 });
-const LER = 'Leia o diálogo de Emma e Lucas e complete';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 1, num: 3, tipo: 'escolha',
   instrucao: 'Leia a conversa e escolha a próxima fala',
@@ -54,16 +53,16 @@ DysePratica.iniciar({
     prox(8, ['Thank you! Portugal is nice too.', 'Thank you! Australia is nice too.', 'Where are you from?'], 1, 'Obrigado! A Austrália também é legal.'),
     prox(9, ['Yes, it is. See you later, Emma!', "I'm Emma.", 'Yes, it is. See you later, Lucas!'], 2, 'Sim, é. Até mais, Lucas!'),
     prox(10, ['Bye, Emma!', 'Bye, Lucas!', 'Nice to meet you!'], 0, 'Tchau, Emma!'),
-    { instrucao: LER, frase: 'Emma is from ___.', opcoes: ['Portugal', 'Australia', 'Argentina'], certa: 1, traducao: 'A Emma é da Austrália.' },
-    { instrucao: LER, frase: 'Lucas is from ___.', opcoes: ['Portugal', 'Australia', 'Peru'], certa: 0, traducao: 'O Lucas é de Portugal.' },
-    { instrucao: LER, frase: '___ is from Australia.', opcoes: ['Lucas', 'Emma'], certa: 1, traducao: 'A Emma é da Austrália.' },
-    { instrucao: LER, frase: '___ is from Portugal.', opcoes: ['Lucas', 'Emma'], certa: 0, traducao: 'O Lucas é de Portugal.' },
-    { instrucao: LER, frase: 'Emma says: "Oh, ___ is beautiful!"', opcoes: ['Australia', 'Mexico', 'Portugal'], certa: 2, traducao: 'Emma diz: "Ah, Portugal é lindo!"' },
-    { instrucao: LER, frase: 'Lucas says: "Thank you! ___ is nice too."', opcoes: ['Australia', 'Portugal', 'Ireland'], certa: 0, traducao: 'Lucas diz: "Obrigado! A Austrália também é legal."' },
-    { instrucao: LER, frase: '___ says: "Where are you from?"', opcoes: ['Emma', 'Lucas'], certa: 1, traducao: 'O Lucas pergunta: "De onde você é?"' },
-    { instrucao: LER, frase: '___ says: "See you later, Lucas!"', opcoes: ['Emma', 'Lucas'], certa: 0, traducao: 'A Emma diz: "Até mais, Lucas!"' },
-    { instrucao: LER, frase: 'Emma: "Hi! I\'m Emma. ___ you?"', opcoes: ['Nice', 'And', 'Where'], certa: 1, traducao: 'Emma: "Oi! Eu sou a Emma. E você?"' },
-    { instrucao: LER, frase: 'Lucas: "My ___ is Lucas."', opcoes: ['from', 'later', 'name'], certa: 2, traducao: 'Lucas: "Meu nome é Lucas."' }
+    { instrucao: 'De onde a Emma é?', frase: 'Emma is from ___.', opcoes: ['Portugal', 'Australia', 'Argentina'], certa: 1, traducao: 'A Emma é da Austrália.' },
+    { instrucao: 'De onde o Lucas é?', frase: 'Lucas is from ___.', opcoes: ['Portugal', 'Australia', 'Peru'], certa: 0, traducao: 'O Lucas é de Portugal.' },
+    { instrucao: 'Quem é da Austrália?', frase: '___ is from Australia.', opcoes: ['Lucas', 'Emma'], certa: 1, traducao: 'A Emma é da Austrália.' },
+    { instrucao: 'Quem é de Portugal?', frase: '___ is from Portugal.', opcoes: ['Lucas', 'Emma'], certa: 0, traducao: 'O Lucas é de Portugal.' },
+    { instrucao: 'Que país a Emma acha lindo?', frase: 'Emma says: "Oh, ___ is beautiful!"', opcoes: ['Australia', 'Mexico', 'Portugal'], certa: 2, traducao: 'Emma diz: "Ah, Portugal é lindo!"' },
+    { instrucao: 'Que país o Lucas diz que também é legal?', frase: 'Lucas says: "Thank you! ___ is nice too."', opcoes: ['Australia', 'Portugal', 'Ireland'], certa: 0, traducao: 'Lucas diz: "Obrigado! A Austrália também é legal."' },
+    { instrucao: 'Quem pergunta de onde o outro é?', frase: '___ says: "Where are you from?"', opcoes: ['Emma', 'Lucas'], certa: 1, traducao: 'O Lucas pergunta: "De onde você é?"' },
+    { instrucao: 'Quem se despede primeiro?', frase: '___ says: "See you later, Lucas!"', opcoes: ['Emma', 'Lucas'], certa: 0, traducao: 'A Emma diz: "Até mais, Lucas!"' },
+    { instrucao: 'Como a Emma devolve a pergunta para o Lucas?', frase: 'Emma: "Hi! I\'m Emma. ___ you?"', opcoes: ['Nice', 'And', 'Where'], certa: 1, traducao: 'Emma: "Oi! Eu sou a Emma. E você?"' },
+    { instrucao: 'Como o Lucas diz o nome dele?', frase: 'Lucas: "My ___ is Lucas."', opcoes: ['from', 'later', 'name'], certa: 2, traducao: 'Lucas: "Meu nome é Lucas."' }
   ]
 });
 </script>
