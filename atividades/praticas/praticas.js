@@ -420,14 +420,18 @@
      ("I'm" = "I am") não importam; homófonos listados em item.aceita contam
      como a palavra certa. Palavra faltando, trocada ou A MAIS = erro.
      Devolve as cores de cada palavra da frase e o que foi dito, já marcado. */
+  /* Palavras de MESMO SOM: o reconhecimento de voz não tem como saber qual o
+     aluno quis dizer, então valem como a mesma palavra (dos dois lados). */
+  const MESMO_SOM = { to: 'too', two: 'too', by: 'bye', buy: 'bye', high: 'hi', meat: 'meet', sea: 'see', four: 'for', u: 'you', r: 'are', eye: 'i', grease: 'greece', chilly: 'chile', chili: 'chile', chilli: 'chile' };
+  const somDe = p => MESMO_SOM[p] || p;
   function avaliarFala(item, ouvido){
     const aceita = item.aceita || {};
     const tokens = item.frase.split(/\s+/);
     const exp = [];
-    tokens.forEach((t, k) => norm(t).forEach(p => exp.push({ p: p, k: k })));
+    tokens.forEach((t, k) => norm(t).forEach(p => exp.push({ p: somDe(p), k: k })));
     const brutas = String(ouvido || '').trim().split(/\s+/).filter(Boolean);
     const heard = [];
-    brutas.forEach((w, b) => norm(w).forEach(p => heard.push({ p: aceita[p] || p, b: b })));
+    brutas.forEach((w, b) => norm(w).forEach(p => heard.push({ p: somDe(aceita[p] || p), b: b })));
     // maior sequência comum (mesma ordem) entre o esperado e o que foi dito
     const m = exp.length, n = heard.length;
     const L = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
@@ -475,6 +479,7 @@
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   // Gravar funciona em qualquer navegador moderno; sem SR, quem transcreve é o servidor.
   const PODE_GRAVAR = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+  const ANDROID = /Android/i.test(navigator.userAgent || '');
   function renderFala(item){
     item.completa = item.frase;
     const main = $('#pxMain');
@@ -533,16 +538,24 @@
     botaoGravando(true);
     $('#pxHeard').textContent = 'Pode falar…';
     $('#pxMain').classList.add('gravando');
-    try{
-      G.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      G.recorder = new MediaRecorder(G.stream);
-      G.recorder.ondataavailable = e => { if(e.data && e.data.size) G.chunks.push(e.data); };
-      G.recorder.start();
-    }catch(e){ G.recorder = null; }
+    // No Android o reconhecimento do Chrome falha se outra gravação estiver
+    // usando o microfone: lá, com reconhecimento, não grava em paralelo (fica
+    // sem o "Minha voz", mas a avaliação funciona). Se o reconhecimento falhar
+    // no aparelho, as próximas gravações vão direto para o servidor.
+    const usarSR = SR && !S.forcarServidor;
+    G.usouSR = !!usarSR;
+    if(!(usarSR && ANDROID)){
+      try{
+        G.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        G.recorder = new MediaRecorder(G.stream);
+        G.recorder.ondataavailable = e => { if(e.data && e.data.size) G.chunks.push(e.data); };
+        G.recorder.start();
+      }catch(e){ G.recorder = null; }
+    }
     // Tocou de novo (ou saiu) enquanto o navegador pedia o microfone: libera e para.
     if(G.encerrada){ if(G.stream) G.stream.getTracks().forEach(t => t.stop()); return; }
     G.timer = setTimeout(pararGravacao, 12000);   // trava de segurança
-    if(SR){
+    if(usarSR){
       // Reconhecimento do próprio navegador (Chrome, Edge, Safari).
       const rec = G.rec = new SR();
       rec.lang = 'en-US'; rec.interimResults = true; rec.maxAlternatives = 3; rec.continuous = false;
@@ -643,8 +656,13 @@
     }
     // Não ouviu nada: não conta como tentativa.
     if(!finais.length){
+      // Reconhecimento do aparelho com defeito (não é só silêncio): daqui em
+      // diante grava e manda para o servidor transcrever.
+      const falhaReal = G.erroSR && G.erroSR !== 'no-speech' && G.erroSR !== 'aborted';
+      if(!abortou && G.usouSR && falhaReal && PODE_GRAVAR) S.forcarServidor = true;
+      const semMic = G.erroSR === 'not-allowed' || G.erroSR === 'service-not-allowed' || G.erroSR === 'audio-capture' || (!G.usouSR && !G.stream);
       $('#pxHeard').textContent = abortou ? 'Toque em Gravar e fale a frase em voz alta.'
-        : !blob && !G.stream ? 'Não consegui usar o microfone. Toque em Gravar de novo e permita o microfone se o navegador pedir.'
+        : semMic ? 'Não consegui usar o microfone. Toque em Gravar de novo e permita o microfone se o navegador pedir.'
         : 'Não ouvi nada. Toque em Gravar e fale a frase em voz alta, perto do microfone.';
       acoesFala(item, (cur.falhas || 0) ? 'retry' : false);
       return;
