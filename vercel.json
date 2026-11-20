@@ -7,6 +7,9 @@
     },
     "api/asaas.js": {
       "maxDuration": 60
+    },
+    "api/transcrever.js": {
+      "maxDuration": 30
     }
   },
   "headers": [
