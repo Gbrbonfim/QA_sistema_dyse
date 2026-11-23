@@ -538,6 +538,22 @@
   // Gravar funciona em qualquer navegador moderno; sem SR, quem transcreve é o servidor.
   const PODE_GRAVAR = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
   const ANDROID = /Android/i.test(navigator.userAgent || '');
+  /* iPhone/iPad: o reconhecimento do Safari só funciona na 1ª gravação quando
+     roda junto com o gravador (nas seguintes não ouve nada). Lá a voz é sempre
+     gravada e transcrita no servidor (api/transcrever.js). */
+  const IOS = /iPad|iPhone|iPod/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  /* No iPhone o Safari pede a permissão do microfone de novo toda vez que a
+     página abre o microfone outra vez. Lá o microfone é aberto UMA vez e fica
+     ligado até o aluno sair da atividade (cada gravação usa o mesmo). */
+  let MIC_FIXO = null;
+  async function abrirMic(){
+    if(IOS && MIC_FIXO && MIC_FIXO.getTracks().some(t => t.readyState === 'live')) return MIC_FIXO;
+    const st = await navigator.mediaDevices.getUserMedia({ audio: true });
+    if(IOS) MIC_FIXO = st;
+    return st;
+  }
+  function fecharMic(st){ if(st && st !== MIC_FIXO) st.getTracks().forEach(t => t.stop()); }
+  window.addEventListener('pagehide', () => { if(MIC_FIXO){ MIC_FIXO.getTracks().forEach(t => t.stop()); MIC_FIXO = null; } });
   function renderFala(item){
     item.completa = item.frase;
     const main = $('#pxMain');
@@ -600,18 +616,18 @@
     // usando o microfone: lá, com reconhecimento, não grava em paralelo (fica
     // sem o "Minha voz", mas a avaliação funciona). Se o reconhecimento falhar
     // no aparelho, as próximas gravações vão direto para o servidor.
-    const usarSR = SR && !S.forcarServidor;
+    const usarSR = SR && !S.forcarServidor && !(IOS && PODE_GRAVAR);
     G.usouSR = !!usarSR;
     if(!(usarSR && ANDROID)){
       try{
-        G.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        G.stream = await abrirMic();
         G.recorder = new MediaRecorder(G.stream);
         G.recorder.ondataavailable = e => { if(e.data && e.data.size) G.chunks.push(e.data); };
         G.recorder.start();
       }catch(e){ G.recorder = null; }
     }
     // Tocou de novo (ou saiu) enquanto o navegador pedia o microfone: libera e para.
-    if(G.encerrada){ if(G.stream) G.stream.getTracks().forEach(t => t.stop()); return; }
+    if(G.encerrada){ fecharMic(G.stream); return; }
     G.timer = setTimeout(pararGravacao, 12000);   // trava de segurança
     if(usarSR){
       // Reconhecimento do próprio navegador (Chrome, Edge, Safari).
@@ -659,7 +675,7 @@
      microfone antes perde a gravação). Blob com o tipo certo pra tocar no Safari. */
   function pararGravador(G){
     return new Promise(ok => {
-      const soltarMic = () => { if(G.stream) G.stream.getTracks().forEach(t => t.stop()); };
+      const soltarMic = () => fecharMic(G.stream);
       if(!G.recorder || G.recorder.state === 'inactive'){ soltarMic(); ok(null); return; }
       G.recorder.onstop = () => {
         soltarMic();
@@ -856,6 +872,7 @@
   /* ---------- final: pontos, revisão e salvar ---------- */
   async function finalizar(){
     pararAudio();
+    if(MIC_FIXO){ MIC_FIXO.getTracks().forEach(t => t.stop()); MIC_FIXO = null; }
     apagarProgresso();
     const itens = S.cfg.itens, n = itens.length;
     const p = calcularPontos();
