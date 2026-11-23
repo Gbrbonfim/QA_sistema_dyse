@@ -601,62 +601,237 @@ async function dyseLiberarRefazerPratica(alunoId, course, aula, activityNum){
   return { error };
 }
 
-/* ---------- Ranking de atividades ----------
-   RPC ranking_atividades() (seção 38): soma dos pontos DYSE (meta.pontos)
-   das atividades concluídas, por aluno. Devolve o top 5 + a linha de quem
-   está olhando (se for aluno fora do top 5). O nome só vem preenchido pra
-   gestão (is_admin), e só no top 5 — pra todo o resto, é anônimo. */
+/* ---------- Ranking mensal (média 0–100) ----------
+   RPC ranking_mensal(p_mes) (seção 40): 50 pts atividades + 30 pts presença
+   + 20 pts Speaking Club. Gestão vê todos com nome e detalhes; professora e
+   aluno veem o top 5 (sem nome) e a própria linha com os detalhes. */
+async function dyseRankingMensal(mes){
+  const { data, error } = await sb.rpc('ranking_mensal', { p_mes: mes || null });
+  return { data: data || [], error };
+}
+async function dyseRankingMensalAvisos(mes){
+  const { data, error } = await sb.rpc('ranking_mensal_avisos', { p_mes: mes || null });
+  return error ? [] : (data || []);
+}
+// Compatibilidade: o antigo ranking por pontos.
 async function dyseRankingAtividades(){
   const { data, error } = await sb.rpc('ranking_atividades');
   return { data: data || [], error };
 }
+const DYSE_MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+function dyseMesAtualISO(){
+  const d = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-01';
+}
+function dyseNomeMes(iso){ const [a, m] = String(iso).split('-'); return DYSE_MESES[Number(m) - 1] + ' de ' + a; }
 
 /* Monta o ranking dentro de "container" — mesma tela no painel do aluno,
    da professora e da gestão. */
-async function dyseRenderRankingAtividades(container){
+async function dyseRenderRankingAtividades(container, mesEscolhido){
   if(!container) return;
+  const mes = mesEscolhido || container.dataset.mes || dyseMesAtualISO();
+  container.dataset.mes = mes;
   container.innerHTML = '<p style="opacity:.6;">Carregando ranking...</p>';
-  const { data, error } = await dyseRankingAtividades();
+  const [{ data, error }, avisos] = await Promise.all([dyseRankingMensal(mes), dyseRankingMensalAvisos(mes)]);
   const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
   if(error){
-    console.error('ranking_atividades:', error);
+    console.error('ranking_mensal:', error);
     container.innerHTML = '<p style="opacity:.75;">Não foi possível carregar o ranking agora. Tente de novo em instantes.</p>';
     return;
   }
-  const top = data.filter(r => r.posicao <= 5);
+  const num = v => v == null ? '–' : Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const elegiveis = data.filter(r => r.elegivel);
+  const verTodos = data.some(r => r.nome);          // gestão: recebe nomes e detalhes de todos
   const eu = data.find(r => r.eu);
+  const lista = verTodos ? elegiveis : elegiveis.filter(r => r.posicao <= 5);
   const medalha = p => p <= 3
     ? '<span class="msr" aria-hidden="true" style="font-size:30px; font-variation-settings:\'FILL\' 1,\'wght\' 500,\'GRAD\' 0,\'opsz\' 40; color:' + (p === 1 ? '#E0A100' : p === 2 ? '#9AA3AD' : '#B8733D') + ';">workspace_premium</span>'
     : p + 'º';
-  const linhas = top.length ? top.map(r =>
+  const partes = r => r.pts_atividades == null ? '' :
+    '<div class="dy-rank-parts">' +
+      '<span title="Atividades feitas ÷ liberadas no mês"><b>' + num(r.pts_atividades) + '</b>/50 atividades <small>(' + r.atividades_feitas + ' de ' + r.atividades_liberadas + ')</small></span>' +
+      '<span title="Presenças ÷ aulas do mês (faltas justificadas, gravada e remarcou não contam)"><b>' + num(r.pts_presenca) + '</b>/30 presença <small>(' + r.aulas_presente + ' de ' + r.aulas_contadas + ')</small></span>' +
+      '<span title="Semanas em que foi ao Speaking ÷ semanas com Speaking no mês"><b>' + num(r.pts_speaking) + '</b>/20 speaking <small>(' + r.speaking_semanas + ' de ' + r.speaking_previstas + ')</small></span>' +
+      (r.qualidade != null ? '<span title="Desempate: % de acertos de primeira nas atividades do mês">' + num(r.qualidade) + '% de primeira</span>' : '') +
+    '</div>';
+  const linhas = lista.length ? lista.map(r =>
     '<div class="dy-rank-row' + (r.posicao <= 3 ? ' podio p' + r.posicao : '') + (r.eu ? ' eu' : '') + '">' +
       '<span class="pos">' + medalha(r.posicao) + '</span>' +
-      '<span class="who">' + (r.nome ? esc(r.nome) : (r.eu ? 'Você' : 'Aluno(a) ' + r.posicao + 'º lugar')) + '</span>' +
-      '<span class="pts">' + r.pontos + ' <small>pts</small></span>' +
+      '<span class="who">' + (r.nome ? esc(r.nome) : (r.eu ? 'Você' : 'Aluno(a) ' + r.posicao + 'º lugar')) + partes(r) + '</span>' +
+      '<span class="pts">' + num(r.media) + ' <small>/100</small></span>' +
     '</div>').join('')
-    : '<p style="opacity:.7; padding:10px 4px;">Ninguém pontuou ainda. As primeiras atividades concluídas aparecem aqui.</p>';
-  const minha = eu && eu.posicao > 5
-    ? '<div class="dy-rank-me">Sua posição: <b>' + eu.posicao + 'º</b> com <b>' + eu.pontos + ' pts</b> — continue fazendo as atividades pra subir!</div>'
-    : (eu ? '<div class="dy-rank-me top">Você está no top 5!</div>' : '');
+    : '<p style="opacity:.7; padding:10px 4px;">Ainda não há alunos pontuando neste mês.</p>';
+  const naoElegiveis = verTodos ? data.filter(r => !r.elegivel) : [];
+  let minha = '';
+  if(eu && !eu.elegivel){
+    const prox = new Date(mes + 'T12:00:00'); prox.setMonth(prox.getMonth() + 1);
+    minha = '<div class="dy-rank-me">Você entrou neste mês: sua pontuação começa a contar em <b>' + DYSE_MESES[prox.getMonth()] + '</b>.</div>';
+  } else if(eu && eu.posicao > 5){
+    minha = '<div class="dy-rank-me">Sua posição: <b>' + eu.posicao + 'º</b> com média <b>' + num(eu.media) + '</b>' + partes(eu) + '</div>';
+  } else if(eu){
+    minha = '<div class="dy-rank-me top">Você está no top 5!</div>';
+  }
+  const avisoHtml = avisos.length && (verTodos || !eu)
+    ? '<div class="dy-rank-aviso"><b>Atenção:</b> semana(s) letiva(s) sem Speaking registrado: ' +
+      avisos.map(a => { const d = new Date(a.semana + 'T12:00:00'); return 'semana de ' + d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }); }).join(', ') +
+      '. Se houve Speaking, registre no menu Speaking — enquanto isso essas semanas não contam para ninguém.</div>'
+    : '';
+  // Seletor de mês: o mês atual e os 11 anteriores.
+  const opcoes = [];
+  const base = new Date(dyseMesAtualISO() + 'T12:00:00');
+  for(let k = 0; k < 12; k++){
+    const d = new Date(base); d.setMonth(base.getMonth() - k);
+    const iso = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-01';
+    opcoes.push('<option value="' + iso + '"' + (iso === mes ? ' selected' : '') + '>' + dyseNomeMes(iso) + (k === 0 ? ' (atual)' : '') + '</option>');
+  }
   container.innerHTML =
     '<style>' +
-      '.dy-rank{max-width:640px;}' +
+      '.dy-rank{max-width:720px;}' +
+      '.dy-rank-top{display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;}' +
+      '.dy-rank-top select{border:2px solid #eee0cf; border-radius:12px; padding:8px 12px; font-family:inherit; font-size:.9rem; background:#fff; color:#3A1D10;}' +
       '.dy-rank-card{background:#fff; border-radius:22px; box-shadow:0 12px 32px rgba(58,29,16,.10); padding:10px 14px; margin-bottom:14px;}' +
       '.dy-rank-row{display:flex; align-items:center; gap:14px; padding:12px 8px; border-bottom:1px dashed #F1DCC6;}' +
       '.dy-rank-row:last-child{border-bottom:none;}' +
       '.dy-rank-row .pos{width:42px; height:42px; border-radius:14px; background:#FFF3E6; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1rem; color:#562915; flex:none;}' +
       '.dy-rank-row.podio .pos{font-size:1.5rem; background:transparent;}' +
       '.dy-rank-row.p1{background:linear-gradient(90deg,#FDF0DD,transparent); border-radius:14px;}' +
-      '.dy-rank-row .who{flex:1; font-weight:600; color:#3A1D10; line-height:1.25;}' +
-      '.dy-rank-row .who small{display:block; font-weight:500; font-size:.74rem; color:#562915; opacity:.7;}' +
-      '.dy-rank-row .pts{font-weight:800; font-size:1.2rem; color:#CE8613;} .dy-rank-row .pts small{font-size:.7rem; font-weight:600;}' +
+      '.dy-rank-row .who{flex:1; font-weight:600; color:#3A1D10; line-height:1.25; min-width:0;}' +
+      '.dy-rank-parts{display:flex; flex-wrap:wrap; gap:4px 12px; margin-top:4px; font-weight:500; font-size:.74rem; color:#562915;}' +
+      '.dy-rank-parts b{color:#3A1D10;} .dy-rank-parts small{opacity:.65;}' +
+      '.dy-rank-row .pts{font-weight:800; font-size:1.25rem; color:#CE8613; white-space:nowrap;} .dy-rank-row .pts small{font-size:.7rem; font-weight:600;}' +
       '.dy-rank-row.eu{box-shadow:inset 0 0 0 2px #D03B55; border-radius:14px;}' +
-      '.dy-rank-me{background:#3A1D10; color:#FFF3E6; border-radius:999px; padding:12px 18px; font-size:.88rem;} .dy-rank-me b{color:#F0A224;}' +
+      '.dy-rank-me{background:#3A1D10; color:#FFF3E6; border-radius:18px; padding:12px 18px; font-size:.88rem;} .dy-rank-me b{color:#F0A224;}' +
+      '.dy-rank-me .dy-rank-parts{color:#FFF3E6;} .dy-rank-me .dy-rank-parts b{color:#F0A224;}' +
       '.dy-rank-me.top{background:#E3F4EA; color:#2E8B57;}' +
+      '.dy-rank-aviso{background:#FDF0DD; color:#7A4A12; border-radius:14px; padding:10px 14px; font-size:.82rem; margin-bottom:14px;}' +
+      '.dy-rank-fora{font-size:.8rem; color:#562915; opacity:.8; margin:0 0 14px;}' +
       '.dy-rank-how{font-size:.8rem; color:#562915; opacity:.8; margin-top:14px; line-height:1.6;}' +
     '</style>' +
-    '<div class="dy-rank"><div class="dy-rank-card">' + linhas + '</div>' + minha +
-      '<p class="dy-rank-how"><b>Como pontua:</b> acerto de primeira 10 pts · acerto na 2ª tentativa 5 pts · Combo DYSE (3 acertos seguidos de primeira) +5 · atividade perfeita +20.</p></div>';
+    '<div class="dy-rank">' +
+      '<div class="dy-rank-top"><label for="dyRankMes" style="font-weight:700; font-size:.85rem; color:#562915;">Mês</label>' +
+        '<select id="dyRankMes">' + opcoes.join('') + '</select></div>' +
+      avisoHtml +
+      '<div class="dy-rank-card">' + linhas + '</div>' +
+      (naoElegiveis.length ? '<p class="dy-rank-fora"><b>Começam a pontuar no mês seguinte</b> (entraram depois do dia 1º): ' + naoElegiveis.map(r => esc(r.nome || 'Aluno(a)')).join(', ') + '.</p>' : '') +
+      minha +
+      '<p class="dy-rank-how"><b>Como funciona:</b> média de 0 a 100 no mês — <b>50</b> pelas atividades (feitas ÷ liberadas no mês), ' +
+      '<b>30</b> pela presença nas aulas (falta justificada, "vai assistir gravada" e "remarcou" não contam como falta) e ' +
+      '<b>20</b> pelo Speaking Club (ir pelo menos 1 vez por semana). Feriados e recessos do calendário não contam. ' +
+      'Empate: vence quem tem mais acertos de primeira, depois menos erros, depois menos tempo nas atividades.</p>' +
+    '</div>';
+  const sel = container.querySelector('#dyRankMes');
+  if(sel) sel.onchange = () => dyseRenderRankingAtividades(container, sel.value);
+}
+
+/* ---------- Speaking Club (seção 40.4) ----------
+   Um encontro por data; a equipe marca quem foi. Tela compartilhada entre
+   o painel da professora e o da gestão. */
+async function dyseSpeakingAlunos(){
+  const { data, error } = await sb.rpc('speaking_alunos');
+  return { data: data || [], error };
+}
+async function dyseSpeakingEncontrosDoMes(mesISO){
+  const d0 = new Date(mesISO + 'T12:00:00');
+  const fim = new Date(d0); fim.setMonth(d0.getMonth() + 1); fim.setDate(0);
+  const ate = fim.getFullYear() + '-' + String(fim.getMonth() + 1).padStart(2, '0') + '-' + String(fim.getDate()).padStart(2, '0');
+  const { data: encontros } = await sb.from('speaking_encontros').select('id, data').gte('data', mesISO).lte('data', ate).order('data');
+  const ids = (encontros || []).map(e => e.id);
+  const { data: pres } = ids.length ? await sb.from('speaking_presencas').select('encontro_id, aluno_id, presente').in('encontro_id', ids) : { data: [] };
+  return { encontros: encontros || [], presencas: pres || [] };
+}
+async function dyseSalvarSpeaking(dataISO, presencas){
+  const { data: enc, error } = await sb.from('speaking_encontros').upsert({ data: dataISO }, { onConflict: 'data' }).select('id').maybeSingle();
+  if(error || !enc) return { error: error || { message: 'Não foi possível criar o encontro.' } };
+  const linhas = presencas.map(p => ({ encontro_id: enc.id, aluno_id: p.aluno_id, presente: !!p.presente, atualizado_em: new Date().toISOString() }));
+  const { error: e2 } = linhas.length ? await sb.from('speaking_presencas').upsert(linhas, { onConflict: 'encontro_id,aluno_id' }) : { error: null };
+  return { error: e2 };
+}
+async function dyseExcluirSpeaking(dataISO){
+  const { error } = await sb.from('speaking_encontros').delete().eq('data', dataISO);
+  return { error };
+}
+
+async function dyseRenderSpeaking(container){
+  if(!container) return;
+  const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
+  const hoje = (() => { const d = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); })();
+  const dataSel = container.dataset.data || hoje;
+  container.dataset.data = dataSel;
+  container.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+  const mes = dataSel.slice(0, 7) + '-01';
+  const [{ data: alunos, error }, { encontros, presencas }] = await Promise.all([dyseSpeakingAlunos(), dyseSpeakingEncontrosDoMes(mes)]);
+  if(error){ container.innerHTML = '<p style="opacity:.75;">Não foi possível carregar os alunos: ' + esc(error.message) + '</p>'; return; }
+  const encDoDia = encontros.find(e => e.data === dataSel);
+  const presDoDia = {};
+  presencas.filter(p => encDoDia && p.encontro_id === encDoDia.id).forEach(p => { presDoDia[p.aluno_id] = p.presente; });
+  // Resumo do mês: quantos encontros cada aluno foi.
+  const foiPorAluno = {};
+  presencas.filter(p => p.presente).forEach(p => { foiPorAluno[p.aluno_id] = (foiPorAluno[p.aluno_id] || 0) + 1; });
+  const fmt = iso => new Date(iso + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+  container.innerHTML =
+    '<style>' +
+      '.spk{max-width:760px;}' +
+      '.spk-bar{display:flex; flex-wrap:wrap; gap:10px; align-items:end; margin-bottom:14px;}' +
+      '.spk-bar label{display:flex; flex-direction:column; gap:4px; font-size:.78rem; font-weight:700; color:#562915;}' +
+      '.spk-bar input{border:2px solid #eee0cf; border-radius:12px; padding:8px 12px; font-family:inherit; font-size:.9rem;}' +
+      '.spk-chips{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; font-size:.78rem;}' +
+      '.spk-chips button{border:1px solid #eee0cf; background:#fff; border-radius:999px; padding:5px 12px; cursor:pointer; font-family:inherit; color:#3A1D10;}' +
+      '.spk-chips button.on{background:#D03B55; color:#fff; border-color:#D03B55;}' +
+      '.spk-card{background:#fff; border-radius:18px; box-shadow:0 8px 24px rgba(58,29,16,.08); overflow:hidden;}' +
+      '.spk-row{display:flex; align-items:center; gap:12px; padding:10px 14px; border-bottom:1px solid #f3e6d6; cursor:pointer;}' +
+      '.spk-row:last-child{border-bottom:none;} .spk-row:hover{background:#FFF8F0;}' +
+      '.spk-row input{width:20px; height:20px; accent-color:#2E8B57; flex:none;}' +
+      '.spk-row .n{flex:1; min-width:0; font-weight:600; color:#3A1D10;} .spk-row .n small{display:block; font-weight:500; font-size:.74rem; opacity:.65;}' +
+      '.spk-row .m{font-size:.74rem; color:#562915; opacity:.75; white-space:nowrap;}' +
+      '.spk-act{display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap:wrap;}' +
+      '.spk-msg{font-size:.85rem;}' +
+    '</style>' +
+    '<div class="spk">' +
+      '<p style="font-size:.85rem; color:#562915; margin:0 0 14px;">Escolha a data do Speaking Club, marque quem participou e salve. Vale <b>20 pontos</b> no ranking do mês: o aluno precisa ir <b>pelo menos 1 vez por semana</b>.</p>' +
+      '<div class="spk-bar">' +
+        '<label>Data do Speaking<input type="date" id="spkData" value="' + dataSel + '"></label>' +
+        '<label style="flex:1; min-width:180px;">Buscar aluno<input type="search" id="spkBusca" placeholder="Nome ou turma"></label>' +
+      '</div>' +
+      '<div class="spk-chips">' + (encontros.length
+        ? '<span style="align-self:center; opacity:.7;">Encontros em ' + DYSE_MESES[Number(mes.slice(5, 7)) - 1] + ':</span>' +
+          encontros.map(e => '<button type="button" data-d="' + e.data + '" class="' + (e.data === dataSel ? 'on' : '') + '">' + fmt(e.data) + '</button>').join('')
+        : '<span style="opacity:.7;">Nenhum Speaking registrado neste mês ainda.</span>') + '</div>' +
+      '<div class="spk-card" id="spkLista">' + (alunos.length ? alunos.map(a =>
+        '<label class="spk-row" data-busca="' + esc(((a.nome || '') + ' ' + (a.turma || '') + ' ' + (a.email || '')).toLowerCase()) + '">' +
+          '<input type="checkbox" data-aluno="' + a.aluno_id + '"' + (presDoDia[a.aluno_id] ? ' checked' : '') + '>' +
+          '<span class="n">' + esc(a.nome || a.email) + '<small>' + esc(a.turma || 'sem turma') + '</small></span>' +
+          '<span class="m">' + (foiPorAluno[a.aluno_id] || 0) + ' no mês</span>' +
+        '</label>').join('') : '<p style="padding:14px; opacity:.7;">Nenhum aluno ativo.</p>') + '</div>' +
+      '<div class="spk-act">' +
+        '<button type="button" class="btn btn-primary" id="spkSalvar">' + (encDoDia ? 'Salvar alterações' : 'Salvar Speaking de ' + fmt(dataSel)) + '</button>' +
+        (encDoDia ? '<button type="button" class="btn btn-ghost" id="spkExcluir">Excluir este encontro</button>' : '') +
+        '<span class="spk-msg" id="spkMsg"></span>' +
+      '</div>' +
+    '</div>';
+  const $ = sel => container.querySelector(sel);
+  $('#spkData').onchange = e => { container.dataset.data = e.target.value || hoje; dyseRenderSpeaking(container); };
+  container.querySelectorAll('.spk-chips button[data-d]').forEach(b => b.onclick = () => { container.dataset.data = b.dataset.d; dyseRenderSpeaking(container); });
+  $('#spkBusca').oninput = e => {
+    const q = e.target.value.trim().toLowerCase();
+    container.querySelectorAll('.spk-row').forEach(r => { r.style.display = !q || r.dataset.busca.indexOf(q) >= 0 ? '' : 'none'; });
+  };
+  $('#spkSalvar').onclick = async () => {
+    const msg = $('#spkMsg');
+    const marcados = [...container.querySelectorAll('#spkLista input[type="checkbox"]')].map(el => ({ aluno_id: el.dataset.aluno, presente: el.checked }));
+    if(!marcados.some(p => p.presente) && !confirm('Ninguém foi marcado como presente. Salvar mesmo assim?')) return;
+    msg.style.color = '#562915'; msg.textContent = 'Salvando…';
+    const { error: e } = await dyseSalvarSpeaking(container.dataset.data, marcados);
+    if(e){ msg.style.color = '#c0392b'; msg.textContent = 'Não foi possível salvar: ' + e.message; return; }
+    await dyseRenderSpeaking(container);
+    const m2 = container.querySelector('#spkMsg'); if(m2){ m2.style.color = '#2e8b57'; m2.textContent = 'Speaking salvo! Já conta no ranking.'; }
+  };
+  const exc = $('#spkExcluir');
+  if(exc) exc.onclick = async () => {
+    if(!confirm('Excluir o Speaking de ' + fmt(dataSel) + ' e as presenças marcadas nele?')) return;
+    const { error: e } = await dyseExcluirSpeaking(dataSel);
+    if(e){ $('#spkMsg').style.color = '#c0392b'; $('#spkMsg').textContent = 'Não foi possível excluir: ' + e.message; return; }
+    dyseRenderSpeaking(container);
+  };
 }
 
 /* ======================================================================
@@ -2353,6 +2528,16 @@ async function dyseExcluirSessaoTurma(sessaoId){
 
 /* Presenças já lançadas numa sessão (pra pré-marcar o checklist ao
    reabrir uma data já registrada). */
+/* Modalidade atual de cada aluno ({ id: 'vip' | 'grupo' | ... }) — a chamada
+   usa pra mostrar "vai assistir gravada" (grupo) ou "remarcou" (VIP). */
+async function dyseModalidadeAlunos(ids){
+  if(!ids || !ids.length) return {};
+  const { data, error } = await sb.rpc('modalidade_alunos', { p_ids: ids });
+  const mapa = {};
+  if(!error) (data || []).forEach(r => { mapa[r.aluno_id] = r.modalidade; });
+  return mapa;
+}
+
 async function dyseListPresencasSessao(sessaoId){
   const { data, error } = await sb.from('sessao_presencas').select('*').eq('sessao_id', sessaoId);
   return error ? [] : data;
@@ -2362,7 +2547,12 @@ async function dyseListPresencasSessao(sessaoId){
    "presencas" = [{ aluno_id, presente }, ...] — um item por aluno
    matriculado na turma no momento da chamada. */
 async function dyseUpsertPresencas(sessaoId, presencas){
-  const linhas = (presencas || []).map(p => ({ sessao_id: sessaoId, aluno_id: p.aluno_id, presente: !!p.presente }));
+  // status: presente | falta | justificada | gravada | remarcou (seção 40.2).
+  // "presente" é mantido igual a (status = 'presente') pelo banco.
+  const linhas = (presencas || []).map(p => {
+    const status = p.status || (p.presente ? 'presente' : 'falta');
+    return { sessao_id: sessaoId, aluno_id: p.aluno_id, status: status, presente: status === 'presente' };
+  });
   if(!linhas.length) return { error: null };
   const { error } = await sb.from('sessao_presencas').upsert(linhas, { onConflict: 'sessao_id,aluno_id' });
   return { error };
