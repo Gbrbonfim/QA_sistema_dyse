@@ -883,6 +883,15 @@ async function dyseGetTurmaPorId(turmaId){
    quem chama normalmente é a professora, que só pode mexer nesse campo,
    não na turma inteira; a função valida teacher_can_see_turma/is_admin
    antes de gravar (seção 29 do schema). */
+/* Graduação da turma (seção 42) — só a gestão. */
+async function dyseGraduarTurma(turmaId){
+  const { data, error } = await sb.rpc('graduar_turma', { p_turma: turmaId });
+  return { data, error };
+}
+async function dyseListGraduacoes(turmaId){
+  const { data, error } = await sb.from('turma_graduacoes').select('*').eq('turma_id', turmaId).order('graduada_em', { ascending: false });
+  return { data: data || [], error };
+}
 async function dyseAtualizarLinkDriveTurma(turmaId, link){
   const { error } = await sb.rpc('atualizar_link_drive_turma', { turma_id_param: turmaId, link_param: link || '' });
   return { error };

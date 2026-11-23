@@ -1409,6 +1409,18 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 </div>
 
+<!-- Histórico de níveis da turma (graduações — seção 42) -->
+<div id="graduacoesModal" class="report-modal" aria-hidden="true">
+  <div class="report-modal-backdrop" onclick="closeGraduacoesModal()"></div>
+  <div class="report-modal-panel" role="dialog" aria-modal="true" aria-labelledby="graduacoesModalTitle">
+    <div class="report-modal-header">
+      <h3 id="graduacoesModalTitle">Histórico de níveis</h3>
+      <button type="button" class="report-modal-close" onclick="closeGraduacoesModal()" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="report-modal-body" id="graduacoesModalBody"></div>
+  </div>
+</div>
+
 <!-- Modal de edição da turma (dados + matérias/professores/alunos) -->
 <div id="turmaEditModal" class="report-modal" aria-hidden="true">
   <div class="report-modal-backdrop" onclick="closeTurmaEditModal()"></div>
@@ -6343,9 +6355,72 @@ body.dyse-modal-open{overflow:hidden;}
   });
   document.addEventListener('scroll', () => closeRowMenu(), true);
 
+  /* ---------- Graduação (seção 42) ----------
+     Nível atual = o primeiro da trilha liberado para a turma; graduar libera o
+     próximo, marca o atual como concluído para os alunos e guarda o histórico
+     (período, aulas registradas e o link das gravações, que é limpo). */
+  const TRILHA_NIVEIS = ['a1', 'a2', 'b1', 'b2', 'c1'];
+  function nivelAtualDaTurma(turmaId){
+    const slugs = TURMA_MATERIAS.filter(tm => tm.turma_id === turmaId).map(tm => tm.materia_slug);
+    const idx = Math.min(...slugs.map(s => TRILHA_NIVEIS.indexOf(s)).filter(i => i >= 0));
+    return isFinite(idx) ? { atual: TRILHA_NIVEIS[idx], proximo: TRILHA_NIVEIS[idx + 1] || null } : null;
+  }
+  const nomeMateria = slug => { const m = MATERIAS.find(x => x.slug === slug); return m ? m.name : String(slug || '').toUpperCase(); };
+  async function handleGraduarTurma(id){
+    const t = TURMAS.find(x => x.id === id);
+    const n = nivelAtualDaTurma(id);
+    if(!t || !n){ alert('Esta turma não tem nível da trilha (A1 a C1) liberado.'); return; }
+    if(!n.proximo){ alert('A turma já está no último nível (' + nomeMateria(n.atual) + ').'); return; }
+    const alunos = STUDENTS.filter(s => s.turma_id === id).length;
+    if(!confirm('Graduar a turma "' + t.name + '": ' + nomeMateria(n.atual) + ' → ' + nomeMateria(n.proximo) + '?\n\n' +
+      '• Os ' + alunos + ' aluno(s) passam a ver só o ' + nomeMateria(n.proximo) + ' (o ' + nomeMateria(n.atual) + ' aparece como concluído).\n' +
+      '• O link das gravações é limpo e fica guardado no Histórico de níveis da turma.\n' +
+      '• Registro de Classe, chamadas, atividades e Report Cards não são apagados.')) return;
+    const { data, error } = await dyseGraduarTurma(id);
+    if(error){ alert('Não foi possível graduar: ' + error.message); return; }
+    TURMA_MATERIAS = TURMA_MATERIAS.filter(tm => !(tm.turma_id === id && tm.materia_slug === data.de));
+    if(!TURMA_MATERIAS.some(tm => tm.turma_id === id && tm.materia_slug === data.para)) TURMA_MATERIAS.push({ turma_id: id, materia_slug: data.para });
+    t.link_drive = null;
+    renderTurmasTable();
+    renderMateriasTable();
+    alert('Turma "' + t.name + '" graduada: agora está no ' + nomeMateria(data.para) + '. Peça à professora para cadastrar o link das gravações do novo nível.');
+  }
+  async function openGraduacoesModal(id){
+    const t = TURMAS.find(x => x.id === id);
+    const body = document.getElementById('graduacoesModalBody');
+    document.getElementById('graduacoesModalTitle').textContent = 'Histórico de níveis' + (t ? ' — ' + t.name : '');
+    body.innerHTML = '<p class="report-line" style="opacity:.6;">Carregando…</p>';
+    const modal = document.getElementById('graduacoesModal');
+    modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); document.body.classList.add('dyse-modal-open');
+    const { data, error } = await dyseListGraduacoes(id);
+    if(error){ body.innerHTML = '<p class="report-line">Não foi possível carregar: ' + escapeHtmlLocal(error.message) + '</p>'; return; }
+    const fmt = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('pt-BR') : '—';
+    const n = nivelAtualDaTurma(id);
+    body.innerHTML = (n ? '<p class="report-line">Nível atual: <b>' + escapeHtmlLocal(nomeMateria(n.atual)) + '</b>' +
+        (t && t.link_drive ? ' · <a href="' + escapeHtmlLocal(t.link_drive) + '" target="_blank" rel="noopener">Links gravações (atual) ↗</a>' : ' · sem link de gravações cadastrado') + '</p>' : '') +
+      (data.length ? data.map(g => {
+        const quem = TEACHERS.concat(STUDENTS).find(p => p.id === g.graduada_por);
+        return '<div style="border:1px solid #f0e3d2; border-radius:14px; padding:12px 14px; margin-bottom:10px; background:#fff;">' +
+          '<div style="font-weight:800; color:var(--seal);">' + escapeHtmlLocal(nomeMateria(g.nivel_slug)) + ' <span style="font-weight:600; opacity:.6;">→ ' + escapeHtmlLocal(nomeMateria(g.proximo_slug)) + '</span></div>' +
+          '<div style="font-size:.82rem; color:var(--seal-soft); margin-top:4px;">' + fmt(g.inicio) + ' a ' + fmt(g.graduada_em) + ' · ' + g.aulas_registradas + ' aula(s) registrada(s)' +
+            (quem ? ' · graduada por ' + escapeHtmlLocal(quem.full_name || quem.email || '') : '') + '</div>' +
+          '<div style="font-size:.82rem; margin-top:6px;">' + (g.link_gravacoes
+            ? '<a href="' + escapeHtmlLocal(g.link_gravacoes) + '" target="_blank" rel="noopener">🔗 Links gravações (' + escapeHtmlLocal(nomeMateria(g.nivel_slug)) + ') ↗</a>'
+            : '<span style="opacity:.6;">Sem link de gravações guardado.</span>') + '</div>' +
+        '</div>';
+      }).join('') : '<p class="report-line" style="opacity:.7;">Esta turma ainda não foi graduada.</p>');
+  }
+  function closeGraduacoesModal(){
+    const modal = document.getElementById('graduacoesModal');
+    modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('dyse-modal-open');
+  }
+
   function openTurmaActionsMenu(event, id){
+    const n = nivelAtualDaTurma(id);
     const html =
       '<button type="button" onclick="closeRowMenu(); openTurmaEditModal(\'' + id + '\')">Editar turma</button>' +
+      (n && n.proximo ? '<button type="button" onclick="closeRowMenu(); handleGraduarTurma(\'' + id + '\')">🎓 Graduar (' + escapeHtmlLocal(nomeMateria(n.atual)) + ' → ' + escapeHtmlLocal(nomeMateria(n.proximo)) + ')</button>' : '') +
+      '<button type="button" onclick="closeRowMenu(); openGraduacoesModal(\'' + id + '\')">Histórico de níveis</button>' +
       '<button type="button" class="danger" onclick="closeRowMenu(); handleDeleteTurma(\'' + id + '\')">Excluir turma</button>';
     toggleRowMenu(event, html);
   }
