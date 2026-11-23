@@ -10,6 +10,9 @@
     },
     "api/transcrever.js": {
       "maxDuration": 30
+    },
+    "api/gerar-audio.js": {
+      "maxDuration": 60
     }
   },
   "headers": [

@@ -106,14 +106,23 @@
        || vs.find(v => /en-US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
   }
   if(window.speechSynthesis){ escolherVoz(); speechSynthesis.onvoiceschanged = escolherVoz; }
+  /* Áudios gerados pela api/gerar-audio.js ficam no Supabase Storage (bucket
+     público "audios-atividades", mesmo nome de arquivo). Se a frase ainda não
+     tiver áudio lá, cai na voz do navegador. */
+  const AUDIO_BUCKET = 'https://vnpjsjrqghttsagbssxx.supabase.co/storage/v1/object/public/audios-atividades/';
+  const SEM_AUDIO = {};   // chaves que já falharam nesta página: vai direto pra voz do navegador
   function falar(texto, rate, quem){
     const cancelou = pararAudio();
     const chave = chaveAudio(texto, vozPara(texto, quem));
-    if(window.DYSE_AUDIOS && window.DYSE_AUDIOS[chave]){
-      const a = new Audio('/atividades/praticas/audio/' + chave + '.mp3');
+    const local = window.DYSE_AUDIOS && window.DYSE_AUDIOS[chave];
+    if(local || !SEM_AUDIO[chave]){
+      const a = new Audio(local ? '/atividades/praticas/audio/' + chave + '.mp3' : AUDIO_BUCKET + chave + '.mp3');
       a.playbackRate = rate && rate < 0.8 ? 0.75 : 1;   // "Devagar" sem distorcer a voz
       AUDIO_ATUAL = a;
-      a.play().catch(() => falarNavegador(texto, rate, false));
+      let caiu = false;
+      const reserva = () => { if(caiu || AUDIO_ATUAL !== a) return; caiu = true; SEM_AUDIO[chave] = 1; falarNavegador(texto, rate, false); };
+      a.onerror = reserva;
+      a.play().catch(e => { if(!e || e.name !== 'AbortError') reserva(); });
       return;
     }
     falarNavegador(texto, rate, cancelou);
@@ -916,6 +925,13 @@
     _playOrig(){ const it = S.cfg.itens[S.i]; falar(it.frase); },
     _avaliar(item, ouvido){ return avaliarFala(item, ouvido); },   // usado nos testes
     // Usado pelo scripts/gerar-audios.ps1 pra listar as frases de cada atividade.
+    // Gera no servidor (api/gerar-audio.js) os áudios que faltam das frases dadas. Só gestão/professor(a).
+    async _gerarAudios(lista){
+      const session = typeof dyseSessaoParaServidor === 'function' ? await dyseSessaoParaServidor() : null;
+      if(!session) throw new Error('sem sessão');
+      const r = await fetch('/api/gerar-audio', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token }, body: JSON.stringify({ itens: lista }) });
+      return r.json();
+    },
     _audios(cfg){ return cfg.itens.map(it => { const f = falaDoItem(cfg.tipo, it); const v = vozPara(f.texto, f.quem); return { texto: String(f.texto).trim(), voz: v, chave: chaveAudio(f.texto, v) }; }); }
   };
 })();
