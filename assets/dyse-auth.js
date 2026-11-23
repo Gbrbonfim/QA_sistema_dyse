@@ -785,7 +785,7 @@ async function dyseRenderSpeaking(container){
       '.spk-row input{width:20px; height:20px; accent-color:#2E8B57; flex:none;}' +
       '.spk-row .n{flex:1; min-width:0; font-weight:600; color:#3A1D10;} .spk-row .n small{display:block; font-weight:500; font-size:.74rem; opacity:.65;}' +
       '.spk-row .m{font-size:.74rem; color:#562915; opacity:.75; white-space:nowrap;}' +
-      '.spk-act{display:flex; gap:10px; align-items:center; margin:0 0 14px; flex-wrap:wrap;}' +
+      '.spk-act{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}' +
       '.spk-msg{font-size:.85rem;}' +
     '</style>' +
     '<div class="spk">' +
@@ -793,16 +793,16 @@ async function dyseRenderSpeaking(container){
       '<div class="spk-bar">' +
         '<label>Data do Speaking<input type="date" id="spkData" value="' + dataSel + '"></label>' +
         '<label style="flex:1; min-width:180px;">Buscar aluno<input type="search" id="spkBusca" placeholder="Nome ou turma"></label>' +
+        '<div class="spk-act">' +
+          '<button type="button" class="btn btn-primary" id="spkSalvar">' + (encDoDia ? 'Salvar alterações' : 'Salvar Speaking de ' + fmt(dataSel)) + '</button>' +
+          (encDoDia ? '<button type="button" class="btn btn-ghost" id="spkExcluir">Excluir este encontro</button>' : '') +
+        '</div>' +
       '</div>' +
+      '<p class="spk-msg" id="spkMsg" style="margin:-6px 0 10px;"></p>' +
       '<div class="spk-chips">' + (encontros.length
         ? '<span style="align-self:center; opacity:.7;">Encontros em ' + DYSE_MESES[Number(mes.slice(5, 7)) - 1] + ':</span>' +
           encontros.map(e => '<button type="button" data-d="' + e.data + '" class="' + (e.data === dataSel ? 'on' : '') + '">' + fmt(e.data) + '</button>').join('')
         : '<span style="opacity:.7;">Nenhum Speaking registrado neste mês ainda.</span>') + '</div>' +
-      '<div class="spk-act">' +
-        '<button type="button" class="btn btn-primary" id="spkSalvar">' + (encDoDia ? 'Salvar alterações' : 'Salvar Speaking de ' + fmt(dataSel)) + '</button>' +
-        (encDoDia ? '<button type="button" class="btn btn-ghost" id="spkExcluir">Excluir este encontro</button>' : '') +
-        '<span class="spk-msg" id="spkMsg"></span>' +
-      '</div>' +
       '<div class="spk-card" id="spkLista">' + (alunos.length ? [alunos.slice(0, Math.ceil(alunos.length / 2)), alunos.slice(Math.ceil(alunos.length / 2))].map(col => '<div class="spk-col">' + col.map(a =>
         '<label class="spk-row" data-busca="' + esc(((a.nome || '') + ' ' + (a.turma || '') + ' ' + (a.email || '')).toLowerCase()) + '">' +
           '<input type="checkbox" data-aluno="' + a.aluno_id + '"' + (presDoDia[a.aluno_id] ? ' checked' : '') + '>' +
