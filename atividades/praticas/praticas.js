@@ -207,6 +207,34 @@
   const HANDLERS = {};
   function on(id, fn){ HANDLERS[id] = fn; }
 
+  /* ---------- progresso guardado por 15 minutos ----------
+     Cada questão respondida fica guardada no aparelho (localStorage, por aluno
+     e por atividade). Se o aluno sair e voltar em até 15 minutos, continua de
+     onde parou; depois disso o progresso é apagado e ele refaz a atividade
+     inteira. O prazo conta a partir da última vez que o progresso foi salvo. */
+  const PROGRESSO_MIN = 15;
+  function chaveProgresso(){ return 'dyse-progresso:' + (S.uid || 'anon') + ':' + S.cfg.course + ':' + S.cfg.aula + ':' + S.cfg.num; }
+  function salvarProgresso(){
+    try{
+      const feitas = S.res.filter(Boolean).length;
+      if(!feitas){ localStorage.removeItem(chaveProgresso()); return; }
+      localStorage.setItem(chaveProgresso(), JSON.stringify({
+        i: S.res[S.i] ? S.i + 1 : S.i, res: S.res, streak: S.streak, maxStreak: S.maxStreak,
+        comboRun: S.comboRun || 0, combos: S.combos || 0, salvoEm: Date.now()
+      }));
+    }catch(e){}
+  }
+  function apagarProgresso(){ try{ localStorage.removeItem(chaveProgresso()); }catch(e){} }
+  function lerProgresso(){
+    try{
+      const g = JSON.parse(localStorage.getItem(chaveProgresso()) || 'null');
+      if(!g) return null;
+      const valido = Date.now() - g.salvoEm < PROGRESSO_MIN * 60000 && Array.isArray(g.res) && g.i > 0 && g.i < S.cfg.itens.length;
+      if(!valido){ apagarProgresso(); return null; }
+      return g;
+    }catch(e){ return null; }
+  }
+
   /* ---------- registro do resultado de um item ---------- */
   function fecharItem(status, extra){
     const tent = S.cur.tentativas;
@@ -221,6 +249,7 @@
       if(status === 'bad' || status === 'skip'){ S.streak = 0; pintarStreak(false); }
     }
     pintarBarra();
+    salvarProgresso();
   }
   function avancar(){
     pararAudio();
@@ -738,16 +767,21 @@
           (at.microfone ? '<span>' + I('mic') + 'Usa microfone</span>' : '') +
           (S.refazendo ? '<span style="background:#FDF0DD; color:#CE8613;">' + I('replay') + 'Treino · não soma no ranking</span>' : '') + '</div>' +
         '<div class="cv-grid"><div><small>Você vai treinar</small><b>' + esc(at.treina) + '</b></div><div class="pts"><small>Ganhe até</small><b>' + dysePraticaPontosMax(S.cfg.itens.length) + ' pts</b></div></div>' +
-        '<button class="px-btn">Começar ' + I('arrow_forward') + '</button>' +
+        (S.retomado ? '<div class="px-ctx" style="margin:0 0 12px;">' + I('history') + ' Você parou na questão ' + (S.i + 1) + ' de ' + S.cfg.itens.length + '. Seu progresso fica guardado por ' + PROGRESSO_MIN + ' minutos depois que você sai.</div>' : '') +
+        '<button class="px-btn">' + (S.retomado ? 'Continuar da questão ' + (S.i + 1) : 'Começar') + ' ' + I('arrow_forward') + '</button>' +
       '</div>', 'cover');
     // imagem/fala já falam a 1ª questão dentro deste toque; as outras só liberam o som.
     m.querySelector('button').onclick = () => { if(S.cfg.tipo !== 'imagem' && S.cfg.tipo !== 'fala') desbloquearAudio(); m.remove(); renderItem(); };
   }
   function sair(){
-    const m = modal('<div class="px-m-kicker">Pausa</div><h2>Quer sair da atividade?</h2><div class="meta">O que você respondeu até agora não será salvo.</div>' +
+    const feitas = S.res.filter(Boolean).length;
+    const aviso = feitas
+      ? 'Seu progresso (' + feitas + ' de ' + S.cfg.itens.length + ' questões) fica guardado por <b>' + PROGRESSO_MIN + ' minutos</b>. Se você voltar depois disso, vai ter que refazer a atividade inteira.'
+      : 'Você ainda não respondeu nenhuma questão.';
+    const m = modal('<div class="px-m-kicker">Pausa</div><h2>Quer sair da atividade?</h2><div class="meta">' + aviso + '</div>' +
       '<button class="px-btn" id="pxStay">Continuar praticando</button><button class="px-btn ghost" id="pxLeave">Sair do exercício</button>', 'small');
     m.querySelector('#pxStay').onclick = () => m.remove();
-    m.querySelector('#pxLeave').onclick = () => { location.href = S.staff ? '/professora.html' : '/area-do-aluno.html#praticas'; };
+    m.querySelector('#pxLeave').onclick = () => { salvarProgresso(); location.href = S.staff ? '/professora.html' : '/area-do-aluno.html#praticas'; };
   }
 
   /* ---------- Pontuação DYSE (ver DYSE_PONTOS em catalogo.js) ---------- */
@@ -804,6 +838,7 @@
   /* ---------- final: pontos, revisão e salvar ---------- */
   async function finalizar(){
     pararAudio();
+    apagarProgresso();
     const itens = S.cfg.itens, n = itens.length;
     const p = calcularPontos();
     const acertos = p.primeira + p.segunda;
@@ -897,6 +932,7 @@
       S.info = dysePraticaInfo(cfg.course, cfg.aula, cfg.num);
       const session = await dyseRequireAuth(); if(!session) return;
       const ok = await dyseRequirePraticaLiberada(cfg.course, cfg.aula, cfg.num); if(!ok) return;
+      S.uid = session.user && session.user.id;
       const profile = await dyseGetProfile(session);
       // Modo de teste (não salva) só pra gestão/professora abrindo uma
       // atividade que NÃO foi liberada pra ela mesma. Se foi liberada pra
@@ -917,7 +953,12 @@
           S.pontosOriginais = res.pontos_ranking != null ? res.pontos_ranking : (res.meta && res.meta.pontos);
         }
       }
+      const g = lerProgresso();
+      if(g){
+        Object.assign(S, { i: g.i, res: g.res, streak: g.streak || 0, maxStreak: g.maxStreak || 0, comboRun: g.comboRun, combos: g.combos, retomado: true });
+      }
       montarTopo();
+      if(g){ pintarBarra(); pintarStreak(false); }
       modalIntro();
     },
     sair: sair,
