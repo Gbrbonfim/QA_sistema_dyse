@@ -618,6 +618,16 @@ a.pr-row:hover{background:var(--antique-soft);}
 .cc-bar span{display:block; height:100%; border-radius:999px;}
 .cc-sub{display:block; font-size:.75rem; line-height:1.4; color:var(--seal-soft); opacity:.75; margin-top:6px;}
 .cc-sub + .cc-sub{margin-top:2px;}
+.cc-rec{display:inline-flex; align-items:center; gap:5px; margin-top:8px; padding:5px 12px; border-radius:999px; background:var(--amaranth); color:#fff; font-size:.74rem; font-weight:700; cursor:pointer;}
+.cc-rec:hover{filter:brightness(1.08);} .cc-rec .msr{font-size:16px;}
+.ag-ov{position:fixed; inset:0; z-index:1000; background:rgba(58,29,16,.55); display:flex; align-items:center; justify-content:center; padding:20px;}
+.ag-box{width:min(1000px,100%); height:min(86vh,760px); background:#fff; border-radius:20px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.ag-top{display:flex; align-items:center; gap:12px; padding:12px 16px; border-bottom:1px solid #f0e3d2; color:var(--seal);}
+.ag-top b{display:flex; align-items:center; gap:6px; flex:1; font-size:1rem;}
+.ag-ext{display:inline-flex; align-items:center; gap:4px; font-size:.8rem; font-weight:700; color:var(--amaranth); text-decoration:none;}
+.ag-x{border:none; background:#FFF3E6; width:34px; height:34px; border-radius:10px; cursor:pointer; color:var(--seal); display:flex; align-items:center; justify-content:center;}
+.ag-box iframe{flex:1; width:100%; border:none;}
+.ag-hint{font-size:.72rem; color:var(--seal-soft); opacity:.75; padding:6px 16px;}
 .cc-go{flex:none; font-size:24px; color:var(--seal-soft); opacity:.55;}
 .cc.travado{cursor:default; box-shadow:none; background:rgba(255,255,255,.55);}
 .cc.travado .cc-nome, .cc.travado .cc-pct, .cc.travado .cc-ic{opacity:.5;}
@@ -1264,41 +1274,39 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     if(m) return 'https://docs.google.com/' + m[1] + '/d/' + m[2] + '/preview';
     return null;
   }
-  function ligarDrive(wrap){
-    const b = wrap.querySelector('#driveToggle');
-    if(!b) return;
-    b.onclick = () => {
-      const box = wrap.querySelector('#driveFrameWrap');
-      const fr = box.querySelector('iframe');
-      const abrir = box.style.display === 'none';
-      if(abrir && fr.getAttribute('src') === 'about:blank') fr.src = fr.dataset.src;
-      box.style.display = abrir ? 'block' : 'none';
-      b.innerHTML = abrir ? MI('visibility_off') + ' Esconder material' : MI('visibility') + ' Ver material aqui';
-    };
+  let TURMA_DRIVE = null;
+  /* "Aulas gravadas": abre a pasta do Drive da turma DENTRO da plataforma
+     (visualização incorporada do Google), com o botão de abrir no Drive
+     como reserva (pasta restrita / Safari sem cookies de terceiros). */
+  function abrirAulasGravadas(){
+    if(!TURMA_DRIVE) return;
+    const emb = driveEmbedUrl(TURMA_DRIVE);
+    if(!emb){ window.open(TURMA_DRIVE, '_blank', 'noopener'); return; }
+    const ov = document.createElement('div');
+    ov.className = 'ag-ov';
+    ov.innerHTML =
+      '<div class="ag-box" role="dialog" aria-label="Aulas gravadas">' +
+        '<div class="ag-top"><b>' + MI('smart_display') + ' Aulas gravadas</b>' +
+          '<a href="' + escapeHtmlLocal(TURMA_DRIVE) + '" target="_blank" rel="noopener" class="ag-ext">' + MI('open_in_new') + ' Abrir no Google Drive</a>' +
+          '<button type="button" class="ag-x" aria-label="Fechar">' + MI('close') + '</button></div>' +
+        '<iframe src="' + escapeHtmlLocal(emb) + '" title="Aulas gravadas" allow="autoplay; fullscreen"></iframe>' +
+        '<div class="ag-hint">Não apareceu? Use "Abrir no Google Drive".</div>' +
+      '</div>';
+    const fechar = () => { ov.remove(); document.removeEventListener('keydown', esc); };
+    const esc = e => { if(e.key === 'Escape') fechar(); };
+    ov.onclick = e => { if(e.target === ov) fechar(); };
+    ov.querySelector('.ag-x').onclick = fechar;
+    document.addEventListener('keydown', esc);
+    document.body.appendChild(ov);
   }
   function renderMeetCard(turma){
     const wrap = document.getElementById('meetCard');
-    if(!turma || (!turma.link_meet && !turma.link_drive)){ wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+    TURMA_DRIVE = (turma && turma.link_drive) || null;
+    if(!turma || !turma.link_meet){ wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
     wrap.style.display = 'block';
-    // Pasta do Google Drive da turma (seção 41), cadastrada pela professora.
-    // Pasta ou arquivo do Drive abre DENTRO da plataforma (visualização de
-    // incorporação do Google); qualquer outro link, só pelo botão.
-    const emb = driveEmbedUrl(turma.link_drive);
-    const drive = turma.link_drive
-      ? '<div style="margin:14px 0 0; padding:16px 20px; background:#fff; border:2px solid #eee0cf; border-radius:var(--radius); color:var(--seal);">' +
-          '<div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">' +
-            '<div style="flex:1 1 220px; min-width:0;">' +
-              '<div style="font-weight:800; font-size:1rem;">' + MI('folder_shared') + ' Material da turma</div>' +
-              '<div style="font-size:.85rem; opacity:.8;">Arquivos e gravações que a professora compartilhou com a sua turma.</div>' +
-            '</div>' +
-            (emb ? '<button type="button" class="btn" id="driveToggle" style="background:var(--amaranth); color:#fff; font-weight:800; flex:0 0 auto;">' + MI('visibility') + ' Ver material aqui</button>' : '') +
-            '<a href="' + escapeHtmlLocal(turma.link_drive) + '" target="_blank" rel="noopener" class="btn" style="' + (emb ? 'background:transparent; color:var(--seal); border:2px solid #eee0cf;' : 'background:var(--amaranth); color:#fff;') + ' font-weight:800; flex:0 0 auto;">' + MI('open_in_new') + ' Abrir no Google Drive</a>' +
-          '</div>' +
-          (emb ? '<div id="driveFrameWrap" style="display:none; margin-top:14px;"><iframe src="about:blank" data-src="' + escapeHtmlLocal(emb) + '" title="Material da turma no Google Drive" style="width:100%; height:520px; border:1px solid #eee0cf; border-radius:12px; background:#fff;" loading="lazy" allow="autoplay; fullscreen"></iframe>' +
-            '<div style="font-size:.76rem; opacity:.7; margin-top:6px;">Não apareceu? Use "Abrir no Google Drive" — pode ser que a pasta não esteja compartilhada com o seu e-mail.</div></div>' : '') +
-        '</div>'
-      : '';
-    if(!turma.link_meet){ wrap.innerHTML = drive; ligarDrive(wrap); return; }
+    // Pasta do Google Drive da turma (seção 41): vira o botão "Aulas gravadas"
+    // dentro do card do nível (ver cartaoCompacto / abrirAulasGravadas).
+    TURMA_DRIVE = turma.link_drive || null;
     wrap.innerHTML =
       '<div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:14px 0 0; padding:16px 20px; background:linear-gradient(135deg, var(--amaranth), var(--gamboge)); border-radius:var(--radius); color:#fff;">' +
         '<div style="flex:1 1 220px; min-width:0;">' +
@@ -1306,8 +1314,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '<div style="font-size:.85rem; opacity:.92;">Entre pelo Google Meet no horário da sua aula.</div>' +
         '</div>' +
         '<a href="' + escapeHtmlLocal(turma.link_meet) + '" target="_blank" rel="noopener" class="btn" style="background:#fff; color:var(--amaranth); font-weight:800; flex:0 0 auto;">Entrar no Google Meet</a>' +
-      '</div>' + drive;
-    ligarDrive(wrap);
+      '</div>';
   }
 
   /* ---------- Navegação por "view" (mesma página, menu fixo) ---------- */
@@ -1762,6 +1769,7 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '<span class="cc-bar"><span style="width:' + o.pct + '%; background:' + o.fg + ';"></span></span>' +
           (o.desc ? '<span class="cc-sub">' + escapeHtmlLocal(o.desc) + '</span>' : '') +
           (o.sub ? '<span class="cc-sub">' + o.sub + '</span>' : '') +
+          (o.id && TURMA_DRIVE && !((AREA_CTX.materias || {})[o.id] && AREA_CTX.materias[o.id].sem_registro) ? '<span class="cc-rec" role="button" tabindex="0" onclick="event.stopPropagation(); abrirAulasGravadas();" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault(); event.stopPropagation(); abrirAulasGravadas();}">' + MI('smart_display') + ' Aulas gravadas</span>' : '') +
         '</span>' +
         '<span class="msr cc-go" aria-hidden="true">' + (o.fim || 'chevron_right') + '</span>' +
       '</' + (o.id ? 'button' : 'div') + '>';
