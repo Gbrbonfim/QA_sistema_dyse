@@ -4976,3 +4976,85 @@ end;
 $$;
 
 grant execute on function public.atualizar_link_drive_turma(uuid, text) to authenticated;
+
+-- ======================================================================
+-- 42) Graduação da turma (só gestão)
+--     "Graduar" troca o nível da turma para o próximo da trilha
+--     (A1 → A2 → B1 → B2 → C1): o nível atual sai de turma_materias (no
+--     painel do aluno vira "Nível concluído") e o próximo é liberado. O link
+--     das gravações (turmas.link_drive) é limpo e guardado no histórico,
+--     junto com o período e as aulas registradas — só a gestão vê.
+--     Nada mais é apagado: Registro de Classe, chamadas, atividades e
+--     Report Cards continuam como estão.
+-- ======================================================================
+create table if not exists public.turma_graduacoes (
+  id bigint generated always as identity primary key,
+  turma_id uuid not null references public.turmas(id) on delete cascade,
+  nivel_slug text not null,
+  proximo_slug text not null,
+  inicio date,
+  graduada_em date not null default ((now() at time zone 'America/Sao_Paulo')::date),
+  aulas_registradas int not null default 0,
+  link_gravacoes text,
+  link_aula text,
+  graduada_por uuid references auth.users(id) default auth.uid(),
+  criado_em timestamptz default now()
+);
+create index if not exists idx_turma_graduacoes_turma on public.turma_graduacoes (turma_id, graduada_em desc);
+
+alter table public.turma_graduacoes enable row level security;
+drop policy if exists "graduacoes: gestao gerencia" on public.turma_graduacoes;
+create policy "graduacoes: gestao gerencia"
+  on public.turma_graduacoes for all
+  using (public.is_admin())
+  with check (public.is_admin());
+
+create or replace function public.graduar_turma(p_turma uuid)
+returns json
+language plpgsql
+security definer set search_path = public
+as $$
+declare
+  trilha text[] := array['a1', 'a2', 'b1', 'b2', 'c1'];
+  atual text;
+  idx int;
+  proximo text;
+  t record;
+  v_inicio date;
+  v_aulas int;
+begin
+  if not public.is_admin() then
+    raise exception 'Só a gestão pode graduar turmas.';
+  end if;
+  select * into t from public.turmas where id = p_turma;
+  if not found then raise exception 'Turma não encontrada.'; end if;
+
+  -- Nível atual = o primeiro da trilha liberado para a turma.
+  select tm.materia_slug, array_position(trilha, tm.materia_slug) into atual, idx
+  from public.turma_materias tm
+  where tm.turma_id = p_turma and tm.materia_slug = any(trilha)
+  order by array_position(trilha, tm.materia_slug)
+  limit 1;
+  if atual is null then raise exception 'A turma não tem nível da trilha (A1 a C1) liberado.'; end if;
+  if idx >= array_length(trilha, 1) then raise exception 'A turma já está no último nível (%).', upper(atual); end if;
+  proximo := trilha[idx + 1];
+  if not exists (select 1 from public.materias where slug = proximo) then
+    raise exception 'O nível % ainda não está cadastrado nas Matérias.', upper(proximo);
+  end if;
+
+  select min(s.data_aula), count(*) into v_inicio, v_aulas
+  from public.registro_classe_sessao s
+  join public.nivel_aulas na on na.id = s.nivel_aula_id
+  where s.turma_id = p_turma and na.materia_slug = atual;
+
+  insert into public.turma_graduacoes (turma_id, nivel_slug, proximo_slug, inicio, aulas_registradas, link_gravacoes, link_aula)
+  values (p_turma, atual, proximo, v_inicio, coalesce(v_aulas, 0), t.link_drive, t.link_meet);
+
+  delete from public.turma_materias where turma_id = p_turma and materia_slug = atual;
+  insert into public.turma_materias (turma_id, materia_slug) values (p_turma, proximo) on conflict do nothing;
+  update public.turmas set link_drive = null where id = p_turma;
+
+  return json_build_object('de', atual, 'para', proximo, 'aulas', coalesce(v_aulas, 0));
+end;
+$$;
+grant execute on function public.graduar_turma(uuid) to authenticated;
