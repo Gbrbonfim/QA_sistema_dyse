@@ -788,6 +788,7 @@
       '<div class="tr-pt">' + esc(pt || '—') + '</div><button class="px-btn ghost">Fechar</button>', 'small');
     m.querySelector('button').onclick = () => m.remove();
   }
+  function avisoMicVisto(){ try{ return localStorage.getItem('dyse-aviso-mic-ios') === '1'; }catch(e){ return false; } }
   function modalIntro(){
     const at = S.info.atividade;
     const m = modal(
@@ -802,9 +803,18 @@
           (S.refazendo ? '<span style="background:#FDF0DD; color:#CE8613;">' + I('replay') + 'Treino · não soma no ranking</span>' : '') + '</div>' +
         '<div class="cv-grid"><div><small>Você vai treinar</small><b>' + esc(at.treina) + '</b></div><div class="pts"><small>Ganhe até</small><b>' + dysePraticaPontosMax(S.cfg.itens.length) + ' pts</b></div></div>' +
         (S.retomado ? '<div class="px-ctx" style="margin:0 0 12px;">' + I('history') + ' Você parou na questão ' + (S.i + 1) + ' de ' + S.cfg.itens.length + '. Seu progresso fica guardado por ' + PROGRESSO_MIN + ' minutos depois que você sai.</div>' : '') +
+        (IOS && at.microfone && !avisoMicVisto()
+          ? '<div class="px-ctx" id="pxDicaMic" style="margin:0 0 12px; text-align:left;"><b>' + I('mic') + ' No iPhone, faça isto antes de começar</b><br>' +
+            'Para o iPhone não pedir a permissão do microfone a cada gravação:<br>' +
+            '1. Abra o app <b>Ajustes</b><br>2. Toque em <b>Apps</b> → <b>Safari</b> (em iPhones mais antigos: <b>Ajustes</b> → <b>Safari</b>)<br>' +
+            '3. Em <b>Microfone</b>, escolha <b>Permitir</b><br>' +
+            '<a href="#" id="pxDicaMicOk" style="display:inline-block; margin-top:8px; font-weight:700; color:var(--amaranth);">Já fiz, não mostrar de novo</a></div>'
+          : '') +
         '<button class="px-btn">' + (S.retomado ? 'Continuar da questão ' + (S.i + 1) : 'Começar') + ' ' + I('arrow_forward') + '</button>' +
       '</div>', 'cover');
     // imagem/fala já falam a 1ª questão dentro deste toque; as outras só liberam o som.
+    const dica = m.querySelector('#pxDicaMicOk');
+    if(dica) dica.onclick = e => { e.preventDefault(); try{ localStorage.setItem('dyse-aviso-mic-ios', '1'); }catch(er){} const c = m.querySelector('#pxDicaMic'); if(c) c.remove(); };
     m.querySelector('button').onclick = () => { if(S.cfg.tipo !== 'imagem' && S.cfg.tipo !== 'fala') desbloquearAudio(); m.remove(); renderItem(); };
   }
   function sair(){
