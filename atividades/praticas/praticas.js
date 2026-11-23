@@ -634,7 +634,10 @@
     // usando o microfone: lá, com reconhecimento, não grava em paralelo (fica
     // sem o "Minha voz", mas a avaliação funciona). Se o reconhecimento falhar
     // no aparelho, as próximas gravações vão direto para o servidor.
-    const usarSR = SR && !S.forcarServidor && !(IOS && PODE_GRAVAR);
+    // Celular (iPhone e Android): sempre grava e transcreve no servidor. O
+    // reconhecimento do navegador no celular falha com frequência (só a 1ª
+    // gravação no iPhone; sem o serviço de voz do Google em alguns Androids).
+    const usarSR = SR && !S.forcarServidor && !((IOS || ANDROID) && PODE_GRAVAR);
     G.usouSR = !!usarSR;
     if(!(usarSR && ANDROID)){
       try{
