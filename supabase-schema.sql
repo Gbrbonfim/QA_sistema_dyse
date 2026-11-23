@@ -4954,3 +4954,25 @@ as $$
   order by 1;
 $$;
 grant execute on function public.ranking_mensal_avisos(date) to authenticated;
+
+-- ======================================================================
+-- 41) Link do Google Drive por turma — mesma lógica do link do Meet
+--     (seção 29): a professora da turma (ou a gestão) cadastra no painel
+--     dela e o aluno vê no painel dele. Só altera turmas.link_drive.
+-- ======================================================================
+alter table public.turmas add column if not exists link_drive text;
+
+create or replace function public.atualizar_link_drive_turma(turma_id_param uuid, link_param text)
+returns void
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if not (public.teacher_can_see_turma(turma_id_param) or public.is_admin()) then
+    raise exception 'Sem permissão para editar o link dessa turma.';
+  end if;
+  update public.turmas set link_drive = nullif(trim(link_param), '') where id = turma_id_param;
+end;
+$$;
+
+grant execute on function public.atualizar_link_drive_turma(uuid, text) to authenticated;
