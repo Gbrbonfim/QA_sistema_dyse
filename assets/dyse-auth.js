@@ -643,7 +643,7 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
   const elegiveis = data.filter(r => r.elegivel);
   const verTodos = data.some(r => r.nome);          // gestão: recebe nomes e detalhes de todos
   const eu = data.find(r => r.eu);
-  const lista = verTodos ? elegiveis : elegiveis.filter(r => r.posicao <= 5);
+  const lista = verTodos ? elegiveis : elegiveis.filter(r => r.posicao <= 3);
   const medalha = p => p <= 3
     ? '<span class="msr" aria-hidden="true" style="font-size:30px; font-variation-settings:\'FILL\' 1,\'wght\' 500,\'GRAD\' 0,\'opsz\' 40; color:' + (p === 1 ? '#E0A100' : p === 2 ? '#9AA3AD' : '#B8733D') + ';">workspace_premium</span>'
     : p + 'º';
@@ -666,10 +666,10 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
   if(eu && !eu.elegivel){
     const prox = new Date(mes + 'T12:00:00'); prox.setMonth(prox.getMonth() + 1);
     minha = '<div class="dy-rank-me">Você entrou neste mês: sua pontuação começa a contar em <b>' + DYSE_MESES[prox.getMonth()] + '</b>.</div>';
-  } else if(eu && eu.posicao > 5){
-    minha = '<div class="dy-rank-me">Sua posição: <b>' + eu.posicao + 'º</b> com média <b>' + num(eu.media) + '</b>' + partes(eu) + '</div>';
+  } else if(eu && eu.posicao > 3){
+    minha = '<div class="dy-rank-me">Sua posição: <b>' + eu.posicao + 'º lugar</b> com média <b>' + num(eu.media) + '</b>' + partes(eu) + '</div>';
   } else if(eu){
-    minha = '<div class="dy-rank-me top">Você está no top 5!</div>';
+    minha = '<div class="dy-rank-me top">Você está no top 3! <b>' + eu.posicao + 'º lugar</b> com média <b>' + num(eu.media) + '</b>' + partes(eu) + '</div>';
   }
   const avisoHtml = avisos.length && (verTodos || !eu)
     ? '<div class="dy-rank-aviso"><b>Atenção:</b> semana(s) letiva(s) sem Speaking registrado: ' +
@@ -702,7 +702,7 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
       '.dy-rank-row.eu{box-shadow:inset 0 0 0 2px #D03B55; border-radius:14px;}' +
       '.dy-rank-me{background:#3A1D10; color:#FFF3E6; border-radius:18px; padding:12px 18px; font-size:.88rem;} .dy-rank-me b{color:#F0A224;}' +
       '.dy-rank-me .dy-rank-parts{color:#FFF3E6;} .dy-rank-me .dy-rank-parts b{color:#F0A224;}' +
-      '.dy-rank-me.top{background:#E3F4EA; color:#2E8B57;}' +
+      '.dy-rank-me.top{background:#E3F4EA; color:#2E8B57;} .dy-rank-me.top b{color:#1F6B41;} .dy-rank-me.top .dy-rank-parts{color:#2E8B57;} .dy-rank-me.top .dy-rank-parts b{color:#1F6B41;}' +
       '.dy-rank-aviso{background:#FDF0DD; color:#7A4A12; border-radius:14px; padding:10px 14px; font-size:.82rem; margin-bottom:14px;}' +
       '.dy-rank-fora{font-size:.8rem; color:#562915; opacity:.8; margin:0 0 14px;}' +
       '.dy-rank-how{font-size:.8rem; color:#562915; opacity:.8; margin-top:14px; line-height:1.6;}' +
@@ -717,7 +717,7 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
       '<p class="dy-rank-how"><b>Como funciona:</b> média de 0 a 100 no mês — <b>50</b> pelas atividades (feitas ÷ liberadas no mês), ' +
       '<b>30</b> pela presença nas aulas (falta justificada, "vai assistir gravada" e "remarcou" não contam como falta) e ' +
       '<b>20</b> pelo Speaking Club (ir pelo menos 1 vez por semana). Feriados e recessos do calendário não contam. ' +
-      'Empate: vence quem tem mais acertos de primeira, depois menos erros, depois menos tempo nas atividades.</p>' +
+      'Empate: vence quem tem mais acertos de primeira, depois menos erros, depois menos tempo nas atividades e, por último, quem está há mais tempo na DYSE.</p>' +
     '</div>';
   const sel = container.querySelector('#dyRankMes');
   if(sel) sel.onchange = () => dyseRenderRankingAtividades(container, sel.value);
