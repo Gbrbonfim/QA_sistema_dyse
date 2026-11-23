@@ -757,6 +757,16 @@ body.dyse-modal-open{overflow:hidden;}
 .report-section.collapsed .report-section-body{display:none;}
 
 .report-line{font-size:.88rem; margin-bottom:10px; color:var(--seal-soft); line-height:1.55;}
+.turma-links{margin:4px 0 18px; padding:14px 16px; background:#fff; border:1px solid #f0e3d2; border-radius:var(--radius-sm); max-width:760px;}
+.turma-links .tl-row{display:grid; grid-template-columns:150px 1fr; align-items:center; gap:10px; margin-bottom:8px;}
+.turma-links .tl-lab{display:flex; align-items:center; gap:6px; font-weight:700; font-size:.8rem; color:var(--seal);}
+.turma-links .tl-lab .msr{font-size:18px; color:var(--amaranth);}
+.turma-links input{min-width:0; border:1px solid #eee0cf; border-radius:10px; padding:8px 12px; font-family:var(--font-body); font-size:.85rem; background:#fffdfa;}
+.turma-links input:focus{outline:none; border-color:var(--amaranth);}
+.turma-links .tl-foot{display:flex; align-items:center; gap:12px; justify-content:space-between; margin-top:4px;}
+.turma-links .tl-msg{font-size:.74rem; color:var(--seal-soft); opacity:.85;}
+.turma-links .tl-btn{padding:7px 16px; font-size:.8rem; flex:none;}
+@media (max-width:640px){ .turma-links .tl-row{grid-template-columns:1fr; gap:4px;} .turma-links .tl-foot{flex-direction:column; align-items:stretch;} }
 .chamada-status{border:2px solid #e4d4c4; border-radius:10px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem; font-weight:700; background:#fff; color:var(--seal); cursor:pointer;}
 .chamada-status.st-presente{border-color:#bfe3cc; background:#eaf7ee; color:var(--ok);}
 .chamada-status.st-falta{border-color:#f3c9c6; background:#fbeceb; color:var(--bad);}
@@ -1080,17 +1090,19 @@ body.dyse-modal-open{overflow:hidden;}
     </div>
     <p id="chamadaMsg" style="font-size:.82rem; margin:8px 0; color:var(--seal-soft);"></p>
 
-    <div id="meetLinkWrap" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; margin:4px 0 16px; padding:12px 14px; background:#fff8f0; border:2px solid #eee0cf; border-radius:var(--radius-sm);">
-      <label for="meetLinkInput" style="font-weight:700; font-size:.82rem; color:var(--seal); flex:0 0 auto;"><span class="msr" aria-hidden="true">link</span> Link do Google Meet da turma</label>
-      <input type="url" id="meetLinkInput" placeholder="https://meet.google.com/xxx-xxxx-xxx" style="flex:1 1 260px; min-width:0; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:8px 12px; font-family:var(--font-body); font-size:.85rem;">
-      <button type="button" class="btn btn-ghost" style="padding:8px 16px; font-size:.82rem;" onclick="salvarLinkMeetTurma()">Salvar link</button>
-      <span id="meetLinkMsg" style="font-size:.78rem; color:var(--seal-soft); flex-basis:100%;"></span>
-    </div>
-    <div id="driveLinkWrap" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; margin:-6px 0 16px; padding:12px 14px; background:#fff8f0; border:2px solid #eee0cf; border-radius:var(--radius-sm);">
-      <label for="driveLinkInput" style="font-weight:700; font-size:.82rem; color:var(--seal); flex:0 0 auto;"><span class="msr" aria-hidden="true">folder_shared</span> Link do Google Drive da turma</label>
-      <input type="url" id="driveLinkInput" placeholder="https://drive.google.com/drive/folders/..." style="flex:1 1 260px; min-width:0; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:8px 12px; font-family:var(--font-body); font-size:.85rem;">
-      <button type="button" class="btn btn-ghost" style="padding:8px 16px; font-size:.82rem;" onclick="salvarLinkDriveTurma()">Salvar link</button>
-      <span id="driveLinkMsg" style="font-size:.78rem; color:var(--seal-soft); flex-basis:100%;">Lembre de deixar a pasta compartilhada com "Qualquer pessoa com o link" (ou com os e-mails dos alunos), senão eles não conseguem abrir.</span>
+    <div id="turmaLinksWrap" class="turma-links" style="display:none;">
+      <div class="tl-row">
+        <span class="tl-lab"><span class="msr" aria-hidden="true">videocam</span> Google Meet</span>
+        <input type="url" id="meetLinkInput" placeholder="https://meet.google.com/xxx-xxxx-xxx">
+      </div>
+      <div class="tl-row">
+        <span class="tl-lab"><span class="msr" aria-hidden="true">folder_shared</span> Google Drive</span>
+        <input type="url" id="driveLinkInput" placeholder="https://drive.google.com/drive/folders/...">
+      </div>
+      <div class="tl-foot">
+        <span id="turmaLinksMsg" class="tl-msg">Os alunos da turma veem os dois links no painel deles. A pasta do Drive precisa estar como "Qualquer pessoa com o link".</span>
+        <button type="button" class="btn btn-ghost tl-btn" onclick="salvarLinksTurma()">Salvar links</button>
+      </div>
     </div>
     <div style="overflow-x:auto;">
       <table class="dash-table" id="chamadaTable">
@@ -1758,7 +1770,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(!turmaId){
       document.getElementById('chamadaBody').innerHTML = '';
       document.getElementById('chamadaHistoricoBody').innerHTML = '';
-      document.getElementById('meetLinkWrap').style.display = 'none';
+      document.getElementById('turmaLinksWrap').style.display = 'none';
       return;
     }
     const students = await dyseListProfilesByRole('student'); // já vem só das turmas permitidas (RLS)
@@ -1775,43 +1787,32 @@ body.dyse-modal-open{overflow:hidden;}
   function carregarLinkMeetTurma(turmaId){
     const turma = CHAMADA_MY_TURMAS.find(t => t.id === turmaId);
     document.getElementById('meetLinkInput').value = (turma && turma.link_meet) || '';
-    document.getElementById('meetLinkMsg').textContent = '';
-    document.getElementById('meetLinkWrap').style.display = 'flex';
     document.getElementById('driveLinkInput').value = (turma && turma.link_drive) || '';
-    document.getElementById('driveLinkWrap').style.display = 'flex';
+    const msg = document.getElementById('turmaLinksMsg');
+    msg.style.color = ''; msg.textContent = 'Os alunos da turma veem os dois links no painel deles. A pasta do Drive precisa estar como "Qualquer pessoa com o link".';
+    document.getElementById('turmaLinksWrap').style.display = 'block';
   }
 
-  /* Link da pasta do Google Drive da turma (seção 41) — mesma lógica do Meet. */
-  async function salvarLinkDriveTurma(){
+  // Salva o link do Meet e o do Drive da turma de uma vez (seções 29 e 41).
+  async function salvarLinksTurma(){
     const turmaId = document.getElementById('chamadaTurmaSelect').value;
     if(!turmaId) return;
-    const link = document.getElementById('driveLinkInput').value.trim();
-    const msg = document.getElementById('driveLinkMsg');
-    if(link && !/^https:\/\//i.test(link)){ msg.style.color = '#c0392b'; msg.textContent = 'O link precisa começar com https://'; return; }
-    msg.style.color = 'var(--seal-soft)';
-    msg.textContent = 'Salvando…';
-    const { error } = await dyseAtualizarLinkDriveTurma(turmaId, link);
-    if(error){ msg.style.color = '#c0392b'; msg.textContent = 'Não foi possível salvar: ' + error.message; return; }
+    const meet = document.getElementById('meetLinkInput').value.trim();
+    const drive = document.getElementById('driveLinkInput').value.trim();
+    const msg = document.getElementById('turmaLinksMsg');
+    if((meet && !/^https:\/\//i.test(meet)) || (drive && !/^https:\/\//i.test(drive))){
+      msg.style.color = '#c0392b'; msg.textContent = 'Os links precisam começar com https://'; return;
+    }
+    msg.style.color = 'var(--seal-soft)'; msg.textContent = 'Salvando…';
+    const [r1, r2] = await Promise.all([dyseAtualizarLinkMeetTurma(turmaId, meet), dyseAtualizarLinkDriveTurma(turmaId, drive)]);
+    const erro = r1.error || r2.error;
+    if(erro){ msg.style.color = '#c0392b'; msg.textContent = 'Não foi possível salvar: ' + erro.message; return; }
     const turma = CHAMADA_MY_TURMAS.find(t => t.id === turmaId);
-    if(turma) turma.link_drive = link || null;
-    msg.style.color = '#2e8b57';
-    msg.textContent = link ? 'Link salvo! Já aparece no painel do aluno.' : 'Link removido.';
+    if(turma){ turma.link_meet = meet || null; turma.link_drive = drive || null; }
+    msg.style.color = '#2e8b57'; msg.textContent = 'Links salvos! Já aparecem no painel do aluno.';
   }
 
-  async function salvarLinkMeetTurma(){
-    const turmaId = document.getElementById('chamadaTurmaSelect').value;
-    if(!turmaId) return;
-    const link = document.getElementById('meetLinkInput').value.trim();
-    const msg = document.getElementById('meetLinkMsg');
-    msg.style.color = 'var(--seal-soft)';
-    msg.textContent = 'Salvando…';
-    const { error } = await dyseAtualizarLinkMeetTurma(turmaId, link);
-    if(error){ msg.style.color = '#c0392b'; msg.textContent = 'Não foi possível salvar: ' + error.message; return; }
-    const turma = CHAMADA_MY_TURMAS.find(t => t.id === turmaId);
-    if(turma) turma.link_meet = link || null;
-    msg.style.color = '#2e8b57';
-    msg.textContent = 'Link salvo! Já aparece no painel do aluno.';
-  }
+
 
   const CHAMADA_STATUS_NOME = { presente: 'Presente', falta: 'Faltou', justificada: 'Falta justificada', gravada: 'Vai assistir gravada', remarcou: 'Remarcou' };
   async function loadChamadaDoDia(){
@@ -2320,7 +2321,7 @@ body.dyse-modal-open{overflow:hidden;}
           '</div>' +
         '</div>';
       }).join('') : '<p style="opacity:.6; font-size:.82rem; margin:0;">A gestão ainda não cadastrou itens neste material.</p>';
-      return '<details class="dyse-collapsible manage-course-block" open style="margin-bottom:12px;">' +
+      return '<details class="dyse-collapsible manage-course-block" style="margin-bottom:12px;">' +
         '<summary class="manage-course-title"><span>' + escapeHtmlLocal(n.name) + ' <span class="pill-count">' + itens.length + '</span></span><span class="chevron">›</span></summary>' +
         '<div class="manage-course-body">' + rows + '</div>' +
       '</details>';
