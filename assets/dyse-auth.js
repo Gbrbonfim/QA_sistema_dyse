@@ -2667,6 +2667,62 @@ function dyseMapAvaliacaoParaPPR(valor){
   return { sim: 'PP', parcial: 'P', nao: 'R' }[valor] || null;
 }
 
+/* Campo "Nota/Resultado Forms" do Report Card (gestão e professor): nota
+   digitada ou "Não fez". O valor continua salvo em nota_forms como texto. */
+const DYSE_FORMS_NAO_FEZ = 'Não fez';
+
+function dyseCampoNotaForms(indice, valor){
+  const naoFez = valor === DYSE_FORMS_NAO_FEZ;
+  const texto = String(valor || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return '<div style="display:flex; flex-direction:column; gap:6px; min-width:150px;">' +
+    '<input type="text" data-rc-rev-nota="' + indice + '" value="' + texto + '" placeholder="[Preenchimento necessário]"' + (naoFez ? ' readonly' : '') + ' style="width:100%; box-sizing:border-box;' + (naoFez ? ' opacity:.65;' : '') + '">' +
+    '<label style="display:inline-flex; align-items:center; gap:6px; font-size:.8rem; font-weight:600; cursor:pointer; margin:0;">' +
+      '<input type="checkbox" onchange="dyseAlternarNaoFezForms(this)" style="width:16px; height:16px; margin:0; flex:none;"' + (naoFez ? ' checked' : '') + '> Não fez' +
+    '</label></div>';
+}
+
+function dyseAlternarNaoFezForms(checkbox){
+  const input = checkbox.closest('div').querySelector('[data-rc-rev-nota]');
+  if(checkbox.checked){
+    input.dataset.notaAnterior = input.value;
+    input.value = DYSE_FORMS_NAO_FEZ;
+  }else{
+    input.value = input.dataset.notaAnterior || '';
+  }
+  input.readOnly = checkbox.checked;
+  input.style.opacity = checkbox.checked ? '.65' : '';
+}
+
+/* Caixas de texto do Report Card crescem junto com o conteúdo, sem barra de
+   rolagem interna. Guarda a rolagem do modal, que poderia pular ao medir. */
+function dyseExpandirTextarea(el){
+  if(!el.scrollHeight) return; // modal ainda fechado: não há o que medir
+  let rolagem = el.parentElement;
+  while(rolagem && rolagem.scrollHeight <= rolagem.clientHeight) rolagem = rolagem.parentElement;
+  const topo = rolagem ? rolagem.scrollTop : 0;
+  el.style.height = 'auto';
+  el.style.height = (el.scrollHeight + el.offsetHeight - el.clientHeight) + 'px';
+  if(rolagem) rolagem.scrollTop = topo;
+}
+
+function dyseAtivarTextareasExpansiveis(containerId){
+  const box = document.getElementById(containerId);
+  if(!box) return;
+  const campos = box.querySelectorAll('textarea');
+  campos.forEach(el => {
+    el.style.boxSizing = 'border-box';
+    el.style.overflowY = 'hidden';
+    el.style.resize = 'none';
+    el.addEventListener('input', () => dyseExpandirTextarea(el));
+  });
+  // Espera o modal abrir pra medir a altura real do texto.
+  requestAnimationFrame(() => campos.forEach(el => dyseExpandirTextarea(el)));
+}
+
+window.addEventListener('resize', () => {
+  document.querySelectorAll('#reportCardModalBody textarea').forEach(el => dyseExpandirTextarea(el));
+});
+
 /* Gera (ou regenera, enquanto ainda em rascunho) o Report Card de um
    aluno num intervalo de aulas de uma matéria/nível. Recusa sobrescrever
    um Report Card que já saiu de rascunho — depois de liberado, os
@@ -2742,9 +2798,9 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
     avaliacaoEixos[eixo] = { nivel: sugestao ? sugestao.nivel : null, amostras: sugestao ? sugestao.amostras : 0, observacoes: '' };
   });
 
-  // Revisões-teste: aulas de revisão dentro do intervalo. Nota do Forms e
-  // validade oficial não têm fonte de dado — ficam pendentes; "fluência
-  // oral" é sugerida a partir do eixo "Tarefa Final" daquela aula (último dia).
+  // Revisões-teste: aulas de revisão dentro do intervalo. Nota do Forms não
+  // tem fonte de dado — fica pendente; "fluência oral" é sugerida a partir
+  // do eixo "Tarefa Final" daquela aula (último dia).
   const checkpoints = aulasDoIntervalo.filter(a => /revis[ãa]o/i.test(a.topico));
   const revisoesTeste = checkpoints.map(a => {
     const tarefaFinal = ultimoValorEixo(registrosPorNumero[a.numero], 'Tarefa Final');
@@ -2752,8 +2808,7 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
       aula_numero: a.numero,
       aula_topico: a.topico,
       nota_forms: null,
-      fluencia_oral: tarefaFinal ? dyseMapAvaliacaoParaPPR(tarefaFinal) : null,
-      validade_oficial: null
+      fluencia_oral: tarefaFinal ? dyseMapAvaliacaoParaPPR(tarefaFinal) : null
     };
   });
 
@@ -2831,6 +2886,23 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
     .select('*')
     .maybeSingle();
   return { data, error };
+}
+
+/* Quantos Report Cards aguardam a revisão DESTE professor. Filtra pelas
+   turmas dele porque quem também é gestão enxerga os de todas as turmas. */
+async function dyseContarReportCardsParaRevisar(){
+  const session = await dyseGetSession();
+  if(!session) return 0;
+  const { data: vinculos } = await sb.from('teacher_turmas').select('turma_id').eq('teacher_id', session.user.id);
+  const turmas = (vinculos || []).map(v => v.turma_id);
+  if(!turmas.length) return 0;
+  const { data: cards } = await sb.from('report_cards').select('aluno_id').eq('status', 'liberado_professor');
+  if(!cards || !cards.length) return 0;
+  const { data: alunos } = await sb.from('profiles').select('id')
+    .in('id', [...new Set(cards.map(c => c.aluno_id))])
+    .in('turma_id', turmas);
+  const meusAlunos = new Set((alunos || []).map(a => a.id));
+  return cards.filter(c => meusAlunos.has(c.aluno_id)).length;
 }
 
 async function dyseListReportCards(alunoId){

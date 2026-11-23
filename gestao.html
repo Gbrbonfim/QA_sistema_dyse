@@ -4921,12 +4921,11 @@ body.dyse-modal-open{overflow:hidden;}
 
     const revisoes = d.revisoes_teste || [];
     const blocoRevisoes = revisoes.length ? '<div class="report-section-head">D · Desempenho nas Revisões-Teste</div>' +
-      '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>Aula</th><th>Nota/Resultado Forms</th><th>Fluência oral</th><th>Validade</th></tr></thead><tbody>' +
+      '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>Aula</th><th>Nota/Resultado Forms</th><th>Fluência oral</th></tr></thead><tbody>' +
       revisoes.map((rv, i) => '<tr>' +
         '<td>' + rv.aula_numero + ' — ' + escapeHtmlLocal(rv.aula_topico || '') + '</td>' +
-        '<td><input type="text" style="width:100px;" placeholder="[Preenchimento necessário]" data-rc-rev-nota="' + i + '" value="' + escapeHtmlLocal(rv.nota_forms || '') + '"></td>' +
+        '<td>' + dyseCampoNotaForms(i, rv.nota_forms) + '</td>' +
         '<td>' + selectPPR('data-rc-rev-fluencia="' + i + '"', rv.fluencia_oral) + '</td>' +
-        '<td><select data-rc-rev-validade="' + i + '"><option value=""' + (!rv.validade_oficial ? ' selected' : '') + '>[Preenchimento necessário]</option><option value="oficial"' + (rv.validade_oficial === 'oficial' ? ' selected' : '') + '>Oficial</option><option value="diagnostico"' + (rv.validade_oficial === 'diagnostico' ? ' selected' : '') + '>Diagnóstico informal</option></select></td>' +
       '</tr>').join('') + '</tbody></table></div>' : '';
 
     const af = d.apresentacao_final;
@@ -4955,10 +4954,10 @@ body.dyse-modal-open{overflow:hidden;}
     const enc = d.encaminhamento || {};
     const blocoRestante =
       '<div class="report-section-head">F · Pontos Fortes e de Desenvolvimento</div>' +
-      '<div class="gestao-field"><label>Pontos fortes</label><textarea id="rcPontosFortes" placeholder="[Preenchimento necessário]" style="min-height:90px; max-height:160px; overflow-y:auto; resize:vertical;">' + escapeHtmlLocal(d.pontos_fortes || '') + '</textarea></div>' +
-      '<div class="gestao-field"><label>Pontos de desenvolvimento</label><input type="text" id="rcPontosDesenvolvimento" value="' + escapeHtmlLocal(d.pontos_desenvolvimento || '') + '" placeholder="[Preenchimento necessário]"></div>' +
+      '<div class="gestao-field"><label>Pontos fortes</label><textarea id="rcPontosFortes" rows="2" placeholder="[Preenchimento necessário]">' + escapeHtmlLocal(d.pontos_fortes || '') + '</textarea></div>' +
+      '<div class="gestao-field"><label>Pontos de desenvolvimento</label><textarea id="rcPontosDesenvolvimento" rows="2" placeholder="[Preenchimento necessário]">' + escapeHtmlLocal(d.pontos_desenvolvimento || '') + '</textarea></div>' +
       '<div class="report-section-head">G · Considerações Pessoais do Professor(a)</div>' +
-      '<div class="gestao-field"><input type="text" id="rcConsideracoes" value="' + escapeHtmlLocal(d.consideracoes_professor || '') + '" placeholder="[Preenchimento necessário]"></div>' +
+      '<div class="gestao-field"><textarea id="rcConsideracoes" rows="2" placeholder="[Preenchimento necessário]">' + escapeHtmlLocal(d.consideracoes_professor || '') + '</textarea></div>' +
       '<div class="report-section-head">H · Encaminhamento</div>' +
       '<div class="gestao-field"><select id="rcEncaminhamentoTipo">' +
         '<option value=""' + (!enc.tipo ? ' selected' : '') + '>[Preenchimento necessário]</option>' +
@@ -4966,7 +4965,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<option value="reforco"' + (enc.tipo === 'reforco' ? ' selected' : '') + '>Reforço pontual</option>' +
         '<option value="protocolo"' + (enc.tipo === 'protocolo' ? ' selected' : '') + '>Protocolo 6.5.1 acionado</option>' +
       '</select></div>' +
-      '<div class="gestao-field"><label>Motivo / plano de reforço (se aplicável)</label><input type="text" id="rcEncaminhamentoMotivo" value="' + escapeHtmlLocal(enc.motivo || '') + '"></div>';
+      '<div class="gestao-field"><label>Motivo / plano de reforço (se aplicável)</label><textarea id="rcEncaminhamentoMotivo" rows="2">' + escapeHtmlLocal(enc.motivo || '') + '</textarea></div>';
 
     let botoesTransicao = '';
     if(CURRENT_REPORT_CARD_CONTEXTO === 'gestao' && rc.status === 'rascunho'){
@@ -4989,6 +4988,7 @@ body.dyse-modal-open{overflow:hidden;}
       blocoFrequencia + blocoEixos + blocoRevisoes + blocoFinal + blocoAlertas + blocoRestante +
       '<div class="btn-row" style="margin-top:16px; display:flex; align-items:center; gap:8px;"><button type="button" class="btn btn-ghost" onclick="handleSalvarReportCard()">Salvar</button>' + botoesTransicao + botaoExcluir + '</div>' +
       '<p class="auth-msg" id="rcModalMsg"></p>';
+    dyseAtivarTextareasExpansiveis('reportCardModalBody');
   }
 
   async function handleExcluirReportCard(){
@@ -5019,7 +5019,6 @@ body.dyse-modal-open{overflow:hidden;}
     }
     document.querySelectorAll('[data-rc-rev-nota]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevNota)].nota_forms = el.value.trim() || null; });
     document.querySelectorAll('[data-rc-rev-fluencia]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevFluencia)].fluencia_oral = el.value || null; });
-    document.querySelectorAll('[data-rc-rev-validade]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevValidade)].validade_oficial = el.value || null; });
     if(d.apresentacao_final){
       document.querySelectorAll('[data-rc-final-eixo]').forEach(el => { d.apresentacao_final.eixos[el.dataset.rcFinalEixo].nivel = el.value || null; });
       const resultadoEl = document.getElementById('rcFinalResultado');

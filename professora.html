@@ -194,6 +194,8 @@ body::before{
 /* Ícones do menu: Material Symbols (contorno; preenchido no item ativo). */
 .sidebar-item .nav-ic{font-size:20px; vertical-align:0; flex:none; opacity:.9; font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24;}
 .sidebar-item.active .nav-ic{opacity:1; font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24;}
+.sidebar-item-badge{margin-left:auto; flex:none; display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; padding:0 6px; border-radius:999px; background:#F0A224; color:#3A1D10; font-size:.7rem; font-weight:800; line-height:1;}
+.sidebar-item-badge[hidden]{display:none;}
 
 /* Saudação/ações da barra superior: só existem no celular. */
 .mob-greet, .mob-actions{display:none;}
@@ -225,6 +227,7 @@ body::before{
   .sidebar-item:active{transform:scale(.97);}
   .sidebar-item .nav-ic{font-size:26px;}
   .sidebar-item.active{background:#fff; color:var(--amaranth); border-color:#fff; box-shadow:0 6px 16px rgba(58,29,16,.22);}
+  .sidebar-item-badge{position:absolute; top:6px; right:6px; margin:0;}
   .sidebar-footer{display:none;}
 
   .main-area{height:auto; overflow-y:visible;}
@@ -875,6 +878,7 @@ body.dyse-modal-open{overflow:hidden;}
       <button type="button" class="sidebar-item" id="tabReportCards" onclick="showPanel('reportcards')">
         <span class="msr nav-ic" aria-hidden="true">description</span>
         <span>Report Cards</span>
+        <span class="sidebar-item-badge" id="reportCardsMenuBadge" hidden></span>
       </button>
       <button type="button" class="sidebar-item" id="tabResults" onclick="showPanel('results')">
         <span class="msr nav-ic" aria-hidden="true">checklist</span>
@@ -2560,11 +2564,8 @@ body.dyse-modal-open{overflow:hidden;}
   function pfCampo(labelText, innerHtml){
     return '<div style="margin-bottom:10px;"><label style="font-weight:700; font-size:.82rem; color:var(--seal); display:block; margin-bottom:4px;">' + labelText + '</label>' + innerHtml + '</div>';
   }
-  function pfInput(idAttr, value, placeholder){
-    return '<input type="text" ' + idAttr + ' value="' + escapeHtmlLocal(value || '') + '" placeholder="' + (placeholder || '') + '" style="width:100%; max-width:520px; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;">';
-  }
-  function pfTextareaScroll(idAttr, value, placeholder){
-    return '<textarea ' + idAttr + ' placeholder="' + (placeholder || '') + '" style="width:100%; max-width:520px; min-height:90px; max-height:160px; overflow-y:auto; resize:vertical; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;">' + escapeHtmlLocal(value || '') + '</textarea>';
+  function pfTextarea(idAttr, value, placeholder){
+    return '<textarea ' + idAttr + ' rows="2" placeholder="' + (placeholder || '') + '" style="width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;">' + escapeHtmlLocal(value || '') + '</textarea>';
   }
 
   async function openReportCardModal(id, contexto){
@@ -2623,12 +2624,11 @@ body.dyse-modal-open{overflow:hidden;}
 
     const revisoes = d.revisoes_teste || [];
     const blocoRevisoes = revisoes.length ? '<div class="report-section-head">D · Desempenho nas Revisões-Teste</div>' +
-      '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>Aula</th><th>Nota/Resultado Forms</th><th>Fluência oral</th><th>Validade</th></tr></thead><tbody>' +
+      '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>Aula</th><th>Nota/Resultado Forms</th><th>Fluência oral</th></tr></thead><tbody>' +
       revisoes.map((rv, i) => '<tr>' +
         '<td>' + rv.aula_numero + ' — ' + escapeHtmlLocal(rv.aula_topico || '') + '</td>' +
-        '<td>' + pfInput('data-rc-rev-nota="' + i + '"', rv.nota_forms, '[Preenchimento necessário]') + '</td>' +
+        '<td>' + dyseCampoNotaForms(i, rv.nota_forms) + '</td>' +
         '<td>' + selectPPR('data-rc-rev-fluencia="' + i + '"', rv.fluencia_oral) + '</td>' +
-        '<td><select data-rc-rev-validade="' + i + '"><option value=""' + (!rv.validade_oficial ? ' selected' : '') + '>[Preenchimento necessário]</option><option value="oficial"' + (rv.validade_oficial === 'oficial' ? ' selected' : '') + '>Oficial</option><option value="diagnostico"' + (rv.validade_oficial === 'diagnostico' ? ' selected' : '') + '>Diagnóstico informal</option></select></td>' +
       '</tr>').join('') + '</tbody></table></div>' : '';
 
     const af = d.apresentacao_final;
@@ -2651,10 +2651,10 @@ body.dyse-modal-open{overflow:hidden;}
     const enc = d.encaminhamento || {};
     const blocoRestante =
       '<div class="report-section-head">F · Pontos Fortes e de Desenvolvimento</div>' +
-      pfCampo('Pontos fortes', pfTextareaScroll('id="rcPontosFortes"', d.pontos_fortes, '[Preenchimento necessário]')) +
-      pfCampo('Pontos de desenvolvimento', pfInput('id="rcPontosDesenvolvimento"', d.pontos_desenvolvimento, '[Preenchimento necessário]')) +
+      pfCampo('Pontos fortes', pfTextarea('id="rcPontosFortes"', d.pontos_fortes, '[Preenchimento necessário]')) +
+      pfCampo('Pontos de desenvolvimento', pfTextarea('id="rcPontosDesenvolvimento"', d.pontos_desenvolvimento, '[Preenchimento necessário]')) +
       '<div class="report-section-head">G · Considerações Pessoais do Professor(a)</div>' +
-      pfCampo('', pfInput('id="rcConsideracoes"', d.consideracoes_professor, '[Preenchimento necessário]')) +
+      pfCampo('', pfTextarea('id="rcConsideracoes"', d.consideracoes_professor, '[Preenchimento necessário]')) +
       '<div class="report-section-head">H · Encaminhamento</div>' +
       pfCampo('Tipo', '<select id="rcEncaminhamentoTipo">' +
         '<option value=""' + (!enc.tipo ? ' selected' : '') + '>[Preenchimento necessário]</option>' +
@@ -2662,7 +2662,7 @@ body.dyse-modal-open{overflow:hidden;}
         '<option value="reforco"' + (enc.tipo === 'reforco' ? ' selected' : '') + '>Reforço pontual</option>' +
         '<option value="protocolo"' + (enc.tipo === 'protocolo' ? ' selected' : '') + '>Protocolo 6.5.1 acionado</option>' +
       '</select>') +
-      pfCampo('Motivo / plano de reforço (se aplicável)', pfInput('id="rcEncaminhamentoMotivo"', enc.motivo, ''));
+      pfCampo('Motivo / plano de reforço (se aplicável)', pfTextarea('id="rcEncaminhamentoMotivo"', enc.motivo, ''));
 
     let botoesTransicao = '';
     if(rc.status === 'liberado_professor'){
@@ -2677,6 +2677,7 @@ body.dyse-modal-open{overflow:hidden;}
       blocoFrequencia + blocoEixos + blocoRevisoes + blocoFinal + blocoAlertas + blocoRestante +
       '<div class="btn-row" style="margin-top:16px;"><button type="button" class="btn btn-ghost" onclick="handleSalvarReportCard()">Salvar</button>' + botoesTransicao + '</div>' +
       '<p style="font-size:.82rem; margin:10px 0; color:var(--seal-soft);" id="rcModalMsg"></p>';
+    dyseAtivarTextareasExpansiveis('reportCardModalBody');
   }
 
   function coletarDadosReportCardDoFormulario(){
@@ -2693,7 +2694,6 @@ body.dyse-modal-open{overflow:hidden;}
     }
     document.querySelectorAll('[data-rc-rev-nota]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevNota)].nota_forms = el.value.trim() || null; });
     document.querySelectorAll('[data-rc-rev-fluencia]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevFluencia)].fluencia_oral = el.value || null; });
-    document.querySelectorAll('[data-rc-rev-validade]').forEach(el => { d.revisoes_teste[Number(el.dataset.rcRevValidade)].validade_oficial = el.value || null; });
     if(d.apresentacao_final){
       document.querySelectorAll('[data-rc-final-eixo]').forEach(el => { d.apresentacao_final.eixos[el.dataset.rcFinalEixo].nivel = el.value || null; });
       const resultadoEl = document.getElementById('rcFinalResultado');
@@ -2756,6 +2756,7 @@ body.dyse-modal-open{overflow:hidden;}
     CURRENT_REPORT_CARD = data;
     renderReportCardModalBody();
     await loadPanelReportCards();
+    await refreshNotificationsBell();
   }
 
   /* ======================================================================
@@ -3251,10 +3252,16 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   let SUGESTOES_PENDENTES_COUNT = 0;
+  let REPORT_CARDS_REVISAR_COUNT = 0;
   let AVISOS_CACHE = [];
 
   function updateBellBadge(){
-    const naoLidos = AVISOS_CACHE.filter(a => !a.lido).length + SUGESTOES_PENDENTES_COUNT;
+    const menuBadge = document.getElementById('reportCardsMenuBadge');
+    if(menuBadge){
+      menuBadge.hidden = REPORT_CARDS_REVISAR_COUNT === 0;
+      menuBadge.textContent = REPORT_CARDS_REVISAR_COUNT > 9 ? '9+' : String(REPORT_CARDS_REVISAR_COUNT);
+    }
+    const naoLidos = AVISOS_CACHE.filter(a => !a.lido).length + SUGESTOES_PENDENTES_COUNT + REPORT_CARDS_REVISAR_COUNT;
     const badge = document.getElementById('topbarBellBadge');
     if(!badge) return;
     if(naoLidos > 0){
@@ -3268,11 +3275,13 @@ body.dyse-modal-open{overflow:hidden;}
 
   async function refreshNotificationsBell(){
     try{
-      const [sugestoes, avisos] = await Promise.all([
+      const [sugestoes, avisos, reportCards] = await Promise.all([
         dyseListMinhasSugestoesPendentes().catch(() => []),
-        dyseListAvisos(50).catch(() => [])
+        dyseListAvisos(50).catch(() => []),
+        dyseContarReportCardsParaRevisar().catch(() => 0)
       ]);
       SUGESTOES_PENDENTES_COUNT = sugestoes.length;
+      REPORT_CARDS_REVISAR_COUNT = reportCards;
       AVISOS_CACHE = avisos;
       updateBellBadge();
       if(document.getElementById('avisosPanel').classList.contains('open')) renderAvisosList();
@@ -3282,6 +3291,10 @@ body.dyse-modal-open{overflow:hidden;}
   function renderAvisosList(){
     const el = document.getElementById('avisosList');
     let html = '';
+    if(REPORT_CARDS_REVISAR_COUNT > 0){
+      html += '<div class="avisos-link-row" onclick="abrirReportCardsDoAviso()">' +
+        (REPORT_CARDS_REVISAR_COUNT === 1 ? '1 Report Card aguardando' : REPORT_CARDS_REVISAR_COUNT + ' Report Cards aguardando') + ' sua revisão →</div>';
+    }
     if(SUGESTOES_PENDENTES_COUNT > 0){
       html += '<div class="avisos-link-row" onclick="document.getElementById(\'avisosPanel\').classList.remove(\'open\'); showPanel(\'disponibilidade\');">' +
         SUGESTOES_PENDENTES_COUNT + ' sugestão(ões) de horário aguardando você →</div>';
@@ -3298,6 +3311,17 @@ body.dyse-modal-open{overflow:hidden;}
     }
     el.innerHTML = html || '<div class="avisos-vazio">Nenhum aviso por enquanto.</div>';
   }
+
+  function abrirReportCardsDoAviso(){
+    document.getElementById('avisosPanel').classList.remove('open');
+    REPORT_CARDS_LOADED = false; // garante a lista atualizada
+    showPanel('reportcards');
+  }
+
+  // Quem deixa o painel aberto vê o aviso novo ao voltar pra aba.
+  document.addEventListener('visibilitychange', () => {
+    if(!document.hidden && PROFESSORA_PROFILE) refreshNotificationsBell();
+  });
 
   function toggleAvisosPanel(event){
     if(event) event.stopPropagation();
