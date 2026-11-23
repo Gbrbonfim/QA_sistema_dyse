@@ -883,6 +883,10 @@ async function dyseGetTurmaPorId(turmaId){
    quem chama normalmente é a professora, que só pode mexer nesse campo,
    não na turma inteira; a função valida teacher_can_see_turma/is_admin
    antes de gravar (seção 29 do schema). */
+async function dyseAtualizarLinkDriveTurma(turmaId, link){
+  const { error } = await sb.rpc('atualizar_link_drive_turma', { turma_id_param: turmaId, link_param: link || '' });
+  return { error };
+}
 async function dyseAtualizarLinkMeetTurma(turmaId, link){
   const { error } = await sb.rpc('atualizar_link_meet_turma', { turma_id_param: turmaId, link_param: link || '' });
   return { error };

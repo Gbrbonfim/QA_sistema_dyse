@@ -1252,10 +1252,53 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
 
   /* Link do Google Meet da turma — a professora cadastra no painel dela;
      aqui é só leitura. Some quando a turma ainda não tem link definido. */
+  // Link do Drive -> endereço de visualização incorporada (ou null).
+  function driveEmbedUrl(link){
+    const l = String(link || '');
+    if(!/^https:\/\/(drive|docs)\.google\.com\//i.test(l)) return null;
+    let m = l.match(/\/folders\/([\w-]+)/) || (/drive\.google\.com\/(open|drive)/.test(l) && l.match(/[?&]id=([\w-]+)/));
+    if(m) return 'https://drive.google.com/embeddedfolderview?id=' + m[1] + '#grid';
+    m = l.match(/\/file\/d\/([\w-]+)/);
+    if(m) return 'https://drive.google.com/file/d/' + m[1] + '/preview';
+    m = l.match(/docs\.google\.com\/(document|spreadsheets|presentation)\/d\/([\w-]+)/);
+    if(m) return 'https://docs.google.com/' + m[1] + '/d/' + m[2] + '/preview';
+    return null;
+  }
+  function ligarDrive(wrap){
+    const b = wrap.querySelector('#driveToggle');
+    if(!b) return;
+    b.onclick = () => {
+      const box = wrap.querySelector('#driveFrameWrap');
+      const fr = box.querySelector('iframe');
+      const abrir = box.style.display === 'none';
+      if(abrir && fr.getAttribute('src') === 'about:blank') fr.src = fr.dataset.src;
+      box.style.display = abrir ? 'block' : 'none';
+      b.innerHTML = abrir ? MI('visibility_off') + ' Esconder material' : MI('visibility') + ' Ver material aqui';
+    };
+  }
   function renderMeetCard(turma){
     const wrap = document.getElementById('meetCard');
-    if(!turma || !turma.link_meet){ wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+    if(!turma || (!turma.link_meet && !turma.link_drive)){ wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
     wrap.style.display = 'block';
+    // Pasta do Google Drive da turma (seção 41), cadastrada pela professora.
+    // Pasta ou arquivo do Drive abre DENTRO da plataforma (visualização de
+    // incorporação do Google); qualquer outro link, só pelo botão.
+    const emb = driveEmbedUrl(turma.link_drive);
+    const drive = turma.link_drive
+      ? '<div style="margin:14px 0 0; padding:16px 20px; background:#fff; border:2px solid #eee0cf; border-radius:var(--radius); color:var(--seal);">' +
+          '<div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">' +
+            '<div style="flex:1 1 220px; min-width:0;">' +
+              '<div style="font-weight:800; font-size:1rem;">' + MI('folder_shared') + ' Material da turma</div>' +
+              '<div style="font-size:.85rem; opacity:.8;">Arquivos e gravações que a professora compartilhou com a sua turma.</div>' +
+            '</div>' +
+            (emb ? '<button type="button" class="btn" id="driveToggle" style="background:var(--amaranth); color:#fff; font-weight:800; flex:0 0 auto;">' + MI('visibility') + ' Ver material aqui</button>' : '') +
+            '<a href="' + escapeHtmlLocal(turma.link_drive) + '" target="_blank" rel="noopener" class="btn" style="' + (emb ? 'background:transparent; color:var(--seal); border:2px solid #eee0cf;' : 'background:var(--amaranth); color:#fff;') + ' font-weight:800; flex:0 0 auto;">' + MI('open_in_new') + ' Abrir no Google Drive</a>' +
+          '</div>' +
+          (emb ? '<div id="driveFrameWrap" style="display:none; margin-top:14px;"><iframe src="about:blank" data-src="' + escapeHtmlLocal(emb) + '" title="Material da turma no Google Drive" style="width:100%; height:520px; border:1px solid #eee0cf; border-radius:12px; background:#fff;" loading="lazy" allow="autoplay; fullscreen"></iframe>' +
+            '<div style="font-size:.76rem; opacity:.7; margin-top:6px;">Não apareceu? Use "Abrir no Google Drive" — pode ser que a pasta não esteja compartilhada com o seu e-mail.</div></div>' : '') +
+        '</div>'
+      : '';
+    if(!turma.link_meet){ wrap.innerHTML = drive; ligarDrive(wrap); return; }
     wrap.innerHTML =
       '<div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:14px 0 0; padding:16px 20px; background:linear-gradient(135deg, var(--amaranth), var(--gamboge)); border-radius:var(--radius); color:#fff;">' +
         '<div style="flex:1 1 220px; min-width:0;">' +
@@ -1263,7 +1306,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '<div style="font-size:.85rem; opacity:.92;">Entre pelo Google Meet no horário da sua aula.</div>' +
         '</div>' +
         '<a href="' + escapeHtmlLocal(turma.link_meet) + '" target="_blank" rel="noopener" class="btn" style="background:#fff; color:var(--amaranth); font-weight:800; flex:0 0 auto;">Entrar no Google Meet</a>' +
-      '</div>';
+      '</div>' + drive;
+    ligarDrive(wrap);
   }
 
   /* ---------- Navegação por "view" (mesma página, menu fixo) ---------- */
