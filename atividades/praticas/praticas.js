@@ -592,8 +592,38 @@
     else if(t && btn.dataset.label) t.textContent = btn.dataset.label;
     if(i) i.innerHTML = I(on ? 'graphic_eq' : 'mic');
   }
-  async function iniciarGravacao(item){
+  /* Aviso do microfone (todos os navegadores): antes da 1ª gravação da página,
+     se o navegador ainda vai perguntar, explica que é preciso tocar em
+     "Permitir"; se o microfone estiver bloqueado, mostra como liberar. */
+  async function estadoMic(){
+    try{
+      if(!navigator.permissions || !navigator.permissions.query) return 'desconhecido';
+      return (await navigator.permissions.query({ name: 'microphone' })).state;   // granted | prompt | denied
+    }catch(e){ return 'desconhecido'; }
+  }
+  function modalMicBloqueado(){
+    const m = modal('<div class="px-m-kicker">' + I('mic_off') + ' Microfone bloqueado</div><h2>Libere o microfone para gravar</h2>' +
+      '<div class="meta" style="text-align:left;">O navegador está bloqueando o microfone para este site. Para liberar:<br><br>' +
+      '<b>No computador ou Android:</b> toque no <b>cadeado</b> (ou no ícone de ajustes) ao lado do endereço do site → <b>Permissões</b> → <b>Microfone</b> → <b>Permitir</b>. Depois recarregue a página.<br><br>' +
+      '<b>No iPhone:</b> toque em <b>aA</b> ao lado do endereço → <b>Ajustes do Site</b> → <b>Microfone</b> → <b>Permitir</b>.</div>' +
+      '<button class="px-btn">Entendi</button>', 'small');
+    m.querySelector('button').onclick = () => m.remove();
+  }
+  async function iniciarGravacao(item, avisado){
     if(S.cur.gravando || !(SR || PODE_GRAVAR)) return;
+    if(!avisado && !S.micAvisado){
+      const st = await estadoMic();
+      if(st === 'denied'){ modalMicBloqueado(); return; }
+      if(st !== 'granted'){
+        S.micAvisado = true;
+        const m = modal('<div class="px-m-kicker">' + I('mic') + ' Microfone</div><h2>Vamos gravar a sua voz</h2>' +
+          '<div class="meta">Para gravar, o navegador vai pedir permissão para usar o microfone. Quando aparecer a pergunta, toque em <b>Permitir</b>. Sem essa permissão não dá para gravar.</div>' +
+          '<button class="px-btn">' + I('mic') + ' Entendi, gravar</button>', 'small');
+        // O toque neste botão já inicia a gravação (o navegador exige um toque para abrir o microfone).
+        m.querySelector('button').onclick = () => { m.remove(); iniciarGravacao(item, true); };
+        return;
+      }
+    }
     pararAudio();
     const G = S.cur.grav = { item: item, chunks: [], resultados: [], recorder: null, stream: null, rec: null };
     S.cur.gravando = true;
@@ -726,6 +756,7 @@
       $('#pxHeard').textContent = abortou ? 'Toque em Gravar e fale a frase em voz alta.'
         : semMic ? 'Não consegui usar o microfone. Toque em Gravar de novo e permita o microfone se o navegador pedir.'
         : 'Não ouvi nada. Toque em Gravar e fale a frase em voz alta, perto do microfone.';
+      if(semMic) estadoMic().then(st => { if(st === 'denied') modalMicBloqueado(); });
       acoesFala(item, (cur.falhas || 0) ? 'retry' : false);
       return;
     }
