@@ -754,16 +754,16 @@ body.dyse-modal-open{overflow:hidden;}
 .report-section.collapsed .report-section-body{display:none;}
 
 .report-line{font-size:.88rem; margin-bottom:10px; color:var(--seal-soft); line-height:1.55;}
-.turma-links{margin:4px 0 18px; padding:14px 16px; background:#fff; border:1px solid #f0e3d2; border-radius:var(--radius-sm); max-width:760px;}
-.turma-links .tl-row{display:grid; grid-template-columns:150px 1fr; align-items:center; gap:10px; margin-bottom:8px;}
+.turma-links{margin:4px 0 18px; padding:14px 16px; background:#fff; border:1px solid #f0e3d2; border-radius:var(--radius-sm);}
+.turma-links .tl-grid{display:grid; grid-template-columns:1fr 1fr auto; gap:12px; align-items:end;}
+.turma-links .tl-campo{display:flex; flex-direction:column; gap:5px; min-width:0;}
 .turma-links .tl-lab{display:flex; align-items:center; gap:6px; font-weight:700; font-size:.8rem; color:var(--seal);}
 .turma-links .tl-lab .msr{font-size:18px; color:var(--amaranth);}
-.turma-links input{min-width:0; border:1px solid #eee0cf; border-radius:10px; padding:8px 12px; font-family:var(--font-body); font-size:.85rem; background:#fffdfa;}
+.turma-links input{min-width:0; border:1px solid #eee0cf; border-radius:10px; padding:9px 12px; font-family:var(--font-body); font-size:.85rem; background:#fffdfa;}
 .turma-links input:focus{outline:none; border-color:var(--amaranth);}
-.turma-links .tl-foot{display:flex; align-items:center; gap:12px; justify-content:space-between; margin-top:4px;}
-.turma-links .tl-msg{font-size:.74rem; color:var(--seal-soft); opacity:.85;}
-.turma-links .tl-btn{padding:7px 16px; font-size:.8rem; flex:none;}
-@media (max-width:640px){ .turma-links .tl-row{grid-template-columns:1fr; gap:4px;} .turma-links .tl-foot{flex-direction:column; align-items:stretch;} }
+.turma-links .tl-btn{padding:9px 18px; font-size:.82rem; white-space:nowrap;}
+.turma-links .tl-msg{display:block; margin-top:8px; font-size:.74rem; color:var(--seal-soft); opacity:.85;}
+@media (max-width:760px){ .turma-links .tl-grid{grid-template-columns:1fr;} }
 .chamada-status{border:2px solid #e4d4c4; border-radius:10px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem; font-weight:700; background:#fff; color:var(--seal); cursor:pointer;}
 .chamada-status.st-presente{border-color:#bfe3cc; background:#eaf7ee; color:var(--ok);}
 .chamada-status.st-falta{border-color:#f3c9c6; background:#fbeceb; color:var(--bad);}
@@ -1087,18 +1087,14 @@ body.dyse-modal-open{overflow:hidden;}
     <p id="chamadaMsg" style="font-size:.82rem; margin:8px 0; color:var(--seal-soft);"></p>
 
     <div id="turmaLinksWrap" class="turma-links" style="display:none;">
-      <div class="tl-row">
-        <span class="tl-lab"><span class="msr" aria-hidden="true">videocam</span> Google Meet</span>
-        <input type="url" id="meetLinkInput" placeholder="https://meet.google.com/xxx-xxxx-xxx">
+      <div class="tl-grid">
+        <label class="tl-campo"><span class="tl-lab"><span class="msr" aria-hidden="true">videocam</span> Link aula ao vivo</span>
+          <input type="url" id="meetLinkInput" placeholder="https://meet.google.com/xxx-xxxx-xxx"></label>
+        <label class="tl-campo"><span class="tl-lab"><span class="msr" aria-hidden="true">smart_display</span> Links gravações</span>
+          <input type="url" id="driveLinkInput" placeholder="https://drive.google.com/drive/folders/..."></label>
+        <button type="button" class="btn btn-primary tl-btn" onclick="salvarLinksTurma()">Salvar links</button>
       </div>
-      <div class="tl-row">
-        <span class="tl-lab"><span class="msr" aria-hidden="true">folder_shared</span> Google Drive</span>
-        <input type="url" id="driveLinkInput" placeholder="https://drive.google.com/drive/folders/...">
-      </div>
-      <div class="tl-foot">
-        <span id="turmaLinksMsg" class="tl-msg">Os alunos da turma veem os dois links no painel deles. A pasta do Drive precisa estar como "Qualquer pessoa com o link".</span>
-        <button type="button" class="btn btn-ghost tl-btn" onclick="salvarLinksTurma()">Salvar links</button>
-      </div>
+      <span id="turmaLinksMsg" class="tl-msg">Os alunos da turma veem os dois links no painel deles. A pasta das gravações precisa estar como "Qualquer pessoa com o link".</span>
     </div>
     <div style="overflow-x:auto;">
       <table class="dash-table" id="chamadaTable">
@@ -1785,7 +1781,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('meetLinkInput').value = (turma && turma.link_meet) || '';
     document.getElementById('driveLinkInput').value = (turma && turma.link_drive) || '';
     const msg = document.getElementById('turmaLinksMsg');
-    msg.style.color = ''; msg.textContent = 'Os alunos da turma veem os dois links no painel deles. A pasta do Drive precisa estar como "Qualquer pessoa com o link".';
+    msg.style.color = ''; msg.textContent = 'Os alunos da turma veem os dois links no painel deles. A pasta das gravações precisa estar como "Qualquer pessoa com o link".';
     document.getElementById('turmaLinksWrap').style.display = 'block';
   }
 
