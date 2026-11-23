@@ -770,20 +770,22 @@ async function dyseRenderSpeaking(container){
   const fmt = iso => new Date(iso + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
   container.innerHTML =
     '<style>' +
-      '.spk{max-width:760px;}' +
+      '.spk{max-width:1200px;}' +
       '.spk-bar{display:flex; flex-wrap:wrap; gap:10px; align-items:end; margin-bottom:14px;}' +
       '.spk-bar label{display:flex; flex-direction:column; gap:4px; font-size:.78rem; font-weight:700; color:#562915;}' +
       '.spk-bar input{border:2px solid #eee0cf; border-radius:12px; padding:8px 12px; font-family:inherit; font-size:.9rem;}' +
       '.spk-chips{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 14px; font-size:.78rem;}' +
       '.spk-chips button{border:1px solid #eee0cf; background:#fff; border-radius:999px; padding:5px 12px; cursor:pointer; font-family:inherit; color:#3A1D10;}' +
       '.spk-chips button.on{background:#D03B55; color:#fff; border-color:#D03B55;}' +
-      '.spk-card{background:#fff; border-radius:18px; box-shadow:0 8px 24px rgba(58,29,16,.08); overflow:hidden;}' +
+      '.spk-card{display:grid; grid-template-columns:1fr 1fr; gap:12px;}' +
+      '.spk-col{background:#fff; border-radius:18px; box-shadow:0 8px 24px rgba(58,29,16,.08); overflow:hidden; align-self:start;}' +
+      '@media (max-width:860px){ .spk-card{grid-template-columns:1fr;} }' +
       '.spk-row{display:flex; align-items:center; gap:12px; padding:10px 14px; border-bottom:1px solid #f3e6d6; cursor:pointer;}' +
       '.spk-row:last-child{border-bottom:none;} .spk-row:hover{background:#FFF8F0;}' +
       '.spk-row input{width:20px; height:20px; accent-color:#2E8B57; flex:none;}' +
       '.spk-row .n{flex:1; min-width:0; font-weight:600; color:#3A1D10;} .spk-row .n small{display:block; font-weight:500; font-size:.74rem; opacity:.65;}' +
       '.spk-row .m{font-size:.74rem; color:#562915; opacity:.75; white-space:nowrap;}' +
-      '.spk-act{display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap:wrap;}' +
+      '.spk-act{display:flex; gap:10px; align-items:center; margin:0 0 14px; flex-wrap:wrap;}' +
       '.spk-msg{font-size:.85rem;}' +
     '</style>' +
     '<div class="spk">' +
@@ -796,17 +798,17 @@ async function dyseRenderSpeaking(container){
         ? '<span style="align-self:center; opacity:.7;">Encontros em ' + DYSE_MESES[Number(mes.slice(5, 7)) - 1] + ':</span>' +
           encontros.map(e => '<button type="button" data-d="' + e.data + '" class="' + (e.data === dataSel ? 'on' : '') + '">' + fmt(e.data) + '</button>').join('')
         : '<span style="opacity:.7;">Nenhum Speaking registrado neste mês ainda.</span>') + '</div>' +
-      '<div class="spk-card" id="spkLista">' + (alunos.length ? alunos.map(a =>
-        '<label class="spk-row" data-busca="' + esc(((a.nome || '') + ' ' + (a.turma || '') + ' ' + (a.email || '')).toLowerCase()) + '">' +
-          '<input type="checkbox" data-aluno="' + a.aluno_id + '"' + (presDoDia[a.aluno_id] ? ' checked' : '') + '>' +
-          '<span class="n">' + esc(a.nome || a.email) + '<small>' + esc(a.turma || 'sem turma') + '</small></span>' +
-          '<span class="m">' + (foiPorAluno[a.aluno_id] || 0) + ' no mês</span>' +
-        '</label>').join('') : '<p style="padding:14px; opacity:.7;">Nenhum aluno ativo.</p>') + '</div>' +
       '<div class="spk-act">' +
         '<button type="button" class="btn btn-primary" id="spkSalvar">' + (encDoDia ? 'Salvar alterações' : 'Salvar Speaking de ' + fmt(dataSel)) + '</button>' +
         (encDoDia ? '<button type="button" class="btn btn-ghost" id="spkExcluir">Excluir este encontro</button>' : '') +
         '<span class="spk-msg" id="spkMsg"></span>' +
       '</div>' +
+      '<div class="spk-card" id="spkLista">' + (alunos.length ? [alunos.slice(0, Math.ceil(alunos.length / 2)), alunos.slice(Math.ceil(alunos.length / 2))].map(col => '<div class="spk-col">' + col.map(a =>
+        '<label class="spk-row" data-busca="' + esc(((a.nome || '') + ' ' + (a.turma || '') + ' ' + (a.email || '')).toLowerCase()) + '">' +
+          '<input type="checkbox" data-aluno="' + a.aluno_id + '"' + (presDoDia[a.aluno_id] ? ' checked' : '') + '>' +
+          '<span class="n">' + esc(a.nome || a.email) + '<small>' + esc(a.turma || 'sem turma') + '</small></span>' +
+          '<span class="m">' + (foiPorAluno[a.aluno_id] || 0) + ' no mês</span>' +
+        '</label>').join('') + '</div>').join('') : '<p style="padding:14px; opacity:.7;">Nenhum aluno ativo.</p>') + '</div>' +
     '</div>';
   const $ = sel => container.querySelector(sel);
   $('#spkData').onchange = e => { container.dataset.data = e.target.value || hoje; dyseRenderSpeaking(container); };
