@@ -4884,7 +4884,9 @@ $$;
 revoke all on function public.ranking_mensal_calculo(date) from public, anon, authenticated;
 
 -- 40.6) Ranking do mês. Gestão vê todos com nome e detalhes; professora e
---       aluno veem o top 5 (sem nome) e a própria linha com os detalhes.
+--       aluno veem o top 3 (sem nome) e a própria linha com os detalhes.
+--       Posição única (sem empate): depois dos critérios de qualidade, quem
+--       está há mais tempo na escola e, por fim, ordem alfabética.
 create or replace function public.ranking_mensal(p_mes date default null)
 returns table(
   posicao int, media numeric, nome text, eu boolean, elegivel boolean, entrada date,
@@ -4899,8 +4901,9 @@ as $$
   with c as (
     select * from public.ranking_mensal_calculo(coalesce(p_mes, (now() at time zone 'America/Sao_Paulo')::date))
   ), rk as (
-    select c.*, case when c.elegivel then (rank() over (partition by c.elegivel order by c.media desc,
-             c.qualidade desc nulls last, c.erros asc nulls last, c.duracao_media asc nulls last))::int end as pos
+    select c.*, case when c.elegivel then (row_number() over (partition by c.elegivel order by c.media desc,
+             c.qualidade desc nulls last, c.erros asc nulls last, c.duracao_media asc nulls last,
+             c.entrada asc, c.nome))::int end as pos
     from c
   ), adm as (select public.is_admin() as a)
   select rk.pos, rk.media,
@@ -4920,7 +4923,7 @@ as $$
          case when adm.a or rk.aluno_id = auth.uid() then rk.erros end,
          case when adm.a or rk.aluno_id = auth.uid() then rk.duracao_media end
   from rk cross join adm
-  where adm.a or (rk.elegivel and rk.pos <= 5) or rk.aluno_id = auth.uid()
+  where adm.a or (rk.elegivel and rk.pos <= 3) or rk.aluno_id = auth.uid()
   order by rk.elegivel desc, rk.pos nulls last, rk.nome;
 $$;
 grant execute on function public.ranking_mensal(date) to authenticated;
