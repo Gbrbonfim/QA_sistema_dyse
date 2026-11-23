@@ -587,6 +587,14 @@ a.pr-row:hover{background:var(--antique-soft);}
 .pr-row.done .pr-ic{background:#EAF7EE; color:var(--ok);}
 .pr-row.locked .pr-ic{background:#F3ECE4; color:#B9A693;}
 .pr-row.locked .pr-txt{opacity:.55;}
+.pr-row.resume{background:#FFF6E8;}
+.pr-row.resume .pr-ic{background:#FDE9C8; color:#CE8613;}
+.pr-st.resume{color:#CE8613;}
+.pr-resume{display:flex; align-items:center; gap:14px; padding:16px 18px; margin:0 0 20px; border-radius:var(--radius-md); background:var(--amaranth); color:#fff; text-decoration:none; box-shadow:0 6px 20px rgba(214,58,85,.25);}
+.pr-resume .msr{font-size:30px;}
+.pr-resume b{display:block; font-size:1rem; font-weight:700;}
+.pr-resume small{display:block; font-size:.8rem; opacity:.92; margin-top:2px;}
+.pr-resume .go{margin-left:auto; flex:0 0 auto;}
 
 /* ---------- COURSE FOLDER (área do aluno) ---------- */
 .course-folder-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(360px,1fr)); gap:18px;}
@@ -1465,9 +1473,21 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       wrap.innerHTML = avisoVazio('hourglass_empty', 'Atividades em preparação.', 'Assim que as atividades do seu nível ficarem prontas, elas aparecem aqui.');
       return;
     }
-    const [liberadas, refazer] = await Promise.all([dyseMinhasPraticasLiberadas(), dyseMinhasPraticasRefazer()]);
+    const [liberadas, refazer, sessao] = await Promise.all([dyseMinhasPraticasLiberadas(), dyseMinhasPraticasRefazer(), sb.auth.getSession()]);
     pintarBadgePraticas(niveis, liberadas);
-    wrap.innerHTML = niveis.map(slug => {
+    // Atividade começada e não terminada: o progresso fica guardado no aparelho
+    // por 15 min depois da última resposta (praticas.js). Mostra "Continuar".
+    const uid = sessao && sessao.data && sessao.data.session ? sessao.data.session.user.id : 'anon';
+    let retomar = null;
+    const progressoDe = (course, aula, num) => {
+      try{
+        const g = JSON.parse(localStorage.getItem('dyse-progresso:' + uid + ':' + course + ':' + aula + ':' + num) || 'null');
+        if(!g || !g.salvoEm) return null;
+        const expira = g.salvoEm + PRATICA_PROGRESSO_MIN * 60000;
+        return expira > Date.now() ? { questao: (g.i || 0) + 1, expira: expira } : null;
+      }catch(e){ return null; }
+    };
+    const html = niveis.map(slug => {
       const nivel = DYSE_PRATICAS[slug];
       return nivel.aulas.map(aula => {
         // Lista enxuta: uma linha por atividade (ícone · título · habilidade e
@@ -1496,6 +1516,12 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
             const pts = res.meta && res.meta.pontos != null ? res.meta.pontos + ' pts' : 'Feita';
             return '<div class="pr-row done" title="Concluída — pra refazer, peça à professora">' + miolo('<span class="pr-st ok">' + MI('check') + ' ' + pts + '</span>') + '</div>';
           }
+          const prog = progressoDe(nivel.course, aula.aula, at.num);
+          if(prog){
+            const url = dysePraticaUrl(slug, aula.aula, at.num);
+            if(!retomar || prog.expira > retomar.expira) retomar = { url: url, titulo: at.titulo, questao: prog.questao, total: at.questoes, expira: prog.expira };
+            return '<a class="pr-row resume" href="' + url + '">' + miolo('<span class="pr-st resume">Continuar · <span data-expira="' + prog.expira + '">' + faltaTexto(prog.expira) + '</span> ' + MI('chevron_right') + '</span>') + '</a>';
+          }
           return '<a class="pr-row" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '">' + miolo('<span class="pr-st go">Fazer ' + MI('chevron_right') + '</span>') + '</a>';
         };
         const partes = [];
@@ -1514,6 +1540,26 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '<div class="pr-prog"><i style="width:' + Math.round(feitas / total * 100) + '%"></i></div>' + grupos + '</section>';
       }).join('');
     }).join('');
+    wrap.innerHTML = (retomar
+      ? '<a class="pr-resume" href="' + retomar.url + '">' + MI('history') + '<span><b>Continuar de onde parou</b><small>' + escapeHtmlLocal(retomar.titulo) +
+        ' · questão ' + retomar.questao + (retomar.total ? ' de ' + retomar.total : '') + ' · restam <span data-expira="' + retomar.expira + '">' + faltaTexto(retomar.expira) + '</span></small></span>' +
+        '<span class="go">' + MI('arrow_forward') + '</span></a>'
+      : '') + html;
+    // Atualiza o tempo restante; quando algum vence, a lista é refeita (volta a "Fazer").
+    clearInterval(window.__dyseProgTimer);
+    if(retomar) window.__dyseProgTimer = setInterval(() => {
+      let venceu = false;
+      document.querySelectorAll('#praticasWrap [data-expira]').forEach(el => {
+        const exp = Number(el.dataset.expira);
+        if(exp <= Date.now()) venceu = true; else el.textContent = faltaTexto(exp);
+      });
+      if(venceu){ clearInterval(window.__dyseProgTimer); renderPraticas(); }
+    }, 15000);
+  }
+  const PRATICA_PROGRESSO_MIN = 15;   // igual ao PROGRESSO_MIN do praticas.js
+  function faltaTexto(expira){
+    const min = Math.ceil((expira - Date.now()) / 60000);
+    return min <= 1 ? 'menos de 1 min' : min + ' min';
   }
 
   /* ---------- Vídeo de boas-vindas obrigatório ----------
