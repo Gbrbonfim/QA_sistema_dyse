@@ -666,7 +666,21 @@
     const G = S.cur && S.cur.grav;
     if(!G || G.encerrada) return;
     if(!G.stream && !G.rec){ encerrarGravacao(G, true); return; }   // ainda esperando o microfone
-    if(G.rec){ try{ G.rec.stop(); return; }catch(e){} }
+    if(G.rec){
+      try{
+        G.rec.stop();
+        // Alguns aparelhos (Android/emulador) nunca avisam o fim do
+        // reconhecimento e o botão ficava travado: depois de 2 s encerra assim
+        // mesmo e as próximas gravações vão para o servidor.
+        setTimeout(() => {
+          if(G.encerrada) return;
+          G.erroSR = G.erroSR || 'travou';
+          try{ G.rec.abort(); }catch(e){}
+          encerrarGravacao(G, false);
+        }, 2000);
+        return;
+      }catch(e){}
+    }
     encerrarGravacao(G, false);
   }
   /* Sem reconhecimento do navegador: para sozinho 1,3 s depois que o aluno
