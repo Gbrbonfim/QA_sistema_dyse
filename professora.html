@@ -754,6 +754,30 @@ body.dyse-modal-open{overflow:hidden;}
 .report-section.collapsed .report-section-body{display:none;}
 
 .report-line{font-size:.88rem; margin-bottom:10px; color:var(--seal-soft); line-height:1.55;}
+
+/* Relatório das Práticas: erros primeiro, em destaque */
+.pr-foco{border:2px solid #f3c9c6; background:#fdf3f2; border-radius:18px; padding:14px 16px; margin-bottom:16px;}
+.pr-foco h4{margin:0 0 4px; font-size:.95rem; color:var(--bad); display:flex; align-items:center; gap:6px;}
+.pr-foco p{margin:0 0 10px; font-size:.8rem; color:var(--seal-soft);}
+.pr-words{display:flex; flex-wrap:wrap; gap:6px;}
+.pr-word{background:#fff; border:1px solid #f3c9c6; color:var(--bad); font-weight:700; font-size:.8rem; padding:4px 10px; border-radius:999px;}
+.pr-word small{color:var(--seal-soft); font-weight:600; margin-left:4px;}
+.pr-item{background:#fff; border:1px solid #f0e3d2; border-left:5px solid #e4d4c4; border-radius:12px; padding:10px 12px; margin-bottom:8px;}
+.pr-item:last-child{margin-bottom:0;}
+.pr-item.bad, .pr-item.skip{border-left-color:var(--bad);}
+.pr-item.warn{border-left-color:var(--gamboge);}
+.pr-item.ok{border-left-color:var(--ok);}
+.pr-item .top{display:flex; align-items:baseline; gap:8px; justify-content:space-between;}
+.pr-item .frase{font-weight:700; color:var(--seal); font-size:.9rem;}
+.pr-item .frase .n{color:var(--seal-soft); opacity:.55; font-weight:800; margin-right:4px;}
+.pr-item .tag{flex:none; font-size:.68rem; font-weight:800; padding:2px 9px; border-radius:999px; white-space:nowrap;}
+.pr-item .tag.bad, .pr-item .tag.skip{background:#fbeceb; color:var(--bad);}
+.pr-item .tag.warn{background:#fdf0dd; color:#a06a2e;}
+.pr-item .tag.ok{background:#eaf7ee; color:var(--ok);}
+.pr-item .tents{margin-top:6px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:.76rem; color:var(--seal-soft);}
+.pr-item .tent{background:#fbeceb; color:var(--bad); text-decoration:line-through; padding:2px 8px; border-radius:8px; font-weight:600;}
+.pr-item .tent.last-ok{background:#eaf7ee; color:var(--ok); text-decoration:none;}
+.pr-item .tent mark{background:none; color:inherit; font-weight:800; text-decoration:underline wavy;}
 .report-line:last-child{margin-bottom:0;}
 .report-line b{color:var(--seal);}
 
@@ -1493,12 +1517,87 @@ body.dyse-modal-open{overflow:hidden;}
     return summaryHtml + sectionsHtml;
   }
 
+  /* ---------- Relatório das Práticas (usa r.meta.itens) ----------
+     Mostra primeiro onde o aluno mais errou: as palavras que ele mais errou,
+     depois as questões erradas/puladas, as certas na 2ª tentativa e, por
+     último (fechadas), as certas de primeira. */
+  function prNorm(t){
+    return String(t || '').toLowerCase().replace(/[’`]/g, "'").split(/\s+/)
+      .map(w => w.replace(/[^a-z0-9']/g, '')).filter(Boolean);
+  }
+  function buildPraticaReportHtml(r){
+    const m = r.meta || {};
+    const itens = Array.isArray(m.itens) ? m.itens : [];
+    const n = m.total || itens.length;
+    const erradas = itens.filter(it => it.status === 'bad' || it.status === 'skip');
+    const segunda = itens.filter(it => it.status === 'warn');
+    const certas = itens.filter(it => it.status === 'ok');
+
+    // Palavras da resposta certa que o aluno trocou/esqueceu nas tentativas erradas.
+    const contagem = {};
+    itens.filter(it => it.status !== 'ok').forEach(it => {
+      const certo = prNorm(it.correta);
+      const tents = (it.tentativas || []).filter(t => String(t).trim());
+      const erradasTents = it.status === 'warn' ? tents.slice(0, -1) : tents;
+      const faltou = {};
+      erradasTents.forEach(t => { const dito = new Set(prNorm(t)); certo.forEach(w => { if(!dito.has(w)) faltou[w] = 1; }); });
+      if(!erradasTents.length && it.status !== 'warn') certo.forEach(w => faltou[w] = 1);
+      Object.keys(faltou).forEach(w => { contagem[w] = (contagem[w] || 0) + 1; });
+    });
+    const comuns = new Set(['i','a','the','is','am','are','to','and','you','he','she','it','we','they','m','s','re']);
+    const palavras = Object.keys(contagem).filter(w => !comuns.has(w)).sort((a, b) => contagem[b] - contagem[a]).slice(0, 10);
+
+    const pct = n ? Math.round(((m.acertos || 0) / n) * 100) : 0;
+    const cls = scoreClass(m.acertos || 0, n);
+    const resumo = '<div class="report-summary">' +
+      '<div class="report-summary-chip ' + cls + '"><div class="label">Acertos totais</div><div class="value">' + (m.acertos || 0) + ' / ' + n + ' (' + pct + '%)</div>' +
+        '<div class="report-progress"><span style="width:' + pct + '%; background:' + (cls === 'ok' ? 'var(--ok)' : cls === 'mid' ? 'var(--gamboge)' : 'var(--bad)') + ';"></span></div></div>' +
+      '<div class="report-summary-chip ' + (erradas.length ? 'bad' : 'ok') + '"><div class="label">Errou / pulou</div><div class="value">' + erradas.length + '</div></div>' +
+      '<div class="report-summary-chip ' + (segunda.length ? 'mid' : 'ok') + '"><div class="label">Certo na 2ª tentativa</div><div class="value">' + segunda.length + '</div></div>' +
+      '<div class="report-summary-chip"><div class="label">Pontos DYSE</div><div class="value">' + (m.pontos || 0) + (m.pontos_max ? ' / ' + m.pontos_max : '') + '</div></div>' +
+    '</div>';
+
+    const marcar = (tent, certo) => {
+      const ok = new Set(prNorm(certo));
+      return String(tent).split(/\s+/).map(w => { const nw = prNorm(w)[0]; return nw && !ok.has(nw) ? '<mark>' + escapeHtmlLocal(w) + '</mark>' : escapeHtmlLocal(w); }).join(' ');
+    };
+    const rotulo = { bad: 'Errou', skip: 'Pulou', warn: 'Certo na 2ª', ok: 'Certo de 1ª' };
+    const cartao = it => {
+      const tents = (it.tentativas || []).filter(t => String(t).trim());
+      const lista = it.status === 'ok' ? '' : '<div class="tents">' + (tents.length ? 'Respondeu: ' + tents.map((t, k) => {
+        const final = it.status === 'warn' && k === tents.length - 1;
+        return '<span class="tent' + (final ? ' last-ok' : '') + '">' + (final ? escapeHtmlLocal(t) : marcar(t, it.correta)) + '</span>';
+      }).join('') : '<i>sem resposta</i>') + (it.nota != null && it.status !== 'warn' ? ' · melhor nota ' + it.nota + '%' : '') + '</div>';
+      return '<div class="pr-item ' + it.status + '"><div class="top"><span class="frase"><span class="n">' + it.n + '.</span>' + escapeHtmlLocal(it.correta) + '</span>' +
+        '<span class="tag ' + it.status + '">' + (rotulo[it.status] || it.status) + '</span></div>' + lista + '</div>';
+    };
+    const secao = (titulo, lista, clsScore, aberta) => !lista.length ? '' :
+      '<div class="report-section' + (aberta ? '' : ' collapsed') + '"><button type="button" class="report-section-head" onclick="this.closest(\'.report-section\').classList.toggle(\'collapsed\')">' +
+      '<span class="name"><span class="caret">▾</span>' + titulo + '</span><span class="report-section-score ' + clsScore + '">' + lista.length + '</span></button>' +
+      '<div class="report-section-body">' + lista.map(cartao).join('') + '</div></div>';
+
+    const foco = (erradas.length || segunda.length) ?
+      '<div class="pr-foco"><h4>⚠ Onde ' + escapeHtmlLocal(String(r.student_name || 'o aluno').split(' ')[0]) + ' mais errou</h4>' +
+        (palavras.length
+          ? '<p>Palavras da resposta certa que mais ficaram de fora ou foram trocadas (nº de questões):</p><div class="pr-words">' +
+            palavras.map(w => '<span class="pr-word">' + escapeHtmlLocal(w) + '<small>' + contagem[w] + '×</small></span>').join('') + '</div>'
+          : '<p>Os erros foram em palavras curtas/comuns — veja as questões abaixo.</p>') +
+      '</div>'
+      : '<div class="pr-foco" style="border-color:#cfe9d7; background:#f1faf4;"><h4 style="color:var(--ok);">✓ Acertou tudo de primeira</h4><p>Nenhum ponto de atenção nesta atividade.</p></div>';
+
+    return resumo + foco +
+      secao('Errou ou pulou', erradas, 'bad', true) +
+      secao('Acertou na 2ª tentativa', segunda, 'mid', true) +
+      secao('Acertou de primeira', certas, 'ok', false);
+  }
+
   function openReport(i){
     const r = window.__filteredRows[i];
     const date = r.updated_at ? new Date(r.updated_at).toLocaleString('pt-BR') : '';
     document.getElementById('modalEyebrow').textContent = (COURSE_NAMES[r.course] || r.course) + ' · ' + resultActLabel(r) + (date ? ' · Enviado em ' + date : '');
     document.getElementById('modalTitle').textContent = r.student_name || r.student_email || 'Aluno(a)';
-    document.getElementById('modalBody').innerHTML = buildReportHtml(r.report_text);
+    document.getElementById('modalBody').innerHTML = (ehPraticaCourse(r.course) && r.meta && Array.isArray(r.meta.itens) && r.meta.itens.length)
+      ? buildPraticaReportHtml(r) : buildReportHtml(r.report_text);
     document.getElementById('reportModal').classList.add('open');
     document.getElementById('reportModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');
