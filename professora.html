@@ -757,6 +757,10 @@ body.dyse-modal-open{overflow:hidden;}
 .report-section.collapsed .report-section-body{display:none;}
 
 .report-line{font-size:.88rem; margin-bottom:10px; color:var(--seal-soft); line-height:1.55;}
+.chamada-status{border:2px solid #e4d4c4; border-radius:10px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem; font-weight:700; background:#fff; color:var(--seal); cursor:pointer;}
+.chamada-status.st-presente{border-color:#bfe3cc; background:#eaf7ee; color:var(--ok);}
+.chamada-status.st-falta{border-color:#f3c9c6; background:#fbeceb; color:var(--bad);}
+.chamada-status.st-justificada, .chamada-status.st-gravada, .chamada-status.st-remarcou{border-color:#f2d9b0; background:#fdf0dd; color:#a06a2e;}
 
 /* Relatório das Práticas: erros primeiro, em destaque */
 .pr-foco{border:2px solid #f3c9c6; background:#fdf3f2; border-radius:18px; padding:14px 16px; margin-bottom:16px;}
@@ -908,9 +912,13 @@ body.dyse-modal-open{overflow:hidden;}
         <span class="msr nav-ic" aria-hidden="true">checklist</span>
         <span>Resultados</span>
       </button>
+      <button type="button" class="sidebar-item" id="tabSpeaking" onclick="showPanel('speaking')">
+        <span class="msr nav-ic" aria-hidden="true">record_voice_over</span>
+        <span>Speaking</span>
+      </button>
       <button type="button" class="sidebar-item" id="tabRanking" onclick="showPanel('ranking')">
         <span class="msr nav-ic" aria-hidden="true">trophy</span>
-        <span>Ranking atividades</span>
+        <span>Ranking</span>
       </button>
       <button type="button" class="sidebar-item" id="tabDisponibilidade" onclick="showPanel('disponibilidade')">
         <span class="msr nav-ic" aria-hidden="true">event_available</span>
@@ -1080,7 +1088,7 @@ body.dyse-modal-open{overflow:hidden;}
     </div>
     <div style="overflow-x:auto;">
       <table class="dash-table" id="chamadaTable">
-        <thead><tr><th>Aluno</th><th>Presente</th></tr></thead>
+        <thead><tr><th>Aluno</th><th>Presença</th></tr></thead>
         <tbody id="chamadaBody"></tbody>
       </table>
     </div>
@@ -1168,6 +1176,7 @@ body.dyse-modal-open{overflow:hidden;}
   <div id="panelCalendario" style="display:none;"><div id="calendarioWrap"></div></div>
 
   <div id="panelRanking" style="display:none;"><div id="rankingWrap"></div></div>
+  <div id="panelSpeaking" style="display:none;"><div id="speakingWrap"></div></div>
 
   <div id="panelDisponibilidade" style="display:none;">
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
@@ -1656,7 +1665,11 @@ body.dyse-modal-open{overflow:hidden;}
     },
     ranking:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
-      title:'Ranking atividades', subtitle:'As maiores pontuações nas atividades.'
+      title:'Ranking', subtitle:'Média do mês de 0 a 100: atividades, presença nas aulas e Speaking Club.'
+    },
+    speaking:{
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>',
+      title:'Speaking', subtitle:'Marque quem participou do Speaking Club em cada encontro. Conta 20 pontos no ranking do mês.'
     }
   };
 
@@ -1680,6 +1693,9 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('panelCalendario').style.display = which==='calendario' ? 'block' : 'none';
     document.getElementById('tabRanking').classList.toggle('active', which==='ranking');
     document.getElementById('panelRanking').style.display = which==='ranking' ? 'block' : 'none';
+    document.getElementById('tabSpeaking').classList.toggle('active', which==='speaking');
+    document.getElementById('panelSpeaking').style.display = which==='speaking' ? 'block' : 'none';
+    if(which === 'speaking') dyseRenderSpeaking(document.getElementById('speakingWrap'));
     if(which === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: false });
     if(which === 'ranking') dyseRenderRankingAtividades(document.getElementById('rankingWrap'));
     const meta = PANEL_META[which];
@@ -1772,6 +1788,7 @@ body.dyse-modal-open{overflow:hidden;}
     msg.textContent = 'Link salvo! Já aparece no painel do aluno.';
   }
 
+  const CHAMADA_STATUS_NOME = { presente: 'Presente', falta: 'Faltou', justificada: 'Falta justificada', gravada: 'Vai assistir gravada', remarcou: 'Remarcou' };
   async function loadChamadaDoDia(){
     const turmaId = document.getElementById('chamadaTurmaSelect').value;
     const data = document.getElementById('chamadaData').value || dyseHoje();
@@ -1780,9 +1797,12 @@ body.dyse-modal-open{overflow:hidden;}
     const mes = data.slice(0,7) + '-01';
     const sessoes = await dyseListSessoesTurma(turmaId, mes);
     const existente = sessoes.find(s => s.data === data && s.professor_id === session.user.id);
-    const presencasExistentes = existente ? await dyseListPresencasSessao(existente.id) : [];
-    const presenteById = {};
-    presencasExistentes.forEach(p => presenteById[p.aluno_id] = p.presente);
+    const [presencasExistentes, modalidades] = await Promise.all([
+      existente ? dyseListPresencasSessao(existente.id) : Promise.resolve([]),
+      dyseModalidadeAlunos(CHAMADA_STUDENTS.map(s => s.id))
+    ]);
+    const statusById = {};
+    presencasExistentes.forEach(p => statusById[p.aluno_id] = p.status || (p.presente ? 'presente' : 'falta'));
 
     document.getElementById('chamadaBody').innerHTML = CHAMADA_STUDENTS.length
       ? CHAMADA_STUDENTS.map(s => {
@@ -1791,9 +1811,18 @@ body.dyse-modal-open{overflow:hidden;}
             return '<tr class="linha-pausada" style="opacity:.6;"><td>' + nome + TAG_PAUSADO + '</td>' +
               '<td style="font-size:.78rem; color:var(--seal-soft);">chamada bloqueada</td></tr>';
           }
-          const presente = presenteById[s.id] !== undefined ? presenteById[s.id] : true;
-          return '<tr><td>' + nome + '</td><td>' +
-            '<label class="dyse-toggle"><input type="checkbox" data-aluno="' + s.id + '" ' + (presente ? 'checked' : '') + '><span class="slider"></span></label>' +
+          // Grupo: "vai assistir gravada"; VIP: "remarcou". Nenhum dos dois
+          // conta como falta no ranking (seção 40). Sem modalidade: mostra os dois.
+          const st = statusById[s.id] || 'presente';
+          const mod = modalidades[s.id];
+          const ops = [['presente', 'Presente'], ['falta', 'Faltou'], ['justificada', 'Falta justificada']];
+          if(mod !== 'vip') ops.push(['gravada', 'Vai assistir gravada']);
+          if(!mod || mod === 'vip') ops.push(['remarcou', 'Remarcou']);
+          if(!ops.some(o => o[0] === st)) ops.push([st, CHAMADA_STATUS_NOME[st] || st]);
+          return '<tr><td>' + nome + (mod ? ' <span style="font-size:.7rem; opacity:.6; text-transform:uppercase;">' + escapeHtmlLocal(mod) + '</span>' : '') + '</td><td>' +
+            '<select class="chamada-status st-' + st + '" data-aluno="' + s.id + '" onchange="this.className=\'chamada-status st-\' + this.value">' +
+              ops.map(o => '<option value="' + o[0] + '"' + (o[0] === st ? ' selected' : '') + '>' + o[1] + '</option>').join('') +
+            '</select>' +
           '</td></tr>';
         }).join('')
       : '<tr><td colspan="2" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
@@ -1806,8 +1835,8 @@ body.dyse-modal-open{overflow:hidden;}
     if(!turmaId){ msg.textContent = 'Escolha uma turma.'; return; }
     const { data: sessao, error } = await dyseUpsertSessaoTurma(turmaId, data, null);
     if(error){ msg.textContent = 'Não foi possível salvar: ' + error.message; return; }
-    const presencas = [...document.querySelectorAll('#chamadaBody input[type="checkbox"]')]
-      .map(el => ({ aluno_id: el.dataset.aluno, presente: el.checked }));
+    const presencas = [...document.querySelectorAll('#chamadaBody select.chamada-status')]
+      .map(el => ({ aluno_id: el.dataset.aluno, status: el.value, presente: el.value === 'presente' }));
     const { error: errP } = await dyseUpsertPresencas(sessao.id, presencas);
     msg.textContent = errP ? ('Erro ao salvar presença: ' + errP.message) : 'Chamada salva!';
     await renderChamadaHistorico();
@@ -3461,7 +3490,7 @@ body.dyse-modal-open{overflow:hidden;}
     PROFESSORA_PROFILE = profile;
     renderProfessoraChrome(session, profile);
     const hashPanel = location.hash.slice(1);
-    showPanel(['results','manage','material','financeiro','turmas','reportcards','disponibilidade','calendario','ranking'].includes(hashPanel) ? hashPanel : 'turmas');
+    showPanel(['results','manage','material','financeiro','turmas','reportcards','disponibilidade','calendario','ranking','speaking'].includes(hashPanel) ? hashPanel : 'turmas');
 
     // As duas buscas são independentes — dispara junto em vez de esperar uma
     // pra só então começar a outra (a segunda nem depende da primeira).

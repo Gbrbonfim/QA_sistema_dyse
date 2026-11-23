@@ -959,9 +959,13 @@ body.dyse-modal-open{overflow:hidden;}
         <span class="msr nav-ic" aria-hidden="true">calendar_month</span>
         <span>Calendário Letivo</span>
       </button>
+      <button type="button" class="sidebar-item" id="tabSpeaking" onclick="showPanel('speaking')">
+        <span class="msr nav-ic" aria-hidden="true">record_voice_over</span>
+        <span>Speaking</span>
+      </button>
       <button type="button" class="sidebar-item" id="tabRanking" onclick="showPanel('ranking')">
         <span class="msr nav-ic" aria-hidden="true">trophy</span>
-        <span>Ranking atividades</span>
+        <span>Ranking</span>
       </button>
     </nav>
     <div class="sidebar-footer">
@@ -1197,6 +1201,8 @@ body.dyse-modal-open{overflow:hidden;}
 
   <!-- ---------- RANKING DE ATIVIDADES ---------- -->
   <div id="panelRanking" style="display:none;"><div id="rankingWrap"></div></div>
+  <!-- ---------- SPEAKING CLUB ---------- -->
+  <div id="panelSpeaking" style="display:none;"><div id="speakingWrap"></div></div>
 
   <div id="panelFinanceiro" style="display:none;">
     <div class="auth-tabs fin-subtabs">
@@ -1761,7 +1767,11 @@ body.dyse-modal-open{overflow:hidden;}
     },
     ranking: {
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>',
-      title: 'Ranking atividades', subtitle: 'As maiores pontuações nas atividades.', action: ''
+      title: 'Ranking', subtitle: 'Média do mês de 0 a 100: atividades, presença nas aulas e Speaking Club.', action: ''
+    },
+    speaking: {
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>',
+      title: 'Speaking', subtitle: 'Marque quem participou do Speaking Club em cada encontro. Conta 20 pontos no ranking do mês.', action: ''
     }
   };
 
@@ -1771,7 +1781,7 @@ body.dyse-modal-open{overflow:hidden;}
     // fica bloqueada e cai em "alunos".
     if(which === 'financeiro' && !document.body.classList.contains('dyse-can-financeiro')) which = 'alunos';
     if(location.hash.slice(1) !== which) history.replaceState(null, '', '#' + which);
-    ['turmas','materias','alunos','registro','professores','contas','financeiro','calendario','ranking'].forEach(p => {
+    ['turmas','materias','alunos','registro','professores','contas','financeiro','calendario','ranking','speaking'].forEach(p => {
       document.getElementById('tab' + capitalize(p)).classList.toggle('active', p===which);
       document.getElementById('panel' + capitalize(p)).style.display = p===which ? 'block' : 'none';
     });
@@ -1786,6 +1796,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(which === 'registro') initRegistroPanel();
     if(which === 'calendario') dyseMontarCalendario(document.getElementById('calendarioWrap'), { canEdit: true });
     if(which === 'ranking') dyseRenderRankingAtividades(document.getElementById('rankingWrap'));
+    if(which === 'speaking') dyseRenderSpeaking(document.getElementById('speakingWrap'));
   }
   function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
@@ -6358,7 +6369,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.body.classList.toggle('dyse-can-ver-financeiro', dyseIsAdmin(profile));
     renderGestaoChrome(session, profile);
     const hashPanel = location.hash.slice(1);
-    showPanel(['turmas','materias','alunos','registro','professores','contas','financeiro','calendario','ranking'].includes(hashPanel) ? hashPanel : 'turmas');
+    showPanel(['turmas','materias','alunos','registro','professores','contas','financeiro','calendario','ranking','speaking'].includes(hashPanel) ? hashPanel : 'turmas');
     await loadAll();
     carregarAvisos();
   })();

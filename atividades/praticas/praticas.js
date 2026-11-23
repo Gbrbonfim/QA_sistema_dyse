@@ -207,6 +207,16 @@
   const HANDLERS = {};
   function on(id, fn){ HANDLERS[id] = fn; }
 
+  /* ---------- tempo de estudo (desempate do ranking) ----------
+     Conta só enquanto a página está visível e a atividade começou. */
+  function tempoGasto(){ return (S.tempoAcum || 0) + (S.t0 ? Date.now() - S.t0 : 0); }
+  function iniciarTempo(){ if(!S.t0) S.t0 = Date.now(); }
+  document.addEventListener('visibilitychange', () => {
+    if(!S.cfg || S.tempoAcum == null && !S.t0) return;
+    if(document.hidden){ S.tempoAcum = tempoGasto(); S.t0 = null; }
+    else if(S.comecou) S.t0 = Date.now();
+  });
+
   /* ---------- progresso guardado por 15 minutos ----------
      Cada questão respondida fica guardada no aparelho (localStorage, por aluno
      e por atividade). Se o aluno sair e voltar em até 15 minutos, continua de
@@ -220,7 +230,7 @@
       if(!feitas){ localStorage.removeItem(chaveProgresso()); return; }
       localStorage.setItem(chaveProgresso(), JSON.stringify({
         i: S.res[S.i] ? S.i + 1 : S.i, res: S.res, streak: S.streak, maxStreak: S.maxStreak,
-        comboRun: S.comboRun || 0, combos: S.combos || 0, salvoEm: Date.now()
+        comboRun: S.comboRun || 0, combos: S.combos || 0, tempoMs: tempoGasto(), salvoEm: Date.now()
       }));
     }catch(e){}
   }
@@ -845,7 +855,8 @@
         '<button class="px-btn" id="pxComecar">' + (S.retomado ? 'Continuar da questão ' + (S.i + 1) : 'Começar') + ' ' + I('arrow_forward') + '</button>' +
       '</div>', 'cover');
     // imagem/fala já falam a 1ª questão dentro deste toque; as outras só liberam o som.
-    m.querySelector('#pxComecar').onclick = () => { if(S.cfg.tipo !== 'imagem' && S.cfg.tipo !== 'fala') desbloquearAudio(); m.remove(); renderItem(); };
+    m.querySelector('#pxComecar').onclick = () => {
+      S.comecou = true; iniciarTempo(); if(S.cfg.tipo !== 'imagem' && S.cfg.tipo !== 'fala') desbloquearAudio(); m.remove(); renderItem(); };
   }
   function sair(){
     const feitas = S.res.filter(Boolean).length;
@@ -927,6 +938,7 @@
     const meta = {
       tipo: S.cfg.tipo, acertos: acertos, acertos_primeira: p.primeira, total: n, pontos: p.total, pontos_max: p.max,
       criterio: 'dyse-v1', pontos_detalhe: p.det, combos: p.combos, max_sequencia: S.maxStreak,
+      duracao_seg: Math.round(tempoGasto() / 1000),
       itens: itens.map((it, k) => { const r = S.res[k] || { status: 'skip', tentativas: [] };
         return { n: k + 1, correta: it.completa, status: r.status, tentativas: r.tentativas, nota: r.nota != null ? Math.round(r.nota * 100) : undefined }; })
     };
@@ -1029,7 +1041,7 @@
       }
       const g = lerProgresso();
       if(g){
-        Object.assign(S, { i: g.i, res: g.res, streak: g.streak || 0, maxStreak: g.maxStreak || 0, comboRun: g.comboRun, combos: g.combos, retomado: true });
+        Object.assign(S, { i: g.i, res: g.res, streak: g.streak || 0, maxStreak: g.maxStreak || 0, comboRun: g.comboRun, combos: g.combos, tempoAcum: g.tempoMs || 0, retomado: true });
       }
       montarTopo();
       if(g){ pintarBarra(); pintarStreak(false); }

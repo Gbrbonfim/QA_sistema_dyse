@@ -4622,3 +4622,332 @@ as $$
 $$;
 
 grant execute on function public.ranking_atividades() to authenticated;
+-- ======================================================================
+-- 40) RANKING MENSAL (média 0–100)
+--     50 pts atividades (feitas ÷ liberadas no mês)
+--     30 pts presença na aula regular (chamada; justificada, "vai assistir
+--        gravada" e "remarcou" não contam como falta)
+--     20 pts Speaking Club (semanas em que foi ÷ semanas letivas do mês
+--        que tiveram Speaking registrado)
+--     Recesso/feriado do calendário letivo não contam. Mês sem atividade
+--     liberada / sem aula / sem Speaking = pontos cheios daquela parte.
+--     Aluno que entrou depois do dia 1º só pontua a partir do mês seguinte.
+--     Desempate (qualidade do estudo): % acertos de primeira, menos erros,
+--     menos tempo médio nas atividades.
+-- ======================================================================
+
+-- 40.1) Quando a atividade foi liberada para o aluno (o mês da liberação
+--       define em qual ranking ela conta). Refazer não muda essa data.
+alter table public.aluno_atividades_liberadas add column if not exists liberada_em timestamptz;
+update public.aluno_atividades_liberadas set liberada_em = updated_at where liberada and liberada_em is null;
+
+create or replace function public.marca_liberada_em()
+returns trigger
+language plpgsql
+as $$
+begin
+  if not new.liberada then
+    new.liberada_em := null;
+  elsif TG_OP = 'INSERT' or not coalesce(old.liberada, false) then
+    new.liberada_em := coalesce(new.liberada_em, now());
+  else
+    new.liberada_em := coalesce(old.liberada_em, new.liberada_em, now());
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_marca_liberada_em on public.aluno_atividades_liberadas;
+create trigger trg_marca_liberada_em
+  before insert or update on public.aluno_atividades_liberadas
+  for each row execute procedure public.marca_liberada_em();
+
+-- 40.2) Situação da presença na chamada. "presente" (boolean) continua
+--       existindo e é mantido igual a (status = 'presente') — é o que o
+--       financeiro (rateio, seção 11) usa, então nada muda por lá.
+alter table public.sessao_presencas add column if not exists status text;
+update public.sessao_presencas set status = case when presente then 'presente' else 'falta' end where status is null;
+alter table public.sessao_presencas alter column status set default 'presente';
+alter table public.sessao_presencas drop constraint if exists sessao_presencas_status_check;
+alter table public.sessao_presencas add constraint sessao_presencas_status_check
+  check (status in ('presente','falta','justificada','gravada','remarcou'));
+
+create or replace function public.sync_presenca_status()
+returns trigger
+language plpgsql
+as $$
+begin
+  -- Tela antiga que só manda "presente": deriva o status dele.
+  if TG_OP = 'UPDATE' and new.status is not distinct from old.status and new.presente is distinct from old.presente then
+    new.status := case when new.presente then 'presente' else 'falta' end;
+  elsif new.status is null then
+    new.status := case when new.presente then 'presente' else 'falta' end;
+  end if;
+  new.presente := (new.status = 'presente');
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_sync_presenca_status on public.sessao_presencas;
+create trigger trg_sync_presenca_status
+  before insert or update on public.sessao_presencas
+  for each row execute procedure public.sync_presenca_status();
+
+-- 40.3) Modalidade atual (vip/grupo/dupla...) dos alunos — a chamada usa
+--       pra mostrar "Vai assistir gravada" (grupo) ou "Remarcou" (VIP).
+create or replace function public.modalidade_alunos(p_ids uuid[])
+returns table(aluno_id uuid, modalidade text)
+language sql
+stable
+security definer set search_path = public
+as $$
+  select distinct on (h.aluno_id) h.aluno_id, m.slug
+  from public.aluno_financeiro_historico h
+  join public.modalidades m on m.id = h.modalidade_id
+  where (public.is_teacher() or public.is_admin())
+    and h.aluno_id = any(p_ids)
+  order by h.aluno_id, (h.data_fim is null) desc, h.data_inicio desc nulls last;
+$$;
+grant execute on function public.modalidade_alunos(uuid[]) to authenticated;
+
+-- 40.4) Speaking Club: um encontro por data; presença por aluno.
+create table if not exists public.speaking_encontros (
+  id bigint generated always as identity primary key,
+  data date not null unique,
+  observacao text,
+  criado_por uuid references auth.users(id) default auth.uid(),
+  criado_em timestamptz default now()
+);
+
+create table if not exists public.speaking_presencas (
+  encontro_id bigint not null references public.speaking_encontros(id) on delete cascade,
+  aluno_id uuid not null references auth.users(id) on delete cascade,
+  presente boolean not null default false,
+  marcado_por uuid references auth.users(id) default auth.uid(),
+  atualizado_em timestamptz default now(),
+  primary key (encontro_id, aluno_id)
+);
+create index if not exists idx_speaking_presencas_aluno on public.speaking_presencas (aluno_id);
+
+alter table public.speaking_encontros enable row level security;
+alter table public.speaking_presencas enable row level security;
+
+drop policy if exists "speaking encontros: equipe gerencia" on public.speaking_encontros;
+create policy "speaking encontros: equipe gerencia"
+  on public.speaking_encontros for all
+  using (public.is_teacher() or public.is_admin())
+  with check (public.is_teacher() or public.is_admin());
+
+drop policy if exists "speaking encontros: alunos leem" on public.speaking_encontros;
+create policy "speaking encontros: alunos leem"
+  on public.speaking_encontros for select
+  using (auth.uid() is not null);
+
+drop policy if exists "speaking presencas: equipe gerencia" on public.speaking_presencas;
+create policy "speaking presencas: equipe gerencia"
+  on public.speaking_presencas for all
+  using (public.is_teacher() or public.is_admin())
+  with check (public.is_teacher() or public.is_admin());
+
+drop policy if exists "speaking presencas: aluno le a propria" on public.speaking_presencas;
+create policy "speaking presencas: aluno le a propria"
+  on public.speaking_presencas for select
+  using (aluno_id = auth.uid());
+
+-- Lista de alunos ativos para a marcação do Speaking (a professora não
+-- enxerga todos os perfis pela RLS de profiles).
+create or replace function public.speaking_alunos()
+returns table(aluno_id uuid, nome text, email text, turma text)
+language sql
+stable
+security definer set search_path = public
+as $$
+  select p.id, p.full_name, p.email, t.name
+  from public.profiles p
+  left join public.turmas t on t.id = p.turma_id
+  where (public.is_teacher() or public.is_admin())
+    and (lower(trim(p.role)) = 'student' or p.also_student)
+    and coalesce(p.situacao_financeira, 'ativo') not in ('cancelado', 'encerrado')
+  order by p.full_name;
+$$;
+grant execute on function public.speaking_alunos() to authenticated;
+
+-- 40.5) Cálculo do mês (base para o ranking e para a tela da gestão).
+create or replace function public.ranking_mensal_calculo(p_mes date)
+returns table(
+  aluno_id uuid, nome text, elegivel boolean, entrada date,
+  atividades_feitas int, atividades_liberadas int, pts_atividades numeric,
+  aulas_presente int, aulas_contadas int, pts_presenca numeric,
+  speaking_semanas int, speaking_previstas int, pts_speaking numeric,
+  media numeric, qualidade numeric, erros int, duracao_media int)
+language sql
+stable
+security definer set search_path = public
+as $$
+  with lim as (
+    select date_trunc('month', p_mes)::date as m0,
+           (date_trunc('month', p_mes) + interval '1 month' - interval '1 day')::date as m1
+  ),
+  nao_letivo as (
+    select d.data from public.calendario_letivo_dias d, lim
+    where d.tipo in ('recesso', 'feriado') and d.data between lim.m0 - 7 and lim.m1 + 7
+  ),
+  alunos as (
+    select p.id, p.full_name,
+           coalesce((select min(h.data_inicio) from public.aluno_financeiro_historico h where h.aluno_id = p.id),
+                    (p.created_at at time zone 'America/Sao_Paulo')::date) as entrada
+    from public.profiles p
+    where (lower(trim(p.role)) = 'student' or p.also_student)
+      and coalesce(p.situacao_financeira, 'ativo') not in ('cancelado', 'encerrado')
+  ),
+  -- Atividades liberadas no mês e quantas foram concluídas até o fim do mês.
+  ativ as (
+    select l.aluno_id,
+           count(*)::int as liberadas,
+           count(*) filter (where exists (
+             select 1 from public.activity_results r
+             where r.user_id = l.aluno_id and r.course = l.course and r.aula = l.aula
+               and r.activity_num = l.activity_num and r.status = 'concluida'
+               and (coalesce(r.created_at, r.updated_at) at time zone 'America/Sao_Paulo')::date <= lim.m1
+           ))::int as feitas
+    from public.aluno_atividades_liberadas l, lim
+    where l.liberada and (l.liberada_em at time zone 'America/Sao_Paulo')::date between lim.m0 and lim.m1
+    group by l.aluno_id
+  ),
+  -- Presença: chamadas do mês fora de recesso/feriado; só presente/falta contam.
+  pres as (
+    select sp.aluno_id,
+           count(*) filter (where sp.status = 'presente')::int as presente,
+           count(*) filter (where sp.status in ('presente', 'falta'))::int as contadas
+    from public.sessao_presencas sp
+    join public.turma_sessoes ts on ts.id = sp.sessao_id, lim
+    where ts.data between lim.m0 and lim.m1
+      and ts.data not in (select data from nao_letivo)
+    group by sp.aluno_id
+  ),
+  -- Semanas do mês (a semana é do mês em que cai a quinta-feira) que têm
+  -- pelo menos um dia letivo (seg–sex) no calendário e tiveram Speaking.
+  semanas as (
+    select distinct date_trunc('week', d)::date as semana
+    from lim, generate_series(lim.m0 - 7, lim.m1 + 7, interval '1 day') g(d)
+    where extract(isodow from d) between 1 and 5
+      and (date_trunc('week', d)::date + 3) between lim.m0 and lim.m1
+      and d::date not in (select data from nao_letivo)
+  ),
+  semanas_com_speaking as (
+    select s.semana from semanas s
+    where exists (select 1 from public.speaking_encontros e where date_trunc('week', e.data)::date = s.semana)
+  ),
+  spk as (
+    select sp.aluno_id, count(distinct date_trunc('week', e.data)::date)::int as semanas
+    from public.speaking_presencas sp
+    join public.speaking_encontros e on e.id = sp.encontro_id
+    where sp.presente and date_trunc('week', e.data)::date in (select semana from semanas_com_speaking)
+    group by sp.aluno_id
+  ),
+  -- Qualidade do estudo: atividades concluídas no mês.
+  qual as (
+    select r.user_id,
+           sum(case when (r.meta->>'acertos_primeira') ~ '^[0-9]+$' then (r.meta->>'acertos_primeira')::int else 0 end) as primeira,
+           sum(case when (r.meta->>'total') ~ '^[0-9]+$' then (r.meta->>'total')::int else 0 end) as total,
+           sum(case when (r.meta->>'total') ~ '^[0-9]+$' and (r.meta->>'acertos') ~ '^[0-9]+$'
+                    then (r.meta->>'total')::int - (r.meta->>'acertos')::int else 0 end) as erros,
+           avg(case when (r.meta->>'duracao_seg') ~ '^[0-9]+$' then (r.meta->>'duracao_seg')::int end) as duracao
+    from public.activity_results r, lim
+    where r.course like 'ativ-%' and r.status = 'concluida'
+      and (coalesce(r.created_at, r.updated_at) at time zone 'America/Sao_Paulo')::date between lim.m0 and lim.m1
+    group by r.user_id
+  ),
+  prev as (select count(*)::int as n from semanas_com_speaking)
+  select a.id, a.full_name, (a.entrada <= lim.m0) as elegivel, a.entrada,
+         coalesce(at.feitas, 0), coalesce(at.liberadas, 0),
+         round(case when coalesce(at.liberadas, 0) = 0 then 50 else 50.0 * at.feitas / at.liberadas end, 1),
+         coalesce(pr.presente, 0), coalesce(pr.contadas, 0),
+         round(case when coalesce(pr.contadas, 0) = 0 then 30 else 30.0 * pr.presente / pr.contadas end, 1),
+         coalesce(sk.semanas, 0), prev.n,
+         round(case when prev.n = 0 then 20 else 20.0 * least(coalesce(sk.semanas, 0), prev.n) / prev.n end, 1),
+         round(
+           (case when coalesce(at.liberadas, 0) = 0 then 50 else 50.0 * at.feitas / at.liberadas end) +
+           (case when coalesce(pr.contadas, 0) = 0 then 30 else 30.0 * pr.presente / pr.contadas end) +
+           (case when prev.n = 0 then 20 else 20.0 * least(coalesce(sk.semanas, 0), prev.n) / prev.n end), 1),
+         case when coalesce(q.total, 0) > 0 then round(100.0 * q.primeira / q.total, 1) end,
+         q.erros::int,
+         round(q.duracao)::int
+  from alunos a
+  cross join lim
+  cross join prev
+  left join ativ at on at.aluno_id = a.id
+  left join pres pr on pr.aluno_id = a.id
+  left join spk sk on sk.aluno_id = a.id
+  left join qual q on q.user_id = a.id;
+$$;
+revoke all on function public.ranking_mensal_calculo(date) from public, anon, authenticated;
+
+-- 40.6) Ranking do mês. Gestão vê todos com nome e detalhes; professora e
+--       aluno veem o top 5 (sem nome) e a própria linha com os detalhes.
+create or replace function public.ranking_mensal(p_mes date default null)
+returns table(
+  posicao int, media numeric, nome text, eu boolean, elegivel boolean, entrada date,
+  pts_atividades numeric, atividades_feitas int, atividades_liberadas int,
+  pts_presenca numeric, aulas_presente int, aulas_contadas int,
+  pts_speaking numeric, speaking_semanas int, speaking_previstas int,
+  qualidade numeric, erros int, duracao_media int)
+language sql
+stable
+security definer set search_path = public
+as $$
+  with c as (
+    select * from public.ranking_mensal_calculo(coalesce(p_mes, (now() at time zone 'America/Sao_Paulo')::date))
+  ), rk as (
+    select c.*, case when c.elegivel then (rank() over (partition by c.elegivel order by c.media desc,
+             c.qualidade desc nulls last, c.erros asc nulls last, c.duracao_media asc nulls last))::int end as pos
+    from c
+  ), adm as (select public.is_admin() as a)
+  select rk.pos, rk.media,
+         case when adm.a then rk.nome end,
+         (rk.aluno_id = auth.uid()),
+         rk.elegivel, rk.entrada,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.pts_atividades end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.atividades_feitas end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.atividades_liberadas end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.pts_presenca end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.aulas_presente end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.aulas_contadas end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.pts_speaking end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.speaking_semanas end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.speaking_previstas end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.qualidade end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.erros end,
+         case when adm.a or rk.aluno_id = auth.uid() then rk.duracao_media end
+  from rk cross join adm
+  where adm.a or (rk.elegivel and rk.pos <= 5) or rk.aluno_id = auth.uid()
+  order by rk.elegivel desc, rk.pos nulls last, rk.nome;
+$$;
+grant execute on function public.ranking_mensal(date) to authenticated;
+
+-- 40.7) Avisos para a equipe: semanas letivas do mês sem Speaking registrado.
+create or replace function public.ranking_mensal_avisos(p_mes date default null)
+returns table(semana date)
+language sql
+stable
+security definer set search_path = public
+as $$
+  with lim as (
+    select date_trunc('month', coalesce(p_mes, (now() at time zone 'America/Sao_Paulo')::date))::date as m0,
+           (date_trunc('month', coalesce(p_mes, (now() at time zone 'America/Sao_Paulo')::date)) + interval '1 month' - interval '1 day')::date as m1
+  ),
+  nao_letivo as (
+    select d.data from public.calendario_letivo_dias d, lim
+    where d.tipo in ('recesso', 'feriado') and d.data between lim.m0 - 7 and lim.m1 + 7
+  )
+  select distinct date_trunc('week', d)::date
+  from lim, generate_series(lim.m0 - 7, lim.m1 + 7, interval '1 day') g(d)
+  where (public.is_teacher() or public.is_admin())
+    and extract(isodow from d) between 1 and 5
+    and (date_trunc('week', d)::date + 3) between lim.m0 and lim.m1
+    and d::date not in (select data from nao_letivo)
+    and date_trunc('week', d)::date <= (now() at time zone 'America/Sao_Paulo')::date
+    and not exists (select 1 from public.speaking_encontros e where date_trunc('week', e.data)::date = date_trunc('week', d)::date)
+  order by 1;
+$$;
+grant execute on function public.ranking_mensal_avisos(date) to authenticated;
