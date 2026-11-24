@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 04 · Ask and answer</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 04 · Fala
+   Alinhado ao slide "Class 04: Changing Nationalities?" — Vocabulary (listen and repeat as
+   nacionalidades) e perguntas/short answers com to be. Conteúdo NOVO: outras frases.
+   20 questões: 8 nacionalidades + 12 perguntas e respostas. */
+const NAC = 'Escute e grave a nacionalidade';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 4, num: 4, tipo: 'fala',
+  instrucao: 'Escute e grave a frase inteira',
+  itens: [
+    { instrucao: NAC, frase: 'Greek', traducao: 'Grego(a)' },
+    { instrucao: NAC, frase: 'Pakistani', traducao: 'Paquistanês / Paquistanesa', nota: 'A força fica no "STA": pa-ki-STA-ni.' },
+    { instrucao: NAC, frase: 'Austrian', traducao: 'Austríaco(a)', nota: 'Começa com som de "ó": ÓS-trian.' },
+    { instrucao: NAC, frase: 'Mexican', traducao: 'Mexicano(a)', nota: 'A força fica no começo: ME-xi-can.' },
+    { instrucao: NAC, frase: 'South African', traducao: 'Sul-africano(a)' },
+    { instrucao: NAC, frase: 'Slovenian', traducao: 'Esloveno(a)', nota: 'A força fica no "VI": slo-VI-nian.' },
+    { instrucao: NAC, frase: 'Portuguese', traducao: 'Português / Portuguesa', nota: 'A força fica no final: por-tu-GUESE.' },
+    { instrucao: NAC, frase: 'Argentinian', traducao: 'Argentino(a)', nota: 'A força fica no "TI": ar-gen-TI-nian.' },
+    { frase: 'Is she Greek?', dica: 0, traducao: 'Ela é grega?' },
+    { frase: 'Yes, she is.', dica: 0, traducao: 'Sim, ela é.' },
+    { frase: 'Are you Mexican?', dica: 0, traducao: 'Você é mexicano(a)?' },
+    { frase: "No, I'm not. I'm Argentinian.", dica: 0, traducao: 'Não, eu não sou. Eu sou argentino(a).' },
+    { frase: 'Is he from Austria?', dica: 0, traducao: 'Ele é da Áustria?' },
+    { frase: "No, he isn't. He's from Slovenia.", dica: 0, traducao: 'Não, ele não é. Ele é da Eslovênia.' },
+    { frase: 'Are they Portuguese?', dica: 0, traducao: 'Eles são portugueses?' },
+    { frase: 'Yes, they are.', dica: 0, traducao: 'Sim, eles são.' },
+    { frase: 'Am I late?', dica: 0, traducao: 'Eu estou atrasado(a)?' },
+    { frase: "No, you aren't.", dica: 0, traducao: 'Não, você não está.' },
+    { frase: 'Are you from Brazil?', dica: 0, traducao: 'Você é do Brasil?' },
+    { frase: "Is Trevor Noah American? No, he's South African.", dica: 0, traducao: 'O Trevor Noah é americano? Não, ele é sul-africano.' }
+  ]
+});
+</script>
+</body>
+</html>

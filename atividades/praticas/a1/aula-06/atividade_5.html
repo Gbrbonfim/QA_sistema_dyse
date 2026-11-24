@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 06 · Numbers, spelling and questions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 06 · Vocabulário e estruturas
+   Alinhado ao slide "Class 06: In a Hotel" — números de 0 a 10, partes do hotel, alfabeto
+   (soletrar) e as perguntas do formulário com a resposta certa. Conteúdo NOVO: outros números,
+   nomes e respostas. 24 questões: 6 números + 6 vocabulário + 8 pergunta → resposta + 4 soletrar. */
+const NUM = 'Qual é o número?';
+const VOC = 'Como se diz em inglês?';
+const QR = 'Escolha a resposta certa para a pergunta';
+const SOL = 'Qual palavra foi soletrada?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 6, num: 5, tipo: 'escolha',
+  instrucao: NUM,
+  itens: [
+    { frase: 'seven = ___', opcoes: ['7', '1', '9'], certa: 0, traducao: 'sete = 7' },
+    { frase: 'three = ___', opcoes: ['8', '3', '2'], certa: 1, traducao: 'três = 3' },
+    { frase: 'nine = ___', opcoes: ['5', '4', '9'], certa: 2, traducao: 'nove = 9' },
+    { frase: '6 = ___', opcoes: ['six', 'seven', 'sixteen'], certa: 0, traducao: '6 = seis' },
+    { frase: '0 = ___', opcoes: ['one', 'zero', 'ten'], certa: 1, traducao: '0 = zero' },
+    { frase: '8 = ___', opcoes: ['three', 'eighteen', 'eight'], certa: 2, traducao: '8 = oito' },
+    { instrucao: VOC, frase: 'piscina = ___', opcoes: ['swimming pool', 'gym', 'parking'], certa: 0, traducao: 'piscina = swimming pool' },
+    { instrucao: VOC, frase: 'recepção = ___', opcoes: ['room', 'reception', 'bar'], certa: 1, traducao: 'recepção = reception' },
+    { instrucao: VOC, frase: 'travesseiros = ___', opcoes: ['towels', 'toiletries', 'pillows'], certa: 2, traducao: 'travesseiros = pillows' },
+    { instrucao: VOC, frase: 'toalhas = ___', opcoes: ['towels', 'pillows', 'showers'], certa: 0, traducao: 'toalhas = towels' },
+    { instrucao: VOC, frase: 'academia = ___', opcoes: ['parking', 'gym', 'pool'], certa: 1, traducao: 'academia = gym' },
+    { instrucao: VOC, frase: 'cama de casal = ___', opcoes: ['single bed', 'room', 'double bed'], certa: 2, traducao: 'cama de casal = double bed' },
+    { instrucao: QR, frase: "What's your first name? → ___", opcoes: ['My first name is Paul.', "It's Walker.", "I'm from Canada."], certa: 0, traducao: 'Qual é o seu primeiro nome? Meu primeiro nome é Paul.' },
+    { instrucao: QR, frase: "What's your last name? → ___", opcoes: ["I'm from Ireland.", "It's Walker.", 'My first name is Paul.'], certa: 1, traducao: 'Qual é o seu sobrenome? É Walker.' },
+    { instrucao: QR, frase: 'Where are you from? → ___', opcoes: ["It's 12 Oak Street.", "It's Walker.", "I'm from Ireland."], certa: 2, traducao: 'De onde você é? Eu sou da Irlanda.' },
+    { instrucao: QR, frase: "What's your address? → ___", opcoes: ["It's 12 Oak Street, Dublin.", "It's 555-2046.", "I'm from Dublin."], certa: 0, traducao: 'Qual é o seu endereço? É 12 Oak Street, Dublin.' },
+    { instrucao: QR, frase: "What's your phone number? → ___", opcoes: ["It's paul@eol.com.", "It's 555-2046.", "It's number nine."], certa: 1, traducao: 'Qual é o seu número de telefone? É 555-2046.' },
+    { instrucao: QR, frase: "What's your e-mail? → ___", opcoes: ["It's 555-2046.", "It's Walker.", "It's paul.walker@eol.com."], certa: 2, traducao: 'Qual é o seu e-mail? É paul.walker@eol.com.' },
+    { instrucao: QR, frase: 'Could you repeat, please? → ___', opcoes: ['Sure. W-A-L-K-E-R.', "You're welcome.", 'Enjoy your stay!'], certa: 0, traducao: 'Você poderia repetir, por favor? Claro. W-A-L-K-E-R.' },
+    { instrucao: QR, frase: 'Thank you! → ___', opcoes: ['Thank you!', "You're welcome.", 'Could you repeat, please?'], certa: 1, traducao: 'Obrigado(a)! De nada.' },
+    { instrucao: SOL, frase: 'T-O-W-E-L-S → ___', opcoes: ['towels', 'tools', 'toilets'], certa: 0, traducao: 'T-O-W-E-L-S = towels (toalhas)' },
+    { instrucao: SOL, frase: 'G-Y-M → ___', opcoes: ['jim', 'gym', 'gem'], certa: 1, traducao: 'G-Y-M = gym (academia)' },
+    { instrucao: SOL, frase: 'S-H-O-W-E-R → ___', opcoes: ['flower', 'power', 'shower'], certa: 2, traducao: 'S-H-O-W-E-R = shower (chuveiro)' },
+    { instrucao: SOL, frase: 'P-I-L-L-O-W-S → ___', opcoes: ['pillows', 'yellows', 'pillars'], certa: 0, traducao: 'P-I-L-L-O-W-S = pillows (travesseiros)' }
+  ]
+});
+</script>
+</body>
+</html>

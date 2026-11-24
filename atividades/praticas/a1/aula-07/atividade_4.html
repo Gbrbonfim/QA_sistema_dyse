@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 07 · In my bag</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 07 · Fala
+   Alinhado ao slide "Class 07: What's in my Travel Bag" — Vocabulary (listen and repeat),
+   Grammar Point (listen and repeat: a laptop / an iPad) e Speaking ("talk about the things in
+   your bag"). Conteúdo NOVO: outras frases, um pouco mais longas. 20 questões. */
+const PAL = 'Escute e grave a palavra';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 7, num: 4, tipo: 'fala',
+  instrucao: 'Escute e grave a frase inteira',
+  itens: [
+    { instrucao: PAL, frase: 'wallet', traducao: 'carteira' },
+    { instrucao: PAL, frase: 'glasses', traducao: 'óculos' },
+    { instrucao: PAL, frase: 'painkillers', traducao: 'analgésicos' },
+    { instrucao: PAL, frase: 'perfume', traducao: 'perfume', nota: 'A força fica no começo: PER-fume.' },
+    { instrucao: PAL, frase: 'charger', traducao: 'carregador', nota: 'Começa com "tch": TCHAR-djer.' },
+    { instrucao: PAL, frase: 'passport', traducao: 'passaporte' },
+    { instrucao: PAL, frase: 'laptop', traducao: 'notebook' },
+    { instrucao: PAL, frase: 'camera', traducao: 'câmera' },
+    { instrucao: PAL, frase: 'credit card', traducao: 'cartão de crédito' },
+    { instrucao: PAL, frase: 'chewing gum', traducao: 'chiclete' },
+    { frase: "It's a wallet.", dica: 0, traducao: 'É uma carteira.' },
+    { frase: "It's an ID card.", dica: 0, traducao: 'É uma carteira de identidade.' },
+    { frase: 'In my bag, I have a phone and a charger.', dica: 0, traducao: 'Na minha bolsa, eu tenho um celular e um carregador.' },
+    { frase: 'Is it an English book?', dica: 0, traducao: 'É um livro de inglês?' },
+    { frase: "Where's my passport?", dica: 0, traducao: 'Cadê o meu passaporte?' },
+    { frase: 'My glasses are in my bag.', dica: 0, traducao: 'Meus óculos estão na minha bolsa.' },
+    { frase: "It isn't an egg. It's an orange.", dica: 0, traducao: 'Não é um ovo. É uma laranja.' },
+    { frase: 'I have painkillers and a snack in my bag.', dica: 0, traducao: 'Eu tenho analgésicos e um lanche na minha bolsa.' },
+    { frase: 'Is the cash in your wallet?', dica: 0, traducao: 'O dinheiro está na sua carteira?' },
+    { frase: 'I have a laptop, a camera and an English book.', dica: 0, traducao: 'Eu tenho um notebook, uma câmera e um livro de inglês.' }
+  ]
+});
+</script>
+</body>
+</html>

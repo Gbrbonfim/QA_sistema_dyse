@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 06 · Say it right: at the hotel</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 06 · Fala
+   Alinhado ao slide "Class 06: In a Hotel" — Vocabulary (listen and repeat) e Listening and
+   Speaking (repeat questions and answers). Conteúdo NOVO: outras frases. Sem números em
+   algarismo (o reconhecimento de voz escreve "7" e daria erro injusto). 20 questões. */
+const PAL = 'Escute e grave a palavra';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 6, num: 4, tipo: 'fala',
+  instrucao: 'Escute e grave a frase inteira',
+  itens: [
+    { instrucao: PAL, frase: 'single bed', traducao: 'cama de solteiro' },
+    { instrucao: PAL, frase: 'double bed', traducao: 'cama de casal' },
+    { instrucao: PAL, frase: 'shower', traducao: 'chuveiro' },
+    { instrucao: PAL, frase: 'towels', traducao: 'toalhas', nota: 'Fala-se "TÁU-els".' },
+    { instrucao: PAL, frase: 'pillows', traducao: 'travesseiros' },
+    { instrucao: PAL, frase: 'breakfast', traducao: 'café da manhã', nota: 'Fala-se "BRÉK-fast".' },
+    { instrucao: PAL, frase: 'remote control', traducao: 'controle remoto' },
+    { instrucao: PAL, frase: 'toiletries', traducao: 'produtos de higiene' },
+    { instrucao: PAL, frase: 'gym', traducao: 'academia', aceita: { jim: 'gym' } },
+    { instrucao: PAL, frase: 'swimming pool', traducao: 'piscina' },
+    { frase: "What's your first name?", dica: 0, traducao: 'Qual é o seu primeiro nome?' },
+    { frase: "What's your last name?", dica: 0, traducao: 'Qual é o seu sobrenome?' },
+    { frase: 'How do you spell your last name?', dica: 0, traducao: 'Como você soletra o seu sobrenome?' },
+    { frase: 'Could you repeat, please?', dica: 0, traducao: 'Você poderia repetir, por favor?' },
+    { frase: "What's your phone number?", dica: 0, traducao: 'Qual é o seu número de telefone?' },
+    { frase: "What's your e-mail?", dica: 0, traducao: 'Qual é o seu e-mail?' },
+    { frase: 'Enjoy your stay!', dica: 0, traducao: 'Aproveite a sua estadia!' },
+    { frase: "You're welcome.", dica: 0, traducao: 'De nada.' },
+    { frase: 'Where is the gym?', dica: 0, traducao: 'Onde fica a academia?', aceita: { jim: 'gym' } },
+    { frase: 'Good afternoon! Welcome to the hotel.', dica: 0, traducao: 'Boa tarde! Bem-vindo ao hotel.' }
+  ]
+});
+</script>
+</body>
+</html>

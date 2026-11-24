@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 05 · Negative and question</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 05 · Escrita
+   Alinhado ao slide "Class 05: Greetings From Around the World" — Grammar Review 2 (rewrite in
+   negative and interrogative forms) e o texto "Greetings from around the world". Conteúdo NOVO:
+   outras frases e outros países. Nos cumprimentos, a frase em português guia a ordem.
+   20 questões. */
+const NEG = 'Escreva na negativa:';
+const PERG = 'Escreva a pergunta:';
+const CUMP = 'Monte em inglês:';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 5, num: 2, tipo: 'montar',
+  instrucao: 'Clique nas palavras e monte a frase (uma palavra sobra)',
+  itens: [
+    { contexto: NEG + ' "He is from Japan."', palavras: ['He', "isn't", 'from', 'Japan'], isca: ["aren't"], fim: '.', traducao: 'Ele não é do Japão.' },
+    { contexto: NEG + ' "They are from Italy."', palavras: ['They', "aren't", 'from', 'Italy'], isca: ["isn't"], fim: '.', traducao: 'Eles não são da Itália.' },
+    { contexto: NEG + ' "I am from Spain."', palavras: ["I'm", 'not', 'from', 'Spain'], isca: ["isn't"], fim: '.', traducao: 'Eu não sou da Espanha.' },
+    { contexto: NEG + ' "She is from Russia."', palavras: ['She', "isn't", 'from', 'Russia'], isca: ["aren't"], fim: '.', traducao: 'Ela não é da Rússia.' },
+    { contexto: NEG + ' "We are from Thailand."', palavras: ['We', "aren't", 'from', 'Thailand'], isca: ["isn't"], fim: '.', traducao: 'Nós não somos da Tailândia.' },
+    { contexto: PERG + ' "He is from Japan."', palavras: ['Is', 'he', 'from', 'Japan'], isca: ['Are'], fim: '?', traducao: 'Ele é do Japão?' },
+    { contexto: PERG + ' "They are from Italy."', palavras: ['Are', 'they', 'from', 'Italy'], isca: ['Is'], fim: '?', traducao: 'Eles são da Itália?' },
+    { contexto: PERG + ' "You are from Portugal."', palavras: ['Are', 'you', 'from', 'Portugal'], isca: ['Am'], fim: '?', traducao: 'Você é de Portugal?' },
+    { contexto: PERG + ' "She is from India."', palavras: ['Is', 'she', 'from', 'India'], isca: ['Am'], fim: '?', traducao: 'Ela é da Índia?' },
+    { contexto: PERG + ' "It is from China."', palavras: ['Is', 'it', 'from', 'China'], isca: ['Are'], fim: '?', traducao: 'É da China?' },
+    { contexto: CUMP + ' "No Japão, as pessoas fazem reverência."', palavras: ['In', 'Japan,', 'people', 'bow'], isca: ['is'], fim: '.', traducao: 'No Japão, as pessoas fazem reverência.' },
+    { contexto: CUMP + ' "No Brasil, as pessoas cumprimentam com um beijo no ar."', palavras: ['In', 'Brazil,', 'people', 'greet', 'with', 'an', 'air', 'kiss'], isca: ['are'], fim: '.', traducao: 'No Brasil, as pessoas cumprimentam com um beijo no ar.' },
+    { contexto: CUMP + ' "Na Rússia, o beijo no ar é triplo."', palavras: ['In', 'Russia,', 'the', 'air', 'kiss', 'is', 'triple'], isca: ['are'], fim: '.', traducao: 'Na Rússia, o beijo no ar é triplo.' },
+    { contexto: CUMP + ' "Na Alemanha, o aperto de mão é firme."', palavras: ['In', 'Germany,', 'the', 'handshake', 'is', 'firm'], isca: ['are'], fim: '.', traducao: 'Na Alemanha, o aperto de mão é firme.' },
+    { contexto: CUMP + ' "A reverência é um símbolo de respeito."', palavras: ['The', 'bow', 'is', 'a', 'symbol', 'of', 'respect'], isca: ['are'], fim: '.', traducao: 'A reverência é um símbolo de respeito.' },
+    { contexto: CUMP + ' "Na China, o aperto de mão é leve."', palavras: ['In', 'China,', 'the', 'handshake', 'is', 'light'], isca: ['are'], fim: '.', traducao: 'Na China, o aperto de mão é leve.' },
+    { contexto: CUMP + ' "No Tibete, as pessoas mostram a língua."', palavras: ['In', 'Tibet,', 'people', 'show', 'their', 'tongue'], isca: ['they'], fim: '.', traducao: 'No Tibete, as pessoas mostram a língua.' },
+    { contexto: CUMP + ' "Na Itália, o beijo no ar é duplo."', palavras: ['In', 'Italy,', 'the', 'air', 'kiss', 'is', 'double'], isca: ['are'], fim: '.', traducao: 'Na Itália, o beijo no ar é duplo.' },
+    { contexto: CUMP + ' "Na Tailândia, as pessoas fazem reverência com as mãos."', palavras: ['In', 'Thailand,', 'people', 'bow', 'with', 'their', 'hands'], isca: ['they'], fim: '.', traducao: 'Na Tailândia, as pessoas fazem reverência com as mãos.' },
+    { contexto: CUMP + ' "Nos Estados Unidos, o aperto de mão é comum."', palavras: ['In', 'the', 'USA,', 'the', 'handshake', 'is', 'common'], isca: ['are'], fim: '.', traducao: 'Nos Estados Unidos, o aperto de mão é comum.' }
+  ]
+});
+</script>
+</body>
+</html>

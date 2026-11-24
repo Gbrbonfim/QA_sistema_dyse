@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 05 · Kiss or handshake?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 05 · Leitura
+   Alinhado ao slide "Class 05: Greetings From Around the World" — texto dos cumprimentos e
+   Talking Point ("What is the greeting in your country?"). Conteúdo NOVO: Laura (Brasil) e
+   Tom (Inglaterra) se conhecem e comparam cumprimentos. 20 questões: 11 de "próxima fala"
+   + 9 de compreensão. As opções erradas não cabem no que já foi dito. */
+const D = [
+  ['Laura', "Hi! I'm Laura. Nice to meet you!"],
+  ['Tom', "Nice to meet you too. I'm Tom."],
+  ['Laura', 'Are you from the USA, Tom?'],
+  ['Tom', "No, I'm not. I'm from England. And you?"],
+  ['Laura', "I'm from Brazil. In Brazil, we greet with an air kiss."],
+  ['Tom', 'Really? In England, we greet with a handshake.'],
+  ['Laura', 'Is the air kiss common in England?'],
+  ['Tom', "No, it isn't. But it's common in France."],
+  ['Laura', "Yes! And in Russia, it's triple."],
+  ['Tom', 'Wow! And in Japan, people bow.'],
+  ['Laura', 'Cool! See you later, Tom!'],
+  ['Tom', 'Bye, Laura!']
+];
+const lado = q => q === 'Laura' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 5, num: 3, tipo: 'escolha',
+  instrucao: 'Leia a conversa e escolha a próxima fala',
+  itens: [
+    prox(1, ["Nice to meet you too. I'm Tom.", 'Bye, Laura!', 'Really? In England, we greet with a handshake.'], 0, 'Prazer em te conhecer também. Eu sou o Tom.'),
+    prox(2, ["No, it isn't. But it's common in France.", 'Are you from the USA, Tom?', 'Bye, Laura!'], 1, 'Você é dos Estados Unidos, Tom?'),
+    prox(3, ['Yes, they are.', 'Is the air kiss common in England?', "No, I'm not. I'm from England. And you?"], 2, 'Não, eu não sou. Eu sou da Inglaterra. E você?'),
+    prox(4, ["I'm from Brazil. In Brazil, we greet with an air kiss.", "Nice to meet you too. I'm Tom.", 'Wow! And in Japan, people bow.'], 0, 'Eu sou do Brasil. No Brasil, nós cumprimentamos com um beijo no ar.'),
+    prox(5, ['Yes, she is.', 'Really? In England, we greet with a handshake.', 'Bye, Tom!'], 1, 'Sério? Na Inglaterra, nós cumprimentamos com um aperto de mão.'),
+    prox(6, ['Are the air kiss common in England?', 'Nice to meet you, Laura.', 'Is the air kiss common in England?'], 2, 'O beijo no ar é comum na Inglaterra?'),
+    prox(7, ["No, it isn't. But it's common in France.", "No, they aren't.", 'Yes, I am.'], 0, 'Não, não é. Mas é comum na França.'),
+    prox(8, ["Yes! And in Russia, they're triple.", "Yes! And in Russia, it's triple.", "No, I'm not from France."], 1, 'Sim! E na Rússia, é triplo.'),
+    prox(9, ['Wow! And in Japan, people is bow.', 'Are you from the USA?', 'Wow! And in Japan, people bow.'], 2, 'Uau! E no Japão, as pessoas fazem reverência.'),
+    prox(10, ['Cool! See you later, Tom!', 'Cool! See you later, Laura!', "I'm from Brazil."], 0, 'Legal! Até mais, Tom!'),
+    prox(11, ['Bye, Tom!', 'Bye, Laura!', "I'm from England."], 1, 'Tchau, Laura!'),
+    { instrucao: 'De onde a Laura é?', frase: 'Laura is from ___.', opcoes: ['England', 'Brazil', 'the USA'], certa: 1, traducao: 'A Laura é do Brasil.' },
+    { instrucao: 'De onde o Tom é?', frase: 'Tom is from ___.', opcoes: ['England', 'the USA', 'France'], certa: 0, traducao: 'O Tom é da Inglaterra.' },
+    { instrucao: 'O Tom é dos Estados Unidos?', frase: 'No, he ___ from the USA.', opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'Não, ele não é dos Estados Unidos.' },
+    { instrucao: 'Como as pessoas se cumprimentam no Brasil?', frase: 'In Brazil, people greet with ___.', opcoes: ['a handshake', 'an air kiss', 'a bow'], certa: 1, traducao: 'No Brasil, as pessoas cumprimentam com um beijo no ar.' },
+    { instrucao: 'E na Inglaterra?', frase: 'In England, people greet with ___.', opcoes: ['an air kiss', 'a bow', 'a handshake'], certa: 2, traducao: 'Na Inglaterra, as pessoas cumprimentam com um aperto de mão.' },
+    { instrucao: 'O beijo no ar é comum na Inglaterra?', frase: 'No, it ___.', opcoes: ["isn't", "aren't", 'am not'], certa: 0, traducao: 'Não, não é.' },
+    { instrucao: 'Onde o beijo no ar é triplo, segundo a Laura?', frase: "In ___, it's triple.", opcoes: ['France', 'Russia', 'Brazil'], certa: 1, traducao: 'Na Rússia, é triplo.' },
+    { instrucao: 'O que as pessoas fazem no Japão, segundo o Tom?', frase: 'In Japan, people ___.', opcoes: ['kiss', 'show their tongue', 'bow'], certa: 2, traducao: 'No Japão, as pessoas fazem reverência.' },
+    { instrucao: 'Complete a pergunta da Laura:', frase: '___ the air kiss common in England?', opcoes: ['Are', 'Is', 'Am'], certa: 1, traducao: 'O beijo no ar é comum na Inglaterra?' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 04 · Am, Is or Are?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 04 · Gramática
+   Alinhado ao slide "Class 04: Changing Nationalities?" — Grammar Point: To Be Interrogative
+   Form (Am / Is / Are), short answers e o "from" antes do país. Conteúdo NOVO: outras frases
+   e famosos (fatos verdadeiros). 24 questões: 10 Am/Is/Are + 8 short answers + 6 frase correta. */
+const Q = ['Am', 'Is', 'Are'];
+const PERG = 'Complete a pergunta: Am, Is ou Are?';
+const RESP = 'Escolha a resposta curta correta';
+const CERTA = 'Qual pergunta está correta?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 4, num: 5, tipo: 'escolha',
+  instrucao: PERG,
+  itens: [
+    { frase: '___ you Greek?', opcoes: Q, certa: 2, traducao: 'Você é grego(a)?' },
+    { frase: '___ Ali Pakistani?', opcoes: Q, certa: 1, traducao: 'O Ali é paquistanês?' },
+    { frase: '___ I late?', opcoes: Q, certa: 0, traducao: 'Eu estou atrasado(a)?' },
+    { frase: '___ they from Mexico?', opcoes: Q, certa: 2, traducao: 'Eles são do México?' },
+    { frase: '___ Elena from Greece?', opcoes: Q, certa: 1, traducao: 'A Elena é da Grécia?' },
+    { frase: '___ we in class 4?', opcoes: Q, certa: 2, traducao: 'Nós estamos na turma 4?' },
+    { frase: '___ paella Spanish?', opcoes: Q, certa: 1, traducao: 'A paella é espanhola?' },
+    { frase: '___ Luka Dončić Slovenian?', opcoes: Q, certa: 1, traducao: 'O Luka Dončić é esloveno?' },
+    { frase: '___ Trevor Noah and Charlize Theron South African?', opcoes: Q, certa: 2, traducao: 'O Trevor Noah e a Charlize Theron são sul-africanos?' },
+    { frase: '___ José Mourinho Portuguese?', opcoes: Q, certa: 1, traducao: 'O José Mourinho é português?' },
+    { instrucao: RESP, frase: 'Is Elena Greek? Yes, ___.', opcoes: ['she is', "she's", 'she are'], certa: 0, traducao: 'A Elena é grega? Sim, ela é.' },
+    { instrucao: RESP, frase: 'Are you Mexican? No, ___.', opcoes: ["I isn't", "I'm not", "I aren't"], certa: 1, traducao: 'Você é mexicano(a)? Não, eu não sou.' },
+    { instrucao: RESP, frase: 'Are they Austrian? Yes, ___.', opcoes: ["they're", 'they is', 'they are'], certa: 2, traducao: 'Eles são austríacos? Sim, eles são.' },
+    { instrucao: RESP, frase: "Is Ali Indian? No, ___. He's Pakistani.", opcoes: ["he isn't", "he aren't", "he's not is"], certa: 0, traducao: 'O Ali é indiano? Não, ele não é. Ele é paquistanês.' },
+    { instrucao: RESP, frase: "Are we late? No, ___.", opcoes: ["we isn't", "we aren't", "we not"], certa: 1, traducao: 'Nós estamos atrasados? Não, nós não estamos.' },
+    { instrucao: RESP, frase: 'Is pizza Italian? Yes, ___.', opcoes: ["it's", 'it are', 'it is'], certa: 2, traducao: 'A pizza é italiana? Sim, é.' },
+    { instrucao: RESP, frase: "Is Mozart German? No, ___. He's Austrian.", opcoes: ["he isn't", "he aren't", "he not"], certa: 0, traducao: 'O Mozart é alemão? Não, ele não é. Ele é austríaco.' },
+    { instrucao: RESP, frase: 'Am I in class 4? Yes, ___.', opcoes: ['I am', 'you are', 'you is'], certa: 1, traducao: 'Eu estou na turma 4? Sim, você está.' },
+    { instrucao: CERTA, opcoes: ['Are you Canada?', 'Are you from Canada?', 'You are from Canada?'], certa: 1, traducao: 'Você é do Canadá?' },
+    { instrucao: CERTA, opcoes: ['Is she from Greece?', 'Is she Greece?', 'She is from Greece?'], certa: 0, traducao: 'Ela é da Grécia?' },
+    { instrucao: CERTA, opcoes: ['Is they Mexican?', 'They are Mexican?', 'Are they Mexican?'], certa: 2, traducao: 'Eles são mexicanos?' },
+    { instrucao: CERTA, opcoes: ['Is he Austrian?', 'Are he Austrian?', 'He is Austrian?'], certa: 0, traducao: 'Ele é austríaco?' },
+    { instrucao: CERTA, opcoes: ['Is you from Pakistan?', 'Are you from Pakistan?', 'Are you Pakistan?'], certa: 1, traducao: 'Você é do Paquistão?' },
+    { instrucao: CERTA, opcoes: ['Is Ana Slovenia?', 'Are Ana from Slovenia?', 'Is Ana from Slovenia?'], certa: 2, traducao: 'A Ana é da Eslovênia?' }
+  ]
+});
+</script>
+</body>
+</html>

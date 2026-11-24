@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 04 · Guess the nationality</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 04 · Leitura
+   Alinhado ao slide "Class 04: Changing Nationalities?" — Speaking and Listening (perguntas
+   com to be sobre famosos + short answers, dizendo a cidade quando sabe). Conteúdo NOVO:
+   Pedro e Anna jogam "adivinhe a nacionalidade" com outros famosos (fatos verdadeiros).
+   20 questões: 11 de "próxima fala" + 9 de compreensão. */
+const D = [
+  ['Pedro', "Let's play a game. Is Giannis Antetokounmpo Italian?"],
+  ['Anna', "No, he isn't. He's Greek. He's from Athens."],
+  ['Pedro', 'Correct! Now you.'],
+  ['Anna', 'OK. Is Trevor Noah American?'],
+  ['Pedro', "Hmm... No, he isn't. He's South African."],
+  ['Anna', "Yes! He's from Johannesburg."],
+  ['Pedro', 'Are Guillermo del Toro and Salma Hayek Spanish?'],
+  ['Anna', "No, they aren't. They're Mexican."],
+  ['Pedro', 'Great! Last question. Is Mozart German?'],
+  ['Anna', "No, he isn't. He's Austrian. He's from Salzburg."],
+  ['Pedro', 'Wow, you are good!'],
+  ['Anna', 'Thank you, Pedro!']
+];
+const lado = q => q === 'Pedro' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 4, num: 3, tipo: 'escolha',
+  instrucao: 'Leia a conversa e escolha a próxima fala',
+  itens: [
+    prox(1, ['Yes, they are. They\'re Mexican.', "No, he isn't. He's Greek. He's from Athens.", 'Thank you, Pedro!'], 1, 'Não, ele não é. Ele é grego. Ele é de Atenas.'),
+    prox(2, ['Wow, you are good!', "No, they aren't.", 'Correct! Now you.'], 2, 'Correto! Agora você.'),
+    prox(3, ['OK. Is Trevor Noah American?', "Yes! He's from Johannesburg.", "No, he isn't. He's Austrian."], 0, 'OK. O Trevor Noah é americano?'),
+    prox(4, ["Yes, she is. She's Greek.", "Hmm... No, he isn't. He's South African.", 'Thank you, Pedro!'], 1, 'Hmm... Não, ele não é. Ele é sul-africano.'),
+    prox(5, ["No, they aren't. They're Mexican.", 'Correct! Now you.', "Yes! He's from Johannesburg."], 2, 'Sim! Ele é de Joanesburgo.'),
+    prox(6, ['Are Guillermo del Toro and Salma Hayek Spanish?', 'Is Guillermo del Toro and Salma Hayek Spanish?', 'Wow, you are good!'], 0, 'O Guillermo del Toro e a Salma Hayek são espanhóis?'),
+    prox(7, ["No, he isn't. He's Mexican.", "No, they aren't. They're Mexican.", "Yes, they are. They're from Madrid."], 1, 'Não, eles não são. Eles são mexicanos.'),
+    prox(8, ['Thank you, Pedro!', "Hmm... No, he isn't.", 'Great! Last question. Is Mozart German?'], 2, 'Ótimo! Última pergunta. O Mozart é alemão?'),
+    prox(9, ["No, he isn't. He's Austrian. He's from Salzburg.", "Yes, he is. He's from Berlin.", "No, they aren't. They're Austrian."], 0, 'Não, ele não é. Ele é austríaco. Ele é de Salzburgo.'),
+    prox(10, ['Correct! Now you.', 'Wow, you are good!', 'Is Mozart German?'], 1, 'Uau, você é boa!'),
+    prox(11, ['Thank you, Anna!', 'Let\'s play a game.', 'Thank you, Pedro!'], 2, 'Obrigada, Pedro!'),
+    { instrucao: 'Qual é a nacionalidade do Giannis Antetokounmpo?', frase: 'Giannis Antetokounmpo is ___.', opcoes: ['Italian', 'Greek', 'Austrian'], certa: 1, traducao: 'O Giannis Antetokounmpo é grego.' },
+    { instrucao: 'De que cidade ele é?', frase: "He's from ___.", opcoes: ['Athens', 'Salzburg', 'Johannesburg'], certa: 0, traducao: 'Ele é de Atenas.' },
+    { instrucao: 'O Trevor Noah é americano?', frase: "No, he ___. He's South African.", opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'Não, ele não é. Ele é sul-africano.' },
+    { instrucao: 'De que cidade é o Trevor Noah?', frase: "He's from ___.", opcoes: ['Athens', 'Johannesburg', 'Salzburg'], certa: 1, traducao: 'Ele é de Joanesburgo.' },
+    { instrucao: 'Qual é a nacionalidade do Guillermo del Toro e da Salma Hayek?', frase: "They're ___.", opcoes: ['Spanish', 'Argentinian', 'Mexican'], certa: 2, traducao: 'Eles são mexicanos.' },
+    { instrucao: 'Complete a pergunta do Pedro:', frase: '___ Guillermo del Toro and Salma Hayek Spanish?', opcoes: ['Is', 'Are', 'Am'], certa: 1, traducao: 'O Guillermo del Toro e a Salma Hayek são espanhóis?' },
+    { instrucao: 'O Mozart é alemão?', frase: "No, he isn't. He's ___.", opcoes: ['Austrian', 'German', 'Greek'], certa: 0, traducao: 'Não, ele não é. Ele é austríaco.' },
+    { instrucao: 'Complete a pergunta do Pedro:', frase: '___ Mozart German?', opcoes: ['Am', 'Are', 'Is'], certa: 2, traducao: 'O Mozart é alemão?' },
+    { instrucao: 'Quem acerta todas as respostas?', frase: '___ is good at the game.', opcoes: ['Pedro', 'Anna'], certa: 1, traducao: 'A Anna é boa no jogo.' }
+  ]
+});
+</script>
+</body>
+</html>

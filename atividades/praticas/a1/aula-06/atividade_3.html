@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 06 · Hotel check-in</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 06 · Leitura
+   Alinhado ao slide "Class 06: In a Hotel" — Role-play de check-in (Good afternoon; How do you
+   spell your last name?; Could you repeat, please?; perguntas do formulário; Enjoy your stay;
+   You're welcome). Conteúdo NOVO: Mike (recepção) e Sophie Clark, de Sydney.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Mike', 'Good afternoon! Welcome to the Ocean Hotel.'],
+  ['Sophie', 'Good afternoon! My name is Sophie Clark.'],
+  ['Mike', 'How do you spell your last name?'],
+  ['Sophie', 'C-L-A-R-K.'],
+  ['Mike', 'Could you repeat, please?'],
+  ['Sophie', 'Sure. C-L-A-R-K.'],
+  ['Mike', 'Thank you. Where are you from?'],
+  ['Sophie', "I'm from Australia. I'm from Sydney."],
+  ['Mike', "What's your phone number?"],
+  ['Sophie', "It's 555-3018."],
+  ['Mike', 'Your room is number nine. Enjoy your stay!'],
+  ['Sophie', 'Thank you!'],
+  ['Mike', "You're welcome."]
+];
+const lado = q => q === 'Mike' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 6, num: 3, tipo: 'escolha',
+  instrucao: 'Leia a conversa e escolha a próxima fala',
+  itens: [
+    prox(1, ['C-L-A-R-K.', 'Good afternoon! My name is Sophie Clark.', "You're welcome."], 1, 'Boa tarde! Meu nome é Sophie Clark.'),
+    prox(2, ["I'm from Australia.", 'Sure. C-L-A-R-K.', 'How do you spell your last name?'], 2, 'Como você soletra o seu sobrenome?'),
+    prox(3, ['C-L-A-R-K.', 'S-O-P-H-I-E.', "It's 555-3018."], 0, 'C-L-A-R-K.'),
+    prox(4, ["You're welcome.", 'Could you repeat, please?', "I'm from Australia."], 1, 'Você poderia repetir, por favor?'),
+    prox(5, ['Thank you!', 'Sure. S-M-I-T-H.', 'Sure. C-L-A-R-K.'], 2, 'Claro. C-L-A-R-K.'),
+    prox(6, ['Thank you. Where are you from?', "You're welcome. Where are you from?", 'Thank you. Where is he from?'], 0, 'Obrigado. De onde você é?'),
+    prox(7, ["I'm from Australia. I'm from Toronto.", "I'm from Australia. I'm from Sydney.", "It's 555-3018."], 1, 'Eu sou da Austrália. Eu sou de Sydney.'),
+    prox(8, ["What's you phone number?", 'How do you spell your last name?', "What's your phone number?"], 2, 'Qual é o seu número de telefone?'),
+    prox(9, ["It's 555-3018.", "It's sophie.clark@eol.com.", 'My last name is Clark.'], 0, 'É 555-3018.'),
+    prox(10, ['Your room are number nine.', 'Your room is number nine. Enjoy your stay!', 'Good afternoon!'], 1, 'O seu quarto é o número nove. Aproveite a sua estadia!'),
+    prox(11, ["You're welcome.", 'Good afternoon! My name is Sophie Clark.', 'Thank you!'], 2, 'Obrigada!'),
+    prox(12, ["You're welcome.", 'Enjoy your stay, Mike!', 'Is she from Australia?'], 0, 'De nada.'),
+    { instrucao: 'Qual é o sobrenome da hóspede?', frase: 'My name is Sophie ___.', opcoes: ['Sydney', 'Clark', 'Smith'], certa: 1, traducao: 'Meu nome é Sophie Clark.' },
+    { instrucao: 'De que país ela é?', frase: "I'm from ___. I'm from Sydney.", opcoes: ['Canada', 'England', 'Australia'], certa: 2, traducao: 'Eu sou da Austrália. Eu sou de Sydney.' },
+    { instrucao: 'De que cidade ela é?', frase: "I'm from Australia. I'm from ___.", opcoes: ['Sydney', 'Toronto', 'London'], certa: 0, traducao: 'Eu sou da Austrália. Eu sou de Sydney.' },
+    { instrucao: 'Qual é o número do quarto?', frase: 'Your room is number ___.', opcoes: ['five', 'nine', 'seven'], certa: 1, traducao: 'O seu quarto é o número nove.' },
+    { instrucao: 'Qual é o telefone da Sophie?', frase: "It's ___.", opcoes: ['555-3810', '555-8013', '555-3018'], certa: 2, traducao: 'É 555-3018.' },
+    { instrucao: 'O que o Mike pede?', frase: 'Could you ___, please?', opcoes: ['repeat', 'spell', 'enjoy'], certa: 0, traducao: 'Você poderia repetir, por favor?' },
+    { instrucao: 'O que o Mike pergunta primeiro?', frase: 'How do you ___ your last name?', opcoes: ['repeat', 'spell', 'welcome'], certa: 1, traducao: 'Como você soletra o seu sobrenome?' },
+    { instrucao: 'Como o Mike responde ao "Thank you!"?', frase: "You're ___.", opcoes: ['OK', 'nine', 'welcome'], certa: 2, traducao: 'De nada.' }
+  ]
+});
+</script>
+</body>
+</html>

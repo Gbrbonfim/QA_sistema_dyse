@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 04 · Is he Greek?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 04 · Escrita
+   Alinhado ao slide "Class 04: Changing Nationalities?" — Grammar Point: To Be Interrogative Form
+   (forme a pergunta; cuidado com o "from") e short answers. Conteúdo NOVO: outras pessoas.
+   A pergunta começa com Is/Are maiúsculo e a resposta com Yes,/No, — só uma ordem possível.
+   A isca é sempre uma forma errada do verbo. 20 questões. */
+const PERG = 'Monte a pergunta:';
+const RESP = 'Monte a resposta curta:';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 4, num: 2, tipo: 'montar',
+  instrucao: 'Clique nas palavras e monte a frase (uma palavra sobra)',
+  itens: [
+    { contexto: PERG + ' Elena / Greek?', palavras: ['Is', 'Elena', 'Greek'], isca: ['Are'], fim: '?', traducao: 'A Elena é grega?' },
+    { contexto: PERG + ' you / Mexican?', palavras: ['Are', 'you', 'Mexican'], isca: ['Is'], fim: '?', traducao: 'Você é mexicano(a)?' },
+    { contexto: PERG + ' Ali and Sara / Pakistani?', palavras: ['Are', 'Ali', 'and', 'Sara', 'Pakistani'], isca: ['Is'], fim: '?', traducao: 'O Ali e a Sara são paquistaneses?' },
+    { contexto: PERG + ' he / from Austria?', palavras: ['Is', 'he', 'from', 'Austria'], isca: ['Am'], fim: '?', traducao: 'Ele é da Áustria?' },
+    { contexto: PERG + ' they / from Slovenia?', palavras: ['Are', 'they', 'from', 'Slovenia'], isca: ['Is'], fim: '?', traducao: 'Eles são da Eslovênia?' },
+    { contexto: PERG + ' I / late?', palavras: ['Am', 'I', 'late'], isca: ['Is'], fim: '?', traducao: 'Eu estou atrasado(a)?' },
+    { contexto: PERG + ' she / South African?', palavras: ['Is', 'she', 'South', 'African'], isca: ['Are'], fim: '?', traducao: 'Ela é sul-africana?' },
+    { contexto: PERG + ' we / in class 4?', palavras: ['Are', 'we', 'in', 'class', '4'], isca: ['Am'], fim: '?', traducao: 'Nós estamos na turma 4?' },
+    { contexto: PERG + ' pizza / Italian?', palavras: ['Is', 'pizza', 'Italian'], isca: ['Are'], fim: '?', traducao: 'A pizza é italiana?' },
+    { contexto: PERG + ' Pedro / from Portugal?', palavras: ['Is', 'Pedro', 'from', 'Portugal'], isca: ['Am'], fim: '?', traducao: 'O Pedro é de Portugal?' },
+    { contexto: RESP + ' "Is Elena Greek?" (sim)', palavras: ['Yes,', 'she', 'is'], isca: ['are'], fim: '.', traducao: 'Sim, ela é.' },
+    { contexto: RESP + ' "Are you Mexican?" (não)', palavras: ['No,', "I'm", 'not'], isca: ["isn't"], fim: '.', traducao: 'Não, eu não sou.' },
+    { contexto: RESP + ' "Are they from Slovenia?" (sim)', palavras: ['Yes,', 'they', 'are'], isca: ['is'], fim: '.', traducao: 'Sim, eles são.' },
+    { contexto: RESP + ' "Is he from Austria?" (não)', palavras: ['No,', 'he', "isn't"], isca: ["aren't"], fim: '.', traducao: 'Não, ele não é.' },
+    { contexto: RESP + ' "Are we in class 4?" (não)', palavras: ['No,', 'we', "aren't"], isca: ["isn't"], fim: '.', traducao: 'Não, nós não estamos.' },
+    { contexto: RESP + ' "Is pizza Italian?" (sim)', palavras: ['Yes,', 'it', 'is'], isca: ['am'], fim: '.', traducao: 'Sim, é.' },
+    { contexto: 'Responda sobre o Luka Dončić (esloveno): "Is he Austrian?" (1/2)', palavras: ['No,', 'he', "isn't"], isca: ["aren't"], fim: '.', traducao: 'Não, ele não é.' },
+    { contexto: 'Responda sobre o Luka Dončić (esloveno): "Is he Austrian?" (2/2)', palavras: ["He's", 'Slovenian'], isca: ['His'], fim: '.', traducao: 'Ele é esloveno.' },
+    { contexto: 'Responda sobre o Papa Francisco (argentino): "Is he Italian?" (1/2)', palavras: ['No,', 'he', "isn't"], isca: ["aren't"], fim: '.', traducao: 'Não, ele não é.' },
+    { contexto: 'Responda sobre o Papa Francisco (argentino): "Is he Italian?" (2/2)', palavras: ["He's", 'Argentinian'], isca: ['His'], fim: '.', traducao: 'Ele é argentino.' }
+  ]
+});
+</script>
+</body>
+</html>

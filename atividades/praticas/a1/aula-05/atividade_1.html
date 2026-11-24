@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 05 · Greetings around the world</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 05 · Escuta
+   Alinhado ao slide "Class 05: Greetings From Around the World" — Grammar Review (to be
+   afirmativo, negativo e pergunta com "from") e os cumprimentos (bow, handshake, air kiss).
+   Conteúdo NOVO: outras frases e outros países (fatos verdadeiros). Em cada questão de
+   cumprimento, só UM país das opções tem aquele costume. 24 questões. */
+const PAIS = { it: 'Italy', es: 'Spain', fr: 'France', pt: 'Portugal', jp: 'Japan', cn: 'China', kr: 'South Korea', 'in': 'India', de: 'Germany', at: 'Austria', ch: 'Switzerland',
+  pk: 'Pakistan', th: 'Thailand', 'gb-eng': 'England', us: 'The USA', ca: 'Canada', au: 'Australia', mx: 'Mexico', ar: 'Argentina', br: 'Brazil', ru: 'Russia', gr: 'Greece' };
+const op = (...cs) => cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' }));
+const CUMP = 'Escute o cumprimento e escolha o país';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 5, num: 1, tipo: 'imagem',
+  instrucao: 'Escute a frase e escolha o país',
+  itens: [
+    { audioTexto: "She's from Italy.", opcoes: op('it', 'es', 'fr', 'pt'), certa: 0 },
+    { audioTexto: "They aren't from Japan. They're from China.", opcoes: op('jp', 'cn', 'kr', 'in'), certa: 1 },
+    { audioTexto: 'Is he from Spain? Yes, he is.', opcoes: op('mx', 'ar', 'es', 'pt'), certa: 2 },
+    { audioTexto: "We aren't from Germany. We're from Switzerland.", opcoes: op('de', 'at', 'fr', 'ch'), certa: 3 },
+    { audioTexto: 'My parents are from India.', opcoes: op('in', 'pk', 'th', 'cn'), certa: 0 },
+    { audioTexto: "Is she from England? No, she isn't. She's from the USA.", opcoes: op('gb-eng', 'us', 'ca', 'au'), certa: 1 },
+    { audioTexto: "I'm not from France. I'm from Portugal.", opcoes: op('fr', 'es', 'pt', 'it'), certa: 2 },
+    { audioTexto: "Are you from Mexico? No, I'm not. I'm from Argentina.", opcoes: op('mx', 'es', 'pt', 'ar'), certa: 3 },
+    { audioTexto: "He's from Russia.", opcoes: op('ru', 'de', 'at', 'gr'), certa: 0 },
+    { audioTexto: 'Are they from Japan? Yes, they are.', opcoes: op('kr', 'jp', 'cn', 'th'), certa: 1 },
+    { audioTexto: "She isn't from Canada. She's from England.", opcoes: op('ca', 'us', 'gb-eng', 'au'), certa: 2 },
+    { audioTexto: "You're from Brazil.", opcoes: op('pt', 'ar', 'mx', 'br'), certa: 3 },
+    { instrucao: CUMP, audioTexto: 'In South Korea, people bow.', opcoes: op('kr', 'br', 'it', 'us'), certa: 0 },
+    { instrucao: CUMP, audioTexto: 'In Thailand, people bow with their hands together.', opcoes: op('de', 'th', 'ar', 'it'), certa: 1 },
+    { instrucao: CUMP, audioTexto: 'In the USA, people greet with a handshake.', opcoes: op('jp', 'kr', 'us', 'th'), certa: 2 },
+    { instrucao: CUMP, audioTexto: 'In Italy, the air kiss is double.', opcoes: op('jp', 'kr', 'th', 'it'), certa: 3 },
+    { instrucao: CUMP, audioTexto: 'In Russia, the air kiss is triple.', opcoes: op('ru', 'jp', 'kr', 'th'), certa: 0 },
+    { instrucao: CUMP, audioTexto: 'In Japan, people bow with their hands at the sides.', opcoes: op('us', 'jp', 'de', 'br'), certa: 1 },
+    { instrucao: CUMP, audioTexto: 'In Germany, the handshake is firm.', opcoes: op('th', 'kr', 'de', 'jp'), certa: 2 },
+    { instrucao: CUMP, audioTexto: 'In India, people bow with their hands together.', opcoes: op('us', 'de', 'br', 'in'), certa: 3 },
+    { instrucao: CUMP, audioTexto: 'In Brazil, people greet with an air kiss.', opcoes: op('br', 'jp', 'kr', 'th'), certa: 0 },
+    { instrucao: CUMP, audioTexto: 'In Portugal, the air kiss is double.', opcoes: op('jp', 'th', 'pt', 'kr'), certa: 2 },
+    { instrucao: CUMP, audioTexto: 'In China, the handshake is light.', opcoes: op('it', 'br', 'ar', 'cn'), certa: 3 },
+    { instrucao: CUMP, audioTexto: 'In Argentina, people greet with one air kiss.', opcoes: op('jp', 'ar', 'kr', 'th'), certa: 1 }
+  ]
+});
+</script>
+</body>
+</html>

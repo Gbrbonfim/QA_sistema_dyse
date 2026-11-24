@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 07 · What's in the bag?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 07 · Escuta + Vocabulário
+   Alinhado ao slide "Class 07: What's in my Travel Bag" — Vocabulary (objetos da bolsa de
+   viagem) e Grammar Point (a / an). As figuras são ícones (Material Symbols). Conteúdo NOVO:
+   outras frases. 24 questões: 12 palavras + 12 frases. */
+const IC = { camera: 'photo_camera', wallet: 'wallet', glasses: 'eyeglasses', pills: 'pill', phone: 'smartphone', charger: 'charger',
+  cash: 'payments', card: 'credit_card', passport: 'passport', laptop: 'laptop', snack: 'cookie', tea: 'emoji_food_beverage',
+  id: 'id_card', egg: 'egg', book: 'menu_book', spray: 'sanitizer' };
+const NOME = { camera: 'camera', wallet: 'wallet', glasses: 'glasses', pills: 'painkillers', phone: 'phone', charger: 'charger',
+  cash: 'cash', card: 'credit card', passport: 'passport', laptop: 'laptop', snack: 'snack', tea: 'tea bag',
+  id: 'ID card', egg: 'egg', book: 'English book', spray: 'sanitizing spray' };
+const op = (...cs) => cs.map(c => ({ label: NOME[c], icon: IC[c] }));
+const FRASE = 'Escute a frase e escolha o objeto';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 7, num: 1, tipo: 'imagem',
+  instrucao: 'Escute a palavra e escolha o objeto',
+  itens: [
+    { audioTexto: 'camera', opcoes: op('camera', 'phone', 'laptop', 'charger'), certa: 0 },
+    { audioTexto: 'wallet', opcoes: op('cash', 'wallet', 'card', 'passport'), certa: 1 },
+    { audioTexto: 'glasses', opcoes: op('camera', 'pills', 'glasses', 'snack'), certa: 2 },
+    { audioTexto: 'painkillers', opcoes: op('tea', 'snack', 'spray', 'pills'), certa: 3 },
+    { audioTexto: 'phone', opcoes: op('phone', 'laptop', 'camera', 'charger'), certa: 0 },
+    { audioTexto: 'charger', opcoes: op('laptop', 'charger', 'phone', 'card'), certa: 1 },
+    { audioTexto: 'cash', opcoes: op('card', 'wallet', 'cash', 'passport'), certa: 2 },
+    { audioTexto: 'credit card', opcoes: op('cash', 'id', 'wallet', 'card'), certa: 3 },
+    { audioTexto: 'passport', opcoes: op('passport', 'book', 'id', 'card'), certa: 0 },
+    { audioTexto: 'laptop', opcoes: op('phone', 'laptop', 'camera', 'book'), certa: 1 },
+    { audioTexto: 'snack', opcoes: op('tea', 'egg', 'snack', 'pills'), certa: 2 },
+    { audioTexto: 'tea bag', opcoes: op('snack', 'egg', 'spray', 'tea'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "It's a wallet.", opcoes: op('wallet', 'cash', 'card', 'id'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "It's an ID card.", opcoes: op('card', 'id', 'passport', 'book'), certa: 1 },
+    { instrucao: FRASE, audioTexto: 'I have a camera in my bag.', opcoes: op('phone', 'laptop', 'camera', 'glasses'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "Where's my passport?", opcoes: op('wallet', 'id', 'book', 'passport'), certa: 3 },
+    { instrucao: FRASE, audioTexto: 'Is it a charger? Yes, it is.', opcoes: op('charger', 'phone', 'laptop', 'camera'), certa: 0 },
+    { instrucao: 'Escute e escolha o que a frase diz que É', audioTexto: "It isn't a phone. It's a laptop.", opcoes: op('phone', 'laptop', 'camera', 'charger'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "It's an egg.", opcoes: op('snack', 'tea', 'egg', 'pills'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "It's an English book.", opcoes: op('passport', 'id', 'laptop', 'book'), certa: 3 },
+    { instrucao: FRASE, audioTexto: 'My painkillers are in my bag.', opcoes: op('pills', 'snack', 'spray', 'tea'), certa: 0 },
+    { instrucao: FRASE, audioTexto: 'Where are my glasses?', opcoes: op('camera', 'glasses', 'phone', 'egg'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "It's a sanitizing spray.", opcoes: op('pills', 'tea', 'spray', 'snack'), certa: 2 },
+    { instrucao: FRASE, audioTexto: 'Is it cash? Yes, it is.', opcoes: op('card', 'wallet', 'id', 'cash'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

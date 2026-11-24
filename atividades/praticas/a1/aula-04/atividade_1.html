@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 04 · Where are they from?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 04 · Escuta + Vocabulário
+   Alinhado ao slide "Class 04: Changing Nationalities?" — novas nacionalidades (Greek, Pakistani,
+   Austrian, Mexican, South African, Slovenian, Portuguese, Argentinian) e perguntas com to be +
+   short answers. Conteúdo NOVO: outras pessoas e famosos (fatos verdadeiros). 24 questões. */
+const PAIS = { gr: 'Greece', pk: 'Pakistan', at: 'Austria', mx: 'Mexico', za: 'South Africa', si: 'Slovenia', pt: 'Portugal', ar: 'Argentina',
+  de: 'Germany', es: 'Spain', 'in': 'India', it: 'Italy', br: 'Brazil', us: 'The USA', ch: 'Switzerland', fr: 'France', jp: 'Japan', cn: 'China', ca: 'Canada', au: 'Australia', 'gb-eng': 'England' };
+const op = (...cs) => cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' }));
+const DIALOGO = 'Escute a pergunta e a resposta e escolha o país da pessoa';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 4, num: 1, tipo: 'imagem',
+  instrucao: 'Escute a nacionalidade e escolha o país',
+  itens: [
+    { audioTexto: 'Greek', opcoes: op('gr', 'it', 'pt', 'es'), certa: 0 },
+    { audioTexto: 'Pakistani', opcoes: op('in', 'pk', 'za', 'gr'), certa: 1 },
+    { audioTexto: 'Austrian', opcoes: op('au', 'de', 'at', 'ch'), certa: 2 },
+    { audioTexto: 'Mexican', opcoes: op('es', 'ar', 'pt', 'mx'), certa: 3 },
+    { audioTexto: 'South African', opcoes: op('za', 'au', 'us', 'pk'), certa: 0 },
+    { audioTexto: 'Slovenian', opcoes: op('at', 'si', 'gr', 'de'), certa: 1 },
+    { audioTexto: 'Portuguese', opcoes: op('es', 'br', 'pt', 'it'), certa: 2 },
+    { audioTexto: 'Argentinian', opcoes: op('mx', 'es', 'br', 'ar'), certa: 3 },
+    { audioTexto: "He's Greek.", opcoes: op('gr', 'si', 'it', 'at'), certa: 0 },
+    { audioTexto: "She's Austrian.", opcoes: op('au', 'at', 'de', 'ch'), certa: 1 },
+    { audioTexto: "They're South African.", opcoes: op('au', 'us', 'za', 'pk'), certa: 2 },
+    { audioTexto: "We're Slovenian.", opcoes: op('gr', 'at', 'de', 'si'), certa: 3 },
+    { instrucao: DIALOGO, audioTexto: 'Is Elena Greek? Yes, she is.', opcoes: op('gr', 'it', 'es', 'si'), certa: 0 },
+    { instrucao: DIALOGO, audioTexto: 'Is Ali Indian? No, he isn\'t. He\'s Pakistani.', opcoes: op('in', 'pk', 'za', 'pt'), certa: 1 },
+    { instrucao: DIALOGO, audioTexto: 'Are you German? No, I\'m not. I\'m Austrian.', opcoes: op('de', 'ch', 'at', 'au'), certa: 2 },
+    { instrucao: DIALOGO, audioTexto: 'Is Carlos Spanish? No, he isn\'t. He\'s Mexican.', opcoes: op('es', 'ar', 'pt', 'mx'), certa: 3 },
+    { instrucao: DIALOGO, audioTexto: 'Are they Portuguese? Yes, they are.', opcoes: op('pt', 'br', 'es', 'it'), certa: 0 },
+    { instrucao: DIALOGO, audioTexto: 'Is Sofia Mexican? No, she isn\'t. She\'s Argentinian.', opcoes: op('mx', 'ar', 'es', 'pt'), certa: 1 },
+    { instrucao: DIALOGO, audioTexto: 'Is Thabo from Australia? No, he isn\'t. He\'s from South Africa.', opcoes: op('au', 'us', 'za', 'gb-eng'), certa: 2 },
+    { instrucao: DIALOGO, audioTexto: 'Are you from Austria? No, we aren\'t. We\'re from Slovenia.', opcoes: op('at', 'de', 'gr', 'si'), certa: 3 },
+    { instrucao: DIALOGO, audioTexto: 'Is Giannis Antetokounmpo Greek? Yes, he is.', opcoes: op('gr', 'it', 'us', 'si'), certa: 0 },
+    { instrucao: DIALOGO, audioTexto: 'Is Luka Dončić Austrian? No, he isn\'t. He\'s Slovenian.', opcoes: op('at', 'si', 'de', 'gr'), certa: 1 },
+    { instrucao: DIALOGO, audioTexto: 'Is Trevor Noah American? No, he isn\'t. He\'s South African.', opcoes: op('us', 'gb-eng', 'za', 'au'), certa: 2 },
+    { instrucao: DIALOGO, audioTexto: 'Is José Mourinho Spanish? No, he isn\'t. He\'s Portuguese.', opcoes: op('es', 'br', 'it', 'pt'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

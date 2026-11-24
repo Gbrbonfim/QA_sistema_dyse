@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 05 · Say it right: greetings</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 05 · Fala
+   Alinhado ao slide "Class 05: Greetings From Around the World" — Vocabulary (listen and repeat:
+   right, left, tongue, hands, kiss, eyes, air, forehead), cumprimentos e revisão do to be.
+   Conteúdo NOVO: outras frases. 20 questões: 8 palavras + 12 frases. */
+const PAL = 'Escute e grave a palavra';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 5, num: 4, tipo: 'fala',
+  instrucao: 'Escute e grave a frase inteira',
+  itens: [
+    { instrucao: PAL, frase: 'right', traducao: 'direita', aceita: { write: 'right', rite: 'right' } },
+    { instrucao: PAL, frase: 'left', traducao: 'esquerda' },
+    { instrucao: PAL, frase: 'tongue', traducao: 'língua', nota: 'Fala-se "tãng", sem o "e" no final.' },
+    { instrucao: PAL, frase: 'hands', traducao: 'mãos' },
+    { instrucao: PAL, frase: 'kiss', traducao: 'beijo' },
+    { instrucao: PAL, frase: 'eyes', traducao: 'olhos', nota: 'Fala-se "áiz".' },
+    { instrucao: PAL, frase: 'air', traducao: 'ar', nota: 'Fala-se "ér".' },
+    { instrucao: PAL, frase: 'forehead', traducao: 'testa', nota: 'Fala-se "FÓR-hed".' },
+    { frase: 'In Japan, people bow.', dica: 0, traducao: 'No Japão, as pessoas fazem reverência.' },
+    { frase: 'The handshake is common.', dica: 0, traducao: 'O aperto de mão é comum.' },
+    { frase: 'In Italy, the air kiss is double.', dica: 0, traducao: 'Na Itália, o beijo no ar é duplo.' },
+    { frase: 'In Russia, the air kiss is triple.', dica: 0, traducao: 'Na Rússia, o beijo no ar é triplo.' },
+    { frase: 'The bow is a symbol of respect.', dica: 0, traducao: 'A reverência é um símbolo de respeito.' },
+    { frase: "She isn't from England.", dica: 0, traducao: 'Ela não é da Inglaterra.' },
+    { frase: 'Is he from Spain?', dica: 0, traducao: 'Ele é da Espanha?' },
+    { frase: 'Yes, he is.', dica: 0, traducao: 'Sim, ele é.' },
+    { frase: "They aren't from Japan.", dica: 0, traducao: 'Eles não são do Japão.' },
+    { frase: "I'm not from France.", dica: 0, traducao: 'Eu não sou da França.' },
+    { frase: "We're from Germany.", dica: 0, traducao: 'Nós somos da Alemanha.' },
+    { frase: 'Are your parents from Portugal?', dica: 0, traducao: 'Seus pais são de Portugal?' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 05 · Verb to be: review</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 05 · Gramática
+   Alinhado ao slide "Class 05: Greetings From Around the World" — Grammar Point: Review (am,
+   is, are; negativa; pergunta) e o vocabulário dos cumprimentos. Conteúdo NOVO: outras frases.
+   24 questões: 10 de verbo + 6 de vocabulário + 8 de frase correta. */
+const AF = ['am', 'is', 'are'];
+const QU = ['Am', 'Is', 'Are'];
+const NE = ['am not', 'is not', 'are not'];
+const VOC = 'Complete com a palavra certa';
+const CERTA = 'Qual frase está correta?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 5, num: 5, tipo: 'escolha',
+  instrucao: 'Complete com o verbo to be',
+  itens: [
+    { frase: 'I ___ from Brazil.', opcoes: AF, certa: 0, traducao: 'Eu sou do Brasil.' },
+    { frase: 'She ___ from Italy.', opcoes: AF, certa: 1, traducao: 'Ela é da Itália.' },
+    { frase: 'My parents ___ from Portugal.', opcoes: AF, certa: 2, traducao: 'Meus pais são de Portugal.' },
+    { frase: '___ you from Spain?', opcoes: QU, certa: 2, traducao: 'Você é da Espanha?' },
+    { frase: '___ he from Russia?', opcoes: QU, certa: 1, traducao: 'Ele é da Rússia?' },
+    { frase: '___ I late?', opcoes: QU, certa: 0, traducao: 'Eu estou atrasado(a)?' },
+    { instrucao: 'Complete com a negativa', frase: 'They ___ from Japan.', opcoes: NE, certa: 2, traducao: 'Eles não são do Japão.' },
+    { instrucao: 'Complete com a negativa', frase: 'He ___ from France.', opcoes: NE, certa: 1, traducao: 'Ele não é da França.' },
+    { instrucao: 'Complete com a negativa', frase: 'I ___ from England.', opcoes: NE, certa: 0, traducao: 'Eu não sou da Inglaterra.' },
+    { instrucao: 'Complete com a negativa', frase: 'We ___ from Thailand.', opcoes: NE, certa: 2, traducao: 'Nós não somos da Tailândia.' },
+    { instrucao: VOC, frase: 'In Japan, people ___.', opcoes: ['kiss', 'bow', 'eyes'], certa: 1, traducao: 'No Japão, as pessoas fazem reverência.' },
+    { instrucao: VOC, frase: 'In Russia, the air kiss is ___.', opcoes: ['triple', 'double', 'light'], certa: 0, traducao: 'Na Rússia, o beijo no ar é triplo.' },
+    { instrucao: VOC, frase: 'In Tibet, people show their ___.', opcoes: ['forehead', 'hands', 'tongue'], certa: 2, traducao: 'No Tibete, as pessoas mostram a língua.' },
+    { instrucao: VOC, frase: 'In China, the handshake is ___.', opcoes: ['triple', 'light', 'double'], certa: 1, traducao: 'Na China, o aperto de mão é leve.' },
+    { instrucao: VOC, frase: 'The bow is a symbol of ___.', opcoes: ['respect', 'tongue', 'air'], certa: 0, traducao: 'A reverência é um símbolo de respeito.' },
+    { instrucao: VOC, frase: 'The Maori look in the eyes and press their ___.', opcoes: ['hands', 'kisses', 'foreheads'], certa: 2, traducao: 'Os maoris olham nos olhos e encostam a testa.' },
+    { instrucao: CERTA, opcoes: ['Is she India?', 'Is she from India?', 'She from India?'], certa: 1, traducao: 'Ela é da Índia?' },
+    { instrucao: CERTA, opcoes: ["They isn't from Japan.", "They not from Japan.", "They aren't from Japan."], certa: 2, traducao: 'Eles não são do Japão.' },
+    { instrucao: CERTA, opcoes: ['Am I from Brazil?', 'Are I from Brazil?', 'Is I from Brazil?'], certa: 0, traducao: 'Eu sou do Brasil?' },
+    { instrucao: CERTA, opcoes: ["We's from Germany.", "We're from Germany.", 'We is from Germany.'], certa: 1, traducao: 'Nós somos da Alemanha.' },
+    { instrucao: CERTA, opcoes: ["He aren't from France.", 'He not is from France.', "He isn't from France."], certa: 2, traducao: 'Ele não é da França.' },
+    { instrucao: CERTA, opcoes: ['Are you from Spain?', 'Is you from Spain?', 'Am you from Spain?'], certa: 0, traducao: 'Você é da Espanha?' },
+    { instrucao: CERTA, opcoes: ['My parents is from Italy.', 'My parents are from Italy.', 'My parents am from Italy.'], certa: 1, traducao: 'Meus pais são da Itália.' },
+    { instrucao: CERTA, opcoes: ['Are they the USA?', 'Is they from the USA?', 'Are they from the USA?'], certa: 2, traducao: 'Eles são dos Estados Unidos?' }
+  ]
+});
+</script>
+</body>
+</html>

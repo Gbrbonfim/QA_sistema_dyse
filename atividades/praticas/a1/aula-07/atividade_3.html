@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 07 · Where are my glasses?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 07 · Leitura
+   Alinhado ao slide "Class 07: What's in my Travel Bag" — Listening (pessoas falando das suas
+   bolsas) e Speaking ("In my bag I have a wallet, credit cards, a phone"). Conteúdo NOVO: Julia
+   e Paul conferem as bolsas antes de viajar. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Julia', 'Paul, is it your travel bag?'],
+  ['Paul', 'Yes, it is. I have a laptop, a phone and a charger.'],
+  ['Julia', 'Is your passport in the bag?'],
+  ['Paul', 'Yes, it is. And my wallet too.'],
+  ['Julia', 'Is the cash in your wallet?'],
+  ['Paul', 'Yes, it is. And my credit cards.'],
+  ['Julia', 'Where are your glasses?'],
+  ['Paul', "Oh no! My glasses aren't in the bag!"],
+  ['Julia', "It's OK! They're here, in my bag."],
+  ['Paul', "Thank you, Julia! And you? What's in your bag?"],
+  ['Julia', 'I have an English book, a snack and a tea bag.'],
+  ['Paul', 'A tea bag? Cool!'],
+  ['Julia', "Yes! I'm English!"]
+];
+const lado = q => q === 'Julia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 7, num: 3, tipo: 'escolha',
+  instrucao: 'Leia a conversa e escolha a próxima fala',
+  itens: [
+    prox(1, ['Yes, it is. I have a laptop, a phone and a charger.', 'Yes, it is. I have an laptop, a phone and a charger.', 'Thank you, Julia!'], 0, 'Sim, é. Eu tenho um notebook, um celular e um carregador.'),
+    prox(2, ['A tea bag? Cool!', 'Is your passport in the bag?', "Yes! I'm English!"], 1, 'O seu passaporte está na bolsa?'),
+    prox(3, ["It's OK! They're here, in my bag.", 'Is the cash in your wallet?', 'Yes, it is. And my wallet too.'], 2, 'Sim, está. E a minha carteira também.'),
+    prox(4, ['Is the cash in your wallet?', 'Is the cash in you wallet?', "Yes! I'm English!"], 0, 'O dinheiro está na sua carteira?'),
+    prox(5, ['A tea bag? Cool!', 'Yes, it is. And my credit cards.', 'Yes, they are.'], 1, 'Sim, está. E os meus cartões de crédito.'),
+    prox(6, ['Where is your glasses?', 'Paul, is it your travel bag?', 'Where are your glasses?'], 2, 'Cadê os seus óculos?'),
+    prox(7, ["Oh no! My glasses aren't in the bag!", "Oh no! My glasses isn't in the bag!", 'I have an English book.'], 0, 'Ah, não! Meus óculos não estão na bolsa!'),
+    prox(8, ["Yes, it is. And my wallet too.", "It's OK! They're here, in my bag.", 'Is your passport in the bag?'], 1, 'Tudo bem! Eles estão aqui, na minha bolsa.'),
+    prox(9, ['A tea bag? Cool!', "Yes! I'm English!", "Thank you, Julia! And you? What's in your bag?"], 2, 'Obrigado, Julia! E você? O que tem na sua bolsa?'),
+    prox(10, ['I have an English book, a snack and a tea bag.', 'I have a English book, a snack and a tea bag.', 'Is the cash in your wallet?'], 0, 'Eu tenho um livro de inglês, um lanche e um saquinho de chá.'),
+    prox(11, ['Where are your glasses?', 'A tea bag? Cool!', 'Paul, is it your travel bag?'], 1, 'Um saquinho de chá? Legal!'),
+    prox(12, ["Oh no! My glasses aren't in the bag!", 'Is your passport in the bag?', "Yes! I'm English!"], 2, 'Sim! Eu sou inglesa!'),
+    { instrucao: 'O que o Paul tem na bolsa?', frase: 'I have a laptop, a phone and a ___.', opcoes: ['camera', 'charger', 'snack'], certa: 1, traducao: 'Eu tenho um notebook, um celular e um carregador.' },
+    { instrucao: 'O passaporte do Paul está na bolsa?', frase: 'Yes, it ___.', opcoes: ['is', 'are', 'am'], certa: 0, traducao: 'Sim, está.' },
+    { instrucao: 'Onde está o dinheiro do Paul?', frase: 'The cash is in the ___.', opcoes: ['bag', 'phone', 'wallet'], certa: 2, traducao: 'O dinheiro está na carteira.' },
+    { instrucao: 'Os óculos estão na bolsa do Paul?', frase: "No, they ___.", opcoes: ["isn't", "aren't", "'m not"], certa: 1, traducao: 'Não, eles não estão.' },
+    { instrucao: 'Complete a fala da Julia sobre os óculos:', frase: "They're here, in ___ bag.", opcoes: ['my', 'you', 'an'], certa: 0, traducao: 'Eles estão aqui, na minha bolsa.' },
+    { instrucao: 'Complete a fala da Julia:', frase: 'I have ___ English book.', opcoes: ['a', 'an', 'two'], certa: 1, traducao: 'Eu tenho um livro de inglês.' },
+    { instrucao: 'O que mais a Julia tem na bolsa?', frase: 'A snack and a ___.', opcoes: ['camera', 'passport', 'tea bag'], certa: 2, traducao: 'Um lanche e um saquinho de chá.' },
+    { instrucao: 'Qual é a nacionalidade da Julia?', frase: "She's ___.", opcoes: ['English', 'American', 'Australian'], certa: 0, traducao: 'Ela é inglesa.' }
+  ]
+});
+</script>
+</body>
+</html>

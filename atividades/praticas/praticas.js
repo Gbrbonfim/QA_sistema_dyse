@@ -304,7 +304,10 @@
     main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Escute e escolha a imagem correta') + '</p>' +
       '<div class="px-imgs">' + item.opcoes.map((o, k) =>
         '<button type="button" class="px-img" id="pxImg' + k + '" onclick="DysePratica._img(' + k + ')">' +
-          '<span class="key">' + 'ABCDEFGH'[k] + '</span><span class="ph"><img src="' + esc(o.img) + '" alt=""></span><span class="lbl">' + esc(o.label) + '</span></button>').join('') + '</div>';
+          '<span class="key">' + 'ABCDEFGH'[k] + '</span><span class="ph">' +
+            // "icon": desenho do Material Symbols no lugar da foto (vocabulário de objetos).
+            (o.icon ? '<span class="msr px-ph-ic" aria-hidden="true">' + esc(o.icon) + '</span>' : '<img src="' + esc(o.img) + '" alt="">') +
+          '</span><span class="lbl">' + esc(o.label) + '</span></button>').join('') + '</div>';
     item.completa = item.audioTexto;
     on('ouvir', () => falar(item.audioTexto));
     on('ouvirLento', () => falar(item.audioTexto, 0.6));

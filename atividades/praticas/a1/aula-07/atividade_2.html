@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 07 · A or an?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 07 · Escrita
+   Alinhado ao slide "Class 07: What's in my Travel Bag" — Grammar Point (a antes de som de
+   consoante, an antes de som de vogal, só no singular) e Speaking and Writing ("In my bag I
+   have..."). Conteúdo NOVO: outras frases. A isca é o artigo errado (ou um verbo errado),
+   que não cabe em posição nenhuma. 20 questões. */
+const AR = 'Monte a frase com a / an:';
+const BAG = 'Monte a frase sobre a bolsa:';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 7, num: 2, tipo: 'montar',
+  instrucao: 'Clique nas palavras e monte a frase (uma palavra sobra)',
+  itens: [
+    { contexto: AR, palavras: ["It's", 'a', 'wallet'], isca: ['an'], fim: '.', traducao: 'É uma carteira.' },
+    { contexto: AR, palavras: ["It's", 'an', 'ID', 'card'], isca: ['a'], fim: '.', traducao: 'É uma carteira de identidade.' },
+    { contexto: AR, palavras: ["It's", 'an', 'English', 'book'], isca: ['a'], fim: '.', traducao: 'É um livro de inglês.' },
+    { contexto: AR, palavras: ["It's", 'a', 'laptop'], isca: ['an'], fim: '.', traducao: 'É um notebook.' },
+    { contexto: AR, palavras: ["It's", 'an', 'egg'], isca: ['a'], fim: '.', traducao: 'É um ovo.' },
+    { contexto: AR, palavras: ["It's", 'a', 'passport'], isca: ['an'], fim: '.', traducao: 'É um passaporte.' },
+    { contexto: AR, palavras: ["It's", 'an', 'email'], isca: ['a'], fim: '.', traducao: 'É um e-mail.' },
+    { contexto: AR, palavras: ["It's", 'a', 'hairband'], isca: ['an'], fim: '.', traducao: 'É uma faixa de cabelo.' },
+    { contexto: AR, palavras: ["It's", 'an', 'orange'], isca: ['a'], fim: '.', traducao: 'É uma laranja.' },
+    { contexto: AR, palavras: ['Is', 'it', 'a', 'credit', 'card'], isca: ['an'], fim: '?', traducao: 'É um cartão de crédito?' },
+    { contexto: AR, palavras: ['Is', 'it', 'an', 'ID', 'card'], isca: ['a'], fim: '?', traducao: 'É uma carteira de identidade?' },
+    { contexto: AR, palavras: ['It', "isn't", 'a', 'phone'], isca: ['an'], fim: '.', traducao: 'Não é um celular.' },
+    { contexto: AR, palavras: ['It', "isn't", 'an', 'egg'], isca: ['a'], fim: '.', traducao: 'Não é um ovo.' },
+    { contexto: AR, palavras: ["It's", 'an', 'American', 'passport'], isca: ['a'], fim: '.', traducao: 'É um passaporte americano.' },
+    { contexto: BAG, palavras: ['I', 'have', 'a', 'camera', 'in', 'my', 'bag'], isca: ['an'], fim: '.', traducao: 'Eu tenho uma câmera na minha bolsa.' },
+    { contexto: BAG, palavras: ['In', 'my', 'bag,', 'I', 'have', 'a', 'wallet'], isca: ['an'], fim: '.', traducao: 'Na minha bolsa, eu tenho uma carteira.' },
+    { contexto: BAG, palavras: ["Where's", 'my', 'passport'], isca: ['a'], fim: '?', traducao: 'Cadê o meu passaporte?' },
+    { contexto: BAG, palavras: ['Where', 'are', 'my', 'glasses'], isca: ['is'], fim: '?', traducao: 'Cadê os meus óculos?' },
+    { contexto: BAG, palavras: ['My', 'painkillers', 'are', 'in', 'my', 'bag'], isca: ['is'], fim: '.', traducao: 'Meus analgésicos estão na minha bolsa.' },
+    { contexto: BAG, palavras: ['I', 'have', 'an', 'English', 'book', 'and', 'a', 'laptop'], isca: ['are'], fim: '.', traducao: 'Eu tenho um livro de inglês e um notebook.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -564,6 +564,18 @@ body.dyse-tutorial-aberto{overflow:hidden;}
 
 /* ---------- ATIVIDADES (lista enxuta por aula) ---------- */
 .pr-aula{margin:22px 0 30px;}
+/* Cada aula abre e fecha; a concluída já vem recolhida. */
+.pr-aula > summary{list-style:none; cursor:pointer; -webkit-tap-highlight-color:transparent;}
+.pr-aula > summary::-webkit-details-marker{display:none;}
+.pr-aula:not([open]){margin-bottom:14px;}
+.pr-aula:not([open]) .pr-prog{margin-bottom:0;}
+.pr-count{display:inline-flex; align-items:center; gap:6px;}
+.pr-chev{display:inline-flex; color:var(--seal-soft); opacity:.6; transition:transform .2s;}
+.pr-chev .msr{font-size:22px; vertical-align:0;}
+.pr-aula[open] .pr-chev{transform:rotate(180deg);}
+.pr-done{display:inline-flex; align-items:center; gap:4px; color:var(--ok, #2E8B57); font-weight:700;}
+.pr-done .msr{font-size:18px; vertical-align:0; font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 20;}
+.pr-aula.feita .pr-prog i{background:var(--ok, #2E8B57);}
 .pr-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px;}
 .pr-head small{display:block; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--amaranth);}
 .pr-head h3{margin:2px 0 0; font-size:1.12rem; font-weight:700; color:var(--seal); line-height:1.25;}
@@ -1588,9 +1600,15 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '<div class="pr-list">' + g.itens.map(linha).join('') + '</div>').join('');
         const total = aula.atividades.length;
         const titulo = String(aula.titulo).split(' · ').pop();
-        return '<section class="pr-aula"><div class="pr-head"><div><small>' + escapeHtmlLocal(nivel.nome) + ' · Aula ' + String(aula.aula).padStart(2, '0') + '</small>' +
-          '<h3>' + escapeHtmlLocal(titulo) + '</h3></div><span class="pr-count">' + feitas + '/' + total + '</span></div>' +
-          '<div class="pr-prog"><i style="width:' + Math.round(feitas / total * 100) + '%"></i></div>' + grupos + '</section>';
+        // Aula com tudo concluído fica recolhida (o aluno chega direto na próxima);
+        // ele ainda pode abrir para ver os pontos.
+        const concluida = total > 0 && feitas >= total;
+        return '<details class="pr-aula' + (concluida ? ' feita' : '') + '"' + (concluida ? '' : ' open') + '><summary>' +
+          '<div class="pr-head"><div><small>' + escapeHtmlLocal(nivel.nome) + ' · Aula ' + String(aula.aula).padStart(2, '0') + '</small>' +
+          '<h3>' + escapeHtmlLocal(titulo) + '</h3></div><span class="pr-count">' +
+            (concluida ? '<span class="pr-done">' + MI('check_circle') + ' Concluída</span>' : feitas + '/' + total) +
+            '<span class="pr-chev">' + MI('expand_more') + '</span></span></div>' +
+          '<div class="pr-prog"><i style="width:' + Math.round(feitas / total * 100) + '%"></i></div></summary>' + grupos + '</details>';
       }).join('');
     }).join('');
     wrap.innerHTML = (retomar

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 06 · In the hotel</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 06 · Escuta + Vocabulário
+   Alinhado ao slide "Class 06: In a Hotel" — Vocabulary 1 e 3 (objetos do quarto e partes do
+   hotel). As figuras são ícones (Material Symbols). Conteúdo NOVO: outras frases.
+   24 questões: 12 palavras + 12 frases. */
+const IC = { single: 'single_bed', double: 'king_bed', shower: 'shower', ac: 'ac_unit', remote: 'settings_remote', tv: 'tv',
+  toiletries: 'soap', breakfast: 'breakfast_dining', reception: 'concierge', parking: 'local_parking', gym: 'fitness_center',
+  pool: 'pool', bar: 'local_bar', room: 'meeting_room' };
+const NOME = { single: 'single bed', double: 'double bed', shower: 'shower', ac: 'air conditioner', remote: 'remote control', tv: 'TV',
+  toiletries: 'toiletries', breakfast: 'breakfast', reception: 'reception', parking: 'parking', gym: 'gym', pool: 'swimming pool', bar: 'bar', room: 'room' };
+const op = (...cs) => cs.map(c => ({ label: NOME[c], icon: IC[c] }));
+const FRASE = 'Escute a frase e escolha a figura';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 6, num: 1, tipo: 'imagem',
+  instrucao: 'Escute a palavra e escolha a figura',
+  itens: [
+    { audioTexto: 'single bed', opcoes: op('single', 'shower', 'tv', 'gym'), certa: 0 },
+    { audioTexto: 'double bed', opcoes: op('pool', 'double', 'remote', 'bar'), certa: 1 },
+    { audioTexto: 'shower', opcoes: op('tv', 'parking', 'shower', 'breakfast'), certa: 2 },
+    { audioTexto: 'air conditioner', opcoes: op('remote', 'toiletries', 'gym', 'ac'), certa: 3 },
+    { audioTexto: 'remote control', opcoes: op('remote', 'tv', 'ac', 'shower'), certa: 0 },
+    { audioTexto: 'toiletries', opcoes: op('breakfast', 'toiletries', 'bar', 'single'), certa: 1 },
+    { audioTexto: 'breakfast', opcoes: op('gym', 'reception', 'breakfast', 'pool'), certa: 2 },
+    { audioTexto: 'reception', opcoes: op('parking', 'bar', 'room', 'reception'), certa: 3 },
+    { audioTexto: 'parking', opcoes: op('parking', 'pool', 'gym', 'tv'), certa: 0 },
+    { audioTexto: 'gym', opcoes: op('bar', 'gym', 'reception', 'shower'), certa: 1 },
+    { audioTexto: 'swimming pool', opcoes: op('shower', 'parking', 'pool', 'room'), certa: 2 },
+    { audioTexto: 'bar', opcoes: op('breakfast', 'gym', 'pool', 'bar'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "It's a single bed.", opcoes: op('single', 'tv', 'pool', 'remote'), certa: 0 },
+    { instrucao: 'Escute e escolha o que a frase diz que É', audioTexto: "It isn't a single bed. It's a double bed.", opcoes: op('single', 'double', 'shower', 'ac'), certa: 1 },
+    { instrucao: FRASE, audioTexto: 'Excuse me, where is the gym?', opcoes: op('bar', 'parking', 'gym', 'reception'), certa: 2 },
+    { instrucao: FRASE, audioTexto: 'Where is the swimming pool?', opcoes: op('shower', 'gym', 'bar', 'pool'), certa: 3 },
+    { instrucao: FRASE, audioTexto: 'The breakfast is very good.', opcoes: op('breakfast', 'toiletries', 'tv', 'room'), certa: 0 },
+    { instrucao: FRASE, audioTexto: 'Is the air conditioner OK?', opcoes: op('remote', 'ac', 'shower', 'tv'), certa: 1 },
+    { instrucao: FRASE, audioTexto: 'Where is the remote control?', opcoes: op('tv', 'ac', 'remote', 'single'), certa: 2 },
+    { instrucao: FRASE, audioTexto: 'Are the toiletries in the room? Yes, they are.', opcoes: op('breakfast', 'bar', 'room', 'toiletries'), certa: 3 },
+    { instrucao: FRASE, audioTexto: 'Good morning! Welcome to reception.', opcoes: op('reception', 'gym', 'bar', 'pool'), certa: 0 },
+    { instrucao: FRASE, audioTexto: 'Is the car in the parking? Yes, it is.', opcoes: op('gym', 'parking', 'pool', 'reception'), certa: 1 },
+    { instrucao: FRASE, audioTexto: 'Your room is number ten.', opcoes: op('bar', 'pool', 'room', 'gym'), certa: 2 },
+    { instrucao: FRASE, audioTexto: 'Excuse me, where is the TV?', opcoes: op('ac', 'pool', 'shower', 'tv'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

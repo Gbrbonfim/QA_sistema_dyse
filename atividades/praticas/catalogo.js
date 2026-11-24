@@ -42,6 +42,50 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Say it right: nationalities', tipo: 'Escute e grave', treina: 'Fala · Sílaba tônica', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Verb to be: negative', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 4,
+        titulo: 'Class 04 · Changing Nationalities?',
+        atividades: [
+          { num: 1, titulo: 'Where are they from?', tipo: 'Escute e escolha', treina: 'Escuta · Nacionalidades', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Is he Greek?', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Guess the nationality', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Ask and answer', tipo: 'Escute e grave', treina: 'Fala · Perguntas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Am, Is or Are?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
+        aula: 5,
+        titulo: 'Class 05 · Greetings From Around the World',
+        atividades: [
+          { num: 1, titulo: 'Greetings around the world', tipo: 'Escute e escolha', treina: 'Escuta · Cumprimentos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Negative and question', tipo: 'Monte a frase', treina: 'Escrita · To be', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Kiss or handshake?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Say it right: greetings', tipo: 'Escute e grave', treina: 'Fala · Vocabulário', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Verb to be: review', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
+        aula: 6,
+        titulo: 'Class 06 · In a Hotel',
+        atividades: [
+          { num: 1, titulo: 'In the hotel', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Check-in questions', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Hotel check-in', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Say it right: at the hotel', tipo: 'Escute e grave', treina: 'Fala · Vocabulário', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Numbers, spelling and questions', tipo: 'Make a Choice', treina: 'Vocabulário · Estruturas', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
+        aula: 7,
+        titulo: "Class 07 · What's in my Travel Bag",
+        atividades: [
+          { num: 1, titulo: "What's in the bag?", tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'A or an?', tipo: 'Monte a frase', treina: 'Escrita · Artigos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Where are my glasses?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'In my bag', tipo: 'Escute e grave', treina: 'Fala · Vocabulário', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'A, an or nothing?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

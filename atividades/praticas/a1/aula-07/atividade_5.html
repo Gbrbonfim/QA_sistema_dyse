@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 07 · A, an or nothing?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 07 · Gramática
+   Alinhado ao slide "Class 07: What's in my Travel Bag" — Grammar Point 2 e 3 (a / an: uma
+   coisa só; a antes de som de consoante, an antes de som de vogal; não se usa com plural).
+   Conteúdo NOVO e um pouco mais difícil: mistura palavras das aulas 1–6 ("an American passport",
+   "an air conditioner"). 24 questões: 14 a/an + 4 regra + 6 frase correta. */
+const A = ['a', 'an'];
+const REGRA = 'Escolha a regra certa';
+const CERTA = 'Qual frase está correta?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 7, num: 5, tipo: 'escolha',
+  instrucao: 'Complete com a ou an',
+  itens: [
+    { frase: "It's ___ wallet.", opcoes: A, certa: 0, traducao: 'É uma carteira.' },
+    { frase: "It's ___ ID card.", opcoes: A, certa: 1, traducao: 'É uma carteira de identidade.' },
+    { frase: "It's ___ English book.", opcoes: A, certa: 1, traducao: 'É um livro de inglês.' },
+    { frase: "It's ___ laptop.", opcoes: A, certa: 0, traducao: 'É um notebook.' },
+    { frase: "It's ___ apple.", opcoes: A, certa: 1, traducao: 'É uma maçã.' },
+    { frase: "It's ___ hairband.", opcoes: A, certa: 0, traducao: 'É uma faixa de cabelo.' },
+    { frase: "It's ___ email.", opcoes: A, certa: 1, traducao: 'É um e-mail.' },
+    { frase: "It's ___ painkiller.", opcoes: A, certa: 0, traducao: 'É um analgésico.' },
+    { frase: 'I have ___ air conditioner in my room.', opcoes: A, certa: 1, traducao: 'Eu tenho um ar-condicionado no meu quarto.' },
+    { frase: "It's ___ American passport.", opcoes: A, certa: 1, traducao: 'É um passaporte americano.' },
+    { frase: "It's ___ Brazilian passport.", opcoes: A, certa: 0, traducao: 'É um passaporte brasileiro.' },
+    { frase: "It's ___ Italian pizza.", opcoes: A, certa: 1, traducao: 'É uma pizza italiana.' },
+    { frase: "It's ___ single bed.", opcoes: A, certa: 0, traducao: 'É uma cama de solteiro.' },
+    { frase: "It isn't an orange. It's ___ egg.", opcoes: A, certa: 1, traducao: 'Não é uma laranja. É um ovo.' },
+    { instrucao: REGRA, frase: 'We use A / AN for ___.', opcoes: ['one thing', 'two things'], certa: 0, traducao: 'Usamos A / AN para uma coisa só.' },
+    { instrucao: REGRA, frase: 'We use AN before a ___ sound.', opcoes: ['consonant', 'vowel'], certa: 1, traducao: 'Usamos AN antes de som de vogal.' },
+    { instrucao: REGRA, frase: 'We use A before a ___ sound.', opcoes: ['consonant', 'vowel'], certa: 0, traducao: 'Usamos A antes de som de consoante.' },
+    { instrucao: REGRA, frase: 'I have ___ credit cards.', opcoes: ['a', 'an', 'two'], certa: 2, traducao: 'Eu tenho dois cartões de crédito. (Plural: sem a / an.)' },
+    { instrucao: CERTA, opcoes: ["It's an laptop.", "It's a laptop.", "It's laptop."], certa: 1, traducao: 'É um notebook.' },
+    { instrucao: CERTA, opcoes: ["It's an ID card.", "It's a ID card.", "It's ID card."], certa: 0, traducao: 'É uma carteira de identidade.' },
+    { instrucao: CERTA, opcoes: ['I have a painkillers.', 'I have an painkillers.', 'I have painkillers.'], certa: 2, traducao: 'Eu tenho analgésicos.' },
+    { instrucao: CERTA, opcoes: ['Is it a English book?', 'Is it an English book?', 'Is it English book?'], certa: 1, traducao: 'É um livro de inglês?' },
+    { instrucao: CERTA, opcoes: ['My glasses are in my bag.', 'My glasses is in my bag.', 'My glasses am in my bag.'], certa: 0, traducao: 'Meus óculos estão na minha bolsa.' },
+    { instrucao: CERTA, opcoes: ['In my bag, I have a wallet and a credit cards.', 'In my bag, I have an wallet and credit cards.', 'In my bag, I have a wallet and credit cards.'], certa: 2, traducao: 'Na minha bolsa, eu tenho uma carteira e cartões de crédito.' }
+  ]
+});
+</script>
+</body>
+</html>
