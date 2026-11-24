@@ -141,6 +141,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'What do you have?', tipo: 'Escute e grave', treina: 'Fala · Refeições', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Have or has?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 13,
+        titulo: 'Class 13 and 14 · Morning People',
+        atividades: [
+          { num: 1, parte: 'Class 13', titulo: 'Daily routine', tipo: 'Escute e escolha', treina: 'Escuta · Rotina', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 13', titulo: 'She gets up', tipo: 'Monte a frase', treina: 'Escrita · Present simple', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 13', titulo: 'Are you a morning person?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 13', titulo: 'My routine', tipo: 'Escute e grave', treina: 'Fala · Rotina', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 13', titulo: 'Present simple: he, she, it', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 14', titulo: 'What time is it?', tipo: 'Escute e escolha', treina: 'Escuta · Horas', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 14', titulo: 'Half past, quarter to', tipo: 'Monte a frase', treina: 'Escrita · Horas', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 14', titulo: 'What time do you get up?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 14', titulo: 'Say the time', tipo: 'Escute e grave', treina: 'Fala · Horas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 14', titulo: 'Telling the time', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

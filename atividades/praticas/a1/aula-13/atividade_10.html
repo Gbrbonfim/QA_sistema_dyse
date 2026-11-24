@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 14 · Telling the time</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 14 · Gramática
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 14) — Saying the Time (regras
+   o'clock / past / to / quarter / half), Practice 4 ("Write the number") e Practice 6 ("What
+   time do you...?", "at", "about"). Conteúdo NOVO e mais difícil: mistura com o present simple da
+   Class 13 (gets, starts, does). 24 questões. */
+const HORA = 'How do you say this time?';
+const PT = 'Past or to?';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 10, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: HORA, frase: '9:15 → ___', opcoes: ['a quarter to nine', 'a quarter past nine', 'nine and a quarter'], certa: 1, traducao: 'nove e quinze' },
+    { instrucao: HORA, frase: '4:30 → ___', opcoes: ['half past four', 'half to five', 'half past five'], certa: 0, traducao: 'quatro e meia' },
+    { instrucao: HORA, frase: '6:45 → ___', opcoes: ['a quarter past six', 'a quarter to six', 'a quarter to seven'], certa: 2, traducao: 'quinze para as sete' },
+    { instrucao: HORA, frase: '10:00 → ___', opcoes: ["ten o'clock", "ten o'clock past", "o'clock ten"], certa: 0, traducao: 'dez horas' },
+    { instrucao: HORA, frase: '2:50 → ___', opcoes: ['ten past two', 'ten to three', 'ten to two'], certa: 1, traducao: 'dez para as três' },
+    { instrucao: HORA, frase: '7:20 → ___', opcoes: ['twenty to seven', 'seven past twenty', 'twenty past seven'], certa: 2, traducao: 'sete e vinte' },
+    { instrucao: HORA, frase: '11:35 → ___', opcoes: ['twenty-five to twelve', 'twenty-five past eleven', 'thirty-five to eleven'], certa: 0, traducao: 'vinte e cinco para o meio-dia' },
+    { instrucao: HORA, frase: '1:05 → ___', opcoes: ['five to one', 'five past one', 'one past five'], certa: 1, traducao: 'uma e cinco' },
+    { instrucao: PT, frase: "It's twenty ___ five. (4:40)", opcoes: ['past', 'to'], certa: 1, completa: "It's twenty to five.", traducao: 'São vinte para as cinco.' },
+    { instrucao: PT, frase: "It's ten ___ eight. (8:10)", opcoes: ['past', 'to'], certa: 0, completa: "It's ten past eight.", traducao: 'São oito e dez.' },
+    { instrucao: PT, frase: "It's a quarter ___ twelve. (11:45)", opcoes: ['past', 'to'], certa: 1, completa: "It's a quarter to twelve.", traducao: 'São quinze para o meio-dia.' },
+    { instrucao: PT, frase: "It's half ___ nine. (9:30)", opcoes: ['past', 'to'], certa: 0, completa: "It's half past nine.", traducao: 'São nove e meia.' },
+    { frase: 'What time ___ you get up?', opcoes: ['do', 'are', 'is'], certa: 0, traducao: 'A que horas você levanta?' },
+    { frase: "I get up ___ seven o'clock.", opcoes: ['in', 'at', 'on'], certa: 1, traducao: 'Eu levanto às sete horas.' },
+    { frase: "Not exact: I get up at ___ seven o'clock.", opcoes: ['half', 'quarter', 'about'], certa: 2, completa: "I get up at about seven o'clock.", traducao: 'Eu levanto por volta das sete horas.' },
+    { frase: 'What time ___ it?', opcoes: ['is', 'are', 'do'], certa: 0, traducao: 'Que horas são?' },
+    { frase: "She ___ up at six o'clock.", opcoes: ['get', 'gets'], certa: 1, traducao: 'Ela levanta às seis horas.' },
+    { frase: 'They ___ to bed at half past eleven.', opcoes: ['go', 'goes'], certa: 0, traducao: 'Eles vão dormir às onze e meia.' },
+    { frase: 'My school ___ at a quarter to eight.', opcoes: ['start', 'starts'], certa: 1, traducao: 'Minha escola começa às quinze para as oito.' },
+    { frase: "He ___ his homework at five o'clock.", opcoes: ['does', 'do'], certa: 0, traducao: 'Ele faz a lição de casa às cinco horas.' },
+    { instrucao: CERTA, opcoes: ["It's quarter a past nine.", "It's a quarter past nine.", "It's a past quarter nine."], certa: 1, traducao: 'São nove e quinze.' },
+    { instrucao: CERTA, opcoes: ['What time do you get up?', 'What time you get up?', 'What time are you get up?'], certa: 0, traducao: 'A que horas você levanta?' },
+    { instrucao: CERTA, opcoes: ["I get up in seven o'clock.", "I get up on seven o'clock.", "I get up at seven o'clock."], certa: 2, traducao: 'Eu levanto às sete horas.' },
+    { instrucao: CERTA, opcoes: ["It's seven half past.", "It's half past seven.", "It's half to seven."], certa: 1, traducao: 'São sete e meia.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 14 · Half past, quarter to</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 14 · Escrita
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 14) — Saying the Time (regras
+   e "Say these times") e Practice ("What time do you get up? I get up at seven o'clock", "at
+   about"). Conteúdo NOVO: outros horários e rotinas. O contexto traz o horário em algarismos ou
+   a frase em português. A isca é past no lugar de to (ou o contrário), ou o verbo errado. 20 questões. */
+const H = h => 'Write the time: ' + h;
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: H('7:00'), palavras: ["It's", 'seven', "o'clock"], isca: ['past'], fim: '.', traducao: 'São sete horas.' },
+    { contexto: H('3:30'), palavras: ["It's", 'half', 'past', 'three'], isca: ['to'], fim: '.', traducao: 'São três e meia.' },
+    { contexto: H('11:15'), palavras: ["It's", 'a', 'quarter', 'past', 'eleven'], isca: ['to'], fim: '.', traducao: 'São onze e quinze.' },
+    { contexto: H('5:45'), palavras: ["It's", 'a', 'quarter', 'to', 'six'], isca: ['past'], fim: '.', traducao: 'São quinze para as seis.' },
+    { contexto: H('4:20'), palavras: ["It's", 'twenty', 'past', 'four'], isca: ['to'], fim: '.', traducao: 'São quatro e vinte.' },
+    { contexto: H('1:50'), palavras: ["It's", 'ten', 'to', 'two'], isca: ['past'], fim: '.', traducao: 'São dez para as duas.' },
+    { contexto: H('8:05'), palavras: ["It's", 'five', 'past', 'eight'], isca: ['to'], fim: '.', traducao: 'São oito e cinco.' },
+    { contexto: H('8:35'), palavras: ["It's", 'twenty-five', 'to', 'nine'], isca: ['past'], fim: '.', traducao: 'São vinte e cinco para as nove.' },
+    { contexto: M('Que horas são?'), palavras: ['What', 'time', 'is', 'it'], isca: ['are'], fim: '?', traducao: 'Que horas são?' },
+    { contexto: M('A que horas você levanta?'), palavras: ['What', 'time', 'do', 'you', 'get', 'up'], isca: ['are'], fim: '?', traducao: 'A que horas você levanta?' },
+    { contexto: M('Eu levanto às sete horas.'), palavras: ['I', 'get', 'up', 'at', 'seven', "o'clock"], isca: ['in'], fim: '.', traducao: 'Eu levanto às sete horas.' },
+    { contexto: M('Ela vai para o trabalho às oito e meia.'), palavras: ['She', 'goes', 'to', 'work', 'at', 'half', 'past', 'eight'], isca: ['go'], fim: '.', traducao: 'Ela vai para o trabalho às oito e meia.' },
+    { contexto: M('Ele almoça à uma hora.'), palavras: ['He', 'has', 'lunch', 'at', 'one', "o'clock"], isca: ['have'], fim: '.', traducao: 'Ele almoça à uma hora.' },
+    { contexto: M('Eu levanto por volta das seis horas.'), palavras: ['I', 'get', 'up', 'at', 'about', 'six', "o'clock"], isca: ['gets'], fim: '.', traducao: 'Eu levanto por volta das seis horas.' },
+    { contexto: M('Minha escola começa às quinze para as oito.'), palavras: ['My', 'school', 'starts', 'at', 'a', 'quarter', 'to', 'eight'], isca: ['past'], fim: '.', traducao: 'Minha escola começa às quinze para as oito.' },
+    { contexto: M('Nós jantamos às oito e quinze.'), palavras: ['We', 'have', 'dinner', 'at', 'a', 'quarter', 'past', 'eight'], isca: ['to'], fim: '.', traducao: 'Nós jantamos às oito e quinze.' },
+    { contexto: M('Eles vão dormir às onze horas.'), palavras: ['They', 'go', 'to', 'bed', 'at', 'eleven', "o'clock"], isca: ['goes'], fim: '.', traducao: 'Eles vão dormir às onze horas.' },
+    { contexto: M('Você está atrasado. São dez e sete.'), palavras: ['You', 'are', 'late.', "It's", 'seven', 'past', 'ten'], isca: ['to'], fim: '.', traducao: 'Você está atrasado. São dez e sete.' },
+    { contexto: M('Eu faço uma pausa às quinze para as três.'), palavras: ['I', 'have', 'a', 'break', 'at', 'a', 'quarter', 'to', 'three'], isca: ['past'], fim: '.', traducao: 'Eu faço uma pausa às quinze para as três.' },
+    { contexto: M('Eu levanto às sete. E você?'), palavras: ['I', 'get', 'up', 'at', 'seven.', 'And', 'you'], isca: ['your'], fim: '?', traducao: 'Eu levanto às sete. E você?' }
+  ]
+});
+</script>
+</body>
+</html>

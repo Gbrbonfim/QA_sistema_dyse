@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 13 · She gets up</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 13 · Escrita
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 13) — Grammar Point (present
+   simple afirmativo; he / she / it: +s, +es, +ies; have → has) e exercício 6. Conteúdo NOVO:
+   outras frases de rotina. O contexto traz a frase em português. A isca é o verbo na forma
+   errada (sem s, com s, ou com a grafia errada). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu levanto de manhã.'), palavras: ['I', 'get', 'up', 'in', 'the', 'morning'], isca: ['gets'], fim: '.', traducao: 'Eu levanto de manhã.' },
+    { contexto: M('Ela levanta de manhã.'), palavras: ['She', 'gets', 'up', 'in', 'the', 'morning'], isca: ['get'], fim: '.', traducao: 'Ela levanta de manhã.' },
+    { contexto: M('Ele lava o rosto.'), palavras: ['He', 'washes', 'his', 'face'], isca: ['washs'], fim: '.', traducao: 'Ele lava o rosto.' },
+    { contexto: M('Ela estuda à noite.'), palavras: ['She', 'studies', 'in', 'the', 'evening'], isca: ['studys'], fim: '.', traducao: 'Ela estuda à noite.' },
+    { contexto: M('Minha mãe faz o jantar todo dia.'), palavras: ['My', 'mom', 'makes', 'dinner', 'every', 'day'], isca: ['make'], fim: '.', traducao: 'Minha mãe faz o jantar todo dia.' },
+    { contexto: M('Eles vão à academia na sexta.'), palavras: ['They', 'go', 'to', 'the', 'gym', 'on', 'Friday'], isca: ['goes'], fim: '.', traducao: 'Eles vão à academia na sexta.' },
+    { contexto: M('Ele vai para a escola de manhã.'), palavras: ['He', 'goes', 'to', 'school', 'in', 'the', 'morning'], isca: ['gos'], fim: '.', traducao: 'Ele vai para a escola de manhã.' },
+    { contexto: M('A Annie faz a lição de casa depois da escola.'), palavras: ['Annie', 'does', 'her', 'homework', 'after', 'school'], isca: ['dos'], fim: '.', traducao: 'A Annie faz a lição de casa depois da escola.' },
+    { contexto: M('Nós almoçamos no trabalho.'), palavras: ['We', 'have', 'lunch', 'at', 'work'], isca: ['has'], fim: '.', traducao: 'Nós almoçamos no trabalho.' },
+    { contexto: M('Meu pai toma banho de manhã.'), palavras: ['My', 'dad', 'has', 'a', 'shower', 'in', 'the', 'morning'], isca: ['have'], fim: '.', traducao: 'Meu pai toma banho de manhã.' },
+    { contexto: M('A Sarah começa a trabalhar na segunda.'), palavras: ['Sarah', 'starts', 'work', 'on', 'Monday'], isca: ['start'], fim: '.', traducao: 'A Sarah começa a trabalhar na segunda.' },
+    { contexto: M('Meu irmão joga videogame à tarde.'), palavras: ['My', 'brother', 'plays', 'video', 'games', 'in', 'the', 'afternoon'], isca: ['plaies'], fim: '.', traducao: 'Meu irmão joga videogame à tarde.' },
+    { contexto: M('Ela relaxa no domingo.'), palavras: ['She', 'relaxes', 'on', 'Sunday'], isca: ['relaxs'], fim: '.', traducao: 'Ela relaxa no domingo.' },
+    { contexto: M('Ele termina o trabalho à noite.'), palavras: ['He', 'finishes', 'work', 'in', 'the', 'evening'], isca: ['finishs'], fim: '.', traducao: 'Ele termina o trabalho à noite.' },
+    { contexto: M('O bebê vai para a cama à noite.'), palavras: ['The', 'baby', 'goes', 'to', 'bed', 'in', 'the', 'evening'], isca: ['go'], fim: '.', traducao: 'O bebê vai para a cama à noite.' },
+    { contexto: M('Você se veste em um minuto.'), palavras: ['You', 'get', 'dressed', 'in', 'a', 'minute'], isca: ['gets'], fim: '.', traducao: 'Você se veste em um minuto.' },
+    { contexto: M('Meus pais fazem as tarefas de casa no fim de semana.'), palavras: ['My', 'parents', 'do', 'housework', 'at', 'the', 'weekend'], isca: ['does'], fim: '.', traducao: 'Meus pais fazem as tarefas de casa no fim de semana.' },
+    { contexto: M('O app me ajuda com a lição de casa.'), palavras: ['The', 'app', 'helps', 'me', 'with', 'my', 'homework'], isca: ['help'], fim: '.', traducao: 'O app me ajuda com a lição de casa.' },
+    { contexto: M('A Julia e eu fazemos uma pausa para um café.'), palavras: ['Julia', 'and', 'I', 'have', 'a', 'break', 'for', 'a', 'coffee'], isca: ['has'], fim: '.', traducao: 'A Julia e eu fazemos uma pausa para um café.' },
+    { contexto: M('Ela levanta, toma banho e vai trabalhar.'), palavras: ['She', 'gets', 'up,', 'has', 'a', 'shower', 'and', 'goes', 'to', 'work'], isca: ['get'], fim: '.', traducao: 'Ela levanta, toma banho e vai trabalhar.' }
+  ]
+});
+</script>
+</body>
+</html>

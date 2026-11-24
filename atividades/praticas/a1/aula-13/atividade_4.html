@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 13 · My routine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 13 · Fala
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 13) — Vocabulary (listen and
+   repeat), Talking Point ("Say the activities in the order you do them") e Grammar Point (o s
+   final: gets /s/, goes /z/, washes /iz/). Conteúdo NOVO: outras frases. 20 questões. */
+const PAL = 'Listen and record the words';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'get up', traducao: 'levantar' },
+    { instrucao: PAL, frase: 'get dressed', traducao: 'se vestir' },
+    { instrucao: PAL, frase: 'have a shower', traducao: 'tomar banho' },
+    { instrucao: PAL, frase: 'go to the gym', traducao: 'ir à academia' },
+    { instrucao: PAL, frase: 'do housework', traducao: 'fazer as tarefas de casa' },
+    { instrucao: PAL, frase: 'make dinner', traducao: 'fazer o jantar' },
+    { instrucao: PAL, frase: 'go to bed', traducao: 'ir para a cama' },
+    { instrucao: PAL, frase: 'washes', traducao: 'lava', nota: 'Depois de sh, o -es soa "iz": WASH-iz.' },
+    { instrucao: PAL, frase: 'studies', traducao: 'estuda', nota: 'Soa como "STÂ-diz".' },
+    { instrucao: PAL, frase: 'goes', traducao: 'vai', nota: 'Soa como "GOUZ".' },
+    { frase: 'I get up and have breakfast.', dica: 0, traducao: 'Eu levanto e tomo café da manhã.' },
+    { frase: 'She gets up and has a shower.', dica: 0, traducao: 'Ela levanta e toma banho.', nota: 'Não esqueça o s: gets, has.' },
+    { frase: 'He washes his face.', dica: 0, traducao: 'Ele lava o rosto.' },
+    { frase: 'My mom makes dinner every day.', dica: 0, traducao: 'Minha mãe faz o jantar todo dia.' },
+    { frase: 'They go to the gym on Friday.', dica: 0, traducao: 'Eles vão à academia na sexta.' },
+    { frase: 'He goes to school in the morning.', dica: 0, traducao: 'Ele vai para a escola de manhã.' },
+    { frase: 'She studies in the evening.', dica: 0, traducao: 'Ela estuda à noite.' },
+    { frase: 'We do housework at the weekend.', dica: 0, traducao: 'Nós fazemos as tarefas de casa no fim de semana.' },
+    { frase: 'My brother does his homework after school.', dica: 0, traducao: 'Meu irmão faz a lição de casa depois da escola.' },
+    { frase: 'She gets dressed, has breakfast and goes to work.', dica: 0, traducao: 'Ela se veste, toma café da manhã e vai trabalhar.' }
+  ]
+});
+</script>
+</body>
+</html>

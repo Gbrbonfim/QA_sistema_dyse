@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 13 · Daily routine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 13 · Escuta
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 13) — Vocabulary: Daily
+   Routine (get up, have a shower, get dressed, go to the gym...) e Grammar Point (present simple
+   com he / she: gets, washes, does). Conteúdo NOVO: outras frases, sem horários (horas são da
+   Class 14). As figuras são ícones. 24 questões: 12 expressões + 12 frases. */
+const IC = { 'get up': 'alarm', 'have a shower': 'shower', 'get dressed': 'checkroom', 'have breakfast': 'egg_alt',
+  'go to school': 'school', 'start work': 'work', 'have lunch': 'lunch_dining', 'have a break': 'coffee', 'go home': 'home',
+  'go to the gym': 'fitness_center', 'do homework': 'edit_note', 'do housework': 'cleaning_services', 'make dinner': 'skillet',
+  'have dinner': 'dinner_dining', 'wash (my) face': 'face', 'go to bed': 'bed' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const FRASE = 'Listen to the sentence and choose the activity';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the activity',
+  itens: [
+    { audioTexto: 'get up', opcoes: op('get up', 'go to bed', 'get dressed', 'go home'), certa: 0 },
+    { audioTexto: 'have a shower', opcoes: op('have a break', 'have a shower', 'have lunch', 'do housework'), certa: 1 },
+    { audioTexto: 'get dressed', opcoes: op('get up', 'go to the gym', 'get dressed', 'wash (my) face'), certa: 2 },
+    { audioTexto: 'go to the gym', opcoes: op('go home', 'go to school', 'go to bed', 'go to the gym'), certa: 3 },
+    { audioTexto: 'do homework', opcoes: op('do homework', 'do housework', 'make dinner', 'start work'), certa: 0 },
+    { audioTexto: 'do housework', opcoes: op('do homework', 'do housework', 'have a break', 'go home'), certa: 1 },
+    { audioTexto: 'make dinner', opcoes: op('have dinner', 'have lunch', 'make dinner', 'have breakfast'), certa: 2 },
+    { audioTexto: 'have a break', opcoes: op('have a shower', 'have dinner', 'go to bed', 'have a break'), certa: 3 },
+    { audioTexto: 'start work', opcoes: op('start work', 'go home', 'do homework', 'go to school'), certa: 0 },
+    { audioTexto: 'go to bed', opcoes: op('get up', 'go to bed', 'go home', 'have dinner'), certa: 1 },
+    { audioTexto: 'wash my face', opcoes: op('have a shower', 'get dressed', 'wash (my) face', 'do housework'), certa: 2 },
+    { audioTexto: 'go home', opcoes: op('go to school', 'start work', 'go to the gym', 'go home'), certa: 3 },
+    { instrucao: FRASE, audioTexto: 'He washes his face.', opcoes: op('wash (my) face', 'have a shower', 'get dressed', 'get up'), certa: 0 },
+    { instrucao: FRASE, audioTexto: 'She has a shower in the morning.', opcoes: op('have a break', 'have a shower', 'have breakfast', 'go to bed'), certa: 1 },
+    { instrucao: FRASE, audioTexto: 'My dad goes to the gym on Monday.', opcoes: op('go home', 'start work', 'go to the gym', 'go to school'), certa: 2 },
+    { instrucao: FRASE, audioTexto: 'Sophia makes dinner for her family.', opcoes: op('have dinner', 'do housework', 'have lunch', 'make dinner'), certa: 3 },
+    { instrucao: FRASE, audioTexto: 'He does his homework in the evening.', opcoes: op('do homework', 'do housework', 'go to bed', 'make dinner'), certa: 0 },
+    { instrucao: FRASE, audioTexto: 'My mom starts work in the morning.', opcoes: op('go to school', 'start work', 'get up', 'have a break'), certa: 1 },
+    { instrucao: FRASE, audioTexto: 'The children go to school in the morning.', opcoes: op('go home', 'go to the gym', 'go to school', 'start work'), certa: 2 },
+    { instrucao: FRASE, audioTexto: 'She goes to bed in the evening.', opcoes: op('go home', 'get up', 'have dinner', 'go to bed'), certa: 3 },
+    { instrucao: FRASE, audioTexto: 'We do housework at the weekend.', opcoes: op('do housework', 'do homework', 'make dinner', 'have a break'), certa: 0 },
+    { instrucao: FRASE, audioTexto: 'He gets dressed in a minute.', opcoes: op('get up', 'get dressed', 'have a shower', 'wash (my) face'), certa: 1 },
+    { instrucao: FRASE, audioTexto: 'They have a break for a coffee.', opcoes: op('have lunch', 'have breakfast', 'have a break', 'have dinner'), certa: 2 },
+    { instrucao: FRASE, audioTexto: 'Julia goes home after work.', opcoes: op('go to school', 'go to bed', 'start work', 'go home'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

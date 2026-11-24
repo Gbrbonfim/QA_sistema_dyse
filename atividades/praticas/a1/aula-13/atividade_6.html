@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 14 · What time is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 14 · Escuta
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 14) — Vocabulary: Saying the
+   Time (o'clock, a quarter past, half past, a quarter to, minutos + past / to) e Practice
+   ("What time do you get up?", "about"). Conteúdo NOVO: outros horários, com as armadilhas
+   past x to e 15 x 45. 24 questões: 16 horas + 8 frases de rotina. */
+const op = (...ls) => ls.map(l => ({ label: l, icon: 'schedule' }));
+const ROT = 'Listen to the sentence and choose the time';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose the time',
+  itens: [
+    { audioTexto: "It's seven o'clock.", opcoes: op('7:00', '11:00', '7:30', '6:00'), certa: 0 },
+    { audioTexto: "It's half past three.", opcoes: op('3:00', '3:30', '2:30', '3:15'), certa: 1 },
+    { audioTexto: "It's a quarter past eleven.", opcoes: op('11:45', '10:15', '11:15', '11:30'), certa: 2 },
+    { audioTexto: "It's a quarter to six.", opcoes: op('6:15', '6:45', '5:15', '5:45'), certa: 3 },
+    { audioTexto: "It's half past ten.", opcoes: op('10:30', '9:30', '10:15', '11:30'), certa: 0 },
+    { audioTexto: "It's nine o'clock.", opcoes: op('5:00', '9:00', '9:30', '10:00'), certa: 1 },
+    { audioTexto: "It's twenty past four.", opcoes: op('4:40', '8:20', '4:20', '3:40'), certa: 2 },
+    { audioTexto: "It's ten to two.", opcoes: op('2:10', '10:02', '1:10', '1:50'), certa: 3 },
+    { audioTexto: "It's five past eight.", opcoes: op('8:05', '5:08', '8:55', '7:55'), certa: 0 },
+    { audioTexto: "It's twenty-five to nine.", opcoes: op('9:25', '8:35', '8:25', '9:35'), certa: 1 },
+    { audioTexto: "It's a quarter past two.", opcoes: op('2:45', '1:45', '2:15', '3:15'), certa: 2 },
+    { audioTexto: "It's half past twelve.", opcoes: op('12:15', '11:30', '6:00', '12:30'), certa: 3 },
+    { audioTexto: "It's eleven o'clock.", opcoes: op('11:00', '7:00', '12:00', '11:30'), certa: 0 },
+    { audioTexto: "It's ten past seven.", opcoes: op('7:50', '7:10', '10:07', '6:50'), certa: 1 },
+    { audioTexto: "It's a quarter to one.", opcoes: op('1:15', '12:15', '12:45', '1:45'), certa: 2 },
+    { audioTexto: "It's twenty to five.", opcoes: op('5:20', '4:20', '5:40', '4:40'), certa: 3 },
+    { instrucao: ROT, audioTexto: 'I get up at half past six.', opcoes: op('6:30', '7:30', '6:15', '5:30'), certa: 0 },
+    { instrucao: ROT, audioTexto: "She has lunch at one o'clock.", opcoes: op('12:00', '1:00', '1:30', '11:00'), certa: 1 },
+    { instrucao: ROT, audioTexto: 'He goes to the gym at a quarter past five.', opcoes: op('5:45', '4:15', '5:15', '5:50'), certa: 2 },
+    { instrucao: ROT, audioTexto: 'My school starts at ten to eight.', opcoes: op('8:10', '7:10', '8:50', '7:50'), certa: 3 },
+    { instrucao: ROT, audioTexto: "We have dinner at about eight o'clock.", opcoes: op('8:00', '8:30', '6:00', '7:00'), certa: 0 },
+    { instrucao: ROT, audioTexto: 'They go to bed at half past eleven.', opcoes: op('11:15', '11:30', '10:30', '12:30'), certa: 1 },
+    { instrucao: ROT, audioTexto: "What time is it? It's twenty-five past three.", opcoes: op('3:35', '2:25', '3:25', '5:25'), certa: 2 },
+    { instrucao: ROT, audioTexto: 'My dad starts work at a quarter to nine.', opcoes: op('9:15', '9:45', '8:15', '8:45'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

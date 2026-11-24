@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 13 · Present simple: he, she, it</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 13 · Gramática
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 13) — Grammar Point (regras
+   da 3ª pessoa: +s; +es depois de s, sh, ch, o, x; consoante + y → ies; have → has) e
+   exercício 6. Conteúdo NOVO e mais difícil: verbos da regra que não estavam nas frases do
+   slide (watch, fly, copy, relax, finish) e vogal + y (play → plays). 24 questões. */
+const HE = 'Choose the verb for he / she / it';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: HE, frase: 'study → she ___', opcoes: ['studys', 'studies', 'studyes'], certa: 1, traducao: 'estudar → ela estuda' },
+    { instrucao: HE, frase: 'watch → he ___', opcoes: ['watches', 'watchs', 'watchies'], certa: 0, traducao: 'assistir → ele assiste' },
+    { instrucao: HE, frase: 'play → she ___', opcoes: ['plaies', 'playes', 'plays'], certa: 2, traducao: 'jogar → ela joga (vogal + y: só +s)' },
+    { instrucao: HE, frase: 'go → he ___', opcoes: ['gos', 'goes', 'goies'], certa: 1, traducao: 'ir → ele vai' },
+    { instrucao: HE, frase: 'do → she ___', opcoes: ['does', 'dos', 'doies'], certa: 0, traducao: 'fazer → ela faz' },
+    { instrucao: HE, frase: 'have → he ___', opcoes: ['haves', 'have', 'has'], certa: 2, traducao: 'ter → ele tem' },
+    { instrucao: HE, frase: 'fly → it ___', opcoes: ['flys', 'flies', 'flyes'], certa: 1, traducao: 'voar → ele (o avião) voa' },
+    { instrucao: HE, frase: 'relax → she ___', opcoes: ['relaxes', 'relaxs', 'relaxies'], certa: 0, traducao: 'relaxar → ela relaxa' },
+    { instrucao: HE, frase: 'finish → he ___', opcoes: ['finishs', 'finishies', 'finishes'], certa: 2, traducao: 'terminar → ele termina' },
+    { instrucao: HE, frase: 'copy → she ___', opcoes: ['copys', 'copies', 'copyes'], certa: 1, traducao: 'copiar → ela copia' },
+    { frase: 'Annie ___ to school in the morning.', opcoes: ['go', 'goes'], certa: 1, traducao: 'A Annie vai para a escola de manhã.' },
+    { frase: 'Josh and Paul ___ to the same gym.', opcoes: ['go', 'goes'], certa: 0, traducao: 'O Josh e o Paul vão à mesma academia.' },
+    { frase: 'My children ___ breakfast at school.', opcoes: ['has', 'have'], certa: 1, traducao: 'Meus filhos tomam café da manhã na escola.' },
+    { frase: 'Sophia ___ pasta for dinner. She is a good cook.', opcoes: ['makes', 'make'], certa: 0, traducao: 'A Sophia faz macarrão no jantar. Ela cozinha bem.' },
+    { frase: 'My dad ___ his face before breakfast.', opcoes: ['wash', 'washs', 'washes'], certa: 2, traducao: 'Meu pai lava o rosto antes do café da manhã.' },
+    { frase: 'John and Sally ___ their homework in the evening.', opcoes: ['do', 'does'], certa: 0, traducao: 'O John e a Sally fazem a lição de casa à noite.' },
+    { frase: 'My school ___ in the morning.', opcoes: ['start', 'starts'], certa: 1, traducao: 'Minha escola começa de manhã.' },
+    { frase: 'Mark ___ dressed in a minute.', opcoes: ['gets', 'get', 'getes'], certa: 0, traducao: 'O Mark se veste em um minuto.' },
+    { frase: 'I ___ a shower in the morning.', opcoes: ['has', 'have'], certa: 1, traducao: 'Eu tomo banho de manhã.' },
+    { frase: 'My sister ___ English on Monday.', opcoes: ['studys', 'study', 'studies'], certa: 2, traducao: 'Minha irmã estuda inglês na segunda.' },
+    { frase: 'It ___ me with my homework.', opcoes: ['helps', 'help', 'helpes'], certa: 0, traducao: 'Isso me ajuda com a lição de casa.' },
+    { instrucao: CERTA, opcoes: ['He get up and go to work.', 'He gets up and goes to work.', 'He gets up and go to work.'], certa: 1, traducao: 'Ele levanta e vai trabalhar.' },
+    { instrucao: CERTA, opcoes: ['She does housework on Saturday.', 'She do housework on Saturday.', 'She dos housework on Saturday.'], certa: 0, traducao: 'Ela faz as tarefas de casa no sábado.' },
+    { instrucao: CERTA, opcoes: ['My parents makes dinner every day.', 'My parents has dinner at home.', 'My parents have dinner at home.'], certa: 2, traducao: 'Meus pais jantam em casa.' }
+  ]
+});
+</script>
+</body>
+</html>

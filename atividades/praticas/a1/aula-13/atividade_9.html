@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 14 · Say the time</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 14 · Fala
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 14) — Saying the Time
+   ("Say these times", "What time is it?") e Practice 6 (perguntar e responder horários da
+   rotina). Conteúdo NOVO: outros horários. O motor converte "7:30" do reconhecimento para "half
+   past seven" quando a frase usa esse jeito. 20 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 9, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { frase: "It's seven o'clock.", dica: 0, traducao: 'São sete horas.' },
+    { frase: "It's half past three.", dica: 0, traducao: 'São três e meia.' },
+    { frase: "It's a quarter past eleven.", dica: 0, traducao: 'São onze e quinze.' },
+    { frase: "It's a quarter to six.", dica: 0, traducao: 'São quinze para as seis.', nota: 'To aponta para a hora seguinte: 5:45 = a quarter to six.' },
+    { frase: "It's twenty past four.", dica: 0, traducao: 'São quatro e vinte.' },
+    { frase: "It's ten to two.", dica: 0, traducao: 'São dez para as duas.' },
+    { frase: "It's five past eight.", dica: 0, traducao: 'São oito e cinco.' },
+    { frase: 'What time is it?', dica: 0, traducao: 'Que horas são?' },
+    { frase: 'What time do you get up?', dica: 0, traducao: 'A que horas você levanta?' },
+    { frase: "I get up at seven o'clock.", dica: 0, traducao: 'Eu levanto às sete horas.' },
+    { frase: "I get up at about six o'clock.", dica: 0, traducao: 'Eu levanto por volta das seis horas.' },
+    { frase: 'She goes to work at half past eight.', dica: 0, traducao: 'Ela vai para o trabalho às oito e meia.' },
+    { frase: "He has lunch at one o'clock.", dica: 0, traducao: 'Ele almoça à uma hora.' },
+    { frase: 'My school starts at a quarter to eight.', dica: 0, traducao: 'Minha escola começa às quinze para as oito.' },
+    { frase: 'We have dinner at a quarter past eight.', dica: 0, traducao: 'Nós jantamos às oito e quinze.' },
+    { frase: "They go to bed at eleven o'clock.", dica: 0, traducao: 'Eles vão dormir às onze horas.' },
+    { frase: 'I have a break at a quarter to three. And you?', dica: 0, traducao: 'Eu faço uma pausa às quinze para as três. E você?' },
+    { frase: "You are late. It's seven past ten.", dica: 0, traducao: 'Você está atrasado. São dez e sete.' },
+    { frase: 'He gets up at half past six and has a shower.', dica: 0, traducao: 'Ele levanta às seis e meia e toma banho.' },
+    { frase: 'My dad starts work at a quarter to nine.', dica: 0, traducao: 'Meu pai começa a trabalhar às quinze para as nove.' }
+  ]
+});
+</script>
+</body>
+</html>

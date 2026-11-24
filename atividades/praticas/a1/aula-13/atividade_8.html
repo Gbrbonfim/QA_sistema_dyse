@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 14 · What time do you get up?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 14 · Leitura
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 14) — Practice 6 ("What time
+   do you get up? I get up at seven o'clock. And you?", "about") e Extra Activity (A Day In My
+   Life). Conteúdo NOVO: Ana e Tom comparam os horários do dia. 20 questões: 12 de "próxima
+   fala" + 8 de compreensão. */
+const D = [
+  ['Ana', 'Hi, Tom! What time do you get up?'],
+  ['Tom', 'I get up at a quarter to seven. And you?'],
+  ['Ana', "I get up at about six o'clock. I go to the gym at half past six."],
+  ['Tom', "Wow! You're a morning person!"],
+  ['Ana', 'Yes, I am! What time do you start work?'],
+  ['Tom', "I start work at nine o'clock. And I have lunch at one."],
+  ['Ana', 'I have lunch at half past twelve. And I have a break at a quarter past three.'],
+  ['Tom', 'A break for a coffee?'],
+  ['Ana', 'Yes! Coffee and cookies! What time do you go home?'],
+  ['Tom', 'At about six. Then I make dinner.'],
+  ['Ana', 'Nice! What time do you go to bed?'],
+  ['Tom', "At eleven o'clock. And you?"],
+  ['Ana', "At ten o'clock. I'm a morning person!"],
+  ['Tom', 'Ha ha! Good night, Ana!']
+];
+const lado = q => q === 'Ana' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I get up at a quarter to seven. And you?', 'I get up in a quarter to seven. And you?', 'A break for a coffee?'], 0, 'Eu levanto às quinze para as sete. E você?'),
+    prox(2, ["At eleven o'clock.", "I get up at about six o'clock. I go to the gym at half past six.", "I get up at about six o'clock. I go to the gym at half to six."], 1, 'Eu levanto por volta das seis. Eu vou à academia às seis e meia.'),
+    prox(3, ['Ha ha! Good night, Ana!', 'At about six.', "Wow! You're a morning person!"], 2, 'Nossa! Você é uma pessoa da manhã!'),
+    prox(4, ['Yes, I am! What time do you start work?', 'Yes, I am! What time you start work?', 'Nice! What time do you go to bed?'], 0, 'Sim, sou! A que horas você começa a trabalhar?'),
+    prox(5, ["I starts work at nine o'clock.", "I start work at nine o'clock. And I have lunch at one.", 'A break for a coffee?'], 1, 'Eu começo a trabalhar às nove horas. E eu almoço à uma.'),
+    prox(6, ['Yes! Coffee and cookies!', 'I have lunch at half twelve past.', 'I have lunch at half past twelve. And I have a break at a quarter past three.'], 2, 'Eu almoço ao meio-dia e meia. E eu faço uma pausa às três e quinze.'),
+    prox(7, ['A break for a coffee?', 'At about six.', "I'm a morning person!"], 0, 'Uma pausa para um café?'),
+    prox(8, ['Nice! What time do you go to bed?', 'Yes! Coffee and cookies! What time do you go home?', 'Yes! Coffee and cookies! What time you go home?'], 1, 'Sim! Café e biscoitos! A que horas você vai para casa?'),
+    prox(9, ["At eleven o'clock.", 'At about six. Then I makes dinner.', 'At about six. Then I make dinner.'], 2, 'Por volta das seis. Depois eu faço o jantar.'),
+    prox(10, ['Nice! What time do you go to bed?', 'Hi, Tom!', 'Yes, I am!'], 0, 'Legal! A que horas você vai dormir?'),
+    prox(11, ["At eleven o'clock. And you?", "In eleven o'clock. And you?", 'I get up at a quarter to seven.'], 0, 'Às onze horas. E você?'),
+    prox(12, ['A break for a coffee?', "At ten o'clock. I'm a morning person!", "At ten o'clock. I'm a night person!"], 1, 'Às dez horas. Eu sou uma pessoa da manhã!'),
+    { instrucao: 'Tom gets up at...', frase: 'He gets up at ___.', opcoes: ['a quarter to seven', 'a quarter past seven', 'half past seven'], certa: 0, traducao: 'Ele levanta às quinze para as sete.' },
+    { instrucao: 'Ana gets up at...', frase: "She gets up at ___ six o'clock.", opcoes: ['half', 'about', 'quarter'], certa: 1, traducao: 'Ela levanta por volta das seis.' },
+    { instrucao: 'Ana goes to the gym at...', frase: 'She goes to the gym at ___.', opcoes: ['six o\'clock', 'a quarter to six', 'half past six'], certa: 2, traducao: 'Ela vai à academia às seis e meia.' },
+    { instrucao: 'Tom starts work at...', frase: 'He starts work at ___.', opcoes: ["nine o'clock", 'half past nine', "one o'clock"], certa: 0, traducao: 'Ele começa a trabalhar às nove horas.' },
+    { instrucao: 'Ana has lunch at...', frase: 'She has lunch at ___.', opcoes: ["one o'clock", 'half past twelve', 'a quarter past twelve'], certa: 1, traducao: 'Ela almoça ao meio-dia e meia.' },
+    { instrucao: 'Ana has a break at...', frase: 'She has a break at ___.', opcoes: ['a quarter to three', 'half past three', 'a quarter past three'], certa: 2, traducao: 'Ela faz uma pausa às três e quinze.' },
+    { instrucao: 'Tom after work:', frase: 'He ___ dinner.', opcoes: ['makes', 'make', 'does'], certa: 0, traducao: 'Ele faz o jantar.' },
+    { instrucao: 'Tom goes to bed at...', frase: 'He goes to bed at ___.', opcoes: ["ten o'clock", "eleven o'clock", 'about six'], certa: 1, traducao: 'Ele vai dormir às onze horas.' }
+  ]
+});
+</script>
+</body>
+</html>

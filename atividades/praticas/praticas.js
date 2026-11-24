@@ -522,11 +522,29 @@
      aluno quis dizer, então valem como a mesma palavra (dos dois lados). */
   const MESMO_SOM = { to: 'too', two: 'too', by: 'bye', buy: 'bye', high: 'hi', meat: 'meet', sea: 'see', four: 'for', u: 'you', r: 'are', eye: 'i', grease: 'greece', chilly: 'chile', chili: 'chile', chilli: 'chile' };
   const somDe = p => MESMO_SOM[p] || p;
+  /* Horário dito como "half past seven" vira "7:30" no reconhecimento. Se a
+     frase da atividade usa o jeito past / to / quarter / half, o horário em
+     algarismos é reescrito nesse mesmo jeito antes de comparar. */
+  function horaNoEstilo(frase, ouvido){
+    if(!/\b(past|to|quarter|half)\b/i.test(frase)) return ouvido;
+    const comA = /\ba quarter\b/i.test(frase);
+    // "quarter to six" sem o "a" (o reconhecimento costuma cortar) conta como "a quarter".
+    if(comA) ouvido = String(ouvido || '').split(/\s+/).map((w, k, ws) => /^quarter$/i.test(w) && !/^a$/i.test(ws[k - 1] || '') ? 'a ' + w : w).join(' ');
+    return String(ouvido || '').replace(/\b(\d{1,2}):(\d{2})\b/g, (s, h, m) => {
+      h = +h; m = +m; const prox = h % 12 + 1;
+      if(m === 0) return numExt(h) + " o'clock";
+      if(m === 15) return (comA ? 'a ' : '') + 'quarter past ' + numExt(h);
+      if(m === 30) return 'half past ' + numExt(h);
+      if(m === 45) return (comA ? 'a ' : '') + 'quarter to ' + numExt(prox);
+      return m < 30 ? numExt(m) + ' past ' + numExt(h) : numExt(60 - m) + ' to ' + numExt(prox);
+    });
+  }
   function avaliarFala(item, ouvido){
     const aceita = item.aceita || {};
     const tokens = item.frase.split(/\s+/);
     const exp = [];
     tokens.forEach((t, k) => norm(t).forEach(p => exp.push({ p: somDe(p), k: k })));
+    ouvido = horaNoEstilo(item.frase, ouvido);
     const brutas = String(ouvido || '').trim().split(/\s+/).filter(Boolean);
     const heard = [];
     brutas.forEach((w, b) => norm(w).forEach(p => heard.push({ p: somDe(aceita[p] || p), b: b })));

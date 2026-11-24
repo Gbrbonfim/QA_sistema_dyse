@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 13 · Are you a morning person?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 13 · Leitura
+   Alinhado ao slide "Class 13 and 14: Morning People" (parte Class 13) — Warm Up ("Are you a
+   morning person?"), Reading (rotinas da manhã) e Speaking (a rotina de alguém da família: "my
+   mother gets up, she washes her face..."). Conteúdo NOVO: Sofia e Dan falam das rotinas; as
+   perguntas pedem o verbo com he / she. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Dan', 'Sofia, are you a morning person?'],
+  ['Sofia', "Yes, I am! I'm happy in the morning."],
+  ['Dan', "Cool! What's your morning routine?"],
+  ['Sofia', 'I get up, have a shower and go to the gym.'],
+  ['Dan', 'Wow! And breakfast?'],
+  ['Sofia', 'I have breakfast after the gym. Then I start work.'],
+  ['Dan', "I'm not a morning person! My mornings aren't good."],
+  ['Sofia', 'Ha ha! And your brother? Is he a morning person?'],
+  ['Dan', 'Yes, he is. He gets up, washes his face and goes to school.'],
+  ['Sofia', 'And breakfast?'],
+  ['Dan', 'He has breakfast at school with his friends.'],
+  ['Sofia', 'Nice! And in the evening?'],
+  ['Dan', 'He does his homework and goes to bed. And my mom makes dinner every day.'],
+  ['Sofia', 'Your mom is great!']
+];
+const lado = q => q === 'Dan' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 13, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes, I am! I'm happy in the morning.", "Yes, I do! I'm happy in the morning.", 'And breakfast?'], 0, 'Sim, sou! Eu fico feliz de manhã.'),
+    prox(2, ['Your mom is great!', "Cool! What's your morning routine?", 'Wow! And breakfast?'], 1, 'Legal! Qual é a sua rotina da manhã?'),
+    prox(3, ['I gets up, has a shower and goes to the gym.', 'He does his homework.', 'I get up, have a shower and go to the gym.'], 2, 'Eu levanto, tomo banho e vou à academia.'),
+    prox(4, ['Wow! And breakfast?', 'Nice! And in the evening?', 'Sofia, are you a morning person?'], 0, 'Nossa! E o café da manhã?'),
+    prox(5, ['I has breakfast after the gym. Then I starts work.', 'I have breakfast after the gym. Then I start work.', 'He has breakfast at school.'], 1, 'Eu tomo café da manhã depois da academia. Depois eu começo a trabalhar.'),
+    prox(6, ['Your mom is great!', "Yes, he is.", "I'm not a morning person! My mornings aren't good."], 2, 'Eu não sou uma pessoa da manhã! Minhas manhãs não são boas.'),
+    prox(7, ['Ha ha! And your brother? Is he a morning person?', 'Ha ha! And your brother? Does he a morning person?', "Cool! What's your morning routine?"], 0, 'Haha! E o seu irmão? Ele é uma pessoa da manhã?'),
+    prox(8, ['Yes, he is. He get up, wash his face and go to school.', 'Yes, he is. He gets up, washes his face and goes to school.', 'Yes, he is. He gets up, washs his face and gos to school.'], 1, 'Sim, ele é. Ele levanta, lava o rosto e vai para a escola.'),
+    prox(9, ['Your mom is great!', 'Nice! And in the evening?', 'And breakfast?'], 2, 'E o café da manhã?'),
+    prox(10, ['He has breakfast at school with his friends.', 'He have breakfast at school with his friends.', 'I have breakfast after the gym.'], 0, 'Ele toma café da manhã na escola com os amigos.'),
+    prox(11, ['Wow! And breakfast?', 'Nice! And in the evening?', 'Sofia, are you a morning person?'], 1, 'Legal! E à noite?'),
+    prox(12, ['He do his homework and go to bed.', "I'm not a morning person!", 'He does his homework and goes to bed. And my mom makes dinner every day.'], 2, 'Ele faz a lição de casa e vai dormir. E minha mãe faz o jantar todo dia.'),
+    { instrucao: 'Is Sofia a morning person?', frase: 'Yes, she ___.', opcoes: ['is', 'are', 'am'], certa: 0, traducao: 'Sim, ela é.' },
+    { instrucao: "Sofia's routine: what comes after the shower?", frase: 'She goes to the ___.', opcoes: ['school', 'gym', 'bed'], certa: 1, traducao: 'Ela vai à academia.' },
+    { instrucao: 'When does Sofia have breakfast?', frase: 'She has breakfast ___ the gym.', opcoes: ['in', 'on', 'after'], certa: 2, traducao: 'Ela toma café da manhã depois da academia.' },
+    { instrucao: 'Is Dan a morning person?', frase: 'No, he ___.', opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'Não, ele não é.' },
+    { instrucao: "Complete the sentence about Dan's brother:", frase: 'He ___ his face.', opcoes: ['wash', 'washes', 'washs'], certa: 1, traducao: 'Ele lava o rosto.' },
+    { instrucao: "Where does Dan's brother have breakfast?", frase: 'He has breakfast at ___.', opcoes: ['home', 'work', 'school'], certa: 2, traducao: 'Ele toma café da manhã na escola.' },
+    { instrucao: "Dan's brother in the evening:", frase: 'He ___ his homework.', opcoes: ['does', 'do', 'makes'], certa: 0, traducao: 'Ele faz a lição de casa.' },
+    { instrucao: "Dan's mom:", frase: 'She ___ dinner every day.', opcoes: ['make', 'makes', 'does'], certa: 1, traducao: 'Ela faz o jantar todo dia.' }
+  ]
+});
+</script>
+</body>
+</html>
