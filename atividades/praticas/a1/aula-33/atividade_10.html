@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 34 · Was / were: all forms</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 34 · Gramática
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 34) — Grammar Point (was /
+   were nas 3 formas + short answers) e Zodiac Signs (as datas de cada signo do slide). Conteúdo
+   NOVO e mais difícil: descobrir o signo pela data e fatos verdadeiros. 24 questões. */
+const SIG = 'What is the zodiac sign? Look at the date';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 10, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: "I ___ at home yesterday. I was at work.", opcoes: ["wasn't", "weren't", "didn't"], certa: 0, traducao: 'Eu não estava em casa ontem. Eu estava no trabalho.' },
+    { frase: "They ___ at school two days ago.", opcoes: ["wasn't", "weren't", "isn't"], certa: 1, traducao: 'Eles não estavam na escola dois dias atrás.' },
+    { frase: '___ you at home at seven?', opcoes: ['Was', 'Did', 'Were'], certa: 2, traducao: 'Você estava em casa às sete?' },
+    { frase: '___ he a scientist?', opcoes: ['Was', 'Were', 'Did'], certa: 0, traducao: 'Ele era cientista?' },
+    { frase: 'Were they born in England? Yes, they ___.', opcoes: ['was', 'were', 'did'], certa: 1, traducao: 'Eles nasceram na Inglaterra? Sim.' },
+    { frase: "Was it in November? No, it ___.", opcoes: ["weren't", "didn't", "wasn't"], certa: 2, traducao: 'Foi em novembro? Não, não foi.' },
+    { frase: "Were you tired? No, I ___.", opcoes: ["wasn't", "weren't", "didn't"], certa: 0, traducao: 'Você estava cansado? Não, não estava.' },
+    { frase: 'When ___ Queen Victoria born?', opcoes: ['were', 'was', 'did'], certa: 1, traducao: 'Quando a rainha Vitória nasceu?' },
+    { frase: "I'm not tired today. I ___ tired yesterday.", opcoes: ["'m not", "weren't", "wasn't"], certa: 2, traducao: 'Eu não estou cansado hoje. Eu não estava cansado ontem.' },
+    { frase: 'Are you at home now? ___ you at home last night?', opcoes: ['Were', 'Was', 'Are'], certa: 0, traducao: 'Você está em casa agora? Você estava em casa ontem à noite?' },
+    { frase: 'Frida Kahlo ___ a singer. She was a painter.', opcoes: ['was', "wasn't", "weren't"], certa: 1, traducao: 'A Frida Kahlo não era cantora. Ela era pintora.' },
+    { frase: 'Einstein and Marie Curie ___ great scientists.', opcoes: ['was', "wasn't", 'were'], certa: 2, traducao: 'O Einstein e a Marie Curie eram grandes cientistas.' },
+    { frase: 'Pelé ___ a famous Brazilian football player.', opcoes: ['was', 'were', "weren't"], certa: 0, traducao: 'O Pelé era um famoso jogador de futebol brasileiro.' },
+    { frase: 'Mozart ___ German. He was Austrian.', opcoes: ['was', "wasn't", 'were'], certa: 1, traducao: 'O Mozart não era alemão. Ele era austríaco.' },
+    { instrucao: SIG, frase: 'the fourteenth of March (Einstein) → ___', opcoes: ['Aries', 'Pisces', 'Aquarius'], certa: 1, completa: 'Einstein was a Pisces.', traducao: '14 de março → peixes' },
+    { instrucao: SIG, frase: 'the seventh of November (Marie Curie) → ___', opcoes: ['Libra', 'Sagittarius', 'Scorpio'], certa: 2, completa: 'Marie Curie was a Scorpio.', traducao: '7 de novembro → escorpião' },
+    { instrucao: SIG, frase: 'the twenty-fourth of May (Queen Victoria) → ___', opcoes: ['Gemini', 'Taurus', 'Cancer'], certa: 0, completa: 'Queen Victoria was a Gemini.', traducao: '24 de maio → gêmeos' },
+    { instrucao: SIG, frase: 'the fifteenth of January (Martin Luther King) → ___', opcoes: ['Aquarius', 'Capricorn', 'Sagittarius'], certa: 1, completa: 'Martin Luther King was a Capricorn.', traducao: '15 de janeiro → capricórnio' },
+    { instrucao: SIG, frase: 'the twenty-ninth of August (Michael Jackson) → ___', opcoes: ['Leo', 'Libra', 'Virgo'], certa: 2, completa: 'Michael Jackson was a Virgo.', traducao: '29 de agosto → virgem' },
+    { instrucao: SIG, frase: 'the twenty-first of March (Ayrton Senna) → ___', opcoes: ['Aries', 'Pisces', 'Taurus'], certa: 0, completa: 'Ayrton Senna was an Aries.', traducao: '21 de março → áries' },
+    { instrucao: CERTA, opcoes: ["Was Einstein good at Math? Yes, he were.", "Was Einstein a scientist? Yes, he was.", "Did Einstein a scientist? Yes, he did."], certa: 1, traducao: 'O Einstein era cientista? Sim, era.' },
+    { instrucao: CERTA, opcoes: ["We wasn't at school.", "We didn't at school.", "We weren't at school."], certa: 2, traducao: 'Nós não estávamos na escola.' },
+    { instrucao: CERTA, opcoes: ['Where were you last night?', 'Where was you last night?', 'Where did you were last night?'], certa: 0, traducao: 'Onde você estava ontem à noite?' },
+    { instrucao: CERTA, opcoes: ['She were born in July.', 'She was born in July.', 'She is born in July yesterday.'], certa: 1, traducao: 'Ela nasceu em julho.' }
+  ]
+});
+</script>
+</body>
+</html>

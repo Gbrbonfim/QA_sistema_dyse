@@ -486,9 +486,25 @@
     return String(n);
   }
   const MOEDA = { '£': ['pound', 'pounds'], '$': ['dollar', 'dollars'], '€': ['euro', 'euros'] };
+  const ORD = ['zeroth','first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth','eleventh','twelfth','thirteenth','fourteenth','fifteenth','sixteenth','seventeenth','eighteenth','nineteenth'];
+  function ordExt(n){
+    if(n < 20) return ORD[n];
+    const d = DEZ[Math.floor(n / 10)];
+    return n % 10 ? d + ' ' + ORD[n % 10] : d.replace(/y$/, 'ieth');
+  }
   function numPorExtenso(w){
     const h = /^(\d{1,2}):(\d{2})$/.exec(w);
     if(h) return numExt(h[1]) + (+h[2] ? ' ' + (+h[2] < 10 ? 'oh ' : '') + numExt(h[2]) : " o'clock");
+    // "15th", "21st" → fifteenth, twenty first
+    const o = /^(\d{1,2})(st|nd|rd|th)$/.exec(w);
+    if(o) return ordExt(+o[1]);
+    // anos: 1990 → nineteen ninety; 2005 → two thousand five; 2014 → twenty fourteen
+    const y = /^(1[1-9]|20)(\d{2})$/.exec(w);
+    if(y){
+      const a = +y[1], b = +y[2];
+      if(a === 20 && b < 10) return 'two thousand' + (b ? ' ' + numExt(b) : '');
+      return numExt(a) + (b === 0 ? ' hundred' : b < 10 ? ' oh ' + numExt(b) : ' ' + numExt(b));
+    }
     const m = /^([£$€])?(\d{1,4})(?:[.,](\d{2}))?(p)?$/.exec(w);
     if(!m) return w;
     if(m[4]) return numExt(m[2]) + ' pence';

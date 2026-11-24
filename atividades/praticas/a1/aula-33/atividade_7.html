@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 34 · Was he? Were they?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 34 · Escrita
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 34) — Grammar Point (was /
+   were nas 3 formas; wasn't / weren't; Was...? Were...? + short answers) e exercícios 3 e 4 (passar
+   para o passado; perguntas e respostas com fatos). Conteúdo NOVO com fatos verdadeiros. O
+   contexto traz a frase em português. A isca é was x were ou did / didn't. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eles não estavam no trabalho ontem.'), palavras: ['They', "weren't", 'at', 'work', 'yesterday'], isca: ["wasn't"], fim: '.', traducao: 'Eles não estavam no trabalho ontem.' },
+    { contexto: M('Ela estava num restaurante ontem à noite.'), palavras: ['She', 'was', 'at', 'a', 'restaurant', 'last', 'night'], isca: ['were'], fim: '.', traducao: 'Ela estava num restaurante ontem à noite.' },
+    { contexto: M('Nós não estávamos na escola dois dias atrás.'), palavras: ['We', "weren't", 'at', 'school', 'two', 'days', 'ago'], isca: ["didn't"], fim: '.', traducao: 'Nós não estávamos na escola dois dias atrás.' },
+    { contexto: M('Você estava em casa às sete da noite?'), palavras: ['Were', 'you', 'at', 'home', 'at', 'seven', 'p.m.'], isca: ['Was'], fim: '?', traducao: 'Você estava em casa às sete da noite?' },
+    { contexto: M('Eu não estava cansado ontem.'), palavras: ['I', "wasn't", 'tired', 'yesterday'], isca: ["weren't"], fim: '.', traducao: 'Eu não estava cansado ontem.' },
+    { contexto: M('O Einstein era de peixes?'), palavras: ['Was', 'Einstein', 'a', 'Pisces'], isca: ['Did'], fim: '?', traducao: 'O Einstein era de peixes?' },
+    { contexto: M('Sim, ele era.'), palavras: ['Yes,', 'he', 'was'], isca: ['were'], fim: '.', traducao: 'Sim, ele era.' },
+    { contexto: M('A Frida Kahlo e o Diego Rivera eram pintores?'), palavras: ['Were', 'Frida', 'Kahlo', 'and', 'Diego', 'Rivera', 'painters'], isca: ['Was'], fim: '?', traducao: 'A Frida Kahlo e o Diego Rivera eram pintores?' },
+    { contexto: M('Sim, eles eram.'), palavras: ['Yes,', 'they', 'were'], isca: ['was'], fim: '.', traducao: 'Sim, eles eram.' },
+    { contexto: M('O Mozart não era brasileiro. Ele era austríaco.'), palavras: ['Mozart', "wasn't", 'Brazilian.', 'He', 'was', 'Austrian'], isca: ["didn't"], fim: '.', traducao: 'O Mozart não era brasileiro. Ele era austríaco.' },
+    { contexto: M('A Marie Curie era de leão? Não, ela não era.'), palavras: ['Was', 'Marie', 'Curie', 'a', 'Leo?', 'No,', 'she', "wasn't"], isca: ["weren't"], fim: '.', traducao: 'A Marie Curie era de leão? Não, ela não era.' },
+    { contexto: M('Ela era de escorpião.'), palavras: ['She', 'was', 'a', 'Scorpio'], isca: ['were'], fim: '.', traducao: 'Ela era de escorpião.' },
+    { contexto: M('O Pelé e o Ayrton Senna eram argentinos? Não, eles não eram.'), palavras: ['Were', 'Pelé', 'and', 'Ayrton', 'Senna', 'Argentinian?', 'No,', 'they', "weren't"], isca: ["wasn't"], fim: '.', traducao: 'O Pelé e o Ayrton Senna eram argentinos? Não, eles não eram.' },
+    { contexto: M('Ele estava no aeroporto ontem de manhã.'), palavras: ['He', 'was', 'at', 'the', 'airport', 'yesterday', 'morning'], isca: ['is'], fim: '.', traducao: 'Ele estava no aeroporto ontem de manhã.' },
+    { contexto: M('A rainha Vitória nasceu em 1919? Não, ela não nasceu.'), palavras: ['Was', 'Queen', 'Victoria', 'born', 'in', '1919?', 'No,', 'she', "wasn't"], isca: ['Did'], fim: '.', traducao: 'A rainha Vitória nasceu em 1919? Não.' },
+    { contexto: M('Ela nasceu em 1819.'), palavras: ['She', 'was', 'born', 'in', '1819'], isca: ['were'], fim: '.', traducao: 'Ela nasceu em 1819.' },
+    { contexto: M('Onde você estava ontem à noite?'), palavras: ['Where', 'were', 'you', 'last', 'night'], isca: ['did'], fim: '?', traducao: 'Onde você estava ontem à noite?' },
+    { contexto: M('Foi em julho? Não, foi em março.'), palavras: ['Was', 'it', 'in', 'July?', 'No,', 'it', 'was', 'in', 'March'], isca: ['were'], fim: '.', traducao: 'Foi em julho? Não, foi em março.' },
+    { contexto: M('Nós não estávamos num café. Nós estávamos num restaurante.'), palavras: ['We', "weren't", 'in', 'a', 'café.', 'We', 'were', 'in', 'a', 'restaurant'], isca: ["wasn't"], fim: '.', traducao: 'Nós não estávamos num café. Nós estávamos num restaurante.' },
+    { contexto: M('Os seus pais estavam em casa? Sim, eles estavam.'), palavras: ['Were', 'your', 'parents', 'at', 'home?', 'Yes,', 'they', 'were'], isca: ['Was'], fim: '.', traducao: 'Os seus pais estavam em casa? Sim, eles estavam.' }
+  ]
+});
+</script>
+</body>
+</html>

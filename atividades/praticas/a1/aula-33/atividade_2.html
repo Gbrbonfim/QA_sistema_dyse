@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 33 · I was born on...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 33 · Escrita
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 33) — Vocabulary (dizer a
+   data com ordinal: the fifteenth of August) e "When were you born? I was born on the sixteenth of
+   December." Conteúdo NOVO: outras datas e fatos verdadeiros. O contexto traz a frase em
+   português. A isca é in x on, o número sem ordinal ou were x was. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Quando você nasceu?'), palavras: ['When', 'were', 'you', 'born'], isca: ['was'], fim: '?', traducao: 'Quando você nasceu?' },
+    { contexto: M('Eu nasci no dia dezesseis de dezembro.'), palavras: ['I', 'was', 'born', 'on', 'the', 'sixteenth', 'of', 'December'], isca: ['in'], fim: '.', traducao: 'Eu nasci no dia dezesseis de dezembro.' },
+    { contexto: M('Ela nasceu em maio.'), palavras: ['She', 'was', 'born', 'in', 'May'], isca: ['on'], fim: '.', traducao: 'Ela nasceu em maio.' },
+    { contexto: M('O Natal é no dia vinte e cinco de dezembro.'), palavras: ['Christmas', 'is', 'on', 'the', 'twenty-fifth', 'of', 'December'], isca: ['twenty-five'], fim: '.', traducao: 'O Natal é no dia vinte e cinco de dezembro.' },
+    { contexto: M('Que dia é hoje?'), palavras: ['What', 'day', 'is', 'it', 'today'], isca: ['are'], fim: '?', traducao: 'Que dia é hoje?' },
+    { contexto: M('Hoje é dia primeiro de março.'), palavras: ["It's", 'the', 'first', 'of', 'March'], isca: ['one'], fim: '.', traducao: 'Hoje é dia primeiro de março.' },
+    { contexto: M('O Dia da Independência do Brasil é sete de setembro.'), palavras: ["Brazil's", 'Independence', 'Day', 'is', 'on', 'the', 'seventh', 'of', 'September'], isca: ['seven'], fim: '.', traducao: 'O Dia da Independência do Brasil é sete de setembro.' },
+    { contexto: M('Qual é o seu mês favorito?'), palavras: ['What', 'is', 'your', 'favorite', 'month'], isca: ['months'], fim: '?', traducao: 'Qual é o seu mês favorito?' },
+    { contexto: M('Meu aniversário é no dia doze de junho.'), palavras: ['My', 'birthday', 'is', 'on', 'the', 'twelfth', 'of', 'June'], isca: ['twelveth'], fim: '.', traducao: 'Meu aniversário é no dia doze de junho.' },
+    { contexto: M('O Einstein nasceu no dia catorze de março.'), palavras: ['Einstein', 'was', 'born', 'on', 'the', 'fourteenth', 'of', 'March'], isca: ['were'], fim: '.', traducao: 'O Einstein nasceu no dia catorze de março.' },
+    { contexto: M('O Halloween é no dia trinta e um de outubro.'), palavras: ['Halloween', 'is', 'on', 'the', 'thirty-first', 'of', 'October'], isca: ['in'], fim: '.', traducao: 'O Halloween é no dia trinta e um de outubro.' },
+    { contexto: M('Minha mãe nasceu no dia vinte e um de janeiro.'), palavras: ['My', 'mom', 'was', 'born', 'on', 'the', 'twenty-first', 'of', 'January'], isca: ['twenty-one'], fim: '.', traducao: 'Minha mãe nasceu no dia vinte e um de janeiro.' },
+    { contexto: M('Eles nasceram em 2010.'), palavras: ['They', 'were', 'born', 'in', '2010'], isca: ['was'], fim: '.', traducao: 'Eles nasceram em 2010.' },
+    { contexto: M('Que dia é amanhã?'), palavras: ['What', 'day', 'is', 'it', 'tomorrow'], isca: ['was'], fim: '?', traducao: 'Que dia é amanhã?' },
+    { contexto: M('Amanhã é dia três de abril.'), palavras: ["It's", 'the', 'third', 'of', 'April'], isca: ['threeth'], fim: '.', traducao: 'Amanhã é dia três de abril.' },
+    { contexto: M('O Ano-Novo é no dia primeiro de janeiro.'), palavras: ["New", "Year's", 'Day', 'is', 'on', 'the', 'first', 'of', 'January'], isca: ['in'], fim: '.', traducao: 'O Dia de Ano-Novo é no dia primeiro de janeiro.' },
+    { contexto: M('Qual é o seu feriado favorito?'), palavras: ['What', 'is', 'your', 'favorite', 'holiday'], isca: ['holidays'], fim: '?', traducao: 'Qual é o seu feriado favorito?' },
+    { contexto: M('Meu pai nasceu em agosto.'), palavras: ['My', 'dad', 'was', 'born', 'in', 'August'], isca: ['on'], fim: '.', traducao: 'Meu pai nasceu em agosto.' },
+    { contexto: M('A Marie Curie nasceu no dia sete de novembro.'), palavras: ['Marie', 'Curie', 'was', 'born', 'on', 'the', 'seventh', 'of', 'November'], isca: ['seven'], fim: '.', traducao: 'A Marie Curie nasceu no dia sete de novembro.' },
+    { contexto: M('Hoje é dia vinte de maio.'), palavras: ["It's", 'the', 'twentieth', 'of', 'May'], isca: ['twenty'], fim: '.', traducao: 'Hoje é dia vinte de maio.' }
+  ]
+});
+</script>
+</body>
+</html>

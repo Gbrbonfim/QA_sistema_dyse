@@ -343,6 +343,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Where were you?', tipo: 'Escute e grave', treina: 'Fala · Passado', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'The past of be', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 33,
+        titulo: 'Class 33 and 34 · When Were You Born?',
+        atividades: [
+          { num: 1, parte: 'Class 33', titulo: 'Months and dates', tipo: 'Escute e escolha', treina: 'Escuta · Datas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 33', titulo: 'I was born on...', tipo: 'Monte a frase', treina: 'Escrita · Datas', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 33', titulo: 'Birthdays and holidays', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 33', titulo: 'Say the date', tipo: 'Escute e grave', treina: 'Fala · Ordinais', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 33', titulo: 'Ordinal numbers', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 34', titulo: 'Signs and short answers', tipo: 'Escute e escolha', treina: 'Escuta · Was / were', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 34', titulo: 'Was he? Were they?', tipo: 'Monte a frase', treina: 'Escrita · Was / were', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 34', titulo: "What's your sign?", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 34', titulo: 'Were you at home?', tipo: 'Escute e grave', treina: 'Fala · Signos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 34', titulo: 'Was / were: all forms', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 34 · What's your sign?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 34 · Leitura
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 34) — Zodiac Signs ("When
+   were you born? I was born on the sixteenth of December. You're a Sagittarius!"; extra challenge
+   com famosos) e Grammar Point (was / were nas 3 formas). Conteúdo NOVO com fatos verdadeiros:
+   Frida Kahlo nasceu em 6 de julho (câncer) e era pintora mexicana; Mozart nasceu em 27 de janeiro
+   (aquário) e era austríaco. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ana', 'Leo, when were you born?'],
+  ['Leo', 'I was born on the sixteenth of December.'],
+  ['Ana', "You're a Sagittarius! I'm a Cancer."],
+  ['Leo', 'Cancer? Frida Kahlo was a Cancer too!'],
+  ['Ana', 'Really? When was she born?'],
+  ['Leo', 'She was born on the sixth of July.'],
+  ['Ana', 'Was she a singer?'],
+  ['Leo', "No, she wasn't. She was a painter. She was Mexican."],
+  ['Ana', 'Cool! Who is a famous Sagittarius?'],
+  ['Leo', "Hmm... Taylor Swift! She was born on the thirteenth of December."],
+  ['Ana', 'And Mozart? Was he a Sagittarius?'],
+  ['Leo', "No, he wasn't. He was an Aquarius. He was born on the twenty-seventh of January."],
+  ['Ana', 'Was he German?'],
+  ['Leo', "No, he wasn't. He was Austrian."]
+];
+const lado = q => q === 'Ana' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I was born on the sixteenth of December.', 'I were born on the sixteenth of December.', 'I was born in the sixteen of December.'], 0, 'Eu nasci no dia dezesseis de dezembro.'),
+    prox(2, ["You're a Capricorn!", "You're a Sagittarius! I'm a Cancer.", "You was a Sagittarius!"], 1, 'Você é de sagitário! Eu sou de câncer.'),
+    prox(3, ['Was she a singer?', 'Cancer? Frida Kahlo were a Cancer too!', 'Cancer? Frida Kahlo was a Cancer too!'], 2, 'Câncer? A Frida Kahlo também era de câncer!'),
+    prox(4, ['Really? When was she born?', 'Really? When were she born?', 'Really? When she was born?'], 0, 'Sério? Quando ela nasceu?'),
+    prox(5, ['She was born in the six of July.', 'She was born on the sixth of July.', 'She were born on the sixth of July.'], 1, 'Ela nasceu no dia seis de julho.'),
+    prox(6, ['Were she a singer?', 'Did she a singer?', 'Was she a singer?'], 2, 'Ela era cantora?'),
+    prox(7, ["No, she wasn't. She was a painter. She was Mexican.", "No, she weren't. She was a painter.", "No, she didn't. She was a painter."], 0, 'Não, ela não era. Ela era pintora. Ela era mexicana.'),
+    prox(8, ['Was he German?', 'Cool! Who is a famous Sagittarius?', 'Cool! Who are a famous Sagittarius?'], 1, 'Legal! Quem é uma pessoa famosa de sagitário?'),
+    prox(9, ['She was born in May.', 'No, he was.', 'Hmm... Taylor Swift! She was born on the thirteenth of December.'], 2, 'Hum... A Taylor Swift! Ela nasceu no dia treze de dezembro.'),
+    prox(10, ['And Mozart? Was he a Sagittarius?', 'And Mozart? Were he a Sagittarius?', 'And Mozart? Did he a Sagittarius?'], 0, 'E o Mozart? Ele era de sagitário?'),
+    prox(11, ["No, he weren't. He was an Aquarius.", "No, he wasn't. He was an Aquarius. He was born on the twenty-seventh of January.", "Yes, he was. He was a Sagittarius."], 1, 'Não, ele não era. Ele era de aquário. Ele nasceu no dia vinte e sete de janeiro.'),
+    prox(12, ['Was he Brazilian? Yes, he was.', 'When were you born?', 'Was he German?'], 2, 'Ele era alemão?'),
+    { instrucao: 'When was Leo born?', frase: 'On the sixteenth of ___.', opcoes: ['December', 'July', 'January'], certa: 0, traducao: 'No dia dezesseis de dezembro.' },
+    { instrucao: "What is Ana's sign?", frase: "She's a ___.", opcoes: ['Sagittarius', 'Cancer', 'Leo'], certa: 1, traducao: 'Ela é de câncer.' },
+    { instrucao: 'When was Frida Kahlo born?', frase: 'On the ___ of July.', opcoes: ['sixteenth', 'seventh', 'sixth'], certa: 2, traducao: 'No dia seis de julho.' },
+    { instrucao: "What was Frida Kahlo's job?", frase: 'She was a ___.', opcoes: ['painter', 'singer', 'scientist'], certa: 0, traducao: 'Ela era pintora.' },
+    { instrucao: "What was Frida Kahlo's nationality?", frase: 'She was ___.', opcoes: ['Spanish', 'Mexican', 'Brazilian'], certa: 1, traducao: 'Ela era mexicana.' },
+    { instrucao: "When was Taylor Swift born?", frase: 'On the ___ of December.', opcoes: ['third', 'thirtieth', 'thirteenth'], certa: 2, traducao: 'No dia treze de dezembro.' },
+    { instrucao: "What was Mozart's sign?", frase: 'He was an ___.', opcoes: ['Aquarius', 'Aries', 'Sagittarius'], certa: 0, traducao: 'Ele era de aquário.' },
+    { instrucao: 'Was Mozart German?', frase: "No, he ___. He was Austrian.", opcoes: ["weren't", "wasn't", "didn't"], certa: 1, traducao: 'Não, ele não era. Ele era austríaco.' }
+  ]
+});
+</script>
+</body>
+</html>

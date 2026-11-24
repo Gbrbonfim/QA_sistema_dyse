@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 33 · Birthdays and holidays</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 33 · Leitura
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 33) — Talking Point (What
+   day is it today? What is your favorite month / holiday?) e "When were you born? I was born on...".
+   Conteúdo NOVO: Lia e Ben falam de aniversários e feriados. Fatos verdadeiros: o Natal é em 25 de
+   dezembro; o Dia da Independência do Brasil é em 7 de setembro. 20 questões: 12 de "próxima fala"
+   + 8 de compreensão. */
+const D = [
+  ['Lia', 'Ben, what day is it today?'],
+  ['Ben', "It's the fifth of September."],
+  ['Lia', "Oh! My mom's birthday is on the seventh."],
+  ['Ben', "The seventh of September? It's Brazil's Independence Day!"],
+  ['Lia', "Yes! It's a holiday and her birthday. When were you born?"],
+  ['Ben', 'I was born on the twenty-third of March. And you?'],
+  ['Lia', 'I was born on the twelfth of December.'],
+  ['Ben', 'December! Your birthday is near Christmas.'],
+  ['Lia', "Yes, it's the twenty-fifth. I always have two parties!"],
+  ['Ben', "Ha ha! What's your favorite month?"],
+  ['Lia', "July. It's my holiday month. And yours?"],
+  ['Ben', 'October. Halloween is on the thirty-first!'],
+  ['Lia', 'Cool! And your favorite holiday?'],
+  ['Ben', "New Year's Day, the first of January!"]
+];
+const lado = q => q === 'Lia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["It's the fifth of September.", "It's the five of September.", "It's September fiveth."], 0, 'É dia cinco de setembro.'),
+    prox(2, ["Oh! My mom's birthday is in the seventh.", "Oh! My mom's birthday is on the seventh.", "Oh! My mom birthday is on the seven."], 1, 'Ah! O aniversário da minha mãe é no dia sete.'),
+    prox(3, ['I was born in July.', 'Cool!', "The seventh of September? It's Brazil's Independence Day!"], 2, 'Sete de setembro? É o Dia da Independência do Brasil!'),
+    prox(4, ["Yes! It's a holiday and her birthday. When were you born?", "Yes! It's a holiday. When was you born?", "Yes! When you were born?"], 0, 'Sim! É feriado e aniversário dela. Quando você nasceu?'),
+    prox(5, ['I were born on the twenty-third of March.', 'I was born on the twenty-third of March. And you?', 'I was born in the twenty-three of March.'], 1, 'Eu nasci no dia vinte e três de março. E você?'),
+    prox(6, ['I was born in the twelve of December.', "It's the fifth.", 'I was born on the twelfth of December.'], 2, 'Eu nasci no dia doze de dezembro.'),
+    prox(7, ['December! Your birthday is near Christmas.', 'December! Your birthday is near Halloween.', 'October.'], 0, 'Dezembro! O seu aniversário é perto do Natal.'),
+    prox(8, ["Yes, it's the twenty-four. I always have two parties!", "Yes, it's the twenty-fifth. I always have two parties!", "Yes, it's in the twenty-fifth."], 1, 'Sim, é dia vinte e cinco. Eu sempre tenho duas festas!'),
+    prox(9, ['And your favorite holiday?', 'When were you born?', "Ha ha! What's your favorite month?"], 2, 'Haha! Qual é o seu mês favorito?'),
+    prox(10, ["July. It's my holiday month. And yours?", "July. Is my holiday month.", "In July. It's on July."], 0, 'Julho. É o meu mês de férias. E o seu?'),
+    prox(11, ['October. Halloween is on the thirteenth!', 'October. Halloween is on the thirty-first!', 'October. Halloween is in the thirty-one!'], 1, 'Outubro. O Halloween é no dia trinta e um!'),
+    prox(12, ["It's the fifth of September.", 'I was born in March.', 'Cool! And your favorite holiday?'], 2, 'Legal! E o seu feriado favorito?'),
+    { instrucao: 'What day is it today?', frase: "It's the fifth of ___.", opcoes: ['September', 'December', 'March'], certa: 0, traducao: 'É dia cinco de setembro.' },
+    { instrucao: "When is Lia's mom's birthday?", frase: 'On the ___ of September.', opcoes: ['fifth', 'seventh', 'twelfth'], certa: 1, traducao: 'No dia sete de setembro.' },
+    { instrucao: 'When was Ben born?', frase: 'On the twenty-third of ___.', opcoes: ['December', 'October', 'March'], certa: 2, traducao: 'No dia vinte e três de março.' },
+    { instrucao: 'When was Lia born?', frase: 'On the ___ of December.', opcoes: ['twelfth', 'twentieth', 'twenty-fifth'], certa: 0, traducao: 'No dia doze de dezembro.' },
+    { instrucao: 'Why does Lia have two parties?', frase: 'Her birthday is near ___.', opcoes: ['Halloween', 'Christmas', 'New Year'], certa: 1, traducao: 'O aniversário dela é perto do Natal.' },
+    { instrucao: "What is Lia's favorite month?", frase: '___.', opcoes: ['October', 'December', 'July'], certa: 2, traducao: 'Julho.' },
+    { instrucao: "What is Ben's favorite month?", frase: '___.', opcoes: ['October', 'March', 'January'], certa: 0, traducao: 'Outubro.' },
+    { instrucao: "What is Ben's favorite holiday?", frase: "New Year's Day, the first of ___.", opcoes: ['December', 'January', 'October'], certa: 1, traducao: 'O Dia de Ano-Novo, primeiro de janeiro.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 34 · Signs and short answers</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 34 · Escuta
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 34) — Vocabulary and
+   Speaking: Zodiac Signs e Grammar Point (was / were em todas as formas: Was he a scientist? Yes,
+   he was. / No, they weren't.). Conteúdo NOVO com fatos verdadeiros (Pelé, Frida Kahlo, Mozart,
+   Ayrton Senna, Einstein, Marie Curie, Michael Jackson). 24 questões: 12 signos + 12 respostas curtas. */
+const signo = (...cs) => cs.map(c => ({ label: c, icon: 'stars' }));
+const resp = (...cs) => cs.map(c => ({ label: c, icon: 'chat' }));
+const SA = 'Listen to the question and choose the true short answer';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose the zodiac sign',
+  itens: [
+    { audioTexto: 'Aries', opcoes: signo('Aries', 'Taurus', 'Leo', 'Libra'), certa: 0 },
+    { audioTexto: 'Gemini', opcoes: signo('Cancer', 'Gemini', 'Virgo', 'Pisces'), certa: 1 },
+    { audioTexto: 'Sagittarius', opcoes: signo('Scorpio', 'Capricorn', 'Sagittarius', 'Aquarius'), certa: 2 },
+    { audioTexto: 'Aquarius', opcoes: signo('Aries', 'Pisces', 'Capricorn', 'Aquarius'), certa: 3 },
+    { audioTexto: 'Virgo', opcoes: signo('Virgo', 'Libra', 'Leo', 'Taurus'), certa: 0 },
+    { audioTexto: 'Capricorn', opcoes: signo('Cancer', 'Capricorn', 'Scorpio', 'Sagittarius'), certa: 1 },
+    { audioTexto: 'Scorpio', opcoes: signo('Sagittarius', 'Gemini', 'Scorpio', 'Leo'), certa: 2 },
+    { audioTexto: 'Pisces', opcoes: signo('Aries', 'Aquarius', 'Virgo', 'Pisces'), certa: 3 },
+    { audioTexto: 'Taurus', opcoes: signo('Taurus', 'Aries', 'Cancer', 'Libra'), certa: 0 },
+    { audioTexto: 'Libra', opcoes: signo('Leo', 'Libra', 'Virgo', 'Gemini'), certa: 1 },
+    { audioTexto: 'Cancer', opcoes: signo('Capricorn', 'Scorpio', 'Cancer', 'Taurus'), certa: 2 },
+    { audioTexto: 'Leo', opcoes: signo('Libra', 'Aries', 'Pisces', 'Leo'), certa: 3 },
+    { instrucao: SA, audioTexto: 'Was Pelé a football player?', opcoes: resp('Yes, he was.', "No, he wasn't.", 'Yes, he were.', 'Yes, she was.'), certa: 0 },
+    { instrucao: SA, audioTexto: 'Was Frida Kahlo a singer?', opcoes: resp('Yes, she was.', "No, she wasn't.", "No, she weren't.", "No, he wasn't."), certa: 1 },
+    { instrucao: SA, audioTexto: 'Were Einstein and Marie Curie scientists?', opcoes: resp('Yes, they was.', "No, they weren't.", 'Yes, they were.', 'Yes, we were.'), certa: 2 },
+    { instrucao: SA, audioTexto: 'Was Mozart from Brazil?', opcoes: resp('Yes, he was.', 'No, he were.', 'Yes, he is.', "No, he wasn't."), certa: 3 },
+    { instrucao: SA, audioTexto: 'Was Ayrton Senna Brazilian?', opcoes: resp('Yes, he was.', 'Yes, he were.', "No, he wasn't.", 'Yes, she was.'), certa: 0 },
+    { instrucao: SA, audioTexto: 'Were the Beatles from the USA?', opcoes: resp('Yes, they were.', "No, they weren't.", "No, they wasn't.", 'No, it was.'), certa: 1 },
+    { instrucao: SA, audioTexto: 'Was Queen Victoria born in May?', opcoes: resp("No, she wasn't.", 'Yes, she were.', 'Yes, she was.', 'Yes, it was.'), certa: 2 },
+    { instrucao: SA, audioTexto: 'Was Michael Jackson a football player?', opcoes: resp('Yes, he was.', 'No, he were.', "No, he isn't.", "No, he wasn't."), certa: 3 },
+    { instrucao: SA, audioTexto: 'Was Einstein a Pisces?', opcoes: resp('Yes, he was.', "No, he wasn't.", 'Yes, he were.', 'Yes, they were.'), certa: 0 },
+    { instrucao: SA, audioTexto: 'Was Marie Curie a Leo?', opcoes: resp('Yes, she was.', "No, she wasn't. She was a Scorpio.", "No, she weren't.", "No, they weren't."), certa: 1 },
+    { instrucao: SA, audioTexto: 'Was the 2014 World Cup in Brazil?', opcoes: resp('Yes, he was.', "No, it wasn't.", 'Yes, it was.', 'Yes, it were.'), certa: 2 },
+    { instrucao: SA, audioTexto: 'Were Pelé and Ayrton Senna Argentinian?', opcoes: resp('Yes, they were.', "No, they wasn't.", "No, he wasn't.", "No, they weren't. They were Brazilian."), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

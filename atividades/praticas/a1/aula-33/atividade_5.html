@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 33 · Ordinal numbers</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 33 · Gramática
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 33) — Vocabulary 5 e 6 (o
+   ordinal na data, quase sempre com -th; os irregulares first, second, third, fifth, eighth,
+   ninth, twelfth), a ordem dos meses e on + data / in + mês ou ano. Conteúdo NOVO e mais difícil:
+   ordinais acima de 20 e fatos verdadeiros. 24 questões. */
+const ORD = 'Choose the ordinal number';
+const PREP = 'On or in?';
+const MES = 'Which month comes next?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: ORD, frase: '1 → ___', opcoes: ['first', 'oneth', 'one'], certa: 0, completa: '1 → first', traducao: '1 → primeiro' },
+    { instrucao: ORD, frase: '2 → ___', opcoes: ['twoth', 'second', 'twice'], certa: 1, completa: '2 → second', traducao: '2 → segundo' },
+    { instrucao: ORD, frase: '3 → ___', opcoes: ['threeth', 'thrid', 'third'], certa: 2, completa: '3 → third', traducao: '3 → terceiro' },
+    { instrucao: ORD, frase: '5 → ___', opcoes: ['fifth', 'fiveth', 'fivth'], certa: 0, completa: '5 → fifth', traducao: '5 → quinto' },
+    { instrucao: ORD, frase: '8 → ___', opcoes: ['eightth', 'eighth', 'eigth'], certa: 1, completa: '8 → eighth', traducao: '8 → oitavo' },
+    { instrucao: ORD, frase: '9 → ___', opcoes: ['nineth', 'ninthe', 'ninth'], certa: 2, completa: '9 → ninth', traducao: '9 → nono' },
+    { instrucao: ORD, frase: '12 → ___', opcoes: ['twelfth', 'twelveth', 'twelvth'], certa: 0, completa: '12 → twelfth', traducao: '12 → décimo segundo' },
+    { instrucao: ORD, frase: '20 → ___', opcoes: ['twentyth', 'twentieth', 'twenteenth'], certa: 1, completa: '20 → twentieth', traducao: '20 → vigésimo' },
+    { instrucao: ORD, frase: '21 → ___', opcoes: ['twenty-oneth', 'twenty-firsth', 'twenty-first'], certa: 2, completa: '21 → twenty-first', traducao: '21 → vigésimo primeiro' },
+    { instrucao: ORD, frase: '23 → ___', opcoes: ['twenty-third', 'twenty-threeth', 'twenty-three'], certa: 0, completa: '23 → twenty-third', traducao: '23 → vigésimo terceiro' },
+    { instrucao: ORD, frase: '30 → ___', opcoes: ['thirteenth', 'thirtieth', 'thirtyth'], certa: 1, completa: '30 → thirtieth', traducao: '30 → trigésimo' },
+    { instrucao: PREP, frase: 'I was born ___ the sixteenth of December.', opcoes: ['on', 'in', 'at'], certa: 0, traducao: 'Eu nasci no dia dezesseis de dezembro.' },
+    { instrucao: PREP, frase: 'She was born ___ May.', opcoes: ['on', 'in', 'at'], certa: 1, traducao: 'Ela nasceu em maio.' },
+    { instrucao: PREP, frase: 'They were born ___ 2010.', opcoes: ['on', 'at', 'in'], certa: 2, traducao: 'Eles nasceram em 2010.' },
+    { instrucao: PREP, frase: 'My birthday is ___ the fifth of July.', opcoes: ['on', 'in', 'at'], certa: 0, traducao: 'Meu aniversário é no dia cinco de julho.' },
+    { instrucao: MES, frase: 'May, June, ___', opcoes: ['August', 'July', 'March'], certa: 1, traducao: 'maio, junho, julho' },
+    { instrucao: MES, frase: 'September, October, ___', opcoes: ['December', 'August', 'November'], certa: 2, traducao: 'setembro, outubro, novembro' },
+    { instrucao: MES, frase: 'January, February, ___', opcoes: ['March', 'May', 'April'], certa: 0, traducao: 'janeiro, fevereiro, março' },
+    { frase: 'Christmas is on the ___ of December.', opcoes: ['twenty-fourth', 'twenty-fifth', 'thirty-first'], certa: 1, traducao: 'O Natal é no dia vinte e cinco de dezembro.' },
+    { frase: "Brazil's Independence Day is on the ___ of September.", opcoes: ['seventeenth', 'ninth', 'seventh'], certa: 2, traducao: 'O Dia da Independência do Brasil é no dia sete de setembro.' },
+    { frase: "New Year's Day is on the first of ___.", opcoes: ['January', 'December', 'March'], certa: 0, traducao: 'O Dia de Ano-Novo é no dia primeiro de janeiro.' },
+    { frase: 'Leonardo da Vinci was born on the fifteenth of April, ___.', opcoes: ['nineteen fifty-two', 'fourteen fifty-two', 'fifteen fifty-two'], certa: 1, completa: 'Leonardo da Vinci was born on the fifteenth of April, fourteen fifty-two.', traducao: 'Leonardo da Vinci nasceu em 15 de abril de 1452.' },
+    { frase: 'When ___ you born?', opcoes: ['was', 'are', 'were'], certa: 2, traducao: 'Quando você nasceu?' },
+    { frase: 'We pronounce the "th" in "fifth" as in ___.', opcoes: ['"thanks"', '"the"', '"tea"'], certa: 0, completa: 'fifth, thanks', traducao: 'Pronunciamos o "th" de "fifth" como em "thanks".' }
+  ]
+});
+</script>
+</body>
+</html>

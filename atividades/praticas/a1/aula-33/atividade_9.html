@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 34 · Were you at home?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 34 · Fala
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 34) — Grammar Point 2
+   (listen and repeat: I wasn't at home. Was I with you? Yes, you were...) e Zodiac Signs (os
+   nomes dos signos têm pronúncia bem diferente do português). Conteúdo NOVO. 20 questões. */
+const PAL = 'Listen and record the word';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 9, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'Gemini', traducao: 'gêmeos', nota: 'Soa como "DJÉ-mi-nai".' },
+    { instrucao: PAL, frase: 'Cancer', traducao: 'câncer' },
+    { instrucao: PAL, frase: 'Virgo', traducao: 'virgem', nota: 'Soa como "VÂR-gou".' },
+    { instrucao: PAL, frase: 'Sagittarius', traducao: 'sagitário', nota: 'sa-dji-TÉ-ri-us.' },
+    { instrucao: PAL, frase: 'Capricorn', traducao: 'capricórnio' },
+    { instrucao: PAL, frase: 'Aquarius', traducao: 'aquário', nota: 'a-KUÉ-ri-us.' },
+    { instrucao: PAL, frase: 'Pisces', traducao: 'peixes', nota: 'Soa como "PAI-siz".' },
+    { instrucao: PAL, frase: 'wasn\'t', traducao: 'não era / não estava (I, he, she, it)' },
+    { frase: "I wasn't at home.", dica: 0, traducao: 'Eu não estava em casa.' },
+    { frase: 'Were you at home? Yes, I was.', dica: 0, traducao: 'Você estava em casa? Sim, estava.' },
+    { frase: "He was a Scorpio. He wasn't a Pisces.", dica: 0, traducao: 'Ele era de escorpião. Ele não era de peixes.' },
+    { frase: "Was she at school? No, she wasn't.", dica: 0, traducao: 'Ela estava na escola? Não, não estava.' },
+    { frase: "We weren't in a café.", dica: 0, traducao: 'Nós não estávamos num café.' },
+    { frase: 'Were they born in England? Yes, they were.', dica: 0, traducao: 'Eles nasceram na Inglaterra? Sim.' },
+    { frase: 'When were you born?', dica: 0, traducao: 'Quando você nasceu?' },
+    { frase: "I was born on the sixteenth of December. I'm a Sagittarius.", dica: 0, traducao: 'Eu nasci no dia dezesseis de dezembro. Eu sou de sagitário.' },
+    { frase: "Was Frida Kahlo a singer? No, she wasn't.", dica: 0, traducao: 'A Frida Kahlo era cantora? Não, não era.' },
+    { frase: 'Were Einstein and Marie Curie scientists? Yes, they were.', dica: 0, traducao: 'O Einstein e a Marie Curie eram cientistas? Sim, eram.' },
+    { frase: "Mozart wasn't German. He was Austrian.", dica: 0, traducao: 'O Mozart não era alemão. Ele era austríaco.' },
+    { frase: "My mom was born on the twenty-first of January. She's an Aquarius.", dica: 0, traducao: 'Minha mãe nasceu no dia vinte e um de janeiro. Ela é de aquário.' }
+  ]
+});
+</script>
+</body>
+</html>

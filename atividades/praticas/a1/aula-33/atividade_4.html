@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 33 · Say the date</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 33 · Fala
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 33) — Vocabulary (listen
+   and repeat os meses e os ordinais; o "th" como em "thanks") e Talking Point (datas e feriados).
+   O motor converte "15th" e "1990" do reconhecimento. Conteúdo NOVO. 20 questões. */
+const PAL = 'Listen and record the word';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'January', traducao: 'janeiro', nota: 'Começa com "DJ": DJÉ-niu-é-ri.' },
+    { instrucao: PAL, frase: 'February', traducao: 'fevereiro' },
+    { instrucao: PAL, frase: 'Wednesday', traducao: 'quarta-feira', nota: 'Revisão: o primeiro "d" não se fala.' },
+    { instrucao: PAL, frase: 'third', traducao: 'terceiro' },
+    { instrucao: PAL, frase: 'fifth', traducao: 'quinto', nota: 'Termina com "th" de "thanks": FIFTH.' },
+    { instrucao: PAL, frase: 'eighth', traducao: 'oitavo' },
+    { instrucao: PAL, frase: 'twelfth', traducao: 'décimo segundo' },
+    { instrucao: PAL, frase: 'twentieth', traducao: 'vigésimo' },
+    { frase: 'When were you born?', dica: 0, traducao: 'Quando você nasceu?' },
+    { frase: 'I was born on the sixteenth of December.', dica: 0, traducao: 'Eu nasci no dia dezesseis de dezembro.' },
+    { frase: "What day is it today? It's the first of March.", dica: 0, traducao: 'Que dia é hoje? É dia primeiro de março.' },
+    { frase: 'Christmas is on the twenty-fifth of December.', dica: 0, traducao: 'O Natal é no dia vinte e cinco de dezembro.' },
+    { frase: 'My birthday is on the twelfth of June.', dica: 0, traducao: 'Meu aniversário é no dia doze de junho.' },
+    { frase: 'She was born in May.', dica: 0, traducao: 'Ela nasceu em maio.' },
+    { frase: "Brazil's Independence Day is on the seventh of September.", dica: 0, traducao: 'O Dia da Independência do Brasil é sete de setembro.' },
+    { frase: 'Einstein was born on the fourteenth of March, eighteen seventy-nine.', dica: 0, traducao: 'O Einstein nasceu em catorze de março de 1879.' },
+    { frase: 'My favorite month is July.', dica: 0, traducao: 'Meu mês favorito é julho.' },
+    { frase: 'Halloween is on the thirty-first of October.', dica: 0, traducao: 'O Halloween é no dia trinta e um de outubro.' },
+    { frase: 'I was born on the third of April, two thousand five.', dica: 0, traducao: 'Eu nasci em três de abril de 2005.' },
+    { frase: "What's your favorite holiday?", dica: 0, traducao: 'Qual é o seu feriado favorito?' }
+  ]
+});
+</script>
+</body>
+</html>

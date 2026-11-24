@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 33 · Months and dates</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 33 · Escuta
+   Alinhado ao slide "Class 33 and 34: When Were You Born?" (parte Class 33) — Vocabulary (os
+   meses; números ordinais; como dizer a data: the fifteenth of August / August fifteenth) e Talking
+   Point (feriados). Conteúdo NOVO: outras datas. 24 questões: 12 meses + 12 datas. */
+const mes = (...cs) => cs.map(c => ({ label: c, icon: 'calendar_month' }));
+const data = (...cs) => cs.map(c => ({ label: c, icon: 'event' }));
+const DATA = 'Listen and choose the date';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 33, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the month',
+  itens: [
+    { audioTexto: 'January', opcoes: mes('January', 'June', 'July', 'February'), certa: 0 },
+    { audioTexto: 'March', opcoes: mes('May', 'March', 'April', 'August'), certa: 1 },
+    { audioTexto: 'June', opcoes: mes('January', 'July', 'June', 'March'), certa: 2 },
+    { audioTexto: 'July', opcoes: mes('June', 'January', 'May', 'July'), certa: 3 },
+    { audioTexto: 'August', opcoes: mes('August', 'April', 'October', 'March'), certa: 0 },
+    { audioTexto: 'September', opcoes: mes('November', 'September', 'December', 'October'), certa: 1 },
+    { audioTexto: 'February', opcoes: mes('November', 'December', 'February', 'January'), certa: 2 },
+    { audioTexto: 'May', opcoes: mes('March', 'April', 'June', 'May'), certa: 3 },
+    { audioTexto: 'October', opcoes: mes('October', 'August', 'November', 'September'), certa: 0 },
+    { audioTexto: 'April', opcoes: mes('August', 'April', 'May', 'March'), certa: 1 },
+    { audioTexto: 'December', opcoes: mes('September', 'November', 'December', 'October'), certa: 2 },
+    { audioTexto: 'November', opcoes: mes('December', 'September', 'October', 'November'), certa: 3 },
+    { instrucao: DATA, audioTexto: 'The fifteenth of August.', opcoes: data('15th August', '5th August', '15th April', '50th August'), certa: 0 },
+    { instrucao: DATA, audioTexto: 'The twenty-first of March.', opcoes: data('23rd March', '21st March', '21st May', '1st March'), certa: 1 },
+    { instrucao: DATA, audioTexto: 'The third of June.', opcoes: data('3rd July', '13th June', '3rd June', '30th June'), certa: 2 },
+    { instrucao: DATA, audioTexto: 'December, the twelfth.', opcoes: data('20th December', '2nd December', '12th November', '12th December'), certa: 3 },
+    { instrucao: DATA, audioTexto: 'The first of January.', opcoes: data('1st January', '1st June', '3rd January', '21st January'), certa: 0 },
+    { instrucao: DATA, audioTexto: 'The thirtieth of September.', opcoes: data('13th September', '30th September', '30th November', '3rd September'), certa: 1 },
+    { instrucao: DATA, audioTexto: 'The eighth of May.', opcoes: data('18th May', '8th March', '8th May', '28th May'), certa: 2 },
+    { instrucao: DATA, audioTexto: 'October, the twenty-second.', opcoes: data('22nd November', '12th October', '2nd October', '22nd October'), certa: 3 },
+    { instrucao: DATA, audioTexto: 'Christmas is on the twenty-fifth of December.', opcoes: data('25th December', '24th December', '25th November', '31st December'), certa: 0 },
+    { instrucao: DATA, audioTexto: "Brazil's Independence Day is on the seventh of September.", opcoes: data('17th September', '7th September', '7th October', '9th September'), certa: 1 },
+    { instrucao: DATA, audioTexto: 'Halloween is on the thirty-first of October.', opcoes: data('13th October', '31st December', '31st October', '30th October'), certa: 2 },
+    { instrucao: DATA, audioTexto: 'I was born on the ninth of July.', opcoes: data('19th July', '9th June', '5th July', '9th July'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>
