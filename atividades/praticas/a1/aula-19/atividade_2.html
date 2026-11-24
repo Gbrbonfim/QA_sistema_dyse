@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 19 · I think it's fun</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 19 · Escrita
+   Alinhado ao slide "Class 19 and 20: Starting a New Hobby" (parte Class 19) — Reading (My New
+   Hobby: I like reading, I want to crochet, Doing crochet isn't easy) e Talking Point ("I think
+   doing crochet is fun. What about you?"). Conteúdo NOVO: outras frases. O contexto traz a frase
+   em português. A isca é o verbo sem -ing, is / are trocado ou o "to" que falta. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 19, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu acho que desenhar é relaxante.'), palavras: ['I', 'think', 'drawing', 'is', 'relaxing'], isca: ['are'], fim: '.', traducao: 'Eu acho que desenhar é relaxante.' },
+    { contexto: M('Eu gosto de ler.'), palavras: ['I', 'like', 'reading'], isca: ['read'], fim: '.', traducao: 'Eu gosto de ler.' },
+    { contexto: M('Ela gosta de cozinhar.'), palavras: ['She', 'likes', 'cooking'], isca: ['like'], fim: '.', traducao: 'Ela gosta de cozinhar.' },
+    { contexto: M('Eu quero experimentar crochê.'), palavras: ['I', 'want', 'to', 'try', 'crochet'], isca: ['wants'], fim: '.', traducao: 'Eu quero experimentar crochê.' },
+    { contexto: M('Fazer crochê não é fácil.'), palavras: ['Doing', 'crochet', "isn't", 'easy'], isca: ['Do'], fim: '.', traducao: 'Fazer crochê não é fácil.' },
+    { contexto: M('Ele quer fazer um bolo.'), palavras: ['He', 'wants', 'to', 'make', 'a', 'cake'], isca: ['want'], fim: '.', traducao: 'Ele quer fazer um bolo.' },
+    { contexto: M('Eu tenho muitos hobbies.'), palavras: ['I', 'have', 'many', 'hobbies'], isca: ['hobbys'], fim: '.', traducao: 'Eu tenho muitos hobbies.' },
+    { contexto: M('Eu acho que jardinagem é chato. E você?'), palavras: ['I', 'think', 'gardening', 'is', 'boring.', 'What', 'about', 'you'], isca: ['are'], fim: '?', traducao: 'Eu acho que jardinagem é chato. E você?' },
+    { contexto: M('Fazer esportes é bom para você.'), palavras: ['Doing', 'sports', 'is', 'good', 'for', 'you'], isca: ['are'], fim: '.', traducao: 'Fazer esportes é bom para você.' },
+    { contexto: M('Meu irmão gosta de jogar videogame.'), palavras: ['My', 'brother', 'likes', 'playing', 'video', 'games'], isca: ['play'], fim: '.', traducao: 'Meu irmão gosta de jogar videogame.' },
+    { contexto: M('Nós queremos fazer um curso.'), palavras: ['We', 'want', 'to', 'do', 'a', 'course'], isca: ['make'], fim: '.', traducao: 'Nós queremos fazer um curso.' },
+    { contexto: M('Ela quer fazer vídeos.'), palavras: ['She', 'wants', 'to', 'make', 'videos'], isca: ['do'], fim: '.', traducao: 'Ela quer fazer vídeos.' },
+    { contexto: M('Escalar é difícil, mas é divertido.'), palavras: ['Climbing', 'is', 'difficult,', 'but', "it's", 'fun'], isca: ['Climb'], fim: '.', traducao: 'Escalar é difícil, mas é divertido.' },
+    { contexto: M('Eu não uso o celular.'), palavras: ['I', "don't", 'use', 'my', 'phone'], isca: ["doesn't"], fim: '.', traducao: 'Eu não uso o celular.' },
+    { contexto: M('Eu fico calma e feliz.'), palavras: ['I', 'feel', 'calm', 'and', 'happy'], isca: ['feels'], fim: '.', traducao: 'Eu fico calma e feliz.' },
+    { contexto: M('Os hobbies me ajudam a relaxar.'), palavras: ['Hobbies', 'help', 'me', 'relax'], isca: ['helps'], fim: '.', traducao: 'Os hobbies me ajudam a relaxar.' },
+    { contexto: M('Eu acho que pintar é divertido.'), palavras: ['I', 'think', 'painting', 'is', 'fun'], isca: ['paint'], fim: '.', traducao: 'Eu acho que pintar é divertido.' },
+    { contexto: M('Minha mãe gosta de jardinagem e de ler.'), palavras: ['My', 'mom', 'likes', 'gardening', 'and', 'reading'], isca: ['like'], fim: '.', traducao: 'Minha mãe gosta de jardinagem e de ler.' },
+    { contexto: M('Eu não preciso ganhar dinheiro.'), palavras: ['I', "don't", 'need', 'to', 'make', 'money'], isca: ['do'], fim: '.', traducao: 'Eu não preciso ganhar dinheiro.' },
+    { contexto: M('Eu sou devagar, mas eu gosto!'), palavras: ['I', 'am', 'slow,', 'but', 'I', 'like', 'it'], isca: ['likes'], fim: '!', traducao: 'Eu sou devagar, mas eu gosto!' }
+  ]
+});
+</script>
+</body>
+</html>

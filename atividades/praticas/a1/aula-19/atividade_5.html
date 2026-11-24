@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 19 · Like, want and think</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 19 · Gramática
+   Alinhado ao slide "Class 19 and 20: Starting a New Hobby" (parte Class 19) — Vocabulary
+   (making / doing + hobby), Reading (I like reading, I want to crochet) e Talking Point (I think
+   + hobby + is + adjetivo). Conteúdo NOVO e mais difícil: like + -ing x want to, make x do,
+   is com o hobby no singular. 24 questões. */
+const MD = 'Make or do?';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 19, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'I like ___.', opcoes: ['read', 'reading', 'to reading'], certa: 1, traducao: 'Eu gosto de ler.' },
+    { frase: 'She likes ___.', opcoes: ['cooking', 'cook', 'cooks'], certa: 0, traducao: 'Ela gosta de cozinhar.' },
+    { frase: 'I want ___ crochet.', opcoes: ['try', 'trying', 'to try'], certa: 2, traducao: 'Eu quero experimentar crochê.' },
+    { frase: 'He wants to ___ a cake.', opcoes: ['make', 'making', 'makes'], certa: 0, traducao: 'Ele quer fazer um bolo.' },
+    { frase: 'My sister ___ painting.', opcoes: ['like', 'likes', 'liking'], certa: 1, traducao: 'Minha irmã gosta de pintar.' },
+    { frase: 'We ___ to learn a new hobby.', opcoes: ['wants', 'want', 'wanting'], certa: 1, traducao: 'Nós queremos aprender um hobby novo.' },
+    { frase: 'I think drawing ___ relaxing.', opcoes: ['is', 'are', 'am'], certa: 0, traducao: 'Eu acho que desenhar é relaxante.' },
+    { frase: 'I think crochet and gardening ___ difficult.', opcoes: ['is', 'am', 'are'], certa: 2, traducao: 'Eu acho que crochê e jardinagem são difíceis.' },
+    { frase: '___ crochet is fun.', opcoes: ['Doing', 'Do', 'Does'], certa: 0, traducao: 'Fazer crochê é divertido.' },
+    { instrucao: MD, frase: '___ a cake', opcoes: ['make', 'do'], certa: 0, traducao: 'fazer um bolo' },
+    { instrucao: MD, frase: '___ sports', opcoes: ['make', 'do'], certa: 1, traducao: 'fazer esportes' },
+    { instrucao: MD, frase: '___ videos', opcoes: ['make', 'do'], certa: 0, traducao: 'fazer vídeos' },
+    { instrucao: MD, frase: '___ a course', opcoes: ['make', 'do'], certa: 1, traducao: 'fazer um curso' },
+    { instrucao: MD, frase: '___ models', opcoes: ['make', 'do'], certa: 0, traducao: 'fazer maquetes, miniaturas' },
+    { instrucao: MD, frase: '___ crochet', opcoes: ['make', 'do'], certa: 1, traducao: 'fazer crochê' },
+    { frase: "Gardening isn't difficult. It's ___.", opcoes: ['difficult', 'easy', 'hard'], certa: 1, traducao: 'Jardinagem não é difícil. É fácil.' },
+    { frase: "I think watching TV all day is ___. I don't like it!", opcoes: ['boring', 'fun', 'relaxing'], certa: 0, traducao: 'Eu acho que assistir TV o dia todo é chato. Eu não gosto!' },
+    { frase: "Yoga is very ___. I feel calm.", opcoes: ['difficult', 'boring', 'relaxing'], certa: 2, traducao: 'Ioga é muito relaxante. Eu fico calma.' },
+    { frase: "I think doing crochet is fun. What ___ you?", opcoes: ['about', 'are', 'do'], certa: 0, traducao: 'Eu acho que fazer crochê é divertido. E você?' },
+    { frase: 'I have many ___.', opcoes: ['hobbys', 'hobbies', 'hobbyes'], certa: 1, traducao: 'Eu tenho muitos hobbies.' },
+    { instrucao: CERTA, opcoes: ['I like cook.', 'I like to cooking.', 'I like cooking.'], certa: 2, traducao: 'Eu gosto de cozinhar.' },
+    { instrucao: CERTA, opcoes: ['She wants to try a new hobby.', 'She want to try a new hobby.', 'She wants try a new hobby.'], certa: 0, traducao: 'Ela quer experimentar um hobby novo.' },
+    { instrucao: CERTA, opcoes: ['I think climbing are difficult.', 'I think climbing is difficult.', 'I think climb is difficult.'], certa: 1, traducao: 'Eu acho que escalar é difícil.' },
+    { instrucao: CERTA, opcoes: ['He makes sports on Saturday.', 'He do sports on Saturday.', 'He does sports on Saturday.'], certa: 2, traducao: 'Ele faz esportes no sábado.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 19 · A new hobby</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 19 · Leitura
+   Alinhado ao slide "Class 19 and 20: Starting a New Hobby" (parte Class 19) — Reading (My New
+   Hobby; respostas Yes, she does / No, it isn't) e Talking Point ("What hobby do you want to
+   try?"). Conteúdo NOVO: Sam quer começar jardinagem e a Nora quer fazer vídeos. 20 questões:
+   12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Sam', 'Hi, Nora! Do you have a hobby?'],
+  ['Nora', 'Yes, I do. I like reading and cooking.'],
+  ['Sam', 'Cool! I want to try a new hobby.'],
+  ['Nora', 'What hobby do you want to try?'],
+  ['Sam', "I want to try gardening. I think it's relaxing."],
+  ['Nora', 'Gardening? My grandmother loves gardening!'],
+  ['Sam', 'Does she have a big garden?'],
+  ['Nora', 'Yes, she does. She has tomatoes and flowers.'],
+  ['Sam', 'Is gardening difficult?'],
+  ['Nora', "No, it isn't. But you need time and patience."],
+  ['Sam', 'OK! And you? Do you want to try a new hobby?'],
+  ['Nora', "Yes! I want to make videos. I think it's fun."],
+  ['Sam', "Making videos? It's difficult!"],
+  ['Nora', 'Maybe! But I want to learn.']
+];
+const lado = q => q === 'Sam' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 19, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I do. I like reading and cooking.', 'Yes, I am. I like reading and cooking.', 'Yes, I do. I like read and cook.'], 0, 'Sim. Eu gosto de ler e de cozinhar.'),
+    prox(2, ['Cool! I want try a new hobby.', 'Cool! I want to try a new hobby.', 'Maybe! But I want to learn.'], 1, 'Legal! Eu quero experimentar um hobby novo.'),
+    prox(3, ['What hobby you want to try?', 'What hobby does you want to try?', 'What hobby do you want to try?'], 2, 'Que hobby você quer experimentar?'),
+    prox(4, ["I want to try gardening. I think it's relaxing.", "I want to try gardening. I think it's relax.", 'Is gardening difficult?'], 0, 'Eu quero experimentar jardinagem. Eu acho que é relaxante.'),
+    prox(5, ['Gardening? My grandmother love gardening!', 'Gardening? My grandmother loves gardening!', 'Does she have a big garden?'], 1, 'Jardinagem? Minha avó adora jardinagem!'),
+    prox(6, ['Is she have a big garden?', 'Does she has a big garden?', 'Does she have a big garden?'], 2, 'Ela tem um jardim grande?'),
+    prox(7, ['Yes, she does. She has tomatoes and flowers.', 'Yes, she is. She has tomatoes and flowers.', 'Yes, she does. She have tomatoes and flowers.'], 0, 'Sim, tem. Ela tem tomates e flores.'),
+    prox(8, ['Does gardening difficult?', 'Is gardening difficult?', 'Are gardening difficult?'], 1, 'Jardinagem é difícil?'),
+    prox(9, ["No, it doesn't. But you need time.", "Yes! I want to make videos.", "No, it isn't. But you need time and patience."], 2, 'Não, não é. Mas você precisa de tempo e paciência.'),
+    prox(10, ['OK! And you? Do you want to try a new hobby?', 'OK! And you? Are you want to try a new hobby?', 'Hi, Nora!'], 0, 'Tá bom! E você? Você quer experimentar um hobby novo?'),
+    prox(11, ["Yes! I want to making videos. I think it's fun.", "Yes! I want to make videos. I think it's fun.", "No, it isn't."], 1, 'Sim! Eu quero fazer vídeos. Eu acho divertido.'),
+    prox(12, ['Does she have a big garden?', 'Is gardening difficult?', "Making videos? It's difficult!"], 2, 'Fazer vídeos? É difícil!'),
+    { instrucao: 'Does Nora have a hobby?', frase: 'Yes, she ___.', opcoes: ['does', 'is', 'do'], certa: 0, traducao: 'Sim, ela tem.' },
+    { instrucao: "What are Nora's hobbies?", frase: 'Reading and ___.', opcoes: ['drawing', 'cooking', 'gardening'], certa: 1, traducao: 'Ler e cozinhar.' },
+    { instrucao: 'What hobby does Sam want to try?', frase: 'He wants to try ___.', opcoes: ['cooking', 'climbing', 'gardening'], certa: 2, traducao: 'Ele quer experimentar jardinagem.' },
+    { instrucao: 'What does Sam think about gardening?', frase: "He thinks it's ___.", opcoes: ['relaxing', 'boring', 'difficult'], certa: 0, traducao: 'Ele acha que é relaxante.' },
+    { instrucao: "Does Nora's grandmother have a big garden?", frase: 'Yes, she ___.', opcoes: ['is', 'does', 'has'], certa: 1, traducao: 'Sim, ela tem.' },
+    { instrucao: 'Is gardening difficult, for Nora?', frase: 'No, it ___.', opcoes: ["doesn't", "aren't", "isn't"], certa: 2, traducao: 'Não, não é.' },
+    { instrucao: 'What does Nora want to do?', frase: 'She wants to make ___.', opcoes: ['videos', 'cakes', 'models'], certa: 0, traducao: 'Ela quer fazer vídeos.' },
+    { instrucao: 'What does Sam think about making videos?', frase: "He thinks it's ___.", opcoes: ['fun', 'difficult', 'relaxing'], certa: 1, traducao: 'Ele acha que é difícil.' }
+  ]
+});
+</script>
+</body>
+</html>

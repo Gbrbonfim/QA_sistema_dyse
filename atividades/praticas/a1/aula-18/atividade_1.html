@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 18 · Jobs</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 18 · Escuta
+   Alinhado ao slide "Class 18: A Day in the Life" — Vocabulary: Jobs (student, teacher, nurse,
+   doctor, football player, shop assistant, cleaner, engineer, influencer, office worker, factory
+   worker, lawyer, secretary, vet, farmer, dentist) e Listening (pessoas descrevem o trabalho).
+   Conteúdo NOVO: outras descrições. As figuras são ícones. 24 questões: 12 profissões + 12 descrições. */
+const IC = { student: 'school', teacher: 'co_present', nurse: 'vaccines', doctor: 'stethoscope', 'football player': 'sports_soccer',
+  'shop assistant': 'storefront', cleaner: 'cleaning_services', engineer: 'engineering', influencer: 'camera_front',
+  'office worker': 'computer', 'factory worker': 'factory', lawyer: 'gavel', secretary: 'support_agent', vet: 'pets',
+  farmer: 'agriculture', dentist: 'dentistry' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const DESC = 'Listen to the description and choose the job';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 18, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the job',
+  itens: [
+    { audioTexto: 'a nurse', opcoes: op('nurse', 'doctor', 'dentist', 'vet'), certa: 0 },
+    { audioTexto: 'an engineer', opcoes: op('office worker', 'engineer', 'factory worker', 'lawyer'), certa: 1 },
+    { audioTexto: 'a lawyer', opcoes: op('teacher', 'secretary', 'lawyer', 'student'), certa: 2 },
+    { audioTexto: 'a farmer', opcoes: op('vet', 'cleaner', 'football player', 'farmer'), certa: 3 },
+    { audioTexto: 'a dentist', opcoes: op('dentist', 'doctor', 'nurse', 'engineer'), certa: 0 },
+    { audioTexto: 'a shop assistant', opcoes: op('secretary', 'shop assistant', 'office worker', 'cleaner'), certa: 1 },
+    { audioTexto: 'an influencer', opcoes: op('teacher', 'student', 'influencer', 'lawyer'), certa: 2 },
+    { audioTexto: 'a secretary', opcoes: op('shop assistant', 'lawyer', 'teacher', 'secretary'), certa: 3 },
+    { audioTexto: 'a vet', opcoes: op('vet', 'farmer', 'nurse', 'dentist'), certa: 0 },
+    { audioTexto: 'a factory worker', opcoes: op('office worker', 'factory worker', 'engineer', 'football player'), certa: 1 },
+    { audioTexto: 'a cleaner', opcoes: op('farmer', 'secretary', 'cleaner', 'shop assistant'), certa: 2 },
+    { audioTexto: 'a doctor', opcoes: op('nurse', 'dentist', 'vet', 'doctor'), certa: 3 },
+    { instrucao: DESC, audioTexto: 'She works with animals. She helps dogs and cats.', opcoes: op('vet', 'farmer', 'nurse', 'cleaner'), certa: 0 },
+    { instrucao: DESC, audioTexto: 'He works on a farm. He gets up at five and checks the animals.', opcoes: op('vet', 'farmer', 'factory worker', 'engineer'), certa: 1 },
+    { instrucao: DESC, audioTexto: 'She teaches English at a school.', opcoes: op('student', 'secretary', 'teacher', 'influencer'), certa: 2 },
+    { instrucao: DESC, audioTexto: 'He plays football and travels for matches.', opcoes: op('teacher', 'student', 'engineer', 'football player'), certa: 3 },
+    { instrucao: DESC, audioTexto: 'She checks people’s teeth.', opcoes: op('dentist', 'doctor', 'nurse', 'vet'), certa: 0 },
+    { instrucao: DESC, audioTexto: 'He works in a shop. He helps people with clothes.', opcoes: op('cleaner', 'shop assistant', 'secretary', 'office worker'), certa: 1 },
+    { instrucao: DESC, audioTexto: 'She cleans rooms in a hotel.', opcoes: op('secretary', 'nurse', 'cleaner', 'shop assistant'), certa: 2 },
+    { instrucao: DESC, audioTexto: 'He works in a factory. He makes cars.', opcoes: op('engineer', 'office worker', 'farmer', 'factory worker'), certa: 3 },
+    { instrucao: DESC, audioTexto: 'She posts videos and photos. She works with her phone.', opcoes: op('influencer', 'secretary', 'student', 'lawyer'), certa: 0 },
+    { instrucao: DESC, audioTexto: 'He works with a computer in an office.', opcoes: op('factory worker', 'office worker', 'farmer', 'cleaner'), certa: 1 },
+    { instrucao: DESC, audioTexto: 'He goes to school and studies every day.', opcoes: op('teacher', 'secretary', 'student', 'influencer'), certa: 2 },
+    { instrucao: DESC, audioTexto: 'She works at the hospital. She helps the doctors and she often works at night.', opcoes: op('dentist', 'vet', 'doctor', 'nurse'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

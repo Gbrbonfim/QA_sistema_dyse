@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 18 · What's your job?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 18 · Leitura
+   Alinhado ao slide "Class 18: A Day in the Life" — Reading and Writing (A Day in the Life;
+   perguntas com does) e Writing 2 (work at weekends, wear a uniform, travel for work, work with a
+   computer). Conteúdo NOVO: a Lily entrevista o tio Paul, que é veterinário. 20 questões:
+   12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Lily', "Uncle Paul, what's your job?"],
+  ['Paul', "I'm a vet. I work with animals."],
+  ['Lily', 'Cool! Do you work at weekends?'],
+  ['Paul', "Yes, I do. I work on Saturdays, but I don't work on Sundays."],
+  ['Lily', 'What time do you start work?'],
+  ['Paul', "I start work at eight o'clock."],
+  ['Lily', 'Do you wear a uniform?'],
+  ['Paul', "Yes, I do. It's green."],
+  ['Lily', 'Does Aunt Kate work with animals too?'],
+  ['Paul', "No, she doesn't. She's a lawyer. She works with a computer."],
+  ['Lily', 'Does she travel for work?'],
+  ['Paul', 'Yes, she does. She often travels to London.'],
+  ['Lily', "Wow! And Max? What's his job?"],
+  ['Paul', "He's a student. He doesn't work. He plays video games!"]
+];
+const lado = q => q === 'Lily' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 18, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I'm a vet. I work with animals.", "I'm vet. I work with animals.", "I'm a vet. I works with animals."], 0, 'Eu sou veterinário. Eu trabalho com animais.'),
+    prox(2, ['Cool! Does you work at weekends?', 'Cool! Do you work at weekends?', 'Cool! Are you work at weekends?'], 1, 'Legal! Você trabalha nos fins de semana?'),
+    prox(3, ["Yes, I am. I work on Saturdays.", "Yes, I do. I work on Saturdays, but I doesn't work on Sundays.", "Yes, I do. I work on Saturdays, but I don't work on Sundays."], 2, 'Sim. Eu trabalho aos sábados, mas não trabalho aos domingos.'),
+    prox(4, ['What time do you start work?', 'What time you start work?', 'What time does you start work?'], 0, 'A que horas você começa a trabalhar?'),
+    prox(5, ["I starts work at eight o'clock.", "I start work at eight o'clock.", "Yes, I do."], 1, 'Eu começo a trabalhar às oito horas.'),
+    prox(6, ['Does you wear a uniform?', 'Do you wears a uniform?', 'Do you wear a uniform?'], 2, 'Você usa uniforme?'),
+    prox(7, ["Yes, I do. It's green.", "Yes, I am. It's green.", "Yes, I does. It's green."], 0, 'Sim, uso. É verde.'),
+    prox(8, ['Do Aunt Kate work with animals too?', 'Does Aunt Kate work with animals too?', 'Does Aunt Kate works with animals too?'], 1, 'A tia Kate também trabalha com animais?'),
+    prox(9, ["No, she don't. She's a lawyer.", "No, she isn't. She's a lawyer.", "No, she doesn't. She's a lawyer. She works with a computer."], 2, 'Não. Ela é advogada. Ela trabalha com computador.'),
+    prox(10, ['Does she travel for work?', 'Does she travels for work?', 'Is she travel for work?'], 0, 'Ela viaja a trabalho?'),
+    prox(11, ['Yes, she do. She often travels to London.', 'Yes, she does. She often travels to London.', 'Yes, she does. She travels often to London.'], 1, 'Sim, viaja. Ela frequentemente viaja para Londres.'),
+    prox(12, ['Do you wear a uniform?', 'What time do you start work?', "Wow! And Max? What's his job?"], 2, 'Nossa! E o Max? Qual é a profissão dele?'),
+    { instrucao: "What's Paul's job?", frase: "He's a ___.", opcoes: ['vet', 'lawyer', 'student'], certa: 0, traducao: 'Ele é veterinário.' },
+    { instrucao: 'Does Paul work on Sundays?', frase: 'No, he ___.', opcoes: ["don't", "doesn't", "isn't"], certa: 1, traducao: 'Não, ele não trabalha.' },
+    { instrucao: 'What time does Paul start work?', frase: 'He starts work at ___.', opcoes: ['seven', 'nine', "eight o'clock"], certa: 2, traducao: 'Ele começa a trabalhar às oito horas.' },
+    { instrucao: "What color is Paul's uniform?", frase: "It's ___.", opcoes: ['green', 'blue', 'white'], certa: 0, traducao: 'É verde.' },
+    { instrucao: "What's Aunt Kate's job?", frase: "She's a ___.", opcoes: ['vet', 'lawyer', 'nurse'], certa: 1, traducao: 'Ela é advogada.' },
+    { instrucao: 'Does Kate work with animals?', frase: 'No, she ___.', opcoes: ["don't", "isn't", "doesn't"], certa: 2, traducao: 'Não, ela não trabalha.' },
+    { instrucao: 'Kate and work:', frase: 'She often ___ to London.', opcoes: ['travels', 'travel', 'works'], certa: 0, traducao: 'Ela frequentemente viaja para Londres.' },
+    { instrucao: "What's Max's job?", frase: "He's a ___.", opcoes: ['vet', 'student', 'teacher'], certa: 1, traducao: 'Ele é estudante.' }
+  ]
+});
+</script>
+</body>
+</html>

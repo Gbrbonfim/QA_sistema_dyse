@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 19 · Hobbies</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 19 · Escuta
+   Alinhado ao slide "Class 19 and 20: Starting a New Hobby" (parte Class 19) — Vocabulary
+   (painting, playing music, climbing, reading, making cakes / models / videos, doing crochet /
+   sports / a course, cooking, drawing, playing games, gardening) e Talking Point (fun, good,
+   relaxing, boring, easy, difficult). Conteúdo NOVO: outras frases. As figuras são ícones.
+   24 questões: 12 hobbies + 12 opiniões. */
+const IC = { painting: 'palette', 'playing music': 'piano', climbing: 'hiking', reading: 'menu_book', 'making cakes': 'cake',
+  'making models': 'toys', 'making videos': 'videocam', 'doing crochet': 'apparel', 'doing sports': 'sports_basketball',
+  'doing a course': 'school', cooking: 'skillet', drawing: 'draw', 'playing games': 'sports_esports', gardening: 'yard',
+  fun: 'sentiment_very_satisfied', good: 'thumb_up', relaxing: 'spa', boring: 'snooze', easy: 'check_circle', difficult: 'warning' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const OPI = 'Listen to the opinion and choose the adjective';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 19, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the hobby',
+  itens: [
+    { audioTexto: 'painting', opcoes: op('painting', 'drawing', 'reading', 'cooking'), certa: 0 },
+    { audioTexto: 'gardening', opcoes: op('climbing', 'gardening', 'cooking', 'painting'), certa: 1 },
+    { audioTexto: 'climbing', opcoes: op('doing sports', 'reading', 'climbing', 'gardening'), certa: 2 },
+    { audioTexto: 'making cakes', opcoes: op('cooking', 'making models', 'making videos', 'making cakes'), certa: 3 },
+    { audioTexto: 'doing crochet', opcoes: op('doing crochet', 'doing a course', 'drawing', 'painting'), certa: 0 },
+    { audioTexto: 'making videos', opcoes: op('playing games', 'making videos', 'making models', 'reading'), certa: 1 },
+    { audioTexto: 'playing music', opcoes: op('playing games', 'doing sports', 'playing music', 'making videos'), certa: 2 },
+    { audioTexto: 'drawing', opcoes: op('painting', 'reading', 'doing crochet', 'drawing'), certa: 3 },
+    { audioTexto: 'doing a course', opcoes: op('doing a course', 'doing sports', 'reading', 'making models'), certa: 0 },
+    { audioTexto: 'making models', opcoes: op('making cakes', 'making models', 'playing games', 'cooking'), certa: 1 },
+    { audioTexto: 'cooking', opcoes: op('making cakes', 'gardening', 'cooking', 'climbing'), certa: 2 },
+    { audioTexto: 'doing sports', opcoes: op('climbing', 'playing music', 'doing a course', 'doing sports'), certa: 3 },
+    { instrucao: OPI, audioTexto: 'I think gardening is relaxing.', opcoes: op('relaxing', 'boring', 'difficult', 'fun'), certa: 0 },
+    { instrucao: OPI, audioTexto: 'I think doing crochet is difficult.', opcoes: op('easy', 'difficult', 'fun', 'good'), certa: 1 },
+    { instrucao: OPI, audioTexto: 'Making videos is fun!', opcoes: op('boring', 'relaxing', 'fun', 'difficult'), certa: 2 },
+    { instrucao: OPI, audioTexto: "I don't like doing a course online. It's boring.", opcoes: op('good', 'fun', 'easy', 'boring'), certa: 3 },
+    { instrucao: OPI, audioTexto: 'Drawing is easy for my sister.', opcoes: op('easy', 'difficult', 'boring', 'relaxing'), certa: 0 },
+    { instrucao: OPI, audioTexto: 'I think reading is good for children.', opcoes: op('fun', 'good', 'boring', 'easy'), certa: 1 },
+    { instrucao: OPI, audioTexto: 'Climbing is very difficult!', opcoes: op('relaxing', 'easy', 'difficult', 'good'), certa: 2 },
+    { instrucao: OPI, audioTexto: 'My dad thinks painting is relaxing.', opcoes: op('boring', 'fun', 'difficult', 'relaxing'), certa: 3 },
+    { instrucao: OPI, audioTexto: 'Playing games with friends is fun.', opcoes: op('fun', 'boring', 'difficult', 'easy'), certa: 0 },
+    { instrucao: OPI, audioTexto: "Cooking isn't difficult. It's easy!", opcoes: op('difficult', 'easy', 'boring', 'relaxing'), certa: 1 },
+    { instrucao: OPI, audioTexto: "Making models? No, thanks. I think it's boring.", opcoes: op('fun', 'good', 'boring', 'relaxing'), certa: 2 },
+    { instrucao: OPI, audioTexto: 'Doing sports is good for you.', opcoes: op('boring', 'difficult', 'easy', 'good'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

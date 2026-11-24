@@ -184,6 +184,33 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 17', titulo: 'Ask and answer', tipo: 'Escute e grave', treina: 'Fala · Perguntas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 17', titulo: 'Questions with do / does', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 18,
+        titulo: 'Class 18 · A Day in the Life',
+        atividades: [
+          { num: 1, titulo: 'Jobs', tipo: 'Escute e escolha', treina: 'Escuta · Profissões', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "He doesn't work on Fridays", tipo: 'Monte a frase', treina: 'Escrita · Present simple', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: "What's your job?", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Entrevista', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Talk about jobs', tipo: 'Escute e grave', treina: 'Fala · Profissões', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Present simple: all forms', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
+        aula: 19,
+        titulo: 'Class 19 and 20 · Starting a New Hobby',
+        atividades: [
+          { num: 1, parte: 'Class 19', titulo: 'Hobbies', tipo: 'Escute e escolha', treina: 'Escuta · Hobbies', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 19', titulo: "I think it's fun", tipo: 'Monte a frase', treina: 'Escrita · Opiniões', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 19', titulo: 'A new hobby', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 19', titulo: 'My favorite hobby', tipo: 'Escute e grave', treina: 'Fala · Opiniões', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 19', titulo: 'Like, want and think', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 20', titulo: 'Is it or does it?', tipo: 'Escute e escolha', treina: 'Escuta · Perguntas', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 20', titulo: 'Make the question', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 20', titulo: 'Interview a partner', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Entrevista', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 20', titulo: 'Ask me anything', tipo: 'Escute e grave', treina: 'Fala · Perguntas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 20', titulo: 'Be or do?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

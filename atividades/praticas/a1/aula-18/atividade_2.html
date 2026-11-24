@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 18 · He doesn't work on Fridays</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 18 · Escrita
+   Alinhado ao slide "Class 18: A Day in the Life" — Grammar (present simple nas 3 formas:
+   afirmativa, negativa com don't / doesn't, pergunta com do / does) e Talking Point ("What's his
+   job? He's a factory worker."). Conteúdo NOVO: outras profissões e frases. O contexto traz a
+   frase em português. A isca é don't x doesn't, o verbo com s depois de doesn't ou a x an.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 18, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Uma secretária não trabalha na rua.'), palavras: ['A', 'secretary', "doesn't", 'work', 'in', 'the', 'street'], isca: ["don't"], fim: '.', traducao: 'Uma secretária não trabalha na rua.' },
+    { contexto: M('Advogados não precisam de uniforme.'), palavras: ['Lawyers', "don't", 'need', 'a', 'uniform'], isca: ["doesn't"], fim: '.', traducao: 'Advogados não precisam de uniforme.' },
+    { contexto: M('Ele não trabalha na sexta.'), palavras: ['He', "doesn't", 'work', 'on', 'Fridays'], isca: ['works'], fim: '.', traducao: 'Ele não trabalha às sextas.' },
+    { contexto: M('Enfermeiros não têm muito tempo livre.'), palavras: ['Nurses', "don't", 'have', 'a', 'lot', 'of', 'free', 'time'], isca: ['has'], fim: '.', traducao: 'Enfermeiros não têm muito tempo livre.' },
+    { contexto: M('Um médico trabalha nos fins de semana?'), palavras: ['Does', 'a', 'doctor', 'work', 'at', 'weekends'], isca: ['works'], fim: '?', traducao: 'Um médico trabalha nos fins de semana?' },
+    { contexto: M('Os vendedores usam uniforme?'), palavras: ['Do', 'shop', 'assistants', 'wear', 'a', 'uniform'], isca: ['Does'], fim: '?', traducao: 'Os vendedores usam uniforme?' },
+    { contexto: M('Qual é a profissão dela?'), palavras: ["What's", 'her', 'job'], isca: ['she'], fim: '?', traducao: 'Qual é a profissão dela?' },
+    { contexto: M('Quais são as profissões deles?'), palavras: ['What', 'are', 'their', 'jobs'], isca: ['is'], fim: '?', traducao: 'Quais são as profissões deles?' },
+    { contexto: M('Ele é engenheiro.'), palavras: ["He's", 'an', 'engineer'], isca: ['a'], fim: '.', traducao: 'Ele é engenheiro.' },
+    { contexto: M('Ela é influenciadora.'), palavras: ["She's", 'an', 'influencer'], isca: ['a'], fim: '.', traducao: 'Ela é influenciadora.' },
+    { contexto: M('Eles são jogadores de futebol.'), palavras: ["They're", 'football', 'players'], isca: ['a'], fim: '.', traducao: 'Eles são jogadores de futebol.' },
+    { contexto: M('A Sara vai para o hospital bem cedo.'), palavras: ['Sara', 'goes', 'to', 'the', 'hospital', 'very', 'early'], isca: ['go'], fim: '.', traducao: 'A Sara vai para o hospital bem cedo.' },
+    { contexto: M('Nós ensinamos idiomas.'), palavras: ['We', 'teach', 'languages'], isca: ['teaches'], fim: '.', traducao: 'Nós ensinamos idiomas.' },
+    { contexto: M('A Ana termina o trabalho às sete.'), palavras: ['Ana', 'finishes', 'work', 'at', 'seven'], isca: ['finish'], fim: '.', traducao: 'A Ana termina o trabalho às sete.' },
+    { contexto: M('O Tom mora no campo.'), palavras: ['Tom', 'lives', 'in', 'the', 'countryside'], isca: ['live'], fim: '.', traducao: 'O Tom mora no campo.' },
+    { contexto: M('Ela não dirige no trabalho.'), palavras: ['She', "doesn't", 'drive', 'at', 'work'], isca: ['drives'], fim: '.', traducao: 'Ela não dirige no trabalho.' },
+    { contexto: M('Um professor trabalha com pessoas?'), palavras: ['Does', 'a', 'teacher', 'work', 'with', 'people'], isca: ['Do'], fim: '?', traducao: 'Um professor trabalha com pessoas?' },
+    { contexto: M('Sim, ele trabalha.'), palavras: ['Yes,', 'he', 'does'], isca: ['is'], fim: '.', traducao: 'Sim, ele trabalha.' },
+    { contexto: M('Influenciadores não começam a trabalhar no mesmo horário.'), palavras: ['Influencers', "don't", 'start', 'work', 'at', 'the', 'same', 'time'], isca: ["doesn't"], fim: '.', traducao: 'Influenciadores não começam a trabalhar no mesmo horário.' },
+    { contexto: M('Onde a Anna trabalha?'), palavras: ['Where', 'does', 'Anna', 'work'], isca: ['works'], fim: '?', traducao: 'Onde a Anna trabalha?' }
+  ]
+});
+</script>
+</body>
+</html>

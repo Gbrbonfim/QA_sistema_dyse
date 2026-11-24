@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 18 · Present simple: all forms</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 18 · Gramática
+   Alinhado ao slide "Class 18: A Day in the Life" — Grammar 2, 3 e 4 (afirmativa, negativa e
+   pergunta do present simple) e Talking Point (a / an + profissão). Conteúdo NOVO e mais
+   difícil: as três formas misturadas, com sujeitos no plural e no singular. 24 questões. */
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 18, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'A factory worker sometimes ___ at night.', opcoes: ['work', 'works'], certa: 1, traducao: 'Um operário às vezes trabalha à noite.' },
+    { frase: 'My parents are farmers. They ___ work very early.', opcoes: ['start', 'starts'], certa: 0, traducao: 'Meus pais são fazendeiros. Eles começam a trabalhar muito cedo.' },
+    { frase: 'Ana is a cleaner. She ___ work at seven.', opcoes: ['finish', 'finishs', 'finishes'], certa: 2, traducao: 'A Ana é faxineira. Ela termina o trabalho às sete.' },
+    { frase: 'We are teachers. We ___ languages.', opcoes: ['teach', 'teaches'], certa: 0, traducao: 'Nós somos professores. Nós ensinamos idiomas.' },
+    { frase: 'An office worker ___ drive at work.', opcoes: ["don't", "doesn't"], certa: 1, traducao: 'Um funcionário de escritório não dirige no trabalho.' },
+    { frase: 'Lawyers ___ need a uniform.', opcoes: ["don't", "doesn't"], certa: 0, traducao: 'Advogados não precisam de uniforme.' },
+    { frase: "My mom is a nurse. She doesn't ___ on Sundays.", opcoes: ['works', 'work', 'working'], certa: 1, traducao: 'Minha mãe é enfermeira. Ela não trabalha aos domingos.' },
+    { frase: "The engineers ___ open the office before eight.", opcoes: ["doesn't", "isn't", "don't"], certa: 2, traducao: 'Os engenheiros não abrem o escritório antes das oito.' },
+    { frase: '___ factory workers start early?', opcoes: ['Do', 'Does'], certa: 0, traducao: 'Os operários começam cedo?' },
+    { frase: '___ a doctor work at weekends?', opcoes: ['Do', 'Does'], certa: 1, traducao: 'Um médico trabalha nos fins de semana?' },
+    { frase: '___ shop assistants wear a uniform?', opcoes: ['Does', 'Are', 'Do'], certa: 2, traducao: 'Os vendedores usam uniforme?' },
+    { frase: 'Does a teacher ___ good holidays?', opcoes: ['have', 'has'], certa: 0, traducao: 'Um professor tem boas férias?' },
+    { frase: "Does she travel for work? No, she ___.", opcoes: ["don't", "doesn't", "isn't"], certa: 1, traducao: 'Ela viaja a trabalho? Não, não viaja.' },
+    { frase: "Do vets work with animals? Yes, they ___.", opcoes: ['does', 'are', 'do'], certa: 2, traducao: 'Os veterinários trabalham com animais? Sim, trabalham.' },
+    { frase: "He's ___ engineer.", opcoes: ['an', 'a'], certa: 0, traducao: 'Ele é engenheiro.' },
+    { frase: "She's ___ lawyer.", opcoes: ['an', 'a'], certa: 1, traducao: 'Ela é advogada.' },
+    { frase: "They're ___.", opcoes: ['a football players', 'football players', 'football player'], certa: 1, traducao: 'Eles são jogadores de futebol.' },
+    { frase: "What's ___ job? He's a farmer.", opcoes: ['his', 'her', 'their'], certa: 0, traducao: 'Qual é a profissão dele? Ele é fazendeiro.' },
+    { frase: "What ___ their jobs? They're nurses.", opcoes: ['is', 'are', 'do'], certa: 1, traducao: 'Quais são as profissões deles? Eles são enfermeiros.' },
+    { frase: 'Where ___ Tom live? In the countryside.', opcoes: ['do', 'is', 'does'], certa: 2, traducao: 'Onde o Tom mora? No campo.' },
+    { instrucao: CERTA, opcoes: ["My father doesn't works on Fridays.", "My father don't work on Fridays.", "My father doesn't work on Fridays."], certa: 2, traducao: 'Meu pai não trabalha às sextas.' },
+    { instrucao: CERTA, opcoes: ['She is a doctor.', 'She is doctor.', 'She doctor is.'], certa: 0, traducao: 'Ela é médica.' },
+    { instrucao: CERTA, opcoes: ['Do Anna work in a factory?', 'Does Anna work in a factory?', 'Does Anna works in a factory?'], certa: 1, traducao: 'A Anna trabalha numa fábrica?' },
+    { instrucao: CERTA, opcoes: ["Nurses doesn't have a lot of free time.", "Nurses don't has a lot of free time.", "Nurses don't have a lot of free time."], certa: 2, traducao: 'Enfermeiros não têm muito tempo livre.' }
+  ]
+});
+</script>
+</body>
+</html>
