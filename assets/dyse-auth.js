@@ -540,6 +540,38 @@ async function dyseSetPraticaAluno(alunoId, course, aula, activityNum, liberada)
   return { error };
 }
 
+/* [Professora] liberações de VÁRIOS alunos (ex.: a turma inteira), numa consulta:
+   { "course:aula:num": Set(aluno_id) } só com as liberadas. */
+async function dysePraticasLiberadasDosAlunos(alunoIds){
+  if(!alunoIds || !alunoIds.length) return {};
+  const { data, error } = await sb
+    .from('aluno_atividades_liberadas')
+    .select('aluno_id, course, aula, activity_num, liberada')
+    .in('aluno_id', alunoIds);
+  const mapa = {};
+  if(!error && data) data.filter(r => r.liberada).forEach(r => {
+    const k = r.course + ':' + r.aula + ':' + r.activity_num;
+    (mapa[k] = mapa[k] || new Set()).add(r.aluno_id);
+  });
+  return mapa;
+}
+
+/* [Professora] libera/bloqueia várias atividades para vários alunos de uma vez
+   (liberar para a turma). itens = [{ course, aula, num }]. Uma gravação só;
+   não mexe no "refazer" já liberado. */
+async function dyseSetPraticasVarios(alunoIds, itens, liberada){
+  if(!alunoIds || !alunoIds.length || !itens || !itens.length) return { error: null };
+  const session = await dyseGetSession();
+  const agora = new Date().toISOString();
+  const linhas = [];
+  alunoIds.forEach(id => itens.forEach(it => linhas.push({
+    aluno_id: id, course: it.course, aula: it.aula, activity_num: it.num,
+    liberada: !!liberada, liberada_por: session ? session.user.id : null, updated_at: agora
+  })));
+  const { error } = await sb.from('aluno_atividades_liberadas').upsert(linhas, { onConflict: 'aluno_id,course,aula,activity_num' });
+  return { error };
+}
+
 /* [Professora] resultados de UM aluno nos cursos de atividade. */
 async function dyseResultadosPraticasDoAluno(alunoId){
   const { data, error } = await sb

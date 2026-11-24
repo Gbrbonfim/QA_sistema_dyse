@@ -610,6 +610,19 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .ab-vazio{padding:12px 14px; font-size:.85rem; color:var(--seal-soft); opacity:.7;}
 @media (max-width:640px){ .dash-filter .aluno-busca input{font-size:16px;} .ab-op{padding-top:11px; padding-bottom:11px;} }
 
+/* ---------- Gerenciar Atividades: Por turma | Por aluno e aulas dentro do material ---------- */
+.modo-lib{display:inline-flex; gap:4px; padding:4px; background:var(--antique-soft); border-radius:999px; margin:0 0 14px; max-width:100%;}
+.modo-lib button{display:inline-flex; align-items:center; gap:6px; border:0; background:none; cursor:pointer; padding:8px 16px; border-radius:999px; font-family:var(--font-body); font-weight:600; font-size:.82rem; color:var(--seal-soft);}
+.modo-lib button.on{background:var(--amaranth); color:#fff; box-shadow:0 4px 12px rgba(208,59,85,.25);}
+details.pratica-aula{border:1px solid #f0e3d2; border-radius:12px; margin:0 0 10px; background:#fff;}
+details.pratica-aula > summary{list-style:none; cursor:pointer; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:.88rem; color:var(--seal);}
+details.pratica-aula > summary::-webkit-details-marker{display:none;}
+details.pratica-aula > summary .chev{opacity:.55; transition:transform .2s; font-size:1.1rem;}
+details.pratica-aula[open] > summary .chev{transform:rotate(90deg);}
+details.pratica-aula > summary .pa-lib{font-size:.74rem; color:var(--seal-soft); opacity:.8; margin-left:4px; white-space:nowrap;}
+details.pratica-aula > .pa-body{padding:0 14px 10px;}
+.pt-cont{font-size:.74rem; color:var(--seal-soft); opacity:.8; white-space:nowrap;}
+
 /* ---------- CAIXA SUSPENSA (details/summary nativo — sem JS) ---------- */
 details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
 details.dyse-collapsible > summary{
@@ -1040,11 +1053,22 @@ body.dyse-modal-open{overflow:hidden;}
 
   <div id="panelManage" style="display:none;">
     <details class="dyse-collapsible manage-course-block" style="margin-bottom:22px; overflow:visible;">
-      <summary class="manage-course-title"><span>Atividades por aluno</span><span class="chevron">›</span></summary>
+      <summary class="manage-course-title"><span>Liberar atividades</span><span class="chevron">›</span></summary>
       <div class="manage-course-body">
         <p style="color:var(--seal-soft); font-size:.85rem; margin:0 0 12px;">
-          O aluno vê todas as atividades do nível dele, mas só faz as que você liberar <b>para ele</b>. Escolha o aluno e ligue as atividades. Em <b>Visualizar</b> você testa a atividade antes (seu resultado não é salvo).
+          O aluno vê todas as atividades do nível dele, mas só faz as que você liberar. Escolha se quer liberar para a <b>turma inteira</b> ou para <b>um aluno</b> e ligue as atividades. Em <b>Visualizar</b> você testa a atividade antes (seu resultado não é salvo).
         </p>
+        <div class="modo-lib" role="tablist" aria-label="Liberar por">
+          <button type="button" role="tab" id="modoLibTurma" onclick="mudarModoLiberacao('turma')"><span class="msr" aria-hidden="true">groups</span> Por turma</button>
+          <button type="button" role="tab" id="modoLibAluno" onclick="mudarModoLiberacao('aluno')"><span class="msr" aria-hidden="true">person</span> Por aluno</button>
+        </div>
+        <div id="libPorTurma" style="display:none;">
+          <div class="dash-filter" style="margin:0 0 10px;">
+            <select id="praticaTurmaSel" onchange="renderPraticasTurma()" style="min-width:240px; max-width:100%;"><option value="">Carregando turmas…</option></select>
+          </div>
+          <div id="praticasTurmaBox"></div>
+        </div>
+        <div id="libPorAluno" style="display:none;">
         <div class="dash-filter" style="margin-bottom:10px;">
           <div class="aluno-busca" id="praticaAlunoBusca">
             <span class="msr" aria-hidden="true">search</span>
@@ -1056,6 +1080,7 @@ body.dyse-modal-open{overflow:hidden;}
           <input type="hidden" id="praticaAlunoSel" value="">
         </div>
         <div id="praticasAlunoBox"></div>
+        </div>
       </div>
     </details>
     <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
@@ -3161,12 +3186,25 @@ body.dyse-modal-open{overflow:hidden;}
   }
   async function loadPraticasAlunos(){
     const sel = document.getElementById('praticaAlunoSel');
-    const [alunos, turmas, tms, niveis] = await Promise.all([dyseListProfilesByRole('student'), dyseListTurmas(), dyseListAllTurmaMaterias(), niveisTodosCache()]);
+    const [alunos, turmas, tms, niveis, meusVinculos] = await Promise.all([dyseListProfilesByRole('student'), dyseListTurmas(), dyseListAllTurmaMaterias(), niveisTodosCache(), dyseListMyTurmas()]);
     PRATICAS_CTX.turmas = {}; turmas.forEach(t => PRATICAS_CTX.turmas[t.id] = t);
     PRATICAS_CTX.turmaMaterias = tms;
     PRATICAS_CTX.niveis = niveis;
     // Só entra na busca o aluno cuja turma tem algum material com atividades prontas.
     PRATICAS_CTX.alunos = alunos.filter(a => a.turma_id && slugsComAtividadesDaTurma(a.turma_id).length);
+    // Por turma: as turmas deste professor que têm material com atividades.
+    const minhas = new Set(meusVinculos.map(l => l.turma_id));
+    const turmasLib = turmas.filter(t => minhas.has(t.id) && slugsComAtividadesDaTurma(t.id).length)
+      .sort((x, y) => String(x.name).localeCompare(String(y.name), 'pt-BR'));
+    const selT = document.getElementById('praticaTurmaSel');
+    const turmaAtual = selT.value;
+    selT.innerHTML = turmasLib.length
+      ? (turmasLib.length > 1 ? '<option value="">Escolha a turma…</option>' : '') + turmasLib.map(t => '<option value="' + t.id + '">' + escapeHtmlLocal(t.name) + '</option>').join('')
+      : '<option value="">Nenhuma turma sua tem atividades disponíveis</option>';
+    if(turmasLib.some(t => t.id === turmaAtual)) selT.value = turmaAtual;
+    let modo = PRATICAS_CTX.modo;
+    if(!modo){ try{ modo = localStorage.getItem('dyse-modo-liberacao'); }catch(e){} }
+    mudarModoLiberacao(modo === 'aluno' ? 'aluno' : 'turma', true);
     const input = document.getElementById('praticaAlunoInput');
     const atual = PRATICAS_CTX.alunos.find(a => a.id === sel.value);
     sel.value = atual ? atual.id : '';
@@ -3174,7 +3212,83 @@ body.dyse-modal-open{overflow:hidden;}
     input.placeholder = PRATICAS_CTX.alunos.length ? 'Digite o nome do aluno…' : 'Nenhum aluno com atividades disponíveis';
     atualizarLimparAlunoPratica();
     if(document.getElementById('praticaAlunoLista').classList.contains('aberta')) renderListaAlunosPratica(input.value);
-    renderPraticasAluno();
+    if(PRATICAS_CTX.modo === 'aluno') renderPraticasAluno(); else renderPraticasTurma();
+  }
+
+  /* Liberar POR TURMA (todos os alunos da turma de uma vez) ou POR ALUNO. */
+  function mudarModoLiberacao(modo, semRender){
+    PRATICAS_CTX.modo = modo;
+    document.getElementById('modoLibTurma').classList.toggle('on', modo === 'turma');
+    document.getElementById('modoLibAluno').classList.toggle('on', modo === 'aluno');
+    document.getElementById('modoLibTurma').setAttribute('aria-selected', modo === 'turma');
+    document.getElementById('modoLibAluno').setAttribute('aria-selected', modo === 'aluno');
+    document.getElementById('libPorTurma').style.display = modo === 'turma' ? '' : 'none';
+    document.getElementById('libPorAluno').style.display = modo === 'aluno' ? '' : 'none';
+    try{ localStorage.setItem('dyse-modo-liberacao', modo); }catch(e){}
+    if(semRender) return;
+    if(modo === 'turma') renderPraticasTurma(); else renderPraticasAluno();
+  }
+
+  let PRATICA_TURMA_SEQ = 0;
+  async function renderPraticasTurma(){
+    const box = document.getElementById('praticasTurmaBox');
+    const turmaId = document.getElementById('praticaTurmaSel').value;
+    const seq = ++PRATICA_TURMA_SEQ;
+    if(!turmaId){ box.innerHTML = ''; return; }
+    const alunos = PRATICAS_CTX.alunos.filter(a => a.turma_id === turmaId);
+    const materiais = ordenarSlugsPratica(slugsComAtividadesDaTurma(turmaId));
+    if(!alunos.length){ box.innerHTML = '<p style="opacity:.7; font-size:.85rem;">Essa turma ainda não tem alunos.</p>'; return; }
+    box.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+    const ids = alunos.map(a => a.id);
+    const mapa = await dysePraticasLiberadasDosAlunos(ids);
+    if(seq !== PRATICA_TURMA_SEQ) return;
+    const total = ids.length;
+    const quantos = chave => { const s = mapa[chave]; return s ? ids.filter(id => s.has(id)).length : 0; };
+    box.innerHTML = '<p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">Ligar libera a atividade para os <b>' + total + ' aluno' + (total > 1 ? 's' : '') +
+        '</b> da turma de uma vez. Aluno que entrar na turma depois precisa ser liberado de novo.</p>' +
+      materiais.map(info => {
+        const nivel = DYSE_PRATICAS[info.slug];
+        return caixaMaterialPratica(info, gruposAulaPratica(nivel).map(g => {
+          const chaves = g.atividades.map(at => nivel.course + ':' + g.aula.aula + ':' + at.num);
+          const cheias = chaves.filter(c => quantos(c) === total).length;
+          const rows = g.atividades.map(at => {
+            const chave = nivel.course + ':' + g.aula.aula + ':' + at.num;
+            const n = quantos(chave);
+            return '<div class="manage-row">' +
+              '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) + ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span></div>' +
+              '<div class="manage-row-actions">' +
+                '<span class="pt-cont" title="Alunos da turma com esta atividade liberada">' + n + '/' + total + ' alunos</span>' +
+                '<a class="btn btn-preview" href="' + dysePraticaUrl(info.slug, g.aula.aula, at.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a>' +
+                '<label class="dyse-toggle"><input type="checkbox" class="pratica-toggle" data-course="' + nivel.course + '" data-aula="' + g.aula.aula + '" data-num="' + at.num + '" ' +
+                  (n === total ? 'checked' : '') + ' onchange="togglePraticaTurma(this)"><span class="slider"></span></label>' +
+              '</div></div>';
+          }).join('');
+          return caixaAulaPratica(g, ' <span class="pa-lib">' + cheias + '/' + chaves.length + ' liberadas</span>',
+            '<div class="manage-row" style="background:var(--paper-2, rgba(0,0,0,.03)); border-radius:10px; padding-left:10px; padding-right:10px;">' +
+              '<div class="info"><b>Liberar todas desta aula</b> para a turma toda</div>' +
+              '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" class="pratica-toggle-aula" ' + (cheias === chaves.length ? 'checked' : '') +
+                ' onchange="togglePraticaAulaToda(this)"><span class="slider"></span></label></div></div>' +
+            '<div class="pratica-aula-rows">' + rows + '</div>');
+        }).join(''));
+      }).join('');
+  }
+  const idsAlunosDaTurmaPratica = () => {
+    const turmaId = document.getElementById('praticaTurmaSel').value;
+    return PRATICAS_CTX.alunos.filter(a => a.turma_id === turmaId).map(a => a.id);
+  };
+  const itemDoToggle = t => ({ course: t.dataset.course, aula: +t.dataset.aula, num: +t.dataset.num });
+  function marcarContTurma(t, ligado, total){
+    const c = t.closest('.manage-row') && t.closest('.manage-row').querySelector('.pt-cont');
+    if(c) c.textContent = (ligado ? total : 0) + '/' + total + ' alunos';
+  }
+  async function togglePraticaTurma(input){
+    const ids = idsAlunosDaTurmaPratica();
+    input.disabled = true;
+    const { error } = await dyseSetPraticasVarios(ids, [itemDoToggle(input)], input.checked);
+    input.disabled = false;
+    if(error){ console.error('togglePraticaTurma:', error); input.checked = !input.checked; alert('Não foi possível salvar. Tente de novo.'); return; }
+    marcarContTurma(input, input.checked, ids.length);
+    contarLiberadasAula(input);
   }
 
   /* Busca de aluno: ao abrir mostra TODOS (por turma); ao digitar, só os
@@ -3302,10 +3416,12 @@ body.dyse-modal-open{overflow:hidden;}
     box.innerHTML = materiais.map(info => {
       const slug = info.slug;
       const nivel = DYSE_PRATICAS[slug];
-      return caixaMaterialPratica(info, nivel.aulas.map(aula => {
-        const chaves = aula.atividades.map(at => nivel.course + ':' + aula.aula + ':' + at.num);
+      return caixaMaterialPratica(info, gruposAulaPratica(nivel).map(g => {
+        const aula = g.aula;
+        const chaves = g.atividades.map(at => nivel.course + ':' + aula.aula + ':' + at.num);
         const todas = chaves.every(c => liberadas.has(c));
-        const rows = aula.atividades.map(at => {
+        const nLib = chaves.filter(c => liberadas.has(c)).length;
+        const rows = g.atividades.map(at => {
           const chave = nivel.course + ':' + aula.aula + ':' + at.num;
           const r = resMap[chave];
           let res = '<span style="opacity:.5; font-size:.76rem;">Ainda não fez</span>';
@@ -3328,7 +3444,7 @@ body.dyse-modal-open{overflow:hidden;}
               : '<button type="button" class="btn btn-ghost" style="padding:6px 12px; font-size:.74rem;" onclick="liberarRefazerPratica(\'' + nivel.course + '\', ' + aula.aula + ', ' + at.num + ', this)">' + MI('replay') + ' Liberar refazer</button>';
           }
           return '<div class="manage-row">' +
-            '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + (at.parte ? '<span style="opacity:.6;">' + escapeHtmlLocal(at.parte) + ' ·</span> ' : '') + escapeHtmlLocal(at.titulo) +
+            '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) +
               ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span><div>' + res + '</div></div>' +
             '<div class="manage-row-actions">' +
               refazerBtn +
@@ -3337,15 +3453,49 @@ body.dyse-modal-open{overflow:hidden;}
                 (liberadas.has(chave) ? 'checked' : '') + ' onchange="togglePraticaAluno(this)"><span class="slider"></span></label>' +
             '</div></div>';
         }).join('');
-        return '<div style="margin-bottom:14px;"><div style="font-weight:600; font-size:.92rem; margin:6px 0 4px;">' + escapeHtmlLocal(nivel.nome) + ' · Aula ' +
-            String(aula.aula).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.titulo) + '</div>' +
+        return caixaAulaPratica(g,
+          ' <span class="pa-lib">' + nLib + '/' + chaves.length + ' liberadas</span>',
           '<div class="manage-row" style="background:var(--paper-2, rgba(0,0,0,.03)); border-radius:10px; padding-left:10px; padding-right:10px;">' +
             '<div class="info"><b>Liberar todas desta aula</b> para ' + escapeHtmlLocal(aluno.full_name || 'o aluno') + '</div>' +
-            '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" ' + (todas ? 'checked' : '') +
+            '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" class="pratica-toggle-aula" ' + (todas ? 'checked' : '') +
               ' onchange="togglePraticaAulaToda(this)"><span class="slider"></span></label></div></div>' +
-          '<div class="pratica-aula-rows">' + rows + '</div></div>';
+          '<div class="pratica-aula-rows">' + rows + '</div>');
       }).join(''));
     }).join('');
+  }
+
+  /* Agrupa as atividades do material por AULA dada. Um PowerPoint que dura
+     duas aulas (parte "Class 01" / "Class 02" no catálogo) vira Aula 01 e
+     Aula 02; os demais usam o número da aula do catálogo. */
+  function gruposAulaPratica(nivel){
+    const grupos = [];
+    nivel.aulas.forEach(aula => {
+      const titulo = String(aula.titulo || '').split(' · ').pop();
+      aula.atividades.forEach(at => {
+        const m = /(\d+)/.exec(at.parte || '');
+        const num = m ? Number(m[1]) : aula.aula;
+        let g = grupos.find(x => x.num === num && x.aula === aula);
+        if(!g){ g = { num: num, aula: aula, titulo: titulo, atividades: [] }; grupos.push(g); }
+        g.atividades.push(at);
+      });
+    });
+    return grupos.sort((a, b) => a.num - b.num);
+  }
+  function caixaAulaPratica(g, extraTitulo, corpo){
+    return '<details class="pratica-aula"><summary><span><b>Aula ' + String(g.num).padStart(2, '0') + '</b> — ' + escapeHtmlLocal(g.titulo) +
+      ' <span class="pill-count">' + g.atividades.length + '</span>' + (extraTitulo || '') + '</span><span class="chev">›</span></summary>' +
+      '<div class="pa-body">' + corpo + '</div></details>';
+  }
+  // Atualiza o "x/y liberadas" do título da aula depois de ligar/desligar.
+  function contarLiberadasAula(el){
+    const caixa = el && el.closest('details.pratica-aula');
+    if(!caixa) return;
+    const ts = caixa.querySelectorAll('.pratica-toggle');
+    const n = Array.from(ts).filter(t => t.checked).length;
+    const lb = caixa.querySelector('.pa-lib');
+    if(lb) lb.textContent = n + '/' + ts.length + ' liberadas';
+    const todas = caixa.querySelector('.pratica-toggle-aula');
+    if(todas) todas.checked = ts.length > 0 && n === ts.length;
   }
 
   /* Blocos de atividades por material (sem escolher aluno): todo professor vê
@@ -3353,15 +3503,13 @@ body.dyse-modal-open{overflow:hidden;}
      (Visualizar). A liberação é por aluno, na busca acima. */
   function blocoCatalogoPratica(info){
     const nivel = DYSE_PRATICAS[info.slug];
-    const corpo = '<p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">Para liberar para um aluno, busque o nome dele em <b>Atividades por aluno</b>.</p>' +
-      nivel.aulas.filter(a => a.atividades.length).map(aula =>
-        '<div style="margin-bottom:14px;"><div style="font-weight:600; font-size:.92rem; margin:6px 0 4px;">Aula ' + String(aula.aula).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.titulo) + '</div>' +
-        aula.atividades.map(at =>
-          '<div class="manage-row"><div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' +
-            (at.parte ? '<span style="opacity:.6;">' + escapeHtmlLocal(at.parte) + ' ·</span> ' : '') + escapeHtmlLocal(at.titulo) +
+    const corpo = '<p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">Para liberar, use <b>Liberar atividades</b> acima (por turma ou por aluno).</p>' +
+      gruposAulaPratica(nivel).map(g => caixaAulaPratica(g, '',
+        g.atividades.map(at =>
+          '<div class="manage-row"><div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) +
             ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span></div>' +
-          '<div class="manage-row-actions"><a class="btn btn-preview" href="' + dysePraticaUrl(info.slug, aula.aula, at.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a></div></div>'
-        ).join('') + '</div>'
+          '<div class="manage-row-actions"><a class="btn btn-preview" href="' + dysePraticaUrl(info.slug, g.aula.aula, at.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a></div></div>'
+        ).join(''))
       ).join('');
     return caixaMaterialPratica(info, corpo);
   }
@@ -3385,19 +3533,23 @@ body.dyse-modal-open{overflow:hidden;}
     input.disabled = true;
     const { error } = await dyseSetPraticaAluno(alunoId, input.dataset.course, +input.dataset.aula, +input.dataset.num, input.checked);
     input.disabled = false;
-    if(error){ input.checked = !input.checked; alert('Não foi possível salvar. Tente de novo.'); }
+    if(error){ input.checked = !input.checked; alert('Não foi possível salvar. Tente de novo.'); return; }
+    contarLiberadasAula(input);
   }
 
+  // "Liberar todas desta aula": uma gravação só, para o aluno ou para a turma toda.
   async function togglePraticaAulaToda(input){
-    const alunoId = document.getElementById('praticaAlunoSel').value;
-    const toggles = input.closest('div[style*="margin-bottom:14px"]').querySelectorAll('.pratica-toggle');
+    const porTurma = !!input.closest('#praticasTurmaBox');
+    const ids = porTurma ? idsAlunosDaTurmaPratica() : [document.getElementById('praticaAlunoSel').value].filter(Boolean);
+    const toggles = Array.from(input.closest('details.pratica-aula').querySelectorAll('.pratica-toggle'));
+    // Na turma, ligar também completa quem estava parcialmente liberado.
+    const alvo = porTurma ? toggles : toggles.filter(t => t.checked !== input.checked);
     input.disabled = true;
-    for(const t of toggles){
-      if(t.checked === input.checked) continue;
-      const { error } = await dyseSetPraticaAluno(alunoId, t.dataset.course, +t.dataset.aula, +t.dataset.num, input.checked);
-      if(!error) t.checked = input.checked;
-    }
+    const { error } = await dyseSetPraticasVarios(ids, alvo.map(itemDoToggle), input.checked);
     input.disabled = false;
+    if(error){ console.error('togglePraticaAulaToda:', error); input.checked = !input.checked; alert('Não foi possível salvar. Tente de novo.'); return; }
+    alvo.forEach(t => { t.checked = input.checked; if(porTurma) marcarContTurma(t, input.checked, ids.length); });
+    contarLiberadasAula(input);
   }
 
   async function loadManagePanel(){
