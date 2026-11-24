@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 36 · How was your vacation?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 36 · Leitura
+   Alinhado ao slide "Class 35 and 36: My Last Vacation" (parte Class 36) — Listening (os amigos
+   ouvem a história de férias) e Speaking ("Be interested in your partner's vacation story").
+   Só verbos regulares. Conteúdo NOVO: a Carla, americana, conta ao Max a viagem ao Rio de
+   Janeiro. Fatos verdadeiros: Cristo Redentor, Copacabana, Santa Teresa e Pão de Açúcar ficam no
+   Rio; feijoada é um prato brasileiro. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Max', 'Carla! How was your vacation?'],
+  ['Carla', 'It was amazing! We traveled to Rio de Janeiro.'],
+  ['Max', 'Wow! Where did you stay?'],
+  ['Carla', 'We stayed in a hotel in Copacabana.'],
+  ['Max', 'Did you visit Christ the Redeemer?'],
+  ['Carla', 'Yes, we did! We walked around Santa Teresa too.'],
+  ['Max', 'What did you like?'],
+  ['Carla', 'I loved the beaches and the food.'],
+  ['Max', 'Did you talk to local people?'],
+  ['Carla', 'Yes! I practiced my Portuguese. People helped me a lot.'],
+  ['Max', 'Cool! Did you try feijoada?'],
+  ['Carla', 'Yes, I did. I loved it!'],
+  ['Max', 'Show me the photos!'],
+  ['Carla', 'Sure! Look, this is the Sugarloaf Mountain.']
+];
+const lado = q => q === 'Max' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 35, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['It was amazing! We traveled to Rio de Janeiro.', 'It is amazing! We travel to Rio.', 'It was amazing! We travelled to Rio de Janeiro yesterday every day.'], 0, 'Foi incrível! Nós viajamos para o Rio de Janeiro.'),
+    prox(2, ['Wow! Where did you stayed?', 'Wow! Where did you stay?', 'Wow! Where you stayed?'], 1, 'Nossa! Onde vocês ficaram?'),
+    prox(3, ['We stay in a hotel.', 'We staied in a hotel in Copacabana.', 'We stayed in a hotel in Copacabana.'], 2, 'Nós ficamos num hotel em Copacabana.'),
+    prox(4, ['Did you visit Christ the Redeemer?', 'Did you visited Christ the Redeemer?', 'Do you visit Christ the Redeemer?'], 0, 'Vocês visitaram o Cristo Redentor?'),
+    prox(5, ["Yes, we were! We walked around.", 'Yes, we did! We walked around Santa Teresa too.', 'Yes, we did! We walk around Santa Teresa.'], 1, 'Sim! Nós andamos por Santa Teresa também.'),
+    prox(6, ['What you liked?', 'What did you liked?', 'What did you like?'], 2, 'Do que você gostou?'),
+    prox(7, ['I loved the beaches and the food.', 'I love the beaches yesterday.', 'I loveed the beaches.'], 0, 'Eu amei as praias e a comida.'),
+    prox(8, ['Did you talked to local people?', 'Did you talk to local people?', 'You talk to local people?'], 1, 'Você conversou com as pessoas de lá?'),
+    prox(9, ["Yes! I practice my Portuguese every day there.", "No, I didn't talked.", 'Yes! I practiced my Portuguese. People helped me a lot.'], 2, 'Sim! Eu pratiquei meu português. As pessoas me ajudaram muito.'),
+    prox(10, ['Cool! Did you try feijoada?', 'Cool! Did you tried feijoada?', 'Cool! Did you tryed feijoada?'], 0, 'Legal! Você experimentou feijoada?'),
+    prox(11, ['Yes, I was. I loved it!', 'Yes, I did. I loved it!', 'Yes, I did. I love it yesterday!'], 1, 'Sim. Eu amei!'),
+    prox(12, ['Where did you stay?', 'How was your vacation?', 'Show me the photos!'], 2, 'Me mostra as fotos!'),
+    { instrucao: 'Where did Carla travel?', frase: 'To Rio de ___.', opcoes: ['Janeiro', 'Lisbon', 'Paris'], certa: 0, traducao: 'Para o Rio de Janeiro.' },
+    { instrucao: 'Where did she stay?', frase: 'In a hotel in ___.', opcoes: ['Santa Teresa', 'Copacabana', 'Lisbon'], certa: 1, traducao: 'Num hotel em Copacabana.' },
+    { instrucao: 'Did she visit Christ the Redeemer?', frase: 'Yes, she ___.', opcoes: ['was', 'visit', 'did'], certa: 2, traducao: 'Sim, ela visitou.' },
+    { instrucao: 'What did she love?', frase: 'The beaches and the ___.', opcoes: ['food', 'hotel', 'plane'], certa: 0, traducao: 'As praias e a comida.' },
+    { instrucao: 'What language did Carla practice?', frase: '___.', opcoes: ['Spanish', 'Portuguese', 'English'], certa: 1, traducao: 'Português.' },
+    { instrucao: 'Who helped Carla?', frase: 'The local ___.', opcoes: ['teachers', 'guides', 'people'], certa: 2, traducao: 'As pessoas de lá.' },
+    { instrucao: 'What Brazilian dish did she try?', frase: '___.', opcoes: ['Feijoada', 'Pizza', 'Pastéis de nata'], certa: 0, traducao: 'Feijoada.' },
+    { instrucao: 'What is in her photo?', frase: 'The ___ Mountain.', opcoes: ['Copacabana', 'Sugarloaf', 'Redeemer'], certa: 1, traducao: 'O Pão de Açúcar.' }
+  ]
+});
+</script>
+</body>
+</html>

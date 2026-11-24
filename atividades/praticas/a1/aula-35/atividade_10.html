@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 36 · Past simple review</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 36 · Gramática
+   Alinhado ao slide "Class 35 and 36: My Last Vacation" (parte Class 36) — Pronunciation (regra
+   dos três sons do -ed), Holiday Phrases (book a flight, pack bags, stay in a hotel, travel by
+   plane...) e as perguntas de Speaking. Só verbos regulares. Conteúdo NOVO e mais difícil.
+   24 questões. */
+const SOM = 'Which verb has the /ɪd/ sound (an extra syllable)?';
+const COL = 'Complete the holiday phrase';
+const CERTA = 'Which question is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 35, num: 10, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: SOM, opcoes: ['wanted', 'worked', 'played'], certa: 0, completa: 'wanted', traducao: 'wanted tem /ɪd/ (depois de t).' },
+    { instrucao: SOM, opcoes: ['packed', 'landed', 'loved'], certa: 1, completa: 'landed', traducao: 'landed tem /ɪd/ (depois de d).' },
+    { instrucao: SOM, opcoes: ['stayed', 'watched', 'visited'], certa: 2, completa: 'visited', traducao: 'visited tem /ɪd/ (depois de t).' },
+    { instrucao: SOM, opcoes: ['needed', 'called', 'booked'], certa: 0, completa: 'needed', traducao: 'needed tem /ɪd/ (depois de d).' },
+    { frase: 'We use /ɪd/ when the verb ends in the sound ___.', opcoes: ['/k/ or /s/', '/t/ or /d/', 'a vowel'], certa: 1, completa: 'We use the extra sound when the verb ends in t or d.', traducao: 'Usamos /ɪd/ quando o verbo termina com som de /t/ ou /d/.' },
+    { frase: 'In "worked", the -ed sounds like ___.', opcoes: ['/d/', '/ɪd/', '/t/'], certa: 2, completa: 'worked', traducao: 'Em "worked", o -ed soa como /t/.' },
+    { frase: 'In "played", the -ed sounds like ___.', opcoes: ['/d/', '/t/', '/ɪd/'], certa: 0, completa: 'played', traducao: 'Em "played", o -ed soa como /d/.' },
+    { instrucao: COL, frase: '___ your bags', opcoes: ['book', 'pack', 'stay'], certa: 1, traducao: 'arrumar as malas' },
+    { instrucao: COL, frase: '___ a flight', opcoes: ['walk', 'pack', 'book'], certa: 2, traducao: 'reservar um voo' },
+    { instrucao: COL, frase: '___ in a hotel', opcoes: ['stay', 'visit', 'arrive'], certa: 0, traducao: 'ficar num hotel' },
+    { instrucao: COL, frase: 'travel ___ plane', opcoes: ['in', 'by', 'on the'], certa: 1, traducao: 'viajar de avião' },
+    { instrucao: COL, frase: 'arrive ___ the airport', opcoes: ['to', 'in', 'at'], certa: 2, traducao: 'chegar ao aeroporto' },
+    { instrucao: COL, frase: 'walk ___ the city', opcoes: ['around', 'at', 'by'], certa: 0, traducao: 'andar pela cidade' },
+    { instrucao: COL, frase: '___ the trip', opcoes: ['stay', 'enjoy', 'board'], certa: 1, traducao: 'aproveitar a viagem' },
+    { frase: 'We ___ in a hotel near the beach last summer.', opcoes: ['stay', 'staied', 'stayed'], certa: 2, traducao: 'Nós ficamos num hotel perto da praia no verão passado.' },
+    { frase: 'They ___ a lot of places in Paris.', opcoes: ['visited', 'visitted', 'visit'], certa: 0, traducao: 'Eles visitaram muitos lugares em Paris.' },
+    { frase: "I ___ like the food there. It was terrible!", opcoes: ["wasn't", "didn't", "don't"], certa: 1, traducao: 'Eu não gostei da comida lá. Era horrível!' },
+    { frase: 'Where did you ___ on your last vacation?', opcoes: ['traveled', 'travels', 'travel'], certa: 2, traducao: 'Para onde você viajou nas suas últimas férias?' },
+    { frase: 'Did you enjoy the trip? Yes, I ___.', opcoes: ['did', 'enjoyed', 'was'], certa: 0, traducao: 'Você aproveitou a viagem? Sim.' },
+    { frase: 'How ___ your vacation? It was great!', opcoes: ['did', 'was', 'were'], certa: 1, traducao: 'Como foram as suas férias? Foram ótimas!' },
+    { instrucao: CERTA, opcoes: ['Where did you stayed?', 'Where you stayed?', 'Where did you stay?'], certa: 2, traducao: 'Onde você ficou?' },
+    { instrucao: CERTA, opcoes: ['When did you pack your bags?', 'When did you packed your bags?', 'When you did pack your bags?'], certa: 0, traducao: 'Quando você arrumou as malas?' },
+    { instrucao: CERTA, opcoes: ['What places you visited?', 'What places did you visit?', 'What places did you visited?'], certa: 1, traducao: 'Que lugares você visitou?' },
+    { instrucao: CERTA, opcoes: ["What did you didn't like?", "What you didn't like?", "What didn't you like there?"], certa: 2, traducao: 'Do que você não gostou lá?' }
+  ]
+});
+</script>
+</body>
+</html>

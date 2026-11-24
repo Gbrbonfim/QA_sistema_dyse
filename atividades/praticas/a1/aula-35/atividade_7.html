@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 36 · Holiday phrases</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 36 · Escrita
+   Alinhado ao slide "Class 35 and 36: My Last Vacation" (parte Class 36) — Vocabulary: Holiday
+   Phrases (pack bags, book flights, stay in a hotel, walk around the city, visit places, talk to
+   people, enjoy the trip...) e Speaking (Where did you stay? What places did you visit? What
+   didn't you like?). Só verbos regulares. O contexto traz a frase em português. A isca é o verbo
+   no presente, o -ed errado ou o -ed depois de did. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 35, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ela arrumou as malas ontem à noite.'), palavras: ['She', 'packed', 'her', 'bags', 'last', 'night'], isca: ['packs'], fim: '.', traducao: 'Ela arrumou as malas ontem à noite.' },
+    { contexto: M('Nós reservamos os nossos voos online.'), palavras: ['We', 'booked', 'our', 'flights', 'online'], isca: ['book'], fim: '.', traducao: 'Nós reservamos os nossos voos online.' },
+    { contexto: M('Eles ficaram num hotel perto da praia.'), palavras: ['They', 'stayed', 'in', 'a', 'hotel', 'near', 'the', 'beach'], isca: ['staied'], fim: '.', traducao: 'Eles ficaram num hotel perto da praia.' },
+    { contexto: M('Eu andei pela cidade.'), palavras: ['I', 'walked', 'around', 'the', 'city'], isca: ['walk'], fim: '.', traducao: 'Eu andei pela cidade.' },
+    { contexto: M('Nós visitamos muitos lugares.'), palavras: ['We', 'visited', 'a', 'lot', 'of', 'places'], isca: ['visitted'], fim: '.', traducao: 'Nós visitamos muitos lugares.' },
+    { contexto: M('Ele conversou com muitas pessoas.'), palavras: ['He', 'talked', 'to', 'a', 'lot', 'of', 'people'], isca: ['talks'], fim: '.', traducao: 'Ele conversou com muitas pessoas.' },
+    { contexto: M('Nós aproveitamos a viagem.'), palavras: ['We', 'enjoyed', 'the', 'trip'], isca: ['enjoied'], fim: '.', traducao: 'Nós aproveitamos a viagem.' },
+    { contexto: M('Eu viajei de ônibus.'), palavras: ['I', 'traveled', 'by', 'bus'], isca: ['travel'], fim: '.', traducao: 'Eu viajei de ônibus.' },
+    { contexto: M('Eles chegaram ao aeroporto às seis.'), palavras: ['They', 'arrived', 'at', 'the', 'airport', 'at', 'six'], isca: ['arrive'], fim: '.', traducao: 'Eles chegaram ao aeroporto às seis.' },
+    { contexto: M('Ela voltou para casa no domingo.'), palavras: ['She', 'returned', 'home', 'on', 'Sunday'], isca: ['returns'], fim: '.', traducao: 'Ela voltou para casa no domingo.' },
+    { contexto: M('Eu queria comer pizza.'), palavras: ['I', 'wanted', 'to', 'eat', 'pizza'], isca: ['want'], fim: '.', traducao: 'Eu queria comer pizza.' },
+    { contexto: M('Que lugares você visitou?'), palavras: ['What', 'places', 'did', 'you', 'visit'], isca: ['visited'], fim: '?', traducao: 'Que lugares você visitou?' },
+    { contexto: M('Onde você ficou?'), palavras: ['Where', 'did', 'you', 'stay'], isca: ['stayed'], fim: '?', traducao: 'Onde você ficou?' },
+    { contexto: M('Quando você arrumou as malas?'), palavras: ['When', 'did', 'you', 'pack', 'your', 'bags'], isca: ['packed'], fim: '?', traducao: 'Quando você arrumou as malas?' },
+    { contexto: M('Do que você não gostou lá?'), palavras: ['What', "didn't", 'you', 'like', 'there'], isca: ['liked'], fim: '?', traducao: 'Do que você não gostou lá?' },
+    { contexto: M('Você aproveitou a viagem?'), palavras: ['Did', 'you', 'enjoy', 'the', 'trip'], isca: ['enjoyed'], fim: '?', traducao: 'Você aproveitou a viagem?' },
+    { contexto: M('Nós não ficamos num hotel.'), palavras: ['We', "didn't", 'stay', 'in', 'a', 'hotel'], isca: ['stayed'], fim: '.', traducao: 'Nós não ficamos num hotel.' },
+    { contexto: M('Ela não reservou o voo.'), palavras: ['She', "didn't", 'book', 'the', 'flight'], isca: ['booked'], fim: '.', traducao: 'Ela não reservou o voo.' },
+    { contexto: M('Nós decidimos viajar para a Argentina.'), palavras: ['We', 'decided', 'to', 'travel', 'to', 'Argentina'], isca: ['decide'], fim: '.', traducao: 'Nós decidimos viajar para a Argentina.' },
+    { contexto: M('Eu amei a comida e conversei com muitas pessoas.'), palavras: ['I', 'loved', 'the', 'food', 'and', 'talked', 'to', 'a', 'lot', 'of', 'people'], isca: ['love'], fim: '.', traducao: 'Eu amei a comida e conversei com muitas pessoas.' }
+  ]
+});
+</script>
+</body>
+</html>

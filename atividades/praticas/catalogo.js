@@ -359,6 +359,22 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 34', titulo: 'Were you at home?', tipo: 'Escute e grave', treina: 'Fala · Signos', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 34', titulo: 'Was / were: all forms', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 35,
+        titulo: 'Class 35 and 36 · My Last Vacation',
+        atividades: [
+          { num: 1, parte: 'Class 35', titulo: 'Vacation and the past', tipo: 'Escute e escolha', treina: 'Escuta · Passado', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 35', titulo: 'We traveled by plane', tipo: 'Monte a frase', treina: 'Escrita · Past simple', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 35', titulo: 'A trip to Lisbon', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 35', titulo: 'Tell the story', tipo: 'Escute e grave', treina: 'Fala · Past simple', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 35', titulo: 'Past simple regular', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 36', titulo: '/t/, /d/ or /ɪd/?', tipo: 'Escute e escolha', treina: 'Escuta · Pronúncia do -ed', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 36', titulo: 'Holiday phrases', tipo: 'Monte a frase', treina: 'Escrita · Viagem', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 36', titulo: 'How was your vacation?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 36', titulo: 'Say it with -ed', tipo: 'Escute e grave', treina: 'Fala · Pronúncia do -ed', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 36', titulo: 'Past simple review', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

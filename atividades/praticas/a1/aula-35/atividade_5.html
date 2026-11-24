@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 35 · Past simple regular</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 35 · Gramática
+   Alinhado ao slide "Class 35 and 36: My Last Vacation" (parte Class 35) — Spelling Rules (watch →
+   watched; like → liked; study → studied; stop → stopped) e Grammar Point (did / didn't + verbo
+   sem -ed; Did...? + short answers). Conteúdo NOVO e mais difícil: verbos regulares que não
+   estavam no slide. 24 questões. */
+const PAST = 'Choose the past simple';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 35, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: PAST, frase: 'watch → ___', opcoes: ['watched', 'watchd', 'watchied'], certa: 0, traducao: 'assistir → assistiu' },
+    { instrucao: PAST, frase: 'like → ___', opcoes: ['likeed', 'liked', 'likked'], certa: 1, traducao: 'gostar → gostou' },
+    { instrucao: PAST, frase: 'study → ___', opcoes: ['studyed', 'studed', 'studied'], certa: 2, traducao: 'estudar → estudou' },
+    { instrucao: PAST, frase: 'stop → ___', opcoes: ['stopped', 'stoped', 'stopd'], certa: 0, traducao: 'parar → parou' },
+    { instrucao: PAST, frase: 'play → ___', opcoes: ['plaied', 'played', 'playd'], certa: 1, traducao: 'jogar → jogou' },
+    { instrucao: PAST, frase: 'try → ___', opcoes: ['tryed', 'tryd', 'tried'], certa: 2, traducao: 'tentar → tentou' },
+    { instrucao: PAST, frase: 'arrive → ___', opcoes: ['arrived', 'arriveed', 'arrivd'], certa: 0, traducao: 'chegar → chegou' },
+    { instrucao: PAST, frase: 'plan → ___', opcoes: ['planed', 'planned', 'planied'], certa: 1, traducao: 'planejar → planejou' },
+    { instrucao: PAST, frase: 'cry → ___', opcoes: ['cryed', 'cryd', 'cried'], certa: 2, traducao: 'chorar → chorou' },
+    { instrucao: PAST, frase: 'stay → ___', opcoes: ['stayed', 'staied', 'staid'], certa: 0, traducao: 'ficar → ficou' },
+    { frase: 'She ___ in a school last year.', opcoes: ['works', 'worked', 'work'], certa: 1, traducao: 'Ela trabalhou numa escola no ano passado.' },
+    { frase: 'We ___ at the airport early yesterday.', opcoes: ['arrive', 'arriving', 'arrived'], certa: 2, traducao: 'Nós chegamos cedo ao aeroporto ontem.' },
+    { frase: "I ___ travel by plane. I traveled by bus.", opcoes: ["didn't", "don't", "wasn't"], certa: 0, traducao: 'Eu não viajei de avião. Viajei de ônibus.' },
+    { frase: "He didn't ___ the tickets.", opcoes: ['booked', 'book', 'books'], certa: 1, traducao: 'Ele não reservou as passagens.' },
+    { frase: '___ you play football last week?', opcoes: ['Do', 'Were', 'Did'], certa: 2, traducao: 'Você jogou futebol semana passada?' },
+    { frase: 'Did they ___ their homework?', opcoes: ['finish', 'finished', 'finishes'], certa: 0, traducao: 'Eles terminaram a lição de casa?' },
+    { frase: 'Did the baby cry last night? No, she ___.', opcoes: ["wasn't", "didn't", "don't"], certa: 1, traducao: 'O bebê chorou ontem à noite? Não, não chorou.' },
+    { frase: 'Did you watch the match? Yes, we ___.', opcoes: ['were', 'watched', 'did'], certa: 2, traducao: 'Vocês assistiram ao jogo? Sim.' },
+    { frase: 'What ___ you study at university?', opcoes: ['did', 'do', 'were'], certa: 0, traducao: 'O que você estudou na faculdade?' },
+    { frase: 'The past simple is for ___ events.', opcoes: ['every day', 'finished', 'now'], certa: 1, traducao: 'O past simple é para eventos terminados.' },
+    { instrucao: CERTA, opcoes: ['Did you traveled to Paris?', 'You did travel to Paris?', 'Did you travel to Paris?'], certa: 2, traducao: 'Você viajou para Paris?' },
+    { instrucao: CERTA, opcoes: ["They didn't watch TV.", "They didn't watched TV.", "They don't watched TV."], certa: 0, traducao: 'Eles não assistiram TV.' },
+    { instrucao: CERTA, opcoes: ['I studyed English last year.', 'I studied English last year.', 'I study English last year.'], certa: 1, traducao: 'Eu estudei inglês no ano passado.' },
+    { instrucao: CERTA, opcoes: ['Where you traveled last summer?', 'Where did you traveled last summer?', 'Where did you travel last summer?'], certa: 2, traducao: 'Para onde você viajou no verão passado?' }
+  ]
+});
+</script>
+</body>
+</html>

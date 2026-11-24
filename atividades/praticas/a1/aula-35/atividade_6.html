@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 36 · /t/, /d/ or /ɪd/?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 36 · Escuta
+   Alinhado ao slide "Class 35 and 36: My Last Vacation" (parte Class 36) — Pronunciation of -ed
+   endings: /t/ depois de p, k, s, f, sh, ch (worked, washed); /d/ depois de vogal e da maioria das
+   consoantes (played, called); /ɪd/ só depois de t ou d (wanted, decided). Conteúdo NOVO: outros
+   verbos. 24 questões, todas de ouvido. */
+const SONS = ['/t/  (like worked)', '/d/  (like played)', '/ɪd/  (like wanted)'];
+const op = () => SONS.map(l => ({ label: l, icon: 'record_voice_over' }));
+const T = 0, D = 1, ID = 2;
+const v = (palavra, som) => ({ audioTexto: palavra, opcoes: op(), certa: som });
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 35, num: 6, tipo: 'imagem',
+  instrucao: 'Listen to the verb. How does the -ed sound?',
+  itens: [
+    v('worked', T), v('played', D), v('wanted', ID), v('booked', T),
+    v('arrived', D), v('decided', ID), v('packed', T), v('traveled', D),
+    v('waited', ID), v('talked', T), v('loved', D), v('boarded', ID),
+    v('watched', T), v('returned', D), v('landed', ID), v('stopped', T),
+    v('stayed', D), v('visited', ID), v('washed', T), v('called', D),
+    v('needed', ID), v('liked', T), v('cried', D), v('started', ID)
+  ]
+});
+</script>
+</body>
+</html>

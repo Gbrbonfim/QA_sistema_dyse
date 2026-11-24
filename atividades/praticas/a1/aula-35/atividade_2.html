@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 35 · We traveled by plane</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 35 · Escrita
+   Alinhado ao slide "Class 35 and 36: My Last Vacation" (parte Class 35) — Grammar Point (past
+   simple regular: +ed, +d, -y → ied, consoante dobrada; didn't + verbo; Did...? + verbo sem -ed) e
+   exercícios 5–7. Só verbos regulares. Conteúdo NOVO. O contexto traz a frase em português. A isca
+   é o verbo no presente, o -ed escrito errado ou o -ed depois de did. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 35, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Nós decidimos viajar para Paris em julho.'), palavras: ['We', 'decided', 'to', 'travel', 'to', 'Paris', 'in', 'July'], isca: ['decide'], fim: '.', traducao: 'Nós decidimos viajar para Paris em julho.' },
+    { contexto: M('Meu marido reservou as passagens online.'), palavras: ['My', 'husband', 'booked', 'the', 'tickets', 'online'], isca: ['books'], fim: '.', traducao: 'Meu marido reservou as passagens online.' },
+    { contexto: M('Nós arrumamos as malas no fim de semana.'), palavras: ['We', 'packed', 'our', 'bags', 'at', 'the', 'weekend'], isca: ['pack'], fim: '.', traducao: 'Nós arrumamos as malas no fim de semana.' },
+    { contexto: M('Ela trabalhou numa escola.'), palavras: ['She', 'worked', 'in', 'a', 'school'], isca: ['works'], fim: '.', traducao: 'Ela trabalhou numa escola.' },
+    { contexto: M('Eles terminaram o trabalho às sete.'), palavras: ['They', 'finished', 'work', 'at', 'seven'], isca: ['finish'], fim: '.', traducao: 'Eles terminaram o trabalho às sete.' },
+    { contexto: M('Eu morei na Inglaterra.'), palavras: ['I', 'lived', 'in', 'England'], isca: ['liveed'], fim: '.', traducao: 'Eu morei na Inglaterra.' },
+    { contexto: M('As crianças assistiram TV.'), palavras: ['The', 'children', 'watched', 'TV'], isca: ['watch'], fim: '.', traducao: 'As crianças assistiram TV.' },
+    { contexto: M('O ônibus parou no centro.'), palavras: ['The', 'bus', 'stopped', 'in', 'the', 'center'], isca: ['stoped'], fim: '.', traducao: 'O ônibus parou no centro.' },
+    { contexto: M('Eu estudei ciência da computação.'), palavras: ['I', 'studied', 'computer', 'science'], isca: ['studyed'], fim: '.', traducao: 'Eu estudei ciência da computação.' },
+    { contexto: M('Eu não viajei de avião.'), palavras: ['I', "didn't", 'travel', 'by', 'plane'], isca: ['traveled'], fim: '.', traducao: 'Eu não viajei de avião.' },
+    { contexto: M('Você viajou de avião?'), palavras: ['Did', 'you', 'travel', 'by', 'plane'], isca: ['traveled'], fim: '?', traducao: 'Você viajou de avião?' },
+    { contexto: M('As crianças terminaram a lição de casa?'), palavras: ['Did', 'the', 'children', 'finish', 'their', 'homework'], isca: ['finished'], fim: '?', traducao: 'As crianças terminaram a lição de casa?' },
+    { contexto: M('Não, elas não terminaram.'), palavras: ['No,', 'they', "didn't"], isca: ["don't"], fim: '.', traducao: 'Não, elas não terminaram.' },
+    { contexto: M('Você jogou futebol semana passada?'), palavras: ['Did', 'you', 'play', 'football', 'last', 'week'], isca: ['Do'], fim: '?', traducao: 'Você jogou futebol semana passada?' },
+    { contexto: M('O bebê chorou ontem à noite?'), palavras: ['Did', 'the', 'baby', 'cry', 'last', 'night'], isca: ['cried'], fim: '?', traducao: 'O bebê chorou ontem à noite?' },
+    { contexto: M('Não, ela não chorou muito.'), palavras: ['No,', 'she', "didn't", 'cry', 'a', 'lot'], isca: ['cried'], fim: '.', traducao: 'Não, ela não chorou muito.' },
+    { contexto: M('A que horas você chegou em casa ontem à noite?'), palavras: ['What', 'time', 'did', 'you', 'arrive', 'home', 'last', 'night'], isca: ['arrived'], fim: '?', traducao: 'A que horas você chegou em casa ontem à noite?' },
+    { contexto: M('Para onde você viajou nas suas últimas férias?'), palavras: ['Where', 'did', 'you', 'travel', 'on', 'your', 'last', 'vacation'], isca: ['traveled'], fim: '?', traducao: 'Para onde você viajou nas suas últimas férias?' },
+    { contexto: M('Você reservou um hotel em Paris?'), palavras: ['Did', 'you', 'book', 'a', 'hotel', 'in', 'Paris'], isca: ['booked'], fim: '?', traducao: 'Você reservou um hotel em Paris?' },
+    { contexto: M('Nós voltamos para casa depois de dez dias.'), palavras: ['We', 'returned', 'home', 'after', 'ten', 'days'], isca: ['return'], fim: '.', traducao: 'Nós voltamos para casa depois de dez dias.' }
+  ]
+});
+</script>
+</body>
+</html>

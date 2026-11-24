@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 35 · Vacation and the past</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 35 · Escuta
+   Alinhado ao slide "Class 35 and 36: My Last Vacation" (parte Class 35) — a história de férias
+   da Anna e do Paul (decided, booked, packed, arrived, waited, boarded, landed, returned) e
+   Grammar Point (past simple regular para fatos terminados). Só verbos regulares. Conteúdo NOVO:
+   outras frases. 24 questões: 12 expressões de viagem + 12 "passado ou presente?" (ouvir o -ed). */
+const IC = { 'pack bags': 'luggage', 'book a flight': 'airplane_ticket', 'arrive at the airport': 'flight_land', 'return home': 'home',
+  'visit places': 'museum', 'stay in a hotel': 'hotel', 'walk around the city': 'directions_walk', 'talk to people': 'forum',
+  'travel by plane': 'flight', 'enjoy the trip': 'sentiment_very_satisfied', 'decide to travel': 'lightbulb', 'want to eat': 'restaurant',
+  'past (finished)': 'history', 'present (every day)': 'event_repeat' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const PP = 'Listen: is it the past or the present?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 35, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the vacation phrase',
+  itens: [
+    { audioTexto: 'pack bags', opcoes: op('pack bags', 'book a flight', 'return home', 'stay in a hotel'), certa: 0 },
+    { audioTexto: 'book a flight', opcoes: op('travel by plane', 'book a flight', 'arrive at the airport', 'pack bags'), certa: 1 },
+    { audioTexto: 'arrive at the airport', opcoes: op('return home', 'travel by plane', 'arrive at the airport', 'visit places'), certa: 2 },
+    { audioTexto: 'return home', opcoes: op('stay in a hotel', 'arrive at the airport', 'walk around the city', 'return home'), certa: 3 },
+    { audioTexto: 'visit places', opcoes: op('visit places', 'talk to people', 'enjoy the trip', 'want to eat'), certa: 0 },
+    { audioTexto: 'stay in a hotel', opcoes: op('return home', 'stay in a hotel', 'pack bags', 'visit places'), certa: 1 },
+    { audioTexto: 'walk around the city', opcoes: op('travel by plane', 'talk to people', 'walk around the city', 'decide to travel'), certa: 2 },
+    { audioTexto: 'talk to people', opcoes: op('want to eat', 'enjoy the trip', 'visit places', 'talk to people'), certa: 3 },
+    { audioTexto: 'travel by plane', opcoes: op('travel by plane', 'book a flight', 'arrive at the airport', 'walk around the city'), certa: 0 },
+    { audioTexto: 'enjoy the trip', opcoes: op('decide to travel', 'enjoy the trip', 'want to eat', 'talk to people'), certa: 1 },
+    { audioTexto: 'decide to travel', opcoes: op('travel by plane', 'enjoy the trip', 'decide to travel', 'pack bags'), certa: 2 },
+    { audioTexto: 'want to eat', opcoes: op('talk to people', 'stay in a hotel', 'visit places', 'want to eat'), certa: 3 },
+    { instrucao: PP, audioTexto: 'We traveled to Paris in July.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'We travel to the beach every summer.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'She booked the tickets online.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'I pack my bags the night before.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'They arrived at the airport early.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'My parents walk in the park every day.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'I talked to a lot of people.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'He works in a hotel.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'The plane landed in the morning.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'I love this city!', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'We waited at the gate.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'We returned home after ten days.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 }
+  ]
+});
+</script>
+</body>
+</html>

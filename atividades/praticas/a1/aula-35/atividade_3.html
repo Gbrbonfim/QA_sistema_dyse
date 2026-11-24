@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 35 · A trip to Lisbon</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 35 · Leitura
+   Alinhado ao slide "Class 35 and 36: My Last Vacation" (parte Class 35) — a história de férias e
+   Grammar Point (Did you...? Yes, I did. / No, we didn't.). Só verbos regulares. Conteúdo NOVO: a
+   Rita conta ao Paulo a viagem para Lisboa (fato verdadeiro: os pastéis de nata são famosos em
+   Lisboa). 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Paulo', 'Hi, Rita! Welcome back! Did you enjoy your trip?'],
+  ['Rita', 'Yes, I did! I loved Lisbon!'],
+  ['Paulo', 'Cool! When did you arrive?'],
+  ['Rita', 'We arrived last Saturday. We traveled by plane.'],
+  ['Paulo', 'Did you stay in a hotel?'],
+  ['Rita', "No, we didn't. We rented a small flat in the center."],
+  ['Paulo', 'Nice! What places did you visit?'],
+  ['Rita', 'We visited museums and walked around the city every day.'],
+  ['Paulo', 'Did you try the pastéis de nata?'],
+  ['Rita', 'Yes, I did! I tried ten! Ha ha!'],
+  ['Paulo', 'Ha ha! Did it rain?'],
+  ['Rita', "No, it didn't. It was sunny and warm."],
+  ['Paulo', 'Did you talk to Portuguese people?'],
+  ['Rita', 'Yes! They were very friendly. I wanted to stay there!']
+];
+const lado = q => q === 'Paulo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 35, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I did! I loved Lisbon!', 'Yes, I do! I love Lisbon!', 'Yes, I did! I loveed Lisbon!'], 0, 'Sim! Eu amei Lisboa!'),
+    prox(2, ['Cool! When did you arrived?', 'Cool! When did you arrive?', 'Cool! When you arrived?'], 1, 'Legal! Quando vocês chegaram?'),
+    prox(3, ['We arrive last Saturday.', 'We did arrive last Saturday by plane.', 'We arrived last Saturday. We traveled by plane.'], 2, 'Nós chegamos sábado passado. Viajamos de avião.'),
+    prox(4, ['Did you stay in a hotel?', 'Did you stayed in a hotel?', 'Do you stayed in a hotel?'], 0, 'Vocês ficaram num hotel?'),
+    prox(5, ["No, we don't. We rent a flat.", "No, we didn't. We rented a small flat in the center.", "No, we didn't. We rentted a small flat."], 1, 'Não. Nós alugamos um apartamento pequeno no centro.'),
+    prox(6, ['Nice! What places you visited?', 'Nice! What places did you visited?', 'Nice! What places did you visit?'], 2, 'Legal! Que lugares vocês visitaram?'),
+    prox(7, ['We visited museums and walked around the city every day.', 'We visit museums and walk around the city.', 'We visitted museums and walkked around the city.'], 0, 'Nós visitamos museus e andamos pela cidade todo dia.'),
+    prox(8, ['Did you tried the pastéis de nata?', 'Did you try the pastéis de nata?', 'You tried the pastéis de nata?'], 1, 'Você experimentou os pastéis de nata?'),
+    prox(9, ['Yes, I do! I try ten!', 'Yes, I did! I tryed ten!', 'Yes, I did! I tried ten! Ha ha!'], 2, 'Sim! Eu experimentei dez! Haha!'),
+    prox(10, ['Ha ha! Did it rain?', 'Ha ha! Did it rained?', 'Ha ha! Was it rain?'], 0, 'Haha! Choveu?'),
+    prox(11, ["No, it doesn't. It's sunny.", "No, it didn't. It was sunny and warm.", "No, it didn't rained."], 1, 'Não, não choveu. Estava ensolarado e quente.'),
+    prox(12, ['Did you stay in a hotel?', 'When did you arrive?', 'Did you talk to Portuguese people?'], 2, 'Você conversou com portugueses?'),
+    { instrucao: 'Did Rita enjoy her trip?', frase: 'Yes, she ___.', opcoes: ['did', 'does', 'was'], certa: 0, traducao: 'Sim, ela gostou.' },
+    { instrucao: 'When did Rita arrive in Lisbon?', frase: 'Last ___.', opcoes: ['Sunday', 'Saturday', 'Friday'], certa: 1, traducao: 'Sábado passado.' },
+    { instrucao: 'How did they travel?', frase: 'By ___.', opcoes: ['bus', 'car', 'plane'], certa: 2, traducao: 'De avião.' },
+    { instrucao: 'Did they stay in a hotel?', frase: "No. They ___ a small flat.", opcoes: ['rented', 'booked a hotel and', 'stayed in'], certa: 0, traducao: 'Não. Eles alugaram um apartamento pequeno.' },
+    { instrucao: 'What did they do every day?', frase: 'They ___ around the city.', opcoes: ['traveled', 'walked', 'waited'], certa: 1, traducao: 'Eles andaram pela cidade.' },
+    { instrucao: 'How many pastéis de nata did Rita try?', frase: '___.', opcoes: ['Two', 'Three', 'Ten'], certa: 2, traducao: 'Dez.' },
+    { instrucao: 'Did it rain?', frase: "No, it ___.", opcoes: ["didn't", "wasn't", "doesn't"], certa: 0, traducao: 'Não, não choveu.' },
+    { instrucao: 'What did Rita think of the Portuguese people?', frase: 'They were very ___.', opcoes: ['noisy', 'friendly', 'lazy'], certa: 1, traducao: 'Eles eram muito simpáticos.' }
+  ]
+});
+</script>
+</body>
+</html>
