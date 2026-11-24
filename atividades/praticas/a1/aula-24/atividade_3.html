@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 24 · How sporty are you?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 24 · Leitura
+   Alinhado ao slide "Class 24: Sports and Workout" — o quiz "How sporty are you?" (resultados
+   couch potato / healthy and active / fitness master) e Speaking "Can you do...? Prove it!".
+   Conteúdo NOVO: o treinador entrevista a Lia na academia. 20 questões: 12 de "próxima fala" +
+   8 de compreensão. */
+const D = [
+  ['Coach', 'Hi, Lia! Can you run?'],
+  ['Lia', 'Yes, I can. I can run five kilometers.'],
+  ['Coach', 'Great! Can you lift weights?'],
+  ['Lia', "No, I can't. I can't lift a barbell."],
+  ['Coach', 'No problem. Can you do sit-ups?'],
+  ['Lia', 'Yes, I can do twenty sit-ups.'],
+  ['Coach', 'Very good! What sports can you play?'],
+  ['Lia', "I can play volleyball, but I can't play tennis."],
+  ['Coach', 'And yoga? Can you stretch?'],
+  ['Lia', 'Yes, I can! I do yoga on Sundays.'],
+  ['Coach', 'How often do you work out?'],
+  ['Lia', "Twice a week. I'm not a fitness master, ha ha!"],
+  ['Coach', "You're healthy and active! That's great."],
+  ['Lia', 'Thanks! I want to start today!']
+];
+const lado = q => q === 'Coach' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 24, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I can. I can run five kilometers.', 'Yes, I do. I can run five kilometers.', 'Yes, I can. I can runs five kilometers.'], 0, 'Sim, consigo. Eu consigo correr cinco quilômetros.'),
+    prox(2, ['Great! Do you can lift weights?', 'Great! Can you lift weights?', 'Great! Can you lifts weights?'], 1, 'Ótimo! Você consegue levantar pesos?'),
+    prox(3, ["No, I don't. I can't lift a barbell.", "No, I can. I can't lift a barbell.", "No, I can't. I can't lift a barbell."], 2, 'Não, não consigo. Eu não consigo levantar uma barra.'),
+    prox(4, ['No problem. Can you do sit-ups?', 'No problem. Can you to do sit-ups?', 'Thanks!'], 0, 'Sem problema. Você consegue fazer abdominais?'),
+    prox(5, ['Yes, I can twenty sit-ups do.', 'Yes, I can do twenty sit-ups.', 'Yes, I cans do twenty sit-ups.'], 1, 'Sim, eu consigo fazer vinte abdominais.'),
+    prox(6, ['What sports do you can play?', 'And yoga?', 'Very good! What sports can you play?'], 2, 'Muito bem! Que esportes você consegue jogar?'),
+    prox(7, ["I can play volleyball, but I can't play tennis.", "I can plays volleyball, but I can't plays tennis.", "I can play volleyball, but I don't can play tennis."], 0, 'Eu consigo jogar vôlei, mas não consigo jogar tênis.'),
+    prox(8, ['How often do you work out?', 'And yoga? Can you stretch?', 'And yoga? You can stretch?'], 1, 'E ioga? Você consegue se alongar?'),
+    prox(9, ["No problem.", "Yes, I do! I can yoga.", 'Yes, I can! I do yoga on Sundays.'], 2, 'Sim, consigo! Eu faço ioga aos domingos.'),
+    prox(10, ['How often do you work out?', 'How often can you work out?', 'How often you work out?'], 0, 'Com que frequência você malha?'),
+    prox(11, ['Twice a week. I\'m a couch potato!', "Twice a week. I'm not a fitness master, ha ha!", 'Yes, I can.'], 1, 'Duas vezes por semana. Eu não sou uma fera do fitness, haha!'),
+    prox(12, ['Can you run?', 'No problem.', "You're healthy and active! That's great."], 2, 'Você é saudável e ativa! Que ótimo.'),
+    { instrucao: 'Can Lia run?', frase: 'Yes, she ___.', opcoes: ['can', 'does', 'is'], certa: 0, traducao: 'Sim, ela consegue.' },
+    { instrucao: 'How far can Lia run?', frase: 'Five ___.', opcoes: ['minutes', 'kilometers', 'marathons'], certa: 1, traducao: 'Cinco quilômetros.' },
+    { instrucao: 'Can Lia lift a barbell?', frase: 'No, she ___.', opcoes: ["doesn't", "isn't", "can't"], certa: 2, traducao: 'Não, ela não consegue.' },
+    { instrucao: 'How many sit-ups can Lia do?', frase: '___.', opcoes: ['Twenty', 'Twelve', 'Two'], certa: 0, traducao: 'Vinte.' },
+    { instrucao: 'What sport can Lia play?', frase: 'She can play ___.', opcoes: ['tennis', 'volleyball', 'basketball'], certa: 1, traducao: 'Ela consegue jogar vôlei.' },
+    { instrucao: 'When does Lia do yoga?', frase: 'On ___.', opcoes: ['Mondays', 'Saturdays', 'Sundays'], certa: 2, traducao: 'Aos domingos.' },
+    { instrucao: 'How often does Lia work out?', frase: '___ a week.', opcoes: ['Twice', 'Never', 'Every day'], certa: 0, traducao: 'Duas vezes por semana.' },
+    { instrucao: 'What is Lia, for the coach?', frase: "She's ___.", opcoes: ['a couch potato', 'healthy and active', 'a fitness master'], certa: 1, traducao: 'Ela é saudável e ativa.' }
+  ]
+});
+</script>
+</body>
+</html>

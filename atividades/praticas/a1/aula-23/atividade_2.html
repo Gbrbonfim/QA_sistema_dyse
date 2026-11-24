@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 23 · I'll have the pasta</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 23 · Escrita
+   Alinhado ao slide "Class 23: Friends in a Restaurant" — Functional Skills (I'll start with +
+   entrada; I'll have + prato; with a side of...) e exercícios 4 e 5 (reescrever "I want..." com
+   I'll have / I'll start with). Conteúdo NOVO: outros pedidos e o diálogo com o garçom. O
+   contexto traz a frase em português. A isca é "want" (pedir sem educação), "of" fora do lugar ou
+   "with" trocado. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 23, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Vou querer a pizza.'), palavras: ["I'll", 'have', 'the', 'pizza'], isca: ['want'], fim: '.', traducao: 'Vou querer a pizza.' },
+    { contexto: M('Vou começar com a sopa de legumes.'), palavras: ["I'll", 'start', 'with', 'the', 'vegetable', 'soup'], isca: ['have'], fim: '.', traducao: 'Vou começar com a sopa de legumes.' },
+    { contexto: M('Vou querer o peixe.'), palavras: ["I'll", 'have', 'the', 'fish'], isca: ['want'], fim: '.', traducao: 'Vou querer o peixe.' },
+    { contexto: M('Vou querer uma omelete.'), palavras: ["I'll", 'have', 'an', 'omelette'], isca: ['a'], fim: '.', traducao: 'Vou querer uma omelete.' },
+    { contexto: M('Vou querer uma xícara de café e um sanduíche de queijo.'), palavras: ["I'll", 'have', 'a', 'cup', 'of', 'coffee', 'and', 'a', 'cheese', 'sandwich'], isca: ['want'], fim: '.', traducao: 'Vou querer uma xícara de café e um sanduíche de queijo.' },
+    { contexto: M('Vou querer o frango com batata frita de acompanhamento.'), palavras: ["I'll", 'have', 'the', 'chicken', 'with', 'a', 'side', 'of', 'fries'], isca: ['in'], fim: '.', traducao: 'Vou querer o frango com batata frita de acompanhamento.' },
+    { contexto: M('Vou querer a pizza com salada de acompanhamento.'), palavras: ["I'll", 'have', 'the', 'pizza', 'with', 'a', 'side', 'of', 'salad'], isca: ['want'], fim: '.', traducao: 'Vou querer a pizza com salada de acompanhamento.' },
+    { contexto: M('Vou querer o camarão com arroz de acompanhamento.'), palavras: ["I'll", 'have', 'the', 'prawns', 'with', 'a', 'side', 'of', 'rice'], isca: ['start'], fim: '.', traducao: 'Vou querer o camarão com arroz de acompanhamento.' },
+    { contexto: M('Vou começar com a sopa de tomate e depois vou querer a lasanha.'), palavras: ["I'll", 'start', 'with', 'the', 'tomato', 'soup', 'and', 'then', "I'll", 'have', 'the', 'lasagne'], isca: ['want'], fim: '.', traducao: 'Vou começar com a sopa de tomate e depois vou querer a lasanha.' },
+    { contexto: M('O mesmo para mim.'), palavras: ['Same', 'for', 'me'], isca: ['I'], fim: '.', traducao: 'O mesmo para mim.' },
+    { contexto: M('Vocês estão prontos para pedir?'), palavras: ['Are', 'you', 'ready', 'to', 'order'], isca: ['Do'], fim: '?', traducao: 'Vocês estão prontos para pedir?' },
+    { contexto: M('Alguma coisa para começar?'), palavras: ['Anything', 'to', 'start', 'with'], isca: ['have'], fim: '?', traducao: 'Alguma coisa para começar?' },
+    { contexto: M('E para o prato principal?'), palavras: ['And', 'for', 'your', 'main', 'course'], isca: ['you'], fim: '?', traducao: 'E para o seu prato principal?' },
+    { contexto: M('E para beber?'), palavras: ['And', 'to', 'drink'], isca: ['drinks'], fim: '?', traducao: 'E para beber?' },
+    { contexto: M('Vou querer um suco de fruta, por favor.'), palavras: ["I'll", 'have', 'a', 'fruit', 'juice,', 'please'], isca: ['an'], fim: '.', traducao: 'Vou querer um suco de fruta, por favor.' },
+    { contexto: M('Mais alguma coisa?'), palavras: ['Anything', 'else'], isca: ['other'], fim: '?', traducao: 'Mais alguma coisa?' },
+    { contexto: M('Não, obrigado. É só isso.'), palavras: ['No,', 'thank', 'you.', "That's", 'all'], isca: ['All'], fim: '.', traducao: 'Não, obrigado. É só isso.' },
+    { contexto: M('Você vai querer um acompanhamento?'), palavras: ['Will', 'you', 'have', 'a', 'side', 'dish'], isca: ['Do'], fim: '?', traducao: 'Você vai querer um acompanhamento?' },
+    { contexto: M('Vou começar com o carpaccio.'), palavras: ["I'll", 'start', 'with', 'the', 'carpaccio'], isca: ['of'], fim: '.', traducao: 'Vou começar com o carpaccio.' },
+    { contexto: M('Já volto com o seu pedido. Bom apetite!'), palavras: ["I'll", 'be', 'back', 'with', 'your', 'order.', 'Enjoy'], isca: ['you'], fim: '!', traducao: 'Já volto com o seu pedido. Bom apetite!' }
+  ]
+});
+</script>
+</body>
+</html>

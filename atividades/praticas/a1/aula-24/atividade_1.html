@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 24 · Can or can't?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 24 · Escuta
+   Alinhado ao slide "Class 24: Sports and Workout" — Vocabulary (walk, run, stretch, lift
+   weights, sit-ups, work out, marathon, play sports, order fast food) e Grammar Point (can / can't
+   para habilidade; can fraco /kən/ na afirmativa e can't forte). Conteúdo NOVO: outras frases.
+   As figuras são ícones. 24 questões: 12 atividades + 12 can x can't (treino de ouvido). */
+const IC = { run: 'directions_run', walk: 'directions_walk', stretch: 'self_improvement', 'lift weights': 'fitness_center',
+  'do sit-ups': 'sports_gymnastics', 'work out': 'fitness_center', 'play tennis': 'sports_tennis', 'play basketball': 'sports_basketball',
+  'play volleyball': 'sports_volleyball', 'play soccer': 'sports_soccer', 'run a marathon': 'sprint', 'order fast food': 'fastfood',
+  'talk to people': 'forum', can: 'check_circle', "can't": 'block' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const CC = 'Listen: can or can\'t?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 24, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the activity',
+  itens: [
+    { audioTexto: 'run', opcoes: op('run', 'walk', 'stretch', 'work out'), certa: 0 },
+    { audioTexto: 'lift weights', opcoes: op('do sit-ups', 'lift weights', 'stretch', 'play tennis'), certa: 1 },
+    { audioTexto: 'stretch', opcoes: op('run', 'walk', 'stretch', 'lift weights'), certa: 2 },
+    { audioTexto: 'do sit-ups', opcoes: op('lift weights', 'run a marathon', 'stretch', 'do sit-ups'), certa: 3 },
+    { audioTexto: 'play volleyball', opcoes: op('play volleyball', 'play basketball', 'play tennis', 'play soccer'), certa: 0 },
+    { audioTexto: 'run a marathon', opcoes: op('walk', 'run a marathon', 'work out', 'order fast food'), certa: 1 },
+    { audioTexto: 'order fast food', opcoes: op('talk to people', 'work out', 'order fast food', 'play soccer'), certa: 2 },
+    { audioTexto: 'play tennis', opcoes: op('play soccer', 'play basketball', 'play volleyball', 'play tennis'), certa: 3 },
+    { audioTexto: 'walk', opcoes: op('walk', 'run', 'talk to people', 'stretch'), certa: 0 },
+    { audioTexto: 'talk to people', opcoes: op('order fast food', 'talk to people', 'walk', 'play tennis'), certa: 1 },
+    { audioTexto: 'play basketball', opcoes: op('play volleyball', 'play tennis', 'play basketball', 'play soccer'), certa: 2 },
+    { audioTexto: 'work out', opcoes: op('walk', 'talk to people', 'run a marathon', 'work out'), certa: 3 },
+    { instrucao: CC, audioTexto: 'I can play tennis.', opcoes: op('can', "can't"), certa: 0 },
+    { instrucao: CC, audioTexto: "She can't lift a barbell.", opcoes: op('can', "can't"), certa: 1 },
+    { instrucao: CC, audioTexto: "We can't run a marathon.", opcoes: op('can', "can't"), certa: 1 },
+    { instrucao: CC, audioTexto: 'He can do thirty sit-ups.', opcoes: op('can', "can't"), certa: 0 },
+    { instrucao: CC, audioTexto: 'My mom can stretch for fifteen minutes.', opcoes: op('can', "can't"), certa: 0 },
+    { instrucao: CC, audioTexto: "I can't play basketball very well.", opcoes: op('can', "can't"), certa: 1 },
+    { instrucao: CC, audioTexto: 'They can run on the treadmill.', opcoes: op('can', "can't"), certa: 0 },
+    { instrucao: CC, audioTexto: "Penguins can't fly.", opcoes: op('can', "can't"), certa: 1 },
+    { instrucao: CC, audioTexto: 'Cheetahs can run very fast.', opcoes: op('can', "can't"), certa: 0 },
+    { instrucao: CC, audioTexto: "My grandfather can't walk for a long time.", opcoes: op('can', "can't"), certa: 1 },
+    { instrucao: CC, audioTexto: 'The boys can play soccer really well.', opcoes: op('can', "can't"), certa: 0 },
+    { instrucao: CC, audioTexto: "Sorry, I can't work out today.", opcoes: op('can', "can't"), certa: 1 }
+  ]
+});
+</script>
+</body>
+</html>

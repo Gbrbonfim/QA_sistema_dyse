@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 24 · I can, I can't</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 24 · Fala
+   Alinhado ao slide "Class 24: Sports and Workout" — Speaking ("Say what you can do": I can lift
+   weights and I can work out. I can't run...) e Grammar Point. Pronúncia: can fraco /kən/ na
+   afirmativa; can forte e can't com o "t" na pergunta e na negativa. Conteúdo NOVO: outras
+   frases. 20 questões. */
+const PAL = 'Listen and record the words';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 24, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'lift weights', traducao: 'levantar pesos' },
+    { instrucao: PAL, frase: 'work out', traducao: 'malhar' },
+    { instrucao: PAL, frase: 'stretch', traducao: 'alongar' },
+    { instrucao: PAL, frase: 'treadmill', traducao: 'esteira' },
+    { instrucao: PAL, frase: 'marathon', traducao: 'maratona' },
+    { instrucao: PAL, frase: 'sit-ups', traducao: 'abdominais' },
+    { instrucao: PAL, frase: 'competition', traducao: 'competição' },
+    { instrucao: PAL, frase: 'healthy', traducao: 'saudável', nota: 'Soa como "RÉL-thi".' },
+    { frase: 'I can play tennis.', dica: 0, traducao: 'Eu consigo jogar tênis.', nota: 'Na afirmativa, can é fraco: "I k\'n play".' },
+    { frase: "I can't play tennis.", dica: 0, traducao: 'Eu não consigo jogar tênis.', nota: "Can't é forte e termina com t." },
+    { frase: 'Can you do thirty sit-ups?', dica: 0, traducao: 'Você consegue fazer trinta abdominais?' },
+    { frase: 'Yes, I can.', dica: 0, traducao: 'Sim, consigo.' },
+    { frase: "No, I can't.", dica: 0, traducao: 'Não, não consigo.' },
+    { frase: 'She can run very fast.', dica: 0, traducao: 'Ela consegue correr muito rápido.' },
+    { frase: "He can't lift a barbell.", dica: 0, traducao: 'Ele não consegue levantar uma barra.' },
+    { frase: 'I can lift weights and I can work out.', dica: 0, traducao: 'Eu consigo levantar pesos e consigo malhar.' },
+    { frase: "I can run on the treadmill, but I can't run a marathon.", dica: 0, traducao: 'Eu consigo correr na esteira, mas não consigo correr uma maratona.' },
+    { frase: 'What sports can you play?', dica: 0, traducao: 'Que esportes você consegue jogar?' },
+    { frase: 'The boys can play basketball really well.', dica: 0, traducao: 'Os meninos conseguem jogar basquete muito bem.' },
+    { frase: "Penguins can't fly.", dica: 0, traducao: 'Pinguins não conseguem voar.' }
+  ]
+});
+</script>
+</body>
+</html>

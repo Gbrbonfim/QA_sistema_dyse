@@ -472,7 +472,7 @@
   }
 
   /* FALA — escute e grave */
-  const CONTR = { "what's":"what is", "i'm":"i am", "it's":"it is", "he's":"he is", "she's":"she is", "you're":"you are", "we're":"we are", "they're":"they are", "that's":"that is", "where's":"where is", "let's":"let us", "isn't":"is not", "aren't":"are not", "isnt":"is not", "arent":"are not", "don't":"do not", "doesn't":"does not", "dont":"do not", "doesnt":"does not","whats":"what is", "im":"i am", "hes":"he is", "shes":"she is", "youre":"you are", "theyre":"they are", "thats":"that is", "wheres":"where is" };
+  const CONTR = { "what's":"what is", "i'm":"i am", "it's":"it is", "he's":"he is", "she's":"she is", "you're":"you are", "we're":"we are", "they're":"they are", "that's":"that is", "where's":"where is", "let's":"let us", "isn't":"is not", "aren't":"are not", "isnt":"is not", "arent":"are not", "don't":"do not", "doesn't":"does not", "dont":"do not", "doesnt":"does not", "can't":"cannot", "cant":"cannot","whats":"what is", "im":"i am", "hes":"he is", "shes":"she is", "youre":"you are", "theyre":"they are", "thats":"that is", "wheres":"where is" };
   /* O reconhecimento de voz escreve números com algarismos ("13", "£4.50",
      "7:30"); a frase da atividade vem por extenso. Converte antes de comparar. */
   const UNI = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];

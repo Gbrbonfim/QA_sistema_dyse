@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 24 · She can run very fast</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 24 · Escrita
+   Alinhado ao slide "Class 24: Sports and Workout" — Grammar Point (can antes do verbo; can't na
+   negativa; na pergunta inverte can e o sujeito; can é igual para todas as pessoas) e exercício 2
+   (ordenar as frases). Conteúdo NOVO: outras frases. O contexto traz a frase em português. A isca
+   é o verbo com s, "do / does" ou "to" (erros "Do you can", "can to play"). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 24, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ela consegue correr muito rápido.'), palavras: ['She', 'can', 'run', 'very', 'fast'], isca: ['runs'], fim: '.', traducao: 'Ela consegue correr muito rápido.' },
+    { contexto: M('Você consegue andar na esteira?'), palavras: ['Can', 'you', 'walk', 'on', 'the', 'treadmill'], isca: ['Do'], fim: '?', traducao: 'Você consegue andar na esteira?' },
+    { contexto: M('Ele não consegue levantar uma barra.'), palavras: ['He', "can't", 'lift', 'a', 'barbell'], isca: ["doesn't"], fim: '.', traducao: 'Ele não consegue levantar uma barra.' },
+    { contexto: M('Que exercícios a Camila consegue fazer?'), palavras: ['What', 'exercises', 'can', 'Camila', 'do'], isca: ['does'], fim: '?', traducao: 'Que exercícios a Camila consegue fazer?' },
+    { contexto: M('Os meninos conseguem jogar basquete muito bem.'), palavras: ['The', 'boys', 'can', 'play', 'basketball', 'really', 'well'], isca: ['plays'], fim: '.', traducao: 'Os meninos conseguem jogar basquete muito bem.' },
+    { contexto: M('Quantos abdominais o Pedro consegue fazer?'), palavras: ['How', 'many', 'sit-ups', 'can', 'Pedro', 'do'], isca: ['does'], fim: '?', traducao: 'Quantos abdominais o Pedro consegue fazer?' },
+    { contexto: M('Os alunos não conseguem correr uma maratona.'), palavras: ['The', 'students', "can't", 'run', 'a', 'marathon'], isca: ["don't"], fim: '.', traducao: 'Os alunos não conseguem correr uma maratona.' },
+    { contexto: M('Você consegue andar mais rápido?'), palavras: ['Can', 'you', 'walk', 'faster'], isca: ['Are'], fim: '?', traducao: 'Você consegue andar mais rápido?' },
+    { contexto: M('Eu consigo jogar tênis.'), palavras: ['I', 'can', 'play', 'tennis'], isca: ['to'], fim: '.', traducao: 'Eu consigo jogar tênis.' },
+    { contexto: M('Minha mãe não consegue se alongar.'), palavras: ['My', 'mom', "can't", 'stretch'], isca: ["doesn't"], fim: '.', traducao: 'Minha mãe não consegue se alongar.' },
+    { contexto: M('As meninas conseguem jogar com raquetes?'), palavras: ['Can', 'the', 'girls', 'play', 'with', 'rackets'], isca: ['Do'], fim: '?', traducao: 'As meninas conseguem jogar com raquetes?' },
+    { contexto: M('O John consegue levantar uma barra.'), palavras: ['John', 'can', 'lift', 'a', 'barbell'], isca: ['lifts'], fim: '.', traducao: 'O John consegue levantar uma barra.' },
+    { contexto: M('Sim, eu consigo.'), palavras: ['Yes,', 'I', 'can'], isca: ['do'], fim: '.', traducao: 'Sim, eu consigo.' },
+    { contexto: M('Não, ela não consegue.'), palavras: ['No,', 'she', "can't"], isca: ["doesn't"], fim: '.', traducao: 'Não, ela não consegue.' },
+    { contexto: M('Eu consigo levantar pesos e consigo malhar.'), palavras: ['I', 'can', 'lift', 'weights', 'and', 'I', 'can', 'work', 'out'], isca: ['to'], fim: '.', traducao: 'Eu consigo levantar pesos e consigo malhar.' },
+    { contexto: M('Eu consigo correr na esteira, mas não consigo correr uma maratona.'), palavras: ['I', 'can', 'run', 'on', 'the', 'treadmill,', 'but', 'I', "can't", 'run', 'a', 'marathon'], isca: ['runs'], fim: '.', traducao: 'Eu consigo correr na esteira, mas não consigo correr uma maratona.' },
+    { contexto: M('Pinguins não conseguem voar.'), palavras: ['Penguins', "can't", 'fly'], isca: ["don't"], fim: '.', traducao: 'Pinguins não conseguem voar.' },
+    { contexto: M('Que esportes você consegue jogar?'), palavras: ['What', 'sports', 'can', 'you', 'play'], isca: ['do'], fim: '?', traducao: 'Que esportes você consegue jogar?' },
+    { contexto: M('Ele consegue fazer trinta abdominais.'), palavras: ['He', 'can', 'do', 'thirty', 'sit-ups'], isca: ['cans'], fim: '.', traducao: 'Ele consegue fazer trinta abdominais.' },
+    { contexto: M('Você consegue fazer ioga?'), palavras: ['Can', 'you', 'do', 'yoga'], isca: ['Does'], fim: '?', traducao: 'Você consegue fazer ioga?' }
+  ]
+});
+</script>
+</body>
+</html>

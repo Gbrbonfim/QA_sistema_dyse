@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 24 · Can for ability</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 24 · Gramática
+   Alinhado ao slide "Class 24: Sports and Workout" — Grammar Point (can + verbo sem to e sem s;
+   can't; pergunta invertida; can igual para todas as pessoas; nunca "do you can") e o quiz.
+   Conteúdo NOVO e mais difícil: fatos verdadeiros sobre animais e escolha da forma correta.
+   24 questões. */
+const REGRA = 'Choose the right rule';
+const FATO = 'Can or can\'t? Think about the fact';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 24, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: REGRA, frase: 'In a sentence, can goes ___ the verb.', opcoes: ['before', 'after'], certa: 0, traducao: 'Numa frase, can vem antes do verbo.' },
+    { instrucao: REGRA, frase: "We use ___ to make negative sentences.", opcoes: ["don't can", "can't"], certa: 1, traducao: "Usamos can't para fazer frases negativas." },
+    { instrucao: REGRA, frase: 'In questions, we ___ can and the subject.', opcoes: ['invert', 'repeat', 'remove'], certa: 0, traducao: 'Nas perguntas, invertemos can e o sujeito.' },
+    { frase: 'She can ___ very fast.', opcoes: ['runs', 'run', 'to run'], certa: 1, traducao: 'Ela consegue correr muito rápido.' },
+    { frase: 'He ___ lift a barbell.', opcoes: ["doesn't", "don't", "can't"], certa: 2, traducao: 'Ele não consegue levantar uma barra.' },
+    { frase: '___ you walk on the treadmill?', opcoes: ['Can', 'Do', 'Are'], certa: 0, traducao: 'Você consegue andar na esteira?' },
+    { frase: 'My parents ___ play tennis.', opcoes: ['cans', 'can', 'can to'], certa: 1, traducao: 'Meus pais conseguem jogar tênis.' },
+    { frase: 'Can you do yoga? Yes, I ___.', opcoes: ['do', 'am', 'can'], certa: 2, traducao: 'Você consegue fazer ioga? Sim, consigo.' },
+    { frase: "Can he play basketball? No, he ___.", opcoes: ["can't", "doesn't", "isn't"], certa: 0, traducao: 'Ele consegue jogar basquete? Não, não consegue.' },
+    { frase: 'How many sit-ups ___ Pedro do?', opcoes: ['does', 'can', 'is'], certa: 1, traducao: 'Quantos abdominais o Pedro consegue fazer?' },
+    { frase: 'What exercises can Camila ___?', opcoes: ['does', 'doing', 'do'], certa: 2, traducao: 'Que exercícios a Camila consegue fazer?' },
+    { instrucao: FATO, frase: 'Penguins ___ fly.', opcoes: ['can', "can't"], certa: 1, traducao: 'Pinguins não conseguem voar.' },
+    { instrucao: FATO, frase: 'Cheetahs ___ run very fast.', opcoes: ['can', "can't"], certa: 0, traducao: 'Guepardos conseguem correr muito rápido.' },
+    { instrucao: FATO, frase: 'Fish ___ swim.', opcoes: ['can', "can't"], certa: 0, traducao: 'Peixes conseguem nadar.' },
+    { instrucao: FATO, frase: 'Dogs ___ talk.', opcoes: ['can', "can't"], certa: 1, traducao: 'Cachorros não conseguem falar.' },
+    { instrucao: FATO, frase: 'A baby ___ run a marathon.', opcoes: ['can', "can't"], certa: 1, traducao: 'Um bebê não consegue correr uma maratona.' },
+    { frase: 'A couch potato never moves. He ___ run for a long time.', opcoes: ['can', "can't"], certa: 1, traducao: 'Um sedentário nunca se mexe. Ele não consegue correr por muito tempo.' },
+    { frase: "I can run on the treadmill, ___ I can't run a marathon.", opcoes: ['and', 'but', 'or'], certa: 1, traducao: 'Eu consigo correr na esteira, mas não consigo correr uma maratona.' },
+    { frase: "I can lift weights ___ I can work out.", opcoes: ['and', 'but', 'or'], certa: 0, traducao: 'Eu consigo levantar pesos e consigo malhar.' },
+    { frase: 'My breakfast is oatmeal, because it is ___.', opcoes: ['lazy', 'healthy', 'fast food'], certa: 1, traducao: 'Meu café da manhã é aveia, porque é saudável.' },
+    { instrucao: CERTA, opcoes: ['Do you can play soccer?', 'Can you play soccer?', 'Can you to play soccer?'], certa: 1, traducao: 'Você consegue jogar futebol?' },
+    { instrucao: CERTA, opcoes: ['She cans swim.', 'She can swims.', 'She can swim.'], certa: 2, traducao: 'Ela consegue nadar.' },
+    { instrucao: CERTA, opcoes: ["They can't run a marathon.", "They don't can run a marathon.", "They can't runs a marathon."], certa: 0, traducao: 'Eles não conseguem correr uma maratona.' },
+    { instrucao: CERTA, opcoes: ['How many sports you can play?', 'How many sports can you play?', 'How many sports do you can play?'], certa: 1, traducao: 'Quantos esportes você consegue jogar?' }
+  ]
+});
+</script>
+</body>
+</html>

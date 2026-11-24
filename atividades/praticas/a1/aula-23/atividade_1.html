@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 23 · What's on the menu?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 23 · Escuta
+   Alinhado ao slide "Class 23: Friends in a Restaurant" — Vocabulary (o cardápio: soups, salad,
+   pizza, prawns, fish, chicken, lasagne, omelette, fries, rice...) e Functional Skills (I'll start
+   with... / I'll have... / with a side of...). Conteúdo NOVO: outros pedidos. As figuras são
+   ícones. 24 questões: 12 pratos + 12 pedidos. */
+const IC = { 'tomato soup': 'soup_kitchen', 'side salad': 'eco', pizza: 'local_pizza', prawns: 'set_meal', fish: 'set_meal',
+  chicken: 'kebab_dining', lasagne: 'dinner_dining', omelette: 'egg', fries: 'fastfood', rice: 'rice_bowl', pasta: 'ramen_dining',
+  'fruit juice': 'local_drink', coffee: 'coffee', bread: 'bakery_dining', 'ice cream': 'icecream', 'cheese sandwich': 'lunch_dining',
+  'vegetable soup': 'soup_kitchen', cake: 'cake' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const PED = 'Listen to the order and choose the main dish';
+const SIDE = 'Listen to the order and choose the side dish';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 23, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the food',
+  itens: [
+    { audioTexto: 'tomato soup', opcoes: op('tomato soup', 'side salad', 'pasta', 'omelette'), certa: 0 },
+    { audioTexto: 'prawns', opcoes: op('pasta', 'prawns', 'fries', 'pizza'), certa: 1 },
+    { audioTexto: 'omelette', opcoes: op('lasagne', 'rice', 'omelette', 'bread'), certa: 2 },
+    { audioTexto: 'lasagne', opcoes: op('pasta', 'pizza', 'fish', 'lasagne'), certa: 3 },
+    { audioTexto: 'fries', opcoes: op('fries', 'rice', 'bread', 'side salad'), certa: 0 },
+    { audioTexto: 'side salad', opcoes: op('vegetable soup', 'side salad', 'fries', 'rice'), certa: 1 },
+    { audioTexto: 'fruit juice', opcoes: op('coffee', 'ice cream', 'fruit juice', 'tomato soup'), certa: 2 },
+    { audioTexto: 'cheese sandwich', opcoes: op('pizza', 'omelette', 'lasagne', 'cheese sandwich'), certa: 3 },
+    { audioTexto: 'chicken', opcoes: op('chicken', 'fish', 'prawns', 'cake'), certa: 0 },
+    { audioTexto: 'rice', opcoes: op('bread', 'rice', 'fries', 'pasta'), certa: 1 },
+    { audioTexto: 'vegetable soup', opcoes: op('tomato soup', 'side salad', 'vegetable soup', 'fruit juice'), certa: 2 },
+    { audioTexto: 'ice cream', opcoes: op('cake', 'coffee', 'fruit juice', 'ice cream'), certa: 3 },
+    { instrucao: PED, audioTexto: "I'll have the lasagne, please.", opcoes: op('lasagne', 'pasta', 'pizza', 'omelette'), certa: 0 },
+    { instrucao: PED, audioTexto: "I'll start with the tomato soup, and then I'll have the fish.", opcoes: op('tomato soup', 'fish', 'chicken', 'prawns'), certa: 1 },
+    { instrucao: PED, audioTexto: "I'm gonna have the pizza.", opcoes: op('pasta', 'lasagne', 'pizza', 'cheese sandwich'), certa: 2 },
+    { instrucao: PED, audioTexto: "I'll have an omelette and a coffee.", opcoes: op('coffee', 'cheese sandwich', 'pasta', 'omelette'), certa: 3 },
+    { instrucao: PED, audioTexto: "Same for me. I'll have the prawns too.", opcoes: op('prawns', 'fish', 'chicken', 'rice'), certa: 0 },
+    { instrucao: PED, audioTexto: "I'll start with the side salad, and then I'll have the chicken.", opcoes: op('side salad', 'chicken', 'fish', 'fries'), certa: 1 },
+    { instrucao: SIDE, audioTexto: "I'll have the fish with a side of rice.", opcoes: op('fries', 'bread', 'rice', 'side salad'), certa: 2 },
+    { instrucao: SIDE, audioTexto: "I'll have the chicken with a side of fries.", opcoes: op('rice', 'side salad', 'bread', 'fries'), certa: 3 },
+    { instrucao: SIDE, audioTexto: "I'll have the pizza with a side of salad.", opcoes: op('side salad', 'fries', 'rice', 'bread'), certa: 0 },
+    { instrucao: SIDE, audioTexto: "I'll have the pasta with a side of bread.", opcoes: op('rice', 'bread', 'fries', 'side salad'), certa: 1 },
+    { instrucao: SIDE, audioTexto: "I'll have the prawns. And a side of rice, please.", opcoes: op('fries', 'side salad', 'rice', 'bread'), certa: 2 },
+    { instrucao: SIDE, audioTexto: "I'll have the omelette with a side of salad, please.", opcoes: op('fries', 'rice', 'bread', 'side salad'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

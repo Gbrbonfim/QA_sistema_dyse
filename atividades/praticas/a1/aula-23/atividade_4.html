@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 23 · Order your food</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 23 · Fala
+   Alinhado ao slide "Class 23: Friends in a Restaurant" — Role-Play (listen and repeat; practice
+   in pairs) e Functional Skills. Foco na contração I'll (uma sílaba só: "AIL"). Conteúdo NOVO:
+   outros pedidos. 20 questões. */
+const PAL = 'Listen and record the words';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 23, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'menu', traducao: 'cardápio', nota: 'Soa como "MÉ-niu".' },
+    { instrucao: PAL, frase: 'main course', traducao: 'prato principal' },
+    { instrucao: PAL, frase: 'side dish', traducao: 'acompanhamento' },
+    { instrucao: PAL, frase: 'omelette', traducao: 'omelete', nota: 'São duas sílabas: OM-lit.' },
+    { instrucao: PAL, frase: 'prawns', traducao: 'camarões' },
+    { instrucao: PAL, frase: 'lasagne', traducao: 'lasanha', aceita: { lasagna: 'lasagne' } },
+    { instrucao: PAL, frase: 'fries', traducao: 'batata frita' },
+    { instrucao: PAL, frase: 'vegetable soup', traducao: 'sopa de legumes' },
+    { instrucao: PAL, frase: 'fruit juice', traducao: 'suco de fruta', nota: 'Fruit soa "FRUT", sem o "i".' },
+    { instrucao: PAL, frase: 'waiter', traducao: 'garçom' },
+    { frase: 'Are you ready to order?', dica: 0, traducao: 'Vocês estão prontos para pedir?' },
+    { frase: "I'll start with the tomato soup.", dica: 0, traducao: 'Vou começar com a sopa de tomate.', nota: "I'll é uma sílaba só: AIL." },
+    { frase: "I'll have the chicken with a side of rice.", dica: 0, traducao: 'Vou querer o frango com arroz de acompanhamento.' },
+    { frase: 'Same for me.', dica: 0, traducao: 'O mesmo para mim.' },
+    { frase: 'And for your main course?', dica: 0, traducao: 'E para o seu prato principal?' },
+    { frase: "I'll have a fruit juice, please.", dica: 0, traducao: 'Vou querer um suco de fruta, por favor.' },
+    { frase: 'Anything else?', dica: 0, traducao: 'Mais alguma coisa?' },
+    { frase: "No, thank you. That's all.", dica: 0, traducao: 'Não, obrigado. É só isso.' },
+    { frase: "I'll start with the soup, and then I'll have the fish.", dica: 0, traducao: 'Vou começar com a sopa e depois vou querer o peixe.' },
+    { frase: "Perfect. I'll be back with your order.", dica: 0, traducao: 'Perfeito. Já volto com o seu pedido.' }
+  ]
+});
+</script>
+</body>
+</html>
