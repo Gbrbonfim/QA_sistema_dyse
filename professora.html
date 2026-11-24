@@ -217,15 +217,15 @@ body::before{
   .mob-icon-btn:active, .mob-icon-btn:hover{background:rgba(255,255,255,.16);}
   .mob-icon-btn .msr{font-size:24px; vertical-align:0;}
 
-  .sidebar-nav{display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;}
-  .sidebar-item{position:relative; flex-direction:column; justify-content:center; text-align:center; gap:6px; min-height:80px; padding:12px 6px;
-    font-size:.78rem; font-weight:600; line-height:1.2; color:#fff; border-radius:14px;
+  .sidebar-nav{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;}
+  .sidebar-item{position:relative; flex-direction:column; justify-content:center; text-align:center; gap:4px; min-height:64px; padding:9px 4px;
+    font-size:.72rem; font-weight:600; line-height:1.2; color:#fff; border-radius:12px;
     background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.24);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.18); transition:background .15s, transform .12s, box-shadow .15s;
     -webkit-tap-highlight-color:transparent;}
   .sidebar-item:hover{background:rgba(255,255,255,.22);}
   .sidebar-item:active{transform:scale(.97);}
-  .sidebar-item .nav-ic{font-size:26px;}
+  .sidebar-item .nav-ic{font-size:22px;}
   .sidebar-item.active{background:#fff; color:var(--amaranth); border-color:#fff; box-shadow:0 6px 16px rgba(58,29,16,.22);}
   .sidebar-item-badge{position:absolute; top:6px; right:6px; margin:0;}
   .sidebar-footer{display:none;}
@@ -609,6 +609,13 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .ab-op.sel{font-weight:600; color:var(--amaranth);}
 .ab-vazio{padding:12px 14px; font-size:.85rem; color:var(--seal-soft); opacity:.7;}
 @media (max-width:640px){ .dash-filter .aluno-busca input{font-size:16px;} .ab-op{padding-top:11px; padding-bottom:11px;} }
+/* Textos de explicação de Gerenciar Atividades: menores no celular. */
+.lib-desc{color:var(--seal-soft); font-size:.85rem; line-height:1.5;}
+.lib-desc.lib-nota{font-size:.8rem;}
+@media (max-width:640px){
+  .lib-desc{font-size:.74rem; line-height:1.45; opacity:.85;}
+  .lib-desc.lib-nota{font-size:.7rem;}
+}
 
 /* ---------- Gerenciar Atividades: Por turma | Por aluno e aulas dentro do material ---------- */
 .modo-lib{display:inline-flex; gap:4px; padding:4px; background:var(--antique-soft); border-radius:999px; margin:0 0 14px; max-width:100%;}
@@ -1059,7 +1066,7 @@ body.dyse-modal-open{overflow:hidden;}
     <details class="dyse-collapsible manage-course-block" open style="margin-bottom:22px; overflow:visible;">
       <summary class="manage-course-title"><span>Liberar atividades</span><span class="chevron">›</span></summary>
       <div class="manage-course-body">
-        <p style="color:var(--seal-soft); font-size:.85rem; margin:0 0 12px;">
+        <p class="lib-desc" style="margin:0 0 12px;">
           O aluno vê todas as atividades do nível dele, mas só faz as que você liberar. Escolha se quer liberar para a <b>turma inteira</b> ou para <b>um aluno</b> e ligue as atividades. Em <b>Visualizar</b> você testa a atividade antes (seu resultado não é salvo).
         </p>
         <div class="modo-lib" role="tablist" aria-label="Liberar por">
@@ -3298,7 +3305,7 @@ body.dyse-modal-open{overflow:hidden;}
         }).join(''));
       });
     if(seq !== PRATICA_TURMA_SEQ) return;
-    box.innerHTML = '<p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">Ligar libera a atividade para os <b>' + total + ' aluno' + (total > 1 ? 's' : '') +
+    box.innerHTML = '<p class="lib-desc lib-nota" style="margin:0 0 12px;">Ligar libera a atividade para os <b>' + total + ' aluno' + (total > 1 ? 's' : '') +
         '</b> da turma de uma vez. Aluno que entrar na turma depois precisa ser liberado de novo.</p>' + corpo;
     sincronizarMaterialPratica(box);
   }
@@ -3629,7 +3636,7 @@ body.dyse-modal-open{overflow:hidden;}
       blocos[course.id] =
         '<details class="dyse-collapsible manage-course-block">' +
           '<summary class="manage-course-title"><span>' + escapeHtmlLocal(course.name) + ' <span class="pill-count">' + course.activities.length + '</span></span><span class="chevron">›</span></summary>' +
-          '<div class="manage-course-body"><p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">No ' + escapeHtmlLocal(course.name) +
+          '<div class="manage-course-body"><p class="lib-desc lib-nota" style="margin:0 0 12px;">No ' + escapeHtmlLocal(course.name) +
             ' a liberação vale para todos os alunos que usam o ' + escapeHtmlLocal(course.name) + '.</p>' +
             '<div class="manage-row lib-todas"><div class="info"><b>Liberar todas</b> as atividades do ' + escapeHtmlLocal(course.name) + '</div>' +
               '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" class="curso-toggle-todas" ' + (todasOn ? 'checked' : '') +
