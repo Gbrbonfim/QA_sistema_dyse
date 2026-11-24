@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 43 Â· Getting to know you</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 43 · Leitura (revisão geral)
+   Alinhado ao slide "Class 43: Review" — Talking Point: ask and answer (rotina, fim de semana
+   passado, esportes, como está hoje, infância, onde estava ontem, planos) e compromissos e
+   viagem futura. Conteúdo NOVO: a Nina entrevista o colega novo, o Theo. 20 questões: 12 de
+   "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Nina', 'Hi, Theo! What time do you wake up on weekdays?'],
+  ['Theo', 'I wake up at half past six.'],
+  ['Nina', 'What did you do last weekend?'],
+  ['Theo', 'I went to a concert with my brother.'],
+  ['Nina', 'Cool! What sports do you play?'],
+  ['Theo', 'I play basketball, but I can\'t play tennis.'],
+  ['Nina', 'Are you tired today?'],
+  ['Theo', 'No, I\'m not. I\'m happy because I\'m going on a trip!'],
+  ['Nina', 'When you were a child, could you ride a bike?'],
+  ['Theo', 'Yes, I could. I loved my bike.'],
+  ['Nina', 'Where were you yesterday at 8 p.m.?'],
+  ['Theo', 'I was at the gym.'],
+  ['Nina', 'Where are you going on your trip?'],
+  ['Theo', 'I\'m going to Buenos Aires next month.'],
+  ['Nina', 'Who are you going with?'],
+  ['Theo', 'I\'m going with my parents. We\'re staying in a hotel.']
+];
+const lado = q => q === 'Nina' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 43, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I wake up at half past six.', 'I woke up at half past six every day.', "I'm wake up at half past six."], 0, 'Eu acordo às seis e meia.'),
+    prox(2, ['What do you did last weekend?', 'What did you do last weekend?', 'What were you do last weekend?'], 1, 'O que você fez no fim de semana passado?'),
+    prox(3, ['I go to a concert last weekend.', 'I goed to a concert.', 'I went to a concert with my brother.'], 2, 'Eu fui a um show com o meu irmão.'),
+    prox(4, ['Cool! What sports do you play?', 'Cool! What sports are you play?', 'Cool! What sports you play?'], 0, 'Legal! Que esportes você pratica?'),
+    prox(5, ["I play basketball, but I don't can play tennis.", "I play basketball, but I can't play tennis.", "I plays basketball, but I can't play tennis."], 1, 'Eu jogo basquete, mas não sei jogar tênis.'),
+    prox(6, ['Do you tired today?', 'Were you tired today?', 'Are you tired today?'], 2, 'Você está cansado hoje?'),
+    prox(7, ["No, I'm not. I'm happy because I'm going on a trip!", "No, I don't. I'm happy.", "No, I wasn't. I'm happy because I go on a trip!"], 0, 'Não. Estou feliz porque vou viajar!'),
+    prox(8, ['When you were a child, did you could ride a bike?', 'When you were a child, could you ride a bike?', 'When you was a child, could you ride a bike?'], 1, 'Quando você era criança, você sabia andar de bicicleta?'),
+    prox(9, ["Yes, I did could.", "Yes, I can. I ride my bike yesterday.", "Yes, I could. I loved my bike."], 2, 'Sim. Eu amava a minha bicicleta.'),
+    prox(10, ['Where were you yesterday at 8 p.m.?', 'Where did you yesterday at 8 p.m.?', 'Where was you yesterday at 8 p.m.?'], 0, 'Onde você estava ontem às 8 da noite?'),
+    prox(13, ["I go to Buenos Aires last month.", "I'm going to Buenos Aires next month.", "I'm go to Buenos Aires next month."], 1, 'Vou para Buenos Aires no mês que vem.'),
+    prox(15, ["I go with my parents. We stay in a hotel last week.", "I'm going with my parents. We stayed in a hotel next month.", "I'm going with my parents. We're staying in a hotel."], 2, 'Vou com os meus pais. Vamos ficar num hotel.'),
+    { instrucao: 'What time does Theo wake up on weekdays?', frase: 'At ___.', opcoes: ['half past six', 'six', 'half past seven'], certa: 0, traducao: 'Às seis e meia.' },
+    { instrucao: 'Where did Theo go last weekend?', frase: 'To a ___.', opcoes: ['gym', 'concert', 'party'], certa: 1, traducao: 'A um show.' },
+    { instrucao: 'What sport can\'t Theo play?', frase: '___.', opcoes: ['Basketball', 'Football', 'Tennis'], certa: 2, traducao: 'Tênis.' },
+    { instrucao: 'Why is Theo happy?', frase: "He's going on a ___.", opcoes: ['trip', 'course', 'date'], certa: 0, traducao: 'Ele vai viajar.' },
+    { instrucao: 'Could Theo ride a bike when he was a child?', frase: 'Yes, he ___.', opcoes: ['did', 'could', 'can'], certa: 1, traducao: 'Sim, sabia.' },
+    { instrucao: 'Where was Theo yesterday at 8 p.m.?', frase: 'At the ___.', opcoes: ['concert', 'hotel', 'gym'], certa: 2, traducao: 'Na academia.' },
+    { instrucao: 'Where is Theo going next month?', frase: 'To ___.', opcoes: ['Buenos Aires', 'Lima', 'Santiago'], certa: 0, traducao: 'Para Buenos Aires.' },
+    { instrucao: 'Where is he staying?', frase: 'In a ___.', opcoes: ['house', 'hotel', 'apartment'], certa: 1, traducao: 'Num hotel.' }
+  ]
+});
+</script>
+</body>
+</html>

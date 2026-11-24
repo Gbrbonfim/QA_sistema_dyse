@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 43 Â· Past, present or future?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 43 · Escuta (revisão geral)
+   Alinhado ao slide "Class 43: Review" — revisão de todos os tempos verbais do A1 (present
+   simple: rotina; present continuous: agora e compromissos futuros; past simple: was / were,
+   regulares, irregulares, could). Conteúdo NOVO. 24 questões: o aluno ouve e diz quando a ação
+   acontece. */
+const IC = { 'every day (routine)': 'event_repeat', 'now': 'timer', 'in the past': 'history', 'a future plan': 'event' };
+const T = ['every day (routine)', 'now', 'in the past', 'a future plan'];
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 43, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: when is it happening?',
+  itens: [
+    q('I wake up at six on weekdays.', 0),
+    q("Shh! The baby is sleeping.", 1),
+    q('We went to the beach last weekend.', 2),
+    q("I'm meeting Ana for lunch tomorrow.", 3),
+    q('She plays volleyball on Saturdays.', 0),
+    q("Look! It's snowing!", 1),
+    q('I was at home yesterday at 8 p.m.', 2),
+    q("They're traveling to Chile next month.", 3),
+    q('My father always drinks coffee in the morning.', 0),
+    q("Where's Tom? He's taking a shower.", 1),
+    q('When I was a child, I could ride a bike.', 2),
+    q("We're having a party next Saturday.", 3),
+    q("He doesn't work on Sundays.", 0),
+    q("I'm watching a movie. Call me later!", 1),
+    q("We didn't go out last night.", 2),
+    q("Is she going to the dentist on Friday?", 3),
+    q('Do you usually have lunch at home?', 0),
+    q('Are you listening to me?', 1),
+    q('Did you enjoy your vacation?', 2),
+    q('What are you doing this weekend?', 3),
+    q('We sometimes eat pizza on Fridays.', 0),
+    q("Mom is in the kitchen. She's cooking dinner.", 1),
+    q('My grandparents were born in Italy.', 2),
+    q("I'm not working next week. I'm on vacation!", 3)
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 43 Â· All the tenses</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 43 · Gramática (revisão geral)
+   Alinhado ao slide "Class 43: Review" (Grammar part) — escolher o auxiliar certo: Do / Does
+   (present simple), Am / Is / Are (to be e present continuous, agora e futuro), Can / Could, Was /
+   Were, Did / didn't + forma base, e os marcadores de tempo. Conteúdo NOVO e o mais difícil do
+   nível: tudo misturado. 24 questões. */
+const AUX = 'Choose the right word to start the question';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 43, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: AUX, frase: '___ you like coffee?', opcoes: ['Do', 'Are', 'Were'], certa: 0, traducao: 'Você gosta de café?' },
+    { instrucao: AUX, frase: '___ your brother live in Rio?', opcoes: ['Do', 'Does', 'Is'], certa: 1, traducao: 'O seu irmão mora no Rio?' },
+    { instrucao: AUX, frase: '___ you tired today?', opcoes: ['Do', 'Did', 'Are'], certa: 2, traducao: 'Você está cansado hoje?' },
+    { instrucao: AUX, frase: '___ you speak Spanish?', opcoes: ['Can', 'Are', 'Were'], certa: 0, traducao: 'Você sabe falar espanhol?' },
+    { instrucao: AUX, frase: '___ you at the party last night?', opcoes: ['Did', 'Were', 'Are'], certa: 1, traducao: 'Você estava na festa ontem à noite?' },
+    { instrucao: AUX, frase: '___ you see the game yesterday?', opcoes: ['Were', 'Do', 'Did'], certa: 2, traducao: 'Você viu o jogo ontem?' },
+    { instrucao: AUX, frase: '___ you read when you were four?', opcoes: ['Could', 'Can', 'Were'], certa: 0, traducao: 'Você sabia ler quando tinha quatro anos?' },
+    { instrucao: AUX, frase: '___ you working next Saturday?', opcoes: ['Do', 'Are', 'Did'], certa: 1, traducao: 'Você vai trabalhar no próximo sábado?' },
+    { frase: 'She ___ to the gym every morning.', opcoes: ['go', 'is going yesterday', 'goes'], certa: 2, traducao: 'Ela vai à academia toda manhã.' },
+    { frase: "Shh! I ___ to the radio.", opcoes: ["'m listening", 'listen', 'listened'], certa: 0, traducao: 'Shh! Estou ouvindo o rádio.' },
+    { frase: "We ___ dinner with Carla tomorrow night.", opcoes: ['had', "'re having", 'have yesterday'], certa: 1, traducao: 'Vamos jantar com a Carla amanhã à noite.' },
+    { frase: 'I ___ a great movie last night.', opcoes: ['watch', "'m watching", 'watched'], certa: 2, traducao: 'Eu assisti a um filme ótimo ontem à noite.' },
+    { frase: 'They ___ in Paris in 2019.', opcoes: ['were', 'are', 'was'], certa: 0, traducao: 'Eles estavam em Paris em 2019.' },
+    { frase: "He ___ come to my party. He was at work.", opcoes: ["can't", "couldn't", "doesn't"], certa: 1, traducao: 'Ele não pôde vir à minha festa. Ele estava no trabalho.' },
+    { frase: "My sister ___ eat meat. She doesn't like it.", opcoes: ["don't", "isn't", "doesn't"], certa: 2, traducao: 'A minha irmã não come carne. Ela não gosta.' },
+    { frase: "I ___ go out last weekend. I stayed at home.", opcoes: ["didn't", "wasn't", "don't"], certa: 0, traducao: 'Eu não saí no fim de semana passado. Fiquei em casa.' },
+    { frase: "We ___ at home yesterday. We were at the beach.", opcoes: ["didn't", "weren't", "aren't"], certa: 1, traducao: 'Nós não estávamos em casa ontem. Estávamos na praia.' },
+    { frase: 'What ___ you do last weekend?', opcoes: ['do', 'were', 'did'], certa: 2, traducao: 'O que você fez no fim de semana passado?' },
+    { frase: 'What ___ you doing this weekend?', opcoes: ['are', 'did', 'do'], certa: 0, traducao: 'O que você vai fazer este fim de semana?' },
+    { frase: 'What time ___ you wake up on weekdays?', opcoes: ['are', 'do', 'were'], certa: 1, traducao: 'A que horas você acorda nos dias de semana?' },
+    { frase: 'Where ___ you yesterday at 8 p.m.?', opcoes: ['did', 'are', 'were'], certa: 2, traducao: 'Onde você estava ontem às 8 da noite?' },
+    { instrucao: 'Which sentence is correct?', opcoes: ["I'm visiting my grandma next Sunday.", 'I visiting my grandma next Sunday.', 'I visited my grandma next Sunday.'], certa: 0, traducao: 'Vou visitar a minha avó no próximo domingo.' },
+    { instrucao: 'Which sentence is correct?', opcoes: ['Did she went to school?', 'Did she go to school?', 'Was she go to school?'], certa: 1, traducao: 'Ela foi para a escola?' },
+    { instrucao: 'Which sentence is correct?', opcoes: ['He can swims very well.', 'He cans swim very well.', 'He can swim very well.'], certa: 2, traducao: 'Ele sabe nadar muito bem.' }
+  ]
+});
+</script>
+</body>
+</html>

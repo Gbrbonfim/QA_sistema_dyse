@@ -435,6 +435,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'My dream vacation', tipo: 'Escute e grave', treina: 'Fala · Futuro', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: "Let's travel: grammar", tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 43,
+        titulo: 'Class 43 · Review',
+        atividades: [
+          { num: 1, titulo: 'Past, present or future?', tipo: 'Escute e escolha', treina: 'Escuta · Tempos verbais', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Ask your partner', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Getting to know you', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Talk about you', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'All the tenses', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

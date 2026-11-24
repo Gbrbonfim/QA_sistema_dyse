@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 43 Â· Ask your partner</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 43 · Escrita (revisão geral)
+   Alinhado ao slide "Class 43: Review" — Talking Point: perguntas com Do you / Are you / Can you /
+   Were you / Did you / Could you e as perguntas do slide (What time do you wake up on weekdays?
+   What did you do last weekend? Where were you yesterday at 8 p.m.? What are you doing this
+   weekend?). Conteúdo NOVO. O contexto traz a frase em português; a isca é o auxiliar errado.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 43, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Você gosta de comida japonesa?'), palavras: ['Do', 'you', 'like', 'Japanese', 'food'], isca: ['Are'], fim: '?', traducao: 'Você gosta de comida japonesa?' },
+    { contexto: M('A sua irmã trabalha num banco?'), palavras: ['Does', 'your', 'sister', 'work', 'in', 'a', 'bank'], isca: ['Do'], fim: '?', traducao: 'A sua irmã trabalha num banco?' },
+    { contexto: M('Você está cansado hoje?'), palavras: ['Are', 'you', 'tired', 'today'], isca: ['Do'], fim: '?', traducao: 'Você está cansado hoje?' },
+    { contexto: M('Você sabe tocar violão?'), palavras: ['Can', 'you', 'play', 'the', 'guitar'], isca: ['Do'], fim: '?', traducao: 'Você sabe tocar violão?' },
+    { contexto: M('Você estava em casa ontem à noite?'), palavras: ['Were', 'you', 'at', 'home', 'last', 'night'], isca: ['Did'], fim: '?', traducao: 'Você estava em casa ontem à noite?' },
+    { contexto: M('Você encontrou os seus amigos no fim de semana?'), palavras: ['Did', 'you', 'meet', 'your', 'friends', 'at', 'the', 'weekend'], isca: ['Were'], fim: '?', traducao: 'Você encontrou os seus amigos no fim de semana?' },
+    { contexto: M('Você sabia nadar quando era criança?'), palavras: ['Could', 'you', 'swim', 'when', 'you', 'were', 'a', 'child'], isca: ['Did'], fim: '?', traducao: 'Você sabia nadar quando era criança?' },
+    { contexto: M('Você vai trabalhar no sábado?'), palavras: ['Are', 'you', 'working', 'on', 'Saturday'], isca: ['Do'], fim: '?', traducao: 'Você vai trabalhar no sábado?' },
+    { contexto: M('A que horas você acorda nos dias de semana?'), palavras: ['What', 'time', 'do', 'you', 'wake', 'up', 'on', 'weekdays'], isca: ['are'], fim: '?', traducao: 'A que horas você acorda nos dias de semana?' },
+    { contexto: M('O que você fez no fim de semana passado?'), palavras: ['What', 'did', 'you', 'do', 'last', 'weekend'], isca: ['were'], fim: '?', traducao: 'O que você fez no fim de semana passado?' },
+    { contexto: M('Que esportes você pratica?'), palavras: ['What', 'sports', 'do', 'you', 'play'], isca: ['did'], fim: '?', traducao: 'Que esportes você pratica?' },
+    { contexto: M('Onde você estava ontem às 8 da noite?'), palavras: ['Where', 'were', 'you', 'yesterday', 'at', '8', 'p.m.'], isca: ['did'], fim: '?', traducao: 'Onde você estava ontem às 8 da noite?' },
+    { contexto: M('O que você vai fazer este fim de semana?'), palavras: ['What', 'are', 'you', 'doing', 'this', 'weekend'], isca: ['do'], fim: '?', traducao: 'O que você vai fazer este fim de semana?' },
+    { contexto: M('Eu acordo às sete nos dias de semana.'), palavras: ['I', 'wake', 'up', 'at', 'seven', 'on', 'weekdays'], isca: ['woke'], fim: '.', traducao: 'Eu acordo às sete nos dias de semana.' },
+    { contexto: M('No fim de semana passado, eu fui ao cinema.'), palavras: ['Last', 'weekend,', 'I', 'went', 'to', 'the', 'movies'], isca: ['go'], fim: '.', traducao: 'No fim de semana passado, eu fui ao cinema.' },
+    { contexto: M('Eu estou feliz hoje porque é sexta!'), palavras: ["I'm", 'happy', 'today', 'because', "it's", 'Friday'], isca: ['was'], fim: '!', traducao: 'Eu estou feliz hoje porque é sexta!' },
+    { contexto: M('Quando eu era criança, eu não sabia andar de bicicleta.'), palavras: ['When', 'I', 'was', 'a', 'child,', 'I', "couldn't", 'ride', 'a', 'bike'], isca: ["didn't"], fim: '.', traducao: 'Quando eu era criança, eu não sabia andar de bicicleta.' },
+    { contexto: M('Ontem às 8 da noite, eu estava no trabalho.'), palavras: ['Yesterday', 'at', '8', 'p.m.,', 'I', 'was', 'at', 'work'], isca: ['were'], fim: '.', traducao: 'Ontem às 8 da noite, eu estava no trabalho.' },
+    { contexto: M('Este fim de semana, eu vou visitar os meus avós.'), palavras: ['This', 'weekend,', "I'm", 'visiting', 'my', 'grandparents'], isca: ['visit'], fim: '.', traducao: 'Este fim de semana, eu vou visitar os meus avós.' },
+    { contexto: M('Eu não jogo futebol, mas jogo tênis.'), palavras: ['I', "don't", 'play', 'football,', 'but', 'I', 'play', 'tennis'], isca: ["didn't"], fim: '.', traducao: 'Eu não jogo futebol, mas jogo tênis.' }
+  ]
+});
+</script>
+</body>
+</html>
