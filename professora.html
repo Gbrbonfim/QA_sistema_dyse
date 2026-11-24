@@ -1052,7 +1052,7 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 
   <div id="panelManage" style="display:none;">
-    <details class="dyse-collapsible manage-course-block" style="margin-bottom:22px; overflow:visible;">
+    <details class="dyse-collapsible manage-course-block" open style="margin-bottom:22px; overflow:visible;">
       <summary class="manage-course-title"><span>Liberar atividades</span><span class="chevron">›</span></summary>
       <div class="manage-course-body">
         <p style="color:var(--seal-soft); font-size:.85rem; margin:0 0 12px;">
@@ -1083,10 +1083,6 @@ body.dyse-modal-open{overflow:hidden;}
         </div>
       </div>
     </details>
-    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:20px;">
-      Clique em <b>Visualizar</b> para abrir e revisar a atividade antes de liberar — como professora, você sempre consegue acessar qualquer atividade, mesmo oculta dos alunos. Ative o interruptor para liberar aos alunos, ou desative para escondê-la novamente.
-    </p>
-    <div id="manageCourses"></div>
   </div>
 
   <div id="panelMaterial" style="display:none;">
@@ -1700,7 +1696,7 @@ body.dyse-modal-open{overflow:hidden;}
     },
     manage:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>',
-      title:'Gerenciar Atividades', subtitle:'Libere as atividades para cada aluno e as do TOEFL.'
+      title:'Gerenciar Atividades', subtitle:'Libere as atividades por turma ou por aluno.'
     },
     material:{
       icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
@@ -3191,10 +3187,10 @@ body.dyse-modal-open{overflow:hidden;}
     PRATICAS_CTX.turmaMaterias = tms;
     PRATICAS_CTX.niveis = niveis;
     // Só entra na busca o aluno cuja turma tem algum material com atividades prontas.
-    PRATICAS_CTX.alunos = alunos.filter(a => a.turma_id && slugsComAtividadesDaTurma(a.turma_id).length);
+    PRATICAS_CTX.alunos = alunos.filter(a => a.turma_id && turmaTemAtividades(a.turma_id));
     // Por turma: as turmas deste professor que têm material com atividades.
     const minhas = new Set(meusVinculos.map(l => l.turma_id));
-    const turmasLib = turmas.filter(t => minhas.has(t.id) && slugsComAtividadesDaTurma(t.id).length)
+    const turmasLib = turmas.filter(t => minhas.has(t.id) && turmaTemAtividades(t.id))
       .sort((x, y) => String(x.name).localeCompare(String(y.name), 'pt-BR'));
     const selT = document.getElementById('praticaTurmaSel');
     const turmaAtual = selT.value;
@@ -3236,7 +3232,6 @@ body.dyse-modal-open{overflow:hidden;}
     const seq = ++PRATICA_TURMA_SEQ;
     if(!turmaId){ box.innerHTML = ''; return; }
     const alunos = PRATICAS_CTX.alunos.filter(a => a.turma_id === turmaId);
-    const materiais = ordenarSlugsPratica(slugsComAtividadesDaTurma(turmaId));
     if(!alunos.length){ box.innerHTML = '<p style="opacity:.7; font-size:.85rem;">Essa turma ainda não tem alunos.</p>'; return; }
     box.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
     const ids = alunos.map(a => a.id);
@@ -3244,9 +3239,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(seq !== PRATICA_TURMA_SEQ) return;
     const total = ids.length;
     const quantos = chave => { const s = mapa[chave]; return s ? ids.filter(id => s.has(id)).length : 0; };
-    box.innerHTML = '<p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">Ligar libera a atividade para os <b>' + total + ' aluno' + (total > 1 ? 's' : '') +
-        '</b> da turma de uma vez. Aluno que entrar na turma depois precisa ser liberado de novo.</p>' +
-      materiais.map(info => {
+    const corpo = await blocosDaTurmaPratica(turmaId, info => {
         const nivel = DYSE_PRATICAS[info.slug];
         return caixaMaterialPratica(info, gruposAulaPratica(nivel).map(g => {
           const chaves = g.atividades.map(at => nivel.course + ':' + g.aula.aula + ':' + at.num);
@@ -3270,7 +3263,10 @@ body.dyse-modal-open{overflow:hidden;}
                 ' onchange="togglePraticaAulaToda(this)"><span class="slider"></span></label></div></div>' +
             '<div class="pratica-aula-rows">' + rows + '</div>');
         }).join(''));
-      }).join('');
+      });
+    if(seq !== PRATICA_TURMA_SEQ) return;
+    box.innerHTML = '<p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">Ligar libera a atividade para os <b>' + total + ' aluno' + (total > 1 ? 's' : '') +
+        '</b> da turma de uma vez. Aluno que entrar na turma depois precisa ser liberado de novo.</p>' + corpo;
   }
   const idsAlunosDaTurmaPratica = () => {
     const turmaId = document.getElementById('praticaTurmaSel').value;
@@ -3405,15 +3401,14 @@ body.dyse-modal-open{overflow:hidden;}
     if(!alunoId){ box.innerHTML = ''; return; }
     const aluno = PRATICAS_CTX.alunos.find(a => a.id === alunoId);
     if(!aluno){ box.innerHTML = ''; return; }
-    const materiais = ordenarSlugsPratica(slugsComAtividadesDaTurma(aluno.turma_id));
-    if(!materiais.length){
+    if(!turmaTemAtividades(aluno.turma_id)){
       box.innerHTML = '<p style="opacity:.7; font-size:.85rem;">O nível da turma deste aluno ainda não tem atividades prontas.</p>';
       return;
     }
     box.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
     const [liberadas, resultados, refazer] = await Promise.all([dysePraticasLiberadasDoAluno(alunoId), dyseResultadosPraticasDoAluno(alunoId), dysePraticasRefazerDoAluno(alunoId)]);
     const resMap = {}; resultados.forEach(r => resMap[r.course + ':' + r.aula + ':' + r.activity_num] = r);
-    box.innerHTML = materiais.map(info => {
+    const corpo = await blocosDaTurmaPratica(aluno.turma_id, info => {
       const slug = info.slug;
       const nivel = DYSE_PRATICAS[slug];
       return caixaMaterialPratica(info, gruposAulaPratica(nivel).map(g => {
@@ -3461,7 +3456,9 @@ body.dyse-modal-open{overflow:hidden;}
               ' onchange="togglePraticaAulaToda(this)"><span class="slider"></span></label></div></div>' +
           '<div class="pratica-aula-rows">' + rows + '</div>');
       }).join(''));
-    }).join('');
+    });
+    if(document.getElementById('praticaAlunoSel').value !== alunoId) return;   // trocou de aluno no meio
+    box.innerHTML = corpo;
   }
 
   /* Agrupa as atividades do material por AULA dada. Um PowerPoint que dura
@@ -3496,22 +3493,6 @@ body.dyse-modal-open{overflow:hidden;}
     if(lb) lb.textContent = n + '/' + ts.length + ' liberadas';
     const todas = caixa.querySelector('.pratica-toggle-aula');
     if(todas) todas.checked = ts.length > 0 && n === ts.length;
-  }
-
-  /* Blocos de atividades por material (sem escolher aluno): todo professor vê
-     os materiais das turmas dele que já têm atividades, para revisar
-     (Visualizar). A liberação é por aluno, na busca acima. */
-  function blocoCatalogoPratica(info){
-    const nivel = DYSE_PRATICAS[info.slug];
-    const corpo = '<p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">Para liberar, use <b>Liberar atividades</b> acima (por turma ou por aluno).</p>' +
-      gruposAulaPratica(nivel).map(g => caixaAulaPratica(g, '',
-        g.atividades.map(at =>
-          '<div class="manage-row"><div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) +
-            ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span></div>' +
-          '<div class="manage-row-actions"><a class="btn btn-preview" href="' + dysePraticaUrl(info.slug, g.aula.aula, at.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a></div></div>'
-        ).join(''))
-      ).join('');
-    return caixaMaterialPratica(info, corpo);
   }
 
   async function liberarRefazerPratica(course, aula, num, btn){
@@ -3553,19 +3534,28 @@ body.dyse-modal-open{overflow:hidden;}
   }
 
   async function loadManagePanel(){
-    loadPraticasAlunos();
-    const container = document.getElementById('manageCourses');
-    container.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
-    // Materiais das turmas deste professor que têm atividades (A1, A2... e extras no fim).
-    const [meusVinculos, turmaMaterias, niveis] = await Promise.all([dyseListMyTurmas(), dyseListAllTurmaMaterias(), niveisTodosCache()]);
-    if(!PRATICAS_CTX.niveis.length) PRATICAS_CTX.niveis = niveis;
-    const minhas = new Set(meusVinculos.map(l => l.turma_id));
-    const slugs = turmaMaterias.filter(tm => minhas.has(tm.turma_id)).map(tm => tm.materia_slug)
-      .filter(slug => window.DYSE_PRATICAS && DYSE_PRATICAS[slug] && DYSE_PRATICAS[slug].aulas.some(a => a.atividades.length));
-    const materiais = ordenarSlugsPratica(slugs);
-    const blocosNiveis = materiais.filter(m => !m.extra).map(blocoCatalogoPratica);
-    const blocosExtras = materiais.filter(m => m.extra).map(blocoCatalogoPratica);
-    const blocksToefl = [];
+    // TOEFL (curso antigo, liberação geral) entra na mesma lista, só para a
+    // turma/aluno que tem o TOEFL nas matérias.
+    PRATICAS_CTX.cursosPromessa = montarBlocosCursosAntigos();
+    PRATICAS_CTX.cursosPromessa.catch(e => console.error('montarBlocosCursosAntigos:', e));
+    await loadPraticasAlunos();
+  }
+
+  // Cursos antigos (COURSES, ex.: TOEFL) da turma: matéria com o mesmo slug do curso.
+  const cursosAntigosDaTurma = turmaId => COURSES.filter(c => PRATICAS_CTX.turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === c.id));
+  const turmaTemAtividades = turmaId => slugsComAtividadesDaTurma(turmaId).length > 0 || cursosAntigosDaTurma(turmaId).length > 0;
+  /* Monta a lista do material da turma: níveis (A1, A2...), depois TOEFL,
+     depois material extra. */
+  async function blocosDaTurmaPratica(turmaId, blocoNivel){
+    const materiais = ordenarSlugsPratica(slugsComAtividadesDaTurma(turmaId));
+    let cursos = {};
+    try{ cursos = (await PRATICAS_CTX.cursosPromessa) || {}; }catch(e){}
+    const antigos = cursosAntigosDaTurma(turmaId).map(c => cursos[c.id] || '').join('');
+    return materiais.filter(m => !m.extra).map(blocoNivel).join('') + antigos + materiais.filter(m => m.extra).map(blocoNivel).join('');
+  }
+
+  async function montarBlocosCursosAntigos(){
+    const blocos = {};
     const dadosCursos = await Promise.all(COURSES.map(c => Promise.all([dyseGetPublishedMap(c.id), dyseListMateriaActivities(c.id)])));
     for(const [ci, course] of COURSES.entries()){
       const [publishedMap, materiaActivities] = dadosCursos[ci];
@@ -3595,14 +3585,14 @@ body.dyse-modal-open{overflow:hidden;}
           '</div>' +
         '</div>';
       }).join('');
-      blocksToefl.push(
+      blocos[course.id] =
         '<details class="dyse-collapsible manage-course-block">' +
-          '<summary class="manage-course-title"><span>' + course.name + ' <span class="pill-count">' + course.activities.length + '</span></span><span class="chevron">›</span></summary>' +
-          '<div class="manage-course-body">' + rows + '</div>' +
-        '</details>'
-      );
+          '<summary class="manage-course-title"><span>' + escapeHtmlLocal(course.name) + ' <span class="pill-count">' + course.activities.length + '</span></span><span class="chevron">›</span></summary>' +
+          '<div class="manage-course-body"><p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">No ' + escapeHtmlLocal(course.name) +
+            ' a liberação vale para todos os alunos que usam o ' + escapeHtmlLocal(course.name) + '.</p>' + rows + '</div>' +
+        '</details>';
     }
-    container.innerHTML = blocosNiveis.join('') + blocksToefl.join('') + blocosExtras.join('');
+    return blocos;
   }
 
   async function loadMaterialPanel(){
