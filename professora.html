@@ -614,15 +614,53 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 .modo-lib{display:inline-flex; gap:4px; padding:4px; background:var(--antique-soft); border-radius:999px; margin:0 0 14px; max-width:100%;}
 .modo-lib button{display:inline-flex; align-items:center; gap:6px; border:0; background:none; cursor:pointer; padding:8px 16px; border-radius:999px; font-family:var(--font-body); font-weight:600; font-size:.82rem; color:var(--seal-soft);}
 .modo-lib button.on{background:var(--amaranth); color:#fff; box-shadow:0 4px 12px rgba(208,59,85,.25);}
-details.pratica-aula{border:1px solid #f0e3d2; border-radius:12px; margin:0 0 10px; background:#fff;}
-details.pratica-aula > summary{list-style:none; cursor:pointer; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:.88rem; color:var(--seal);}
+/* Material (caixa grande) > Aula (caixa com cabeçalho próprio) > atividades (linhas). */
+#libPorTurma .manage-course-block, #libPorAluno .manage-course-block{border:1px solid #f0e3d2; border-left:5px solid var(--amaranth); box-shadow:0 6px 18px rgba(58,29,16,.07);}
+details.pratica-aula{border:1px solid #eadbc8; border-radius:14px; margin:0 0 12px; background:#fff; overflow:hidden; transition:box-shadow .2s;}
+details.pratica-aula[open]{box-shadow:0 6px 16px rgba(58,29,16,.08); border-color:#e3cdb4;}
+details.pratica-aula > summary{list-style:none; cursor:pointer; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fffaf4; color:var(--seal);}
+details.pratica-aula > summary:hover{background:var(--antique-soft);}
+details.pratica-aula[open] > summary{background:var(--antique-soft); border-bottom:1px solid #eadbc8;}
 details.pratica-aula > summary::-webkit-details-marker{display:none;}
-details.pratica-aula > summary .chev{opacity:.55; transition:transform .2s; font-size:1.1rem;}
+.pa-tit{display:flex; align-items:center; gap:12px; min-width:0;}
+.pa-num{flex:none; width:38px; height:38px; border-radius:11px; background:var(--amaranth); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:.88rem;}
+.pa-txt{display:flex; flex-direction:column; min-width:0; line-height:1.25;}
+.pa-txt b{font-size:.92rem; color:var(--seal);}
+.pa-txt small{font-size:.78rem; color:var(--seal-soft); opacity:.85; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.pa-meta{display:flex; align-items:center; gap:8px; flex:none;}
+.pa-meta .chev{opacity:.55; transition:transform .2s; font-size:1.2rem; margin-left:2px;}
 details.pratica-aula[open] > summary .chev{transform:rotate(90deg);}
-details.pratica-aula > summary .pa-lib{font-size:.74rem; color:var(--seal-soft); opacity:.8; margin-left:4px; white-space:nowrap;}
-details.pratica-aula > .pa-body{padding:0 14px 10px;}
-.pt-cont{font-size:.74rem; color:var(--seal-soft); opacity:.8; white-space:nowrap;}
-.manage-row.lib-todas{background:var(--antique-soft); border-radius:10px; padding-left:12px; padding-right:12px; margin-bottom:12px;}
+details.pratica-aula > .pa-body{padding:8px 16px 6px;}
+/* Etiquetas de estado: nada liberado (cinza), parcial (laranja), tudo (verde). */
+.pa-lib, .pt-cont{display:inline-block; font-size:.72rem; font-weight:600; padding:3px 10px; border-radius:999px; white-space:nowrap; background:#f3ebe2; color:var(--seal-soft);}
+.pa-lib.parcial, .pt-cont.parcial{background:#FDF0DD; color:var(--gamboge-dark);}
+.pa-lib.cheio, .pt-cont.cheio{background:#eaf7ee; color:var(--ok);}
+/* Faixas "Liberar todas": material (destaque) e aula (tracejada). */
+.manage-row.lib-linha{gap:12px; border-radius:12px; padding:10px 14px; border-bottom:none;}
+.manage-row.lib-todas{background:linear-gradient(90deg, #fdeef0, var(--antique-soft)); border:1px solid #f4d3d9; margin:2px 0 16px;}
+.manage-row.lib-aula{background:#fffaf4; border:1px dashed #e3cdb4; margin:4px 0 6px;}
+.manage-row.lib-linha .info{flex:1;}
+.manage-row.lib-todas .at-ic{background:var(--amaranth); color:#fff;}
+/* Linha de atividade: número, ícone do tipo, título e tipo embaixo. */
+.manage-row.at-row{gap:12px; padding:12px 6px; border-bottom:1px solid #f3e7da;}
+.manage-row.at-row:last-child{border-bottom:none;}
+.manage-row.at-row:hover{background:#fffaf4;}
+.at-num{flex:none; width:24px; font-weight:700; font-size:.82rem; color:var(--amaranth); text-align:right;}
+.at-ic{flex:none; width:36px; height:36px; border-radius:50%; background:var(--antique-soft); color:var(--amaranth); display:inline-flex; align-items:center; justify-content:center;}
+.at-ic .msr{font-size:1.15rem; vertical-align:0;}
+.manage-row.at-row .info, .manage-row.lib-linha .info{flex:1; min-width:0;}
+.manage-row.at-row .info b{display:block; font-size:.9rem; font-weight:600;}
+.manage-row.at-row .info small{display:block; font-size:.76rem; color:var(--seal-soft); opacity:.8; margin-top:1px;}
+@media (max-width:860px){
+  .pa-txt small{white-space:normal;}
+  .manage-row.lib-linha{flex-wrap:nowrap;}
+  .manage-row.lib-linha .manage-row-actions{width:auto;}
+  .manage-row.at-row .manage-row-actions{padding-left:72px; justify-content:flex-start; flex-wrap:wrap;}
+}
+@media (max-width:520px){
+  .pa-meta .pill-count{display:none;}
+  .manage-row.at-row .manage-row-actions{padding-left:0;}
+}
 
 /* ---------- CAIXA SUSPENSA (details/summary nativo — sem JS) ---------- */
 details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
@@ -3180,10 +3218,22 @@ body.dyse-modal-open{overflow:hidden;}
       '<summary class="manage-course-title"><span>' + escapeHtmlLocal(info.nome) + (info.extra ? ' <span style="font-size:.72rem; font-weight:500; opacity:.65;">· material extra</span>' : '') +
         ' <span class="pill-count">' + totalAtividadesPratica(info.slug) + '</span></span><span class="chevron">›</span></summary>' +
       '<div class="manage-course-body">' +
-        '<div class="manage-row lib-todas"><div class="info"><b>Liberar todas</b> as atividades do ' + escapeHtmlLocal(info.nome) + '</div>' +
-          '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" class="pratica-toggle-material" onchange="togglePraticaMaterialToda(this)"><span class="slider"></span></label></div></div>' +
+        linhaLiberarTodasPratica('lib-todas', 'done_all', '<b>Liberar todas</b> as atividades do ' + escapeHtmlLocal(info.nome),
+          '<input type="checkbox" class="pratica-toggle-material" onchange="togglePraticaMaterialToda(this)">') +
         corpo + '</div></details>';
   }
+  /* Peças visuais da liberação (material > aula > atividade). */
+  const ICONE_TIPO_PRATICA = { 'Escute e escolha': 'headphones', 'Monte a frase': 'extension', 'Qual é a próxima fala?': 'forum', 'Escute e grave': 'mic', 'Make a Choice': 'task_alt' };
+  const estadoPillPratica = (n, total) => !n ? '' : (n >= total ? 'cheio' : 'parcial');
+  function linhaLiberarTodasPratica(classe, icone, textoHtml, inputHtml){
+    return '<div class="manage-row lib-linha ' + classe + '"><span class="at-ic">' + MI(icone) + '</span><div class="info">' + textoHtml + '</div>' +
+      '<div class="manage-row-actions"><label class="dyse-toggle">' + inputHtml + '<span class="slider"></span></label></div></div>';
+  }
+  function infoAtividadePratica(num, titulo, subtitulo, icone, extraHtml){
+    return '<span class="at-num">' + String(num).padStart(2, '0') + '</span><span class="at-ic">' + MI(icone) + '</span>' +
+      '<div class="info"><b>' + escapeHtmlLocal(titulo) + '</b><small>' + escapeHtmlLocal(subtitulo) + '</small>' + (extraHtml || '') + '</div>';
+  }
+  const subtituloPratica = at => at.tipo + (at.treina ? ' · ' + String(at.treina).split(' · ')[0] : '');
   // Liga o "Liberar todas" do material quando todas as atividades dele estão liberadas.
   function sincronizarMaterialPratica(raiz){
     if(!raiz) return;
@@ -3277,20 +3327,18 @@ body.dyse-modal-open{overflow:hidden;}
           const rows = g.atividades.map(at => {
             const chave = nivel.course + ':' + g.aula.aula + ':' + at.num;
             const n = quantos(chave);
-            return '<div class="manage-row">' +
-              '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) + ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span></div>' +
+            return '<div class="manage-row at-row">' +
+              infoAtividadePratica(at.num, at.titulo, subtituloPratica(at), ICONE_TIPO_PRATICA[at.tipo] || 'edit_note') +
               '<div class="manage-row-actions">' +
-                '<span class="pt-cont" title="Alunos da turma com esta atividade liberada">' + n + '/' + total + ' alunos</span>' +
+                '<span class="pt-cont ' + estadoPillPratica(n, total) + '" title="Alunos da turma com esta atividade liberada">' + n + '/' + total + ' alunos</span>' +
                 '<a class="btn btn-preview" href="' + dysePraticaUrl(info.slug, g.aula.aula, at.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a>' +
                 '<label class="dyse-toggle"><input type="checkbox" class="pratica-toggle" data-course="' + nivel.course + '" data-aula="' + g.aula.aula + '" data-num="' + at.num + '" ' +
                   (n === total ? 'checked' : '') + ' onchange="togglePraticaTurma(this)"><span class="slider"></span></label>' +
               '</div></div>';
           }).join('');
-          return caixaAulaPratica(g, ' <span class="pa-lib">' + cheias + '/' + chaves.length + ' liberadas</span>',
-            '<div class="manage-row" style="background:var(--paper-2, rgba(0,0,0,.03)); border-radius:10px; padding-left:10px; padding-right:10px;">' +
-              '<div class="info"><b>Liberar todas desta aula</b> para a turma toda</div>' +
-              '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" class="pratica-toggle-aula" ' + (cheias === chaves.length ? 'checked' : '') +
-                ' onchange="togglePraticaAulaToda(this)"><span class="slider"></span></label></div></div>' +
+          return caixaAulaPratica(g, '<span class="pa-lib ' + estadoPillPratica(cheias, chaves.length) + '">' + cheias + '/' + chaves.length + ' liberadas</span>',
+            linhaLiberarTodasPratica('lib-aula', 'checklist', '<b>Liberar todas desta aula</b> para a turma toda',
+              '<input type="checkbox" class="pratica-toggle-aula" ' + (cheias === chaves.length ? 'checked' : '') + ' onchange="togglePraticaAulaToda(this)">') +
             '<div class="pratica-aula-rows">' + rows + '</div>');
         }).join(''));
       });
@@ -3306,7 +3354,7 @@ body.dyse-modal-open{overflow:hidden;}
   const itemDoToggle = t => ({ course: t.dataset.course, aula: +t.dataset.aula, num: +t.dataset.num });
   function marcarContTurma(t, ligado, total){
     const c = t.closest('.manage-row') && t.closest('.manage-row').querySelector('.pt-cont');
-    if(c) c.textContent = (ligado ? total : 0) + '/' + total + ' alunos';
+    if(c){ c.textContent = (ligado ? total : 0) + '/' + total + ' alunos'; c.className = 'pt-cont ' + estadoPillPratica(ligado ? total : 0, total); }
   }
   async function togglePraticaTurma(input){
     const ids = idsAlunosDaTurmaPratica();
@@ -3469,9 +3517,8 @@ body.dyse-modal-open{overflow:hidden;}
               ? '<span style="font-size:.74rem; font-weight:600; color:var(--gamboge-dark, #CE8613);">' + MI('replay') + ' Refazer liberado</span>'
               : '<button type="button" class="btn btn-ghost" style="padding:6px 12px; font-size:.74rem;" onclick="liberarRefazerPratica(\'' + nivel.course + '\', ' + aula.aula + ', ' + at.num + ', this)">' + MI('replay') + ' Liberar refazer</button>';
           }
-          return '<div class="manage-row">' +
-            '<div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' + escapeHtmlLocal(at.titulo) +
-              ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span><div>' + res + '</div></div>' +
+          return '<div class="manage-row at-row">' +
+            infoAtividadePratica(at.num, at.titulo, subtituloPratica(at), ICONE_TIPO_PRATICA[at.tipo] || 'edit_note', '<div style="margin-top:4px;">' + res + '</div>') +
             '<div class="manage-row-actions">' +
               refazerBtn +
               '<a class="btn btn-preview" href="' + dysePraticaUrl(slug, aula.aula, at.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a>' +
@@ -3480,11 +3527,9 @@ body.dyse-modal-open{overflow:hidden;}
             '</div></div>';
         }).join('');
         return caixaAulaPratica(g,
-          ' <span class="pa-lib">' + nLib + '/' + chaves.length + ' liberadas</span>',
-          '<div class="manage-row" style="background:var(--paper-2, rgba(0,0,0,.03)); border-radius:10px; padding-left:10px; padding-right:10px;">' +
-            '<div class="info"><b>Liberar todas desta aula</b> para ' + escapeHtmlLocal(aluno.full_name || 'o aluno') + '</div>' +
-            '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" class="pratica-toggle-aula" ' + (todas ? 'checked' : '') +
-              ' onchange="togglePraticaAulaToda(this)"><span class="slider"></span></label></div></div>' +
+          '<span class="pa-lib ' + estadoPillPratica(nLib, chaves.length) + '">' + nLib + '/' + chaves.length + ' liberadas</span>',
+          linhaLiberarTodasPratica('lib-aula', 'checklist', '<b>Liberar todas desta aula</b> para ' + escapeHtmlLocal(aluno.full_name || 'o aluno'),
+            '<input type="checkbox" class="pratica-toggle-aula" ' + (todas ? 'checked' : '') + ' onchange="togglePraticaAulaToda(this)">') +
           '<div class="pratica-aula-rows">' + rows + '</div>');
       }).join(''));
     });
@@ -3511,9 +3556,11 @@ body.dyse-modal-open{overflow:hidden;}
     return grupos.sort((a, b) => a.num - b.num);
   }
   function caixaAulaPratica(g, extraTitulo, corpo){
-    return '<details class="pratica-aula"><summary><span><b>Aula ' + String(g.num).padStart(2, '0') + '</b> — ' + escapeHtmlLocal(g.titulo) +
-      ' <span class="pill-count">' + g.atividades.length + '</span>' + (extraTitulo || '') + '</span><span class="chev">›</span></summary>' +
-      '<div class="pa-body">' + corpo + '</div></details>';
+    const n = String(g.num).padStart(2, '0');
+    return '<details class="pratica-aula"><summary>' +
+      '<span class="pa-tit"><span class="pa-num">' + n + '</span><span class="pa-txt"><b>Aula ' + n + '</b><small>' + escapeHtmlLocal(g.titulo) + '</small></span></span>' +
+      '<span class="pa-meta"><span class="pill-count">' + g.atividades.length + ' atividade' + (g.atividades.length > 1 ? 's' : '') + '</span>' + (extraTitulo || '') + '<span class="chev">›</span></span>' +
+      '</summary><div class="pa-body">' + corpo + '</div></details>';
   }
   // Atualiza o "x/y liberadas" do título da aula depois de ligar/desligar.
   function contarLiberadasAula(el){
@@ -3522,7 +3569,7 @@ body.dyse-modal-open{overflow:hidden;}
     const ts = caixa.querySelectorAll('.pratica-toggle');
     const n = Array.from(ts).filter(t => t.checked).length;
     const lb = caixa.querySelector('.pa-lib');
-    if(lb) lb.textContent = n + '/' + ts.length + ' liberadas';
+    if(lb){ lb.textContent = n + '/' + ts.length + ' liberadas'; lb.className = 'pa-lib ' + estadoPillPratica(n, ts.length); }
     const todas = caixa.querySelector('.pratica-toggle-aula');
     if(todas) todas.checked = ts.length > 0 && n === ts.length;
     sincronizarMaterialPratica(caixa.closest('details.manage-course-block'));
@@ -3600,15 +3647,15 @@ body.dyse-modal-open{overflow:hidden;}
         // como liberada (mesmo comportamento de antes dessa trava existir).
         const isReleased = releasedMap[a.num] !== undefined ? releasedMap[a.num] : true;
         if(!isReleased){
-          return '<div class="manage-row">' +
-            '<div class="info"><b>' + String(a.num).padStart(2,'0') + '.</b> ' + a.theme + ' <span style="opacity:.6;">(' + a.level + ')</span></div>' +
+          return '<div class="manage-row at-row">' +
+            infoAtividadePratica(a.num, a.theme, a.level, 'lock') +
             '<div class="manage-row-actions">' +
               '<span style="font-size:.76rem; color:var(--seal-soft); opacity:.75;">' + MI('lock') + ' Aguardando liberação da gestão</span>' +
             '</div>' +
           '</div>';
         }
-        return '<div class="manage-row">' +
-          '<div class="info"><b>' + String(a.num).padStart(2,'0') + '.</b> ' + a.theme + ' <span style="opacity:.6;">(' + a.level + ')</span></div>' +
+        return '<div class="manage-row at-row">' +
+          infoAtividadePratica(a.num, a.theme, a.level, 'school') +
           '<div class="manage-row-actions">' +
             '<a class="btn btn-preview" href="' + activityUrl(course.id, a.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a>' +
             '<label class="dyse-toggle">' +
@@ -3626,9 +3673,8 @@ body.dyse-modal-open{overflow:hidden;}
           '<summary class="manage-course-title"><span>' + escapeHtmlLocal(course.name) + ' <span class="pill-count">' + course.activities.length + '</span></span><span class="chevron">›</span></summary>' +
           '<div class="manage-course-body"><p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">No ' + escapeHtmlLocal(course.name) +
             ' a liberação vale para todos os alunos que usam o ' + escapeHtmlLocal(course.name) + '.</p>' +
-            '<div class="manage-row lib-todas"><div class="info"><b>Liberar todas</b> as atividades do ' + escapeHtmlLocal(course.name) + '</div>' +
-              '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" class="curso-toggle-todas" ' + (todasOn ? 'checked' : '') +
-                ' onchange="togglePublishCursoTodas(this)"><span class="slider"></span></label></div></div>' +
+            linhaLiberarTodasPratica('lib-todas', 'done_all', '<b>Liberar todas</b> as atividades do ' + escapeHtmlLocal(course.name),
+              '<input type="checkbox" class="curso-toggle-todas" ' + (todasOn ? 'checked' : '') + ' onchange="togglePublishCursoTodas(this)">') +
             rows + '</div>' +
         '</details>';
     }
