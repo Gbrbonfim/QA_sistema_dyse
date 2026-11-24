@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 32 · I was at home</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 32 · Escrita
+   Alinhado ao slide "Class 32: They were just babies!" — Grammar Point (was com I / he / she / it;
+   were com you / we / they; marcadores yesterday, last night, last week, in 2010) e exercício 5
+   (frases com was e were). Conteúdo NOVO: outras frases e fatos verdadeiros. O contexto traz a
+   frase em português. A isca é was x were trocado ou o presente (is / are). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 32, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('A Susana era a nossa professora em 1996.'), palavras: ['Susana', 'was', 'our', 'teacher', 'in', '1996'], isca: ['were'], fim: '.', traducao: 'A Susana era a nossa professora em 1996.' },
+    { contexto: M('Eu estava na escola ontem de manhã.'), palavras: ['I', 'was', 'at', 'school', 'yesterday', 'morning'], isca: ['am'], fim: '.', traducao: 'Eu estava na escola ontem de manhã.' },
+    { contexto: M('Nós estávamos num restaurante ontem.'), palavras: ['We', 'were', 'in', 'a', 'restaurant', 'yesterday'], isca: ['was'], fim: '.', traducao: 'Nós estávamos num restaurante ontem.' },
+    { contexto: M('Meus amigos estavam na festa ontem à noite.'), palavras: ['My', 'friends', 'were', 'at', 'the', 'party', 'last', 'night'], isca: ['was'], fim: '.', traducao: 'Meus amigos estavam na festa ontem à noite.' },
+    { contexto: M('Eu era garçom no meu primeiro emprego.'), palavras: ['I', 'was', 'a', 'waiter', 'in', 'my', 'first', 'job'], isca: ['were'], fim: '.', traducao: 'Eu era garçom no meu primeiro emprego.' },
+    { contexto: M('A Kim e a Kylie eram muito novas no vídeo.'), palavras: ['Kim', 'and', 'Kylie', 'were', 'very', 'young', 'in', 'the', 'video'], isca: ['was'], fim: '.', traducao: 'A Kim e a Kylie eram muito novas no vídeo.' },
+    { contexto: M('Eu tinha onze anos na foto.'), palavras: ['I', 'was', 'eleven', 'years', 'old', 'in', 'the', 'photo'], isca: ['had'], fim: '.', traducao: 'Eu tinha onze anos na foto.' },
+    { contexto: M('Meus irmãos estavam em casa.'), palavras: ['My', 'brothers', 'were', 'at', 'home'], isca: ['was'], fim: '.', traducao: 'Meus irmãos estavam em casa.' },
+    { contexto: M('Ela estava no ônibus às sete e meia.'), palavras: ['She', 'was', 'on', 'a', 'bus', 'at', 'half', 'past', 'seven'], isca: ['were'], fim: '.', traducao: 'Ela estava no ônibus às sete e meia.' },
+    { contexto: M('Eles eram bebês naquela foto.'), palavras: ['They', 'were', 'babies', 'in', 'that', 'photo'], isca: ['are'], fim: '.', traducao: 'Eles eram bebês naquela foto.' },
+    { contexto: M('Em 2014, a Copa do Mundo foi no Brasil.'), palavras: ['In', '2014,', 'the', 'World', 'Cup', 'was', 'in', 'Brazil'], isca: ['were'], fim: '.', traducao: 'Em 2014, a Copa do Mundo foi no Brasil.' },
+    { contexto: M('Os Beatles eram de Liverpool.'), palavras: ['The', 'Beatles', 'were', 'from', 'Liverpool'], isca: ['was'], fim: '.', traducao: 'Os Beatles eram de Liverpool.' },
+    { contexto: M('Quantos anos ela tinha na foto?'), palavras: ['How', 'old', 'was', 'she', 'in', 'the', 'photo'], isca: ['had'], fim: '?', traducao: 'Quantos anos ela tinha na foto?' },
+    { contexto: M('Eu acho que ela tinha três anos.'), palavras: ['I', 'think', 'she', 'was', 'three'], isca: ['were'], fim: '.', traducao: 'Eu acho que ela tinha três anos.' },
+    { contexto: M('Você era criança no passado.'), palavras: ['You', 'were', 'a', 'child', 'in', 'the', 'past'], isca: ['was'], fim: '.', traducao: 'Você era criança no passado.' },
+    { contexto: M('Ele estava no quarto ontem à noite.'), palavras: ['He', 'was', 'in', 'his', 'bedroom', 'last', 'night'], isca: ['is'], fim: '.', traducao: 'Ele estava no quarto dele ontem à noite.' },
+    { contexto: M('Nós éramos amigos na escola.'), palavras: ['We', 'were', 'friends', 'at', 'school'], isca: ['was'], fim: '.', traducao: 'Nós éramos amigos na escola.' },
+    { contexto: M('Foi o meu primeiro trabalho.'), palavras: ['It', 'was', 'my', 'first', 'job'], isca: ['were'], fim: '.', traducao: 'Foi o meu primeiro trabalho.' },
+    { contexto: M('Minha mãe e eu estávamos no supermercado sábado passado.'), palavras: ['My', 'mom', 'and', 'I', 'were', 'in', 'a', 'supermarket', 'last', 'Saturday'], isca: ['was'], fim: '.', traducao: 'Minha mãe e eu estávamos no supermercado sábado passado.' },
+    { contexto: M('Hoje ela está em casa, mas ontem ela estava no trabalho.'), palavras: ['Today', "she's", 'at', 'home,', 'but', 'yesterday', 'she', 'was', 'at', 'work'], isca: ['is'], fim: '.', traducao: 'Hoje ela está em casa, mas ontem ela estava no trabalho.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 32 · Was or were?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 32 · Escuta
+   Alinhado ao slide "Class 32: They were just babies!" — Vocabulary (at home, in bed, in the
+   kitchen, at work, in my car, in a restaurant, on a bus, at school, at the gym, in a park, at
+   university, on the street, in a supermarket) e Grammar Point (was / were + yesterday, last
+   night, in 2010). Conteúdo NOVO: outras frases. As figuras são ícones.
+   24 questões: 12 lugares + 12 "was ou were?" (treino de ouvido). */
+const IC = { 'at home': 'home', 'in bed': 'bed', 'in the kitchen': 'kitchen', 'at work': 'work', 'in my car': 'directions_car',
+  'in a restaurant': 'restaurant', 'on a bus': 'directions_bus', 'at school': 'school', 'at the gym': 'fitness_center', 'in a park': 'park',
+  'at university': 'account_balance', 'on the street': 'signpost', 'in a supermarket': 'local_grocery_store', was: 'looks_one', were: 'filter_2' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const WW = 'Listen: was or were?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 32, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the place',
+  itens: [
+    { audioTexto: 'I was at home.', opcoes: op('at home', 'at work', 'at school', 'in bed'), certa: 0 },
+    { audioTexto: 'She was on a bus.', opcoes: op('in my car', 'on a bus', 'on the street', 'in a park'), certa: 1 },
+    { audioTexto: 'We were in a supermarket.', opcoes: op('in a restaurant', 'at the gym', 'in a supermarket', 'at home'), certa: 2 },
+    { audioTexto: 'They were at university.', opcoes: op('at school', 'at work', 'at home', 'at university'), certa: 3 },
+    { audioTexto: 'He was in bed.', opcoes: op('in bed', 'in the kitchen', 'at the gym', 'on a bus'), certa: 0 },
+    { audioTexto: 'My dad was in the kitchen.', opcoes: op('in a restaurant', 'in the kitchen', 'in my car', 'at work'), certa: 1 },
+    { audioTexto: 'I was in my car.', opcoes: op('on a bus', 'on the street', 'in my car', 'in a park'), certa: 2 },
+    { audioTexto: 'We were at the gym.', opcoes: op('at school', 'in a park', 'at home', 'at the gym'), certa: 3 },
+    { audioTexto: 'They were in a park.', opcoes: op('in a park', 'on the street', 'at university', 'in bed'), certa: 0 },
+    { audioTexto: 'She was at work.', opcoes: op('at school', 'at work', 'at home', 'at the gym'), certa: 1 },
+    { audioTexto: 'You were on the street.', opcoes: op('on a bus', 'in my car', 'on the street', 'in a supermarket'), certa: 2 },
+    { audioTexto: 'My parents were in a restaurant.', opcoes: op('in the kitchen', 'in a supermarket', 'at home', 'in a restaurant'), certa: 3 },
+    { instrucao: WW, audioTexto: 'I was at school yesterday morning.', opcoes: op('was', 'were'), certa: 0 },
+    { instrucao: WW, audioTexto: 'We were in a restaurant yesterday.', opcoes: op('was', 'were'), certa: 1 },
+    { instrucao: WW, audioTexto: 'My friends were at the party last night.', opcoes: op('was', 'were'), certa: 1 },
+    { instrucao: WW, audioTexto: 'David was very angry last class.', opcoes: op('was', 'were'), certa: 0 },
+    { instrucao: WW, audioTexto: 'In 2014, the World Cup was in Brazil.', opcoes: op('was', 'were'), certa: 0 },
+    { instrucao: WW, audioTexto: 'In 2016, the Olympic Games were in Rio de Janeiro.', opcoes: op('was', 'were'), certa: 1 },
+    { instrucao: WW, audioTexto: 'In 2010, Barack Obama was the president of the USA.', opcoes: op('was', 'were'), certa: 0 },
+    { instrucao: WW, audioTexto: 'The Beatles were from Liverpool.', opcoes: op('was', 'were'), certa: 1 },
+    { instrucao: WW, audioTexto: 'You were a child in the photo.', opcoes: op('was', 'were'), certa: 1 },
+    { instrucao: WW, audioTexto: 'It was my first job.', opcoes: op('was', 'were'), certa: 0 },
+    { instrucao: WW, audioTexto: 'Lucy and Sandra were friends at school.', opcoes: op('was', 'were'), certa: 1 },
+    { instrucao: WW, audioTexto: 'Justin Bieber was very famous as a teen.', opcoes: op('was', 'were'), certa: 0 }
+  ]
+});
+</script>
+</body>
+</html>

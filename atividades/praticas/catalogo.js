@@ -332,6 +332,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Describe your house', tipo: 'Escute e grave', treina: 'Fala · Casa', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Some or any?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 32,
+        titulo: 'Class 32 · They were just babies!',
+        atividades: [
+          { num: 1, titulo: 'Was or were?', tipo: 'Escute e escolha', treina: 'Escuta · Was / were', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'I was at home', tipo: 'Monte a frase', treina: 'Escrita · Was / were', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Old photos', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Where were you?', tipo: 'Escute e grave', treina: 'Fala · Passado', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'The past of be', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

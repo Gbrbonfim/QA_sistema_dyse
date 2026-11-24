@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 32 · The past of be</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 32 · Gramática
+   Alinhado ao slide "Class 32: They were just babies!" — Grammar Point (presente is / are →
+   passado was / were; marcadores de tempo passado) e Vocabulary (at / in / on + lugar). Conteúdo
+   NOVO e mais difícil: presente x passado pelo marcador de tempo e fatos verdadeiros. 24 questões. */
+const PT = 'Present or past? Look at the time word';
+const PREP = 'At, in or on?';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 32, num: 5, tipo: 'escolha',
+  instrucao: 'Complete with was or were',
+  itens: [
+    { frase: 'I ___ a teacher in 2010.', opcoes: ['was', 'were'], certa: 0, traducao: 'Eu era professor em 2010.' },
+    { frase: 'You ___ a child in the past.', opcoes: ['was', 'were'], certa: 1, traducao: 'Você era criança no passado.' },
+    { frase: 'He ___ my student.', opcoes: ['was', 'were'], certa: 0, traducao: 'Ele era meu aluno.' },
+    { frase: 'We ___ friends at school.', opcoes: ['was', 'were'], certa: 1, traducao: 'Nós éramos amigos na escola.' },
+    { frase: 'They ___ babies in the photo.', opcoes: ['was', 'were'], certa: 1, traducao: 'Eles eram bebês na foto.' },
+    { frase: 'It ___ my first job.', opcoes: ['was', 'were'], certa: 0, traducao: 'Foi o meu primeiro emprego.' },
+    { frase: 'My parents ___ at home last night.', opcoes: ['was', 'were'], certa: 1, traducao: 'Meus pais estavam em casa ontem à noite.' },
+    { frase: 'In 2010, Barack Obama ___ the president of the USA.', opcoes: ['was', 'were'], certa: 0, traducao: 'Em 2010, Barack Obama era o presidente dos EUA.' },
+    { frase: 'In 2016, the Olympic Games ___ in Rio de Janeiro.', opcoes: ['was', 'were'], certa: 1, traducao: 'Em 2016, os Jogos Olímpicos foram no Rio de Janeiro.' },
+    { frase: 'My friend and I ___ in a café last Saturday.', opcoes: ['was', 'were'], certa: 1, traducao: 'Meu amigo e eu estávamos num café sábado passado.' },
+    { instrucao: PT, frase: 'She ___ at school today.', opcoes: ['is', 'was'], certa: 0, traducao: 'Ela está na escola hoje.' },
+    { instrucao: PT, frase: 'She ___ at school this morning.', opcoes: ['is', 'was'], certa: 1, traducao: 'Ela estava na escola hoje de manhã.' },
+    { instrucao: PT, frase: 'They ___ at the gym yesterday.', opcoes: ['are', 'were'], certa: 1, traducao: 'Eles estavam na academia ontem.' },
+    { instrucao: PT, frase: 'They ___ at the gym now.', opcoes: ['are', 'were'], certa: 0, traducao: 'Eles estão na academia agora.' },
+    { instrucao: PT, frase: 'Harry Styles ___ famous today.', opcoes: ['is', 'was'], certa: 0, traducao: 'Harry Styles é famoso hoje.' },
+    { instrucao: PT, frase: 'I ___ ten years old in this photo.', opcoes: ['am', 'was'], certa: 1, traducao: 'Eu tinha dez anos nesta foto.' },
+    { instrucao: PREP, frase: 'I was ___ home.', opcoes: ['at', 'in', 'on'], certa: 0, traducao: 'Eu estava em casa.' },
+    { instrucao: PREP, frase: 'She was ___ a bus.', opcoes: ['at', 'on', 'in'], certa: 1, traducao: 'Ela estava num ônibus.' },
+    { instrucao: PREP, frase: 'He was ___ bed.', opcoes: ['on', 'at', 'in'], certa: 2, traducao: 'Ele estava na cama.' },
+    { instrucao: PREP, frase: 'We were ___ the street.', opcoes: ['on', 'in', 'at'], certa: 0, traducao: 'Nós estávamos na rua.' },
+    { frase: 'How old ___ she in the photo?', opcoes: ['were', 'was', 'had'], certa: 1, traducao: 'Quantos anos ela tinha na foto?' },
+    { instrucao: CERTA, opcoes: ['I were at home yesterday.', 'I am at home yesterday.', 'I was at home yesterday.'], certa: 2, traducao: 'Eu estava em casa ontem.' },
+    { instrucao: CERTA, opcoes: ['My brothers were at school.', 'My brothers was at school.', 'My brothers is at school yesterday.'], certa: 0, traducao: 'Meus irmãos estavam na escola.' },
+    { instrucao: CERTA, opcoes: ['I had five years in the photo.', 'I was five years old in the photo.', 'I were five years old in the photo.'], certa: 1, traducao: 'Eu tinha cinco anos na foto.' }
+  ]
+});
+</script>
+</body>
+</html>

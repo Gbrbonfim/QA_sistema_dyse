@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 32 · Old photos</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 32 · Leitura
+   Alinhado ao slide "Class 32: They were just babies!" — Talking Point ("Who is she? How old was
+   she in the photo? I think she was 3.") e Extra challenge (apresentar uma foto de criança).
+   Conteúdo NOVO: Gabi e o avô olham fotos antigas da família. 20 questões: 12 de "próxima fala" +
+   8 de compreensão. */
+const D = [
+  ['Gabi', 'Grandpa, who is this baby?'],
+  ['Grandpa', 'Ha ha! It was your mom! She was one year old in this photo.'],
+  ['Gabi', 'She was so cute! And who is this man?'],
+  ['Grandpa', 'It was me! I was twenty-five.'],
+  ['Gabi', 'Wow! Where were you in the photo?'],
+  ['Grandpa', 'We were at the beach in Salvador. It was summer.'],
+  ['Gabi', 'And this photo? Where was it?'],
+  ['Grandpa', 'It was my first job. I was a teacher at a small school.'],
+  ['Gabi', 'A teacher? Cool! And your students?'],
+  ['Grandpa', 'They were very good students. They were always happy.'],
+  ['Gabi', 'Who are these two girls?'],
+  ['Grandpa', 'They were my sisters, Rosa and Clara. They were at university.'],
+  ['Gabi', 'They were very beautiful!'],
+  ['Grandpa', 'Yes! And they were very smart too.']
+];
+const lado = q => q === 'Gabi' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 32, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Ha ha! It was your mom! She was one year old in this photo.', 'Ha ha! It were your mom! She were one year old.', 'Ha ha! It was your mom! She had one year in this photo.'], 0, 'Haha! Era a sua mãe! Ela tinha um ano nesta foto.'),
+    prox(2, ['She were so cute!', 'She was so cute! And who is this man?', 'They were very beautiful!'], 1, 'Ela era tão fofa! E quem é este homem?'),
+    prox(3, ['It were me! I was twenty-five.', 'It was me! I had twenty-five.', 'It was me! I was twenty-five.'], 2, 'Era eu! Eu tinha vinte e cinco anos.'),
+    prox(4, ['Wow! Where were you in the photo?', 'Wow! Where was you in the photo?', 'Wow! Where are you were?'], 0, 'Nossa! Onde você estava na foto?'),
+    prox(5, ['We was at the beach in Salvador.', 'We were at the beach in Salvador. It was summer.', 'We were at the beach in Salvador. It were summer.'], 1, 'Nós estávamos na praia em Salvador. Era verão.'),
+    prox(6, ['They were very beautiful!', 'Who are these two girls?', 'And this photo? Where was it?'], 2, 'E esta foto? Onde foi?'),
+    prox(7, ['It was my first job. I was a teacher at a small school.', 'It was my first job. I were a teacher.', 'It is my first job. I am a teacher.'], 0, 'Foi o meu primeiro emprego. Eu era professor numa escola pequena.'),
+    prox(8, ['A teacher? Cool! And you students?', 'A teacher? Cool! And your students?', 'A teacher? Cool! And yours students?'], 1, 'Professor? Legal! E os seus alunos?'),
+    prox(9, ['They was very good students.', 'They are very good students now.', 'They were very good students. They were always happy.'], 2, 'Eles eram ótimos alunos. Eles estavam sempre felizes.'),
+    prox(10, ['Who are these two girls?', 'Who is these two girls?', 'And this man?'], 0, 'Quem são estas duas meninas?'),
+    prox(11, ['They was my sisters, Rosa and Clara.', 'They were my sisters, Rosa and Clara. They were at university.', 'They were my sisters. They was at university.'], 1, 'Eram as minhas irmãs, Rosa e Clara. Elas estavam na faculdade.'),
+    prox(12, ['She was so cute!', 'Where were you?', 'They were very beautiful!'], 2, 'Elas eram muito bonitas!'),
+    { instrucao: 'Who was the baby in the photo?', frase: "Gabi's ___.", opcoes: ['mom', 'sister', 'grandmother'], certa: 0, traducao: 'A mãe da Gabi.' },
+    { instrucao: 'How old was the baby?', frase: 'One ___ old.', opcoes: ['month', 'year', 'week'], certa: 1, traducao: 'Um ano.' },
+    { instrucao: 'How old was Grandpa in the photo?', frase: 'He was ___.', opcoes: ['one', 'fifteen', 'twenty-five'], certa: 2, traducao: 'Ele tinha vinte e cinco anos.' },
+    { instrucao: 'Where were they?', frase: 'At the beach in ___.', opcoes: ['Salvador', 'Rio', 'Recife'], certa: 0, traducao: 'Na praia em Salvador.' },
+    { instrucao: "What was Grandpa's first job?", frase: 'He was a ___.', opcoes: ['doctor', 'teacher', 'student'], certa: 1, traducao: 'Ele era professor.' },
+    { instrucao: "Grandpa's students:", frase: 'They ___ very good students.', opcoes: ['was', 'are', 'were'], certa: 2, traducao: 'Eles eram ótimos alunos.' },
+    { instrucao: 'Who were the two girls?', frase: "Grandpa's ___.", opcoes: ['sisters', 'daughters', 'students'], certa: 0, traducao: 'As irmãs do avô.' },
+    { instrucao: 'Where were Rosa and Clara?', frase: 'At ___.', opcoes: ['school', 'university', 'the beach'], certa: 1, traducao: 'Na faculdade.' }
+  ]
+});
+</script>
+</body>
+</html>

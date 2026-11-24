@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 32 · Where were you?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 32 · Fala
+   Alinhado ao slide "Class 32: They were just babies!" — Grammar Point (was /wʌz/ x were /wɜːr/),
+   Vocabulary (lugares: "They were at university. He was in the kitchen.") e Speaking ("At 10:30
+   yesterday I was..."). Conteúdo NOVO: outras frases. 20 questões. */
+const PAL = 'Listen and record the words';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 32, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'yesterday', traducao: 'ontem' },
+    { instrucao: PAL, frase: 'last night', traducao: 'ontem à noite' },
+    { instrucao: PAL, frase: 'last week', traducao: 'semana passada' },
+    { instrucao: PAL, frase: 'at university', traducao: 'na faculdade' },
+    { instrucao: PAL, frase: 'in a supermarket', traducao: 'num supermercado' },
+    { instrucao: PAL, frase: 'on the street', traducao: 'na rua' },
+    { frase: 'I was at home last night.', dica: 0, traducao: 'Eu estava em casa ontem à noite.', nota: 'Was soa curto: UÓZ.' },
+    { frase: 'They were at university.', dica: 0, traducao: 'Eles estavam na faculdade.', nota: 'Were soa como "UÊR".' },
+    { frase: 'He was in the kitchen.', dica: 0, traducao: 'Ele estava na cozinha.' },
+    { frase: 'We were in a restaurant yesterday.', dica: 0, traducao: 'Nós estávamos num restaurante ontem.' },
+    { frase: 'She was on a bus at eight o\'clock.', dica: 0, traducao: 'Ela estava num ônibus às oito horas.' },
+    { frase: 'My friends were at the party last night.', dica: 0, traducao: 'Meus amigos estavam na festa ontem à noite.' },
+    { frase: 'I was eleven years old in the photo.', dica: 0, traducao: 'Eu tinha onze anos na foto.' },
+    { frase: 'How old was she in the photo?', dica: 0, traducao: 'Quantos anos ela tinha na foto?' },
+    { frase: 'I think she was three.', dica: 0, traducao: 'Eu acho que ela tinha três anos.' },
+    { frase: 'In 2014, the World Cup was in Brazil.', dica: 0, traducao: 'Em 2014, a Copa do Mundo foi no Brasil.' },
+    { frase: 'The Beatles were from Liverpool.', dica: 0, traducao: 'Os Beatles eram de Liverpool.' },
+    { frase: 'At ten thirty yesterday, I was at work.', dica: 0, traducao: 'Às dez e meia ontem, eu estava no trabalho.' },
+    { frase: 'My first teacher was very nice.', dica: 0, traducao: 'Minha primeira professora era muito legal.' },
+    { frase: 'Today I am at home, but yesterday I was at the gym.', dica: 0, traducao: 'Hoje eu estou em casa, mas ontem eu estava na academia.' }
+  ]
+});
+</script>
+</body>
+</html>
