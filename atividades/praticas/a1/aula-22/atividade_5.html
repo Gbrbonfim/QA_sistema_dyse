@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 22 · Object pronouns</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 22 · Gramática
+   Alinhado ao slide "Class 22: Drama? I like it." — Grammar Point 3 e 4 (object pronoun que
+   substitui o nome; subject ou object pronoun?) e a revisão de possessive adjectives (Aula 9).
+   Conteúdo NOVO e mais difícil: I / me / my, he / him / his na mesma questão. 24 questões. */
+const PAR = 'Choose the object pronoun';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 22, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'Naomi Watts is a great actress. I love ___.', opcoes: ['she', 'her', 'him'], certa: 1, traducao: 'A Naomi Watts é uma ótima atriz. Eu amo ela.' },
+    { frase: 'Iris misses Walter. She thinks about ___ a lot.', opcoes: ['him', 'he', 'his'], certa: 0, traducao: 'A Iris sente falta do Walter. Ela pensa muito nele.' },
+    { frase: 'I like dramas. I always watch ___ at night.', opcoes: ['they', 'it', 'them'], certa: 2, traducao: 'Eu gosto de dramas. Eu sempre assisto eles à noite.' },
+    { frase: 'I really like this film. Do you like ___ too?', opcoes: ['it', 'them', 'him'], certa: 0, traducao: 'Eu gosto muito deste filme. Você gosta dele também?' },
+    { frase: 'This exercise is difficult. Please help ___.', opcoes: ['I', 'me', 'my'], certa: 1, traducao: 'Este exercício é difícil. Por favor, me ajude.' },
+    { frase: 'We visit our friends, but they never visit ___.', opcoes: ['we', 'our', 'us'], certa: 2, traducao: 'Nós visitamos nossos amigos, mas eles nunca visitam a gente.' },
+    { frase: 'Matt is not OK. Talk to ___.', opcoes: ['him', 'he', 'his'], certa: 0, traducao: 'O Matt não está bem. Fale com ele.' },
+    { frase: "I like action films, but I don't watch ___ very often.", opcoes: ['it', 'them', 'they'], certa: 1, traducao: 'Eu gosto de filmes de ação, mas não assisto com muita frequência.' },
+    { frase: 'The new teachers are here. Do you know ___?', opcoes: ['they', 'their', 'them'], certa: 2, traducao: 'Os professores novos estão aqui. Você conhece eles?' },
+    { frase: 'I love watching films with you. Do you want to watch one with ___ tonight?', opcoes: ['me', 'I', 'my'], certa: 0, traducao: 'Eu amo assistir filmes com você. Quer assistir um comigo hoje à noite?' },
+    { frase: 'My name is Sarah. ___ am a big fan of drama films.', opcoes: ['Me', 'I', 'My'], certa: 1, traducao: 'Meu nome é Sarah. Eu sou muito fã de dramas.' },
+    { frase: 'I like Robert De Niro. ___ is a great actor.', opcoes: ['Him', 'His', 'He'], certa: 2, traducao: 'Eu gosto do Robert De Niro. Ele é um ótimo ator.' },
+    { frase: "Where is Tom? He isn't here. I need to talk to ___.", opcoes: ['him', 'he', 'his'], certa: 0, traducao: 'Cadê o Tom? Ele não está aqui. Eu preciso falar com ele.' },
+    { frase: 'Iris is sad. ___ feels happy with the dog.', opcoes: ['Her', 'She', 'Hers'], certa: 1, traducao: 'A Iris está triste. Ela se sente feliz com o cachorro.' },
+    { frase: 'This is my favorite part! Watch ___!', opcoes: ['its', "it's", 'it'], certa: 2, traducao: 'Essa é a minha parte favorita! Assista!' },
+    { instrucao: PAR, frase: 'I → ___', opcoes: ['me', 'my', 'mine'], certa: 0, traducao: 'eu → me / mim' },
+    { instrucao: PAR, frase: 'she → ___', opcoes: ['she', 'her', 'hers'], certa: 1, traducao: 'ela → ela / a / lhe' },
+    { instrucao: PAR, frase: 'we → ___', opcoes: ['our', 'we', 'us'], certa: 2, traducao: 'nós → nos / a gente' },
+    { instrucao: PAR, frase: 'they → ___', opcoes: ['them', 'their', 'there'], certa: 0, traducao: 'eles → eles / os / lhes' },
+    { instrucao: PAR, frase: 'he → ___', opcoes: ['his', 'him', 'he'], certa: 1, traducao: 'ele → ele / o / lhe' },
+    { frase: 'Lucas has a cat. Her name is Bella. He loves ___.', opcoes: ['she', 'her', 'him'], certa: 1, traducao: 'O Lucas tem uma gata. O nome dela é Bella. Ele ama ela.' },
+    { instrucao: CERTA, opcoes: ['I love she.', 'I love her.', 'Me love her.'], certa: 1, traducao: 'Eu amo ela.' },
+    { instrucao: CERTA, opcoes: ['They visit we.', 'Them visit us.', 'They visit us.'], certa: 2, traducao: 'Eles visitam a gente.' },
+    { instrucao: CERTA, opcoes: ['The dog follows me.', 'The dog follows I.', 'The dog follow me.'], certa: 0, traducao: 'O cachorro me segue.' }
+  ]
+});
+</script>
+</body>
+</html>

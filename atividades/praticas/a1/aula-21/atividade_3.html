@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 21 · Help, Mom!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 21 · Leitura
+   Alinhado ao slide "Class 21: Breakfast sandwich" — a receita do sanduíche de café da manhã
+   (passos no imperativo) e Grammar Point (Don't...). Conteúdo NOVO: o Leo pede ajuda à mãe por
+   mensagem para fazer um sanduíche. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Leo', 'Mom, I want to make a breakfast sandwich. Help!'],
+  ['Mom', 'OK! First, cook the bacon in a pan.'],
+  ['Leo', 'OK. Do I add salt?'],
+  ['Mom', "No! Don't add salt to the bacon."],
+  ['Leo', 'OK. And the eggs?'],
+  ['Mom', 'Cook the eggs with butter in another pan.'],
+  ['Leo', 'Do I use the oven?'],
+  ['Mom', "No, don't use the oven. It's a quick breakfast."],
+  ['Leo', 'OK. And now?'],
+  ['Mom', 'Prepare the bread. Then make the sandwich: add the bacon and the eggs.'],
+  ['Leo', "Done! It's beautiful!"],
+  ['Mom', "Great! Now eat it. Don't give it to the dog!"],
+  ['Leo', 'Ha ha! Thanks, Mom!'],
+  ['Mom', 'And clean the kitchen, please!']
+];
+const lado = q => q === 'Leo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 21, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['OK! First, cook the bacon in a pan.', 'OK! First, you cooks the bacon in a pan.', 'OK! First, cooking the bacon in a pan.'], 0, 'Tá bom! Primeiro, frite o bacon numa frigideira.'),
+    prox(2, ['Done!', 'OK. Do I add salt?', 'OK. Does I add salt?'], 1, 'Tá. Eu coloco sal?'),
+    prox(3, ["No! No add salt to the bacon.", "No! Doesn't add salt to the bacon.", "No! Don't add salt to the bacon."], 2, 'Não! Não coloque sal no bacon.'),
+    prox(4, ['OK. And the eggs?', 'Thanks, Mom!', 'And clean the kitchen!'], 0, 'Tá. E os ovos?'),
+    prox(5, ['You cook the eggs with butter.', 'Cook the eggs with butter in another pan.', 'Cooks the eggs with butter.'], 1, 'Frite os ovos com manteiga em outra frigideira.'),
+    prox(6, ['Does I use the oven?', 'I use the oven?', 'Do I use the oven?'], 2, 'Eu uso o forno?'),
+    prox(7, ["No, don't use the oven. It's a quick breakfast.", "No, not use the oven.", "No, doesn't use the oven."], 0, 'Não, não use o forno. É um café da manhã rápido.'),
+    prox(8, ["Done! It's beautiful!", 'OK. And now?', 'Ha ha! Thanks, Mom!'], 1, 'Tá. E agora?'),
+    prox(9, ['You prepare the bread.', 'Prepares the bread. Then makes the sandwich.', 'Prepare the bread. Then make the sandwich: add the bacon and the eggs.'], 2, 'Prepare o pão. Depois monte o sanduíche: coloque o bacon e os ovos.'),
+    prox(10, ["Done! It's beautiful!", 'OK. Do I add salt?', 'Help!'], 0, 'Pronto! Ficou lindo!'),
+    prox(11, ["Great! Now eat it. No give it to the dog!", "Great! Now eat it. Don't give it to the dog!", 'And the eggs?'], 1, 'Ótimo! Agora coma. Não dê para o cachorro!'),
+    prox(12, ['OK. And the eggs?', 'Do I use the oven?', 'Ha ha! Thanks, Mom!'], 2, 'Haha! Obrigado, mãe!'),
+    { instrucao: 'What does Leo want to make?', frase: 'A breakfast ___.', opcoes: ['sandwich', 'cake', 'pizza'], certa: 0, traducao: 'Um sanduíche de café da manhã.' },
+    { instrucao: 'What does Leo cook first?', frase: 'He cooks the ___.', opcoes: ['eggs', 'bacon', 'bread'], certa: 1, traducao: 'Ele frita o bacon.' },
+    { instrucao: "Mom's instruction about salt:", frase: "___ add salt to the bacon.", opcoes: ['No', "Doesn't", "Don't"], certa: 2, traducao: 'Não coloque sal no bacon.' },
+    { instrucao: 'What does Leo cook with butter?', frase: 'The ___.', opcoes: ['eggs', 'bacon', 'tomatoes'], certa: 0, traducao: 'Os ovos.' },
+    { instrucao: 'Does Leo use the oven?', frase: 'No, he ___.', opcoes: ["don't", "doesn't", "isn't"], certa: 1, traducao: 'Não, ele não usa.' },
+    { instrucao: 'Why not?', frase: "It's a ___ breakfast.", opcoes: ['slow', 'big', 'quick'], certa: 2, traducao: 'É um café da manhã rápido.' },
+    { instrucao: "Mom's instruction about the dog:", frase: "Don't ___ it to the dog!", opcoes: ['give', 'gives', 'giving'], certa: 0, traducao: 'Não dê para o cachorro!' },
+    { instrucao: 'What does Mom want at the end?', frase: '___ the kitchen, please!', opcoes: ['Cleans', 'Clean', 'You clean'], certa: 1, traducao: 'Limpe a cozinha, por favor!' }
+  ]
+});
+</script>
+</body>
+</html>

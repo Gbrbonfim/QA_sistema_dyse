@@ -211,6 +211,28 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 20', titulo: 'Ask me anything', tipo: 'Escute e grave', treina: 'Fala · Perguntas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 20', titulo: 'Be or do?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 21,
+        titulo: 'Class 21 · Breakfast sandwich',
+        atividades: [
+          { num: 1, titulo: 'Breakfast and instructions', tipo: 'Escute e escolha', treina: 'Escuta · Imperativo', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "Cook, add, don't...", tipo: 'Monte a frase', treina: 'Escrita · Imperativo', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Help, Mom!', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Receita', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Give instructions', tipo: 'Escute e grave', treina: 'Fala · Instruções', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Imperatives', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
+        aula: 22,
+        titulo: 'Class 22 · Drama? I like it.',
+        atividades: [
+          { num: 1, titulo: 'Films and pronouns', tipo: 'Escute e escolha', treina: 'Escuta · Filmes', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'I love her!', tipo: 'Monte a frase', treina: 'Escrita · Object pronouns', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Movie night', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'What do you think of...?', tipo: 'Escute e grave', treina: 'Fala · Opiniões', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Object pronouns', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 22 · What do you think of...?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 22 · Fala
+   Alinhado ao slide "Class 22: Drama? I like it." — Vocabulary (listen and repeat os gêneros),
+   Grammar Point (object pronouns; him x her na fala) e Speaking ("What do you think of...?").
+   Conteúdo NOVO: outras frases. 20 questões. */
+const PAL = 'Listen and record the words';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 22, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'an action film', traducao: 'um filme de ação' },
+    { instrucao: PAL, frase: 'an animation', traducao: 'uma animação' },
+    { instrucao: PAL, frase: 'a drama', traducao: 'um drama' },
+    { instrucao: PAL, frase: 'a romance', traducao: 'um romance' },
+    { instrucao: PAL, frase: 'a comedy', traducao: 'uma comédia', nota: 'A força fica no começo: CÓ-me-di.' },
+    { instrucao: PAL, frase: 'a horror film', traducao: 'um filme de terror' },
+    { instrucao: PAL, frase: 'actress', traducao: 'atriz' },
+    { instrucao: PAL, frase: 'actor', traducao: 'ator' },
+    { instrucao: PAL, frase: 'him', traducao: 'ele, o, lhe (objeto)', nota: 'Him tem o "i" curto: HIM.' },
+    { instrucao: PAL, frase: 'them', traducao: 'eles, os, lhes (objeto)', nota: 'O "th" é com a língua entre os dentes.' },
+    { frase: 'What do you think of Naomi Watts?', dica: 0, traducao: 'O que você acha da Naomi Watts?' },
+    { frase: "I love her. She's great.", dica: 0, traducao: 'Eu amo ela. Ela é ótima.' },
+    { frase: 'What do you think of action films?', dica: 0, traducao: 'O que você acha de filmes de ação?' },
+    { frase: "I don't like them. They're boring.", dica: 0, traducao: 'Eu não gosto deles. Eles são chatos.' },
+    { frase: 'I prefer dramas.', dica: 0, traducao: 'Eu prefiro dramas.' },
+    { frase: 'I like Tom Cruise. Do you like him?', dica: 0, traducao: 'Eu gosto do Tom Cruise. Você gosta dele?' },
+    { frase: 'This exercise is difficult. Please help me.', dica: 0, traducao: 'Este exercício é difícil. Por favor, me ajude.' },
+    { frase: 'This dog is so cute. I love it!', dica: 0, traducao: 'Este cachorro é tão fofo. Eu amo ele!' },
+    { frase: 'We visit our friends, but they never visit us.', dica: 0, traducao: 'Nós visitamos nossos amigos, mas eles nunca visitam a gente.' },
+    { frase: 'Do you want to watch a film with me tonight?', dica: 0, traducao: 'Você quer assistir a um filme comigo hoje à noite?' }
+  ]
+});
+</script>
+</body>
+</html>

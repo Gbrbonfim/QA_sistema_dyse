@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 21 · Breakfast and instructions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 21 · Escuta
+   Alinhado ao slide "Class 21: Breakfast sandwich" — Vocabulary (café da manhã americano e
+   britânico: orange juice, toast, pancakes, bacon, sausages, black pudding, baked beans,
+   mushrooms...) e Grammar Point (imperativo: cook, add, put, open, close, speak, go, use, make;
+   Don't). Conteúdo NOVO: outras instruções. 24 questões: 12 comidas + 12 instruções. */
+const IC = { cook: 'skillet', add: 'add_circle', put: 'move_down', open: 'door_open', close: 'door_front', speak: 'record_voice_over',
+  go: 'directions_walk', use: 'touch_app', make: 'restaurant', 'turn over': 'flip', clean: 'cleaning_services', "don't": 'do_not_disturb_on' };
+const food = (...cs) => cs.map(c => ({ label: c, icon: 'restaurant' }));
+const verbo = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const INS = 'Listen to the instruction and choose the verb';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 21, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the food',
+  itens: [
+    { audioTexto: 'pancakes', opcoes: food('pancakes', 'sausages', 'toast', 'bacon'), certa: 0 },
+    { audioTexto: 'sausages', opcoes: food('mushrooms', 'sausages', 'tomatoes', 'pancakes'), certa: 1 },
+    { audioTexto: 'baked beans', opcoes: food('black pudding', 'bacon', 'baked beans', 'toast'), certa: 2 },
+    { audioTexto: 'mushrooms', opcoes: food('tomatoes', 'sausages', 'pancakes', 'mushrooms'), certa: 3 },
+    { audioTexto: 'bacon', opcoes: food('bacon', 'baked beans', 'butter', 'bread'), certa: 0 },
+    { audioTexto: 'toast', opcoes: food('tea', 'toast', 'tomatoes', 'eggs'), certa: 1 },
+    { audioTexto: 'orange juice', opcoes: food('coffee', 'tea', 'orange juice', 'vinegar'), certa: 2 },
+    { audioTexto: 'black pudding', opcoes: food('baked beans', 'pancakes', 'bacon', 'black pudding'), certa: 3 },
+    { audioTexto: 'butter', opcoes: food('butter', 'bread', 'bacon', 'pepper'), certa: 0 },
+    { audioTexto: 'salt and pepper', opcoes: food('butter and bread', 'salt and pepper', 'eggs and bacon', 'tea and toast'), certa: 1 },
+    { audioTexto: 'vinegar', opcoes: food('butter', 'orange juice', 'vinegar', 'pepper'), certa: 2 },
+    { audioTexto: 'tomatoes', opcoes: food('mushrooms', 'potatoes', 'pancakes', 'tomatoes'), certa: 3 },
+    { instrucao: INS, audioTexto: 'Cook the sausages in a pan.', opcoes: verbo('cook', 'add', 'put', 'use'), certa: 0 },
+    { instrucao: INS, audioTexto: 'Add salt and pepper to the eggs.', opcoes: verbo('make', 'add', 'cook', 'open'), certa: 1 },
+    { instrucao: INS, audioTexto: 'Put the pan in the oven.', opcoes: verbo('use', 'close', 'put', 'go'), certa: 2 },
+    { instrucao: INS, audioTexto: "Close the window. It's really cold.", opcoes: verbo('open', 'speak', 'go', 'close'), certa: 3 },
+    { instrucao: INS, audioTexto: 'Speak English in class.', opcoes: verbo('speak', 'make', 'use', 'add'), certa: 0 },
+    { instrucao: INS, audioTexto: "Don't open the door.", opcoes: verbo('close', "don't", 'go', 'open'), certa: 1 },
+    { instrucao: INS, audioTexto: 'Make a sandwich. You are hungry.', opcoes: verbo('cook', 'put', 'make', 'add'), certa: 2 },
+    { instrucao: INS, audioTexto: 'Turn over the bacon.', opcoes: verbo('put', 'cook', 'add', 'turn over'), certa: 3 },
+    { instrucao: INS, audioTexto: 'Use butter. Don\'t use oil.', opcoes: verbo('use', 'make', 'put', 'add'), certa: 0 },
+    { instrucao: INS, audioTexto: "Go to bed. It's late!", opcoes: verbo('close', 'go', 'speak', 'use'), certa: 1 },
+    { instrucao: INS, audioTexto: 'Clean the kitchen, please.', opcoes: verbo('cook', 'make', 'clean', 'use'), certa: 2 },
+    { instrucao: INS, audioTexto: 'Open your books, please.', opcoes: verbo('close', 'use', 'go', 'open'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

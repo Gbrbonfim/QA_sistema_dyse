@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 22 · Films and pronouns</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 22 · Escuta
+   Alinhado ao slide "Class 22: Drama? I like it." — Vocabulary: Kinds of films (action film,
+   animation, drama, romance, comedy, horror film) e Grammar Point (object pronouns: me, you, him,
+   her, it, us, them). Conteúdo NOVO: filmes famosos com o gênero verdadeiro (Toy Story é
+   animação; Mission: Impossible é ação; The Conjuring é terror; Home Alone é comédia).
+   24 questões: 6 gêneros + 6 filmes + 12 pronomes. */
+const IC = { 'action film': 'explosion', animation: 'animation', drama: 'theater_comedy', romance: 'favorite', comedy: 'sentiment_very_satisfied',
+  'horror film': 'skull', me: 'person', you: 'face', him: 'man', her: 'woman', it: 'pets', us: 'groups', them: 'group' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const FILME = 'Listen and choose the kind of film';
+const PRON = 'Listen and choose the object pronoun you hear';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 22, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the kind of film',
+  itens: [
+    { audioTexto: 'a horror film', opcoes: op('horror film', 'drama', 'comedy', 'romance'), certa: 0 },
+    { audioTexto: 'an animation', opcoes: op('action film', 'animation', 'drama', 'comedy'), certa: 1 },
+    { audioTexto: 'a romance', opcoes: op('comedy', 'horror film', 'romance', 'action film'), certa: 2 },
+    { audioTexto: 'a comedy', opcoes: op('drama', 'romance', 'animation', 'comedy'), certa: 3 },
+    { audioTexto: 'an action film', opcoes: op('action film', 'animation', 'horror film', 'drama'), certa: 0 },
+    { audioTexto: 'a drama', opcoes: op('comedy', 'drama', 'romance', 'animation'), certa: 1 },
+    { instrucao: FILME, audioTexto: 'Toy Story is an animation.', opcoes: op('comedy', 'drama', 'animation', 'horror film'), certa: 2 },
+    { instrucao: FILME, audioTexto: 'Mission: Impossible is an action film.', opcoes: op('romance', 'animation', 'comedy', 'action film'), certa: 3 },
+    { instrucao: FILME, audioTexto: 'The Conjuring is a horror film.', opcoes: op('horror film', 'action film', 'drama', 'comedy'), certa: 0 },
+    { instrucao: FILME, audioTexto: 'Home Alone is a comedy.', opcoes: op('drama', 'comedy', 'horror film', 'action film'), certa: 1 },
+    { instrucao: FILME, audioTexto: 'Titanic is a romance.', opcoes: op('animation', 'horror film', 'romance', 'comedy'), certa: 2 },
+    { instrucao: FILME, audioTexto: 'The Friend is a drama with Naomi Watts.', opcoes: op('action film', 'animation', 'comedy', 'drama'), certa: 3 },
+    { instrucao: PRON, audioTexto: "Naomi Watts is a great actress. I love her.", opcoes: op('her', 'him', 'them', 'it'), certa: 0 },
+    { instrucao: PRON, audioTexto: 'I like Tom Cruise. Do you like him?', opcoes: op('her', 'him', 'us', 'me'), certa: 1 },
+    { instrucao: PRON, audioTexto: "I like dramas. I watch them at night.", opcoes: op('it', 'her', 'them', 'us'), certa: 2 },
+    { instrucao: PRON, audioTexto: 'This exercise is difficult. Please help me.', opcoes: op('you', 'us', 'him', 'me'), certa: 3 },
+    { instrucao: PRON, audioTexto: 'This dog is so cute. I love it!', opcoes: op('it', 'him', 'them', 'her'), certa: 0 },
+    { instrucao: PRON, audioTexto: 'We visit our friends, but they never visit us.', opcoes: op('them', 'us', 'me', 'you'), certa: 1 },
+    { instrucao: PRON, audioTexto: "Matt is sad. Talk to him.", opcoes: op('her', 'them', 'him', 'it'), certa: 2 },
+    { instrucao: PRON, audioTexto: 'I see you!', opcoes: op('me', 'him', 'us', 'you'), certa: 3 },
+    { instrucao: PRON, audioTexto: "The new teachers are here. Do you know them?", opcoes: op('them', 'us', 'him', 'it'), certa: 0 },
+    { instrucao: PRON, audioTexto: 'The dog follows Iris. It follows her all the time.', opcoes: op('him', 'her', 'it', 'me'), certa: 1 },
+    { instrucao: PRON, audioTexto: "I have a new app, but I don't like it.", opcoes: op('them', 'him', 'it', 'her'), certa: 2 },
+    { instrucao: PRON, audioTexto: 'Do you want to watch a film with me tonight?', opcoes: op('us', 'you', 'him', 'me'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

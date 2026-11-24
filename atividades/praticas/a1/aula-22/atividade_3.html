@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 22 · Movie night</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 22 · Leitura
+   Alinhado ao slide "Class 22: Drama? I like it." — Speaking and Writing ("What do you think of
+   Naomi Watts? I love her. / What do you think of action films? I don't like them. I prefer
+   dramas.") e Listening (pets). Conteúdo NOVO: Ana e Pedro escolhem um filme para a noite.
+   Fatos verdadeiros: Toy Story é uma animação; Tom Cruise faz filmes de ação.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ana', 'Pedro, do you want to watch a film with me tonight?'],
+  ['Pedro', 'Yes! What do you think of action films?'],
+  ['Ana', "I don't like them. They're boring. I prefer comedies."],
+  ['Pedro', 'OK. What do you think of Tom Cruise?'],
+  ['Ana', "I like him. He's a great actor!"],
+  ['Pedro', 'Ha ha! And horror films? Do you like them?'],
+  ['Ana', "No! I don't watch them. They're scary!"],
+  ['Pedro', 'OK, OK. What about Toy Story? It\'s an animation.'],
+  ['Ana', 'I love it! It\'s my favorite film!'],
+  ['Pedro', 'Great! Do you want to watch it with my sister too?'],
+  ['Ana', 'Sure! I like her. She\'s very funny.'],
+  ['Pedro', 'And my dog? He always watches films with us!'],
+  ['Ana', 'Ha ha! Yes, invite him too!'],
+  ['Pedro', 'Perfect! See you tonight!']
+];
+const lado = q => q === 'Ana' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 22, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes! What do you think of action films?', 'Yes! What do you think of action films? I love they.', 'Perfect! See you tonight!'], 0, 'Sim! O que você acha de filmes de ação?'),
+    prox(2, ["I don't like they. They're boring.", "I don't like them. They're boring. I prefer comedies.", "I love it!"], 1, 'Eu não gosto deles. São chatos. Eu prefiro comédias.'),
+    prox(3, ['And my dog?', 'Sure!', 'OK. What do you think of Tom Cruise?'], 2, 'Tá. O que você acha do Tom Cruise?'),
+    prox(4, ["I like him. He's a great actor!", "I like he. He's a great actor!", "I like him. Him is a great actor!"], 0, 'Eu gosto dele. Ele é um ótimo ator!'),
+    prox(5, ['Ha ha! And horror films? Do you like it?', 'Ha ha! And horror films? Do you like them?', 'Great!'], 1, 'Haha! E filmes de terror? Você gosta deles?'),
+    prox(6, ["No! I don't watch they.", 'I love it!', "No! I don't watch them. They're scary!"], 2, 'Não! Eu não assisto. Eles dão medo!'),
+    prox(7, ["OK, OK. What about Toy Story? It's an animation.", "OK, OK. What about Toy Story? It's a horror film.", 'Ha ha! Yes, invite him too!'], 0, 'Tá bom, tá bom. E Toy Story? É uma animação.'),
+    prox(8, ["I love them! It's my favorite film!", "I love it! It's my favorite film!", "I love him! It's my favorite film!"], 1, 'Eu amo! É o meu filme favorito!'),
+    prox(9, ['Perfect!', 'And my dog?', 'Great! Do you want to watch it with my sister too?'], 2, 'Ótimo! Você quer assistir com a minha irmã também?'),
+    prox(10, ["Sure! I like her. She's very funny.", "Sure! I like she. She's very funny.", "Sure! I like her. Her's very funny."], 0, 'Claro! Eu gosto dela. Ela é muito engraçada.'),
+    prox(11, ['See you tonight!', 'And my dog? He always watches films with us!', 'And my dog? He always watches films with we!'], 1, 'E o meu cachorro? Ele sempre assiste filmes com a gente!'),
+    prox(12, ['Ha ha! Yes, invite he too!', 'I love it!', 'Ha ha! Yes, invite him too!'], 2, 'Haha! Sim, convida ele também!'),
+    { instrucao: 'Does Ana like action films?', frase: "No. She thinks they're ___.", opcoes: ['boring', 'fun', 'scary'], certa: 0, traducao: 'Não. Ela acha que eles são chatos.' },
+    { instrucao: 'What kind of film does Ana prefer?', frase: 'She prefers ___.', opcoes: ['dramas', 'comedies', 'horror films'], certa: 1, traducao: 'Ela prefere comédias.' },
+    { instrucao: 'Ana talks about Tom Cruise:', frase: 'I like ___.', opcoes: ['he', 'his', 'him'], certa: 2, traducao: 'Eu gosto dele.' },
+    { instrucao: 'Why doesn\'t Ana watch horror films?', frase: "They're ___.", opcoes: ['scary', 'boring', 'long'], certa: 0, traducao: 'Eles dão medo.' },
+    { instrucao: 'What kind of film is Toy Story?', frase: "It's ___.", opcoes: ['a comedy', 'an animation', 'an action film'], certa: 1, traducao: 'É uma animação.' },
+    { instrucao: "What does Ana think of Pedro's sister?", frase: "I like ___. She's very funny.", opcoes: ['she', 'him', 'her'], certa: 2, traducao: 'Eu gosto dela. Ela é muito engraçada.' },
+    { instrucao: "Pedro's dog:", frase: 'He always watches films with ___.', opcoes: ['us', 'we', 'our'], certa: 0, traducao: 'Ele sempre assiste filmes com a gente.' },
+    { instrucao: 'What does Ana say about the dog?', frase: 'Invite ___ too!', opcoes: ['he', 'him', 'his'], certa: 1, traducao: 'Convida ele também!' }
+  ]
+});
+</script>
+</body>
+</html>

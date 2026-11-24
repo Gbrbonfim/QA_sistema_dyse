@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 21 · Cook, add, don't...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 21 · Escrita
+   Alinhado ao slide "Class 21: Breakfast sandwich" — Grammar Point (o verbo no imperativo vai no
+   começo, sem sujeito; negativa com Don't) e a receita (Cook the sausages... Add the tomatoes...).
+   Conteúdo NOVO: outras instruções. O contexto traz a frase em português. A isca é "You" (o
+   sujeito que não existe no imperativo) ou "No" no lugar de Don't. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 21, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Cozinhe as linguiças numa frigideira.'), palavras: ['Cook', 'the', 'sausages', 'in', 'a', 'pan'], isca: ['You'], fim: '.', traducao: 'Cozinhe as linguiças numa frigideira.' },
+    { contexto: M('Acrescente os tomates.'), palavras: ['Add', 'the', 'tomatoes'], isca: ['You'], fim: '.', traducao: 'Acrescente os tomates.' },
+    { contexto: M('Coloque a frigideira no forno.'), palavras: ['Put', 'the', 'pan', 'in', 'the', 'oven'], isca: ['Puts'], fim: '.', traducao: 'Coloque a frigideira no forno.' },
+    { contexto: M('Não coma o meu sanduíche!'), palavras: ["Don't", 'eat', 'my', 'sandwich'], isca: ['No'], fim: '!', traducao: 'Não coma o meu sanduíche!' },
+    { contexto: M('Fale inglês na aula.'), palavras: ['Speak', 'English', 'in', 'class'], isca: ['You'], fim: '.', traducao: 'Fale inglês na aula.' },
+    { contexto: M('Feche a janela. Está muito frio.'), palavras: ['Close', 'the', 'window.', "It's", 'really', 'cold'], isca: ['Closes'], fim: '.', traducao: 'Feche a janela. Está muito frio.' },
+    { contexto: M('Não vá para a escola hoje.'), palavras: ["Don't", 'go', 'to', 'school', 'today'], isca: ['No'], fim: '.', traducao: 'Não vá para a escola hoje.' },
+    { contexto: M('Não abra a porta.'), palavras: ["Don't", 'open', 'the', 'door'], isca: ["Doesn't"], fim: '.', traducao: 'Não abra a porta.' },
+    { contexto: M('Não use vinagre.'), palavras: ["Don't", 'use', 'vinegar'], isca: ['No'], fim: '.', traducao: 'Não use vinagre.' },
+    { contexto: M('Faça um sanduíche. Você está com fome.'), palavras: ['Make', 'a', 'sandwich.', 'You', 'are', 'hungry'], isca: ['Makes'], fim: '.', traducao: 'Faça um sanduíche. Você está com fome.' },
+    { contexto: M('Cozinhe os ovos com manteiga.'), palavras: ['Cook', 'the', 'eggs', 'with', 'butter'], isca: ['Cooking'], fim: '.', traducao: 'Cozinhe os ovos com manteiga.' },
+    { contexto: M('Acrescente sal e pimenta.'), palavras: ['Add', 'salt', 'and', 'pepper'], isca: ['Adds'], fim: '.', traducao: 'Acrescente sal e pimenta.' },
+    { contexto: M('Prepare o pão.'), palavras: ['Prepare', 'the', 'bread'], isca: ['You'], fim: '.', traducao: 'Prepare o pão.' },
+    { contexto: M('Não cozinhe hoje. Vamos pedir uma pizza.'), palavras: ["Don't", 'cook', 'today.', "Let's", 'order', 'a', 'pizza'], isca: ['No'], fim: '.', traducao: 'Não cozinhe hoje. Vamos pedir uma pizza.' },
+    { contexto: M('Vire o bacon.'), palavras: ['Turn', 'over', 'the', 'bacon'], isca: ['Turns'], fim: '.', traducao: 'Vire o bacon.' },
+    { contexto: M('Abram os livros, por favor.'), palavras: ['Open', 'your', 'books,', 'please'], isca: ['You'], fim: '.', traducao: 'Abram os livros, por favor.' },
+    { contexto: M('Não fale português na aula de inglês.'), palavras: ["Don't", 'speak', 'Portuguese', 'in', 'English', 'class'], isca: ['No'], fim: '.', traducao: 'Não fale português na aula de inglês.' },
+    { contexto: M('Limpe a cozinha, por favor.'), palavras: ['Clean', 'the', 'kitchen,', 'please'], isca: ['Cleans'], fim: '.', traducao: 'Limpe a cozinha, por favor.' },
+    { contexto: M('Coloque o bacon e os ovos no pão.'), palavras: ['Put', 'the', 'bacon', 'and', 'the', 'eggs', 'on', 'the', 'bread'], isca: ['You'], fim: '.', traducao: 'Coloque o bacon e os ovos no pão.' },
+    { contexto: M('Não coloque a frigideira no forno por trinta minutos.'), palavras: ["Don't", 'put', 'the', 'pan', 'in', 'the', 'oven', 'for', 'thirty', 'minutes'], isca: ['No'], fim: '.', traducao: 'Não coloque a frigideira no forno por trinta minutos.' }
+  ]
+});
+</script>
+</body>
+</html>

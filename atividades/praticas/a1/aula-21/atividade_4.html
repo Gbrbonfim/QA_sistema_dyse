@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 21 · Give instructions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 21 · Fala
+   Alinhado ao slide "Class 21: Breakfast sandwich" — Vocabulary (listen and repeat), a receita e
+   Speaking ("Record a video of a recipe"). Instrução em inglês é firme e direta: verbo no começo,
+   sem sujeito. Conteúdo NOVO: outras instruções. 20 questões. */
+const PAL = 'Listen and record the words';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 21, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'pancakes', traducao: 'panquecas' },
+    { instrucao: PAL, frase: 'sausages', traducao: 'linguiças', nota: 'Soa como "SÓ-si-djiz".' },
+    { instrucao: PAL, frase: 'mushrooms', traducao: 'cogumelos' },
+    { instrucao: PAL, frase: 'baked beans', traducao: 'feijão cozido com molho de tomate' },
+    { instrucao: PAL, frase: 'orange juice', traducao: 'suco de laranja' },
+    { instrucao: PAL, frase: 'toast', traducao: 'torrada' },
+    { instrucao: PAL, frase: 'butter', traducao: 'manteiga' },
+    { instrucao: PAL, frase: 'salt and pepper', traducao: 'sal e pimenta' },
+    { instrucao: PAL, frase: 'vinegar', traducao: 'vinagre' },
+    { instrucao: PAL, frase: 'oven', traducao: 'forno', nota: 'Soa como "Â-ven".' },
+    { frase: 'Cook the sausages and bacon in a pan.', dica: 0, traducao: 'Frite as linguiças e o bacon numa frigideira.' },
+    { frase: 'Add the tomatoes and cook.', dica: 0, traducao: 'Acrescente os tomates e cozinhe.' },
+    { frase: 'Put the pan in the oven.', dica: 0, traducao: 'Coloque a frigideira no forno.' },
+    { frase: "Don't eat my sandwich!", dica: 0, traducao: 'Não coma o meu sanduíche!' },
+    { frase: 'Speak English in class.', dica: 0, traducao: 'Fale inglês na aula.' },
+    { frase: "Close the window. It's really cold.", dica: 0, traducao: 'Feche a janela. Está muito frio.' },
+    { frase: "Don't go to school today.", dica: 0, traducao: 'Não vá para a escola hoje.' },
+    { frase: 'Cook the eggs with butter, salt and pepper.', dica: 0, traducao: 'Frite os ovos com manteiga, sal e pimenta.' },
+    { frase: "Don't cook today. Let's order a pizza.", dica: 0, traducao: 'Não cozinhe hoje. Vamos pedir uma pizza.' },
+    { frase: 'Make a sandwich. You are hungry.', dica: 0, traducao: 'Faça um sanduíche. Você está com fome.' }
+  ]
+});
+</script>
+</body>
+</html>

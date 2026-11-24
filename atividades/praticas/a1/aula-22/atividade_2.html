@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 22 · I love her!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 22 · Escrita
+   Alinhado ao slide "Class 22: Drama? I like it." — Grammar Point (subject pronoun faz a ação;
+   object pronoun recebe a ação, depois do verbo ou da preposição) e Speaking ("What do you think
+   of...? I love her. / I don't like them."). Conteúdo NOVO: outras frases. O contexto traz a
+   frase em português. A isca é o subject pronoun no lugar do object (o erro "I love she").
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 22, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu amo ela.'), palavras: ['I', 'love', 'her'], isca: ['she'], fim: '.', traducao: 'Eu amo ela.' },
+    { contexto: M('Você gosta dele?'), palavras: ['Do', 'you', 'like', 'him'], isca: ['he'], fim: '?', traducao: 'Você gosta dele?' },
+    { contexto: M('Por favor, me ajude.'), palavras: ['Please', 'help', 'me'], isca: ['I'], fim: '.', traducao: 'Por favor, me ajude.' },
+    { contexto: M('Eu assisto eles à noite.'), palavras: ['I', 'watch', 'them', 'at', 'night'], isca: ['they'], fim: '.', traducao: 'Eu assisto eles à noite.' },
+    { contexto: M('O cachorro precisa de nós.'), palavras: ['The', 'dog', 'needs', 'us'], isca: ['we'], fim: '.', traducao: 'O cachorro precisa de nós.' },
+    { contexto: M('Eu vejo você.'), palavras: ['I', 'see', 'you'], isca: ['your'], fim: '.', traducao: 'Eu vejo você.' },
+    { contexto: M('A Iris fala com ele.'), palavras: ['Iris', 'talks', 'to', 'him'], isca: ['he'], fim: '.', traducao: 'A Iris fala com ele.' },
+    { contexto: M('O cachorro está com ela.'), palavras: ['The', 'dog', 'is', 'with', 'her'], isca: ['she'], fim: '.', traducao: 'O cachorro está com ela.' },
+    { contexto: M('A Iris gosta dele (do cachorro).'), palavras: ['Iris', 'likes', 'it'], isca: ["it's"], fim: '.', traducao: 'A Iris gosta dele.' },
+    { contexto: M('A Iris visita eles.'), palavras: ['Iris', 'visits', 'them'], isca: ['they'], fim: '.', traducao: 'A Iris visita eles.' },
+    { contexto: M('O que você acha da Naomi Watts?'), palavras: ['What', 'do', 'you', 'think', 'of', 'Naomi', 'Watts'], isca: ['does'], fim: '?', traducao: 'O que você acha da Naomi Watts?' },
+    { contexto: M('Eu amo ela. Ela é ótima.'), palavras: ['I', 'love', 'her.', "She's", 'great'], isca: ['she'], fim: '.', traducao: 'Eu amo ela. Ela é ótima.' },
+    { contexto: M('Eu não gosto deles. Eles são chatos.'), palavras: ['I', "don't", 'like', 'them.', "They're", 'boring'], isca: ['they'], fim: '.', traducao: 'Eu não gosto deles. Eles são chatos.' },
+    { contexto: M('Eu prefiro dramas.'), palavras: ['I', 'prefer', 'dramas'], isca: ['prefers'], fim: '.', traducao: 'Eu prefiro dramas.' },
+    { contexto: M('Ela sente falta dele.'), palavras: ['She', 'misses', 'him'], isca: ['he'], fim: '.', traducao: 'Ela sente falta dele.' },
+    { contexto: M('Você sempre ajuda a Diana, mas ela nunca ajuda você.'), palavras: ['You', 'always', 'help', 'Diana,', 'but', 'she', 'never', 'helps', 'you'], isca: ['your'], fim: '.', traducao: 'Você sempre ajuda a Diana, mas ela nunca ajuda você.' },
+    { contexto: M('Eu conheço o ator, mas não gosto dele.'), palavras: ['I', 'know', 'the', 'actor,', 'but', 'I', "don't", 'like', 'him'], isca: ['he'], fim: '.', traducao: 'Eu conheço o ator, mas não gosto dele.' },
+    { contexto: M('Nós assistimos filmes com eles.'), palavras: ['We', 'watch', 'films', 'with', 'them'], isca: ['they'], fim: '.', traducao: 'Nós assistimos filmes com eles.' },
+    { contexto: M('Essa é a minha parte favorita! Assista!'), palavras: ['This', 'is', 'my', 'favorite', 'part!', 'Watch', 'it'], isca: ['its'], fim: '!', traducao: 'Essa é a minha parte favorita! Assista!' },
+    { contexto: M('Cadê o Tom? Eu preciso falar com ele.'), palavras: ["Where's", 'Tom?', 'I', 'need', 'to', 'talk', 'to', 'him'], isca: ['he'], fim: '.', traducao: 'Cadê o Tom? Eu preciso falar com ele.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 21 · Imperatives</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 21 · Gramática
+   Alinhado ao slide "Class 21: Breakfast sandwich" — Grammar Point 3 (afirmativo ou negativo
+   pelo contexto: "___ the window. It's really cold.") e Vocabulary (café da manhã americano x
+   britânico). Conteúdo NOVO e mais difícil: o aluno decide o verbo E se é Don't pelo contexto.
+   24 questões. */
+const CTX = 'Choose the right instruction';
+const BR = 'British or American breakfast?';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 21, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the instruction',
+  itens: [
+    { instrucao: CTX, frase: '___ English in class. You need to practice.', opcoes: ['Speak', "Don't speak", 'Speaks'], certa: 0, traducao: 'Fale inglês na aula. Você precisa praticar.' },
+    { instrucao: CTX, frase: "___ the window. It's really cold.", opcoes: ['Open', 'Close', "Don't close"], certa: 1, traducao: 'Feche a janela. Está muito frio.' },
+    { instrucao: CTX, frase: '___ to school today. You are not OK.', opcoes: ['Go', 'Goes', "Don't go"], certa: 2, traducao: 'Não vá para a escola hoje. Você não está bem.' },
+    { instrucao: CTX, frase: '___ the door. We need silence.', opcoes: ["Don't open", 'Open', 'Opens'], certa: 0, traducao: 'Não abra a porta. Nós precisamos de silêncio.' },
+    { instrucao: CTX, frase: '___ vinegar. I prefer ketchup.', opcoes: ['Use', "Don't use", 'Uses'], certa: 1, traducao: 'Não use vinagre. Eu prefiro ketchup.' },
+    { instrucao: CTX, frase: "___ today. Let's order a pizza.", opcoes: ['Cook', 'Cooks', "Don't cook"], certa: 2, traducao: 'Não cozinhe hoje. Vamos pedir uma pizza.' },
+    { instrucao: CTX, frase: '___ a sandwich. You are hungry.', opcoes: ['Make', "Don't make", 'Makes'], certa: 0, traducao: 'Faça um sanduíche. Você está com fome.' },
+    { instrucao: CTX, frase: "___ the oven. It's very hot!", opcoes: ['Touch', "Don't touch", 'Touches'], certa: 1, traducao: 'Não toque no forno. Está muito quente!' },
+    { instrucao: CTX, frase: "___ to bed. It's late!", opcoes: ["Don't go", 'Goes', 'Go'], certa: 2, traducao: 'Vá dormir. Está tarde!' },
+    { instrucao: CTX, frase: '___ my sandwich! I want it!', opcoes: ["Don't eat", 'Eat', 'Eats'], certa: 0, traducao: 'Não coma o meu sanduíche! Eu quero ele!' },
+    { frase: '___ the sausages in a pan.', opcoes: ['You cook', 'Cook', 'Cooks'], certa: 1, traducao: 'Frite as linguiças numa frigideira.' },
+    { frase: '___ add salt to the bacon.', opcoes: ['No', 'Not', "Don't"], certa: 2, traducao: 'Não coloque sal no bacon.' },
+    { frase: 'Put the pan ___ the oven.', opcoes: ['in', 'on', 'at'], certa: 0, traducao: 'Coloque a frigideira no forno.' },
+    { frase: '___ the bacon. Cook the other side.', opcoes: ['Turn on', 'Turn over', 'Turn off'], certa: 1, traducao: 'Vire o bacon. Frite o outro lado.' },
+    { instrucao: BR, frase: 'Black pudding and baked beans are typical in a ___ breakfast.', opcoes: ['American', 'British'], certa: 1, traducao: 'Black pudding e feijão com molho são típicos no café da manhã britânico.' },
+    { instrucao: BR, frase: 'Pancakes with orange juice are typical in an ___ breakfast.', opcoes: ['American', 'British'], certa: 0, traducao: 'Panquecas com suco de laranja são típicas no café da manhã americano.' },
+    { instrucao: BR, frase: 'British people often have ___ with breakfast.', opcoes: ['tea', 'orange soda', 'milkshake'], certa: 0, traducao: 'Os britânicos frequentemente tomam chá no café da manhã.' },
+    { frase: 'A British breakfast has eggs, bacon, sausages and ___.', opcoes: ['pancakes', 'mushrooms', 'ice cream'], certa: 1, traducao: 'O café da manhã britânico tem ovos, bacon, linguiças e cogumelos.' },
+    { frase: "Gordon Ramsay is a famous ___.", opcoes: ['singer', 'football player', 'chef'], certa: 2, traducao: 'Gordon Ramsay é um chef famoso.' },
+    { frase: '"Cook" and "add" are ___ verbs.', opcoes: ['imperative', 'question', 'negative'], certa: 0, traducao: '"Cook" e "add" são verbos no imperativo.' },
+    { instrucao: CERTA, opcoes: ['You cook the eggs with butter.', 'Cook the eggs with butter.', 'Cooks the eggs with butter.'], certa: 1, traducao: 'Frite os ovos com manteiga.' },
+    { instrucao: CERTA, opcoes: ['No open the door.', "Doesn't open the door.", "Don't open the door."], certa: 2, traducao: 'Não abra a porta.' },
+    { instrucao: CERTA, opcoes: ['Close the window, please.', 'Closing the window, please.', 'You close window, please.'], certa: 0, traducao: 'Feche a janela, por favor.' },
+    { instrucao: CERTA, opcoes: ["Don't to speak Portuguese.", "Don't speak Portuguese.", "Not speak Portuguese."], certa: 1, traducao: 'Não fale português.' }
+  ]
+});
+</script>
+</body>
+</html>
