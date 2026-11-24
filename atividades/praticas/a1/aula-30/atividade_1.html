@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 30 · Review: listen and answer</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 30 · Escuta (revisão)
+   Alinhado ao slide "Class 30: Review Classes 14-26" — Talking Point (perguntas a–x: phone,
+   job, free time, hobbies, cooking, singer, films, restaurant, instructions, can, rules, weather,
+   barista, clothes, city). Conteúdo NOVO e mais difícil: o aluno ouve a pergunta e escolhe a ÚNICA
+   resposta que combina; as outras respondem outra pergunta ou têm erro. 24 questões. */
+const op = (...ls) => ls.map(l => ({ label: l, icon: 'chat' }));
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 30, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the question and choose the answer',
+  itens: [
+    { audioTexto: 'How often do you use WhatsApp?', opcoes: op('Every day.', 'Yes, I do.', 'On my phone.', "I'm using it."), certa: 0 },
+    { audioTexto: 'Do you send voice messages?', opcoes: op('Yes, I am.', "No, I don't.", "No, I'm not.", 'No, I can.'), certa: 1 },
+    { audioTexto: "What's your job?", opcoes: op('I work.', 'At nine.', "I'm a nurse.", 'Yes, it is.'), certa: 2 },
+    { audioTexto: 'Does your mother work at weekends?', opcoes: op("No, she don't.", 'No, she not.', "No, she isn't.", "No, she doesn't."), certa: 3 },
+    { audioTexto: 'What do you do in your free time?', opcoes: op('I play video games.', "I'm free.", 'Yes, I do.', 'At home.'), certa: 0 },
+    { audioTexto: 'Do you like cooking?', opcoes: op('Yes, I like.', 'Yes, I do. I think it is fun.', 'Yes, I am.', 'Cooking.'), certa: 1 },
+    { audioTexto: 'Who is the best cook in your family?', opcoes: op('Pasta.', 'Every day.', 'My grandmother.', 'In the kitchen.'), certa: 2 },
+    { audioTexto: 'Why do you like Adele?', opcoes: op('Yes, I like her.', 'She likes me.', 'I like she.', 'Because her songs are beautiful.'), certa: 3 },
+    { audioTexto: 'What is your favorite kind of film?', opcoes: op('Comedies.', 'At the cinema.', 'Yes, it is.', 'Tom Cruise.'), certa: 0 },
+    { audioTexto: 'Are you ready to order?', opcoes: op('Same for me.', "Yes. I'll have the chicken, please.", "That's all.", 'Enjoy!'), certa: 1 },
+    { audioTexto: 'Can you do twenty jacks?', opcoes: op('Yes, I do.', 'Yes, I am.', "No, I can't.", 'No, I cannot do it jacks.'), certa: 2 },
+    { audioTexto: 'Can you use your phone at work?', opcoes: op('Yes, I do.', 'I use.', 'Yes, it is.', 'Only at break.'), certa: 3 },
+    { audioTexto: "What's the weather like in your city today?", opcoes: op("It's sunny and hot.", 'I like summer.', "It's a city.", 'Yes, it is.'), certa: 0 },
+    { audioTexto: 'Iced or hot?', opcoes: op('Grande.', 'Iced, please.', 'Vanilla.', 'Almond milk.'), certa: 1 },
+    { audioTexto: 'What are you wearing today?', opcoes: op('I wear.', 'Yes, I am.', "I'm wearing jeans and a sweater.", 'I usually wear.'), certa: 2 },
+    { audioTexto: "Where can you go when it's raining?", opcoes: op('To the beach.', 'Yes, I can.', "It's raining.", 'To a museum or to the cinema.'), certa: 3 },
+    { audioTexto: 'What time do you finish work?', opcoes: op("At six o'clock.", 'At work.', 'Yes, I do.', 'Every day.'), certa: 0 },
+    { audioTexto: 'Where do you work?', opcoes: op('I work.', 'In a hospital.', 'At eight.', "I'm working."), certa: 1 },
+    { audioTexto: 'Are you studying English this year?', opcoes: op('Yes, I do.', 'Yes, I study.', "Yes, I am.", 'Yes, I can.'), certa: 2 },
+    { audioTexto: 'Can I have a latte, please?', opcoes: op('Yes, I can.', "No, I can't swim.", 'A latte.', 'Of course. Iced or hot?'), certa: 3 },
+    { audioTexto: 'Is it raining now?', opcoes: op("No, it isn't. It's sunny.", "No, it doesn't.", "No, it don't rain.", "No, it's raining."), certa: 0 },
+    { audioTexto: 'What hobby do you want to try?', opcoes: op('I want.', 'I want to try climbing.', 'I try.', 'Yes, I want.'), certa: 1 },
+    { audioTexto: 'Does he work with computers?', opcoes: op('Yes, he is.', 'Yes, he works.', 'Yes, he does.', 'Yes, he do.'), certa: 2 },
+    { audioTexto: 'Can you give me an instruction?', opcoes: op('I give.', 'Yes, you can.', 'Instructions.', "Don't close the door."), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

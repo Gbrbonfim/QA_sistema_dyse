@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 30 · Review: a day with Nina</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 30 · Leitura (revisão)
+   Alinhado ao slide "Class 30: Review Classes 14-26" — Talking Point (job, free time, hobbies,
+   cooking, can, rules, weather, clothes) e os role-plays da revisão. Conteúdo NOVO: o Theo
+   entrevista a Nina, que é veterinária, para o jornal da escola. 20 questões: 12 de "próxima
+   fala" + 8 de compreensão. */
+const D = [
+  ['Theo', "Hi, Nina! Thanks for the interview. What's your job?"],
+  ['Nina', "I'm a vet. I work with dogs and cats."],
+  ['Theo', 'Do you work at weekends?'],
+  ['Nina', "Yes, I do. I usually work on Saturdays, but I never work on Sundays."],
+  ['Theo', 'What do you do in your free time?'],
+  ['Nina', "I love cooking. I think it's relaxing."],
+  ['Theo', 'Can you make pizza?'],
+  ['Nina', "Yes, I can! But I can't make sushi. It's difficult!"],
+  ['Theo', 'Ha ha! And now? What are you doing?'],
+  ['Nina', "I'm having a coffee with my sister at a café. It's raining, so we can't go to the park."],
+  ['Theo', 'What are you wearing today?'],
+  ['Nina', "I'm wearing my uniform, but I have a raincoat in my bag."],
+  ['Theo', 'Last question: what is your favorite kind of film?'],
+  ['Nina', 'Animations! I love them.']
+];
+const lado = q => q === 'Theo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 30, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I'm a vet. I work with dogs and cats.", "I'm vet. I works with dogs and cats.", "I'm a vet. I'm work with dogs."], 0, 'Eu sou veterinária. Eu trabalho com cachorros e gatos.'),
+    prox(2, ['Are you work at weekends?', 'Do you work at weekends?', 'Does you work at weekends?'], 1, 'Você trabalha nos fins de semana?'),
+    prox(3, ['Yes, I am. I work always on Saturdays.', "No, I'm not.", 'Yes, I do. I usually work on Saturdays, but I never work on Sundays.'], 2, 'Sim. Eu geralmente trabalho aos sábados, mas nunca trabalho aos domingos.'),
+    prox(4, ['What do you do in your free time?', 'What are you do in your free time?', 'Can you make pizza?'], 0, 'O que você faz no seu tempo livre?'),
+    prox(5, ["I love cook. I think it's relax.", "I love cooking. I think it's relaxing.", "I'm loving cooking."], 1, 'Eu amo cozinhar. Eu acho relaxante.'),
+    prox(6, ['Do you can make pizza?', 'Can you makes pizza?', 'Can you make pizza?'], 2, 'Você sabe fazer pizza?'),
+    prox(7, ["Yes, I can! But I can't make sushi. It's difficult!", "Yes, I do! But I don't can make sushi.", "Yes, I can! But I can't makes sushi."], 0, 'Sim! Mas não sei fazer sushi. É difícil!'),
+    prox(8, ['Ha ha! And now? What do you doing?', 'Ha ha! And now? What are you doing?', 'Ha ha! And now? What you doing?'], 1, 'Haha! E agora? O que você está fazendo?'),
+    prox(9, ["I have a coffee with my sister now every day.", "I'm having a coffee. We can go to the park, it's raining.", "I'm having a coffee with my sister at a café. It's raining, so we can't go to the park."], 2, 'Estou tomando um café com a minha irmã num café. Está chovendo, então não podemos ir ao parque.'),
+    prox(10, ['What are you wearing today?', 'What do you wearing today?', 'What are you wear today?'], 0, 'O que você está usando hoje?'),
+    prox(11, ["I wear my uniform now.", "I'm wearing my uniform, but I have a raincoat in my bag.", "I'm wearing my uniform, but I has a raincoat."], 1, 'Eu estou de uniforme, mas tenho uma capa de chuva na bolsa.'),
+    prox(12, ['Do you like it?', 'Thanks!', 'Last question: what is your favorite kind of film?'], 2, 'Última pergunta: qual é o seu tipo de filme favorito?'),
+    { instrucao: "What's Nina's job?", frase: "She's a ___.", opcoes: ['vet', 'nurse', 'cook'], certa: 0, traducao: 'Ela é veterinária.' },
+    { instrucao: 'Does Nina work on Sundays?', frase: 'No, she ___.', opcoes: ["isn't", "doesn't", "can't"], certa: 1, traducao: 'Não, ela não trabalha.' },
+    { instrucao: 'What does Nina think of cooking?', frase: "She thinks it's ___.", opcoes: ['boring', 'difficult', 'relaxing'], certa: 2, traducao: 'Ela acha relaxante.' },
+    { instrucao: 'Can Nina make sushi?', frase: 'No, she ___.', opcoes: ["can't", "doesn't", "isn't"], certa: 0, traducao: 'Não, ela não sabe.' },
+    { instrucao: 'Who is Nina with now?', frase: 'Her ___.', opcoes: ['mother', 'sister', 'friend'], certa: 1, traducao: 'A irmã dela.' },
+    { instrucao: "What's the weather like today?", frase: "It's ___.", opcoes: ['sunny', 'snowing', 'raining'], certa: 2, traducao: 'Está chovendo.' },
+    { instrucao: 'What is Nina wearing?', frase: 'Her ___.', opcoes: ['uniform', 'raincoat', 'pajamas'], certa: 0, traducao: 'O uniforme dela.' },
+    { instrucao: "What's Nina's favorite kind of film?", frase: '___.', opcoes: ['Comedies', 'Animations', 'Dramas'], certa: 1, traducao: 'Animações.' }
+  ]
+});
+</script>
+</body>
+</html>

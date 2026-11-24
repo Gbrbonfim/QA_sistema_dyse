@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 30 · Review: build the sentence</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 30 · Escrita (revisão)
+   Alinhado ao slide "Class 30: Review Classes 14-26" — revisão integrada das aulas 16–29:
+   advérbios de frequência, do / does, profissões, hobbies, imperativo, object pronouns,
+   restaurante, can (3 usos), roupas, tempo, present simple x continuous. Conteúdo NOVO e mais
+   difícil: uma frase de cada aula, com a armadilha típica como isca. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 30, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ela está sempre atrasada para a aula.'), palavras: ['She', 'is', 'always', 'late', 'for', 'class'], isca: ['does'], fim: '.', traducao: 'Ela está sempre atrasada para a aula.' },
+    { contexto: M('Eu geralmente confiro meus e-mails de manhã.'), palavras: ['I', 'usually', 'check', 'my', 'emails', 'in', 'the', 'morning'], isca: ['checks'], fim: '.', traducao: 'Eu geralmente confiro meus e-mails de manhã.' },
+    { contexto: M('A sua mãe trabalha nos fins de semana?'), palavras: ['Does', 'your', 'mother', 'work', 'at', 'weekends'], isca: ['works'], fim: '?', traducao: 'A sua mãe trabalha nos fins de semana?' },
+    { contexto: M('Meu pai é engenheiro. Ele não usa uniforme.'), palavras: ['My', 'dad', 'is', 'an', 'engineer.', 'He', "doesn't", 'wear', 'a', 'uniform'], isca: ["don't"], fim: '.', traducao: 'Meu pai é engenheiro. Ele não usa uniforme.' },
+    { contexto: M('Eu acho que jardinagem é relaxante.'), palavras: ['I', 'think', 'gardening', 'is', 'relaxing'], isca: ['are'], fim: '.', traducao: 'Eu acho que jardinagem é relaxante.' },
+    { contexto: M('Ela quer experimentar um hobby novo.'), palavras: ['She', 'wants', 'to', 'try', 'a', 'new', 'hobby'], isca: ['want'], fim: '.', traducao: 'Ela quer experimentar um hobby novo.' },
+    { contexto: M('Não feche a porta.'), palavras: ["Don't", 'close', 'the', 'door'], isca: ['No'], fim: '.', traducao: 'Não feche a porta.' },
+    { contexto: M('Eu amo a Adele. Eu ouço ela todo dia.'), palavras: ['I', 'love', 'Adele.', 'I', 'listen', 'to', 'her', 'every', 'day'], isca: ['she'], fim: '.', traducao: 'Eu amo a Adele. Eu ouço ela todo dia.' },
+    { contexto: M('Vou começar com a sopa e depois vou querer o peixe.'), palavras: ["I'll", 'start', 'with', 'the', 'soup', 'and', 'then', "I'll", 'have', 'the', 'fish'], isca: ['want'], fim: '.', traducao: 'Vou começar com a sopa e depois vou querer o peixe.' },
+    { contexto: M('Você consegue fazer vinte abdominais?'), palavras: ['Can', 'you', 'do', 'twenty', 'sit-ups'], isca: ['Do'], fim: '?', traducao: 'Você consegue fazer vinte abdominais?' },
+    { contexto: M('Eu poderia pedir um cappuccino gelado, por favor?'), palavras: ['Could', 'I', 'have', 'an', 'iced', 'cappuccino,', 'please'], isca: ['a'], fim: '?', traducao: 'Eu poderia pedir um cappuccino gelado, por favor?' },
+    { contexto: M('Você não pode usar o celular na aula.'), palavras: ['You', "can't", 'use', 'your', 'phone', 'in', 'class'], isca: ["don't"], fim: '.', traducao: 'Você não pode usar o celular na aula.' },
+    { contexto: M('Ele está usando uma jaqueta preta e botas.'), palavras: ["He's", 'wearing', 'a', 'black', 'jacket', 'and', 'boots'], isca: ['wear'], fim: '.', traducao: 'Ele está usando uma jaqueta preta e botas.' },
+    { contexto: M('Está nevando? Não, está chovendo.'), palavras: ['Is', 'it', 'snowing?', 'No,', "it's", 'raining'], isca: ['Does'], fim: '.', traducao: 'Está nevando? Não, está chovendo.' },
+    { contexto: M('Eu geralmente não trabalho no domingo, mas hoje estou trabalhando.'), palavras: ['I', "don't", 'usually', 'work', 'on', 'Sunday,', 'but', 'today', "I'm", 'working'], isca: ['works'], fim: '.', traducao: 'Eu geralmente não trabalho no domingo, mas hoje estou trabalhando.' },
+    { contexto: M('Quando está frio, eu vou a um café.'), palavras: ['When', "it's", 'cold,', 'I', 'go', 'to', 'a', 'café'], isca: ['going'], fim: '.', traducao: 'Quando está frio, eu vou a um café.' },
+    { contexto: M('A que horas o seu irmão começa a trabalhar?'), palavras: ['What', 'time', 'does', 'your', 'brother', 'start', 'work'], isca: ['starts'], fim: '?', traducao: 'A que horas o seu irmão começa a trabalhar?' },
+    { contexto: M('Com que frequência vocês vão a restaurantes?'), palavras: ['How', 'often', 'do', 'you', 'go', 'to', 'restaurants'], isca: ['does'], fim: '?', traducao: 'Com que frequência vocês vão a restaurantes?' },
+    { contexto: M('Faça um sanduíche. Você está com fome.'), palavras: ['Make', 'a', 'sandwich.', 'You', 'are', 'hungry'], isca: ['Makes'], fim: '.', traducao: 'Faça um sanduíche. Você está com fome.' },
+    { contexto: M('Eles não estão assistindo TV agora. Eles estão jogando.'), palavras: ['They', "aren't", 'watching', 'TV', 'now.', "They're", 'playing'], isca: ["don't"], fim: '.', traducao: 'Eles não estão assistindo TV agora. Eles estão jogando.' }
+  ]
+});
+</script>
+</body>
+</html>

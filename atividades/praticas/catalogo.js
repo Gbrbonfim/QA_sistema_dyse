@@ -310,6 +310,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Every day or today?', tipo: 'Escute e grave', treina: 'Fala · Simple x continuous', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Simple or continuous?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 30,
+        titulo: 'Class 30 · Review Classes 16-29',
+        atividades: [
+          { num: 1, titulo: 'Review: listen and answer', tipo: 'Escute e escolha', treina: 'Escuta · Revisão', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Review: build the sentence', tipo: 'Monte a frase', treina: 'Escrita · Revisão', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Review: a day with Nina', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Entrevista', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Review: speak', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Review: grammar', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

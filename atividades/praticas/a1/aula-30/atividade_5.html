@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 30 · Review: grammar</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 30 · Gramática (revisão)
+   Alinhado ao slide "Class 30: Review Classes 14-26" — Grammar part (revisão integrada das aulas
+   16–29). Conteúdo NOVO e mais difícil: dois itens de cada ponto, com os distratores dos erros
+   mais comuns (posição do advérbio, does + verbo com s, I love she, do you can, I wearing,
+   rains x raining). 24 questões. */
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 30, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'She ___ late for class.', opcoes: ['is always', 'always is', 'always'], certa: 0, traducao: 'Ela está sempre atrasada para a aula.' },
+    { frase: 'They ___ games on their phones.', opcoes: ['play never', 'never play', 'never plays'], certa: 1, traducao: 'Eles nunca jogam no celular.' },
+    { frase: '___ your brother work with computers?', opcoes: ['Do', 'Is', 'Does'], certa: 2, traducao: 'O seu irmão trabalha com computadores?' },
+    { frase: 'Does she ___ a uniform?', opcoes: ['wear', 'wears', 'wearing'], certa: 0, traducao: 'Ela usa uniforme?' },
+    { frase: "He's ___ engineer.", opcoes: ['a', 'an', 'the a'], certa: 1, traducao: 'Ele é engenheiro.' },
+    { frase: 'I like ___. I think it is fun.', opcoes: ['cook', 'to cooking', 'cooking'], certa: 2, traducao: 'Eu gosto de cozinhar. Acho divertido.' },
+    { frase: '___ the window. It is cold.', opcoes: ['Close', 'You close', 'Closes'], certa: 0, traducao: 'Feche a janela. Está frio.' },
+    { frase: "___ eat in the library.", opcoes: ['No', "Don't", "Doesn't"], certa: 1, traducao: 'Não coma na biblioteca.' },
+    { frase: 'Naomi Watts is great. I love ___.', opcoes: ['she', 'hers', 'her'], certa: 2, traducao: 'A Naomi Watts é ótima. Eu amo ela.' },
+    { frase: 'My friends visit ___ every Sunday.', opcoes: ['us', 'we', 'our'], certa: 0, traducao: 'Meus amigos visitam a gente todo domingo.' },
+    { frase: "I'll start ___ the tomato soup.", opcoes: ['of', 'with', 'for'], certa: 1, traducao: 'Vou começar com a sopa de tomate.' },
+    { frase: "I'll have the chicken with a side ___ fries.", opcoes: ['with', 'for', 'of'], certa: 2, traducao: 'Vou querer o frango com batata frita de acompanhamento.' },
+    { frase: '___ you swim?', opcoes: ['Can', 'Do can', 'Are'], certa: 0, traducao: 'Você sabe nadar?' },
+    { frase: "Can I use my phone in class? No, you ___.", opcoes: ["don't", "can't", "aren't"], certa: 1, traducao: 'Posso usar o celular na aula? Não, não pode.' },
+    { frase: '___ like a hot chocolate, please.', opcoes: ['I', 'I can', "I'd"], certa: 2, traducao: 'Eu gostaria de um chocolate quente, por favor.' },
+    { frase: "She's ___ a red dress today.", opcoes: ['wearing', 'wear', 'wears'], certa: 0, traducao: 'Ela está usando um vestido vermelho hoje.' },
+    { frase: 'The children are ___ in the pool.', opcoes: ['swiming', 'swimming', 'swim'], certa: 1, traducao: 'As crianças estão nadando na piscina.' },
+    { frase: '___ it snowing?', opcoes: ['Does', 'Do', 'Is'], certa: 2, traducao: 'Está nevando?' },
+    { frase: "Look! It's ___.", opcoes: ['raining', 'rains', 'rain'], certa: 0, traducao: 'Olha! Está chovendo.' },
+    { frase: 'We usually go to the beach when it ___ sunny.', opcoes: ["'s being", 'is', 'are'], certa: 1, traducao: 'Nós geralmente vamos à praia quando está ensolarado.' },
+    { instrucao: CERTA, opcoes: ['Does he plays tennis?', 'Is he play tennis?', 'Does he play tennis?'], certa: 2, traducao: 'Ele joga tênis?' },
+    { instrucao: CERTA, opcoes: ["I'm not working today.", "I don't working today.", "I not working today."], certa: 0, traducao: 'Eu não estou trabalhando hoje.' },
+    { instrucao: CERTA, opcoes: ['Do you can play the piano?', 'Can you play the piano?', 'Can you to play the piano?'], certa: 1, traducao: 'Você sabe tocar piano?' },
+    { instrucao: CERTA, opcoes: ['He is usually going to the gym on Mondays.', 'He go usually to the gym on Mondays.', 'He usually goes to the gym on Mondays.'], certa: 2, traducao: 'Ele geralmente vai à academia às segundas.' }
+  ]
+});
+</script>
+</body>
+</html>
