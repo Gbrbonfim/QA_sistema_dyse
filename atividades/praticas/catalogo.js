@@ -47,6 +47,21 @@ window.DYSE_PRATICAS = {
   }
 };
 
+/* Ordem dos materiais nas listas (painel da professora e Área do Aluno):
+   Pre-A1, A1, A2, B1, B2, C1, C2; material extra sempre no fim, na mesma
+   ordem entre si. Material extra = matéria com sem_registro no banco ou
+   entrada do catálogo com `extra: true`. */
+function dysePraticaOrdemNivel(slug){
+  const s = String(slug || '').toLowerCase();
+  if(/^pre/.test(s)) return 0;
+  const i = ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'].indexOf(s.slice(0, 2));
+  return i >= 0 ? i + 1 : 50;
+}
+function dysePraticasOrdenar(slugs, ehExtra){
+  const extra = s => !!((window.DYSE_PRATICAS[s] && window.DYSE_PRATICAS[s].extra) || (ehExtra && ehExtra(s)));
+  return [...new Set(slugs)].sort((x, y) => (extra(x) - extra(y)) || (dysePraticaOrdemNivel(x) - dysePraticaOrdemNivel(y)) || String(x).localeCompare(String(y)));
+}
+
 function dysePraticaUrl(nivel, aula, num){
   return '/atividades/praticas/' + nivel + '/aula-' + String(aula).padStart(2, '0') + '/atividade_' + num + '.html';
 }

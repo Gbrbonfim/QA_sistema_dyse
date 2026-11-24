@@ -1039,7 +1039,7 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 
   <div id="panelManage" style="display:none;">
-    <details class="dyse-collapsible manage-course-block" open style="margin-bottom:22px; overflow:visible;">
+    <details class="dyse-collapsible manage-course-block" style="margin-bottom:22px; overflow:visible;">
       <summary class="manage-course-title"><span>Atividades por aluno</span><span class="chevron">›</span></summary>
       <div class="manage-course-body">
         <p style="color:var(--seal-soft); font-size:.85rem; margin:0 0 12px;">
@@ -1793,12 +1793,18 @@ body.dyse-modal-open{overflow:hidden;}
       document.getElementById('turmaLinksWrap').style.display = 'none';
       return;
     }
+    // Troca de turma: tira o Registro de Classe da turma anterior e avisa que está carregando.
+    document.getElementById('registroClasseWrap').style.display = 'none';
+    document.getElementById('registroClasseNivelWrap').style.display = 'none';
+    const semNivel = document.getElementById('registroClasseSemNivel');
+    semNivel.textContent = 'Carregando…';
+    semNivel.style.display = 'block';
     const students = await dyseListProfilesByRole('student'); // já vem só das turmas permitidas (RLS)
     CHAMADA_STUDENTS = students.filter(s => s.turma_id === turmaId);
     carregarLinkMeetTurma(turmaId);
-    await loadChamadaDoDia();
-    await renderChamadaHistorico();
-    await carregarRegistroClasseDaTurma();
+    // Chamada, histórico do mês e Registro de Classe não dependem um do outro:
+    // carregam juntos (antes o Registro só começava depois dos outros dois).
+    await Promise.all([loadChamadaDoDia(), renderChamadaHistorico(), carregarRegistroClasseDaTurma()]);
   }
 
   /* Link do Google Meet — único por turma, editado só pela professora
@@ -1936,6 +1942,19 @@ body.dyse-modal-open{overflow:hidden;}
   // aparecerem as aulas do A2).
   let REGISTRO_SEQ = 0;
 
+  // Lista de matérias com currículo (níveis + material extra): muda raramente,
+  // então é buscada uma vez por página e dividida entre Registro e Material extra.
+  let NIVEIS_TODOS_PROMESSA = null;
+  function niveisTodosCache(){
+    if(!NIVEIS_TODOS_PROMESSA){
+      NIVEIS_TODOS_PROMESSA = dyseListNiveis().then(l => { if(!l.length) NIVEIS_TODOS_PROMESSA = null; return l; });
+    }
+    return NIVEIS_TODOS_PROMESSA;
+  }
+  // Linhas de registro da aula aberta (todas as datas, todos os alunos da turma):
+  // o registro do dia sai delas, sem nova consulta. Toda gravação recarrega a aula.
+  let REGISTRO_LINHAS_AULA = null;   // { turmaId, aulaId, linhas }
+
   async function onRegistroClasseNivelChange(){
     REGISTRO_NIVEL_ESCOLHIDO = document.getElementById('registroClasseNivelSelect').value;
     // Tira da tela as aulas do material anterior enquanto o novo carrega.
@@ -2012,6 +2031,7 @@ body.dyse-modal-open{overflow:hidden;}
     const msg = document.getElementById('registroClasseMsg');
     if(!isDataOk(data)) return;
     if(!confirm('Apagar o registro de ' + formatDateBR(data) + ' desta aula? A avaliação e a anotação dessa data serão removidas de todos os alunos da turma.')) return;
+    REGISTRO_LINHAS_AULA = null;
     const { error } = await dyseDeleteRegistroClasseDia(turmaId, aulaId, data);
     if(error){ if(msg) msg.textContent = 'Erro ao remover: ' + error.message; return; }
     // carregarRegistroClasseDaTurma refaz o seletor de aula + REGISTRO_DATAS
@@ -2081,7 +2101,11 @@ body.dyse-modal-open{overflow:hidden;}
 
     const alunoIds = CHAMADA_STUDENTS.map(s => s.id);
     const seq = ++REGISTRO_SEQ;
-    const existentes = branco ? [] : await dyseListRegistrosClasseDaAula(alunoIds, aulaId, data);
+    const cache = REGISTRO_LINHAS_AULA;
+    const existentes = branco ? []
+      : (cache && cache.turmaId === turmaId && cache.aulaId === aulaId)
+        ? cache.linhas.filter(r => String(r.data_aula || '').slice(0, 10) === data)
+        : await dyseListRegistrosClasseDaAula(alunoIds, aulaId, data);
     if(seq !== REGISTRO_SEQ) return;
     const existentePorAluno = {};
     existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
@@ -2164,15 +2188,19 @@ body.dyse-modal-open{overflow:hidden;}
     const semNivel = document.getElementById('registroClasseSemNivel');
     const nivelWrap = document.getElementById('registroClasseNivelWrap');
     const seq = ++REGISTRO_SEQ;
-    carregarMaterialExtraDaTurma(turmaId); // seção própria, independente do Registro de Classe
-    if(!turmaId){ wrap.style.display = 'none'; semNivel.style.display = 'none'; nivelWrap.style.display = 'none'; return; }
+    if(!turmaId){ carregarMaterialExtraDaTurma(turmaId); wrap.style.display = 'none'; semNivel.style.display = 'none'; nivelWrap.style.display = 'none'; return; }
 
     // "Nível" (A1, A2...) é uma matéria com currículo (total_aulas
     // preenchido) vinculada à turma pelo mesmo turma_materias de
     // "Matérias liberadas" — não existe um campo separado pra isso.
     // Material extra (materias.sem_registro) não tem Registro de Classe — fica de fora.
-    if(!REGISTRO_NIVEIS_CACHE.length) REGISTRO_NIVEIS_CACHE = (await dyseListNiveis()).filter(n => !n.sem_registro);
-    const [turmaMaterias, materialTurma] = await Promise.all([dyseListAllTurmaMaterias(), dyseListTurmaAulaMaterial(turmaId)]);
+    // Tudo que não depende de outra resposta sai junto; o Material extra usa as mesmas respostas.
+    const base = Promise.all([niveisTodosCache(), dyseListAllTurmaMaterias(), dyseListTurmaAulaMaterial(turmaId)]);
+    carregarMaterialExtraDaTurma(turmaId, base); // seção própria, independente do Registro de Classe
+    const registrosPromessa = Promise.all(CHAMADA_STUDENTS.map(s => dyseListRegistrosClasse(s.id)));
+    registrosPromessa.catch(() => {});
+    const [niveisTodos, turmaMaterias, materialTurma] = await base;
+    REGISTRO_NIVEIS_CACHE = niveisTodos.filter(n => !n.sem_registro);
     if(seq !== REGISTRO_SEQ) return;
     const vinculados = REGISTRO_NIVEIS_CACHE.filter(n => turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
 
@@ -2233,7 +2261,7 @@ body.dyse-modal-open{overflow:hidden;}
     // de uma vez (poucas chamadas — turma é pequena) pra marcar quais aulas
     // já têm registro completo. Conta ALUNO distinto (uma aula pode ter
     // vários dias/linhas por aluno).
-    const registrosPorAluno = await Promise.all(CHAMADA_STUDENTS.map(s => dyseListRegistrosClasse(s.id)));
+    const registrosPorAluno = await registrosPromessa;   // já foi pedido lá no começo
     if(seq !== REGISTRO_SEQ) return;
     const registrosPorAula = {}; // nivel_aula_id -> Set(aluno_id)
     registrosPorAluno.flat().forEach(r => {
@@ -2298,13 +2326,15 @@ body.dyse-modal-open{overflow:hidden;}
   let MATERIAL_EXTRA_SEQ = 0;
   let MATERIAL_EXTRA_NIVEIS = null;
 
-  async function carregarMaterialExtraDaTurma(turmaId){
+  // "base" (opcional): as respostas [níveis, turma_materias, material da turma] que o
+  // Registro de Classe já pediu — evita repetir as mesmas consultas ao trocar de turma.
+  async function carregarMaterialExtraDaTurma(turmaId, base){
     const wrap = document.getElementById('turmaMaterialExtraWrap');
     const body = document.getElementById('turmaMaterialExtraBody');
     const seq = ++MATERIAL_EXTRA_SEQ;
     if(!turmaId){ wrap.style.display = 'none'; return; }
-    if(!MATERIAL_EXTRA_NIVEIS) MATERIAL_EXTRA_NIVEIS = (await dyseListNiveis()).filter(n => n.sem_registro);
-    const [turmaMaterias, materialTurma] = await Promise.all([dyseListAllTurmaMaterias(), dyseListTurmaAulaMaterial(turmaId)]);
+    const [niveisTodos, turmaMaterias, materialTurma] = await (base || Promise.all([niveisTodosCache(), dyseListAllTurmaMaterias(), dyseListTurmaAulaMaterial(turmaId)]));
+    MATERIAL_EXTRA_NIVEIS = niveisTodos.filter(n => n.sem_registro);
     if(seq !== MATERIAL_EXTRA_SEQ) return;
     const extras = MATERIAL_EXTRA_NIVEIS.filter(n => turmaMaterias.some(tm => tm.turma_id === turmaId && tm.materia_slug === n.slug));
     if(!extras.length){ wrap.style.display = 'none'; body.innerHTML = ''; return; }
@@ -2399,10 +2429,11 @@ body.dyse-modal-open{overflow:hidden;}
 
     // Datas já lançadas = datas do planner + datas com linha de aluno (planner
     // pode faltar) — nunca some com uma data já registrada.
-    const sessoes = await dyseListRegistroClasseSessoes(turmaId, aulaId);
     const alunoIds = CHAMADA_STUDENTS.map(s => s.id);
-    const linhasAluno = await dyseListRegistrosClasseDaAula(alunoIds, aulaId);
+    REGISTRO_LINHAS_AULA = null;
+    const [sessoes, linhasAluno] = await Promise.all([dyseListRegistroClasseSessoes(turmaId, aulaId), dyseListRegistrosClasseDaAula(alunoIds, aulaId)]);
     if(seq !== REGISTRO_SEQ) return;
+    REGISTRO_LINHAS_AULA = { turmaId: turmaId, aulaId: aulaId, linhas: linhasAluno };
     REGISTRO_SESSOES_CACHE = sessoes;
     const datas = new Set();
     REGISTRO_SESSOES_CACHE.forEach(s => { const d = String(s.data_aula || '').slice(0, 10); if(isDataOk(d)) datas.add(d); });
@@ -2433,6 +2464,7 @@ body.dyse-modal-open{overflow:hidden;}
       if(porAluno[el.dataset.obs]) porAluno[el.dataset.obs].observacoes = el.value.trim();
     });
 
+    REGISTRO_LINHAS_AULA = null;
     const resultados = await Promise.all(alunosRegistraveis.map(s =>
       dyseUpsertRegistroClasse(s.id, aulaId, data, {
         turma_id: turmaId,
@@ -3102,18 +3134,44 @@ body.dyse-modal-open{overflow:hidden;}
      professora liga/desliga cada atividade PARA AQUELE ALUNO
      (aluno_atividades_liberadas). Lista de alunos já vem filtrada pelas
      turmas dela (RLS de profiles). */
-  const PRATICAS_CTX = { alunos: [], turmas: {}, turmaMaterias: [] };
+  const PRATICAS_CTX = { alunos: [], turmas: {}, turmaMaterias: [], niveis: [] };
+
+  /* Materiais com atividades prontas (catálogo DYSE_PRATICAS), na ordem do
+     curso: Pre-A1, A1, A2, B1, B2, C1, C2; material extra (sem_registro)
+     sempre no fim, na mesma ordem entre si. */
+  function infoMaterialPratica(slug){
+    const m = (PRATICAS_CTX.niveis || []).find(n => n.slug === slug);
+    const cat = window.DYSE_PRATICAS && DYSE_PRATICAS[slug];
+    return { slug: slug, nome: m ? m.name : ((cat && cat.nome) || slug), extra: !!((m && m.sem_registro) || (cat && cat.extra)) };
+  }
+  function ordenarSlugsPratica(slugs){
+    const sem = s => { const m = (PRATICAS_CTX.niveis || []).find(n => n.slug === s); return !!(m && m.sem_registro); };
+    return dysePraticasOrdenar(slugs, sem).map(infoMaterialPratica);
+  }
+  function slugsComAtividadesDaTurma(turmaId){
+    return PRATICAS_CTX.turmaMaterias.filter(tm => tm.turma_id === turmaId).map(tm => tm.materia_slug)
+      .filter(slug => window.DYSE_PRATICAS && DYSE_PRATICAS[slug] && DYSE_PRATICAS[slug].aulas.some(a => a.atividades.length));
+  }
+  const totalAtividadesPratica = slug => DYSE_PRATICAS[slug].aulas.reduce((s, a) => s + a.atividades.length, 0);
+  function caixaMaterialPratica(info, corpo){
+    return '<details class="dyse-collapsible manage-course-block">' +
+      '<summary class="manage-course-title"><span>' + escapeHtmlLocal(info.nome) + (info.extra ? ' <span style="font-size:.72rem; font-weight:500; opacity:.65;">· material extra</span>' : '') +
+        ' <span class="pill-count">' + totalAtividadesPratica(info.slug) + '</span></span><span class="chevron">›</span></summary>' +
+      '<div class="manage-course-body">' + corpo + '</div></details>';
+  }
   async function loadPraticasAlunos(){
     const sel = document.getElementById('praticaAlunoSel');
-    const [alunos, turmas, tms] = await Promise.all([dyseListProfilesByRole('student'), dyseListTurmas(), dyseListAllTurmaMaterias()]);
-    PRATICAS_CTX.alunos = alunos.filter(a => a.turma_id);
+    const [alunos, turmas, tms, niveis] = await Promise.all([dyseListProfilesByRole('student'), dyseListTurmas(), dyseListAllTurmaMaterias(), niveisTodosCache()]);
     PRATICAS_CTX.turmas = {}; turmas.forEach(t => PRATICAS_CTX.turmas[t.id] = t);
     PRATICAS_CTX.turmaMaterias = tms;
+    PRATICAS_CTX.niveis = niveis;
+    // Só entra na busca o aluno cuja turma tem algum material com atividades prontas.
+    PRATICAS_CTX.alunos = alunos.filter(a => a.turma_id && slugsComAtividadesDaTurma(a.turma_id).length);
     const input = document.getElementById('praticaAlunoInput');
     const atual = PRATICAS_CTX.alunos.find(a => a.id === sel.value);
     sel.value = atual ? atual.id : '';
     input.value = atual ? nomeAlunoPratica(atual) : '';
-    input.placeholder = PRATICAS_CTX.alunos.length ? 'Digite o nome do aluno…' : 'Nenhum aluno com turma vinculada';
+    input.placeholder = PRATICAS_CTX.alunos.length ? 'Digite o nome do aluno…' : 'Nenhum aluno com atividades disponíveis';
     atualizarLimparAlunoPratica();
     if(document.getElementById('praticaAlunoLista').classList.contains('aberta')) renderListaAlunosPratica(input.value);
     renderPraticasAluno();
@@ -3137,7 +3195,7 @@ body.dyse-modal-open{overflow:hidden;}
     });
     const grupos = Object.keys(porTurma).sort((x, y) => x.localeCompare(y, 'pt-BR'));
     if(!grupos.length){
-      lista.innerHTML = '<div class="ab-vazio">' + (PRATICAS_CTX.alunos.length ? 'Nenhum aluno encontrado.' : 'Nenhum aluno com turma vinculada.') + '</div>';
+      lista.innerHTML = '<div class="ab-vazio">' + (PRATICAS_CTX.alunos.length ? 'Nenhum aluno encontrado.' : 'Nenhum aluno com atividades disponíveis.') + '</div>';
       return;
     }
     lista.innerHTML = grupos.map(g => '<div class="ab-grupo">' + escapeHtmlLocal(g) + '</div>' +
@@ -3232,18 +3290,19 @@ body.dyse-modal-open{overflow:hidden;}
     const alunoId = document.getElementById('praticaAlunoSel').value;
     if(!alunoId){ box.innerHTML = ''; return; }
     const aluno = PRATICAS_CTX.alunos.find(a => a.id === alunoId);
-    const slugs = PRATICAS_CTX.turmaMaterias.filter(tm => tm.turma_id === aluno.turma_id).map(tm => tm.materia_slug)
-      .filter(slug => window.DYSE_PRATICAS && DYSE_PRATICAS[slug]);
-    if(!slugs.length){
+    if(!aluno){ box.innerHTML = ''; return; }
+    const materiais = ordenarSlugsPratica(slugsComAtividadesDaTurma(aluno.turma_id));
+    if(!materiais.length){
       box.innerHTML = '<p style="opacity:.7; font-size:.85rem;">O nível da turma deste aluno ainda não tem atividades prontas.</p>';
       return;
     }
     box.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
     const [liberadas, resultados, refazer] = await Promise.all([dysePraticasLiberadasDoAluno(alunoId), dyseResultadosPraticasDoAluno(alunoId), dysePraticasRefazerDoAluno(alunoId)]);
     const resMap = {}; resultados.forEach(r => resMap[r.course + ':' + r.aula + ':' + r.activity_num] = r);
-    box.innerHTML = slugs.map(slug => {
+    box.innerHTML = materiais.map(info => {
+      const slug = info.slug;
       const nivel = DYSE_PRATICAS[slug];
-      return nivel.aulas.map(aula => {
+      return caixaMaterialPratica(info, nivel.aulas.map(aula => {
         const chaves = aula.atividades.map(at => nivel.course + ':' + aula.aula + ':' + at.num);
         const todas = chaves.every(c => liberadas.has(c));
         const rows = aula.atividades.map(at => {
@@ -3285,8 +3344,26 @@ body.dyse-modal-open{overflow:hidden;}
             '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" ' + (todas ? 'checked' : '') +
               ' onchange="togglePraticaAulaToda(this)"><span class="slider"></span></label></div></div>' +
           '<div class="pratica-aula-rows">' + rows + '</div></div>';
-      }).join('');
+      }).join(''));
     }).join('');
+  }
+
+  /* Blocos de atividades por material (sem escolher aluno): todo professor vê
+     os materiais das turmas dele que já têm atividades, para revisar
+     (Visualizar). A liberação é por aluno, na busca acima. */
+  function blocoCatalogoPratica(info){
+    const nivel = DYSE_PRATICAS[info.slug];
+    const corpo = '<p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">Para liberar para um aluno, busque o nome dele em <b>Atividades por aluno</b>.</p>' +
+      nivel.aulas.filter(a => a.atividades.length).map(aula =>
+        '<div style="margin-bottom:14px;"><div style="font-weight:600; font-size:.92rem; margin:6px 0 4px;">Aula ' + String(aula.aula).padStart(2, '0') + ' — ' + escapeHtmlLocal(aula.titulo) + '</div>' +
+        aula.atividades.map(at =>
+          '<div class="manage-row"><div class="info"><b>' + String(at.num).padStart(2, '0') + '.</b> ' +
+            (at.parte ? '<span style="opacity:.6;">' + escapeHtmlLocal(at.parte) + ' ·</span> ' : '') + escapeHtmlLocal(at.titulo) +
+            ' <span style="opacity:.6;">(' + escapeHtmlLocal(at.tipo) + ')</span></div>' +
+          '<div class="manage-row-actions"><a class="btn btn-preview" href="' + dysePraticaUrl(info.slug, aula.aula, at.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a></div></div>'
+        ).join('') + '</div>'
+      ).join('');
+    return caixaMaterialPratica(info, corpo);
   }
 
   async function liberarRefazerPratica(course, aula, num, btn){
@@ -3327,10 +3404,19 @@ body.dyse-modal-open{overflow:hidden;}
     loadPraticasAlunos();
     const container = document.getElementById('manageCourses');
     container.innerHTML = '<p style="opacity:.6;">Carregando...</p>';
+    // Materiais das turmas deste professor que têm atividades (A1, A2... e extras no fim).
+    const [meusVinculos, turmaMaterias, niveis] = await Promise.all([dyseListMyTurmas(), dyseListAllTurmaMaterias(), niveisTodosCache()]);
+    if(!PRATICAS_CTX.niveis.length) PRATICAS_CTX.niveis = niveis;
+    const minhas = new Set(meusVinculos.map(l => l.turma_id));
+    const slugs = turmaMaterias.filter(tm => minhas.has(tm.turma_id)).map(tm => tm.materia_slug)
+      .filter(slug => window.DYSE_PRATICAS && DYSE_PRATICAS[slug] && DYSE_PRATICAS[slug].aulas.some(a => a.atividades.length));
+    const materiais = ordenarSlugsPratica(slugs);
+    const blocosNiveis = materiais.filter(m => !m.extra).map(blocoCatalogoPratica);
+    const blocosExtras = materiais.filter(m => m.extra).map(blocoCatalogoPratica);
     const blocksToefl = [];
-    for(const course of COURSES){
-      const publishedMap = await dyseGetPublishedMap(course.id);
-      const materiaActivities = await dyseListMateriaActivities(course.id);
+    const dadosCursos = await Promise.all(COURSES.map(c => Promise.all([dyseGetPublishedMap(c.id), dyseListMateriaActivities(c.id)])));
+    for(const [ci, course] of COURSES.entries()){
+      const [publishedMap, materiaActivities] = dadosCursos[ci];
       const releasedMap = {};
       materiaActivities.forEach(ma => releasedMap[ma.activity_num] = ma.released_to_teachers);
       const rows = course.activities.map(a => {
@@ -3358,13 +3444,13 @@ body.dyse-modal-open{overflow:hidden;}
         '</div>';
       }).join('');
       blocksToefl.push(
-        '<details class="dyse-collapsible manage-course-block" open>' +
+        '<details class="dyse-collapsible manage-course-block">' +
           '<summary class="manage-course-title"><span>' + course.name + ' <span class="pill-count">' + course.activities.length + '</span></span><span class="chevron">›</span></summary>' +
           '<div class="manage-course-body">' + rows + '</div>' +
         '</details>'
       );
     }
-    container.innerHTML = blocksToefl.join('');
+    container.innerHTML = blocosNiveis.join('') + blocksToefl.join('') + blocosExtras.join('');
   }
 
   async function loadMaterialPanel(){

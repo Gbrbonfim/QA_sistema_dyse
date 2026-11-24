@@ -1519,7 +1519,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       wrap.innerHTML = avisoVazio('folder_open', 'Você ainda não está em uma turma.', 'Assim que a coordenação vincular você, as atividades do seu nível aparecem aqui.');
       return;
     }
-    const niveis = Object.keys(window.DYSE_PRATICAS || {}).filter(slug => AREA_CTX.allowedSlugs.has(slug));
+    // Material da turma que tem atividades: A1, A2... e material extra sempre no fim.
+    const niveis = dysePraticasOrdenar(Object.keys(window.DYSE_PRATICAS || {}).filter(slug => AREA_CTX.allowedSlugs.has(slug)),
+      slug => !!(AREA_CTX.materias && AREA_CTX.materias[slug] && AREA_CTX.materias[slug].sem_registro));
     if(!niveis.length){
       wrap.innerHTML = avisoVazio('hourglass_empty', 'Atividades em preparação.', 'Assim que as atividades do seu nível ficarem prontas, elas aparecem aqui.');
       return;
