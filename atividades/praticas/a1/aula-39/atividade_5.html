@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 39 Â· Regular and irregular verbs</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 39 · Gramática
+   Alinhado ao slide "Class 39: Story of my Life" — Grammar Point: Remember the rules of the Past
+   Simple (the past of be: was / were, wasn't / weren't, Was she? Were they?; can: could /
+   couldn't / Could you...?; regulares -ed, -d, -ied e irregulares na afirmativa; didn't / Did +
+   forma base). Conteúdo NOVO e mais difícil. 24 questões. */
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 39, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'I ___ Lisbon in 2015 and moved to London.', opcoes: ['left', 'leaved', 'leave'], certa: 0, traducao: 'Eu saí de Lisboa em 2015 e me mudei para Londres.' },
+    { frase: 'My grandparents ___ to Brazil in 1960.', opcoes: ['come', 'came', 'comed'], certa: 1, traducao: 'Os meus avós vieram para o Brasil em 1960.' },
+    { frase: 'She ___ a lot of photos of the city.', opcoes: ['taked', 'take', 'took'], certa: 2, traducao: 'Ela tirou muitas fotos da cidade.' },
+    { frase: 'We ___ a small house near the river.', opcoes: ['bought', 'buyed', 'buy'], certa: 0, traducao: 'Nós compramos uma casa pequena perto do rio.' },
+    { frase: 'He ___ his studies and moved to the countryside.', opcoes: ['stoped', 'stopped', 'stop'], certa: 1, traducao: 'Ele parou os estudos e se mudou para o interior.' },
+    { frase: 'They ___ to live in the countryside.', opcoes: ['decide', 'decideed', 'decided'], certa: 2, traducao: 'Eles decidiram morar no interior.' },
+    { frase: 'I ___ English and Spanish at university.', opcoes: ['studied', 'studyed', 'studed'], certa: 0, traducao: 'Eu estudei inglês e espanhol na universidade.' },
+    { frase: 'The first years ___ very hard.', opcoes: ['was', 'were', 'did'], certa: 1, traducao: 'Os primeiros anos foram muito difíceis.' },
+    { frase: 'My first apartment ___ very small.', opcoes: ['were', 'did', 'was'], certa: 2, traducao: 'O meu primeiro apartamento era muito pequeno.' },
+    { frase: 'We ___ tired after the trip.', opcoes: ["weren't", "wasn't", "didn't"], certa: 0, traducao: 'Nós não estávamos cansados depois da viagem.' },
+    { frase: '___ she happy in the village?', opcoes: ['Did', 'Was', 'Were'], certa: 1, traducao: 'Ela era feliz na vila?' },
+    { frase: '___ they at home last night?', opcoes: ['Was', 'Did', 'Were'], certa: 2, traducao: 'Eles estavam em casa ontem à noite?' },
+    { frase: 'She ___ stay in the city. It was too expensive.', opcoes: ["couldn't", "didn't could", "wasn't"], certa: 0, traducao: 'Ela não pôde ficar na cidade. Era cara demais.' },
+    { frase: '___ you work from home last year?', opcoes: ['Did could', 'Could', 'Were'], certa: 1, traducao: 'Você podia trabalhar de casa no ano passado?' },
+    { frase: "She didn't ___ to the countryside.", opcoes: ['went', 'goes', 'go'], certa: 2, traducao: 'Ela não foi para o interior.' },
+    { frase: 'Did he ___ to the party?', opcoes: ['come', 'came', 'comes'], certa: 0, traducao: 'Ele veio à festa?' },
+    { frase: 'What did you ___ with you when you left?', opcoes: ['took', 'take', 'taked'], certa: 1, traducao: 'O que você levou quando saiu?' },
+    { frase: 'Where did you ___ your camera?', opcoes: ['bought', 'buyed', 'buy'], certa: 2, traducao: 'Onde você comprou a sua câmera?' },
+    { instrucao: 'Which verb is IRREGULAR?', opcoes: ['move', 'create', 'find'], certa: 2, completa: 'find, found', traducao: 'find → found (irregular).' },
+    { instrucao: 'Which verb is REGULAR?', opcoes: ['stop', 'take', 'leave'], certa: 0, completa: 'stop, stopped', traducao: 'stop → stopped (regular).' },
+    { instrucao: CERTA, opcoes: ['I didn\'t had money.', 'I didn\'t have money.', 'I hadn\'t money yesterday.'], certa: 1, traducao: 'Eu não tinha dinheiro.' },
+    { instrucao: CERTA, opcoes: ['Did you came here in 2020?', 'You did come here in 2020?', 'Did you come here in 2020?'], certa: 2, traducao: 'Você veio para cá em 2020?' },
+    { instrucao: CERTA, opcoes: ['Were you at work yesterday?', 'Did you at work yesterday?', 'Was you at work yesterday?'], certa: 0, traducao: 'Você estava no trabalho ontem?' },
+    { instrucao: CERTA, opcoes: ['He wasn\'t find a job.', 'He couldn\'t find a job.', 'He didn\'t could find a job.'], certa: 1, traducao: 'Ele não conseguiu encontrar um emprego.' }
+  ]
+});
+</script>
+</body>
+</html>

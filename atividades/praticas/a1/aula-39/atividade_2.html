@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 39 Â· The story of my life</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 39 · Escrita
+   Alinhado ao slide "Class 39: Story of my Life" — a história de alguém que deixou a cidade e foi
+   morar no interior (left, moved, came, bought, found, took, could, was/were) e Speaking and
+   Writing: A Day in Life (What time did you get up / leave home? Where did you have lunch?).
+   Conteúdo NOVO: a história do Rafael, que saiu de São Paulo e foi morar numa cidadezinha.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 39, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu tomei uma decisão importante em 2018.'), palavras: ['I', 'made', 'an', 'important', 'decision', 'in', '2018'], isca: ['did'], fim: '.', traducao: 'Eu tomei uma decisão importante em 2018.' },
+    { contexto: M('Eu saí de São Paulo.'), palavras: ['I', 'left', 'São', 'Paulo'], isca: ['leaved'], fim: '.', traducao: 'Eu saí de São Paulo.' },
+    { contexto: M('Eu me mudei para uma cidade pequena no interior.'), palavras: ['I', 'moved', 'to', 'a', 'small', 'town', 'in', 'the', 'countryside'], isca: ['move'], fim: '.', traducao: 'Eu me mudei para uma cidade pequena no interior.' },
+    { contexto: M('Quando eu cheguei, eu não tinha emprego.'), palavras: ['When', 'I', 'came,', 'I', "didn't", 'have', 'a', 'job'], isca: ['had'], fim: '.', traducao: 'Quando eu cheguei, eu não tinha emprego.' },
+    { contexto: M('Os primeiros meses foram difíceis.'), palavras: ['The', 'first', 'months', 'were', 'difficult'], isca: ['was'], fim: '.', traducao: 'Os primeiros meses foram difíceis.' },
+    { contexto: M('Eu comprei uma casa velha.'), palavras: ['I', 'bought', 'an', 'old', 'house'], isca: ['buyed'], fim: '.', traducao: 'Eu comprei uma casa velha.' },
+    { contexto: M('Eu encontrei um emprego numa fazenda.'), palavras: ['I', 'found', 'a', 'job', 'on', 'a', 'farm'], isca: ['find'], fim: '.', traducao: 'Eu encontrei um emprego numa fazenda.' },
+    { contexto: M('Eu tirei muitas fotos da natureza.'), palavras: ['I', 'took', 'a', 'lot', 'of', 'photos', 'of', 'nature'], isca: ['taked'], fim: '.', traducao: 'Eu tirei muitas fotos da natureza.' },
+    { contexto: M('Eu criei um blog.'), palavras: ['I', 'created', 'a', 'blog'], isca: ['create'], fim: '.', traducao: 'Eu criei um blog.' },
+    { contexto: M('Eu consegui escrever sobre a minha vida nova.'), palavras: ['I', 'could', 'write', 'about', 'my', 'new', 'life'], isca: ['can'], fim: '.', traducao: 'Eu consegui escrever sobre a minha vida nova.' },
+    { contexto: M('A minha irmã não veio comigo.'), palavras: ['My', 'sister', "didn't", 'come', 'with', 'me'], isca: ['came'], fim: '.', traducao: 'A minha irmã não veio comigo.' },
+    { contexto: M('Você gostava da vida na cidade?'), palavras: ['Did', 'you', 'like', 'life', 'in', 'the', 'city'], isca: ['liked'], fim: '?', traducao: 'Você gostava da vida na cidade?' },
+    { contexto: M('Por que você quis se mudar?'), palavras: ['Why', 'did', 'you', 'want', 'to', 'move'], isca: ['wanted'], fim: '?', traducao: 'Por que você quis se mudar?' },
+    { contexto: M('A vila era grande ou pequena?'), palavras: ['Was', 'the', 'village', 'big', 'or', 'small'], isca: ['Did'], fim: '?', traducao: 'A vila era grande ou pequena?' },
+    { contexto: M('A que horas você levantou?'), palavras: ['What', 'time', 'did', 'you', 'get', 'up'], isca: ['got'], fim: '?', traducao: 'A que horas você levantou?' },
+    { contexto: M('O que você tomou no café da manhã?'), palavras: ['What', 'did', 'you', 'have', 'for', 'breakfast'], isca: ['had'], fim: '?', traducao: 'O que você tomou no café da manhã?' },
+    { contexto: M('A que horas você saiu de casa?'), palavras: ['What', 'time', 'did', 'you', 'leave', 'home'], isca: ['left'], fim: '?', traducao: 'A que horas você saiu de casa?' },
+    { contexto: M('Com quem você almoçou?'), palavras: ['Who', 'did', 'you', 'have', 'lunch', 'with'], isca: ['had'], fim: '?', traducao: 'Com quem você almoçou?' },
+    { contexto: M('Eu saí de casa às oito e levei o meu notebook.'), palavras: ['I', 'left', 'home', 'at', 'eight', 'and', 'took', 'my', 'laptop'], isca: ['take'], fim: '.', traducao: 'Eu saí de casa às oito e levei o meu notebook.' },
+    { contexto: M('O meu dia foi corrido, mas divertido.'), palavras: ['My', 'day', 'was', 'busy,', 'but', 'fun'], isca: ['were'], fim: '.', traducao: 'O meu dia foi corrido, mas divertido.' }
+  ]
+});
+</script>
+</body>
+</html>

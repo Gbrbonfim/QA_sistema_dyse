@@ -391,6 +391,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 38', titulo: 'Ask about a birthday', tipo: 'Escute e grave', treina: 'Fala · Perguntas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 38', titulo: 'Birthday questions', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 39,
+        titulo: 'Class 39 · Story of my Life',
+        atividades: [
+          { num: 1, titulo: 'Regular or irregular?', tipo: 'Escute e escolha', treina: 'Escuta · Passado', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'The story of my life', tipo: 'Monte a frase', treina: 'Escrita · Past simple', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'From the city to the countryside', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'A day in my life', tipo: 'Escute e grave', treina: 'Fala · Past simple', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Regular and irregular verbs', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

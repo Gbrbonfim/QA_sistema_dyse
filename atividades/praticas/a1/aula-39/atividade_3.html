@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 39 Â· From the city to the countryside</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 39 · Leitura
+   Alinhado ao slide "Class 39: Story of my Life" — Warm Up (city or countryside?), Watching and
+   Listening e Talking Point (Did she like life in the city? Why did she want to move? Was the
+   village big or small? Was the start easy or difficult?). Conteúdo NOVO: a Julia conta para o
+   Pedro por que saiu do Rio e foi morar numa vila. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Pedro', 'Julia! I love your photos. Do you live in the countryside now?'],
+  ['Julia', 'Yes! I left Rio in 2021.'],
+  ['Pedro', 'Did you like life in the city?'],
+  ['Julia', 'No, I didn\'t. It was very noisy.'],
+  ['Pedro', 'Why did you want to move?'],
+  ['Julia', 'I loved nature and silence.'],
+  ['Pedro', 'Was the village big or small?'],
+  ['Julia', 'It was very small. Only 200 people lived there.'],
+  ['Pedro', 'Was the start easy?'],
+  ['Julia', 'No, it wasn\'t. I didn\'t have a job and the winter was cold.'],
+  ['Pedro', 'What did you do?'],
+  ['Julia', 'I bought a camera and took photos of the mountains.'],
+  ['Pedro', 'Did you find a job?'],
+  ['Julia', 'Yes! I found a job in a small hotel.'],
+  ['Pedro', 'Are you happy there?'],
+  ['Julia', 'Very happy! Moving there was like coming home.']
+];
+const lado = q => q === 'Pedro' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 39, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes! I left Rio in 2021.', 'Yes! I leave Rio in 2021.', 'Yes! I leaved Rio in 2021.'], 0, 'Sim! Eu saí do Rio em 2021.'),
+    prox(2, ['Did you liked life in the city?', 'Did you like life in the city?', 'Were you like life in the city?'], 1, 'Você gostava da vida na cidade?'),
+    prox(3, ["No, I wasn't. It was very noisy.", "No, I didn't. It were very noisy.", "No, I didn't. It was very noisy."], 2, 'Não. Era muito barulhenta.'),
+    prox(4, ['Why did you want to move?', 'Why did you wanted to move?', 'Why you wanted to move?'], 0, 'Por que você quis se mudar?'),
+    prox(5, ['I love nature yesterday.', 'I loved nature and silence.', 'I did loved nature and silence.'], 1, 'Eu amava a natureza e o silêncio.'),
+    prox(6, ['Did the village big or small?', 'Were the village big or small?', 'Was the village big or small?'], 2, 'A vila era grande ou pequena?'),
+    prox(7, ['It was very small. Only 200 people lived there.', 'It were very small.', 'It was very small. Only 200 people live there last year.'], 0, 'Era muito pequena. Só 200 pessoas moravam lá.'),
+    prox(8, ['Did the start easy?', 'Was the start easy?', 'Were the start easy?'], 1, 'O começo foi fácil?'),
+    prox(9, ["No, it didn't. I wasn't have a job.", "No, it wasn't. I don't have a job yesterday.", "No, it wasn't. I didn't have a job and the winter was cold."], 2, 'Não. Eu não tinha emprego e o inverno era frio.'),
+    prox(10, ['What did you do?', 'What did you did?', 'What you did?'], 0, 'O que você fez?'),
+    prox(11, ['I buyed a camera and taked photos.', 'I bought a camera and took photos of the mountains.', 'I buy a camera and take photos last year.'], 1, 'Eu comprei uma câmera e tirei fotos das montanhas.'),
+    prox(12, ['Did you found a job?', 'You did find a job?', 'Did you find a job?'], 2, 'Você encontrou um emprego?'),
+    { instrucao: 'When did Julia leave Rio?', frase: 'In ___.', opcoes: ['2021', '2012', '2020'], certa: 0, completa: 'In twenty twenty-one.', traducao: 'Em 2021.' },
+    { instrucao: 'Why didn\'t Julia like the city?', frase: 'It was very ___.', opcoes: ['small', 'noisy', 'cold'], certa: 1, traducao: 'Era muito barulhenta.' },
+    { instrucao: 'What did Julia love?', frase: 'Nature and ___.', opcoes: ['music', 'the city', 'silence'], certa: 2, traducao: 'A natureza e o silêncio.' },
+    { instrucao: 'How many people lived in the village?', frase: 'Only ___.', opcoes: ['200', '2,000', '20'], certa: 0, completa: 'Only two hundred.', traducao: 'Só 200.' },
+    { instrucao: 'Was the start easy or difficult?', frase: 'It was ___.', opcoes: ['easy', 'difficult', 'fun'], certa: 1, traducao: 'Foi difícil.' },
+    { instrucao: 'What did Julia buy?', frase: 'A ___.', opcoes: ['house', 'car', 'camera'], certa: 2, traducao: 'Uma câmera.' },
+    { instrucao: 'What did she take photos of?', frase: 'The ___.', opcoes: ['mountains', 'beaches', 'people'], certa: 0, traducao: 'As montanhas.' },
+    { instrucao: 'Where did Julia find a job?', frase: 'In a small ___.', opcoes: ['school', 'hotel', 'restaurant'], certa: 1, traducao: 'Num hotel pequeno.' }
+  ]
+});
+</script>
+</body>
+</html>

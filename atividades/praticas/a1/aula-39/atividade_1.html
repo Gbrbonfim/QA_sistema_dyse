@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 39 Â· Regular or irregular?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 39 · Escuta
+   Alinhado ao slide "Class 39: Story of my Life" — Grammar Point: Past Simple Regular and
+   Irregular Verbs (started, moved, created, stopped, decided x was, were, left, came, took,
+   found, bought, could, got, did, made, had, went) e o "Test yourself" (A: took. B: take!).
+   Conteúdo NOVO: outras frases. 24 questões: 12 "ouça e escolha a forma base" + 12 "regular ou
+   irregular?". */
+const IC = { come: 'login', leave: 'logout', take: 'photo_camera', buy: 'shopping_cart', find: 'search', move: 'local_shipping',
+  decide: 'lightbulb', get: 'card_giftcard', make: 'cake', have: 'breakfast_dining', go: 'directions_walk', stop: 'block',
+  'regular (-ed)': 'rule', 'irregular': 'shuffle' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const RI = 'Listen: is the verb regular or irregular?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 39, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the verb in the past. What is the base form?',
+  itens: [
+    { audioTexto: 'came', opcoes: op('come', 'leave', 'take', 'make'), certa: 0 },
+    { audioTexto: 'left', opcoes: op('find', 'leave', 'go', 'get'), certa: 1 },
+    { audioTexto: 'took', opcoes: op('buy', 'make', 'take', 'come'), certa: 2 },
+    { audioTexto: 'bought', opcoes: op('take', 'get', 'have', 'buy'), certa: 3 },
+    { audioTexto: 'found', opcoes: op('find', 'buy', 'move', 'leave'), certa: 0 },
+    { audioTexto: 'moved', opcoes: op('make', 'move', 'stop', 'go'), certa: 1 },
+    { audioTexto: 'decided', opcoes: op('find', 'come', 'decide', 'take'), certa: 2 },
+    { audioTexto: 'got', opcoes: op('go', 'take', 'come', 'get'), certa: 3 },
+    { audioTexto: 'made', opcoes: op('make', 'move', 'have', 'take'), certa: 0 },
+    { audioTexto: 'had', opcoes: op('make', 'have', 'leave', 'buy'), certa: 1 },
+    { audioTexto: 'went', opcoes: op('get', 'come', 'go', 'decide'), certa: 2 },
+    { audioTexto: 'stopped', opcoes: op('take', 'leave', 'move', 'stop'), certa: 3 },
+    { instrucao: RI, audioTexto: 'moved', opcoes: op('regular (-ed)', 'irregular'), certa: 0 },
+    { instrucao: RI, audioTexto: 'took', opcoes: op('regular (-ed)', 'irregular'), certa: 1 },
+    { instrucao: RI, audioTexto: 'created', opcoes: op('regular (-ed)', 'irregular'), certa: 0 },
+    { instrucao: RI, audioTexto: 'bought', opcoes: op('regular (-ed)', 'irregular'), certa: 1 },
+    { instrucao: RI, audioTexto: 'decided', opcoes: op('regular (-ed)', 'irregular'), certa: 0 },
+    { instrucao: RI, audioTexto: 'left', opcoes: op('regular (-ed)', 'irregular'), certa: 1 },
+    { instrucao: RI, audioTexto: 'stopped', opcoes: op('regular (-ed)', 'irregular'), certa: 0 },
+    { instrucao: RI, audioTexto: 'came', opcoes: op('regular (-ed)', 'irregular'), certa: 1 },
+    { instrucao: RI, audioTexto: 'started', opcoes: op('regular (-ed)', 'irregular'), certa: 0 },
+    { instrucao: RI, audioTexto: 'found', opcoes: op('regular (-ed)', 'irregular'), certa: 1 },
+    { instrucao: RI, audioTexto: 'studied', opcoes: op('regular (-ed)', 'irregular'), certa: 0 },
+    { instrucao: RI, audioTexto: 'went', opcoes: op('regular (-ed)', 'irregular'), certa: 1 }
+  ]
+});
+</script>
+</body>
+</html>
