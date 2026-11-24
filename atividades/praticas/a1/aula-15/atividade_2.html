@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 15 · Ask the right question</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 15 · Escrita (revisão)
+   Alinhado ao slide "Class 15: Review Classes 1-12" — Talking Point (perguntas pessoais) e a
+   revisão integrada das aulas 1–14 (to be, have / has, 's, possessivos, adjetivos, present
+   simple, horas). Conteúdo NOVO e mais difícil: frases mais longas e as armadilhas clássicas
+   ("I have twenty years", "She favorite", "smarts dogs"). O contexto traz a frase em português.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 15, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Qual é o seu nome?'), palavras: ["What's", 'your', 'name'], isca: ['you'], fim: '?', traducao: 'Qual é o seu nome?' },
+    { contexto: M('De onde você é?'), palavras: ['Where', 'are', 'you', 'from'], isca: ['is'], fim: '?', traducao: 'De onde você é?' },
+    { contexto: M('Quantos anos você tem?'), palavras: ['How', 'old', 'are', 'you'], isca: ['have'], fim: '?', traducao: 'Quantos anos você tem?' },
+    { contexto: M('O seu professor é do Brasil?'), palavras: ['Is', 'your', 'teacher', 'from', 'Brazil'], isca: ['Are'], fim: '?', traducao: 'O seu professor é do Brasil?' },
+    { contexto: M('Como você soletra o seu sobrenome?'), palavras: ['How', 'do', 'you', 'spell', 'your', 'last', 'name'], isca: ['are'], fim: '?', traducao: 'Como você soletra o seu sobrenome?' },
+    { contexto: M('O que tem na sua bolsa?'), palavras: ["What's", 'in', 'your', 'bag'], isca: ['you'], fim: '?', traducao: 'O que tem na sua bolsa?' },
+    { contexto: M('Quanto custa um café?'), palavras: ['How', 'much', 'is', 'a', 'coffee'], isca: ['are'], fim: '?', traducao: 'Quanto custa um café?' },
+    { contexto: M('Quanto custam as maçãs?'), palavras: ['How', 'much', 'are', 'the', 'apples'], isca: ['is'], fim: '?', traducao: 'Quanto custam as maçãs?' },
+    { contexto: M('Quem está na sua família?'), palavras: ['Who', 'is', 'in', 'your', 'family'], isca: ['are'], fim: '?', traducao: 'Quem está na sua família?' },
+    { contexto: M('O seu celular é novo?'), palavras: ['Is', 'your', 'phone', 'new'], isca: ['Are'], fim: '?', traducao: 'O seu celular é novo?' },
+    { contexto: M('O que você come no café da manhã?'), palavras: ['What', 'do', 'you', 'have', 'for', 'breakfast'], isca: ['has'], fim: '?', traducao: 'O que você come no café da manhã?' },
+    { contexto: M('Qual é o seu dia favorito da semana?'), palavras: ["What's", 'your', 'favorite', 'day', 'of', 'the', 'week'], isca: ['favorites'], fim: '?', traducao: 'Qual é o seu dia favorito da semana?' },
+    { contexto: M('A que horas você começa a trabalhar?'), palavras: ['What', 'time', 'do', 'you', 'start', 'work'], isca: ['starts'], fim: '?', traducao: 'A que horas você começa a trabalhar?' },
+    { contexto: M('Eu tenho vinte e cinco anos.'), palavras: ['I', 'am', 'twenty-five', 'years', 'old'], isca: ['have'], fim: '.', traducao: 'Eu tenho vinte e cinco anos.' },
+    { contexto: M('Minha irmã tem um cachorro pequeno.'), palavras: ['My', 'sister', 'has', 'a', 'small', 'dog'], isca: ['have'], fim: '.', traducao: 'Minha irmã tem um cachorro pequeno.' },
+    { contexto: M('O nome da mãe dela é Rosa.'), palavras: ['Her', "mother's", 'name', 'is', 'Rosa'], isca: ['She'], fim: '.', traducao: 'O nome da mãe dela é Rosa.' },
+    { contexto: M('Eles não são do México.'), palavras: ['They', "aren't", 'from', 'Mexico'], isca: ["isn't"], fim: '.', traducao: 'Eles não são do México.' },
+    { contexto: M('Ela levanta às seis e meia.'), palavras: ['She', 'gets', 'up', 'at', 'half', 'past', 'six'], isca: ['get'], fim: '.', traducao: 'Ela levanta às seis e meia.' },
+    { contexto: M('Nós temos dois gatos amigáveis.'), palavras: ['We', 'have', 'two', 'friendly', 'cats'], isca: ['friendlys'], fim: '.', traducao: 'Nós temos dois gatos amigáveis.' },
+    { contexto: M('O Pedro é o primo da Ana. Ele é brasileiro.'), palavras: ['Pedro', 'is', "Ana's", 'cousin.', "He's", 'Brazilian'], isca: ['His'], fim: '.', traducao: 'O Pedro é o primo da Ana. Ele é brasileiro.' }
+  ]
+});
+</script>
+</body>
+</html>

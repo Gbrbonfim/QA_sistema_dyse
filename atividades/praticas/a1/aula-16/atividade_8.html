@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 17 · Phone interview</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 17 · Leitura
+   Alinhado ao slide "Class 16 and 17: How Often Do You Use Your Phone?" (parte Class 17) —
+   Speaking and Writing (entrevista: What phone do you have? Do you like it? How often do you use
+   WhatsApp? Do you have a favorite influencer?...). Conteúdo NOVO: Rita entrevista o Ben. As
+   perguntas de compreensão pedem does / doesn't. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Rita', 'Hi, Ben! What phone do you have?'],
+  ['Ben', 'I have an Android phone.'],
+  ['Rita', 'Do you like it?'],
+  ['Ben', "Yes, I do. It's fast and it charges fast."],
+  ['Rita', 'How often do you use WhatsApp?'],
+  ['Ben', 'I use it every day. I always send voice messages.'],
+  ['Rita', 'Do you send emails?'],
+  ['Ben', "No, I don't. My mom sends emails!"],
+  ['Rita', 'Ha ha! Do you have a favorite Instagram influencer?'],
+  ['Ben', 'Yes, I do. Her name is Anna. She posts photos of food.'],
+  ['Rita', 'Does she post stories every day?'],
+  ['Ben', 'Yes, she does. And she often posts videos too.'],
+  ['Rita', 'How often do you use your phone before bed?'],
+  ['Ben', "I always use it before bed. It's bad, I know!"]
+];
+const lado = q => q === 'Rita' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 16, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I have an Android phone.', 'I has an Android phone.', 'Yes, I do.'], 0, 'Eu tenho um celular Android.'),
+    prox(2, ['Does you like it?', 'Do you like it?', 'Are you like it?'], 1, 'Você gosta dele?'),
+    prox(3, ["Yes, I am. It's fast.", "No, I don't. My mom sends emails!", "Yes, I do. It's fast and it charges fast."], 2, 'Sim, gosto. Ele é rápido e carrega rápido.'),
+    prox(4, ['How often do you use WhatsApp?', 'How often you use WhatsApp?', 'How often does you use WhatsApp?'], 0, 'Com que frequência você usa o WhatsApp?'),
+    prox(5, ['I use it every day. I send always voice messages.', 'I use it every day. I always send voice messages.', 'Yes, she does.'], 1, 'Eu uso todo dia. Eu sempre mando mensagens de voz.'),
+    prox(6, ['Does you send emails?', 'Do you sends emails?', 'Do you send emails?'], 2, 'Você manda e-mails?'),
+    prox(7, ["No, I don't. My mom sends emails!", "No, I doesn't. My mom sends emails!", "No, I don't. My mom send emails!"], 0, 'Não. A minha mãe manda e-mails!'),
+    prox(8, ['How often do you use your phone before bed?', 'Ha ha! Do you have a favorite Instagram influencer?', 'Ha ha! Does you have a favorite Instagram influencer?'], 1, 'Haha! Você tem um influenciador favorito no Instagram?'),
+    prox(9, ['Yes, I have. Her name is Anna.', 'Yes, I do. His name is Anna.', 'Yes, I do. Her name is Anna. She posts photos of food.'], 2, 'Sim, tenho. O nome dela é Anna. Ela posta fotos de comida.'),
+    prox(10, ['Does she post stories every day?', 'Does she posts stories every day?', 'Do she post stories every day?'], 0, 'Ela posta stories todo dia?'),
+    prox(11, ['Yes, she do. And she often posts videos too.', 'Yes, she does. And she often posts videos too.', 'Yes, she is. And she often posts videos too.'], 1, 'Sim, posta. E ela frequentemente posta vídeos também.'),
+    prox(12, ['Do you like it?', 'What phone do you have?', 'How often do you use your phone before bed?'], 2, 'Com que frequência você usa o celular antes de dormir?'),
+    { instrucao: 'Does Ben like his phone?', frase: 'Yes, he ___.', opcoes: ['does', 'is', 'do'], certa: 0, traducao: 'Sim, ele gosta.' },
+    { instrucao: 'How often does Ben use WhatsApp?', frase: 'He uses it ___.', opcoes: ['sometimes', 'every day', 'on Monday'], certa: 1, traducao: 'Ele usa todo dia.' },
+    { instrucao: 'Does Ben send emails?', frase: 'No, he ___.', opcoes: ["don't", "isn't", "doesn't"], certa: 2, traducao: 'Não, ele não manda.' },
+    { instrucao: 'Who sends emails?', frase: "Ben's ___ sends emails.", opcoes: ['mom', 'dad', 'sister'], certa: 0, traducao: 'A mãe do Ben manda e-mails.' },
+    { instrucao: "Who is Ben's favorite influencer?", frase: 'Her name is ___.', opcoes: ['Rita', 'Anna', 'Ben'], certa: 1, traducao: 'O nome dela é Anna.' },
+    { instrucao: 'What does Anna post?', frase: 'She posts photos of ___.', opcoes: ['dogs', 'cars', 'food'], certa: 2, traducao: 'Ela posta fotos de comida.' },
+    { instrucao: 'Does Anna post stories every day?', frase: 'Yes, she ___.', opcoes: ['does', 'do', 'is'], certa: 0, traducao: 'Sim, ela posta.' },
+    { instrucao: 'Ben and his phone before bed:', frase: 'He ___ uses it before bed.', opcoes: ['never', 'always', 'sometimes'], certa: 1, traducao: 'Ele sempre usa antes de dormir.' }
+  ]
+});
+</script>
+</body>
+</html>

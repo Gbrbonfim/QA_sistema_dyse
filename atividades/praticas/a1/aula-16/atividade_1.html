@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 16 · Always or never?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 16 · Escuta
+   Alinhado ao slide "Class 16 and 17: How Often Do You Use Your Phone?" (parte Class 16) — Warm
+   Up (o que as pessoas fazem no celular: take photos, download games, check emails, listen to
+   the news...) e Grammar Point (always 100%, usually 90%, often 70%, sometimes 50%, never 0%).
+   Conteúdo NOVO: outras pessoas e frases. As figuras são ícones. 24 questões: 12 atividades no
+   celular + 12 advérbios. */
+const IC = { 'take photos': 'photo_camera', 'download games': 'download', 'check the weather': 'partly_cloudy_day',
+  'check emails': 'mail', 'listen to the news': 'radio', 'play games': 'sports_esports', 'send messages': 'sms',
+  'post stories': 'amp_stories', 'watch series': 'tv', 'listen to music': 'headphones', 'read books': 'menu_book',
+  'send voice messages': 'mic', always: 'battery_full', usually: 'battery_5_bar', often: 'battery_4_bar',
+  sometimes: 'battery_3_bar', never: 'battery_0_bar' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const ADV = 'Listen to the sentence and choose the frequency word';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 16, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose what people do on the phone',
+  itens: [
+    { audioTexto: 'take photos', opcoes: op('take photos', 'read books', 'play games', 'check emails'), certa: 0 },
+    { audioTexto: 'download games', opcoes: op('play games', 'download games', 'watch series', 'send messages'), certa: 1 },
+    { audioTexto: 'check the weather', opcoes: op('check emails', 'listen to the news', 'check the weather', 'take photos'), certa: 2 },
+    { audioTexto: 'check emails', opcoes: op('send messages', 'post stories', 'read books', 'check emails'), certa: 3 },
+    { audioTexto: 'listen to the news', opcoes: op('listen to the news', 'listen to music', 'watch series', 'send voice messages'), certa: 0 },
+    { audioTexto: 'send messages', opcoes: op('check emails', 'send messages', 'take photos', 'download games'), certa: 1 },
+    { audioTexto: 'post stories', opcoes: op('read books', 'watch series', 'post stories', 'play games'), certa: 2 },
+    { audioTexto: 'watch series', opcoes: op('listen to music', 'take photos', 'check the weather', 'watch series'), certa: 3 },
+    { audioTexto: 'listen to music', opcoes: op('listen to music', 'listen to the news', 'send voice messages', 'read books'), certa: 0 },
+    { audioTexto: 'read books', opcoes: op('post stories', 'read books', 'check emails', 'download games'), certa: 1 },
+    { audioTexto: 'send voice messages', opcoes: op('send messages', 'listen to music', 'send voice messages', 'listen to the news'), certa: 2 },
+    { audioTexto: 'play games', opcoes: op('download games', 'watch series', 'take photos', 'play games'), certa: 3 },
+    { instrucao: ADV, audioTexto: 'I always check my emails in the morning.', opcoes: op('always', 'usually', 'sometimes', 'never'), certa: 0 },
+    { instrucao: ADV, audioTexto: 'She never downloads games.', opcoes: op('often', 'never', 'always', 'usually'), certa: 1 },
+    { instrucao: ADV, audioTexto: 'We sometimes take photos with our friends.', opcoes: op('usually', 'always', 'sometimes', 'often'), certa: 2 },
+    { instrucao: ADV, audioTexto: 'He often listens to music on the bus.', opcoes: op('never', 'sometimes', 'always', 'often'), certa: 3 },
+    { instrucao: ADV, audioTexto: 'My dad usually listens to the news.', opcoes: op('usually', 'often', 'never', 'always'), certa: 0 },
+    { instrucao: ADV, audioTexto: "My sister is always on her phone.", opcoes: op('usually', 'always', 'often', 'sometimes'), certa: 1 },
+    { instrucao: ADV, audioTexto: 'They never watch series in the afternoon.', opcoes: op('always', 'often', 'never', 'usually'), certa: 2 },
+    { instrucao: ADV, audioTexto: 'I usually send voice messages.', opcoes: op('sometimes', 'never', 'always', 'usually'), certa: 3 },
+    { instrucao: ADV, audioTexto: 'Lucio is often late for class.', opcoes: op('often', 'always', 'never', 'sometimes'), certa: 0 },
+    { instrucao: ADV, audioTexto: 'My grandmother sometimes reads books on her phone.', opcoes: op('usually', 'sometimes', 'often', 'never'), certa: 1 },
+    { instrucao: ADV, audioTexto: 'We are never on Instagram at work.', opcoes: op('sometimes', 'usually', 'never', 'always'), certa: 2 },
+    { instrucao: ADV, audioTexto: 'She always checks the weather before she goes out.', opcoes: op('often', 'never', 'usually', 'always'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

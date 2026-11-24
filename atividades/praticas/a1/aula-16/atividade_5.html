@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 16 · Adverbs of frequency</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 16 · Gramática
+   Alinhado ao slide "Class 16 and 17: How Often Do You Use Your Phone?" (parte Class 16) —
+   Grammar Point (escala 100% → 0% e posição: depois do be, antes dos outros verbos) e exercício 3.
+   Conteúdo NOVO e mais difícil: frase correta x posição errada, porcentagem e o verbo com s.
+   24 questões. */
+const PCT = 'Which frequency word is it?';
+const CERTA = 'Which sentence is correct?';
+const REGRA = 'Choose the right rule';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 16, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: PCT, frase: '100% → ___', opcoes: ['usually', 'always', 'often'], certa: 1, traducao: '100% → sempre' },
+    { instrucao: PCT, frase: '0% → ___', opcoes: ['never', 'sometimes', 'often'], certa: 0, traducao: '0% → nunca' },
+    { instrucao: PCT, frase: '50% → ___', opcoes: ['always', 'usually', 'sometimes'], certa: 2, traducao: '50% → às vezes' },
+    { instrucao: PCT, frase: '90% → ___', opcoes: ['often', 'usually', 'never'], certa: 1, traducao: '90% → geralmente' },
+    { instrucao: PCT, frase: '70% → ___', opcoes: ['often', 'always', 'sometimes'], certa: 0, traducao: '70% → frequentemente' },
+    { instrucao: REGRA, frase: 'Adverbs of frequency go ___ the verb be.', opcoes: ['before', 'after'], certa: 1, traducao: 'Os advérbios de frequência vão depois do verbo be.' },
+    { instrucao: REGRA, frase: 'Adverbs of frequency go ___ other verbs.', opcoes: ['before', 'after'], certa: 0, traducao: 'Os advérbios de frequência vão antes dos outros verbos.' },
+    { instrucao: CERTA, opcoes: ['David never is on Instagram.', 'David is never on Instagram.', 'Never David is on Instagram.'], certa: 1, traducao: 'O David nunca está no Instagram.' },
+    { instrucao: CERTA, opcoes: ['The children usually download games.', 'The children download usually games.', 'The children download games usually always.'], certa: 0, traducao: 'As crianças geralmente baixam jogos.' },
+    { instrucao: CERTA, opcoes: ['Lucio always is late.', 'Lucio is late always for class.', 'Lucio is always late for class.'], certa: 2, traducao: 'O Lucio sempre está atrasado para a aula.' },
+    { instrucao: CERTA, opcoes: ['Ana goes often to work by car.', 'Ana often goes to work by car.', 'Ana often go to work by car.'], certa: 1, traducao: 'A Ana frequentemente vai trabalhar de carro.' },
+    { instrucao: CERTA, opcoes: ['My parents sometimes go out for dinner.', 'My parents go sometimes out for dinner.', 'My parents sometimes goes out for dinner.'], certa: 0, traducao: 'Meus pais às vezes saem para jantar.' },
+    { instrucao: CERTA, opcoes: ['We usually are happy.', 'We are happy usually always.', 'We are usually happy.'], certa: 2, traducao: 'Nós geralmente estamos felizes.' },
+    { frase: 'She always ___ her emails in the morning.', opcoes: ['check', 'checks'], certa: 1, traducao: 'Ela sempre confere os e-mails de manhã.' },
+    { frase: 'They never ___ games on their phones.', opcoes: ['play', 'plays'], certa: 0, traducao: 'Eles nunca jogam no celular.' },
+    { frase: 'My brother usually ___ series in the evening.', opcoes: ['watch', 'watchs', 'watches'], certa: 2, traducao: 'Meu irmão geralmente assiste séries à noite.' },
+    { frase: 'I ___ late for work. I get up at five!', opcoes: ['am always', 'am never', 'always am'], certa: 1, traducao: 'Eu nunca me atraso para o trabalho. Eu levanto às cinco!' },
+    { frase: 'Mark checks his phone 0% of the time. He ___ checks his phone.', opcoes: ['always', 'usually', 'never'], certa: 2, traducao: 'O Mark confere o celular 0% das vezes. Ele nunca confere o celular.' },
+    { frase: 'I have breakfast every day. I ___ have breakfast.', opcoes: ['always', 'sometimes', 'never'], certa: 0, traducao: 'Eu tomo café da manhã todo dia. Eu sempre tomo café da manhã.' },
+    { frase: 'She plays tennis on Wednesdays and Saturdays. She ___ plays tennis.', opcoes: ['never', 'often', 'always'], certa: 1, traducao: 'Ela joga tênis às quartas e aos sábados. Ela frequentemente joga tênis.' },
+    { frase: 'My grandmother ___ on her phone. She loves it!', opcoes: ['is always', 'always is', 'is never'], certa: 0, traducao: 'Minha avó está sempre no celular. Ela adora!' },
+    { frase: 'He ___ to the gym on Monday.', opcoes: ['goes usually', 'usually goes', 'usually go'], certa: 1, traducao: 'Ele geralmente vai à academia na segunda.' },
+    { frase: 'We ___ hungry after class.', opcoes: ['often are', 'are often', 'often is'], certa: 1, traducao: 'Nós frequentemente estamos com fome depois da aula.' },
+    { frase: 'I ___ take photos with my friends.', opcoes: ['sometimes', 'am sometimes', 'sometimes am'], certa: 0, traducao: 'Eu às vezes tiro fotos com meus amigos.' }
+  ]
+});
+</script>
+</body>
+</html>

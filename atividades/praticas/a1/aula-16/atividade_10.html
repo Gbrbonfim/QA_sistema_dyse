@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 17 · Questions with do / does</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 17 · Gramática
+   Alinhado ao slide "Class 16 and 17: How Often Do You Use Your Phone?" (parte Class 17) —
+   Grammar Point (do / does; short answers; question word antes do auxiliar; verbo sem s depois
+   de does). Conteúdo NOVO e mais difícil: contraste to be x do / does (Aula 4 x Aula 17).
+   24 questões. */
+const DD = ['Do', 'Does'];
+const CURTA = 'Choose the short answer';
+const BE = 'To be or do / does?';
+const CERTA = 'Which question is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 16, num: 10, tipo: 'escolha',
+  instrucao: 'Complete with Do or Does',
+  itens: [
+    { frase: '___ you use Instagram?', opcoes: DD, certa: 0, traducao: 'Você usa o Instagram?' },
+    { frase: '___ he take photos?', opcoes: DD, certa: 1, traducao: 'Ele tira fotos?' },
+    { frase: '___ your parents send emails?', opcoes: DD, certa: 0, traducao: 'Os seus pais mandam e-mails?' },
+    { frase: '___ your sister have an iPhone?', opcoes: DD, certa: 1, traducao: 'A sua irmã tem um iPhone?' },
+    { frase: '___ the phone charge fast?', opcoes: DD, certa: 1, traducao: 'O celular carrega rápido?' },
+    { frase: '___ we have class on Friday?', opcoes: DD, certa: 0, traducao: 'Nós temos aula na sexta?' },
+    { frase: 'How often ___ she check messages?', opcoes: ['do', 'does'], certa: 1, traducao: 'Com que frequência ela confere as mensagens?' },
+    { frase: 'What time ___ they go to bed?', opcoes: ['do', 'does'], certa: 0, traducao: 'A que horas eles vão dormir?' },
+    { instrucao: CURTA, frase: 'Does he take photos? Yes, he ___.', opcoes: ['do', 'does', 'is'], certa: 1, traducao: 'Ele tira fotos? Sim, tira.' },
+    { instrucao: CURTA, frase: "Do they check emails? No, they ___.", opcoes: ["don't", "doesn't", "aren't"], certa: 0, traducao: 'Eles conferem e-mails? Não, não conferem.' },
+    { instrucao: CURTA, frase: "Does she have a car? No, she ___.", opcoes: ["don't", "isn't", "doesn't"], certa: 2, traducao: 'Ela tem um carro? Não, não tem.' },
+    { instrucao: CURTA, frase: 'Do you like it? Yes, I ___.', opcoes: ['do', 'am', 'like'], certa: 0, traducao: 'Você gosta? Sim, gosto.' },
+    { instrucao: CURTA, frase: 'Are you a student? Yes, I ___.', opcoes: ['do', 'am', 'does'], certa: 1, traducao: 'Você é estudante? Sim, sou.' },
+    { instrucao: CURTA, frase: "Is the phone new? No, it ___.", opcoes: ["doesn't", "don't", "isn't"], certa: 2, traducao: 'O celular é novo? Não, não é.' },
+    { instrucao: BE, frase: '___ you a teacher?', opcoes: ['Are', 'Do'], certa: 0, traducao: 'Você é professor?' },
+    { instrucao: BE, frase: '___ you work at a school?', opcoes: ['Are', 'Do'], certa: 1, traducao: 'Você trabalha numa escola?' },
+    { instrucao: BE, frase: '___ she from Brazil?', opcoes: ['Is', 'Does'], certa: 0, traducao: 'Ela é do Brasil?' },
+    { instrucao: BE, frase: '___ she live in Brazil?', opcoes: ['Is', 'Does'], certa: 1, traducao: 'Ela mora no Brasil?' },
+    { frase: 'Does she ___ games on her phone?', opcoes: ['plays', 'play', 'playes'], certa: 1, traducao: 'Ela joga no celular?' },
+    { frase: 'Does he ___ a new laptop?', opcoes: ['has', 'have'], certa: 1, traducao: 'Ele tem um notebook novo?' },
+    { instrucao: CERTA, opcoes: ['Where she does live?', 'Does where she live?', 'Where does she live?'], certa: 2, traducao: 'Onde ela mora?' },
+    { instrucao: CERTA, opcoes: ['How often do you go to the gym?', 'How often you go to the gym?', 'Do how often you go to the gym?'], certa: 0, traducao: 'Com que frequência você vai à academia?' },
+    { instrucao: CERTA, opcoes: ['Does she has an iPhone?', 'Does she have an iPhone?', 'Do she have an iPhone?'], certa: 1, traducao: 'Ela tem um iPhone?' },
+    { instrucao: CERTA, opcoes: ['Is he use Instagram?', 'Does he uses Instagram?', 'Does he use Instagram?'], certa: 2, traducao: 'Ele usa o Instagram?' }
+  ]
+});
+</script>
+</body>
+</html>

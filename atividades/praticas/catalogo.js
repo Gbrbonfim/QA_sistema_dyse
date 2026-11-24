@@ -157,6 +157,33 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 14', titulo: 'Say the time', tipo: 'Escute e grave', treina: 'Fala · Horas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 14', titulo: 'Telling the time', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 15,
+        titulo: 'Class 15 · Review Classes 1-14',
+        atividades: [
+          { num: 1, titulo: 'Questions and answers', tipo: 'Escute e escolha', treina: 'Escuta · Revisão', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Ask the right question', tipo: 'Monte a frase', treina: 'Escrita · Revisão', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'A new student', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Talk about you', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Review: grammar', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
+        aula: 16,
+        titulo: 'Class 16 and 17 · How Often Do You Use Your Phone?',
+        atividades: [
+          { num: 1, parte: 'Class 16', titulo: 'Always or never?', tipo: 'Escute e escolha', treina: 'Escuta · Frequência', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 16', titulo: 'Where does the adverb go?', tipo: 'Monte a frase', treina: 'Escrita · Advérbios', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 16', titulo: 'My phone and me', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 16', titulo: 'How often?', tipo: 'Escute e grave', treina: 'Fala · Frequência', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 16', titulo: 'Adverbs of frequency', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 17', titulo: 'Yes, I do!', tipo: 'Escute e escolha', treina: 'Escuta · Respostas curtas', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 17', titulo: 'Do or does?', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 17', titulo: 'Phone interview', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Entrevista', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 17', titulo: 'Ask and answer', tipo: 'Escute e grave', treina: 'Fala · Perguntas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 17', titulo: 'Questions with do / does', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

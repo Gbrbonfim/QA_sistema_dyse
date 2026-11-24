@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 15 · Questions and answers</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 15 · Escuta (revisão)
+   Alinhado ao slide "Class 15: Review Classes 1-12" — Talking Point (as perguntas a–s: name,
+   from, nationality, age, spell, email, bag, prices, favorites, family, breakfast, time,
+   routine). Conteúdo NOVO e mais difícil: o aluno ouve a pergunta e escolhe a ÚNICA resposta
+   que combina; as outras respondem outra pergunta ou têm erro de gramática. 24 questões. */
+const op = (...ls) => ls.map(l => ({ label: l, icon: 'chat' }));
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 15, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the question and choose the answer',
+  itens: [
+    { audioTexto: "What's your name?", opcoes: op('My name is Carla.', "I'm from Chile.", "I'm twenty-five.", "It's blue."), certa: 0 },
+    { audioTexto: 'Where are you from?', opcoes: op('My name is Leo.', "I'm from Argentina.", "It's ten o'clock.", "They're cheap."), certa: 1 },
+    { audioTexto: "What's your nationality?", opcoes: op("I'm in London.", "It's my bag.", "I'm Brazilian.", "I'm fine."), certa: 2 },
+    { audioTexto: 'How old are you?', opcoes: op("I'm Mexican.", "I'm OK.", "At seven o'clock.", "I'm thirty-two."), certa: 3 },
+    { audioTexto: 'Is your teacher from Brazil?', opcoes: op("No, she isn't. She's from England.", "No, she aren't.", 'Yes, I am.', "She's my teacher."), certa: 0 },
+    { audioTexto: 'Is your best friend English?', opcoes: op('Yes, I am.', "No, he isn't. He's American.", 'No, he not.', 'My friend is.'), certa: 1 },
+    { audioTexto: 'How do you spell your last name?', opcoes: op("It's Silva.", 'I have a last name.', 'S-I-L-V-A.', "I'm Silva."), certa: 2 },
+    { audioTexto: "What's your email?", opcoes: op("I'm at home.", "It's a phone.", "At five o'clock.", 'ana@dyse.com'), certa: 3 },
+    { audioTexto: "What's in your bag?", opcoes: op('A wallet and a phone.', "It's in my bag.", "It's two pounds.", 'Yes, it is.'), certa: 0 },
+    { audioTexto: 'How much is a cup of coffee?', opcoes: op("It's a cup.", "It's two dollars.", "They're two dollars.", "It's at two."), certa: 1 },
+    { audioTexto: "What's your favorite food?", opcoes: op("It's red.", "At one o'clock.", 'My favorite food is lasagna.', "I'm hungry."), certa: 2 },
+    { audioTexto: 'Who is in your family?', opcoes: op('In Brazil.', "It's at home.", 'Yes, they are.', 'My mom, my dad and my sister.'), certa: 3 },
+    { audioTexto: 'Is your phone new or old?', opcoes: op("It's new.", "It's a phone.", 'Yes, it is.', "It's my."), certa: 0 },
+    { audioTexto: 'What do you have for breakfast?', opcoes: op('At seven.', 'I have bread and coffee.', 'I has eggs.', "I'm breakfast."), certa: 1 },
+    { audioTexto: "What's your favorite day of the week?", opcoes: op("It's morning.", "It's at eight.", 'Friday!', 'Yes, it is.'), certa: 2 },
+    { audioTexto: 'What time do you start work?', opcoes: op('On Monday.', 'At work.', 'I start.', "At nine o'clock."), certa: 3 },
+    { audioTexto: "What's your morning routine?", opcoes: op('I get up, have a shower and have breakfast.', "I'm a morning.", "It's in the morning.", 'At six.'), certa: 0 },
+    { audioTexto: "Where's my passport?", opcoes: op("It's a passport.", "It's in your bag.", "They're in your bag.", 'Yes, it is.'), certa: 1 },
+    { audioTexto: 'Are you a morning person?', opcoes: op("I'm morning.", 'Yes, I do.', "No, I'm not.", 'No, I amn\'t.'), certa: 2 },
+    { audioTexto: 'Who is Kate?', opcoes: op("She's William.", "She's from.", "Her is William's wife.", "She's William's wife."), certa: 3 },
+    { audioTexto: 'How much are the apples?', opcoes: op("They're three euros.", "It's three euros.", "They're apples.", 'Three apples.'), certa: 0 },
+    { audioTexto: "What's your phone number?", opcoes: op("It's my phone.", "It's 555-0193.", "I'm twenty-five.", "It's new."), certa: 1 },
+    { audioTexto: 'What time is it?', opcoes: op("It's Friday.", "It's a clock.", "It's half past four.", "It's late time."), certa: 2 },
+    { audioTexto: "What's your favorite TV show?", opcoes: op("It's on TV.", 'I have a TV.', 'Yes, it is.', 'My favorite TV show is Friends.'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

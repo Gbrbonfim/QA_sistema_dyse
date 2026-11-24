@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 15 · A new student</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 15 · Leitura (revisão)
+   Alinhado ao slide "Class 15: Review Classes 1-12" — Talking Point ("Ask and answer questions
+   with a partner", "Try to remember some information about your partner"). Conteúdo NOVO: a
+   professora Jane entrevista o aluno novo, Marco. As perguntas de compreensão pedem para lembrar
+   as informações dele. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Jane', "Hello! What's your name?"],
+  ['Marco', 'My name is Marco Rossi.'],
+  ['Jane', 'How do you spell your last name?'],
+  ['Marco', 'R-O-S-S-I.'],
+  ['Jane', 'Thank you. Where are you from, Marco?'],
+  ['Marco', "I'm from Italy. I'm Italian."],
+  ['Jane', 'How old are you?'],
+  ['Marco', "I'm twenty-eight."],
+  ['Jane', 'Who is in your family?'],
+  ['Marco', "My wife, Giulia, and our son, Luca. He's four."],
+  ['Jane', 'Nice! What do you have for breakfast?'],
+  ['Marco', "I have a coffee and bread. I'm not hungry in the morning."],
+  ['Jane', 'What time do you start work?'],
+  ['Marco', "At half past eight. I'm a teacher too!"]
+];
+const lado = q => q === 'Jane' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 15, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['My name is Marco Rossi.', "I'm from Italy.", 'Me name is Marco Rossi.'], 0, 'Meu nome é Marco Rossi.'),
+    prox(2, ['How old are you?', 'How do you spell your last name?', 'How do you spell you last name?'], 1, 'Como você soletra o seu sobrenome?'),
+    prox(3, ["I'm Rossi.", "It's Italian.", 'R-O-S-S-I.'], 2, 'R-O-S-S-I.'),
+    prox(4, ['Thank you. Where are you from, Marco?', 'Thank you. Where you are from, Marco?', 'What time do you start work?'], 0, 'Obrigada. De onde você é, Marco?'),
+    prox(5, ["I'm from Italian. I'm Italy.", "I'm from Italy. I'm Italian.", "I'm twenty-eight."], 1, 'Eu sou da Itália. Eu sou italiano.'),
+    prox(6, ['Who is in your family?', 'Nice!', 'How old are you?'], 2, 'Quantos anos você tem?'),
+    prox(7, ["I'm twenty-eight.", 'I have twenty-eight years.', "I'm twenty-eight years."], 0, 'Eu tenho vinte e oito anos.'),
+    prox(8, ['What time do you start work?', 'Who is in your family?', 'Who are in your family?'], 1, 'Quem está na sua família?'),
+    prox(9, ["My wife, Giulia, and her son, Luca. She's four.", "At half past eight.", "My wife, Giulia, and our son, Luca. He's four."], 2, 'Minha esposa, Giulia, e nosso filho, Luca. Ele tem quatro anos.'),
+    prox(10, ['Nice! What do you have for breakfast?', 'Nice! What do you has for breakfast?', 'How old are you?'], 0, 'Legal! O que você come no café da manhã?'),
+    prox(11, ['I has a coffee and bread.', "I have a coffee and bread. I'm not hungry in the morning.", "I have a coffee and bread. I'm not hungry in morning the."], 1, 'Eu tomo um café e como pão. Eu não tenho fome de manhã.'),
+    prox(12, ['Thank you.', 'Where are you from?', 'What time do you start work?'], 2, 'A que horas você começa a trabalhar?'),
+    { instrucao: "What's Marco's last name?", frase: 'His last name is ___.', opcoes: ['Rossi', 'Marco', 'Luca'], certa: 0, traducao: 'O sobrenome dele é Rossi.' },
+    { instrucao: "What's Marco's nationality?", frase: "He's ___.", opcoes: ['Italy', 'Italian', 'English'], certa: 1, traducao: 'Ele é italiano.' },
+    { instrucao: 'How old is Marco?', frase: "He's ___.", opcoes: ['four', 'twenty-four', 'twenty-eight'], certa: 2, traducao: 'Ele tem vinte e oito anos.' },
+    { instrucao: "What's the name of Marco's wife?", frase: 'Her name is ___.', opcoes: ['Giulia', 'Jane', 'Luca'], certa: 0, traducao: 'O nome dela é Giulia.' },
+    { instrucao: 'Who is Luca?', frase: "He's Marco's ___.", opcoes: ['brother', 'son', 'cousin'], certa: 1, traducao: 'Ele é o filho do Marco.' },
+    { instrucao: 'How old is Luca?', frase: "He's ___.", opcoes: ['twenty-eight', 'fourteen', 'four'], certa: 2, traducao: 'Ele tem quatro anos.' },
+    { instrucao: "Marco's breakfast:", frase: 'He ___ a coffee and bread.', opcoes: ['has', 'have', 'is'], certa: 0, traducao: 'Ele toma um café e come pão.' },
+    { instrucao: 'What time does Marco start work?', frase: 'He starts work at ___.', opcoes: ["eight o'clock", 'half past eight', 'a quarter to eight'], certa: 1, traducao: 'Ele começa a trabalhar às oito e meia.' }
+  ]
+});
+</script>
+</body>
+</html>

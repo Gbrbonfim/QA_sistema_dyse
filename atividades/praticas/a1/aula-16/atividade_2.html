@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 16 · Where does the adverb go?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 16 · Escrita
+   Alinhado ao slide "Class 16 and 17: How Often Do You Use Your Phone?" (parte Class 16) —
+   Grammar Point (o advérbio vai DEPOIS do be e ANTES dos outros verbos) e exercício 3 (reescrever
+   com o advérbio no lugar certo). Conteúdo NOVO: outras frases. O contexto traz a frase em
+   português; o desafio é a posição do advérbio. A isca é is / are trocado ou o verbo sem o s.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 16, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu sempre tomo café da manhã.'), palavras: ['I', 'always', 'have', 'breakfast'], isca: ['has'], fim: '.', traducao: 'Eu sempre tomo café da manhã.' },
+    { contexto: M('O David nunca está no Instagram.'), palavras: ['David', 'is', 'never', 'on', 'Instagram'], isca: ['are'], fim: '.', traducao: 'O David nunca está no Instagram.' },
+    { contexto: M('As crianças geralmente baixam jogos.'), palavras: ['The', 'children', 'usually', 'download', 'games'], isca: ['downloads'], fim: '.', traducao: 'As crianças geralmente baixam jogos.' },
+    { contexto: M('Eu nunca assisto séries à tarde.'), palavras: ['I', 'never', 'watch', 'series', 'in', 'the', 'afternoon'], isca: ['watches'], fim: '.', traducao: 'Eu nunca assisto séries à tarde.' },
+    { contexto: M('O Lucio sempre chega atrasado na aula.'), palavras: ['Lucio', 'is', 'always', 'late', 'for', 'class'], isca: ['are'], fim: '.', traducao: 'O Lucio sempre está atrasado para a aula.' },
+    { contexto: M('A Ana frequentemente vai trabalhar de carro.'), palavras: ['Ana', 'often', 'goes', 'to', 'work', 'by', 'car'], isca: ['go'], fim: '.', traducao: 'A Ana frequentemente vai trabalhar de carro.' },
+    { contexto: M('Meus pais às vezes saem para jantar.'), palavras: ['My', 'parents', 'sometimes', 'go', 'out', 'for', 'dinner'], isca: ['goes'], fim: '.', traducao: 'Meus pais às vezes saem para jantar.' },
+    { contexto: M('Ela sempre confere a previsão do tempo.'), palavras: ['She', 'always', 'checks', 'the', 'weather'], isca: ['check'], fim: '.', traducao: 'Ela sempre confere a previsão do tempo.' },
+    { contexto: M('Nós geralmente estamos no celular.'), palavras: ['We', 'are', 'usually', 'on', 'our', 'phones'], isca: ['is'], fim: '.', traducao: 'Nós geralmente estamos no celular.' },
+    { contexto: M('Ele às vezes tira fotos com os amigos.'), palavras: ['He', 'sometimes', 'takes', 'photos', 'with', 'his', 'friends'], isca: ['take'], fim: '.', traducao: 'Ele às vezes tira fotos com os amigos.' },
+    { contexto: M('Eu frequentemente mando mensagens de voz.'), palavras: ['I', 'often', 'send', 'voice', 'messages'], isca: ['sends'], fim: '.', traducao: 'Eu frequentemente mando mensagens de voz.' },
+    { contexto: M('Meu avô nunca joga no celular.'), palavras: ['My', 'grandfather', 'never', 'plays', 'games', 'on', 'his', 'phone'], isca: ['play'], fim: '.', traducao: 'Meu avô nunca joga no celular.' },
+    { contexto: M('Eles estão sempre felizes de manhã.'), palavras: ['They', 'are', 'always', 'happy', 'in', 'the', 'morning'], isca: ['is'], fim: '.', traducao: 'Eles estão sempre felizes de manhã.' },
+    { contexto: M('Minha irmã geralmente ouve música no ônibus.'), palavras: ['My', 'sister', 'usually', 'listens', 'to', 'music', 'on', 'the', 'bus'], isca: ['listen'], fim: '.', traducao: 'Minha irmã geralmente ouve música no ônibus.' },
+    { contexto: M('O celular dela é sempre caro.'), palavras: ['Her', 'phone', 'is', 'always', 'expensive'], isca: ['She'], fim: '.', traducao: 'O celular dela é sempre caro.' },
+    { contexto: M('Eu às vezes leio livros no celular.'), palavras: ['I', 'sometimes', 'read', 'books', 'on', 'my', 'phone'], isca: ['reads'], fim: '.', traducao: 'Eu às vezes leio livros no celular.' },
+    { contexto: M('O Mark frequentemente joga tênis na quarta.'), palavras: ['Mark', 'often', 'plays', 'tennis', 'on', 'Wednesday'], isca: ['play'], fim: '.', traducao: 'O Mark frequentemente joga tênis na quarta.' },
+    { contexto: M('Você nunca está atrasado.'), palavras: ['You', 'are', 'never', 'late'], isca: ['is'], fim: '.', traducao: 'Você nunca está atrasado.' },
+    { contexto: M('Eu sempre ouço as notícias de manhã.'), palavras: ['I', 'always', 'listen', 'to', 'the', 'news', 'in', 'the', 'morning'], isca: ['listens'], fim: '.', traducao: 'Eu sempre ouço as notícias de manhã.' },
+    { contexto: M('Meu irmão geralmente posta stories à noite.'), palavras: ['My', 'brother', 'usually', 'posts', 'stories', 'in', 'the', 'evening'], isca: ['post'], fim: '.', traducao: 'Meu irmão geralmente posta stories à noite.' }
+  ]
+});
+</script>
+</body>
+</html>

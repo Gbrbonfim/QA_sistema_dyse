@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 15 · Review: grammar</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 15 · Gramática (revisão)
+   Alinhado ao slide "Class 15: Review Classes 1-12" — Grammar part (revisão integrada: to be,
+   a / an, plurais, How much is / are, possessivos, 's, adjetivos, have / has, present simple,
+   horas e preposições at / on / in). Conteúdo NOVO e mais difícil: um item de cada aula, com
+   distratores dos erros mais comuns. 24 questões. */
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 15, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'I ___ from Brazil.', opcoes: ['am', 'is', 'are'], certa: 0, traducao: 'Eu sou do Brasil.' },
+    { frase: 'My parents ___ Italian.', opcoes: ['is', 'are', 'am'], certa: 1, traducao: 'Meus pais são italianos.' },
+    { frase: '___ she your teacher?', opcoes: ['Are', 'Am', 'Is'], certa: 2, traducao: 'Ela é a sua professora?' },
+    { frase: "It's ___ orange.", opcoes: ['a', 'an'], certa: 1, traducao: 'É uma laranja.' },
+    { instrucao: 'Choose the right plural', frase: 'a city → two ___', opcoes: ['citys', 'cities', 'cityes'], certa: 1, traducao: 'uma cidade → duas cidades' },
+    { frase: 'How much ___ the cheese?', opcoes: ['is', 'are'], certa: 0, traducao: 'Quanto custa o queijo?' },
+    { frase: 'This is Mark. ___ wife is Anna.', opcoes: ['His', 'Her', 'He'], certa: 0, traducao: 'Este é o Mark. A esposa dele é a Anna.' },
+    { frase: 'Anna and Tom are my friends. ___ house is big.', opcoes: ['There', 'Their', 'They'], certa: 1, traducao: 'Anna e Tom são meus amigos. A casa deles é grande.' },
+    { frase: 'Luke is ___ brother.', opcoes: ['Haley', 'Haleys', "Haley's"], certa: 2, traducao: 'O Luke é o irmão da Haley.' },
+    { frase: "They're ___.", opcoes: ['smart dogs', 'smarts dogs', 'dogs smart'], certa: 0, traducao: 'Eles são cachorros espertos.' },
+    { frase: 'My brother ___ a new laptop.', opcoes: ['have', 'has'], certa: 1, traducao: 'Meu irmão tem um notebook novo.' },
+    { frase: 'We ___ dinner at home.', opcoes: ['has', 'have'], certa: 1, traducao: 'Nós jantamos em casa.' },
+    { frase: 'She ___ TV in the evening.', opcoes: ['watchs', 'watches', 'watch'], certa: 1, traducao: 'Ela assiste TV à noite.' },
+    { frase: "My dad ___ to work at eight o'clock.", opcoes: ['goes', 'go', 'gos'], certa: 0, traducao: 'Meu pai vai trabalhar às oito horas.' },
+    { frase: "It's ___ past six. (6:30)", opcoes: ['quarter', 'half', 'about'], certa: 1, completa: "It's half past six.", traducao: 'São seis e meia.' },
+    { frase: "I get up ___ seven o'clock.", opcoes: ['on', 'in', 'at'], certa: 2, traducao: 'Eu levanto às sete horas.' },
+    { frase: 'We have pizza ___ Friday.', opcoes: ['in', 'on', 'at'], certa: 1, traducao: 'Nós comemos pizza na sexta.' },
+    { frase: "How ___ are you? I'm twenty.", opcoes: ['old', 'many', 'much'], certa: 0, traducao: 'Quantos anos você tem? Eu tenho vinte.' },
+    { frase: "What's your ___ name? Silva.", opcoes: ['first', 'last', 'favorite'], certa: 1, traducao: 'Qual é o seu sobrenome? Silva.' },
+    { frase: "She isn't English. ___ American.", opcoes: ["She's", 'Her', 'Hers'], certa: 0, traducao: 'Ela não é inglesa. Ela é americana.' },
+    { instrucao: CERTA, opcoes: ['I have twenty years.', 'I am twenty years old.', 'I have twenty years old.'], certa: 1, traducao: 'Eu tenho vinte anos.' },
+    { instrucao: CERTA, opcoes: ['Her name is Sara and she is from Peru.', 'She name is Sara and her is from Peru.', 'Her name is Sara and her is from Peru.'], certa: 0, traducao: 'O nome dela é Sara e ela é do Peru.' },
+    { instrucao: CERTA, opcoes: ['My sister cat is very lazy.', 'The cat of my sister is very lazys.', "My sister's cat is very lazy."], certa: 2, traducao: 'O gato da minha irmã é muito preguiçoso.' },
+    { instrucao: CERTA, opcoes: ['He have a shower at seven.', 'He has a shower at seven.', 'He has shower a at seven.'], certa: 1, traducao: 'Ele toma banho às sete.' }
+  ]
+});
+</script>
+</body>
+</html>
