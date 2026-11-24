@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 29 · Simple or continuous?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 29 · Gramática
+   Alinhado ao slide "Class 29: It's Raining!" — Grammar Point (present simple para hábitos com
+   always / usually / sometimes / never / every day; present continuous para now / at the moment /
+   today) e exercício 4. Conteúdo NOVO e mais difícil: o marcador de tempo decide; inclui perguntas
+   e negativas dos dois tempos. 24 questões. */
+const MARC = 'Present simple or present continuous? Look at the time word';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 29, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: MARC, frase: "It's ___ today, so we can go to the museum.", opcoes: ['raining', 'rains'], certa: 0, traducao: 'Está chovendo hoje, então podemos ir ao museu.' },
+    { instrucao: MARC, frase: 'We usually go to the cinema when it ___.', opcoes: ['raining', 'rains'], certa: 1, traducao: 'Nós geralmente vamos ao cinema quando chove.' },
+    { instrucao: MARC, frase: 'Julie ___ a shower right now.', opcoes: ['has', 'is having', 'have'], certa: 1, traducao: 'A Julie está tomando banho agora.' },
+    { instrucao: MARC, frase: 'My brother usually ___ in the evening.', opcoes: ['is working', 'work', 'works'], certa: 2, traducao: 'Meu irmão geralmente trabalha à noite.' },
+    { instrucao: MARC, frase: 'My grandfather often ___ for dinner on weekends.', opcoes: ['comes', 'is coming', 'come'], certa: 0, traducao: 'Meu avô frequentemente vem jantar nos fins de semana.' },
+    { instrucao: MARC, frase: 'They ___ lasagna today.', opcoes: ['cook', 'are cooking', 'cooks'], certa: 1, traducao: 'Eles estão cozinhando lasanha hoje.' },
+    { instrucao: MARC, frase: 'Angela ___ guitar lessons every Wednesday.', opcoes: ['is taking', 'take', 'takes'], certa: 2, traducao: 'A Angela faz aula de violão toda quarta.' },
+    { instrucao: MARC, frase: 'I ___ exercises at the moment.', opcoes: ["'m not doing", "don't do", "doesn't do"], certa: 0, traducao: 'Eu não estou fazendo exercícios no momento.' },
+    { instrucao: MARC, frase: 'What time ___ on weekends?', opcoes: ['are you getting up', 'do you get up', 'you get up'], certa: 1, traducao: 'A que horas você levanta nos fins de semana?' },
+    { instrucao: MARC, frase: 'What ___ today?', opcoes: ['do they study', 'they study', 'are they studying'], certa: 2, traducao: 'O que eles estão estudando hoje?' },
+    { instrucao: MARC, frase: 'How often ___ to the gym?', opcoes: ['do you go', 'are you going', 'you go'], certa: 0, traducao: 'Com que frequência você vai à academia?' },
+    { instrucao: MARC, frase: 'She ___ as a secretary in a big company.', opcoes: ['is working now always', 'works', 'working'], certa: 1, traducao: 'Ela trabalha como secretária numa empresa grande.' },
+    { instrucao: MARC, frase: "I don't usually work on Saturdays, but today I ___.", opcoes: ['work', 'works', "'m working"], certa: 2, traducao: 'Eu geralmente não trabalho aos sábados, mas hoje estou trabalhando.' },
+    { instrucao: MARC, frase: "She isn't sleeping now. She ___.", opcoes: ["'s studying", 'studies', 'study'], certa: 0, traducao: 'Ela não está dormindo agora. Ela está estudando.' },
+    { instrucao: MARC, frase: "I'm wearing my raincoat because it ___ today.", opcoes: ['rains', "'s raining", 'rain'], certa: 1, traducao: 'Eu estou usando a minha capa de chuva porque está chovendo hoje.' },
+    { frase: 'We use the present simple with ___.', opcoes: ['now, at the moment', 'today', 'always, usually, every day'], certa: 2, traducao: 'Usamos o present simple com always, usually, every day.' },
+    { frase: 'We use the present continuous with ___.', opcoes: ['now, at the moment, today', 'never', 'every day'], certa: 0, traducao: 'Usamos o present continuous com now, at the moment, today.' },
+    { frase: "When it's cold, I go to a ___. I have a hot chocolate there.", opcoes: ['beach', 'café', 'park'], certa: 1, traducao: 'Quando está frio, eu vou a um café. Eu tomo um chocolate quente lá.' },
+    { frase: 'You can see paintings in an art ___.', opcoes: ['shop', 'cinema', 'gallery'], certa: 2, traducao: 'Você pode ver quadros numa galeria de arte.' },
+    { frase: 'You can watch a movie at the ___.', opcoes: ['cinema', 'museum', 'beach'], certa: 0, traducao: 'Você pode assistir a um filme no cinema.' },
+    { instrucao: CERTA, opcoes: ["I'm usually going to the beach on Saturdays.", 'I usually go to the beach on Saturdays.', 'I usually going to the beach on Saturdays.'], certa: 1, traducao: 'Eu geralmente vou à praia aos sábados.' },
+    { instrucao: CERTA, opcoes: ['Look! It rains.', 'Look! It raining.', "Look! It's raining."], certa: 2, traducao: 'Olha! Está chovendo.' },
+    { instrucao: CERTA, opcoes: ["I'm drinking water right now.", 'I drink water right now.', 'I drinking water right now.'], certa: 0, traducao: 'Eu estou bebendo água agora.' },
+    { instrucao: CERTA, opcoes: ['She is always brushing her teeth before bed every day.', 'She always brushes her teeth before bed.', 'She always brush her teeth before bed.'], certa: 1, traducao: 'Ela sempre escova os dentes antes de dormir.' }
+  ]
+});
+</script>
+</body>
+</html>

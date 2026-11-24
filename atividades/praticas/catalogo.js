@@ -299,6 +299,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Talk about the weather', tipo: 'Escute e grave', treina: 'Fala · Tempo', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Present continuous: all forms', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 29,
+        titulo: "Class 29 · It's Raining!",
+        atividades: [
+          { num: 1, titulo: 'Usually or now?', tipo: 'Escute e escolha', treina: 'Escuta · Lugares', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "It rains or it's raining?", tipo: 'Monte a frase', treina: 'Escrita · Simple x continuous', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'A rainy Saturday', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Every day or today?', tipo: 'Escute e grave', treina: 'Fala · Simple x continuous', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Simple or continuous?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

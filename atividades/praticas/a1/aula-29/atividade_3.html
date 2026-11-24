@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 29 · A rainy Saturday</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 29 · Leitura
+   Alinhado ao slide "Class 29: It's Raining!" — Listening (três pessoas falam do dia: o que
+   geralmente fazem e o que estão fazendo hoje) e Talking Point (When it's cold, I go to a café).
+   Conteúdo NOVO: Sara e Pedro trocam mensagens num sábado de chuva. 20 questões: 12 de "próxima
+   fala" + 8 de compreensão. */
+const D = [
+  ['Sara', "Hi, Pedro! What are you doing?"],
+  ['Pedro', "Hi! I'm watching a series at home. It's raining a lot!"],
+  ['Sara', 'I know! I usually go to the beach on Saturdays.'],
+  ['Pedro', "Not today! Where are you now?"],
+  ['Sara', "I'm at the shopping center with my mom. We're buying new shoes."],
+  ['Pedro', 'Nice! I usually play soccer in the park on Saturdays.'],
+  ['Sara', 'And today?'],
+  ['Pedro', "Today I'm staying at home. My brother is cooking lasagna."],
+  ['Sara', 'Yum! Does he cook every weekend?'],
+  ['Pedro', 'No, he sometimes cooks. Today is special. It\'s my birthday!'],
+  ['Sara', 'Happy birthday! Are you having a party?'],
+  ['Pedro', "Yes, a small party. My friends are here now!"],
+  ['Sara', "Great! When it's raining, a party at home is perfect!"],
+  ['Pedro', 'Ha ha! Come too!']
+];
+const lado = q => q === 'Sara' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 29, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi! I'm watching a series at home. It's raining a lot!", "Hi! I watch a series at home now. It rains a lot!", "Hi! I watching a series."], 0, 'Oi! Eu estou assistindo uma série em casa. Está chovendo muito!'),
+    prox(2, ["I know! I'm usually going to the beach.", 'I know! I usually go to the beach on Saturdays.', 'Come too!'], 1, 'Eu sei! Eu geralmente vou à praia aos sábados.'),
+    prox(3, ['Not today! Where do you go now?', 'And today?', 'Not today! Where are you now?'], 2, 'Hoje não! Onde você está agora?'),
+    prox(4, ["I'm at the shopping center with my mom. We're buying new shoes.", "I'm at the shopping center. We buy new shoes now.", "I'm at the shopping center. We buying new shoes."], 0, 'Eu estou no shopping com a minha mãe. Estamos comprando sapatos novos.'),
+    prox(5, ["Nice! I'm usually playing soccer.", 'Nice! I usually play soccer in the park on Saturdays.', 'Happy birthday!'], 1, 'Legal! Eu geralmente jogo futebol no parque aos sábados.'),
+    prox(6, ['Ha ha!', 'Come too!', 'And today?'], 2, 'E hoje?'),
+    prox(7, ["Today I'm staying at home. My brother is cooking lasagna.", "Today I stay at home. My brother cooks lasagna now.", "Today I staying at home."], 0, 'Hoje eu vou ficar em casa. Meu irmão está cozinhando lasanha.'),
+    prox(8, ['Yum! Is he cook every weekend?', 'Yum! Does he cook every weekend?', 'Yum! Is he cooking every weekend?'], 1, 'Que delícia! Ele cozinha todo fim de semana?'),
+    prox(9, ["No, he's sometimes cooking.", 'Yes, he is.', "No, he sometimes cooks. Today is special. It's my birthday!"], 2, 'Não, ele às vezes cozinha. Hoje é especial. É meu aniversário!'),
+    prox(10, ['Happy birthday! Are you having a party?', 'Happy birthday! Do you having a party?', 'And today?'], 0, 'Feliz aniversário! Você vai fazer festa?'),
+    prox(11, ['Yes, a small party. My friends is here now!', 'Yes, a small party. My friends are here now!', 'No, I usually go to the beach.'], 1, 'Sim, uma festa pequena. Meus amigos estão aqui agora!'),
+    prox(12, ['Where are you now?', 'Yum!', "Great! When it's raining, a party at home is perfect!"], 2, 'Ótimo! Quando está chovendo, uma festa em casa é perfeita!'),
+    { instrucao: 'What is Pedro doing now?', frase: "He's watching a ___.", opcoes: ['series', 'movie', 'game'], certa: 0, traducao: 'Ele está assistindo uma série.' },
+    { instrucao: 'Where does Sara usually go on Saturdays?', frase: 'To the ___.', opcoes: ['park', 'beach', 'museum'], certa: 1, traducao: 'À praia.' },
+    { instrucao: 'Where is Sara now?', frase: 'At the ___.', opcoes: ['beach', 'café', 'shopping center'], certa: 2, traducao: 'No shopping.' },
+    { instrucao: 'What are Sara and her mom doing?', frase: "They're buying new ___.", opcoes: ['shoes', 'clothes', 'phones'], certa: 0, traducao: 'Elas estão comprando sapatos novos.' },
+    { instrucao: 'What does Pedro usually do on Saturdays?', frase: 'He ___ soccer in the park.', opcoes: ['is playing', 'plays', 'play'], certa: 1, traducao: 'Ele joga futebol no parque.' },
+    { instrucao: "What is Pedro's brother doing now?", frase: "He's ___ lasagna.", opcoes: ['eating', 'buying', 'cooking'], certa: 2, traducao: 'Ele está cozinhando lasanha.' },
+    { instrucao: 'Why is today special?', frase: "It's Pedro's ___.", opcoes: ['birthday', 'party', 'weekend'], certa: 0, traducao: 'É o aniversário do Pedro.' },
+    { instrucao: "Where are Pedro's friends now?", frase: "At Pedro's ___.", opcoes: ['school', 'house', 'beach'], certa: 1, traducao: 'Na casa do Pedro.' }
+  ]
+});
+</script>
+</body>
+</html>

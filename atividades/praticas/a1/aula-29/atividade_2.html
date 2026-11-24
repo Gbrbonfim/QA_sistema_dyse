@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 29 · It rains or it's raining?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 29 · Escrita
+   Alinhado ao slide "Class 29: It's Raining!" — Grammar Point (present simple com always /
+   usually / every day; present continuous com now / at the moment / today) e exercício 4.
+   Conteúdo NOVO: outras frases. O contexto traz a frase em português; o marcador de tempo decide
+   o tempo verbal. A isca é a forma do outro tempo verbal. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 29, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Está chovendo hoje.'), palavras: ["It's", 'raining', 'today'], isca: ['rains'], fim: '.', traducao: 'Está chovendo hoje.' },
+    { contexto: M('Nós geralmente vamos a um museu quando chove.'), palavras: ['We', 'usually', 'go', 'to', 'a', 'museum', 'when', 'it', 'rains'], isca: ['raining'], fim: '.', traducao: 'Nós geralmente vamos a um museu quando chove.' },
+    { contexto: M('A Julie está tomando banho agora.'), palavras: ['Julie', 'is', 'having', 'a', 'shower', 'right', 'now'], isca: ['has'], fim: '.', traducao: 'A Julie está tomando banho agora.' },
+    { contexto: M('Meu irmão geralmente trabalha à noite.'), palavras: ['My', 'brother', 'usually', 'works', 'in', 'the', 'evening'], isca: ['working'], fim: '.', traducao: 'Meu irmão geralmente trabalha à noite.' },
+    { contexto: M('Eu não estou fazendo exercícios no momento.'), palavras: ["I'm", 'not', 'doing', 'exercises', 'at', 'the', 'moment'], isca: ["don't"], fim: '.', traducao: 'Eu não estou fazendo exercícios no momento.' },
+    { contexto: M('Minha escola começa às nove todo dia.'), palavras: ['My', 'school', 'starts', 'at', 'nine', 'every', 'day'], isca: ['starting'], fim: '.', traducao: 'Minha escola começa às nove todo dia.' },
+    { contexto: M('A que horas você levanta nos fins de semana?'), palavras: ['What', 'time', 'do', 'you', 'get', 'up', 'on', 'weekends'], isca: ['are'], fim: '?', traducao: 'A que horas você levanta nos fins de semana?' },
+    { contexto: M('O que eles estão estudando hoje?'), palavras: ['What', 'are', 'they', 'studying', 'today'], isca: ['do'], fim: '?', traducao: 'O que eles estão estudando hoje?' },
+    { contexto: M('Ela não está dormindo agora. Ela está estudando.'), palavras: ['She', "isn't", 'sleeping', 'now.', "She's", 'studying'], isca: ["doesn't"], fim: '.', traducao: 'Ela não está dormindo agora. Ela está estudando.' },
+    { contexto: M('Com que frequência você vai à academia?'), palavras: ['How', 'often', 'do', 'you', 'go', 'to', 'the', 'gym'], isca: ['are'], fim: '?', traducao: 'Com que frequência você vai à academia?' },
+    { contexto: M('Eles estão cozinhando lasanha hoje.'), palavras: ['They', 'are', 'cooking', 'lasagna', 'today'], isca: ['cook'], fim: '.', traducao: 'Eles estão cozinhando lasanha hoje.' },
+    { contexto: M('Ela trabalha como secretária numa empresa grande.'), palavras: ['She', 'works', 'as', 'a', 'secretary', 'in', 'a', 'big', 'company'], isca: ['working'], fim: '.', traducao: 'Ela trabalha como secretária numa empresa grande.' },
+    { contexto: M('A Angela faz aula de violão toda quarta.'), palavras: ['Angela', 'takes', 'guitar', 'lessons', 'every', 'Wednesday'], isca: ['taking'], fim: '.', traducao: 'A Angela faz aula de violão toda quarta.' },
+    { contexto: M('Eu geralmente não trabalho no sábado, mas hoje eu estou trabalhando.'), palavras: ['I', "don't", 'usually', 'work', 'on', 'Saturdays,', 'but', 'today', "I'm", 'working'], isca: ['works'], fim: '.', traducao: 'Eu geralmente não trabalho aos sábados, mas hoje estou trabalhando.' },
+    { contexto: M('Eu estou usando a minha capa de chuva porque está chovendo.'), palavras: ["I'm", 'wearing', 'my', 'raincoat', 'because', "it's", 'raining'], isca: ['rains'], fim: '.', traducao: 'Eu estou usando a minha capa de chuva porque está chovendo.' },
+    { contexto: M('Quando está frio, eu vou a um café.'), palavras: ['When', "it's", 'cold,', 'I', 'go', 'to', 'a', 'café'], isca: ['going'], fim: '.', traducao: 'Quando está frio, eu vou a um café.' },
+    { contexto: M('A Emma está comprando sapatos novos com a irmã.'), palavras: ['Emma', 'is', 'buying', 'new', 'shoes', 'with', 'her', 'sister'], isca: ['buys'], fim: '.', traducao: 'A Emma está comprando sapatos novos com a irmã.' },
+    { contexto: M('O Lucas está em casa hoje.'), palavras: ['Lucas', 'is', 'at', 'home', 'today'], isca: ['does'], fim: '.', traducao: 'O Lucas está em casa hoje.' },
+    { contexto: M('Eu sempre escovo os dentes antes de dormir.'), palavras: ['I', 'always', 'brush', 'my', 'teeth', 'before', 'bed'], isca: ['brushing'], fim: '.', traducao: 'Eu sempre escovo os dentes antes de dormir.' },
+    { contexto: M('Eu estou usando muito o celular esta semana.'), palavras: ["I'm", 'using', 'my', 'phone', 'a', 'lot', 'this', 'week'], isca: ['use'], fim: '.', traducao: 'Eu estou usando muito o celular esta semana.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 29 · Usually or now?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 29 · Escuta
+   Alinhado ao slide "Class 29: It's Raining!" — Vocabulary: Places in the City (museum, art
+   gallery, park, shopping center, shop, beach, café, cinema) e Grammar Point (present simple para
+   hábitos x present continuous para agora). Conteúdo NOVO: outras frases. As figuras são ícones.
+   24 questões: 12 lugares + 12 "hábito ou agora?". */
+const IC = { museum: 'museum', 'art gallery': 'image', park: 'park', 'shopping center': 'local_mall', shop: 'storefront', beach: 'beach_access',
+  café: 'local_cafe', cinema: 'theaters', gym: 'fitness_center', library: 'local_library', restaurant: 'restaurant', school: 'school',
+  'usually (habit)': 'event_repeat', 'now (at the moment)': 'schedule' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const QUANDO = 'Listen: is it a habit or is it happening now?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 29, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the place',
+  itens: [
+    { audioTexto: 'a museum', opcoes: op('museum', 'art gallery', 'cinema', 'shop'), certa: 0 },
+    { audioTexto: 'an art gallery', opcoes: op('museum', 'art gallery', 'café', 'park'), certa: 1 },
+    { audioTexto: 'a shopping center', opcoes: op('shop', 'cinema', 'shopping center', 'restaurant'), certa: 2 },
+    { audioTexto: 'a cinema', opcoes: op('museum', 'café', 'gym', 'cinema'), certa: 3 },
+    { audioTexto: 'the beach', opcoes: op('beach', 'park', 'school', 'library'), certa: 0 },
+    { audioTexto: 'a café', opcoes: op('restaurant', 'café', 'shop', 'cinema'), certa: 1 },
+    { audioTexto: 'a park', opcoes: op('beach', 'gym', 'park', 'museum'), certa: 2 },
+    { audioTexto: 'a shop', opcoes: op('shopping center', 'café', 'library', 'shop'), certa: 3 },
+    { audioTexto: "When it's raining, I go to the cinema.", opcoes: op('cinema', 'beach', 'park', 'gym'), certa: 0 },
+    { audioTexto: "When it's sunny, we go to the beach.", opcoes: op('museum', 'beach', 'shop', 'café'), certa: 1 },
+    { audioTexto: "When it's cold, I go to a café. I have a hot chocolate.", opcoes: op('park', 'beach', 'café', 'gym'), certa: 2 },
+    { audioTexto: 'We can visit a museum when it rains.', opcoes: op('park', 'beach', 'shop', 'museum'), certa: 3 },
+    { instrucao: QUANDO, audioTexto: 'We usually go to a museum when it rains.', opcoes: op('usually (habit)', 'now (at the moment)'), certa: 0 },
+    { instrucao: QUANDO, audioTexto: "It's raining today.", opcoes: op('usually (habit)', 'now (at the moment)'), certa: 1 },
+    { instrucao: QUANDO, audioTexto: 'Emma is buying new shoes with her sister.', opcoes: op('usually (habit)', 'now (at the moment)'), certa: 1 },
+    { instrucao: QUANDO, audioTexto: 'Anna and Tom usually go to the cinema.', opcoes: op('usually (habit)', 'now (at the moment)'), certa: 0 },
+    { instrucao: QUANDO, audioTexto: 'Lucas is watching a movie with his brother.', opcoes: op('usually (habit)', 'now (at the moment)'), certa: 1 },
+    { instrucao: QUANDO, audioTexto: 'I always brush my teeth before bed.', opcoes: op('usually (habit)', 'now (at the moment)'), certa: 0 },
+    { instrucao: QUANDO, audioTexto: "I'm drinking water right now.", opcoes: op('usually (habit)', 'now (at the moment)'), certa: 1 },
+    { instrucao: QUANDO, audioTexto: 'My brother works in the evening.', opcoes: op('usually (habit)', 'now (at the moment)'), certa: 0 },
+    { instrucao: QUANDO, audioTexto: 'Julie is having a shower at the moment.', opcoes: op('usually (habit)', 'now (at the moment)'), certa: 1 },
+    { instrucao: QUANDO, audioTexto: 'Angela takes guitar lessons every Wednesday.', opcoes: op('usually (habit)', 'now (at the moment)'), certa: 0 },
+    { instrucao: QUANDO, audioTexto: "They're cooking lasagna today.", opcoes: op('usually (habit)', 'now (at the moment)'), certa: 1 },
+    { instrucao: QUANDO, audioTexto: 'My grandfather often comes for dinner on weekends.', opcoes: op('usually (habit)', 'now (at the moment)'), certa: 0 }
+  ]
+});
+</script>
+</body>
+</html>
