@@ -30,6 +30,18 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 02', titulo: 'Present a famous person', tipo: 'Escute e grave', treina: 'Fala · Apresentação', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 02', titulo: 'Subject pronouns', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 3,
+        titulo: 'Class 03 · Guess the Country',
+        // PowerPoint de 1 aula = 5 atividades (uma por habilidade).
+        atividades: [
+          { num: 1, titulo: 'Nationalities', tipo: 'Escute e escolha', treina: 'Escuta · Nacionalidades', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "I'm not, isn't, aren't", tipo: 'Monte a frase', treina: 'Escrita · Negativa', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Guess the country', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Say it right: nationalities', tipo: 'Escute e grave', treina: 'Fala · Sílaba tônica', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Verb to be: negative', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

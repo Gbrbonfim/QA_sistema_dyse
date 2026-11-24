@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 03 · Say it right: nationalities</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 03 · Fala
+   Alinhado ao slide "Class 03: Guess the Country" — Vocabulary 1 e 2 (nacionalidades, sílaba
+   tônica, listen and repeat) e To Be Negative Form. Conteúdo NOVO: frases negativas com
+   outras pessoas e fatos. 20 questões: 10 nacionalidades + 10 frases.
+   "isn't / aren't / I'm not" também valem ditos por extenso (is not / are not / I am not). */
+const NAC = 'Escute e grave a nacionalidade';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 3, num: 4, tipo: 'fala',
+  instrucao: 'Escute e grave a frase inteira',
+  itens: [
+    { instrucao: NAC, frase: 'Brazilian', traducao: 'Brasileiro(a)', nota: 'A força fica no "ZI": bra-ZI-lian.' },
+    { instrucao: NAC, frase: 'Canadian', traducao: 'Canadense', nota: 'A força fica no "NA": ca-NA-dian.' },
+    { instrucao: NAC, frase: 'Italian', traducao: 'Italiano(a)', nota: 'A força fica no "TA": i-TA-lian.' },
+    { instrucao: NAC, frase: 'Indian', traducao: 'Indiano(a)', nota: 'A força fica no começo: IN-dian.' },
+    { instrucao: NAC, frase: 'German', traducao: 'Alemão / Alemã', nota: 'Começa com som de "dj": DJER-man.' },
+    { instrucao: NAC, frase: 'Chinese', traducao: 'Chinês / Chinesa', nota: 'A força fica no final: chi-NESE.' },
+    { instrucao: NAC, frase: 'Japanese', traducao: 'Japonês / Japonesa', nota: 'A força fica no final: ja-pa-NESE.' },
+    { instrucao: NAC, frase: 'Spanish', traducao: 'Espanhol(a)', nota: 'A força fica no começo: SPA-nish.' },
+    { instrucao: NAC, frase: 'Swiss', traducao: 'Suíço(a)' },
+    { instrucao: NAC, frase: 'French', traducao: 'Francês / Francesa' },
+    { frase: "I'm not American.", dica: 0, traducao: 'Eu não sou americano(a).' },
+    { frase: "She isn't Chinese. She's Japanese.", dica: 0, traducao: 'Ela não é chinesa. Ela é japonesa.' },
+    { frase: "He isn't Spanish.", dica: 0, traducao: 'Ele não é espanhol.' },
+    { frase: "We aren't German. We're Swiss.", dica: 0, traducao: 'Nós não somos alemães. Nós somos suíços.' },
+    { frase: "They aren't Italian.", dica: 0, traducao: 'Eles não são italianos.' },
+    { frase: "You aren't French. You're Canadian.", dica: 0, traducao: 'Você não é francês. Você é canadense.' },
+    { frase: "Pizza isn't Spanish. It's Italian.", dica: 0, traducao: 'A pizza não é espanhola. Ela é italiana.' },
+    { frase: "I'm not Indian. I'm Brazilian.", dica: 0, traducao: 'Eu não sou indiano(a). Eu sou brasileiro(a).' },
+    { frase: "Mike isn't English. He's American.", dica: 0, traducao: 'O Mike não é inglês. Ele é americano.' },
+    { frase: "Emma isn't Japanese. She's Chinese.", dica: 0, traducao: 'A Emma não é japonesa. Ela é chinesa.' }
+  ]
+});
+</script>
+</body>
+</html>

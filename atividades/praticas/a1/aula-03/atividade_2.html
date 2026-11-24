@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 03 · I'm not, isn't, aren't</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 03 · Escrita
+   Alinhado ao slide "Class 03: Guess the Country" — Vocabulary 3 (change the sentences:
+   país → nacionalidade) e Grammar Point: To Be Negative Form (contrações isn't / aren't /
+   I'm not, corrigir uma informação falsa). Conteúdo NOVO: outras pessoas e outros famosos
+   (fatos verdadeiros). Frases de duas partes ficam em 1/2 e 2/2 para não haver duas ordens
+   certas. 20 questões. */
+const RW = 'Reescreva com a nacionalidade:';
+const NEG = 'Escreva na negativa:';
+const COR = 'A frase está errada. Corrija:';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 3, num: 2, tipo: 'montar',
+  instrucao: 'Clique nas palavras e monte a frase (uma palavra sobra)',
+  itens: [
+    { contexto: RW + ' "Paul is from France."', palavras: ["He's", 'French'], isca: ['His'], fim: '.', traducao: 'Ele é francês.' },
+    { contexto: RW + ' "Ana is from Spain."', palavras: ["She's", 'Spanish'], isca: ['Her'], fim: '.', traducao: 'Ela é espanhola.' },
+    { contexto: RW + ' "Hans and Greta are from Germany."', palavras: ["They're", 'German'], isca: ['Their'], fim: '.', traducao: 'Eles são alemães.' },
+    { contexto: RW + ' "Sam and I are from Canada."', palavras: ["We're", 'Canadian'], isca: ['Were'], fim: '.', traducao: 'Nós somos canadenses.' },
+    { contexto: RW + ' "I am from Italy."', palavras: ["I'm", 'Italian'], isca: ["I's"], fim: '.', traducao: 'Eu sou italiano(a).' },
+    { contexto: RW + ' "Yuki is from Japan."', palavras: ["She's", 'Japanese'], isca: ['Her'], fim: '.', traducao: 'Ela é japonesa.' },
+    { contexto: RW + ' "Raj is from India."', palavras: ["He's", 'Indian'], isca: ['His'], fim: '.', traducao: 'Ele é indiano.' },
+    { contexto: RW + ' "Mei and Li are from China."', palavras: ["They're", 'Chinese'], isca: ['Them'], fim: '.', traducao: 'Elas são chinesas.' },
+    { contexto: NEG + ' "I\'m Japanese."', palavras: ["I'm", 'not', 'Japanese'], isca: ["isn't"], fim: '.', traducao: 'Eu não sou japonês(a).' },
+    { contexto: NEG + ' "She\'s Chinese."', palavras: ['She', "isn't", 'Chinese'], isca: ["aren't"], fim: '.', traducao: 'Ela não é chinesa.' },
+    { contexto: NEG + ' "They\'re Swiss."', palavras: ['They', "aren't", 'Swiss'], isca: ["isn't"], fim: '.', traducao: 'Eles não são suíços.' },
+    { contexto: NEG + ' "He\'s English."', palavras: ['He', "isn't", 'English'], isca: ['am'], fim: '.', traducao: 'Ele não é inglês.' },
+    { contexto: NEG + ' "We\'re Brazilian."', palavras: ['We', "aren't", 'Brazilian'], isca: ["isn't"], fim: '.', traducao: 'Nós não somos brasileiros.' },
+    { contexto: NEG + ' "You\'re American."', palavras: ['You', "aren't", 'American'], isca: ["isn't"], fim: '.', traducao: 'Você não é americano(a).' },
+    { contexto: NEG + ' "It\'s from India."', palavras: ['It', "isn't", 'from', 'India'], isca: ["aren't"], fim: '.', traducao: 'Não é da Índia.' },
+    { contexto: COR + ' "Pizza is Spanish." (1/2)', palavras: ['Pizza', "isn't", 'Spanish'], isca: ["aren't"], fim: '.', traducao: 'A pizza não é espanhola.' },
+    { contexto: COR + ' "Pizza is Spanish." (2/2)', palavras: ["It's", 'Italian'], isca: ['Its'], fim: '.', traducao: 'Ela é italiana.' },
+    { contexto: COR + ' "Justin Bieber is American." (1/2)', palavras: ['Justin', 'Bieber', "isn't", 'American'], isca: ["aren't"], fim: '.', traducao: 'O Justin Bieber não é americano.' },
+    { contexto: COR + ' "Justin Bieber is American." (2/2)', palavras: ["He's", 'Canadian'], isca: ['His'], fim: '.', traducao: 'Ele é canadense.' },
+    { contexto: COR + ' "Neymar is Spanish."', palavras: ['Neymar', "isn't", 'Spanish'], isca: ["aren't"], fim: '.', traducao: 'O Neymar não é espanhol.' }
+  ]
+});
+</script>
+</body>
+</html>

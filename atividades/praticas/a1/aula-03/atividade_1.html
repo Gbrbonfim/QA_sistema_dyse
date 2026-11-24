@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 03 · Nationalities</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 03 · Escuta + Vocabulário
+   Alinhado ao slide "Class 03: Guess the Country" — Vocabulary: as 12 nacionalidades e
+   To Be Negative Form. Conteúdo NOVO: o aluno ouve a nacionalidade (ou uma frase com
+   "isn't / aren't / I'm not") e escolhe o país de onde a pessoa É. 24 questões. */
+const PAIS = { 'in': 'India', br: 'Brazil', ca: 'Canada', de: 'Germany', us: 'The USA', it: 'Italy', cn: 'China', jp: 'Japan', 'gb-eng': 'England', es: 'Spain', ch: 'Switzerland', fr: 'France',
+  ie: 'Ireland', ar: 'Argentina', pt: 'Portugal', au: 'Australia', se: 'Sweden', kr: 'South Korea', gr: 'Greece', mx: 'Mexico' };
+const op = (...cs) => cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' }));
+const FRASE = 'Escute e escolha o país de onde a pessoa É';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 3, num: 1, tipo: 'imagem',
+  instrucao: 'Escute a nacionalidade e escolha o país',
+  itens: [
+    { audioTexto: 'Indian', opcoes: op('in', 'it', 'ie', 'cn'), certa: 0 },
+    { audioTexto: 'Brazilian', opcoes: op('pt', 'br', 'ar', 'es'), certa: 1 },
+    { audioTexto: 'Canadian', opcoes: op('us', 'gb-eng', 'ca', 'au'), certa: 2 },
+    { audioTexto: 'German', opcoes: op('ch', 'fr', 'se', 'de'), certa: 3 },
+    { audioTexto: 'American', opcoes: op('us', 'ca', 'mx', 'gb-eng'), certa: 0 },
+    { audioTexto: 'Italian', opcoes: op('es', 'it', 'pt', 'gr'), certa: 1 },
+    { audioTexto: 'Chinese', opcoes: op('jp', 'kr', 'cn', 'in'), certa: 2 },
+    { audioTexto: 'Japanese', opcoes: op('cn', 'kr', 'in', 'jp'), certa: 3 },
+    { audioTexto: 'English', opcoes: op('gb-eng', 'ie', 'us', 'au'), certa: 0 },
+    { audioTexto: 'Spanish', opcoes: op('mx', 'es', 'pt', 'it'), certa: 1 },
+    { audioTexto: 'Swiss', opcoes: op('se', 'de', 'ch', 'fr'), certa: 2 },
+    { audioTexto: 'French', opcoes: op('it', 'ch', 'es', 'fr'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "Hi! I'm Pedro. I'm Brazilian.", opcoes: op('pt', 'br', 'es', 'ar'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "I'm not American. I'm Canadian.", opcoes: op('us', 'gb-eng', 'ca', 'au'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "She isn't Chinese. She's Japanese.", opcoes: op('cn', 'kr', 'in', 'jp'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "He isn't Spanish. He's French.", opcoes: op('fr', 'es', 'it', 'ch'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "We aren't German. We're Swiss.", opcoes: op('de', 'ch', 'fr', 'se'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "They aren't American. They're English.", opcoes: op('us', 'ca', 'gb-eng', 'ie'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "My name is Leo. I'm not Italian. I'm Spanish.", opcoes: op('it', 'pt', 'mx', 'es'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "Mike isn't English. He's American.", opcoes: op('us', 'gb-eng', 'ca', 'au'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "Emma isn't Indian. She's Chinese.", opcoes: op('in', 'cn', 'jp', 'kr'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "I'm not French. I'm German.", opcoes: op('fr', 'ch', 'de', 'it'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "Anna and Mia aren't Japanese. They're Indian.", opcoes: op('jp', 'cn', 'kr', 'in'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "Hi! I'm Tom. I'm not American. I'm English.", opcoes: op('gb-eng', 'us', 'ca', 'au'), certa: 0 }
+  ]
+});
+</script>
+</body>
+</html>

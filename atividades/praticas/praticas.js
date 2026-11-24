@@ -469,7 +469,7 @@
   }
 
   /* FALA — escute e grave */
-  const CONTR = { "what's":"what is", "i'm":"i am", "it's":"it is", "he's":"he is", "she's":"she is", "you're":"you are", "we're":"we are", "they're":"they are", "that's":"that is", "where's":"where is", "let's":"let us", "whats":"what is", "im":"i am", "hes":"he is", "shes":"she is", "youre":"you are", "theyre":"they are", "thats":"that is", "wheres":"where is" };
+  const CONTR = { "what's":"what is", "i'm":"i am", "it's":"it is", "he's":"he is", "she's":"she is", "you're":"you are", "we're":"we are", "they're":"they are", "that's":"that is", "where's":"where is", "let's":"let us", "isn't":"is not", "aren't":"are not", "isnt":"is not", "arent":"are not","whats":"what is", "im":"i am", "hes":"he is", "shes":"she is", "youre":"you are", "theyre":"they are", "thats":"that is", "wheres":"where is" };
   function norm(txt){
     return String(txt || '').toLowerCase().replace(/[’`]/g, "'").split(/\s+/)
       .map(w => w.replace(/[^a-z']/g, '')).filter(Boolean)
