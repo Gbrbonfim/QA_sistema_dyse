@@ -413,6 +413,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Review: speak', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Review: grammar', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 41,
+        titulo: "Class 41 · I'm Busy",
+        atividades: [
+          { num: 1, titulo: 'Appointments', tipo: 'Escute e escolha', treina: 'Escuta · Compromissos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'My busy week', tipo: 'Monte a frase', treina: 'Escrita · Futuro', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: "Let's meet!", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'What are you doing tomorrow?', tipo: 'Escute e grave', treina: 'Fala · Futuro', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Present continuous for the future', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

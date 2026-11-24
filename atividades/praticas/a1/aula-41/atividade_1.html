@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 41 Â· Appointments</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 41 · Escuta
+   Alinhado ao slide "Class 41: I'm Busy" — Vocabulary: Appointments (have a meeting, meet somebody
+   for lunch / dinner, go to the dentist, travel, have an appointment with the doctor, see a
+   friend, have a party, do a course, talk to clients, study for a test) e Grammar Point 3
+   (acontecendo agora ou no futuro?). Conteúdo NOVO: outras frases. 24 questões: 12 compromissos
+   + 12 "agora ou futuro?". */
+const IC = { 'have a meeting': 'groups', 'meet for lunch': 'restaurant', 'go to the dentist': 'dentistry', 'travel': 'flight',
+  'doctor appointment': 'medical_services', 'see a friend': 'emoji_people', 'have a party': 'celebration', 'do a course': 'school',
+  'talk to clients': 'support_agent', 'study for a test': 'menu_book', 'now': 'timer', 'the future': 'event' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const NF = 'Listen: is it happening now or in the future?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 41, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the appointment',
+  itens: [
+    { audioTexto: "I'm having a meeting at ten.", opcoes: op('have a meeting', 'have a party', 'do a course', 'travel'), certa: 0 },
+    { audioTexto: "She's meeting her sister for lunch on Friday.", opcoes: op('doctor appointment', 'meet for lunch', 'have a meeting', 'talk to clients'), certa: 1 },
+    { audioTexto: "I'm going to the dentist tomorrow.", opcoes: op('doctor appointment', 'study for a test', 'go to the dentist', 'see a friend'), certa: 2 },
+    { audioTexto: "We're traveling to Chile next month.", opcoes: op('have a party', 'meet for lunch', 'do a course', 'travel'), certa: 3 },
+    { audioTexto: "He's having an appointment with the doctor on Monday.", opcoes: op('doctor appointment', 'go to the dentist', 'have a meeting', 'see a friend'), certa: 0 },
+    { audioTexto: "I'm seeing a friend this evening.", opcoes: op('talk to clients', 'see a friend', 'travel', 'study for a test'), certa: 1 },
+    { audioTexto: "They're having a party on Saturday night.", opcoes: op('have a meeting', 'meet for lunch', 'have a party', 'do a course'), certa: 2 },
+    { audioTexto: "My mom is doing a cooking course next year.", opcoes: op('study for a test', 'travel', 'see a friend', 'do a course'), certa: 3 },
+    { audioTexto: "I'm talking to two clients this afternoon.", opcoes: op('talk to clients', 'have a party', 'doctor appointment', 'meet for lunch'), certa: 0 },
+    { audioTexto: "We're studying for a test tonight.", opcoes: op('do a course', 'study for a test', 'have a meeting', 'go to the dentist'), certa: 1 },
+    { audioTexto: "Is she going to the dentist on Thursday?", opcoes: op('see a friend', 'travel', 'go to the dentist', 'talk to clients'), certa: 2 },
+    { audioTexto: "Are you having a party next weekend?", opcoes: op('meet for lunch', 'do a course', 'have a meeting', 'have a party'), certa: 3 },
+    { instrucao: NF, audioTexto: "Shh! I'm talking to a client.", opcoes: op('now', 'the future'), certa: 0 },
+    { instrucao: NF, audioTexto: "I'm meeting Paul for dinner tomorrow.", opcoes: op('now', 'the future'), certa: 1 },
+    { instrucao: NF, audioTexto: "Look! It's raining.", opcoes: op('now', 'the future'), certa: 0 },
+    { instrucao: NF, audioTexto: "We're traveling to Spain next week.", opcoes: op('now', 'the future'), certa: 1 },
+    { instrucao: NF, audioTexto: "Mom is in the kitchen. She's cooking.", opcoes: op('now', 'the future'), certa: 0 },
+    { instrucao: NF, audioTexto: "What are you doing tonight?", opcoes: op('now', 'the future'), certa: 1 },
+    { instrucao: NF, audioTexto: "Where's Ana? She's studying in her bedroom.", opcoes: op('now', 'the future'), certa: 0 },
+    { instrucao: NF, audioTexto: "Is he working late next Friday?", opcoes: op('now', 'the future'), certa: 1 },
+    { instrucao: NF, audioTexto: "Are you using the computer? I need it.", opcoes: op('now', 'the future'), certa: 0 },
+    { instrucao: NF, audioTexto: "The party is starting at eight tomorrow night.", opcoes: op('now', 'the future'), certa: 1 },
+    { instrucao: NF, audioTexto: "It's seven o'clock. Are you getting up?", opcoes: op('now', 'the future'), certa: 0 },
+    { instrucao: NF, audioTexto: "I'm not going to the gym next month.", opcoes: op('now', 'the future'), certa: 1 }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 41 Â· Let's meet!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 41 · Leitura
+   Alinhado ao slide "Class 41: I'm Busy" — Role-Play: Making an Appointment ("What are you doing
+   on Wednesday at 12pm? I'm free. Would you like to meet for lunch? Sure! I'm sorry, I can't.
+   Maybe another day.") e o Present Continuous para o futuro. Conteúdo NOVO: o Sam e a Lara tentam
+   achar um dia para ver um filme. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Sam', 'Hi, Lara! What are you doing on Wednesday evening?'],
+  ['Lara', 'I\'m studying for a test. It\'s on Thursday.'],
+  ['Sam', 'Oh! And what are you doing on Thursday evening?'],
+  ['Lara', 'I\'m meeting my cousins for dinner.'],
+  ['Sam', 'Are you working on Friday?'],
+  ['Lara', 'Yes, I am. I\'m talking to clients all day.'],
+  ['Sam', 'You\'re very busy! What are you doing on Saturday afternoon?'],
+  ['Lara', 'I\'m free.'],
+  ['Sam', 'Great! Would you like to see a movie?'],
+  ['Lara', 'Sure! What time?'],
+  ['Sam', 'The movie is starting at four.'],
+  ['Lara', 'Perfect. Where are we meeting?'],
+  ['Sam', 'In front of the shopping center, at a quarter to four.'],
+  ['Lara', 'OK! See you on Saturday!']
+];
+const lado = q => q === 'Sam' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 41, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I'm studying for a test. It's on Thursday.", "I study for a test now on Thursday.", "I'm study for a test."], 0, 'Vou estudar para uma prova. É na quinta.'),
+    prox(2, ['Oh! And what do you doing on Thursday evening?', 'Oh! And what are you doing on Thursday evening?', 'Oh! And what you are doing on Thursday?'], 1, 'Ah! E o que você vai fazer na quinta à noite?'),
+    prox(3, ["I meeting my cousins for dinner.", "I'm meet my cousins for dinner.", "I'm meeting my cousins for dinner."], 2, 'Vou jantar com os meus primos.'),
+    prox(4, ['Are you working on Friday?', 'Do you working on Friday?', 'Is you working on Friday?'], 0, 'Você vai trabalhar na sexta?'),
+    prox(5, ["Yes, I do. I'm talking to clients.", "Yes, I am. I'm talking to clients all day.", "Yes, I am. I talking to clients."], 1, 'Vou. Vou atender clientes o dia todo.'),
+    prox(6, ["You're very busy! What do you do on Saturday?", "You're very busy! What you doing Saturday?", "You're very busy! What are you doing on Saturday afternoon?"], 2, 'Você está muito ocupada! O que vai fazer no sábado à tarde?'),
+    prox(7, ["I'm free.", "I'm busy free.", "I free."], 0, 'Estou livre.'),
+    prox(8, ['Great! Do you like see a movie?', 'Great! Would you like to see a movie?', 'Great! Would you like seeing movie?'], 1, 'Ótimo! Você gostaria de ver um filme?'),
+    prox(9, ['Yes, I am.', 'Sure! I watch.', 'Sure! What time?'], 2, 'Claro! Que horas?'),
+    prox(10, ['The movie is starting at four.', 'The movie are starting at four.', 'The movie starting at four.'], 0, 'O filme começa às quatro.'),
+    prox(11, ['Perfect. Where do we meeting?', 'Perfect. Where are we meeting?', 'Perfect. Where we are meeting?'], 1, 'Perfeito. Onde a gente se encontra?'),
+    prox(13, ['Maybe another day.', "I'm sorry, I can't.", 'OK! See you on Saturday!'], 2, 'Tá! Até sábado!'),
+    { instrucao: 'Why is Lara busy on Wednesday?', frase: "She's studying for a ___.", opcoes: ['test', 'course', 'meeting'], certa: 0, traducao: 'Ela vai estudar para uma prova.' },
+    { instrucao: 'Who is Lara meeting on Thursday?', frase: 'Her ___.', opcoes: ['parents', 'cousins', 'clients'], certa: 1, traducao: 'Os primos dela.' },
+    { instrucao: 'What is Lara doing on Friday?', frase: "She's talking to ___.", opcoes: ['the doctor', 'her cousins', 'clients'], certa: 2, traducao: 'Ela vai atender clientes.' },
+    { instrucao: 'When is Lara free?', frase: 'On Saturday ___.', opcoes: ['afternoon', 'morning', 'evening'], certa: 0, traducao: 'No sábado à tarde.' },
+    { instrucao: 'What are they doing on Saturday?', frase: "They're seeing a ___.", opcoes: ['friend', 'movie', 'doctor'], certa: 1, traducao: 'Eles vão ver um filme.' },
+    { instrucao: 'What time is the movie starting?', frase: 'At ___.', opcoes: ['three', 'a quarter to four', 'four'], certa: 2, traducao: 'Às quatro.' },
+    { instrucao: 'Where are they meeting?', frase: 'In front of the ___.', opcoes: ['shopping center', 'cinema', 'school'], certa: 0, traducao: 'Na frente do shopping.' },
+    { instrucao: 'What time are they meeting?', frase: 'At ___.', opcoes: ['four', 'a quarter to four', 'a quarter past four'], certa: 1, traducao: 'Às quinze para as quatro.' }
+  ]
+});
+</script>
+</body>
+</html>

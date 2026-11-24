@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 41 Â· Present continuous for the future</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 41 · Gramática
+   Alinhado ao slide "Class 41: I'm Busy" — Grammar Point (to be + verbo + -ing para compromissos
+   futuros; am / is / are; isn't / aren't; perguntas; expressões de futuro: tonight, tomorrow,
+   tomorrow night, next week / month / weekend; agora x futuro) e exercício 5 (perguntas e
+   respostas). Conteúdo NOVO e mais difícil. 24 questões. */
+const NF = 'Is it happening NOW or in the FUTURE?';
+const RESP = 'Choose the best answer';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 41, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'I ___ meeting my friends this evening.', opcoes: ['am', 'is', 'are'], certa: 0, traducao: 'Vou encontrar os meus amigos hoje à noite.' },
+    { frase: 'My boss ___ traveling to Lima next week.', opcoes: ['are', 'is', 'am'], certa: 1, traducao: 'O meu chefe vai viajar para Lima na semana que vem.' },
+    { frase: 'We ___ having a meeting on Monday.', opcoes: ['is', 'am', 'are'], certa: 2, traducao: 'Nós vamos ter uma reunião na segunda.' },
+    { frase: "Pete ___ seeing a friend on Thursday.", opcoes: ["isn't", "aren't", "don't"], certa: 0, traducao: 'O Pete não vai ver um amigo na quinta.' },
+    { frase: "They ___ coming for dinner tonight.", opcoes: ["isn't", "aren't", "doesn't"], certa: 1, traducao: 'Eles não vão vir jantar hoje à noite.' },
+    { frase: 'Daniel is ___ to the dentist on Monday.', opcoes: ['go', 'goes', 'going'], certa: 2, traducao: 'O Daniel vai ao dentista na segunda.' },
+    { frase: 'Alice is ___ for a test next weekend.', opcoes: ['studying', 'study', 'studies'], certa: 0, traducao: 'A Alice vai estudar para uma prova no próximo fim de semana.' },
+    { frase: "We're ___ a party for Mom's birthday.", opcoes: ['have', 'having', 'haveing'], certa: 1, traducao: 'Nós vamos dar uma festa para o aniversário da mamãe.' },
+    { frase: '___ you doing anything tomorrow night?', opcoes: ['Do', 'Is', 'Are'], certa: 2, traducao: 'Você vai fazer alguma coisa amanhã à noite?' },
+    { frase: '___ your course starting in May?', opcoes: ['Is', 'Are', 'Does'], certa: 0, traducao: 'O seu curso vai começar em maio?' },
+    { frase: 'Where ___ we having the meeting?', opcoes: ['is', 'are', 'do'], certa: 1, traducao: 'Onde vamos fazer a reunião?' },
+    { frase: "I'm visiting my grandparents ___.", opcoes: ['last weekend', 'yesterday', 'next weekend'], certa: 2, traducao: 'Vou visitar os meus avós no próximo fim de semana.' },
+    { frase: "She's doing a course ___ December.", opcoes: ['next', 'last', 'tomorrow'], certa: 0, traducao: 'Ela vai fazer um curso em dezembro que vem.' },
+    { instrucao: NF, frase: "It's eight o'clock, Tom. Are you getting ready for school? → ___", opcoes: ['the future', 'now', 'the past'], certa: 1, traducao: 'Agora.' },
+    { instrucao: NF, frase: 'What time are Sally and James coming for dinner tonight? → ___', opcoes: ['now', 'the past', 'the future'], certa: 2, traducao: 'Futuro.' },
+    { instrucao: NF, frase: "Shh! The baby is sleeping. → ___", opcoes: ['now', 'the future', 'the past'], certa: 0, traducao: 'Agora.' },
+    { instrucao: NF, frase: "Is she working late next Friday? → ___", opcoes: ['now', 'the future', 'the past'], certa: 1, traducao: 'Futuro.' },
+    { instrucao: RESP, frase: 'When are you traveling to New York? ___', opcoes: ["I'm free.", 'Maybe another day.', 'My flight is tomorrow morning.'], certa: 2, traducao: 'O meu voo é amanhã de manhã.' },
+    { instrucao: RESP, frase: 'Is your course starting in May? ___', opcoes: ["No, it's starting in June.", "No, it doesn't.", "No, it wasn't."], certa: 0, traducao: 'Não, vai começar em junho.' },
+    { instrucao: RESP, frase: 'Are they having a meeting this afternoon? ___', opcoes: ["No, they don't.", "No, they aren't.", "No, they isn't."], certa: 1, traducao: 'Não, não vão.' },
+    { instrucao: RESP, frase: 'Would you like to meet for lunch on Friday? ___', opcoes: ["Yes, I am.", "Yes, I would like.", "I'm sorry, I can't. I'm traveling."], certa: 2, traducao: 'Desculpe, não posso. Vou viajar.' },
+    { instrucao: 'Which sentence is correct?', opcoes: ["I'm not going to London tomorrow.", "I don't going to London tomorrow.", "I'm not go to London tomorrow."], certa: 0, traducao: 'Eu não vou para Londres amanhã.' },
+    { instrucao: 'Which sentence is correct?', opcoes: ['What you are doing next weekend?', 'What are you doing next weekend?', 'What do you doing next weekend?'], certa: 1, traducao: 'O que você vai fazer no próximo fim de semana?' },
+    { instrucao: 'Which sentence is correct?', opcoes: ['George have an appointment on Friday.', 'George are having an appointment on Friday.', 'George is having an appointment on Friday.'], certa: 2, traducao: 'O George tem uma consulta na sexta.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 41 Â· My busy week</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 41 · Escrita
+   Alinhado ao slide "Class 41: I'm Busy" — Grammar Point (Present Continuous para o futuro:
+   compromissos com dia e hora; afirmativa, negativa e pergunta; tonight, tomorrow, next week /
+   month / weekend, this evening, on Monday) e exercícios 4 e 5. Conteúdo NOVO. O contexto traz a
+   frase em português; a isca é o verbo sem -ing ou o auxiliar errado. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 41, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu vou ter uma reunião amanhã.'), palavras: ["I'm", 'having', 'a', 'meeting', 'tomorrow'], isca: ['have'], fim: '.', traducao: 'Eu vou ter uma reunião amanhã.' },
+    { contexto: M('Ela vai ao dentista na segunda.'), palavras: ["She's", 'going', 'to', 'the', 'dentist', 'on', 'Monday'], isca: ['goes'], fim: '.', traducao: 'Ela vai ao dentista na segunda.' },
+    { contexto: M('Nós vamos viajar para o Peru no mês que vem.'), palavras: ["We're", 'traveling', 'to', 'Peru', 'next', 'month'], isca: ['travel'], fim: '.', traducao: 'Nós vamos viajar para o Peru no mês que vem.' },
+    { contexto: M('Eu vou encontrar a Mila para almoçar na sexta.'), palavras: ["I'm", 'meeting', 'Mila', 'for', 'lunch', 'on', 'Friday'], isca: ['meet'], fim: '.', traducao: 'Eu vou encontrar a Mila para almoçar na sexta.' },
+    { contexto: M('Os meus pais vão dar uma festa no sábado.'), palavras: ['My', 'parents', 'are', 'having', 'a', 'party', 'on', 'Saturday'], isca: ['is'], fim: '.', traducao: 'Os meus pais vão dar uma festa no sábado.' },
+    { contexto: M('O Leo vai fazer um curso em janeiro.'), palavras: ['Leo', 'is', 'doing', 'a', 'course', 'in', 'January'], isca: ['are'], fim: '.', traducao: 'O Leo vai fazer um curso em janeiro.' },
+    { contexto: M('Eu vou ficar em casa hoje à noite.'), palavras: ["I'm", 'staying', 'at', 'home', 'tonight'], isca: ['stay'], fim: '.', traducao: 'Eu vou ficar em casa hoje à noite.' },
+    { contexto: M('Eu não vou dar uma festa este fim de semana.'), palavras: ["I'm", 'not', 'having', 'a', 'party', 'this', 'weekend'], isca: ["don't"], fim: '.', traducao: 'Eu não vou dar uma festa este fim de semana.' },
+    { contexto: M('Ela não vai trabalhar amanhã.'), palavras: ['She', "isn't", 'working', 'tomorrow'], isca: ["doesn't"], fim: '.', traducao: 'Ela não vai trabalhar amanhã.' },
+    { contexto: M('Eles não vão viajar na semana que vem.'), palavras: ['They', "aren't", 'traveling', 'next', 'week'], isca: ["isn't"], fim: '.', traducao: 'Eles não vão viajar na semana que vem.' },
+    { contexto: M('O que você vai fazer hoje à noite?'), palavras: ['What', 'are', 'you', 'doing', 'tonight'], isca: ['do'], fim: '?', traducao: 'O que você vai fazer hoje à noite?' },
+    { contexto: M('A que horas a festa vai começar?'), palavras: ['What', 'time', 'is', 'the', 'party', 'starting'], isca: ['are'], fim: '?', traducao: 'A que horas a festa vai começar?' },
+    { contexto: M('Aonde vocês vão no domingo?'), palavras: ['Where', 'are', 'you', 'going', 'on', 'Sunday'], isca: ['is'], fim: '?', traducao: 'Aonde vocês vão no domingo?' },
+    { contexto: M('Você tem consulta com o médico amanhã?'), palavras: ['Are', 'you', 'having', 'an', 'appointment', 'with', 'the', 'doctor', 'tomorrow'], isca: ['Do'], fim: '?', traducao: 'Você tem consulta com o médico amanhã?' },
+    { contexto: M('A Claudia vai ao escritório amanhã?'), palavras: ['Is', 'Claudia', 'going', 'to', 'the', 'office', 'tomorrow'], isca: ['Are'], fim: '?', traducao: 'A Claudia vai ao escritório amanhã?' },
+    { contexto: M('Quando os alunos vão fazer a prova?'), palavras: ['When', 'are', 'the', 'students', 'doing', 'the', 'test'], isca: ['is'], fim: '?', traducao: 'Quando os alunos vão fazer a prova?' },
+    { contexto: M('Eu estou livre.'), palavras: ["I'm", 'free'], isca: ['busy'], fim: '.', traducao: 'Eu estou livre.' },
+    { contexto: M('Você gostaria de almoçar comigo?'), palavras: ['Would', 'you', 'like', 'to', 'meet', 'for', 'lunch'], isca: ['Do'], fim: '?', traducao: 'Você gostaria de almoçar comigo?' },
+    { contexto: M('Desculpe, eu não posso.'), palavras: ["I'm", 'sorry,', 'I', "can't"], isca: ["don't"], fim: '.', traducao: 'Desculpe, eu não posso.' },
+    { contexto: M('Quem sabe outro dia.'), palavras: ['Maybe', 'another', 'day'], isca: ['other'], fim: '.', traducao: 'Quem sabe outro dia.' }
+  ]
+});
+</script>
+</body>
+</html>
