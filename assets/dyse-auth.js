@@ -2793,23 +2793,66 @@ async function dyseListRegistrosClasseDaAula(alunoIds, nivelAulaId, dataAula){
 async function dyseUpsertRegistroClasse(alunoId, nivelAulaId, dataAula, campos){
   const session = await dyseGetSession();
   const userId = session ? session.user.id : null;
-  const { data, error } = await sb
-    .from('registros_classe')
-    .upsert({
-      aluno_id: alunoId,
-      nivel_aula_id: nivelAulaId,
-      turma_id: campos.turma_id || null,
-      professor_id: userId,
-      data_aula: dataAula || dyseHoje(),
-      avaliacoes: campos.avaliacoes || {},
-      observacoes: campos.observacoes || null,
-      criado_por: userId,
-      atualizado_por: userId,
-      atualizado_em: new Date().toISOString()
-    }, { onConflict: 'aluno_id,nivel_aula_id,data_aula' })
+  const linha = {
+    aluno_id: alunoId,
+    nivel_aula_id: nivelAulaId,
+    turma_id: campos.turma_id || null,
+    professor_id: userId,
+    data_aula: dataAula || dyseHoje(),
+    avaliacoes: campos.avaliacoes || {},
+    observacoes: campos.observacoes || null,
+    criado_por: userId,
+    atualizado_por: userId,
+    atualizado_em: new Date().toISOString()
+  };
+  if(campos.homework !== undefined) linha.homework = !!campos.homework;
+  const gravar = l => sb.from('registros_classe')
+    .upsert(l, { onConflict: 'aluno_id,nivel_aula_id,data_aula' })
     .select('*')
     .maybeSingle();
+  let { data, error } = await gravar(linha);
+  // Banco ainda sem a coluna homework: salva o resto do registro em vez de falhar.
+  if(error && 'homework' in linha && /homework/i.test(error.message || '')){
+    console.error('registros_classe.homework', error);
+    delete linha.homework;
+    ({ data, error } = await gravar(linha));
+  }
   return { data, error };
+}
+
+/* Homework (tarefa de casa): no registro de cada dia a professora marca se o
+   aluno fez a tarefa passada na aula anterior; desmarcado = não fez. Só conta o
+   dia em que o aluno estava presente e que tem uma aula ANTERIOR registrada (no
+   1º registro do aluno ainda não havia tarefa). Registros de antes do campo
+   existir (homework null) ficam fora. Duas aulas na mesma data = um dia só. */
+function dyseResumoHomework(registrosDoPeriodo, todosRegistrosDoAluno){
+  const datas = (todosRegistrosDoAluno || []).map(r => String(r.data_aula || '').slice(0, 10)).filter(Boolean).sort();
+  const primeira = datas[0] || '';
+  const porData = {};
+  (registrosDoPeriodo || []).forEach(r => {
+    const d = String(r.data_aula || '').slice(0, 10);
+    if(!d || d <= primeira || r.homework == null) return;
+    const presente = r.homework === true || Object.values(r.avaliacoes || {}).some(v => v && v !== 'nao_participou');
+    if(!presente) return;
+    porData[d] = !!porData[d] || r.homework === true;
+  });
+  const dias = Object.keys(porData).sort();
+  const feitas = dias.filter(d => porData[d]).length;
+  return {
+    verificadas: dias.length,
+    feitas,
+    percentual: dias.length ? Math.round((feitas / dias.length) * 1000) / 10 : null,
+    nao_feitas_datas: dias.filter(d => !porData[d])
+  };
+}
+
+/* Linha do homework no Report Card (modal da professora e da gestão). */
+function dyseHomeworkLinhaHtml(hw, classe){
+  if(!hw) return '';
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  if(!hw.verificadas) return '<p class="' + esc(classe || '') + '"><b>Homework:</b> nenhuma tarefa verificada no período.</p>';
+  return '<p class="' + esc(classe || '') + '"><b>Homework:</b> fez ' + hw.feitas + ' de ' + hw.verificadas + ' tarefas verificadas (' + hw.percentual + '%)' +
+    (hw.nao_feitas_datas && hw.nao_feitas_datas.length ? ' · não fez em ' + hw.nao_feitas_datas.map(d => d.split('-').reverse().join('/')).join(', ') : '') + '</p>';
 }
 
 /* Apaga um registro de uma data de uma aula de uma turma (linhas dos alunos
@@ -3085,6 +3128,7 @@ async function dyseGerarReportCard(alunoId, materiaSlug, semestre, aulaInicio, a
 
   const dados = {
     frequencia,
+    homework: dyseResumoHomework(registrosDoIntervalo, todosRegistros),
     avaliacao_eixos: avaliacaoEixos,
     revisoes_teste: revisoesTeste,
     apresentacao_final: apresentacaoFinal,

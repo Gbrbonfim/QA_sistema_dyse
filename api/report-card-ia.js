@@ -86,10 +86,33 @@ async function run(req, res){
   if(!aulas.length){ res.status(400).json({ error: 'Nenhuma aula cadastrada no intervalo ' + aulaInicio + '-' + aulaFim + ' para "' + materiaSlug + '".' }); return; }
 
   const aulaIds = aulas.map(a => a.id);
-  const { data: registros } = await admin.from('registros_classe')
-    .select('nivel_aula_id, data_aula, avaliacoes, observacoes')
-    .eq('aluno_id', alunoId).in('nivel_aula_id', aulaIds)
-    .order('data_aula', { ascending: true });
+  const [{ data: registros }, { data: primeiroReg }] = await Promise.all([
+    admin.from('registros_classe')
+      .select('*')
+      .eq('aluno_id', alunoId).in('nivel_aula_id', aulaIds)
+      .order('data_aula', { ascending: true }),
+    admin.from('registros_classe').select('data_aula').eq('aluno_id', alunoId)
+      .order('data_aula', { ascending: true }).limit(1)
+  ]);
+  // Homework (mesma regra de dyseResumoHomework em dyse-auth.js): no registro de
+  // cada dia a professora marca se o aluno fez a tarefa da aula anterior;
+  // desmarcado = não fez. Só conta dia com o aluno presente e com aula anterior
+  // registrada; homework null = registro de antes do campo existir.
+  const primeiraData = primeiroReg && primeiroReg[0] ? String(primeiroReg[0].data_aula).slice(0, 10) : '';
+  const hwPorData = {};
+  (registros || []).forEach(r => {
+    const d = String(r.data_aula || '').slice(0, 10);
+    if(!d || d <= primeiraData || r.homework == null) return;
+    const presente = r.homework === true || Object.values(r.avaliacoes || {}).some(v => v && v !== 'nao_participou');
+    if(!presente) return;
+    hwPorData[d] = !!hwPorData[d] || r.homework === true;
+  });
+  const hwDias = Object.keys(hwPorData).sort();
+  const hwFeitas = hwDias.filter(d => hwPorData[d]).length;
+  const hwRegistrado = r => {
+    const d = String(r.data_aula || '').slice(0, 10);
+    return (d in hwPorData) ? ' | Homework da aula anterior: ' + (hwPorData[d] ? 'FEZ' : 'NÃO FEZ') : '';
+  };
   // Uma aula pode ter mais de um registro (um por data) — agrupa por aula.
   const regsPorAula = {};
   (registros || []).forEach(r => { (regsPorAula[r.nivel_aula_id] = regsPorAula[r.nivel_aula_id] || []).push(r); });
@@ -119,13 +142,13 @@ async function run(req, res){
     } else if(regs.length === 1){
       const reg = regs[0];
       const avals = Object.entries(reg.avaliacoes || {}).map(([eixo, v]) => eixo + ': ' + (AVAL_LABEL[v] || v)).join('; ');
-      registroTexto = (avals || '(sem avaliação por eixo)') + (reg.observacoes ? '\n    Observações do professor: ' + reg.observacoes : '');
+      registroTexto = (avals || '(sem avaliação por eixo)') + hwRegistrado(reg) + (reg.observacoes ? '\n    Observações do professor: ' + reg.observacoes : '');
     } else {
       // Aula dada em vários dias — mostra cada data; a IA deve ler como trajetória.
       registroTexto = 'aula dada em ' + regs.length + ' dias:\n    ' + regs.map((reg, i) => {
         const avals = Object.entries(reg.avaliacoes || {}).map(([eixo, v]) => eixo + ': ' + (AVAL_LABEL[v] || v)).join('; ');
         const dia = reg.data_aula ? String(reg.data_aula).slice(0, 10).split('-').reverse().join('/') : ('dia ' + (i + 1));
-        return dia + ': ' + (avals || '(sem avaliação por eixo)') +
+        return dia + ': ' + (avals || '(sem avaliação por eixo)') + hwRegistrado(reg) +
           (reg.observacoes ? ' | Observações do professor: ' + reg.observacoes : '');
       }).join('\n    ');
     }
@@ -135,9 +158,9 @@ async function run(req, res){
   const coberturaPct = aulas.length ? Math.round((comRegistro / aulas.length) * 1000) / 10 : 0;
   const listaEixos = eixos.length ? eixos.join(', ') : 'Reading, Writing, Speaking, Listening, Gramática';
 
-  // Speaking Club (aula de conversação) e tarefa de casa não têm campo próprio:
-  // a professora menciona nas observações. Detecta se houve QUALQUER menção no
-  // período — a ausência de menção também vira comentário no Report Card.
+  // Speaking Club (aula de conversação) não tem campo próprio: a professora
+  // menciona nas observações. A tarefa de casa tem o campo homework (acima) e
+  // também pode aparecer nas observações. A ausência de menção vira comentário.
   const obsPeriodo = (registros || []).map(r => r.observacoes || '').join('  \n  ').toLowerCase();
   const mencionaSpeakingClub = /speaking club|clube de conversa|conversation club|convers[aãç]/.test(obsPeriodo);
   const mencionaTarefaCasa = /tarefa de casa|dever de casa|li[çc][ãa]o de casa|atividade de casa|homework|fez a tarefa|n[ãa]o fez a tarefa/.test(obsPeriodo);
@@ -150,9 +173,10 @@ async function run(req, res){
     '# COMO LER OS DADOS\n' +
     'Cada aula abaixo tem duas partes: o PLANO DA AULA (o que a coordenação desenhou pra aquela aula trabalhar) e o REGISTRO DO ALUNO (como o professor marcou cada habilidade + observações livres, às vezes de mais de um dia). CRUZE as duas: o plano diz o que a aula tentou desenvolver, o registro diz como o aluno respondeu. Uma habilidade marcada bem numa aula que era justamente sobre ela é um ponto forte real. Uma habilidade com dificuldade numa aula focada nela é um ponto claro pra trabalhar. As observações escritas do professor carregam a nuance, use-as de verdade.\n' +
     'Se uma aula tem registro de mais de uma data, leia como uma trajetória: um dia difícil seguido de um dia melhor é evolução, e isso merece ser contado com alegria. Considere todos os dias, não só o último.\n' +
-    'As observações do professor também podem mencionar o SPEAKING CLUB e a TAREFA DE CASA (ver seção própria abaixo).\n\n' +
+    'As observações do professor também podem mencionar o SPEAKING CLUB e a TAREFA DE CASA (ver seção própria abaixo). Além disso, cada dia de aula pode trazer "Homework da aula anterior: FEZ / NÃO FEZ", que é a marcação do professor sobre a tarefa de casa.\n\n' +
     '# SPEAKING CLUB E TAREFA DE CASA (SEMPRE COMENTE ALGO)\n' +
-    'O Speaking Club é a aula de conversação da DYSE, recomendada pra quem quer soltar a fala e ampliar o vocabulário. A tarefa de casa é o que o aluno pratica entre as aulas. Nenhum dos dois tem campo próprio, o professor menciona nas observações quando é relevante.\n' +
+    'O Speaking Club é a aula de conversação da DYSE, recomendada pra quem quer soltar a fala e ampliar o vocabulário. O Speaking Club não tem campo próprio, o professor menciona nas observações quando é relevante. A tarefa de casa (homework) é o que o aluno pratica entre as aulas, e o professor marca em cada aula se o aluno fez a tarefa da aula anterior. Use essa marcação como a fonte principal sobre a tarefa de casa, e as observações como complemento.\n' +
+    '- Tarefa de casa com marcação: se você fez a tarefa em todas ou quase todas as aulas, elogie a constância e ligue isso à sua evolução. Se fez em parte das aulas, reconheça o esforço e incentive a ter mais regularidade. Se fez pouco ou nunca, acolha sem culpa e explique com carinho que praticar em casa entre as aulas é o que consolida o que vimos em aula. Nunca cite quantas vezes nem datas.\n' +
     '- Se as observações do período mencionam que você TEM ido ao Speaking Club ou participado bem, reconheça isso com entusiasmo e ligue à sua evolução de fala/fluência/vocabulário.\n' +
     '- Se mencionam que você NÃO tem ido, ou tem ido pouco, comente com acolhimento e convide a retomar, explicando o quanto ajuda.\n' +
     '- Se NÃO há nenhuma menção ao Speaking Club no período, mesmo assim inclua uma frase recomendando o Speaking Club como um próximo passo pra desenvolver a fala e o vocabulário. Isso é uma recomendação da escola, não um dado sobre você, então enquadre como convite ("vale muito a pena", "queremos ver você lá"), nunca como algo que você deixou de fazer.\n' +
@@ -190,9 +214,12 @@ async function run(req, res){
     'Speaking Club: ' + (mencionaSpeakingClub
       ? 'HÁ menção nas observações do período. Comente com base no que o professor escreveu (confirme lendo os registros abaixo).'
       : 'NENHUMA menção no período. Inclua uma frase recomendando o Speaking Club como próximo passo, enquadrada como convite da escola, não como algo que o aluno deixou de fazer.') + '\n' +
-    'Tarefa de casa: ' + (mencionaTarefaCasa
-      ? 'HÁ menção nas observações do período. Comente com base no que o professor escreveu.'
-      : 'NENHUMA menção no período. Reforce com carinho a importância de praticar em casa entre as aulas.') + '\n\n' +
+    'Tarefa de casa (homework marcado pelo professor): ' + (hwDias.length
+      ? 'fez em ' + hwFeitas + ' de ' + hwDias.length + ' aulas em que a tarefa foi verificada (' + Math.round((hwFeitas / hwDias.length) * 100) + '%). Comente seguindo a regra da tarefa de casa, sem citar números.'
+      : 'nenhuma verificação marcada no período.') + '\n' +
+    'Tarefa de casa nas observações: ' + (mencionaTarefaCasa
+      ? 'HÁ menção nas observações do período. Use como complemento.'
+      : (hwDias.length ? 'nenhuma menção.' : 'NENHUMA menção no período. Reforce com carinho a importância de praticar em casa entre as aulas.')) + '\n\n' +
     'Aula por aula (o que a aula trabalhou + como o aluno foi):\n\n' + aulasTexto;
 
   const anthropic = new Anthropic();

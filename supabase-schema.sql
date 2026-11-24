@@ -1427,6 +1427,11 @@ alter table public.registros_classe add constraint registros_classe_aluno_aula_k
 
 create index if not exists idx_registros_classe_aluno on public.registros_classe (aluno_id, nivel_aula_id);
 
+-- Homework: no registro do dia a professora marca se o aluno fez a tarefa de
+-- casa passada na aula anterior (desmarcado = não fez). null = registro de
+-- antes do campo existir — fica fora da conta do Report Card.
+alter table public.registros_classe add column if not exists homework boolean;
+
 alter table public.registros_classe enable row level security;
 
 -- Mesmo padrão de activity_results (seção 8.7): visibilidade pela turma

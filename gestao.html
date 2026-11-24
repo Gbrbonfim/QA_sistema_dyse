@@ -4442,7 +4442,7 @@ body.dyse-modal-open{overflow:hidden;}
           const avaliacoesTexto = Object.keys(r.avaliacoes || {}).map(eixo => {
             const val = { sim: 'Sim', parcial: 'Parcial', nao: 'Não', nao_participou: 'Não participou' }[r.avaliacoes[eixo]] || r.avaliacoes[eixo];
             return eixo + ': ' + val;
-          }).join(' · ');
+          }).join(' · ') + (r.homework == null ? '' : (Object.keys(r.avaliacoes || {}).length ? ' · ' : '') + 'Homework: ' + (r.homework ? 'fez' : 'não fez'));
           const dataIso = String(r.data_aula || '').slice(0, 10);
           const dataTxt = formatDateBR(dataIso);
           const diaTag = (diasPorAula[r.nivel_aula_id] || 1) > 1 ? ' · ' + dataTxt : '';
@@ -4917,7 +4917,8 @@ body.dyse-modal-open{overflow:hidden;}
       '<div class="report-section-head">B · Frequência</div>' +
       '<p class="report-line">' + (freq.aulas_presentes ?? '-') + ' de ' + (freq.aulas_previstas ?? '-') + ' aulas (' + (freq.percentual ?? '-') + '%) — critério mínimo 75%: ' +
       (freq.criterio_atingido ? '<b style="color:var(--ok);">Atingido</b>' : '<b style="color:var(--bad);">Não atingido</b>') + '</p>' +
-      (freq.aulas_sem_registro ? '<p class="gestao-hint">' + MI('info') + ' ' + freq.aulas_sem_registro + ' aula(s) do período ainda sem Registro de Classe lançado.</p>' : '');
+      (freq.aulas_sem_registro ? '<p class="gestao-hint">' + MI('info') + ' ' + freq.aulas_sem_registro + ' aula(s) do período ainda sem Registro de Classe lançado.</p>' : '') +
+      dyseHomeworkLinhaHtml(d.homework, 'report-line');
 
     // Bloco C — análise de desenvolvimento por IA (substitui os selects PP/P/R).
     const ia = d.analise_ia;

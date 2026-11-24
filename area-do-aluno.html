@@ -2130,6 +2130,13 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
         '<div class="rc-freq-icon">' + MI('star') + '</div>' +
         '<div><b>' + escapeHtmlLocal(freqLinha) + '</b><span>' + freqMsg + '</span></div>' +
       '</div>' +
+      (d.homework && d.homework.verificadas
+        ? '<div class="rc-freq">' +
+            '<div class="rc-freq-icon">' + MI('home_work') + '</div>' +
+            '<div><b>' + escapeHtmlLocal('Homework: feito em ' + d.homework.feitas + ' de ' + d.homework.verificadas + ' aulas') + '</b><span>' +
+              (d.homework.percentual >= 75 ? 'Ótima constância nas tarefas de casa!' : 'Praticar em casa faz toda a diferença, conte com a gente.') + '</span></div>' +
+          '</div>'
+        : '') +
 
       '<div class="rc-section"><h4 class="rc-h">Desenvolvimento no semestre</h4>' + devHtml + '</div>' +
 
