@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 26 · Signs and rules</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 26 · Escuta
+   Alinhado ao slide "Class 26: What Can I do Here?" — Vocabulary (as placas: no mobile phones,
+   silence, internet, no food and drinks, no photos, toilet, enter, leave, park, credit card) e
+   Grammar Point (can / can't para regras e permissão). Conteúdo NOVO: outras regras. As figuras
+   são ícones. 24 questões: 12 placas + 12 "pode ou não pode". */
+const IC = { 'no phones': 'mobile_off', silence: 'volume_off', internet: 'wifi', 'no food': 'no_food', 'no drinks': 'no_drinks',
+  'no photos': 'no_photography', toilet: 'wc', enter: 'login', leave: 'logout', park: 'local_parking', 'credit card': 'credit_card',
+  'no smoking': 'smoke_free', 'OK (can)': 'check_circle', "not OK (can't)": 'block' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const PODE = 'Listen to the rule: is it OK or not OK?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 26, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the rule and choose the sign',
+  itens: [
+    { audioTexto: "You can't use your phone here.", opcoes: op('no phones', 'silence', 'internet', 'no photos'), certa: 0 },
+    { audioTexto: "Silence, please. You can't talk loudly here.", opcoes: op('no phones', 'silence', 'no food', 'toilet'), certa: 1 },
+    { audioTexto: 'You can use the internet here.', opcoes: op('no phones', 'credit card', 'internet', 'enter'), certa: 2 },
+    { audioTexto: "You can't bring food here.", opcoes: op('no drinks', 'toilet', 'no photos', 'no food'), certa: 3 },
+    { audioTexto: "You can't take photos here.", opcoes: op('no photos', 'no phones', 'silence', 'park'), certa: 0 },
+    { audioTexto: 'You can go to the toilet here.', opcoes: op('leave', 'toilet', 'enter', 'park'), certa: 1 },
+    { audioTexto: 'You can enter here.', opcoes: op('leave', 'park', 'enter', 'toilet'), certa: 2 },
+    { audioTexto: 'You can leave here.', opcoes: op('enter', 'toilet', 'park', 'leave'), certa: 3 },
+    { audioTexto: 'You can park here.', opcoes: op('park', 'leave', 'credit card', 'enter'), certa: 0 },
+    { audioTexto: 'You can pay by credit card here.', opcoes: op('internet', 'credit card', 'park', 'no phones'), certa: 1 },
+    { audioTexto: "You can't have drinks here.", opcoes: op('no food', 'silence', 'no drinks', 'no smoking'), certa: 2 },
+    { audioTexto: "You can't smoke here.", opcoes: op('no drinks', 'no photos', 'no phones', 'no smoking'), certa: 3 },
+    { instrucao: PODE, audioTexto: 'You can read books in the library.', opcoes: op('OK (can)', "not OK (can't)"), certa: 0 },
+    { instrucao: PODE, audioTexto: "You can't eat in the computer room.", opcoes: op('OK (can)', "not OK (can't)"), certa: 1 },
+    { instrucao: PODE, audioTexto: 'You can take photos after class.', opcoes: op('OK (can)', "not OK (can't)"), certa: 0 },
+    { instrucao: PODE, audioTexto: "Students can't use their phones in class.", opcoes: op('OK (can)', "not OK (can't)"), certa: 1 },
+    { instrucao: PODE, audioTexto: 'Can I sit here? Yes, you can.', opcoes: op('OK (can)', "not OK (can't)"), certa: 0 },
+    { instrucao: PODE, audioTexto: "Can we park at school? No, you can't.", opcoes: op('OK (can)', "not OK (can't)"), certa: 1 },
+    { instrucao: PODE, audioTexto: 'You can drink water in the hall.', opcoes: op('OK (can)', "not OK (can't)"), certa: 0 },
+    { instrucao: PODE, audioTexto: "Sorry, you can't sit here. It's for teachers only.", opcoes: op('OK (can)', "not OK (can't)"), certa: 1 },
+    { instrucao: PODE, audioTexto: 'Can I use the Wi-Fi? Yes, you can.', opcoes: op('OK (can)', "not OK (can't)"), certa: 0 },
+    { instrucao: PODE, audioTexto: "Can we talk loudly in the library? No, you can't.", opcoes: op('OK (can)', "not OK (can't)"), certa: 1 },
+    { instrucao: PODE, audioTexto: 'You can bring snacks to the event.', opcoes: op('OK (can)', "not OK (can't)"), certa: 0 },
+    { instrucao: PODE, audioTexto: "You can't enter. The room is closed.", opcoes: op('OK (can)', "not OK (can't)"), certa: 1 }
+  ]
+});
+</script>
+</body>
+</html>

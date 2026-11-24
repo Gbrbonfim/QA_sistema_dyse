@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 26 · First day at school</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 26 · Leitura
+   Alinhado ao slide "Class 26: What Can I do Here?" — Listening (Alex mostra a escola para a
+   Lina) e Role-Play: First Day at School (Can we...? Yes, you can. / No, you can't. / Only at
+   break.). Conteúdo NOVO: o Sam mostra a Sunshine School para a Mei. 20 questões: 12 de "próxima
+   fala" + 8 de compreensão. */
+const D = [
+  ['Sam', 'Hi! You must be Mei. Welcome to Sunshine School!'],
+  ['Mei', 'Thank you! Can I ask some questions?'],
+  ['Sam', 'Of course! Come with me. This is the gym.'],
+  ['Mei', 'Can we use the gym after class?'],
+  ['Sam', 'Yes, you can. But you can\'t eat here.'],
+  ['Mei', 'OK. And this room?'],
+  ['Sam', "It's the music room. You can play the piano here."],
+  ['Mei', 'Cool! Can we use our phones in class?'],
+  ['Sam', "No, you can't. Only at break."],
+  ['Mei', 'Only at break. OK! Can I park my bike at school?'],
+  ['Sam', 'Yes, you can park it here, near the door.'],
+  ['Mei', 'Great! Can students bring snacks?'],
+  ['Sam', "I don't know. Can you ask the teacher?"],
+  ['Mei', 'Sure. Thank you, Sam!']
+];
+const lado = q => q === 'Sam' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 26, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Thank you! Can I ask some questions?', 'Thank you! Do I can ask some questions?', 'Thank you! Can I to ask some questions?'], 0, 'Obrigada! Posso fazer algumas perguntas?'),
+    prox(2, ['Yes, you can.', 'Of course! Come with me. This is the gym.', 'Of course! Comes with me.'], 1, 'Claro! Vem comigo. Esta é a academia.'),
+    prox(3, ['Can we uses the gym after class?', 'Do we can use the gym after class?', 'Can we use the gym after class?'], 2, 'Podemos usar a academia depois da aula?'),
+    prox(4, ["Yes, you can. But you can't eat here.", "Yes, you do. But you can't eat here.", "Yes, you can. But you don't can eat here."], 0, 'Sim, podem. Mas vocês não podem comer aqui.'),
+    prox(5, ['Sure. Thank you, Sam!', 'OK. And this room?', 'Only at break.'], 1, 'Tá. E esta sala?'),
+    prox(6, ["It's the music room. You can plays the piano here.", 'Of course!', "It's the music room. You can play the piano here."], 2, 'É a sala de música. Vocês podem tocar piano aqui.'),
+    prox(7, ['Cool! Can we use our phones in class?', 'Cool! Can we use ours phones in class?', 'Cool! We can use our phones in class?'], 0, 'Legal! Podemos usar o celular na aula?'),
+    prox(8, ["Yes, you can. Every time.", "No, you can't. Only at break.", "No, you don't. Only at break."], 1, 'Não, não podem. Só no intervalo.'),
+    prox(9, ['Can students bring snacks?', 'OK. And this room?', 'Only at break. OK! Can I park my bike at school?'], 2, 'Só no intervalo. Tá! Posso estacionar a minha bicicleta na escola?'),
+    prox(10, ['Yes, you can park it here, near the door.', 'Yes, you can parks it here.', "No, you can't. Only at break."], 0, 'Sim, você pode estacioná-la aqui, perto da porta.'),
+    prox(11, ['Great! Do students can bring snacks?', 'Great! Can students bring snacks?', 'Great! Can students brings snacks?'], 1, 'Ótimo! Os alunos podem trazer lanche?'),
+    prox(12, ['Yes, you can.', "No, you can't.", "I don't know. Can you ask the teacher?"], 2, 'Eu não sei. Você pode perguntar ao professor?'),
+    { instrucao: "What's the name of the school?", frase: '___ School.', opcoes: ['Sunshine', 'Greenfield', 'Music'], certa: 0, traducao: 'Sunshine School.' },
+    { instrucao: 'Can students use the gym after class?', frase: 'Yes, they ___.', opcoes: ['do', 'can', 'are'], certa: 1, traducao: 'Sim, eles podem.' },
+    { instrucao: 'Can students eat in the gym?', frase: 'No, they ___.', opcoes: ["don't", "aren't", "can't"], certa: 2, traducao: 'Não, eles não podem.' },
+    { instrucao: 'What can students do in the music room?', frase: 'They can play the ___.', opcoes: ['piano', 'guitar', 'games'], certa: 0, traducao: 'Eles podem tocar piano.' },
+    { instrucao: 'When can students use their phones?', frase: 'Only at ___.', opcoes: ['class', 'break', 'night'], certa: 1, traducao: 'Só no intervalo.' },
+    { instrucao: 'Can Mei park her bike at school?', frase: 'Yes, she can park it near the ___.', opcoes: ['gym', 'piano', 'door'], certa: 2, traducao: 'Sim, ela pode estacioná-la perto da porta.' },
+    { instrucao: 'Does Sam know the rule about snacks?', frase: "No, he ___.", opcoes: ["doesn't", "can't", "isn't"], certa: 0, traducao: 'Não, ele não sabe.' },
+    { instrucao: 'Who can answer the question about snacks?', frase: 'The ___.', opcoes: ['student', 'teacher', 'piano'], certa: 1, traducao: 'O professor.' }
+  ]
+});
+</script>
+</body>
+</html>

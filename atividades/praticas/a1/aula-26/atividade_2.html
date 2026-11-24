@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 26 · You can't talk loudly</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 26 · Escrita
+   Alinhado ao slide "Class 26: What Can I do Here?" — Grammar Point 2 (frases com can / can't
+   para regras: You can't use your phone in the library; Can I sit here?) e 3 (can / can't +
+   verbo). Conteúdo NOVO: outras regras e lugares. O contexto traz a frase em português. A isca é
+   "Do / don't" (o erro "Do I can"), "to" ou o verbo com s. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 26, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Você não pode usar o celular na biblioteca.'), palavras: ['You', "can't", 'use', 'your', 'phone', 'in', 'the', 'library'], isca: ["don't"], fim: '.', traducao: 'Você não pode usar o celular na biblioteca.' },
+    { contexto: M('Nós não podemos falar alto na biblioteca.'), palavras: ['We', "can't", 'talk', 'loudly', 'in', 'the', 'library'], isca: ["don't"], fim: '.', traducao: 'Nós não podemos falar alto na biblioteca.' },
+    { contexto: M('A Lina pode usar o Wi-Fi na escola.'), palavras: ['Lina', 'can', 'use', 'the', 'Wi-Fi', 'at', 'school'], isca: ['uses'], fim: '.', traducao: 'A Lina pode usar o Wi-Fi na escola.' },
+    { contexto: M('Posso sentar aqui?'), palavras: ['Can', 'I', 'sit', 'here'], isca: ['Do'], fim: '?', traducao: 'Posso sentar aqui?' },
+    { contexto: M('Podemos estacionar na escola?'), palavras: ['Can', 'we', 'park', 'at', 'school'], isca: ['Do'], fim: '?', traducao: 'Podemos estacionar na escola?' },
+    { contexto: M('Eu posso olhar o celular depois da aula.'), palavras: ['I', 'can', 'check', 'my', 'phone', 'after', 'class'], isca: ['to'], fim: '.', traducao: 'Eu posso olhar o celular depois da aula.' },
+    { contexto: M('Você não pode tirar fotos durante a aula.'), palavras: ['You', "can't", 'take', 'photos', 'during', 'class'], isca: ['takes'], fim: '.', traducao: 'Você não pode tirar fotos durante a aula.' },
+    { contexto: M('Sim, vocês podem.'), palavras: ['Yes,', 'you', 'can'], isca: ['do'], fim: '.', traducao: 'Sim, vocês podem.' },
+    { contexto: M('Não, você não pode.'), palavras: ['No,', 'you', "can't"], isca: ["don't"], fim: '.', traducao: 'Não, você não pode.' },
+    { contexto: M('Só no intervalo.'), palavras: ['Only', 'at', 'break'], isca: ['in'], fim: '.', traducao: 'Só no intervalo.' },
+    { contexto: M('Os alunos não podem trazer comida para a sala de computadores.'), palavras: ['Students', "can't", 'bring', 'food', 'into', 'the', 'computer', 'room'], isca: ['brings'], fim: '.', traducao: 'Os alunos não podem trazer comida para a sala de computadores.' },
+    { contexto: M('Você pode beber água aqui dentro.'), palavras: ['You', 'can', 'drink', 'water', 'inside'], isca: ['drinks'], fim: '.', traducao: 'Você pode beber água aqui dentro.' },
+    { contexto: M('Podemos trazer lanches para o evento?'), palavras: ['Can', 'we', 'bring', 'snacks', 'to', 'the', 'event'], isca: ['Do'], fim: '?', traducao: 'Podemos trazer lanches para o evento?' },
+    { contexto: M('Desculpe, você não pode sentar nesta área.'), palavras: ['Sorry,', 'you', "can't", 'sit', 'in', 'this', 'area'], isca: ["don't"], fim: '.', traducao: 'Desculpe, você não pode sentar nesta área.' },
+    { contexto: M('Você pode pagar com cartão de crédito aqui.'), palavras: ['You', 'can', 'pay', 'by', 'credit', 'card', 'here'], isca: ['to'], fim: '.', traducao: 'Você pode pagar com cartão de crédito aqui.' },
+    { contexto: M('Eu não sei. Você pode me perguntar de novo?'), palavras: ['I', "don't", 'know.', 'Can', 'you', 'ask', 'me', 'again'], isca: ['Do'], fim: '?', traducao: 'Eu não sei. Você pode me perguntar de novo?' },
+    { contexto: M('O que eu posso fazer aqui?'), palavras: ['What', 'can', 'I', 'do', 'here'], isca: ['does'], fim: '?', traducao: 'O que eu posso fazer aqui?' },
+    { contexto: M('Você pode ler livros aqui.'), palavras: ['You', 'can', 'read', 'books', 'here'], isca: ['reads'], fim: '.', traducao: 'Você pode ler livros aqui.' },
+    { contexto: M('Ela pode ir ao banheiro?'), palavras: ['Can', 'she', 'go', 'to', 'the', 'toilet'], isca: ['Does'], fim: '?', traducao: 'Ela pode ir ao banheiro?' },
+    { contexto: M('Nós podemos tirar fotos depois da aula.'), palavras: ['We', 'can', 'take', 'photos', 'after', 'class'], isca: ['to'], fim: '.', traducao: 'Nós podemos tirar fotos depois da aula.' }
+  ]
+});
+</script>
+</body>
+</html>

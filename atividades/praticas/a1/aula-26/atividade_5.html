@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 26 · Three uses of can</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 26 · Gramática
+   Alinhado ao slide "Class 26: What Can I do Here?" — Grammar Point (can / can't para regras e
+   permissão; igual para todas as pessoas; nunca "Do I can"; short answers) e exercício 3 (can /
+   can't + verbo pelo contexto). Conteúdo NOVO e mais difícil: as três funções de can (habilidade
+   da Aula 24, pedido da Aula 25 e permissão desta aula). 24 questões. */
+const FUN = 'What is this can? Ability, request or permission?';
+const CTX = "Can or can't? Think about the rule";
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 26, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: CTX, frase: "I'm in the library. I ___ talk loudly here.", opcoes: ['can', "can't"], certa: 1, traducao: 'Eu estou na biblioteca. Eu não posso falar alto aqui.' },
+    { instrucao: CTX, frase: 'This is the computer room. You ___ use the internet here.', opcoes: ['can', "can't"], certa: 0, traducao: 'Esta é a sala de computadores. Você pode usar a internet aqui.' },
+    { instrucao: CTX, frase: "We're in class. We ___ take photos during the lesson.", opcoes: ['can', "can't"], certa: 1, traducao: 'Estamos na aula. Não podemos tirar fotos durante a aula.' },
+    { instrucao: CTX, frase: 'You ___ drink water inside, but not near the computers.', opcoes: ['can', "can't"], certa: 0, traducao: 'Você pode beber água aqui dentro, mas não perto dos computadores.' },
+    { instrucao: CTX, frase: "Sorry, you ___ sit in this area. It's for teachers only.", opcoes: ['can', "can't"], certa: 1, traducao: 'Desculpe, você não pode sentar nesta área. É só para professores.' },
+    { instrucao: CTX, frase: 'The sign says "No Mobile Phones". You ___ use your phone.', opcoes: ['can', "can't"], certa: 1, traducao: 'A placa diz "Proibido celular". Você não pode usar o celular.' },
+    { frase: '___ I sit here?', opcoes: ['Do', 'Can', 'Am'], certa: 1, traducao: 'Posso sentar aqui?' },
+    { frase: 'Can we take photos? Yes, you ___.', opcoes: ['do', 'are', 'can'], certa: 2, traducao: 'Podemos tirar fotos? Sim, vocês podem.' },
+    { frase: "Can I eat here? No, you ___.", opcoes: ["can't", "don't", "aren't"], certa: 0, traducao: 'Posso comer aqui? Não, você não pode.' },
+    { frase: 'Students can ___ food into the hall.', opcoes: ['brings', 'bring', 'to bring'], certa: 1, traducao: 'Os alunos podem trazer comida para o salão.' },
+    { frase: 'Lina ___ use the Wi-Fi at school.', opcoes: ['cans', 'can to', 'can'], certa: 2, traducao: 'A Lina pode usar o Wi-Fi na escola.' },
+    { frase: 'Can we use our phones in class? ___ at break.', opcoes: ['Only', 'Never', 'Always'], certa: 0, traducao: 'Podemos usar o celular na aula? Só no intervalo.' },
+    { instrucao: FUN, frase: 'I can swim very well. → ___', opcoes: ['ability', 'request', 'permission'], certa: 0, completa: 'I can swim very well.', traducao: 'Eu sei nadar muito bem. → habilidade' },
+    { instrucao: FUN, frase: 'Can I have a latte, please? → ___', opcoes: ['ability', 'request', 'permission'], certa: 1, completa: 'Can I have a latte, please?', traducao: 'Posso pedir um latte? → pedido' },
+    { instrucao: FUN, frase: "You can't use your phone in the library. → ___", opcoes: ['ability', 'request', 'permission'], certa: 2, completa: "You can't use your phone in the library.", traducao: 'Você não pode usar o celular na biblioteca. → regra / permissão' },
+    { instrucao: FUN, frase: 'She can lift a barbell. → ___', opcoes: ['ability', 'request', 'permission'], certa: 0, completa: 'She can lift a barbell.', traducao: 'Ela consegue levantar uma barra. → habilidade' },
+    { instrucao: FUN, frase: 'Can we park at school? → ___', opcoes: ['ability', 'request', 'permission'], certa: 2, completa: 'Can we park at school?', traducao: 'Podemos estacionar na escola? → permissão' },
+    { instrucao: FUN, frase: 'Could I have the menu, please? → ___', opcoes: ['ability', 'request', 'permission'], certa: 1, completa: 'Could I have the menu, please?', traducao: 'Eu poderia ver o cardápio? → pedido' },
+    { frase: 'You can ___ the toilet here.', opcoes: ['go', 'go to', 'goes to'], certa: 1, traducao: 'Você pode ir ao banheiro aqui.' },
+    { frase: "I don't know. ___ you ask me again?", opcoes: ['Do', 'Can', 'Are'], certa: 1, traducao: 'Eu não sei. Você pode me perguntar de novo?' },
+    { instrucao: CERTA, opcoes: ['Do I can sit here?', 'Can I sit here?', 'Can I to sit here?'], certa: 1, traducao: 'Posso sentar aqui?' },
+    { instrucao: CERTA, opcoes: ["You don't can talk loudly.", "You can't talks loudly.", "You can't talk loudly."], certa: 2, traducao: 'Você não pode falar alto.' },
+    { instrucao: CERTA, opcoes: ['Can we bring snacks?', 'Can we brings snacks?', 'We can bring snacks?'], certa: 0, traducao: 'Podemos trazer lanches?' },
+    { instrucao: '"Can I use the Wi-Fi?" Choose the correct answer', opcoes: ['Yes, you do.', 'Yes, you can.', 'Yes, you can it.'], certa: 1, completa: 'Can I use the Wi-Fi? Yes, you can.', traducao: 'Posso usar o Wi-Fi? Sim, pode.' }
+  ]
+});
+</script>
+</body>
+</html>

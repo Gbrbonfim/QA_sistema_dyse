@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 26 · Can we...?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 26 · Fala
+   Alinhado ao slide "Class 26: What Can I do Here?" — Role-Play (Useful Language: Yes, you can. /
+   No, you can't. / Only at break. / I don't know. Can you ask me again?) e as regras da escola.
+   Entonação: "No, you CAN'T" com força no can't. Conteúdo NOVO: outras regras. 20 questões. */
+const PAL = 'Listen and record the words';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 26, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'library', traducao: 'biblioteca', nota: 'Não é "livraria": library = biblioteca. LAI-bre-ri.' },
+    { instrucao: PAL, frase: 'silence, please', traducao: 'silêncio, por favor' },
+    { instrucao: PAL, frase: 'loudly', traducao: 'alto (falar alto)' },
+    { instrucao: PAL, frase: 'toilet', traducao: 'banheiro' },
+    { instrucao: PAL, frase: 'computer room', traducao: 'sala de computadores' },
+    { instrucao: PAL, frase: 'main hall', traducao: 'salão principal' },
+    { frase: 'Can we talk loudly?', dica: 0, traducao: 'Podemos falar alto?' },
+    { frase: "No, you can't.", dica: 0, traducao: 'Não, vocês não podem.', nota: "Dê força ao can't, com o t no fim." },
+    { frase: 'Yes, you can.', dica: 0, traducao: 'Sim, vocês podem.' },
+    { frase: 'Only at break.', dica: 0, traducao: 'Só no intervalo.' },
+    { frase: "I don't know. Can you ask me again?", dica: 0, traducao: 'Eu não sei. Você pode me perguntar de novo?' },
+    { frase: "You can't use your phone in the library.", dica: 0, traducao: 'Você não pode usar o celular na biblioteca.' },
+    { frase: 'You can read books here.', dica: 0, traducao: 'Você pode ler livros aqui.' },
+    { frase: 'Can I sit here?', dica: 0, traducao: 'Posso sentar aqui?' },
+    { frase: "You can't eat or drink in this room.", dica: 0, traducao: 'Você não pode comer nem beber nesta sala.' },
+    { frase: 'Can we park at school?', dica: 0, traducao: 'Podemos estacionar na escola?' },
+    { frase: 'You can take photos after class.', dica: 0, traducao: 'Vocês podem tirar fotos depois da aula.' },
+    { frase: 'Can I pay by credit card here?', dica: 0, traducao: 'Posso pagar com cartão de crédito aqui?' },
+    { frase: "Sorry, you can't sit here. It's for teachers only.", dica: 0, traducao: 'Desculpe, você não pode sentar aqui. É só para professores.' },
+    { frase: 'What can I do here?', dica: 0, traducao: 'O que eu posso fazer aqui?' }
+  ]
+});
+</script>
+</body>
+</html>

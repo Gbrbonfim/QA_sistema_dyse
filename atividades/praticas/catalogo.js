@@ -266,6 +266,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Order a coffee', tipo: 'Escute e grave', treina: 'Fala · Pedidos', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Polite requests', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 26,
+        titulo: 'Class 26 · What Can I do Here?',
+        atividades: [
+          { num: 1, titulo: 'Signs and rules', tipo: 'Escute e escolha', treina: 'Escuta · Regras', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "You can't talk loudly", tipo: 'Monte a frase', treina: 'Escrita · Permissão', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'First day at school', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Can we...?', tipo: 'Escute e grave', treina: 'Fala · Permissão', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Three uses of can', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
