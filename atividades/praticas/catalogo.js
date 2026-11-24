@@ -255,6 +255,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: "I can, I can't", tipo: 'Escute e grave', treina: 'Fala · Can forte e fraco', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Can for ability', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 25,
+        titulo: 'Class 25 · Know Your Coffee',
+        atividades: [
+          { num: 1, titulo: 'Coffee words', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Can I have a latte?', tipo: 'Monte a frase', treina: 'Escrita · Pedidos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'At the coffee shop', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Order a coffee', tipo: 'Escute e grave', treina: 'Fala · Pedidos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Polite requests', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 25 · Polite requests</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 25 · Gramática
+   Alinhado ao slide "Class 25: Know Your Coffee" — Grammar Point (can para pedido educado,
+   diferente do can de habilidade da Aula 24; could é mais educado; I'd like) e Warm Up / Vocabulary
+   (fatos verdadeiros: espresso é café preto; Americano não leva leite; mocha leva chocolate; latte
+   leva bastante leite). 24 questões. */
+const FUN = 'Request or ability?';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 25, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: '___ I have a latte, please?', opcoes: ['Can', 'Do', 'Am'], certa: 0, traducao: 'Posso pedir um latte, por favor?' },
+    { frase: '___ like a hot chocolate.', opcoes: ['I', "I'd", 'I can'], certa: 1, traducao: 'Eu gostaria de um chocolate quente.' },
+    { frase: 'Could I ___ almond milk in my coffee?', opcoes: ['to have', 'has', 'have'], certa: 2, traducao: 'Eu poderia pedir leite de amêndoas no meu café?' },
+    { frase: 'Can I ___ by credit card?', opcoes: ['pay', 'paying', 'pays'], certa: 0, traducao: 'Posso pagar com cartão de crédito?' },
+    { instrucao: 'Which is the most polite request?', opcoes: ['I want a latte.', 'Could I have a latte, please?', 'Give me a latte.'], certa: 1, completa: 'Could I have a latte, please?', traducao: 'O pedido mais educado: Eu poderia pedir um latte, por favor?' },
+    { instrucao: 'What does "Can I help you?" mean?', opcoes: ['I want help.', 'I can run.', 'Do you need help?'], certa: 2, completa: 'Can I help you?', traducao: '"Can I help you?" quer dizer: Você precisa de ajuda?' },
+    { instrucao: FUN, frase: 'Can I have an espresso? → ___', opcoes: ['request', 'ability'], certa: 0, completa: 'Can I have an espresso?', traducao: 'Posso pedir um espresso? → pedido' },
+    { instrucao: FUN, frase: 'I can play tennis. → ___', opcoes: ['request', 'ability'], certa: 1, completa: 'I can play tennis.', traducao: 'Eu consigo jogar tênis. → habilidade' },
+    { instrucao: FUN, frase: 'Can I use your pen? → ___', opcoes: ['request', 'ability'], certa: 0, completa: 'Can I use your pen?', traducao: 'Posso usar a sua caneta? → pedido' },
+    { instrucao: FUN, frase: 'She can lift a barbell. → ___', opcoes: ['request', 'ability'], certa: 1, completa: 'She can lift a barbell.', traducao: 'Ela consegue levantar uma barra. → habilidade' },
+    { frase: 'An espresso is a ___ coffee.', opcoes: ['black', 'milk', 'iced'], certa: 0, traducao: 'Um espresso é um café preto.' },
+    { frase: 'An Americano is a coffee ___ milk.', opcoes: ['with', 'without', 'and'], certa: 1, traducao: 'Um Americano é um café sem leite.' },
+    { frase: 'A mocha has ___.', opcoes: ['vanilla', 'caramel', 'chocolate'], certa: 2, traducao: 'Um mocha tem chocolate.' },
+    { frase: 'A latte has a lot of ___.', opcoes: ['milk', 'syrup', 'water'], certa: 0, traducao: 'Um latte tem bastante leite.' },
+    { frase: 'Decaf coffee has no ___.', opcoes: ['milk', 'caffeine', 'sugar'], certa: 1, traducao: 'Café descafeinado não tem cafeína.' },
+    { frase: "Let's go to a ___. I want a cappuccino.", opcoes: ['coffee', 'gym', 'café'], certa: 2, traducao: 'Vamos a um café. Eu quero um cappuccino.' },
+    { frase: 'I like ___. I drink it every morning.', opcoes: ['coffee', 'café', 'cafés'], certa: 0, traducao: 'Eu gosto de café. Eu tomo todas as manhãs.' },
+    { frase: 'Small, medium or ___?', opcoes: ['big', 'large', 'long'], certa: 1, traducao: 'Pequeno, médio ou grande?' },
+    { frase: 'Hot or ___?', opcoes: ['cold', 'ice', 'iced'], certa: 2, traducao: 'Quente ou gelado?' },
+    { frase: 'Could you ___ me, please?', opcoes: ['help', 'helps', 'to help'], certa: 0, traducao: 'Você poderia me ajudar, por favor?' },
+    { instrucao: CERTA, opcoes: ['Do I can have a latte?', 'Can I have a latte?', 'Can I to have a latte?'], certa: 1, traducao: 'Posso pedir um latte?' },
+    { instrucao: CERTA, opcoes: ["I'd like a tall vanilla latte.", "I'd like to a tall vanilla latte.", "I like'd a tall vanilla latte."], certa: 0, traducao: 'Eu gostaria de um latte de baunilha tall.' },
+    { instrucao: CERTA, opcoes: ['Could I has a mocha?', 'Could I having a mocha?', 'Could I have a mocha?'], certa: 2, traducao: 'Eu poderia pedir um mocha?' },
+    { instrucao: CERTA, opcoes: ['Can I pay with credit card by?', 'Can I pay by credit card?', 'Can pay I by credit card?'], certa: 1, traducao: 'Posso pagar com cartão de crédito?' }
+  ]
+});
+</script>
+</body>
+</html>

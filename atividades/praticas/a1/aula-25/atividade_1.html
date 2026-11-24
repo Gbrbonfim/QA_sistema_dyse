@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 25 · Coffee words</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 25 · Escuta
+   Alinhado ao slide "Class 25: Know Your Coffee" — Vocabulary (espresso, cappuccino, mocha,
+   latte, Americano; hot / iced; small / medium / large; regular, low fat, soy, almond milk;
+   vanilla, caramel, chocolate syrup) e a conversa com o barista. Conteúdo NOVO: outros pedidos.
+   As figuras são ícones. 24 questões: 12 palavras + 12 pedidos. */
+const IC = { espresso: 'coffee', cappuccino: 'local_cafe', mocha: 'local_cafe', latte: 'local_cafe', Americano: 'coffee',
+  hot: 'local_fire_department', iced: 'ac_unit', small: 'close_fullscreen', medium: 'crop_square', large: 'open_in_full',
+  'regular milk': 'water_full', 'low fat milk': 'water_full', 'soy milk': 'eco', 'almond milk': 'eco',
+  vanilla: 'water_drop', caramel: 'water_drop', chocolate: 'water_drop' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const TEMP = 'Listen to the order: hot or iced?';
+const SIZE = 'Listen to the order and choose the size';
+const MILK = 'Listen to the order and choose the milk';
+const SYR = 'Listen to the order and choose the syrup';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 25, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the word',
+  itens: [
+    { audioTexto: 'espresso', opcoes: op('espresso', 'cappuccino', 'mocha', 'latte'), certa: 0 },
+    { audioTexto: 'cappuccino', opcoes: op('Americano', 'cappuccino', 'espresso', 'mocha'), certa: 1 },
+    { audioTexto: 'mocha', opcoes: op('latte', 'espresso', 'mocha', 'Americano'), certa: 2 },
+    { audioTexto: 'latte', opcoes: op('mocha', 'cappuccino', 'Americano', 'latte'), certa: 3 },
+    { audioTexto: 'Americano', opcoes: op('Americano', 'espresso', 'latte', 'cappuccino'), certa: 0 },
+    { audioTexto: 'iced', opcoes: op('hot', 'iced', 'small', 'large'), certa: 1 },
+    { audioTexto: 'medium', opcoes: op('small', 'large', 'medium', 'hot'), certa: 2 },
+    { audioTexto: 'almond milk', opcoes: op('soy milk', 'regular milk', 'low fat milk', 'almond milk'), certa: 3 },
+    { audioTexto: 'low fat milk', opcoes: op('low fat milk', 'almond milk', 'soy milk', 'regular milk'), certa: 0 },
+    { audioTexto: 'caramel', opcoes: op('vanilla', 'caramel', 'chocolate', 'latte'), certa: 1 },
+    { audioTexto: 'vanilla', opcoes: op('caramel', 'chocolate', 'vanilla', 'mocha'), certa: 2 },
+    { audioTexto: 'soy milk', opcoes: op('almond milk', 'regular milk', 'low fat milk', 'soy milk'), certa: 3 },
+    { instrucao: TEMP, audioTexto: 'Can I have an iced latte, please?', opcoes: op('iced', 'hot'), certa: 0 },
+    { instrucao: TEMP, audioTexto: "I'd like a hot chocolate mocha, please.", opcoes: op('iced', 'hot'), certa: 1 },
+    { instrucao: TEMP, audioTexto: 'Could I have an iced Americano?', opcoes: op('iced', 'hot'), certa: 0 },
+    { instrucao: SIZE, audioTexto: 'Can I have a large cappuccino, please?', opcoes: op('small', 'medium', 'large'), certa: 2 },
+    { instrucao: SIZE, audioTexto: "I'd like a small espresso.", opcoes: op('small', 'medium', 'large'), certa: 0 },
+    { instrucao: SIZE, audioTexto: 'A medium latte with vanilla syrup, please.', opcoes: op('small', 'medium', 'large'), certa: 1 },
+    { instrucao: MILK, audioTexto: 'Could I have almond milk in my coffee?', opcoes: op('regular milk', 'soy milk', 'almond milk', 'low fat milk'), certa: 2 },
+    { instrucao: MILK, audioTexto: "Any different kind of milk? Yes, soy milk, please.", opcoes: op('almond milk', 'regular milk', 'low fat milk', 'soy milk'), certa: 3 },
+    { instrucao: MILK, audioTexto: 'No, thanks. Regular milk.', opcoes: op('regular milk', 'low fat milk', 'soy milk', 'almond milk'), certa: 0 },
+    { instrucao: SYR, audioTexto: 'Any syrup? Caramel, please.', opcoes: op('vanilla', 'caramel', 'chocolate'), certa: 1 },
+    { instrucao: SYR, audioTexto: "I'd like a hot latte with chocolate syrup.", opcoes: op('vanilla', 'caramel', 'chocolate'), certa: 2 },
+    { instrucao: SYR, audioTexto: 'Can I have a tall vanilla latte?', opcoes: op('vanilla', 'caramel', 'chocolate'), certa: 0 }
+  ]
+});
+</script>
+</body>
+</html>

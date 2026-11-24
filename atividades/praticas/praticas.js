@@ -499,7 +499,7 @@
     return s;
   }
   function norm(txt){
-    return String(txt || '').toLowerCase().replace(/[’`]/g, "'").split(/\s+/)
+    return String(txt || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’`]/g, "'").split(/\s+/)
       .map(w => numPorExtenso(w.replace(/[.,!?;:"]+$/, '')))
       .join(' ').replace(/-/g, ' ').split(/\s+/)
       .map(w => w.replace(/[^a-z']/g, '')).filter(Boolean)

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 25 · At the coffee shop</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 25 · Leitura
+   Alinhado ao slide "Class 25: Know Your Coffee" — a conversa com o barista (Can I help you? Iced
+   or hot? Tall, grande or venti? Any syrup? Any different kind of milk? Anything else?) e os
+   passos para pedir café. Conteúdo NOVO: a Rosa pede um mocha gelado e paga com cartão.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Barista', 'Hello! Can I help you?'],
+  ['Rosa', 'Hi! Could I have a mocha, please?'],
+  ['Barista', 'Iced or hot?'],
+  ['Rosa', "Iced, please. It's a hot day!"],
+  ['Barista', 'Tall, grande or venti?'],
+  ['Rosa', 'Grande, please.'],
+  ['Barista', 'Decaf, regular, or with extra shots?'],
+  ['Rosa', "Decaf. I don't drink caffeine in the afternoon."],
+  ['Barista', 'Any syrup?'],
+  ['Rosa', 'No, thanks. Mocha has chocolate.'],
+  ['Barista', 'Any different kind of milk?'],
+  ['Rosa', "Yes, I'd like almond milk, please."],
+  ['Barista', 'Anything else?'],
+  ['Rosa', 'No, thanks. Can I pay by credit card?']
+];
+const lado = q => q === 'Barista' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 25, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Hi! Could I have a mocha, please?', 'Hi! I want mocha.', 'Hi! Could I to have a mocha?'], 0, 'Oi! Eu poderia pedir um mocha, por favor?'),
+    prox(2, ['Any syrup?', 'Iced or hot?', 'Iced and hot?'], 1, 'Gelado ou quente?'),
+    prox(3, ['Grande, please.', 'Decaf.', "Iced, please. It's a hot day!"], 2, 'Gelado, por favor. Está um dia quente!'),
+    prox(4, ['Tall, grande or venti?', 'Anything else?', 'Any different kind of milk?'], 0, 'Tall, grande ou venti?'),
+    prox(5, ['Iced, please.', 'Grande, please.', 'Hot, please.'], 1, 'Grande, por favor.'),
+    prox(6, ['Any syrup?', 'Can I help you?', 'Decaf, regular, or with extra shots?'], 2, 'Descafeinado, normal ou com doses extras?'),
+    prox(7, ["Decaf. I don't drink caffeine in the afternoon.", "Decaf. I doesn't drink caffeine in the afternoon.", 'Yes, please.'], 0, 'Descafeinado. Eu não tomo cafeína à tarde.'),
+    prox(8, ['Anything else?', 'Any syrup?', 'Some syrups?'], 1, 'Algum xarope?'),
+    prox(9, ['Vanilla and caramel and chocolate!', 'Yes, I would.', 'No, thanks. Mocha has chocolate.'], 2, 'Não, obrigada. O mocha já tem chocolate.'),
+    prox(10, ['Any different kind of milk?', 'Any different kinds of milks?', 'Iced or hot?'], 0, 'Algum tipo diferente de leite?'),
+    prox(11, ["Yes, I like almond milk, please.", "Yes, I'd like almond milk, please.", "Yes, I'd almond milk, please."], 1, 'Sim, eu gostaria de leite de amêndoas, por favor.'),
+    prox(12, ['Can I help you?', 'Tall, grande or venti?', 'Anything else?'], 2, 'Mais alguma coisa?'),
+    { instrucao: 'What coffee does Rosa order?', frase: 'A ___.', opcoes: ['mocha', 'latte', 'cappuccino'], certa: 0, traducao: 'Um mocha.' },
+    { instrucao: 'Hot or iced?', frase: '___.', opcoes: ['Hot', 'Iced', 'Warm'], certa: 1, traducao: 'Gelado.' },
+    { instrucao: 'What size?', frase: '___.', opcoes: ['Tall', 'Venti', 'Grande'], certa: 2, traducao: 'Grande.' },
+    { instrucao: 'Regular, decaf or extra shots?', frase: '___.', opcoes: ['Decaf', 'Regular', 'Extra shots'], certa: 0, traducao: 'Descafeinado.' },
+    { instrucao: "Why doesn't Rosa want syrup?", frase: 'Mocha has ___.', opcoes: ['vanilla', 'chocolate', 'caramel'], certa: 1, traducao: 'O mocha tem chocolate.' },
+    { instrucao: 'What milk does Rosa want?', frase: '___ milk.', opcoes: ['Regular', 'Soy', 'Almond'], certa: 2, traducao: 'Leite de amêndoas.' },
+    { instrucao: 'How does Rosa want to pay?', frase: 'By ___.', opcoes: ['credit card', 'cash', 'phone'], certa: 0, traducao: 'Com cartão de crédito.' },
+    { instrucao: 'What does "decaf" mean?', frase: 'No ___.', opcoes: ['milk', 'caffeine', 'syrup'], certa: 1, traducao: 'Sem cafeína.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 25 · Can I have a latte?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 25 · Escrita
+   Alinhado ao slide "Class 25: Know Your Coffee" — Grammar Point (pedido educado: Can I have...?
+   Could I have...? I'd like...; Can I help you?) e exercícios 2–4 (reescrever pedidos com can,
+   could e I'd like). Conteúdo NOVO: outros pedidos. O contexto traz a frase em português. A isca
+   é "want" (pouco educado), "Do" ou "to". 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 25, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Posso pedir um latte, por favor?'), palavras: ['Can', 'I', 'have', 'a', 'latte,', 'please'], isca: ['want'], fim: '?', traducao: 'Posso pedir um latte, por favor?' },
+    { contexto: M('Posso ajudar?'), palavras: ['Can', 'I', 'help', 'you'], isca: ['Do'], fim: '?', traducao: 'Posso ajudar?' },
+    { contexto: M('Eu gostaria de um latte de caramelo quente.'), palavras: ["I'd", 'like', 'a', 'hot', 'caramel', 'latte'], isca: ['want'], fim: '.', traducao: 'Eu gostaria de um latte de caramelo quente.' },
+    { contexto: M('Eu poderia pedir leite de amêndoas no meu café?'), palavras: ['Could', 'I', 'have', 'almond', 'milk', 'in', 'my', 'coffee'], isca: ['to'], fim: '?', traducao: 'Eu poderia pedir leite de amêndoas no meu café?' },
+    { contexto: M('Você poderia me ajudar, por favor?'), palavras: ['Could', 'you', 'help', 'me,', 'please'], isca: ['I'], fim: '?', traducao: 'Você poderia me ajudar, por favor?' },
+    { contexto: M('Posso pedir um cappuccino gelado?'), palavras: ['Can', 'I', 'have', 'an', 'iced', 'cappuccino'], isca: ['a'], fim: '?', traducao: 'Posso pedir um cappuccino gelado?' },
+    { contexto: M('Posso pedir um Americano grande (tall)?'), palavras: ['Can', 'I', 'have', 'a', 'tall', 'Americano'], isca: ['an'], fim: '?', traducao: 'Posso pedir um Americano tall?' },
+    { contexto: M('Posso fechar a porta?'), palavras: ['Can', 'I', 'close', 'the', 'door'], isca: ['Do'], fim: '?', traducao: 'Posso fechar a porta?' },
+    { contexto: M('Posso usar a sua caneta?'), palavras: ['Can', 'I', 'use', 'your', 'pen'], isca: ['you'], fim: '?', traducao: 'Posso usar a sua caneta?' },
+    { contexto: M('Posso pagar com cartão de crédito?'), palavras: ['Can', 'I', 'pay', 'by', 'credit', 'card'], isca: ['to'], fim: '?', traducao: 'Posso pagar com cartão de crédito?' },
+    { contexto: M('Eu gostaria de duas doses de espresso no meu café.'), palavras: ["I'd", 'like', 'two', 'shots', 'of', 'espresso', 'in', 'my', 'coffee'], isca: ['want'], fim: '.', traducao: 'Eu gostaria de duas doses de espresso no meu café.' },
+    { contexto: M('Eu poderia pedir um mocha gelado grande?'), palavras: ['Could', 'I', 'have', 'a', 'large', 'iced', 'mocha'], isca: ['an'], fim: '?', traducao: 'Eu poderia pedir um mocha gelado grande?' },
+    { contexto: M('Gelado ou quente?'), palavras: ['Iced', 'or', 'hot'], isca: ['and'], fim: '?', traducao: 'Gelado ou quente?' },
+    { contexto: M('Algum xarope?'), palavras: ['Any', 'syrup'], isca: ['Some'], fim: '?', traducao: 'Algum xarope?' },
+    { contexto: M('Baunilha, por favor.'), palavras: ['Vanilla,', 'please'], isca: ['want'], fim: '.', traducao: 'Baunilha, por favor.' },
+    { contexto: M('Algum tipo diferente de leite?'), palavras: ['Any', 'different', 'kind', 'of', 'milk'], isca: ['kinds'], fim: '?', traducao: 'Algum tipo diferente de leite?' },
+    { contexto: M('Não, obrigado. Leite normal.'), palavras: ['No,', 'thanks.', 'Regular', 'milk'], isca: ['Normal'], fim: '.', traducao: 'Não, obrigado. Leite normal.' },
+    { contexto: M('Vamos a um café.'), palavras: ["Let's", 'go', 'to', 'a', 'café'], isca: ['coffee'], fim: '.', traducao: 'Vamos a um café (lugar).' },
+    { contexto: M('Eu gosto de café (bebida).'), palavras: ['I', 'like', 'coffee'], isca: ['café'], fim: '.', traducao: 'Eu gosto de café.' },
+    { contexto: M('Eu gostaria de um chocolate quente, por favor.'), palavras: ["I'd", 'like', 'a', 'hot', 'chocolate,', 'please'], isca: ['want'], fim: '.', traducao: 'Eu gostaria de um chocolate quente, por favor.' }
+  ]
+});
+</script>
+</body>
+</html>
