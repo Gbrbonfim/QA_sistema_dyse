@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 40 Â· Review: read</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 40 · Leitura (revisão)
+   Alinhado ao slide "Class 40: Review" — "Tick what you can do": a casa, onde estava, quando
+   nasceu, o signo, as férias, o aniversário e o dia de ontem. Conteúdo NOVO: a Mia e o Lucas se
+   reencontram depois das férias. 10 de janeiro = capricórnio. 20 questões: 12 de "próxima fala"
+   + 8 de compreensão. */
+const D = [
+  ['Mia', 'Lucas! Where were you last week?'],
+  ['Lucas', 'I was on vacation in Florianópolis.'],
+  ['Mia', 'Cool! Where did you stay?'],
+  ['Lucas', 'We stayed in a small apartment near the beach.'],
+  ['Mia', 'Was it nice?'],
+  ['Lucas', 'Yes! It had two bedrooms and a big kitchen.'],
+  ['Mia', 'What did you do there?'],
+  ['Lucas', 'We walked on the beach and ate a lot of fish.'],
+  ['Mia', 'And your birthday? It was on Saturday, right?'],
+  ['Lucas', 'Yes! I had a picnic on the beach with my family.'],
+  ['Mia', 'How old are you now?'],
+  ['Lucas', 'I\'m twenty-six. I was born on January 10th, 2000.'],
+  ['Mia', 'So you\'re a Capricorn!'],
+  ['Lucas', 'Yes, I am. And what about you? Were you at home?'],
+  ['Mia', 'Yes, I was. I couldn\'t travel. I had a lot of work.']
+];
+const lado = q => q === 'Mia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 40, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I was on vacation in Florianópolis.', 'I were on vacation in Florianópolis.', 'I am on vacation last week.'], 0, 'Eu estava de férias em Florianópolis.'),
+    prox(2, ['Cool! Where did you stayed?', 'Cool! Where did you stay?', 'Cool! Where you stayed?'], 1, 'Legal! Onde vocês ficaram?'),
+    prox(3, ['We stay in a small apartment last week.', 'We staied in a small apartment.', 'We stayed in a small apartment near the beach.'], 2, 'Nós ficamos num apartamento pequeno perto da praia.'),
+    prox(4, ['Was it nice?', 'Did it nice?', 'Were it nice?'], 0, 'Era legal?'),
+    prox(5, ['Yes! It haved two bedrooms.', 'Yes! It had two bedrooms and a big kitchen.', 'Yes! It has two bedrooms last week.'], 1, 'Sim! Tinha dois quartos e uma cozinha grande.'),
+    prox(6, ['What did you did there?', 'What you did there?', 'What did you do there?'], 2, 'O que vocês fizeram lá?'),
+    prox(7, ['We walked on the beach and ate a lot of fish.', 'We walk on the beach and eat fish yesterday.', 'We walked on the beach and eated fish.'], 0, 'Nós caminhamos na praia e comemos muito peixe.'),
+    prox(8, ['And your birthday? It were on Saturday, right?', 'And your birthday? It was on Saturday, right?', 'And your birthday? It did on Saturday, right?'], 1, 'E o seu aniversário? Foi no sábado, né?'),
+    prox(9, ['Yes! I have a picnic on the beach yesterday.', 'Yes! I haved a picnic on the beach.', 'Yes! I had a picnic on the beach with my family.'], 2, 'Sim! Eu fiz um piquenique na praia com a minha família.'),
+    prox(10, ['How old are you now?', 'How old were you now?', 'How old did you now?'], 0, 'Quantos anos você tem agora?'),
+    prox(11, ["I'm twenty-six. I am born on January 10th.", "I'm twenty-six. I was born on January 10th, 2000.", "I'm twenty-six. I born on January 10th."], 1, 'Tenho vinte e seis. Eu nasci em 10 de janeiro de 2000.'),
+    prox(14, ["Yes, I did. I couldn't travel.", "Yes, I was. I didn't could travel.", "Yes, I was. I couldn't travel. I had a lot of work."], 2, 'Sim, eu estava. Eu não pude viajar. Tive muito trabalho.'),
+    { instrucao: 'Where was Lucas last week?', frase: 'In ___.', opcoes: ['Florianópolis', 'Salvador', 'Rio'], certa: 0, traducao: 'Em Florianópolis.' },
+    { instrucao: 'Where did he stay?', frase: 'In a small ___ near the beach.', opcoes: ['hotel', 'apartment', 'house'], certa: 1, traducao: 'Num apartamento pequeno perto da praia.' },
+    { instrucao: 'How many bedrooms did the apartment have?', frase: 'It had ___ bedrooms.', opcoes: ['three', 'five', 'two'], certa: 2, traducao: 'Tinha dois quartos.' },
+    { instrucao: 'What did they eat?', frase: 'A lot of ___.', opcoes: ['fish', 'pizza', 'cake'], certa: 0, traducao: 'Muito peixe.' },
+    { instrucao: 'What did Lucas do on his birthday?', frase: 'He had a ___ on the beach.', opcoes: ['party', 'picnic', 'dinner'], certa: 1, traducao: 'Ele fez um piquenique na praia.' },
+    { instrucao: 'When was Lucas born?', frase: 'On January ___, 2000.', opcoes: ['2nd', '20th', '10th'], certa: 2, completa: 'On January tenth, two thousand.', traducao: 'Em 10 de janeiro de 2000.' },
+    { instrucao: 'What star sign is Lucas?', frase: 'He\'s a ___.', opcoes: ['Capricorn', 'Aquarius', 'Leo'], certa: 0, traducao: 'Ele é de capricórnio.' },
+    { instrucao: 'Why couldn\'t Mia travel?', frase: 'She had a lot of ___.', opcoes: ['money', 'work', 'presents'], certa: 1, traducao: 'Ela tinha muito trabalho.' }
+  ]
+});
+</script>
+</body>
+</html>

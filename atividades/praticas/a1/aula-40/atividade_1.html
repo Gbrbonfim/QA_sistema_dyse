@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 40 Â· Review: listen</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 40 · Escuta (revisão)
+   Alinhado ao slide "Class 40: Review" — Talking Point "Tick what you can do": partes da casa e o
+   que tem na cozinha e no quarto (aula 31), onde você estava ontem (aula 32), datas e signos
+   (aulas 33–34), férias (35–36), aniversário (37–38) e o seu dia de ontem (39). Conteúdo NOVO.
+   24 questões: 6 casa + 6 lugares + 6 aniversário e férias + 6 "passado ou presente?". */
+const IC = { 'kitchen': 'kitchen', 'bedroom': 'bed', 'bathroom': 'bathtub', 'living room': 'chair', 'garden': 'yard', 'garage': 'garage',
+  'stove': 'cooking', 'shower': 'shower', 'sofa': 'weekend', 'desk': 'desk', 'lamp': 'light', 'shelves': 'shelves',
+  'at home': 'home', 'at work': 'work', 'at school': 'school', 'at the gym': 'fitness_center', 'in a park': 'park', 'in a restaurant': 'restaurant',
+  'a cake': 'cake', 'balloons': 'festival', 'candles': 'candle', 'pack bags': 'luggage', 'book a flight': 'airplane_ticket', 'stay in a hotel': 'hotel',
+  'past (finished)': 'history', 'present (every day)': 'event_repeat' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const CASA = 'Listen and choose the part of the house or the thing';
+const ONDE = 'Listen: where was the person?';
+const PP = 'Listen: is it the past or the present?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 40, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the picture',
+  itens: [
+    { instrucao: CASA, audioTexto: "There's a stove in the kitchen.", opcoes: op('stove', 'shower', 'sofa', 'desk'), certa: 0 },
+    { instrucao: CASA, audioTexto: 'There are some shelves in my bedroom.', opcoes: op('lamp', 'shelves', 'desk', 'sofa'), certa: 1 },
+    { instrucao: CASA, audioTexto: "There isn't a garage, but there's a garden.", opcoes: op('garage', 'kitchen', 'garden', 'bathroom'), certa: 2 },
+    { instrucao: CASA, audioTexto: 'Is there a shower in the bathroom? Yes, there is.', opcoes: op('stove', 'lamp', 'sofa', 'shower'), certa: 3 },
+    { instrucao: CASA, audioTexto: "There's a big sofa in the living room.", opcoes: op('sofa', 'desk', 'shelves', 'stove'), certa: 0 },
+    { instrucao: CASA, audioTexto: "There isn't a desk, but there's a lamp.", opcoes: op('desk', 'lamp', 'shower', 'shelves'), certa: 1 },
+    { instrucao: ONDE, audioTexto: 'I was at the gym yesterday morning.', opcoes: op('at home', 'at work', 'at the gym', 'in a park'), certa: 2 },
+    { instrucao: ONDE, audioTexto: 'She was in a restaurant last night.', opcoes: op('at school', 'at home', 'in a park', 'in a restaurant'), certa: 3 },
+    { instrucao: ONDE, audioTexto: 'They were at school all day.', opcoes: op('at school', 'at work', 'at the gym', 'in a restaurant'), certa: 0 },
+    { instrucao: ONDE, audioTexto: 'We were in a park on Sunday afternoon.', opcoes: op('at home', 'in a park', 'at school', 'at work'), certa: 1 },
+    { instrucao: ONDE, audioTexto: 'My dad was at work until seven.', opcoes: op('in a restaurant', 'at the gym', 'at work', 'at home'), certa: 2 },
+    { instrucao: ONDE, audioTexto: "I wasn't at work. I was at home.", opcoes: op('at work', 'in a park', 'at school', 'at home'), certa: 3 },
+    { audioTexto: 'We bought a lot of balloons.', opcoes: op('balloons', 'candles', 'a cake', 'pack bags'), certa: 0 },
+    { audioTexto: 'We bought twelve candles for the cake.', opcoes: op('balloons', 'candles', 'stay in a hotel', 'book a flight'), certa: 1 },
+    { audioTexto: 'My mom made a chocolate cake.', opcoes: op('candles', 'pack bags', 'a cake', 'balloons'), certa: 2 },
+    { audioTexto: 'We booked a flight to Salvador.', opcoes: op('stay in a hotel', 'pack bags', 'balloons', 'book a flight'), certa: 3 },
+    { audioTexto: 'I packed my bags the night before the trip.', opcoes: op('pack bags', 'book a flight', 'a cake', 'stay in a hotel'), certa: 0 },
+    { audioTexto: 'We stayed in a hotel near the beach.', opcoes: op('book a flight', 'stay in a hotel', 'pack bags', 'candles'), certa: 1 },
+    { instrucao: PP, audioTexto: 'I was born in 1998.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'There are two bedrooms in my apartment.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'We went to the beach and took a lot of photos.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'I get up at six and have breakfast.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'He left home at eight and came back at six.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: "I couldn't sleep last night.", opcoes: op('past (finished)', 'present (every day)'), certa: 0 }
+  ]
+});
+</script>
+</body>
+</html>

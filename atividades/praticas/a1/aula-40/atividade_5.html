@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 40 Â· Review: grammar</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 40 · Gramática (revisão)
+   Alinhado ao slide "Class 40: Review" (Grammar part) — there is / there are + some / any; was /
+   were; born; on + data / in + mês ou ano; past simple regular (-ed, -d, -ied, consoante dobrada)
+   e irregular; didn't / Did + forma base; could / couldn't. Conteúdo NOVO e mais difícil, com
+   fatos verdadeiros: Bob Marley nasceu na Jamaica; Frida Kahlo era mexicana e pintora. 24 questões. */
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 40, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'There ___ a big table in the dining room.', opcoes: ['is', 'are', 'were'], certa: 0, traducao: 'Tem uma mesa grande na sala de jantar.' },
+    { frase: 'There ___ some plants in the garden.', opcoes: ['is', 'are', 'was'], certa: 1, traducao: 'Tem algumas plantas no jardim.' },
+    { frase: "There aren't ___ chairs in the kitchen.", opcoes: ['some', 'a', 'any'], certa: 2, traducao: 'Não tem nenhuma cadeira na cozinha.' },
+    { frase: '___ there a garage? No, there isn\'t.', opcoes: ['Is', 'Are', 'Was'], certa: 0, traducao: 'Tem garagem? Não, não tem.' },
+    { frase: 'Where ___ you yesterday afternoon?', opcoes: ['was', 'were', 'did'], certa: 1, traducao: 'Onde você estava ontem à tarde?' },
+    { frase: 'My brother ___ at the gym last night.', opcoes: ['were', 'did', 'was'], certa: 2, traducao: 'O meu irmão estava na academia ontem à noite.' },
+    { frase: 'Bob Marley was born ___ Jamaica.', opcoes: ['in', 'on', 'at'], certa: 0, traducao: 'O Bob Marley nasceu na Jamaica.' },
+    { frase: 'I was born ___ the third of October.', opcoes: ['in', 'on', 'at'], certa: 1, traducao: 'Eu nasci em três de outubro.' },
+    { frase: 'Frida Kahlo ___ a Mexican painter.', opcoes: ['were', 'is', 'was'], certa: 2, traducao: 'A Frida Kahlo era uma pintora mexicana.' },
+    { frase: '___ your parents born in Brazil?', opcoes: ['Were', 'Was', 'Did'], certa: 0, traducao: 'Os seus pais nasceram no Brasil?' },
+    { frase: 'We ___ a hotel in Paris last month.', opcoes: ['book', 'booked', 'bookd'], certa: 1, traducao: 'Nós reservamos um hotel em Paris mês passado.' },
+    { frase: 'The bus ___ in front of the museum.', opcoes: ['stoped', 'stop', 'stopped'], certa: 2, traducao: 'O ônibus parou na frente do museu.' },
+    { frase: 'She ___ French at university.', opcoes: ['studied', 'studyed', 'study'], certa: 0, traducao: 'Ela estudou francês na universidade.' },
+    { frase: 'They ___ the house at seven and came back at ten.', opcoes: ['leaved', 'left', 'leave'], certa: 1, traducao: 'Eles saíram de casa às sete e voltaram às dez.' },
+    { frase: 'I ___ a lot of photos on my vacation.', opcoes: ['taked', 'take', 'took'], certa: 2, traducao: 'Eu tirei muitas fotos nas minhas férias.' },
+    { frase: 'We ___ a new sofa for the living room.', opcoes: ['bought', 'buyed', 'buy'], certa: 0, traducao: 'Nós compramos um sofá novo para a sala.' },
+    { frase: "He didn't ___ to my birthday party.", opcoes: ['came', 'come', 'comes'], certa: 1, traducao: 'Ele não veio à minha festa de aniversário.' },
+    { frase: 'What did you ___ for your mom?', opcoes: ['bought', 'buys', 'buy'], certa: 2, traducao: 'O que você comprou para a sua mãe?' },
+    { frase: 'When I was a child, I ___ swim very well.', opcoes: ['could', 'can', 'did'], certa: 0, traducao: 'Quando eu era criança, eu sabia nadar muito bem.' },
+    { frase: 'Sorry, I ___ answer the phone. I was in the shower.', opcoes: ["didn't could", "couldn't", "wasn't"], certa: 1, traducao: 'Desculpe, eu não consegui atender o telefone. Eu estava no banho.' },
+    { instrucao: CERTA, opcoes: ['There is two bathrooms.', 'There are any bathrooms.', 'There are two bathrooms.'], certa: 2, traducao: 'Tem dois banheiros.' },
+    { instrucao: CERTA, opcoes: ['Where were you born?', 'Where did you born?', 'Where you were born?'], certa: 0, traducao: 'Onde você nasceu?' },
+    { instrucao: CERTA, opcoes: ['Did you went to the party?', 'Did you go to the party?', 'Were you go to the party?'], certa: 1, traducao: 'Você foi à festa?' },
+    { instrucao: CERTA, opcoes: ["I didn't saw the photos.", "I wasn't eat the cake.", "I didn't eat the cake."], certa: 2, traducao: 'Eu não comi o bolo.' }
+  ]
+});
+</script>
+</body>
+</html>

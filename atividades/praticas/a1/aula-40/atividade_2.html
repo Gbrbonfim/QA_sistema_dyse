@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 40 Â· Review: write</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 40 · Escrita (revisão)
+   Alinhado ao slide "Class 40: Review" — "Tick what you can do": a casa (there is / there are),
+   onde você estava (was / were), quando e onde nasceu, o signo, pessoas do passado e a profissão
+   delas, férias, último aniversário e o dia de ontem (regulares e irregulares). Conteúdo NOVO
+   com fatos verdadeiros: Frida Kahlo nasceu no México em 6 de julho de 1907 e era pintora; Bob
+   Marley era cantor e nasceu na Jamaica. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 40, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Tem dois quartos e um banheiro.'), palavras: ['There', 'are', 'two', 'bedrooms', 'and', 'a', 'bathroom'], isca: ['is'], fim: '.', traducao: 'Tem dois quartos e um banheiro.' },
+    { contexto: M('Não tem garagem.'), palavras: ['There', "isn't", 'a', 'garage'], isca: ["aren't"], fim: '.', traducao: 'Não tem garagem.' },
+    { contexto: M('Tem alguma planta na sala?'), palavras: ['Are', 'there', 'any', 'plants', 'in', 'the', 'living', 'room'], isca: ['some'], fim: '?', traducao: 'Tem alguma planta na sala?' },
+    { contexto: M('Eu estava no trabalho ontem de manhã.'), palavras: ['I', 'was', 'at', 'work', 'yesterday', 'morning'], isca: ['were'], fim: '.', traducao: 'Eu estava no trabalho ontem de manhã.' },
+    { contexto: M('Onde vocês estavam ontem à noite?'), palavras: ['Where', 'were', 'you', 'last', 'night'], isca: ['did'], fim: '?', traducao: 'Onde vocês estavam ontem à noite?' },
+    { contexto: M('Eu nasci em Curitiba, em 2001.'), palavras: ['I', 'was', 'born', 'in', 'Curitiba', 'in', '2001'], isca: ['am'], fim: '.', traducao: 'Eu nasci em Curitiba, em 2001.' },
+    { contexto: M('Quando você nasceu?'), palavras: ['When', 'were', 'you', 'born'], isca: ['did'], fim: '?', traducao: 'Quando você nasceu?' },
+    { contexto: M('Eu sou de Leão.'), palavras: ["I'm", 'a', 'Leo'], isca: ['was'], fim: '.', traducao: 'Eu sou de Leão.' },
+    { contexto: M('A Frida Kahlo era pintora.'), palavras: ['Frida', 'Kahlo', 'was', 'a', 'painter'], isca: ['were'], fim: '.', traducao: 'A Frida Kahlo era pintora.' },
+    { contexto: M('Ela nasceu no México em 1907.'), palavras: ['She', 'was', 'born', 'in', 'Mexico', 'in', '1907'], isca: ['is'], fim: '.', traducao: 'Ela nasceu no México em 1907.' },
+    { contexto: M('O Bob Marley não era ator. Ele era cantor.'), palavras: ['Bob', 'Marley', "wasn't", 'an', 'actor.', 'He', 'was', 'a', 'singer'], isca: ["weren't"], fim: '.', traducao: 'O Bob Marley não era ator. Ele era cantor.' },
+    { contexto: M('Nós viajamos para a Bahia em janeiro.'), palavras: ['We', 'traveled', 'to', 'Bahia', 'in', 'January'], isca: ['travel'], fim: '.', traducao: 'Nós viajamos para a Bahia em janeiro.' },
+    { contexto: M('Nós ficamos num hotel e visitamos muitos lugares.'), palavras: ['We', 'stayed', 'in', 'a', 'hotel', 'and', 'visited', 'a', 'lot', 'of', 'places'], isca: ['stay'], fim: '.', traducao: 'Nós ficamos num hotel e visitamos muitos lugares.' },
+    { contexto: M('Para onde você foi nas suas últimas férias?'), palavras: ['Where', 'did', 'you', 'go', 'on', 'your', 'last', 'vacation'], isca: ['went'], fim: '?', traducao: 'Para onde você foi nas suas últimas férias?' },
+    { contexto: M('No meu último aniversário, eu fui a um restaurante.'), palavras: ['On', 'my', 'last', 'birthday,', 'I', 'went', 'to', 'a', 'restaurant'], isca: ['go'], fim: '.', traducao: 'No meu último aniversário, eu fui a um restaurante.' },
+    { contexto: M('Eu ganhei um presente lindo.'), palavras: ['I', 'got', 'a', 'beautiful', 'present'], isca: ['get'], fim: '.', traducao: 'Eu ganhei um presente lindo.' },
+    { contexto: M('Ontem de manhã, eu levantei às sete.'), palavras: ['Yesterday', 'morning,', 'I', 'got', 'up', 'at', 'seven'], isca: ['get'], fim: '.', traducao: 'Ontem de manhã, eu levantei às sete.' },
+    { contexto: M('À tarde, eu estudei e fiz a lição de casa.'), palavras: ['In', 'the', 'afternoon,', 'I', 'studied', 'and', 'did', 'my', 'homework'], isca: ['studyed'], fim: '.', traducao: 'À tarde, eu estudei e fiz a lição de casa.' },
+    { contexto: M('À noite, eu não saí. Fiquei em casa.'), palavras: ['In', 'the', 'evening,', 'I', "didn't", 'go', 'out.', 'I', 'stayed', 'at', 'home'], isca: ['went'], fim: '.', traducao: 'À noite, eu não saí. Fiquei em casa.' },
+    { contexto: M('Eu não consegui dormir cedo.'), palavras: ['I', "couldn't", 'sleep', 'early'], isca: ["didn't"], fim: '.', traducao: 'Eu não consegui dormir cedo.' }
+  ]
+});
+</script>
+</body>
+</html>
