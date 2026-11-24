@@ -277,6 +277,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Can we...?', tipo: 'Escute e grave', treina: 'Fala · Permissão', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Three uses of can', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 27,
+        titulo: 'Class 27 · What Are You Wearing Today?',
+        atividades: [
+          { num: 1, titulo: 'Clothes', tipo: 'Escute e escolha', treina: 'Escuta · Roupas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "I'm wearing a jacket", tipo: 'Monte a frase', treina: 'Escrita · Present continuous', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'What are you wearing?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: "Say what you're wearing", tipo: 'Escute e grave', treina: 'Fala · Roupas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Present continuous', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

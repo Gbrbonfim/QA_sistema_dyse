@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 27 · Say what you're wearing</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 27 · Fala
+   Alinhado ao slide "Class 27: What Are You Wearing Today?" — Vocabulary (listen and repeat),
+   Grammar Point (o -ing soa /ɪŋ/, sem "g" forte no fim) e Speaking ("say what you are wearing
+   today"). Conteúdo NOVO: outras frases. 20 questões. */
+const PAL = 'Listen and record the words';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 27, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'sneakers', traducao: 'tênis' },
+    { instrucao: PAL, frase: 'sweater', traducao: 'suéter, blusa de lã', nota: 'Soa como "SUÉ-ter".' },
+    { instrucao: PAL, frase: 'hoodie', traducao: 'moletom com capuz' },
+    { instrucao: PAL, frase: 'skirt', traducao: 'saia' },
+    { instrucao: PAL, frase: 'shirt', traducao: 'camisa' },
+    { instrucao: PAL, frase: 'pajamas', traducao: 'pijama', aceita: { pyjamas: 'pajamas' } },
+    { instrucao: PAL, frase: 'clothes', traducao: 'roupas', nota: 'Uma sílaba só: CLOUZ.' },
+    { instrucao: PAL, frase: 'wearing', traducao: 'usando, vestindo', nota: 'O -ing termina suave, sem "g" forte: WÉR-ing.' },
+    { frase: "I'm wearing a jacket today.", dica: 0, traducao: 'Eu estou usando uma jaqueta hoje.' },
+    { frase: "She's wearing jeans and a t-shirt.", dica: 0, traducao: 'Ela está usando calça jeans e uma camiseta.' },
+    { frase: "He's wearing a black jacket and boots.", dica: 0, traducao: 'Ele está usando uma jaqueta preta e botas.' },
+    { frase: "They're wearing pajamas right now.", dica: 0, traducao: 'Eles estão de pijama agora.' },
+    { frase: 'The girls are dancing.', dica: 0, traducao: 'As meninas estão dançando.' },
+    { frase: "I'm shopping online today.", dica: 0, traducao: 'Eu estou fazendo compras online hoje.' },
+    { frase: 'The baby is crying.', dica: 0, traducao: 'O bebê está chorando.' },
+    { frase: "We're driving to the city now.", dica: 0, traducao: 'Nós estamos dirigindo para a cidade agora.' },
+    { frase: "I'm studying at the moment.", dica: 0, traducao: 'Eu estou estudando no momento.' },
+    { frase: "My sister's working in Spain at the moment.", dica: 0, traducao: 'Minha irmã está trabalhando na Espanha no momento.' },
+    { frase: "You're wearing a lovely dress.", dica: 0, traducao: 'Você está usando um vestido lindo.' },
+    { frase: "I'm wearing a sweater, jeans and sneakers.", dica: 0, traducao: 'Eu estou usando um suéter, calça jeans e tênis.' }
+  ]
+});
+</script>
+</body>
+</html>

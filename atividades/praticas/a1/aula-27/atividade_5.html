@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 27 · Present continuous</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 27 · Gramática
+   Alinhado ao slide "Class 27: What Are You Wearing Today?" — Grammar Point (present continuous =
+   to be + verbo-ing, para hoje / agora; grafia: +ing, e → ∅ + ing, consoante dobrada) e
+   Vocabulary (a coat x jeans: roupa no plural sem "a"). Conteúdo NOVO e mais difícil: verbos que
+   não estavam no slide. 24 questões. */
+const ING = 'Choose the -ing form';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 27, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: ING, frase: 'eat → ___', opcoes: ['eating', 'eatting', 'eateing'], certa: 0, traducao: 'comer → comendo' },
+    { instrucao: ING, frase: 'write → ___', opcoes: ['writeing', 'writing', 'writting'], certa: 1, traducao: 'escrever → escrevendo' },
+    { instrucao: ING, frase: 'run → ___', opcoes: ['runing', 'runeing', 'running'], certa: 2, traducao: 'correr → correndo' },
+    { instrucao: ING, frase: 'make → ___', opcoes: ['making', 'makeing', 'makking'], certa: 0, traducao: 'fazer → fazendo' },
+    { instrucao: ING, frase: 'sit → ___', opcoes: ['siting', 'sitting', 'siteing'], certa: 1, traducao: 'sentar → sentando' },
+    { instrucao: ING, frase: 'play → ___', opcoes: ['plaing', 'plaiing', 'playing'], certa: 2, traducao: 'jogar → jogando' },
+    { instrucao: ING, frase: 'plan → ___', opcoes: ['planning', 'planing', 'planeing'], certa: 0, traducao: 'planejar → planejando' },
+    { instrucao: ING, frase: 'cry → ___', opcoes: ['criing', 'crying', 'cryeing'], certa: 1, traducao: 'chorar → chorando' },
+    { instrucao: ING, frase: 'take → ___', opcoes: ['takking', 'takeing', 'taking'], certa: 2, traducao: 'pegar → pegando' },
+    { instrucao: ING, frase: 'swim → ___', opcoes: ['swimming', 'swiming', 'swimeing'], certa: 0, traducao: 'nadar → nadando' },
+    { frase: 'I ___ wearing a jacket today.', opcoes: ['is', 'am', 'are'], certa: 1, traducao: 'Eu estou usando uma jaqueta hoje.' },
+    { frase: 'They ___ wearing pajamas right now.', opcoes: ['is', 'am', 'are'], certa: 2, traducao: 'Eles estão de pijama agora.' },
+    { frase: 'My dad ___ getting up right now.', opcoes: ['is', 'are', 'am'], certa: 0, traducao: 'Meu pai está levantando agora.' },
+    { frase: "She's ___ a red skirt.", opcoes: ['wear', 'wearing', 'wears'], certa: 1, traducao: 'Ela está usando uma saia vermelha.' },
+    { frase: 'We are ___ a nice TV program.', opcoes: ['watch', 'watchs', 'watching'], certa: 2, traducao: 'Nós estamos assistindo a um programa de TV legal.' },
+    { frase: "I'm wearing ___ jeans.", opcoes: ['a', 'an', 'my'], certa: 2, traducao: 'Eu estou usando a minha calça jeans.' },
+    { frase: "He's wearing ___ coat.", opcoes: ['a', 'an', 'two'], certa: 0, traducao: 'Ele está usando um casaco.' },
+    { frase: 'We use the present continuous to talk about ___.', opcoes: ['every day', 'today, now', 'always'], certa: 1, traducao: 'Usamos o present continuous para falar de hoje, agora.' },
+    { frase: 'Present continuous = to be + verb + ___', opcoes: ['-s', '-ed', '-ing'], certa: 2, completa: 'Present continuous: to be plus verb plus ing.', traducao: 'Present continuous = to be + verbo + -ing' },
+    { frase: "Be quiet! The baby's ___ now!", opcoes: ['sleeping', 'sleep', 'sleeps'], certa: 0, traducao: 'Silêncio! O bebê está dormindo agora!' },
+    { instrucao: CERTA, opcoes: ['I wearing a dress today.', "I'm wearing a dress today.", "I'm wear a dress today."], certa: 1, traducao: 'Eu estou usando um vestido hoje.' },
+    { instrucao: CERTA, opcoes: ['She is danceing.', 'She dancing.', 'She is dancing.'], certa: 2, traducao: 'Ela está dançando.' },
+    { instrucao: CERTA, opcoes: ["They're shopping today.", "They're shoping today.", "They shopping today."], certa: 0, traducao: 'Eles estão fazendo compras hoje.' },
+    { instrucao: CERTA, opcoes: ["He's wearing a jeans.", "He's wearing jeans.", "He's wear jeans."], certa: 1, traducao: 'Ele está usando calça jeans.' }
+  ]
+});
+</script>
+</body>
+</html>

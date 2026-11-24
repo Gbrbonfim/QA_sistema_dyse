@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 27 · What are you wearing?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 27 · Leitura
+   Alinhado ao slide "Class 27: What Are You Wearing Today?" — Reading (o vídeo de rua "What Are
+   People Wearing Today?"), Listening (descrever roupas no Pinterest) e Speaking ("say what you
+   are wearing today"). Conteúdo NOVO: Bella e Kim conversam por vídeo antes de uma festa.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Bella', 'Hi, Kim! Are you ready for the party?'],
+  ['Kim', "Almost! I'm getting dressed right now."],
+  ['Bella', 'What are you wearing?'],
+  ['Kim', "I'm wearing a black dress and red shoes."],
+  ['Bella', 'So stylish! And Leo? Is he ready?'],
+  ['Kim', "No! He's sleeping on the sofa. He's wearing his pajamas!"],
+  ['Bella', 'Ha ha! What about Mia?'],
+  ['Kim', "Mia's in the kitchen. She's making a cake for the party."],
+  ['Bella', 'Nice! I love her cakes.'],
+  ['Kim', 'And you? What are you wearing?'],
+  ['Bella', "I'm wearing jeans, a white top and a jacket."],
+  ['Kim', "A jacket? It's hot today!"],
+  ['Bella', "It's OK. I'm taking it off later!"],
+  ['Kim', 'Ha ha! See you soon!']
+];
+const lado = q => q === 'Bella' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 27, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Almost! I'm getting dressed right now.", "Almost! I getting dressed right now.", "Almost! I'm geting dressed right now."], 0, 'Quase! Eu estou me vestindo agora.'),
+    prox(2, ['What you wearing?', 'What are you wearing?', 'What are you wear?'], 1, 'O que você está usando?'),
+    prox(3, ["I'm wear a black dress and red shoes.", "I'm wearing a dress black and shoes red.", "I'm wearing a black dress and red shoes."], 2, 'Eu estou usando um vestido preto e sapatos vermelhos.'),
+    prox(4, ['So stylish! And Leo? Is he ready?', 'So stylish! And Leo? Does he ready?', 'See you soon!'], 0, 'Que estilosa! E o Leo? Ele está pronto?'),
+    prox(5, ["No! He sleeping on the sofa.", "No! He's sleeping on the sofa. He's wearing his pajamas!", "No! He's sleepping on the sofa."], 1, 'Não! Ele está dormindo no sofá. Ele está de pijama!'),
+    prox(6, ['Nice!', 'I love her cakes.', 'Ha ha! What about Mia?'], 2, 'Haha! E a Mia?'),
+    prox(7, ["Mia's in the kitchen. She's making a cake for the party.", "Mia's in the kitchen. She's makeing a cake.", "Mia's in the kitchen. She making a cake."], 0, 'A Mia está na cozinha. Ela está fazendo um bolo para a festa.'),
+    prox(8, ['What are you wearing?', 'Nice! I love her cakes.', 'Nice! I love she cakes.'], 1, 'Que legal! Eu amo os bolos dela.'),
+    prox(9, ['See you soon!', 'And you? What do you wearing?', 'And you? What are you wearing?'], 2, 'E você? O que você está usando?'),
+    prox(10, ["I'm wearing jeans, a white top and a jacket.", "I'm wearing a jeans, a white top and a jacket.", "I'm wearing jeans, a top white and a jacket."], 0, 'Eu estou usando calça jeans, uma blusa branca e uma jaqueta.'),
+    prox(11, ['Ha ha!', "A jacket? It's hot today!", 'A jacket? Its hot today!'], 1, 'Uma jaqueta? Está calor hoje!'),
+    prox(12, ['Are you ready?', "It's OK. I'm takeing it off later!", "It's OK. I'm taking it off later!"], 2, 'Tudo bem. Eu tiro mais tarde!'),
+    { instrucao: 'What is Kim doing right now?', frase: "She's getting ___.", opcoes: ['dressed', 'up', 'ready'], certa: 0, traducao: 'Ela está se vestindo.' },
+    { instrucao: 'What color is Kim\'s dress?', frase: "It's ___.", opcoes: ['red', 'black', 'white'], certa: 1, traducao: 'É preto.' },
+    { instrucao: "Kim's shoes:", frase: 'They are ___.', opcoes: ['black', 'white', 'red'], certa: 2, traducao: 'Eles são vermelhos.' },
+    { instrucao: 'What is Leo doing?', frase: "He's ___ on the sofa.", opcoes: ['sleeping', 'dancing', 'sitting'], certa: 0, traducao: 'Ele está dormindo no sofá.' },
+    { instrucao: 'What is Leo wearing?', frase: 'His ___.', opcoes: ['sweatsuit', 'pajamas', 'jeans'], certa: 1, traducao: 'O pijama dele.' },
+    { instrucao: 'What is Mia doing?', frase: "She's making a ___.", opcoes: ['dress', 'party', 'cake'], certa: 2, traducao: 'Ela está fazendo um bolo.' },
+    { instrucao: 'What is Bella wearing?', frase: 'Jeans, a white top and a ___.', opcoes: ['jacket', 'coat', 'hoodie'], certa: 0, traducao: 'Calça jeans, uma blusa branca e uma jaqueta.' },
+    { instrucao: 'How is the weather today?', frase: "It's ___.", opcoes: ['cold', 'hot', 'rainy'], certa: 1, traducao: 'Está calor.' }
+  ]
+});
+</script>
+</body>
+</html>

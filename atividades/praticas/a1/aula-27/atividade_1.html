@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 27 · Clothes</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 27 · Escuta
+   Alinhado ao slide "Class 27: What Are You Wearing Today?" — Vocabulary (hat, jacket, sneakers,
+   skirt, sweater, shoes, t-shirt, boots, sweatsuit, pants, coat, shorts, pajamas, flip flops,
+   hoodie, top, jeans, shirt, sandals, dress) e Grammar Point (present continuous e a grafia do
+   -ing). Conteúdo NOVO: outras frases. 24 questões: 12 roupas + 12 frases (escolher a palavra
+   com -ing escrita certo). */
+const roupa = (...cs) => cs.map(c => ({ label: c, icon: 'checkroom' }));
+const ing = (...cs) => cs.map(c => ({ label: c, icon: 'edit' }));
+const ING = 'Listen to the sentence and choose the -ing word with the right spelling';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 27, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the clothes',
+  itens: [
+    { audioTexto: 'a hoodie', opcoes: roupa('hoodie', 'hat', 'coat', 'top'), certa: 0 },
+    { audioTexto: 'sneakers', opcoes: roupa('sandals', 'sneakers', 'shoes', 'boots'), certa: 1 },
+    { audioTexto: 'a skirt', opcoes: roupa('shirt', 'shorts', 'skirt', 'sweater'), certa: 2 },
+    { audioTexto: 'a sweater', opcoes: roupa('sweatsuit', 'skirt', 'shirt', 'sweater'), certa: 3 },
+    { audioTexto: 'boots', opcoes: roupa('boots', 'shoes', 'shorts', 'sandals'), certa: 0 },
+    { audioTexto: 'pajamas', opcoes: roupa('pants', 'pajamas', 'jeans', 'jacket'), certa: 1 },
+    { audioTexto: 'flip flops', opcoes: roupa('sneakers', 'sandals', 'flip flops', 'boots'), certa: 2 },
+    { audioTexto: 'a dress', opcoes: roupa('skirt', 'top', 'shirt', 'dress'), certa: 3 },
+    { audioTexto: 'a jacket', opcoes: roupa('jacket', 'jeans', 'hat', 'coat'), certa: 0 },
+    { audioTexto: 'shorts', opcoes: roupa('shirt', 'shorts', 'skirt', 'sweatsuit'), certa: 1 },
+    { audioTexto: 'a sweatsuit', opcoes: roupa('sweater', 'shirt', 'sweatsuit', 'hoodie'), certa: 2 },
+    { audioTexto: 'a coat', opcoes: roupa('hat', 'top', 'jacket', 'coat'), certa: 3 },
+    { instrucao: ING, audioTexto: "I'm wearing a dress today.", opcoes: ing('wearing', 'wearring', 'wereing'), certa: 0 },
+    { instrucao: ING, audioTexto: 'The girls are dancing.', opcoes: ing('danceing', 'dancing', 'dancking'), certa: 1 },
+    { instrucao: ING, audioTexto: "I'm shopping online today.", opcoes: ing('shoping', 'shopeing', 'shopping'), certa: 2 },
+    { instrucao: ING, audioTexto: 'My dad is getting up right now.', opcoes: ing('getting', 'geting', 'getteing'), certa: 0 },
+    { instrucao: ING, audioTexto: "We're driving to the city now.", opcoes: ing('driveing', 'driving', 'drivving'), certa: 1 },
+    { instrucao: ING, audioTexto: 'The baby is crying.', opcoes: ing('crieing', 'criing', 'crying'), certa: 2 },
+    { instrucao: ING, audioTexto: "She's swimming in the pool.", opcoes: ing('swimming', 'swiming', 'swimeing'), certa: 0 },
+    { instrucao: ING, audioTexto: "He's writing an email.", opcoes: ing('writeing', 'writing', 'writting'), certa: 1 },
+    { instrucao: ING, audioTexto: "They're running in the park.", opcoes: ing('runing', 'runneing', 'running'), certa: 2 },
+    { instrucao: ING, audioTexto: "I'm studying at the moment.", opcoes: ing('studying', 'studing', 'studiing'), certa: 0 },
+    { instrucao: ING, audioTexto: "We're sitting in the café.", opcoes: ing('siting', 'sitting', 'siteing'), certa: 1 },
+    { instrucao: ING, audioTexto: "She's planning a party.", opcoes: ing('planing', 'planeing', 'planning'), certa: 2 }
+  ]
+});
+</script>
+</body>
+</html>

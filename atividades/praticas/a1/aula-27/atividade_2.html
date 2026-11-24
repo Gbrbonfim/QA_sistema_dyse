@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 27 · I'm wearing a jacket</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 27 · Escrita
+   Alinhado ao slide "Class 27: What Are You Wearing Today?" — Grammar Point (to be + verbo-ing;
+   contrações I'm, you're, he's) e exercício 4 (frases no present continuous com a grafia certa).
+   Conteúdo NOVO: outras frases. O contexto traz a frase em português. A isca é o verbo sem -ing,
+   o -ing escrito errado ou "a" com roupa no plural (a jeans). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 27, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu estou usando uma jaqueta hoje.'), palavras: ["I'm", 'wearing', 'a', 'jacket', 'today'], isca: ['wear'], fim: '.', traducao: 'Eu estou usando uma jaqueta hoje.' },
+    { contexto: M('Você está usando uma saia.'), palavras: ["You're", 'wearing', 'a', 'skirt'], isca: ['wears'], fim: '.', traducao: 'Você está usando uma saia.' },
+    { contexto: M('Ele está usando calça jeans e uma camiseta hoje.'), palavras: ["He's", 'wearing', 'jeans', 'and', 'a', 't-shirt', 'today'], isca: ['wear'], fim: '.', traducao: 'Ele está usando calça jeans e uma camiseta hoje.' },
+    { contexto: M('Eu estou estudando no momento.'), palavras: ["I'm", 'studying', 'at', 'the', 'moment'], isca: ['studing'], fim: '.', traducao: 'Eu estou estudando no momento.' },
+    { contexto: M('A Lucy está dormindo com o gato.'), palavras: ["Lucy's", 'sleeping', 'with', 'the', 'cat'], isca: ['sleep'], fim: '.', traducao: 'A Lucy está dormindo com o gato.' },
+    { contexto: M('Nós estamos assistindo a um programa de TV legal.'), palavras: ["We're", 'watching', 'a', 'nice', 'TV', 'program'], isca: ['watch'], fim: '.', traducao: 'Nós estamos assistindo a um programa de TV legal.' },
+    { contexto: M('Minha irmã está trabalhando na Espanha no momento.'), palavras: ['My', "sister's", 'working', 'in', 'Spain', 'at', 'the', 'moment'], isca: ['works'], fim: '.', traducao: 'Minha irmã está trabalhando na Espanha no momento.' },
+    { contexto: M('O bebê está acordando agora!'), palavras: ['The', "baby's", 'getting', 'up', 'now'], isca: ['geting'], fim: '!', traducao: 'O bebê está acordando agora!' },
+    { contexto: M('A Carla e a Jane estão fazendo compras hoje.'), palavras: ['Carla', 'and', 'Jane', 'are', 'shopping', 'today'], isca: ['shoping'], fim: '.', traducao: 'A Carla e a Jane estão fazendo compras hoje.' },
+    { contexto: M('As meninas estão dançando.'), palavras: ['The', 'girls', 'are', 'dancing'], isca: ['danceing'], fim: '.', traducao: 'As meninas estão dançando.' },
+    { contexto: M('Eles estão usando pijamas agora.'), palavras: ["They're", 'wearing', 'pajamas', 'right', 'now'], isca: ['a'], fim: '.', traducao: 'Eles estão usando pijamas agora.' },
+    { contexto: M('Ela está usando um vestido vermelho e botas pretas.'), palavras: ["She's", 'wearing', 'a', 'red', 'dress', 'and', 'black', 'boots'], isca: ['reds'], fim: '.', traducao: 'Ela está usando um vestido vermelho e botas pretas.' },
+    { contexto: M('Eu estou usando um moletom e tênis.'), palavras: ["I'm", 'wearing', 'a', 'sweatsuit', 'and', 'sneakers'], isca: ['wear'], fim: '.', traducao: 'Eu estou usando um moletom e tênis.' },
+    { contexto: M('Ele está correndo no parque.'), palavras: ["He's", 'running', 'in', 'the', 'park'], isca: ['runing'], fim: '.', traducao: 'Ele está correndo no parque.' },
+    { contexto: M('Nós estamos dirigindo para a cidade agora.'), palavras: ["We're", 'driving', 'to', 'the', 'city', 'now'], isca: ['driveing'], fim: '.', traducao: 'Nós estamos dirigindo para a cidade agora.' },
+    { contexto: M('Você está usando uma camiseta linda.'), palavras: ["You're", 'wearing', 'a', 'lovely', 't-shirt'], isca: ['are'], fim: '.', traducao: 'Você está usando uma camiseta linda.' },
+    { contexto: M('O bebê está chorando.'), palavras: ['The', 'baby', 'is', 'crying'], isca: ['criing'], fim: '.', traducao: 'O bebê está chorando.' },
+    { contexto: M('Eu estou nadando na piscina.'), palavras: ["I'm", 'swimming', 'in', 'the', 'pool'], isca: ['swiming'], fim: '.', traducao: 'Eu estou nadando na piscina.' },
+    { contexto: M('O Tom está usando uma calça e uma camisa.'), palavras: ["Tom's", 'wearing', 'pants', 'and', 'a', 'shirt'], isca: ['wears'], fim: '.', traducao: 'O Tom está usando uma calça e uma camisa.' },
+    { contexto: M('Eu estou escrevendo um e-mail para a minha professora.'), palavras: ["I'm", 'writing', 'an', 'email', 'to', 'my', 'teacher'], isca: ['writeing'], fim: '.', traducao: 'Eu estou escrevendo um e-mail para a minha professora.' }
+  ]
+});
+</script>
+</body>
+</html>
