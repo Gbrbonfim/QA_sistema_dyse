@@ -44,7 +44,7 @@ const prox = (k, opcoes, certa, traducao) => ({
 });
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 8, num: 3, tipo: 'escolha',
-  instrucao: 'Leia a conversa e escolha a próxima fala',
+  instrucao: 'Read the conversation and choose the next line',
   itens: [
     prox(1, ["Good morning! They're two pounds.", "Good morning! It's two pounds.", 'Thank you! Bye!'], 0, 'Bom dia! Custam duas libras.'),
     prox(2, ['How much is the salmon?', "Two pounds? They're cheap!", 'Here you are. Thank you!'], 1, 'Duas libras? Estão baratas!'),
@@ -58,14 +58,14 @@ DysePratica.iniciar({
     prox(10, ["Oh no! It's expensive too! Two avocados, please.", "Oh no! It's expensive too! Two avocado, please.", 'Good morning! How much are the apples?'], 0, 'Ah, não! É caro também! Dois abacates, por favor.'),
     prox(11, ["It's French cheese!", 'Two avocados... two pounds forty, please.', 'Great! And how much is the cheese?'], 1, 'Dois abacates... duas libras e quarenta, por favor.'),
     prox(12, ["Six pounds fifty? It's expensive!", 'Yes, they are.', 'Here you are. Thank you!'], 2, 'Aqui está. Obrigada!'),
-    { instrucao: 'Quanto custam as maçãs?', frase: "They're ___ pounds.", opcoes: ['two', 'twelve', 'six'], certa: 0, traducao: 'Custam duas libras.' },
-    { instrucao: 'As maçãs são baratas ou caras?', frase: "They're ___.", opcoes: ['expensive', 'cheap', 'French'], certa: 1, traducao: 'Elas são baratas.' },
-    { instrucao: 'Quanto custa o queijo?', frase: "It's six pounds ___.", opcoes: ['fifteen', 'fifty-five', 'fifty'], certa: 2, traducao: 'Custa seis libras e cinquenta.' },
-    { instrucao: 'De onde é o queijo?', frase: "It's ___ cheese.", opcoes: ['French', 'Italian', 'English'], certa: 0, traducao: 'É queijo francês.' },
-    { instrucao: 'Quanto custa o salmão?', frase: "It's ___ pounds ninety-nine.", opcoes: ['two', 'twelve', 'twenty'], certa: 1, traducao: 'Custa doze libras e noventa e nove.' },
-    { instrucao: 'O que a Kate acha do salmão?', frase: "It's ___.", opcoes: ['cheap', 'French', 'expensive'], certa: 2, traducao: 'É caro.' },
-    { instrucao: 'O que a Kate compra no fim?', frase: 'Two ___, please.', opcoes: ['avocados', 'apples', 'peaches'], certa: 0, traducao: 'Dois abacates, por favor.' },
-    { instrucao: 'Qual é a moeda do mercado?', frase: 'The prices are in ___.', opcoes: ['dollars', 'pounds', 'euros'], certa: 1, traducao: 'Os preços estão em libras.' }
+    { instrucao: 'How much are the apples?', frase: "They're ___ pounds.", opcoes: ['two', 'twelve', 'six'], certa: 0, traducao: 'Custam duas libras.' },
+    { instrucao: 'Are the apples cheap or expensive?', frase: "They're ___.", opcoes: ['expensive', 'cheap', 'French'], certa: 1, traducao: 'Elas são baratas.' },
+    { instrucao: 'How much is the cheese?', frase: "It's six pounds ___.", opcoes: ['fifteen', 'fifty-five', 'fifty'], certa: 2, traducao: 'Custa seis libras e cinquenta.' },
+    { instrucao: 'Where is the cheese from?', frase: "It's ___ cheese.", opcoes: ['French', 'Italian', 'English'], certa: 0, traducao: 'É queijo francês.' },
+    { instrucao: 'How much is the salmon?', frase: "It's ___ pounds ninety-nine.", opcoes: ['two', 'twelve', 'twenty'], certa: 1, traducao: 'Custa doze libras e noventa e nove.' },
+    { instrucao: 'What does Kate say about the salmon?', frase: "It's ___.", opcoes: ['cheap', 'French', 'expensive'], certa: 2, traducao: 'É caro.' },
+    { instrucao: 'What does Kate buy at the end?', frase: 'Two ___, please.', opcoes: ['avocados', 'apples', 'peaches'], certa: 0, traducao: 'Dois abacates, por favor.' },
+    { instrucao: 'What money are the prices in?', frase: 'The prices are in ___.', opcoes: ['dollars', 'pounds', 'euros'], certa: 1, traducao: 'Os preços estão em libras.' }
   ]
 });
 </script>

@@ -24,10 +24,10 @@
 const PAIS = { 'in': 'India', br: 'Brazil', ca: 'Canada', de: 'Germany', us: 'The USA', it: 'Italy', cn: 'China', jp: 'Japan', 'gb-eng': 'England', es: 'Spain', ch: 'Switzerland', fr: 'France',
   ie: 'Ireland', ar: 'Argentina', pt: 'Portugal', au: 'Australia', se: 'Sweden', kr: 'South Korea', gr: 'Greece', mx: 'Mexico' };
 const op = (...cs) => cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' }));
-const FRASE = 'Escute e escolha o país de onde a pessoa É';
+const FRASE = 'Listen and choose the country the person IS from';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 3, num: 1, tipo: 'imagem',
-  instrucao: 'Escute a nacionalidade e escolha o país',
+  instrucao: 'Listen to the nationality and choose the country',
   itens: [
     { audioTexto: 'Indian', opcoes: op('in', 'it', 'ie', 'cn'), certa: 0 },
     { audioTexto: 'Brazilian', opcoes: op('pt', 'br', 'ar', 'es'), certa: 1 },

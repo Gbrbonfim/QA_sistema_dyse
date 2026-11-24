@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 12 · My week menu</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 12 · Leitura
+   Alinhado ao slide "Class 12: Breakfast, lunch and dinner" — Watching and Listening (o café da
+   manhã da Morgan), Days of Week (o menu da Emma) e Talking Point ("What do you have for...?").
+   Conteúdo NOVO: Ben e Laura comparam o que comem na semana. As perguntas de compreensão pedem
+   has / have. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ben', 'Hi, Laura! What do you have for breakfast?'],
+  ['Laura', 'I have yoghurt, papaya and coffee. And you?'],
+  ['Ben', 'I have bread, cheese and ham. And milk.'],
+  ['Laura', 'Cool! What do you have for lunch?'],
+  ['Ben', "On Monday, I have rice, beans and chicken. I'm Brazilian!"],
+  ['Laura', 'Ha ha! I have lunch at work. I have a sandwich and juice.'],
+  ['Ben', 'Only a sandwich? Are you hungry in the afternoon?'],
+  ['Laura', 'Yes, I am! I have cookies for my afternoon snack.'],
+  ['Ben', 'And for dinner?'],
+  ['Laura', 'My husband and I have soup and salad.'],
+  ['Ben', 'My sister has pasta for dinner every day!'],
+  ['Laura', 'Every day? Wow! And on Friday?'],
+  ['Ben', "On Friday, we have pizza! It's my favorite food."],
+  ['Laura', 'Pizza on Friday! Cool!']
+];
+const lado = q => q === 'Ben' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 12, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I have yoghurt, papaya and coffee. And you?', 'I has yoghurt, papaya and coffee. And you?', 'And for dinner?'], 0, 'Eu como iogurte, mamão e tomo café. E você?'),
+    prox(2, ['Pizza on Friday!', 'I have bread, cheese and ham. And milk.', 'I have a bread, a cheese and a ham.'], 1, 'Eu como pão, queijo e presunto. E tomo leite.'),
+    prox(3, ['My sister has pasta.', 'And for dinner?', 'Cool! What do you have for lunch?'], 2, 'Legal! O que você come no almoço?'),
+    prox(4, ["On Monday, I have rice, beans and chicken. I'm Brazilian!", "In Monday, I have rice, beans and chicken.", "On Monday, I has rice, beans and chicken."], 0, 'Na segunda, eu como arroz, feijão e frango. Eu sou brasileiro!'),
+    prox(5, ['Ha ha! I have a lunch at work.', 'Ha ha! I have lunch at work. I have a sandwich and juice.', 'Ha ha! I has lunch at work.'], 1, 'Haha! Eu almoço no trabalho. Eu como um sanduíche e tomo suco.'),
+    prox(6, ['And for dinner?', 'Every day? Wow!', 'Only a sandwich? Are you hungry in the afternoon?'], 2, 'Só um sanduíche? Você fica com fome à tarde?'),
+    prox(7, ['Yes, I am! I have cookies for my afternoon snack.', 'Yes, I have! I have cookies.', 'No, I am. I have cookies.'], 0, 'Sim! Eu como biscoitos no meu lanche da tarde.'),
+    prox(8, ['Hi, Laura!', 'And for dinner?', 'And for a dinner?'], 1, 'E no jantar?'),
+    prox(9, ['My husband and I has soup and salad.', 'I have bread, cheese and ham.', 'My husband and I have soup and salad.'], 2, 'Meu marido e eu tomamos sopa e comemos salada.'),
+    prox(10, ['My sister has pasta for dinner every day!', 'My sister have pasta for dinner every day!', 'Cool! What do you have for lunch?'], 0, 'Minha irmã come macarrão no jantar todo dia!'),
+    prox(11, ['Only a sandwich?', 'Every day? Wow! And on Friday?', 'Every day? Wow! And in Friday?'], 1, 'Todo dia? Nossa! E na sexta?'),
+    prox(12, ['And for dinner?', 'Yes, I am!', "On Friday, we have pizza! It's my favorite food."], 2, 'Na sexta, nós comemos pizza! É a minha comida favorita.'),
+    { instrucao: 'What does Laura have for breakfast?', frase: 'She has yoghurt, papaya and ___.', opcoes: ['coffee', 'milk', 'juice'], certa: 0, traducao: 'Ela come iogurte, mamão e toma café.' },
+    { instrucao: 'What does Ben drink at breakfast?', frase: 'He has ___.', opcoes: ['coffee', 'milk', 'water'], certa: 1, traducao: 'Ele toma leite.' },
+    { instrucao: 'What does Ben have for lunch on Monday?', frase: 'He has rice, beans and ___.', opcoes: ['fish', 'pasta', 'chicken'], certa: 2, traducao: 'Ele come arroz, feijão e frango.' },
+    { instrucao: 'Where does Laura have lunch?', frase: 'She has lunch at ___.', opcoes: ['work', 'school', 'home'], certa: 0, traducao: 'Ela almoça no trabalho.' },
+    { instrucao: "Complete the sentence about Laura's snack:", frase: 'Laura ___ cookies in the afternoon.', opcoes: ['have', 'has', 'is'], certa: 1, traducao: 'A Laura come biscoitos à tarde.' },
+    { instrucao: 'Complete the sentence about dinner:', frase: 'Laura and her husband ___ soup and salad.', opcoes: ['has', 'is', 'have'], certa: 2, traducao: 'A Laura e o marido dela tomam sopa e comem salada.' },
+    { instrucao: "What does Ben's sister have for dinner?", frase: 'She has ___ every day.', opcoes: ['pasta', 'pizza', 'soup'], certa: 0, traducao: 'Ela come macarrão todo dia.' },
+    { instrucao: "What does Ben's family have on Friday?", frase: 'They have ___ on Friday.', opcoes: ['fish', 'pizza', 'salad'], certa: 1, traducao: 'Eles comem pizza na sexta.' }
+  ]
+});
+</script>
+</body>
+</html>

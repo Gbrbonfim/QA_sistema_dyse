@@ -43,7 +43,7 @@ const prox = (k, opcoes, certa, traducao) => ({
 });
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 7, num: 3, tipo: 'escolha',
-  instrucao: 'Leia a conversa e escolha a próxima fala',
+  instrucao: 'Read the conversation and choose the next line',
   itens: [
     prox(1, ['Yes, it is. I have a laptop, a phone and a charger.', 'Yes, it is. I have an laptop, a phone and a charger.', 'Thank you, Julia!'], 0, 'Sim, é. Eu tenho um notebook, um celular e um carregador.'),
     prox(2, ['A tea bag? Cool!', 'Is your passport in the bag?', "Yes! I'm English!"], 1, 'O seu passaporte está na bolsa?'),
@@ -57,14 +57,14 @@ DysePratica.iniciar({
     prox(10, ['I have an English book, a snack and a tea bag.', 'I have a English book, a snack and a tea bag.', 'Is the cash in your wallet?'], 0, 'Eu tenho um livro de inglês, um lanche e um saquinho de chá.'),
     prox(11, ['Where are your glasses?', 'A tea bag? Cool!', 'Paul, is it your travel bag?'], 1, 'Um saquinho de chá? Legal!'),
     prox(12, ["Oh no! My glasses aren't in the bag!", 'Is your passport in the bag?', "Yes! I'm English!"], 2, 'Sim! Eu sou inglesa!'),
-    { instrucao: 'O que o Paul tem na bolsa?', frase: 'I have a laptop, a phone and a ___.', opcoes: ['camera', 'charger', 'snack'], certa: 1, traducao: 'Eu tenho um notebook, um celular e um carregador.' },
-    { instrucao: 'O passaporte do Paul está na bolsa?', frase: 'Yes, it ___.', opcoes: ['is', 'are', 'am'], certa: 0, traducao: 'Sim, está.' },
-    { instrucao: 'Onde está o dinheiro do Paul?', frase: 'The cash is in the ___.', opcoes: ['bag', 'phone', 'wallet'], certa: 2, traducao: 'O dinheiro está na carteira.' },
-    { instrucao: 'Os óculos estão na bolsa do Paul?', frase: "No, they ___.", opcoes: ["isn't", "aren't", "'m not"], certa: 1, traducao: 'Não, eles não estão.' },
-    { instrucao: 'Complete a fala da Julia sobre os óculos:', frase: "They're here, in ___ bag.", opcoes: ['my', 'you', 'an'], certa: 0, traducao: 'Eles estão aqui, na minha bolsa.' },
-    { instrucao: 'Complete a fala da Julia:', frase: 'I have ___ English book.', opcoes: ['a', 'an', 'two'], certa: 1, traducao: 'Eu tenho um livro de inglês.' },
-    { instrucao: 'O que mais a Julia tem na bolsa?', frase: 'A snack and a ___.', opcoes: ['camera', 'passport', 'tea bag'], certa: 2, traducao: 'Um lanche e um saquinho de chá.' },
-    { instrucao: 'Qual é a nacionalidade da Julia?', frase: "She's ___.", opcoes: ['English', 'American', 'Australian'], certa: 0, traducao: 'Ela é inglesa.' }
+    { instrucao: "What's in Paul's bag?", frase: 'I have a laptop, a phone and a ___.', opcoes: ['camera', 'charger', 'snack'], certa: 1, traducao: 'Eu tenho um notebook, um celular e um carregador.' },
+    { instrucao: "Is Paul's passport in the bag?", frase: 'Yes, it ___.', opcoes: ['is', 'are', 'am'], certa: 0, traducao: 'Sim, está.' },
+    { instrucao: "Where's Paul's cash?", frase: 'The cash is in the ___.', opcoes: ['bag', 'phone', 'wallet'], certa: 2, traducao: 'O dinheiro está na carteira.' },
+    { instrucao: "Are Paul's glasses in the bag?", frase: "No, they ___.", opcoes: ["isn't", "aren't", "'m not"], certa: 1, traducao: 'Não, eles não estão.' },
+    { instrucao: "Complete Julia's line about the glasses:", frase: "They're here, in ___ bag.", opcoes: ['my', 'you', 'an'], certa: 0, traducao: 'Eles estão aqui, na minha bolsa.' },
+    { instrucao: "Complete Julia's line:", frase: 'I have ___ English book.', opcoes: ['a', 'an', 'two'], certa: 1, traducao: 'Eu tenho um livro de inglês.' },
+    { instrucao: "What else is in Julia's bag?", frase: 'A snack and a ___.', opcoes: ['camera', 'passport', 'tea bag'], certa: 2, traducao: 'Um lanche e um saquinho de chá.' },
+    { instrucao: "What's Julia's nationality?", frase: "She's ___.", opcoes: ['English', 'American', 'Australian'], certa: 0, traducao: 'Ela é inglesa.' }
   ]
 });
 </script>

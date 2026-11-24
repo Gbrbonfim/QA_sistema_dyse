@@ -119,6 +119,28 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Talk about a family', tipo: 'Escute e grave', treina: 'Fala · Família', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: "Family and 's", tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 11,
+        titulo: 'Class 11 · Dog Lovers',
+        atividades: [
+          { num: 1, titulo: 'Big, fast, smart', tipo: 'Escute e escolha', treina: 'Escuta · Adjetivos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Adjective + noun', tipo: 'Monte a frase', treina: 'Escrita · Adjetivos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Happy Dogs', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Describe a dog', tipo: 'Escute e grave', treina: 'Fala · Descrição', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Adjectives', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
+        aula: 12,
+        titulo: 'Class 12 · Breakfast, lunch and dinner',
+        atividades: [
+          { num: 1, titulo: 'Food and meals', tipo: 'Escute e escolha', treina: 'Escuta · Comida', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'I have, she has', tipo: 'Monte a frase', treina: 'Escrita · Have / has', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'My week menu', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'What do you have?', tipo: 'Escute e grave', treina: 'Fala · Refeições', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Have or has?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

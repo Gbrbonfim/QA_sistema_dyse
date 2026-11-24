@@ -28,10 +28,10 @@ const NOME = { camera: 'camera', wallet: 'wallet', glasses: 'glasses', pills: 'p
   cash: 'cash', card: 'credit card', passport: 'passport', laptop: 'laptop', snack: 'snack', tea: 'tea bag',
   id: 'ID card', egg: 'egg', book: 'English book', spray: 'sanitizing spray' };
 const op = (...cs) => cs.map(c => ({ label: NOME[c], icon: IC[c] }));
-const FRASE = 'Escute a frase e escolha o objeto';
+const FRASE = 'Listen to the sentence and choose the object';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 7, num: 1, tipo: 'imagem',
-  instrucao: 'Escute a palavra e escolha o objeto',
+  instrucao: 'Listen to the word and choose the object',
   itens: [
     { audioTexto: 'camera', opcoes: op('camera', 'phone', 'laptop', 'charger'), certa: 0 },
     { audioTexto: 'wallet', opcoes: op('cash', 'wallet', 'card', 'passport'), certa: 1 },
@@ -50,7 +50,7 @@ DysePratica.iniciar({
     { instrucao: FRASE, audioTexto: 'I have a camera in my bag.', opcoes: op('phone', 'laptop', 'camera', 'glasses'), certa: 2 },
     { instrucao: FRASE, audioTexto: "Where's my passport?", opcoes: op('wallet', 'id', 'book', 'passport'), certa: 3 },
     { instrucao: FRASE, audioTexto: 'Is it a charger? Yes, it is.', opcoes: op('charger', 'phone', 'laptop', 'camera'), certa: 0 },
-    { instrucao: 'Escute e escolha o que a frase diz que É', audioTexto: "It isn't a phone. It's a laptop.", opcoes: op('phone', 'laptop', 'camera', 'charger'), certa: 1 },
+    { instrucao: 'Listen and choose what it IS', audioTexto: "It isn't a phone. It's a laptop.", opcoes: op('phone', 'laptop', 'camera', 'charger'), certa: 1 },
     { instrucao: FRASE, audioTexto: "It's an egg.", opcoes: op('snack', 'tea', 'egg', 'pills'), certa: 2 },
     { instrucao: FRASE, audioTexto: "It's an English book.", opcoes: op('passport', 'id', 'laptop', 'book'), certa: 3 },
     { instrucao: FRASE, audioTexto: 'My painkillers are in my bag.', opcoes: op('pills', 'snack', 'spray', 'tea'), certa: 0 },

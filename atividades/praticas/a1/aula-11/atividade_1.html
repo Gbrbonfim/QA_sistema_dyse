@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 11 · Big, fast, smart</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 11 · Escuta
+   Alinhado ao slide "Class 11: Dog Lovers" — Vocabulary (adjetivos: big, small, old, new, fast,
+   slow, cheap, expensive, long, short, hungry, thirsty, friendly, unfriendly, good, bad, lazy,
+   smart, cute, noisy, clean). Conteúdo NOVO: outras raças com fatos verdadeiros (Chihuahua é
+   pequeno e mexicano; Greyhound é rápido; Great Dane é grande; Dachshund é comprido). As figuras
+   são ícones. 24 questões: 12 palavras + 12 frases. */
+const IC = { big: 'open_in_full', small: 'close_fullscreen', fast: 'speed', slow: 'hourglass_bottom', hungry: 'restaurant',
+  thirsty: 'water_drop', friendly: 'sentiment_satisfied', unfriendly: 'sentiment_dissatisfied', lazy: 'bedtime',
+  smart: 'psychology', noisy: 'volume_up', clean: 'cleaning_services', cheap: 'savings', expensive: 'diamond',
+  good: 'thumb_up', bad: 'thumb_down', old: 'elderly', new: 'fiber_new', cute: 'favorite', long: 'straighten' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const FRASE = 'Listen to the sentence and choose the adjective';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 11, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the adjective and choose',
+  itens: [
+    { audioTexto: 'hungry', opcoes: op('hungry', 'thirsty', 'lazy', 'noisy'), certa: 0 },
+    { audioTexto: 'thirsty', opcoes: op('hungry', 'thirsty', 'friendly', 'cute'), certa: 1 },
+    { audioTexto: 'friendly', opcoes: op('unfriendly', 'smart', 'friendly', 'lazy'), certa: 2 },
+    { audioTexto: 'lazy', opcoes: op('smart', 'noisy', 'clean', 'lazy'), certa: 3 },
+    { audioTexto: 'smart', opcoes: op('smart', 'slow', 'small', 'cute'), certa: 0 },
+    { audioTexto: 'noisy', opcoes: op('new', 'noisy', 'good', 'old'), certa: 1 },
+    { audioTexto: 'expensive', opcoes: op('cheap', 'clean', 'expensive', 'fast'), certa: 2 },
+    { audioTexto: 'slow', opcoes: op('fast', 'small', 'long', 'slow'), certa: 3 },
+    { audioTexto: 'clean', opcoes: op('clean', 'cheap', 'cute', 'bad'), certa: 0 },
+    { audioTexto: 'unfriendly', opcoes: op('friendly', 'unfriendly', 'hungry', 'lazy'), certa: 1 },
+    { audioTexto: 'cute', opcoes: op('good', 'new', 'cute', 'clean'), certa: 2 },
+    { audioTexto: 'old', opcoes: op('new', 'bad', 'long', 'old'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "Chihuahuas are small dogs. They're from Mexico.", opcoes: op('small', 'big', 'long', 'fast'), certa: 0 },
+    { instrucao: FRASE, audioTexto: 'The Greyhound is a fast dog.', opcoes: op('slow', 'fast', 'lazy', 'old'), certa: 1 },
+    { instrucao: FRASE, audioTexto: 'Border Collies are smart dogs.', opcoes: op('cute', 'lazy', 'smart', 'noisy'), certa: 2 },
+    { instrucao: FRASE, audioTexto: 'The Great Dane is a very big dog.', opcoes: op('small', 'long', 'fast', 'big'), certa: 3 },
+    { instrucao: FRASE, audioTexto: 'The Dachshund is a long dog.', opcoes: op('long', 'big', 'slow', 'old'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "My dog is hungry. Where's its food?", opcoes: op('thirsty', 'hungry', 'lazy', 'bad'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "The dog is thirsty. Where's its water?", opcoes: op('hungry', 'clean', 'thirsty', 'noisy'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "It's a very noisy dog!", opcoes: op('cute', 'smart', 'friendly', 'noisy'), certa: 3 },
+    { instrucao: FRASE, audioTexto: 'Their cat is very lazy.', opcoes: op('lazy', 'smart', 'fast', 'clean'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "It isn't a cheap dog. It's expensive!", opcoes: op('cheap', 'expensive', 'good', 'new'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "It's a new laptop.", opcoes: op('old', 'good', 'new', 'fast'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "They're friendly dogs.", opcoes: op('unfriendly', 'cute', 'lazy', 'friendly'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

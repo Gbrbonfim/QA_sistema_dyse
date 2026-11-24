@@ -27,10 +27,10 @@ const IC = { single: 'single_bed', double: 'king_bed', shower: 'shower', ac: 'ac
 const NOME = { single: 'single bed', double: 'double bed', shower: 'shower', ac: 'air conditioner', remote: 'remote control', tv: 'TV',
   toiletries: 'toiletries', breakfast: 'breakfast', reception: 'reception', parking: 'parking', gym: 'gym', pool: 'swimming pool', bar: 'bar', room: 'room' };
 const op = (...cs) => cs.map(c => ({ label: NOME[c], icon: IC[c] }));
-const FRASE = 'Escute a frase e escolha a figura';
+const FRASE = 'Listen to the sentence and choose the picture';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 6, num: 1, tipo: 'imagem',
-  instrucao: 'Escute a palavra e escolha a figura',
+  instrucao: 'Listen to the word and choose the picture',
   itens: [
     { audioTexto: 'single bed', opcoes: op('single', 'shower', 'tv', 'gym'), certa: 0 },
     { audioTexto: 'double bed', opcoes: op('pool', 'double', 'remote', 'bar'), certa: 1 },
@@ -45,7 +45,7 @@ DysePratica.iniciar({
     { audioTexto: 'swimming pool', opcoes: op('shower', 'parking', 'pool', 'room'), certa: 2 },
     { audioTexto: 'bar', opcoes: op('breakfast', 'gym', 'pool', 'bar'), certa: 3 },
     { instrucao: FRASE, audioTexto: "It's a single bed.", opcoes: op('single', 'tv', 'pool', 'remote'), certa: 0 },
-    { instrucao: 'Escute e escolha o que a frase diz que É', audioTexto: "It isn't a single bed. It's a double bed.", opcoes: op('single', 'double', 'shower', 'ac'), certa: 1 },
+    { instrucao: 'Listen and choose what it IS', audioTexto: "It isn't a single bed. It's a double bed.", opcoes: op('single', 'double', 'shower', 'ac'), certa: 1 },
     { instrucao: FRASE, audioTexto: 'Excuse me, where is the gym?', opcoes: op('bar', 'parking', 'gym', 'reception'), certa: 2 },
     { instrucao: FRASE, audioTexto: 'Where is the swimming pool?', opcoes: op('shower', 'gym', 'bar', 'pool'), certa: 3 },
     { instrucao: FRASE, audioTexto: 'The breakfast is very good.', opcoes: op('breakfast', 'toiletries', 'tv', 'room'), certa: 0 },

@@ -45,7 +45,7 @@ const prox = (k, opcoes, certa, traducao) => ({
 });
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 10, num: 3, tipo: 'escolha',
-  instrucao: 'Leia a conversa e escolha a próxima fala',
+  instrucao: 'Read the conversation and choose the next line',
   itens: [
     prox(1, ["She's my mom. Her name is Rosa.", "She's my mom. His name is Rosa.", "They're my brothers."], 0, 'Ela é a minha mãe. O nome dela é Rosa.'),
     prox(2, ['Who are the two boys?', 'And who is he?', 'Your family is big!'], 1, 'E quem é ele?'),
@@ -59,14 +59,14 @@ DysePratica.iniciar({
     prox(10, ['Cool! And who is she, with Lia?', 'Cool! And who are she, with Lia?', 'Nina, who is she?'], 0, 'Legal! E quem é ela, com a Lia?'),
     prox(11, ["She's my grandmother, Ana. She's my mom's mother.", "She's my grandmother, Ana. She's my mom's sister.", "He's my dad, Carlos."], 0, 'Ela é a minha avó, Ana. Ela é a mãe da minha mãe.'),
     prox(12, ['And the baby?', 'Your family is big!', 'Who are the two boys?'], 1, 'A sua família é grande!'),
-    { instrucao: 'Quem é a Rosa?', frase: "Rosa is Nina's ___.", opcoes: ['mother', 'sister', 'aunt'], certa: 0, traducao: 'A Rosa é a mãe da Nina.' },
-    { instrucao: 'Quem é o Carlos para a Rosa?', frase: "Carlos is Rosa's ___.", opcoes: ['son', 'husband', 'brother'], certa: 1, traducao: 'O Carlos é o marido da Rosa.' },
-    { instrucao: 'Quem são o Tiago e o Rafa?', frase: "Tiago and Rafa are Nina's ___.", opcoes: ['cousins', 'uncles', 'brothers'], certa: 2, traducao: 'O Tiago e o Rafa são os irmãos da Nina.' },
-    { instrucao: 'Quem é a Lia?', frase: "Lia is Nina's sister's ___.", opcoes: ['daughter', 'mother', 'son'], certa: 0, traducao: 'A Lia é a filha da irmã da Nina.' },
-    { instrucao: 'O que a Nina é da Lia?', frase: "Nina is Lia's ___.", opcoes: ['sister', 'aunt', 'mother'], certa: 1, traducao: 'A Nina é tia da Lia.' },
-    { instrucao: 'O que o Tiago é da Lia?', frase: "Tiago is Lia's ___.", opcoes: ['brother', 'father', 'uncle'], certa: 2, traducao: 'O Tiago é tio da Lia.' },
-    { instrucao: 'Quem é a Ana para a Nina?', frase: "Ana is Nina's ___.", opcoes: ['grandmother', 'granddaughter', 'aunt'], certa: 0, traducao: 'A Ana é a avó da Nina.' },
-    { instrucao: 'Quem é a Ana para a Rosa?', frase: "Ana is Rosa's ___.", opcoes: ['sister', 'mother', 'daughter'], certa: 1, traducao: 'A Ana é a mãe da Rosa.' }
+    { instrucao: 'Who is Rosa?', frase: "Rosa is Nina's ___.", opcoes: ['mother', 'sister', 'aunt'], certa: 0, traducao: 'A Rosa é a mãe da Nina.' },
+    { instrucao: "Who is Carlos in Rosa's family?", frase: "Carlos is Rosa's ___.", opcoes: ['son', 'husband', 'brother'], certa: 1, traducao: 'O Carlos é o marido da Rosa.' },
+    { instrucao: 'Who are Tiago and Rafa?', frase: "Tiago and Rafa are Nina's ___.", opcoes: ['cousins', 'uncles', 'brothers'], certa: 2, traducao: 'O Tiago e o Rafa são os irmãos da Nina.' },
+    { instrucao: 'Who is Lia?', frase: "Lia is Nina's sister's ___.", opcoes: ['daughter', 'mother', 'son'], certa: 0, traducao: 'A Lia é a filha da irmã da Nina.' },
+    { instrucao: "Who is Nina in Lia's family?", frase: "Nina is Lia's ___.", opcoes: ['sister', 'aunt', 'mother'], certa: 1, traducao: 'A Nina é tia da Lia.' },
+    { instrucao: "Who is Tiago in Lia's family?", frase: "Tiago is Lia's ___.", opcoes: ['brother', 'father', 'uncle'], certa: 2, traducao: 'O Tiago é tio da Lia.' },
+    { instrucao: "Who is Ana in Nina's family?", frase: "Ana is Nina's ___.", opcoes: ['grandmother', 'granddaughter', 'aunt'], certa: 0, traducao: 'A Ana é a avó da Nina.' },
+    { instrucao: "Who is Ana in Rosa's family?", frase: "Ana is Rosa's ___.", opcoes: ['sister', 'mother', 'daughter'], certa: 1, traducao: 'A Ana é a mãe da Rosa.' }
   ]
 });
 </script>

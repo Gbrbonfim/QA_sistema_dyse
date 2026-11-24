@@ -22,11 +22,11 @@
    Haley's brother" = "He is her brother") e exercício 3 (Claire is Phil's wife → Phil is
    Claire's husband). Conteúdo NOVO e mais difícil: raciocínio de parentesco (a irmã da minha
    mãe = minha tia), 's de posse x 's de is, e his / her / their. 24 questões. */
-const QUER = 'O que o \'s quer dizer nesta frase?';
-const CERTA = 'Qual frase está correta?';
+const QUER = "What does 's mean in this sentence?";
+const CERTA = 'Which sentence is correct?';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 10, num: 5, tipo: 'escolha',
-  instrucao: 'Complete a frase',
+  instrucao: 'Complete the sentence',
   itens: [
     { frase: "Kate is William's wife. William is Kate's ___.", opcoes: ['husband', 'wife', 'father'], certa: 0, traducao: 'A Kate é a esposa do William. O William é o marido da Kate.' },
     { frase: "Charlotte is William's daughter. William is Charlotte's ___.", opcoes: ['son', 'father', 'brother'], certa: 1, traducao: 'A Charlotte é a filha do William. O William é o pai da Charlotte.' },
@@ -47,8 +47,8 @@ DysePratica.iniciar({
     { frase: "Haley and Alex are Phil's ___.", opcoes: ['daughter', 'daughters'], certa: 1, traducao: 'A Haley e a Alex são as filhas do Phil.' },
     { frase: "Poppy and George are Haley's ___.", opcoes: ['children', 'childs', 'child'], certa: 0, traducao: 'A Poppy e o George são os filhos da Haley.' },
     { frase: "Who ___ Alex and Luke? They're Haley's sister and brother.", opcoes: ['is', 'are'], certa: 1, traducao: 'Quem são a Alex e o Luke? Eles são a irmã e o irmão da Haley.' },
-    { instrucao: QUER + " — Haley's a mother.", opcoes: ['is (verbo to be)', 'posse (de)'], certa: 0, completa: "Haley's a mother.", traducao: 'A Haley é mãe. (\'s = is)' },
-    { instrucao: QUER + " — Haley's mother is Claire.", opcoes: ['is (verbo to be)', 'posse (de)'], certa: 1, completa: "Haley's mother is Claire.", traducao: 'A mãe da Haley é a Claire. (\'s = posse)' },
+    { instrucao: QUER + " — Haley's a mother.", opcoes: ['is (verb to be)', 'possession'], certa: 0, completa: "Haley's a mother.", traducao: 'A Haley é mãe. (\'s = is)' },
+    { instrucao: QUER + " — Haley's mother is Claire.", opcoes: ['is (verb to be)', 'possession'], certa: 1, completa: "Haley's mother is Claire.", traducao: 'A mãe da Haley é a Claire. (\'s = posse)' },
     { instrucao: CERTA, opcoes: ["Luke is Haley's brother.", "Luke is brother's Haley.", 'Luke is Haley brother.'], certa: 0, traducao: 'O Luke é o irmão da Haley.' },
     { instrucao: CERTA, opcoes: ['Kate is William wife.', "Kate is William's wife.", "Kate is wife's William."], certa: 1, traducao: 'A Kate é a esposa do William.' },
     { instrucao: CERTA, opcoes: ["Who is Harper's?", 'Who are Harper?', 'Who is Harper?'], certa: 2, traducao: 'Quem é a Harper?' }

@@ -44,7 +44,7 @@ const prox = (k, opcoes, certa, traducao) => ({
 });
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 3, num: 3, tipo: 'escolha',
-  instrucao: 'Leia a conversa e escolha a próxima fala',
+  instrucao: 'Read the conversation and choose the next line',
   itens: [
     prox(1, ["No, I'm not Italian. I'm French.", "Hi, Tom! I'm Julia. Nice to meet you.", 'Bye, Tom!'], 1, 'Oi, Tom! Eu sou a Julia. Prazer em te conhecer.'),
     prox(2, ["Hmm... You're Italian!", 'Bye, Tom!', 'Nice to meet you too. Where are you from?'], 2, 'Prazer em te conhecer também. De onde você é?'),
@@ -57,15 +57,15 @@ DysePratica.iniciar({
     prox(9, ['Canadian? My friend Mei is Canadian too.', 'French? My friend Mei is French too.', "Hmm... You're Italian!"], 0, 'Canadense? Minha amiga Mei também é canadense.'),
     prox(10, ['Nice! See you later, Tom!', 'Nice! See you later, Julia!', 'Where are you from?'], 1, 'Legal! Até mais, Julia!'),
     prox(11, ['Bye, Julia!', "Hi! I'm Tom.", 'Bye, Tom!'], 2, 'Tchau, Tom!'),
-    { instrucao: 'Qual é a nacionalidade da Julia?', frase: 'Julia is ___.', opcoes: ['Italian', 'French', 'Spanish'], certa: 1, traducao: 'A Julia é francesa.' },
-    { instrucao: 'O que o Tom acha que a Julia é?', frase: 'Tom says: "You\'re ___!"', opcoes: ['Italian', 'French', 'Canadian'], certa: 0, traducao: 'Tom diz: "Você é italiana!"' },
-    { instrucao: 'A Julia é italiana?', frase: 'No, she ___ Italian.', opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'Não, ela não é italiana.' },
-    { instrucao: 'O Tom é americano?', frase: 'No, he ___ American.', opcoes: ["'m not", "aren't", "isn't"], certa: 2, traducao: 'Não, ele não é americano.' },
-    { instrucao: 'Qual é a nacionalidade do Tom?', frase: 'Tom is ___.', opcoes: ['American', 'Canadian', 'English'], certa: 1, traducao: 'O Tom é canadense.' },
-    { instrucao: 'Qual é a nacionalidade da Mei?', frase: 'Mei is ___.', opcoes: ['Chinese', 'Canadian', 'French'], certa: 1, traducao: 'A Mei é canadense.' },
-    { instrucao: 'A Julia é espanhola?', frase: 'Julia ___ Spanish.', opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'A Julia não é espanhola.' },
-    { instrucao: 'Complete a fala da Julia:', frase: 'Julia: "No, I\'m ___ Italian."', opcoes: ['not', 'no', "isn't"], certa: 0, traducao: 'Julia: "Não, eu não sou italiana."' },
-    { instrucao: 'Quem diz "See you later"?', frase: '___ says: "See you later, Julia!"', opcoes: ['Tom', 'Julia'], certa: 0, traducao: 'O Tom diz: "Até mais, Julia!"' }
+    { instrucao: "What's Julia's nationality?", frase: 'Julia is ___.', opcoes: ['Italian', 'French', 'Spanish'], certa: 1, traducao: 'A Julia é francesa.' },
+    { instrucao: 'Tom says Julia is... what?', frase: 'Tom says: "You\'re ___!"', opcoes: ['Italian', 'French', 'Canadian'], certa: 0, traducao: 'Tom diz: "Você é italiana!"' },
+    { instrucao: 'Is Julia Italian?', frase: 'No, she ___ Italian.', opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'Não, ela não é italiana.' },
+    { instrucao: 'Is Tom American?', frase: 'No, he ___ American.', opcoes: ["'m not", "aren't", "isn't"], certa: 2, traducao: 'Não, ele não é americano.' },
+    { instrucao: "What's Tom's nationality?", frase: 'Tom is ___.', opcoes: ['American', 'Canadian', 'English'], certa: 1, traducao: 'O Tom é canadense.' },
+    { instrucao: "What's Mei's nationality?", frase: 'Mei is ___.', opcoes: ['Chinese', 'Canadian', 'French'], certa: 1, traducao: 'A Mei é canadense.' },
+    { instrucao: 'Is Julia Spanish?', frase: 'Julia ___ Spanish.', opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'A Julia não é espanhola.' },
+    { instrucao: "Complete Julia's line:", frase: 'Julia: "No, I\'m ___ Italian."', opcoes: ['not', 'no', "isn't"], certa: 0, traducao: 'Julia: "Não, eu não sou italiana."' },
+    { instrucao: 'Who says "See you later"?', frase: '___ says: "See you later, Julia!"', opcoes: ['Tom', 'Julia'], certa: 0, traducao: 'O Tom diz: "Até mais, Julia!"' }
   ]
 });
 </script>

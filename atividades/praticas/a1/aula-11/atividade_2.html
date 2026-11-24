@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 11 · Adjective + noun</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 11 · Escrita
+   Alinhado ao slide "Class 11: Dog Lovers" — Grammar Point (adjetivo depois do be ou ANTES do
+   substantivo; adjetivo não vai para o plural: big dogs, nunca bigs dogs) e exercícios 2 e 3
+   (It's / They're + adjetivo + substantivo; ordenar as palavras). Conteúdo NOVO: outras frases
+   e raças. O contexto mostra a frase em português para que só uma ordem seja certa. A isca é o
+   adjetivo no plural, a / an trocado ou is / are trocado. 20 questões. */
+const M = pt => 'Monte em inglês: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 11, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('É um cachorro pequeno.'), palavras: ["It's", 'a', 'small', 'dog'], isca: ['an'], fim: '.', traducao: 'É um cachorro pequeno.' },
+    { contexto: M('Eles são cachorros grandes.'), palavras: ["They're", 'big', 'dogs'], isca: ['bigs'], fim: '.', traducao: 'Eles são cachorros grandes.' },
+    { contexto: M('Poodles são cachorros espertos.'), palavras: ['Poodles', 'are', 'smart', 'dogs'], isca: ['smarts'], fim: '.', traducao: 'Poodles são cachorros espertos.' },
+    { contexto: M('O Buldogue Francês é preguiçoso.'), palavras: ['The', 'French', 'Bulldog', 'is', 'lazy'], isca: ['are'], fim: '.', traducao: 'O Buldogue Francês é preguiçoso.' },
+    { contexto: M('O Golden Retriever é um cachorro amigável.'), palavras: ['The', 'Golden', 'Retriever', 'is', 'a', 'friendly', 'dog'], isca: ['an'], fim: '.', traducao: 'O Golden Retriever é um cachorro amigável.' },
+    { contexto: M('Chihuahuas são cachorros pequenos.'), palavras: ['Chihuahuas', 'are', 'small', 'dogs'], isca: ['smalls'], fim: '.', traducao: 'Chihuahuas são cachorros pequenos.' },
+    { contexto: M('É um perfume caro.'), palavras: ["It's", 'an', 'expensive', 'perfume'], isca: ['a'], fim: '.', traducao: 'É um perfume caro.' },
+    { contexto: M('Elas são maçãs baratas.'), palavras: ["They're", 'cheap', 'apples'], isca: ['cheaps'], fim: '.', traducao: 'Elas são maçãs baratas.' },
+    { contexto: M('O bebê está com muita fome.'), palavras: ['The', 'baby', 'is', 'very', 'hungry'], isca: ['are'], fim: '.', traducao: 'O bebê está com muita fome.' },
+    { contexto: M('A esposa dele é muito legal.'), palavras: ['His', 'wife', 'is', 'very', 'nice'], isca: ['He'], fim: '.', traducao: 'A esposa dele é muito legal.' },
+    { contexto: M('O nosso cachorro é muito velho.'), palavras: ['Our', 'dog', 'is', 'very', 'old'], isca: ['We'], fim: '.', traducao: 'O nosso cachorro é muito velho.' },
+    { contexto: M('Não é um notebook bom.'), palavras: ['It', "isn't", 'a', 'good', 'laptop'], isca: ['an'], fim: '.', traducao: 'Não é um notebook bom.' },
+    { contexto: M('É uma casa verde?'), palavras: ['Is', 'it', 'a', 'green', 'house'], isca: ['are'], fim: '?', traducao: 'É uma casa verde?' },
+    { contexto: M('O cachorro deles é francês.'), palavras: ['Their', 'dog', 'is', 'French'], isca: ['There'], fim: '.', traducao: 'O cachorro deles é francês.' },
+    { contexto: M('Este é um celular barato.'), palavras: ['This', 'is', 'a', 'cheap', 'phone'], isca: ['an'], fim: '.', traducao: 'Este é um celular barato.' },
+    { contexto: M('Greyhounds são cachorros rápidos.'), palavras: ['Greyhounds', 'are', 'fast', 'dogs'], isca: ['fasts'], fim: '.', traducao: 'Greyhounds são cachorros rápidos.' },
+    { contexto: M('O Dogue Alemão é um cachorro muito grande.'), palavras: ['The', 'Great', 'Dane', 'is', 'a', 'very', 'big', 'dog'], isca: ['an'], fim: '.', traducao: 'O Dogue Alemão (Great Dane) é um cachorro muito grande.' },
+    { contexto: M('Eles não são cachorros barulhentos.'), palavras: ['They', "aren't", 'noisy', 'dogs'], isca: ["isn't"], fim: '.', traducao: 'Eles não são cachorros barulhentos.' },
+    { contexto: M('O seu gato é amigável?'), palavras: ['Is', 'your', 'cat', 'friendly'], isca: ['you'], fim: '?', traducao: 'O seu gato é amigável?' },
+    { contexto: M('O Labrador é grande e amigável.'), palavras: ['The', 'Labrador', 'is', 'big', 'and', 'friendly'], isca: ['bigs'], fim: '.', traducao: 'O Labrador é grande e amigável.' }
+  ]
+});
+</script>
+</body>
+</html>

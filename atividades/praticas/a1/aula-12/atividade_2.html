@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 12 · I have, she has</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 12 · Escrita
+   Alinhado ao slide "Class 12: Breakfast, lunch and dinner" — Grammar Point (have com I / you /
+   we / they; has com he / she / it; refeição sem artigo: have breakfast, nunca "have a
+   breakfast") e Talking Point ("On Monday I have..."). Conteúdo NOVO: outras pessoas e menus.
+   O contexto mostra a frase em português para que só uma ordem seja certa. A isca é have / has
+   trocado ou o "a" antes da refeição. 20 questões. */
+const M = pt => 'Monte em inglês: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 12, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu tomo café no café da manhã.'), palavras: ['I', 'have', 'coffee', 'for', 'breakfast'], isca: ['has'], fim: '.', traducao: 'Eu tomo café no café da manhã.' },
+    { contexto: M('Ela come ovos no café da manhã.'), palavras: ['She', 'has', 'eggs', 'for', 'breakfast'], isca: ['have'], fim: '.', traducao: 'Ela come ovos no café da manhã.' },
+    { contexto: M('Ele come macarrão no almoço.'), palavras: ['He', 'has', 'pasta', 'for', 'lunch'], isca: ['have'], fim: '.', traducao: 'Ele come macarrão no almoço.' },
+    { contexto: M('Nós tomamos sopa no jantar.'), palavras: ['We', 'have', 'soup', 'for', 'dinner'], isca: ['has'], fim: '.', traducao: 'Nós tomamos sopa no jantar.' },
+    { contexto: M('Eles comem sanduíches no almoço.'), palavras: ['They', 'have', 'sandwiches', 'for', 'lunch'], isca: ['has'], fim: '.', traducao: 'Eles comem sanduíches no almoço.' },
+    { contexto: M('A Maria toma suco e come cereal no café da manhã.'), palavras: ['Maria', 'has', 'juice', 'and', 'cereal', 'for', 'breakfast'], isca: ['have'], fim: '.', traducao: 'A Maria toma suco e come cereal no café da manhã.' },
+    { contexto: M('Minha mãe come salada no jantar.'), palavras: ['My', 'mom', 'has', 'salad', 'for', 'dinner'], isca: ['have'], fim: '.', traducao: 'Minha mãe come salada no jantar.' },
+    { contexto: M('As crianças comem biscoitos na escola.'), palavras: ['The', 'children', 'have', 'cookies', 'at', 'school'], isca: ['has'], fim: '.', traducao: 'As crianças comem biscoitos na escola.' },
+    { contexto: M('Eu almoço no trabalho.'), palavras: ['I', 'have', 'lunch', 'at', 'work'], isca: ['a'], fim: '.', traducao: 'Eu almoço no trabalho.' },
+    { contexto: M('Nós tomamos café da manhã de manhã.'), palavras: ['We', 'have', 'breakfast', 'in', 'the', 'morning'], isca: ['a'], fim: '.', traducao: 'Nós tomamos café da manhã de manhã.' },
+    { contexto: M('Ela faz um lanche à tarde.'), palavras: ['She', 'has', 'a', 'snack', 'in', 'the', 'afternoon'], isca: ['have'], fim: '.', traducao: 'Ela faz um lanche à tarde.' },
+    { contexto: M('Na segunda, eu como arroz e feijão.'), palavras: ['On', 'Monday,', 'I', 'have', 'rice', 'and', 'beans'], isca: ['has'], fim: '.', traducao: 'Na segunda, eu como arroz e feijão.' },
+    { contexto: M('Na sexta, nós comemos pizza no jantar.'), palavras: ['On', 'Friday,', 'we', 'have', 'pizza', 'for', 'dinner'], isca: ['has'], fim: '.', traducao: 'Na sexta, nós comemos pizza no jantar.' },
+    { contexto: M('Minha família e eu tomamos café da manhã em casa.'), palavras: ['My', 'family', 'and', 'I', 'have', 'breakfast', 'at', 'home'], isca: ['has'], fim: '.', traducao: 'Minha família e eu tomamos café da manhã em casa.' },
+    { contexto: M('O Jorge come carne e macarrão no almoço.'), palavras: ['Jorge', 'has', 'meat', 'and', 'pasta', 'for', 'lunch'], isca: ['have'], fim: '.', traducao: 'O Jorge come carne e macarrão no almoço.' },
+    { contexto: M('Eles tomam sorvete depois do almoço.'), palavras: ['They', 'have', 'ice', 'cream', 'after', 'lunch'], isca: ['has'], fim: '.', traducao: 'Eles tomam sorvete depois do almoço.' },
+    { contexto: M('O que você come no café da manhã?'), palavras: ['What', 'do', 'you', 'have', 'for', 'breakfast'], isca: ['has'], fim: '?', traducao: 'O que você come no café da manhã?' },
+    { contexto: M('A Sara almoça no trabalho.'), palavras: ['Sara', 'has', 'lunch', 'at', 'work'], isca: ['a'], fim: '.', traducao: 'A Sara almoça no trabalho.' },
+    { contexto: M('Nossa professora toma chá e come biscoitos à tarde.'), palavras: ['Our', 'teacher', 'has', 'tea', 'and', 'cookies', 'in', 'the', 'afternoon'], isca: ['have'], fim: '.', traducao: 'Nossa professora toma chá e come biscoitos à tarde.' },
+    { contexto: M('No domingo, meus pais comem peixe e salada no almoço.'), palavras: ['On', 'Sunday,', 'my', 'parents', 'have', 'fish', 'and', 'salad', 'for', 'lunch'], isca: ['has'], fim: '.', traducao: 'No domingo, meus pais comem peixe e salada no almoço.' }
+  ]
+});
+</script>
+</body>
+</html>

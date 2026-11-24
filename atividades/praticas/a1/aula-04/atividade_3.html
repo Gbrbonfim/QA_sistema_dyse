@@ -43,7 +43,7 @@ const prox = (k, opcoes, certa, traducao) => ({
 });
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 4, num: 3, tipo: 'escolha',
-  instrucao: 'Leia a conversa e escolha a próxima fala',
+  instrucao: 'Read the conversation and choose the next line',
   itens: [
     prox(1, ['Yes, they are. They\'re Mexican.', "No, he isn't. He's Greek. He's from Athens.", 'Thank you, Pedro!'], 1, 'Não, ele não é. Ele é grego. Ele é de Atenas.'),
     prox(2, ['Wow, you are good!', "No, they aren't.", 'Correct! Now you.'], 2, 'Correto! Agora você.'),
@@ -56,15 +56,15 @@ DysePratica.iniciar({
     prox(9, ["No, he isn't. He's Austrian. He's from Salzburg.", "Yes, he is. He's from Berlin.", "No, they aren't. They're Austrian."], 0, 'Não, ele não é. Ele é austríaco. Ele é de Salzburgo.'),
     prox(10, ['Correct! Now you.', 'Wow, you are good!', 'Is Mozart German?'], 1, 'Uau, você é boa!'),
     prox(11, ['Thank you, Anna!', 'Let\'s play a game.', 'Thank you, Pedro!'], 2, 'Obrigada, Pedro!'),
-    { instrucao: 'Qual é a nacionalidade do Giannis Antetokounmpo?', frase: 'Giannis Antetokounmpo is ___.', opcoes: ['Italian', 'Greek', 'Austrian'], certa: 1, traducao: 'O Giannis Antetokounmpo é grego.' },
-    { instrucao: 'De que cidade ele é?', frase: "He's from ___.", opcoes: ['Athens', 'Salzburg', 'Johannesburg'], certa: 0, traducao: 'Ele é de Atenas.' },
-    { instrucao: 'O Trevor Noah é americano?', frase: "No, he ___. He's South African.", opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'Não, ele não é. Ele é sul-africano.' },
-    { instrucao: 'De que cidade é o Trevor Noah?', frase: "He's from ___.", opcoes: ['Athens', 'Johannesburg', 'Salzburg'], certa: 1, traducao: 'Ele é de Joanesburgo.' },
-    { instrucao: 'Qual é a nacionalidade do Guillermo del Toro e da Salma Hayek?', frase: "They're ___.", opcoes: ['Spanish', 'Argentinian', 'Mexican'], certa: 2, traducao: 'Eles são mexicanos.' },
-    { instrucao: 'Complete a pergunta do Pedro:', frase: '___ Guillermo del Toro and Salma Hayek Spanish?', opcoes: ['Is', 'Are', 'Am'], certa: 1, traducao: 'O Guillermo del Toro e a Salma Hayek são espanhóis?' },
-    { instrucao: 'O Mozart é alemão?', frase: "No, he isn't. He's ___.", opcoes: ['Austrian', 'German', 'Greek'], certa: 0, traducao: 'Não, ele não é. Ele é austríaco.' },
-    { instrucao: 'Complete a pergunta do Pedro:', frase: '___ Mozart German?', opcoes: ['Am', 'Are', 'Is'], certa: 2, traducao: 'O Mozart é alemão?' },
-    { instrucao: 'Quem acerta todas as respostas?', frase: '___ is good at the game.', opcoes: ['Pedro', 'Anna'], certa: 1, traducao: 'A Anna é boa no jogo.' }
+    { instrucao: "What's Giannis Antetokounmpo's nationality?", frase: 'Giannis Antetokounmpo is ___.', opcoes: ['Italian', 'Greek', 'Austrian'], certa: 1, traducao: 'O Giannis Antetokounmpo é grego.' },
+    { instrucao: 'What city is he from?', frase: "He's from ___.", opcoes: ['Athens', 'Salzburg', 'Johannesburg'], certa: 0, traducao: 'Ele é de Atenas.' },
+    { instrucao: 'Is Trevor Noah American?', frase: "No, he ___. He's South African.", opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'Não, ele não é. Ele é sul-africano.' },
+    { instrucao: 'What city is Trevor Noah from?', frase: "He's from ___.", opcoes: ['Athens', 'Johannesburg', 'Salzburg'], certa: 1, traducao: 'Ele é de Joanesburgo.' },
+    { instrucao: 'What nationality are Guillermo del Toro and Salma Hayek?', frase: "They're ___.", opcoes: ['Spanish', 'Argentinian', 'Mexican'], certa: 2, traducao: 'Eles são mexicanos.' },
+    { instrucao: "Complete Pedro's question:", frase: '___ Guillermo del Toro and Salma Hayek Spanish?', opcoes: ['Is', 'Are', 'Am'], certa: 1, traducao: 'O Guillermo del Toro e a Salma Hayek são espanhóis?' },
+    { instrucao: 'Is Mozart German?', frase: "No, he isn't. He's ___.", opcoes: ['Austrian', 'German', 'Greek'], certa: 0, traducao: 'Não, ele não é. Ele é austríaco.' },
+    { instrucao: "Complete Pedro's question:", frase: '___ Mozart German?', opcoes: ['Am', 'Are', 'Is'], certa: 2, traducao: 'O Mozart é alemão?' },
+    { instrucao: 'Who has all the right answers?', frase: '___ is good at the game.', opcoes: ['Pedro', 'Anna'], certa: 1, traducao: 'A Anna é boa no jogo.' }
   ]
 });
 </script>

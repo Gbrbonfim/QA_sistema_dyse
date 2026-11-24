@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 12 · Food and meals</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 12 · Escuta
+   Alinhado ao slide "Class 12: Breakfast, lunch and dinner" — Vocabulary (comidas e bebidas,
+   refeições, dias da semana) e Grammar Point (have / has + refeição). Conteúdo NOVO: outras
+   frases e outras pessoas. As figuras são ícones. 24 questões: 12 comidas + 6 refeições + 6 dias. */
+const IC = { coffee: 'coffee', cookies: 'cookie', 'ice cream': 'icecream', water: 'water_bottle', eggs: 'egg',
+  bread: 'breakfast_dining', rice: 'rice_bowl', fish: 'set_meal', soup: 'soup_kitchen', pasta: 'ramen_dining',
+  juice: 'local_drink', salad: 'eco', breakfast: 'egg_alt', lunch: 'lunch_dining', dinner: 'dinner_dining', snack: 'cookie',
+  Monday: 'calendar_today', Tuesday: 'calendar_today', Wednesday: 'calendar_today', Thursday: 'calendar_today',
+  Friday: 'calendar_today', Saturday: 'calendar_today', Sunday: 'calendar_today' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const REF = 'Listen to the sentence and choose the meal';
+const DIA = 'Listen to the sentence and choose the day';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 12, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the word and choose',
+  itens: [
+    { audioTexto: 'coffee', opcoes: op('coffee', 'juice', 'water', 'soup'), certa: 0 },
+    { audioTexto: 'cookies', opcoes: op('bread', 'cookies', 'ice cream', 'eggs'), certa: 1 },
+    { audioTexto: 'ice cream', opcoes: op('cookies', 'juice', 'ice cream', 'coffee'), certa: 2 },
+    { audioTexto: 'water', opcoes: op('juice', 'coffee', 'soup', 'water'), certa: 3 },
+    { audioTexto: 'eggs', opcoes: op('eggs', 'bread', 'rice', 'fish'), certa: 0 },
+    { audioTexto: 'bread', opcoes: op('rice', 'bread', 'pasta', 'cookies'), certa: 1 },
+    { audioTexto: 'rice', opcoes: op('pasta', 'salad', 'rice', 'soup'), certa: 2 },
+    { audioTexto: 'fish', opcoes: op('eggs', 'pasta', 'salad', 'fish'), certa: 3 },
+    { audioTexto: 'soup', opcoes: op('soup', 'juice', 'salad', 'rice'), certa: 0 },
+    { audioTexto: 'pasta', opcoes: op('rice', 'pasta', 'fish', 'bread'), certa: 1 },
+    { audioTexto: 'juice', opcoes: op('water', 'coffee', 'juice', 'ice cream'), certa: 2 },
+    { audioTexto: 'salad', opcoes: op('soup', 'fish', 'rice', 'salad'), certa: 3 },
+    { instrucao: REF, audioTexto: 'I have cereal and milk for breakfast.', opcoes: op('breakfast', 'lunch', 'dinner', 'snack'), certa: 0 },
+    { instrucao: REF, audioTexto: 'He has fish and rice for dinner.', opcoes: op('breakfast', 'dinner', 'lunch', 'snack'), certa: 1 },
+    { instrucao: REF, audioTexto: 'They have sandwiches for lunch at school.', opcoes: op('dinner', 'snack', 'lunch', 'breakfast'), certa: 2 },
+    { instrucao: REF, audioTexto: "She has a banana in the afternoon. It's her snack.", opcoes: op('lunch', 'breakfast', 'dinner', 'snack'), certa: 3 },
+    { instrucao: REF, audioTexto: 'We have soup and salad for dinner.', opcoes: op('dinner', 'lunch', 'snack', 'breakfast'), certa: 0 },
+    { instrucao: REF, audioTexto: 'My dad has bread and coffee in the morning.', opcoes: op('lunch', 'breakfast', 'snack', 'dinner'), certa: 1 },
+    { instrucao: DIA, audioTexto: 'On Monday, I have pasta for lunch.', opcoes: op('Monday', 'Tuesday', 'Wednesday', 'Thursday'), certa: 0 },
+    { instrucao: DIA, audioTexto: 'On Wednesday, she has chicken and rice.', opcoes: op('Monday', 'Wednesday', 'Friday', 'Thursday'), certa: 1 },
+    { instrucao: DIA, audioTexto: 'We have pizza on Friday.', opcoes: op('Thursday', 'Saturday', 'Friday', 'Sunday'), certa: 2 },
+    { instrucao: DIA, audioTexto: 'On Tuesday, they have fish for dinner.', opcoes: op('Thursday', 'Monday', 'Sunday', 'Tuesday'), certa: 3 },
+    { instrucao: DIA, audioTexto: 'On Thursday, he has eggs for breakfast.', opcoes: op('Thursday', 'Tuesday', 'Wednesday', 'Friday'), certa: 0 },
+    { instrucao: DIA, audioTexto: 'On Sunday, my family has meat and beans for lunch.', opcoes: op('Saturday', 'Sunday', 'Monday', 'Friday'), certa: 1 }
+  ]
+});
+</script>
+</body>
+</html>

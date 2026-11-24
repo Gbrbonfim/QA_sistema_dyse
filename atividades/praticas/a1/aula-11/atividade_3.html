@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 11 · Happy Dogs</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 11 · Leitura
+   Alinhado ao slide "Class 11: Dog Lovers" — Listening (a mulher escolhe um cachorro) e Speaking
+   ("The Labrador is friendly and big"). Conteúdo NOVO: Amy visita o abrigo Happy Dogs e o Jake
+   apresenta três cachorros. Fatos verdadeiros: Chihuahua é do México; Greyhounds são rápidos.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Jake', 'Hello! Welcome to Happy Dogs!'],
+  ['Amy', "Hi! I'm Amy. I love dogs!"],
+  ['Jake', "Great! Look, this is Max. He's a Labrador."],
+  ['Amy', "He's very big! Is he friendly?"],
+  ['Jake', "Yes, he is. He's a very friendly dog."],
+  ['Amy', 'And who is this small dog?'],
+  ['Jake', "This is Lola. She's a Chihuahua. She's from Mexico."],
+  ['Amy', "She's cute! Is she noisy?"],
+  ['Jake', "Yes, she is! She's small, but she's very noisy!"],
+  ['Amy', 'Ha ha! And the black dog? Is he lazy?'],
+  ['Jake', "No, he isn't. This is Bolt. He's a Greyhound. Greyhounds are fast dogs."],
+  ['Amy', 'Fast? Cool! Is he old?'],
+  ['Jake', "No, he isn't. He's two."],
+  ['Amy', "I love Bolt! He's my favorite dog!"]
+];
+const lado = q => q === 'Amy' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 11, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi! I'm Amy. I love dogs!", "Hi! I'm Amy. I love dog!", 'Fast? Cool!'], 0, 'Oi! Eu sou a Amy. Eu amo cachorros!'),
+    prox(2, ["No, he isn't. He's two.", "Great! Look, this is Max. He's a Labrador.", "Great! Look, this is Max. He's a Labradors."], 1, 'Ótimo! Olha, este é o Max. Ele é um Labrador.'),
+    prox(3, ['And who is this small dog?', "She's cute!", "He's very big! Is he friendly?"], 2, 'Ele é muito grande! Ele é amigável?'),
+    prox(4, ["Yes, he is. He's a very friendly dog.", "Yes, he is. He's a dog very friendly.", "Yes, he is. He's a very friendlys dog."], 0, 'Sim, ele é. Ele é um cachorro muito amigável.'),
+    prox(5, ['And who is this dog small?', 'And who is this small dog?', 'Is he old?'], 1, 'E quem é este cachorro pequeno?'),
+    prox(6, ["He's a Greyhound.", "Yes, she is!", "This is Lola. She's a Chihuahua. She's from Mexico."], 2, 'Esta é a Lola. Ela é uma Chihuahua. Ela é do México.'),
+    prox(7, ["She's cute! Is she noisy?", "She's cute! Is he noisy?", 'Hello! Welcome to Happy Dogs!'], 0, 'Ela é fofa! Ela é barulhenta?'),
+    prox(8, ["No, he isn't. He's two.", "Yes, she is! She's small, but she's very noisy!", "Yes, she is! She's smalls, but she's very noisy!"], 1, 'Sim, ela é! Ela é pequena, mas é muito barulhenta!'),
+    prox(9, ['Fast? Cool! Is he old?', "I love Bolt!", 'Ha ha! And the black dog? Is he lazy?'], 2, 'Haha! E o cachorro preto? Ele é preguiçoso?'),
+    prox(10, ["No, he isn't. This is Bolt. He's a Greyhound. Greyhounds are fast dogs.", "No, he isn't. This is Bolt. He's a Greyhound. Greyhounds are slow dogs.", "No, he aren't. This is Bolt."], 0, 'Não, ele não é. Este é o Bolt. Ele é um Greyhound. Greyhounds são cachorros rápidos.'),
+    prox(11, ['And who is this small dog?', 'Fast? Cool! Is he old?', 'Fast? Cool! Is he olds?'], 1, 'Rápido? Legal! Ele é velho?'),
+    prox(12, ["She's cute!", "Yes, he is. He's a very friendly dog.", "No, he isn't. He's two."], 2, 'Não, ele não é. Ele tem dois anos.'),
+    { instrucao: "What's Max's breed?", frase: "Max is a ___.", opcoes: ['Labrador', 'Chihuahua', 'Greyhound'], certa: 0, traducao: 'O Max é um Labrador.' },
+    { instrucao: 'What is Max like?', frase: "He's a very ___ dog.", opcoes: ['lazy', 'friendly', 'noisy'], certa: 1, traducao: 'Ele é um cachorro muito amigável.' },
+    { instrucao: 'What is Lola like?', frase: 'Lola is a ___ dog.', opcoes: ['big', 'old', 'small'], certa: 2, traducao: 'A Lola é uma cachorra pequena.' },
+    { instrucao: 'Where is Lola from?', frase: "She's from ___.", opcoes: ['Mexico', 'England', 'France'], certa: 0, traducao: 'Ela é do México.' },
+    { instrucao: 'Is Lola quiet or noisy?', frase: "She's very ___.", opcoes: ['lazy', 'noisy', 'unfriendly'], certa: 1, traducao: 'Ela é muito barulhenta.' },
+    { instrucao: 'Complete the sentence about Greyhounds:', frase: 'Greyhounds are ___ dogs.', opcoes: ['slow', 'fasts', 'fast'], certa: 2, traducao: 'Greyhounds são cachorros rápidos.' },
+    { instrucao: 'Is Bolt old?', frase: 'No, he ___.', opcoes: ["isn't", "aren't", 'is'], certa: 0, traducao: 'Não, ele não é.' },
+    { instrucao: "What's Amy's favorite dog?", frase: 'Her favorite dog is ___.', opcoes: ['Max', 'Bolt', 'Lola'], certa: 1, traducao: 'O cachorro favorito dela é o Bolt.' }
+  ]
+});
+</script>
+</body>
+</html>

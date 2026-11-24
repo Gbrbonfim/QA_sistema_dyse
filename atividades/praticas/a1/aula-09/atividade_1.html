@@ -26,10 +26,10 @@ const IC = { color: 'palette', number: '123', animal: 'pets', drink: 'local_cafe
   artist: 'mic', hobby: 'sports_esports', object: 'smartphone', song: 'music_note', movie: 'movie', book: 'menu_book',
   my: 'person', your: 'face', his: 'man', her: 'woman', its: 'pets', our: 'groups', their: 'group' };
 const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
-const POS = 'Escute e escolha a palavra de posse que você ouviu';
+const POS = 'Listen and choose the possessive you hear';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 9, num: 1, tipo: 'imagem',
-  instrucao: 'Escute a pergunta e escolha o assunto',
+  instrucao: 'Listen to the question and choose the topic',
   itens: [
     { audioTexto: "What's your favorite animal?", opcoes: op('animal', 'drink', 'food', 'color'), certa: 0 },
     { audioTexto: "What's your favorite drink?", opcoes: op('food', 'drink', 'song', 'number'), certa: 1 },

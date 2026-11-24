@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 12 · Have or has?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 12 · Gramática
+   Alinhado ao slide "Class 12: Breakfast, lunch and dinner" — Grammar Point (have / has),
+   refeições (morning / afternoon / evening), dias da semana e as preposições do slide (for
+   breakfast, in the morning, on Monday, at work). Conteúdo NOVO e mais difícil: sujeitos
+   compostos ("My friend and I", "The baby", "Ana and Lucas"). 24 questões. */
+const HV = ['have', 'has'];
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 12, num: 5, tipo: 'escolha',
+  instrucao: 'Complete with have or has',
+  itens: [
+    { frase: 'I ___ salad for lunch.', opcoes: HV, certa: 0, traducao: 'Eu como salada no almoço.' },
+    { frase: 'Pedro ___ cereal for breakfast.', opcoes: HV, certa: 1, traducao: 'O Pedro come cereal no café da manhã.' },
+    { frase: 'My parents ___ dinner at home.', opcoes: HV, certa: 0, traducao: 'Meus pais jantam em casa.' },
+    { frase: 'The baby ___ milk in the morning.', opcoes: HV, certa: 1, traducao: 'O bebê toma leite de manhã.' },
+    { frase: 'You ___ juice in the morning.', opcoes: HV, certa: 0, traducao: 'Você toma suco de manhã.' },
+    { frase: 'My friend and I ___ lunch at school.', opcoes: HV, certa: 0, traducao: 'Meu amigo e eu almoçamos na escola.' },
+    { frase: 'Our teacher ___ tea in the afternoon.', opcoes: HV, certa: 1, traducao: 'Nossa professora toma chá à tarde.' },
+    { frase: 'Ana and Lucas ___ pizza on Friday.', opcoes: HV, certa: 0, traducao: 'A Ana e o Lucas comem pizza na sexta.' },
+    { frase: 'My brother ___ eggs and bread for breakfast.', opcoes: HV, certa: 1, traducao: 'Meu irmão come ovos e pão no café da manhã.' },
+    { frase: 'They ___ fish for dinner on Tuesday.', opcoes: HV, certa: 0, traducao: 'Eles comem peixe no jantar na terça.' },
+    { frase: 'She ___ a sandwich at work.', opcoes: HV, certa: 1, traducao: 'Ela come um sanduíche no trabalho.' },
+    { frase: 'My dog ___ its food in the morning.', opcoes: HV, certa: 1, traducao: 'Meu cachorro come a comida dele de manhã.' },
+    { instrucao: 'Complete with the meal', frase: 'In the morning, we have ___.', opcoes: ['breakfast', 'lunch', 'dinner'], certa: 0, traducao: 'De manhã, nós tomamos café da manhã.' },
+    { instrucao: 'Complete with the meal', frase: 'In the evening, I have ___.', opcoes: ['breakfast', 'dinner', 'lunch'], certa: 1, traducao: 'À noite, eu janto.' },
+    { instrucao: 'Complete with the meal', frase: 'In the afternoon, I have a ___.', opcoes: ['dinner', 'breakfast', 'snack'], certa: 2, traducao: 'À tarde, eu faço um lanche.' },
+    { instrucao: 'Complete with the day', frase: 'Monday, Tuesday, ___, Thursday.', opcoes: ['Wednesday', 'Friday', 'Sunday'], certa: 0, traducao: 'Segunda, terça, quarta, quinta.' },
+    { instrucao: 'Complete with the day', frase: 'Thursday, ___, Saturday.', opcoes: ['Sunday', 'Friday', 'Monday'], certa: 1, traducao: 'Quinta, sexta, sábado.' },
+    { instrucao: 'Complete with the day', frase: 'Saturday and Sunday are the ___.', opcoes: ['week', 'morning', 'weekend'], certa: 2, traducao: 'Sábado e domingo são o fim de semana.' },
+    { instrucao: 'Complete with the preposition', frase: 'I have eggs ___ breakfast.', opcoes: ['for', 'in', 'on'], certa: 0, traducao: 'Eu como ovos no café da manhã.' },
+    { instrucao: 'Complete with the preposition', frase: 'She has a snack ___ the afternoon.', opcoes: ['on', 'in', 'for'], certa: 1, traducao: 'Ela faz um lanche à tarde.' },
+    { instrucao: 'Complete with the preposition', frase: 'We have pizza ___ Friday.', opcoes: ['in', 'for', 'on'], certa: 2, traducao: 'Nós comemos pizza na sexta.' },
+    { instrucao: CERTA, opcoes: ['She have coffee for breakfast.', 'She has coffee for breakfast.', 'She has coffee for a breakfast.'], certa: 1, traducao: 'Ela toma café no café da manhã.' },
+    { instrucao: CERTA, opcoes: ['I have a lunch at work.', 'I has lunch at work.', 'I have lunch at work.'], certa: 2, traducao: 'Eu almoço no trabalho.' },
+    { instrucao: CERTA, opcoes: ['My brothers have pasta for dinner.', 'My brothers has pasta for dinner.', 'My brothers haves pasta for dinner.'], certa: 0, traducao: 'Meus irmãos comem macarrão no jantar.' }
+  ]
+});
+</script>
+</body>
+</html>

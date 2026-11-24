@@ -44,7 +44,7 @@ const prox = (k, opcoes, certa, traducao) => ({
 });
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 6, num: 3, tipo: 'escolha',
-  instrucao: 'Leia a conversa e escolha a próxima fala',
+  instrucao: 'Read the conversation and choose the next line',
   itens: [
     prox(1, ['C-L-A-R-K.', 'Good afternoon! My name is Sophie Clark.', "You're welcome."], 1, 'Boa tarde! Meu nome é Sophie Clark.'),
     prox(2, ["I'm from Australia.", 'Sure. C-L-A-R-K.', 'How do you spell your last name?'], 2, 'Como você soletra o seu sobrenome?'),
@@ -58,14 +58,14 @@ DysePratica.iniciar({
     prox(10, ['Your room are number nine.', 'Your room is number nine. Enjoy your stay!', 'Good afternoon!'], 1, 'O seu quarto é o número nove. Aproveite a sua estadia!'),
     prox(11, ["You're welcome.", 'Good afternoon! My name is Sophie Clark.', 'Thank you!'], 2, 'Obrigada!'),
     prox(12, ["You're welcome.", 'Enjoy your stay, Mike!', 'Is she from Australia?'], 0, 'De nada.'),
-    { instrucao: 'Qual é o sobrenome da hóspede?', frase: 'My name is Sophie ___.', opcoes: ['Sydney', 'Clark', 'Smith'], certa: 1, traducao: 'Meu nome é Sophie Clark.' },
-    { instrucao: 'De que país ela é?', frase: "I'm from ___. I'm from Sydney.", opcoes: ['Canada', 'England', 'Australia'], certa: 2, traducao: 'Eu sou da Austrália. Eu sou de Sydney.' },
-    { instrucao: 'De que cidade ela é?', frase: "I'm from Australia. I'm from ___.", opcoes: ['Sydney', 'Toronto', 'London'], certa: 0, traducao: 'Eu sou da Austrália. Eu sou de Sydney.' },
-    { instrucao: 'Qual é o número do quarto?', frase: 'Your room is number ___.', opcoes: ['five', 'nine', 'seven'], certa: 1, traducao: 'O seu quarto é o número nove.' },
-    { instrucao: 'Qual é o telefone da Sophie?', frase: "It's ___.", opcoes: ['555-3810', '555-8013', '555-3018'], certa: 2, traducao: 'É 555-3018.' },
-    { instrucao: 'O que o Mike pede?', frase: 'Could you ___, please?', opcoes: ['repeat', 'spell', 'enjoy'], certa: 0, traducao: 'Você poderia repetir, por favor?' },
-    { instrucao: 'O que o Mike pergunta primeiro?', frase: 'How do you ___ your last name?', opcoes: ['repeat', 'spell', 'welcome'], certa: 1, traducao: 'Como você soletra o seu sobrenome?' },
-    { instrucao: 'Como o Mike responde ao "Thank you!"?', frase: "You're ___.", opcoes: ['OK', 'nine', 'welcome'], certa: 2, traducao: 'De nada.' }
+    { instrucao: "What's the guest's surname?", frase: 'My name is Sophie ___.', opcoes: ['Sydney', 'Clark', 'Smith'], certa: 1, traducao: 'Meu nome é Sophie Clark.' },
+    { instrucao: 'What country is she from?', frase: "I'm from ___. I'm from Sydney.", opcoes: ['Canada', 'England', 'Australia'], certa: 2, traducao: 'Eu sou da Austrália. Eu sou de Sydney.' },
+    { instrucao: 'What city is she from?', frase: "I'm from Australia. I'm from ___.", opcoes: ['Sydney', 'Toronto', 'London'], certa: 0, traducao: 'Eu sou da Austrália. Eu sou de Sydney.' },
+    { instrucao: "What's the room number?", frase: 'Your room is number ___.', opcoes: ['five', 'nine', 'seven'], certa: 1, traducao: 'O seu quarto é o número nove.' },
+    { instrucao: "What's Sophie's phone number?", frase: "It's ___.", opcoes: ['555-3810', '555-8013', '555-3018'], certa: 2, traducao: 'É 555-3018.' },
+    { instrucao: 'What does Mike ask for?', frase: 'Could you ___, please?', opcoes: ['repeat', 'spell', 'enjoy'], certa: 0, traducao: 'Você poderia repetir, por favor?' },
+    { instrucao: "What's Mike's first question?", frase: 'How do you ___ your last name?', opcoes: ['repeat', 'spell', 'welcome'], certa: 1, traducao: 'Como você soletra o seu sobrenome?' },
+    { instrucao: 'How does Mike answer "Thank you!"?', frase: "You're ___.", opcoes: ['OK', 'nine', 'welcome'], certa: 2, traducao: 'De nada.' }
   ]
 });
 </script>

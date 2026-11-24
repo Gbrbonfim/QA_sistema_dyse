@@ -28,10 +28,10 @@ const IC = { mother: 'woman', father: 'man', wife: 'woman', husband: 'man', son:
   granddaughter: 'girl', aunt: 'woman_2', uncle: 'man_2', cousin: 'person', parents: 'escalator_warning',
   stepmother: 'woman_2', baby: 'child_care', children: 'groups' };
 const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
-const FRASE = 'Escute a frase e escolha a palavra de família';
+const FRASE = 'Listen to the sentence and choose the family word';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 10, num: 1, tipo: 'imagem',
-  instrucao: 'Escute a palavra e escolha',
+  instrucao: 'Listen to the word and choose',
   itens: [
     { audioTexto: 'mother', opcoes: op('mother', 'father', 'daughter', 'son'), certa: 0 },
     { audioTexto: 'father', opcoes: op('mother', 'father', 'brother', 'grandfather'), certa: 1 },

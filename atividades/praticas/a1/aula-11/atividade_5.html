@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 11 · Adjectives</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 11 · Gramática
+   Alinhado ao slide "Class 11: Dog Lovers" — Grammar Point (posição do adjetivo e adjetivo sem
+   plural) e Vocabulary (pares de opostos: big / small, fast / slow, cheap / expensive...).
+   Conteúdo NOVO e mais difícil: mistura a / an, is / are e o adjetivo pelo contexto.
+   24 questões: 8 estrutura + 7 opostos + 6 contexto + 3 frase correta. */
+const OP = "What's the opposite?";
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 11, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: CERTA, opcoes: ['The French Bulldog lazy is.', 'The French Bulldog is lazy.', 'The French Bulldog is lazys.'], certa: 1, traducao: 'O Buldogue Francês é preguiçoso.' },
+    { instrucao: CERTA, opcoes: ['The Golden Retriever is a friendly dog.', 'The Golden Retriever is a dog friendly.', 'The Golden Retriever is an friendly dog.'], certa: 0, traducao: 'O Golden Retriever é um cachorro amigável.' },
+    { instrucao: CERTA, opcoes: ['They are bigs dogs.', 'They are dogs big.', 'They are big dogs.'], certa: 2, traducao: 'Eles são cachorros grandes.' },
+    { frase: 'Poodles are ___ dogs.', opcoes: ['smarts', 'smart'], certa: 1, traducao: 'Poodles são cachorros espertos.' },
+    { frase: "It's ___ expensive perfume.", opcoes: ['a', 'an'], certa: 1, traducao: 'É um perfume caro.' },
+    { frase: "It's ___ cheap perfume.", opcoes: ['a', 'an'], certa: 0, traducao: 'É um perfume barato.' },
+    { frase: 'They are ___.', opcoes: ['lazy dogs', 'lazys dogs', 'dogs lazy'], certa: 0, traducao: 'Eles são cachorros preguiçosos.' },
+    { frase: 'Chihuahuas ___ small dogs.', opcoes: ['is', 'are'], certa: 1, traducao: 'Chihuahuas são cachorros pequenos.' },
+    { instrucao: OP, frase: 'big → ___', opcoes: ['small', 'long', 'old'], certa: 0, traducao: 'grande → pequeno' },
+    { instrucao: OP, frase: 'fast → ___', opcoes: ['short', 'slow', 'lazy'], certa: 1, traducao: 'rápido → lento' },
+    { instrucao: OP, frase: 'cheap → ___', opcoes: ['bad', 'new', 'expensive'], certa: 2, traducao: 'barato → caro' },
+    { instrucao: OP, frase: 'friendly → ___', opcoes: ['unfriendly', 'friendlys', 'cute'], certa: 0, traducao: 'amigável → pouco amigável' },
+    { instrucao: OP, frase: 'good → ___', opcoes: ['old', 'bad', 'long'], certa: 1, traducao: 'bom → ruim' },
+    { instrucao: OP, frase: 'old → ___', opcoes: ['big', 'cute', 'new'], certa: 2, traducao: 'velho → novo' },
+    { instrucao: OP, frase: 'long → ___', opcoes: ['short', 'slow', 'small'], certa: 0, traducao: 'comprido → curto' },
+    { frase: "The dog is ___. Where's its water?", opcoes: ['hungry', 'thirsty', 'lazy'], certa: 1, traducao: 'O cachorro está com sede. Cadê a água dele?' },
+    { frase: "The baby is ___. Where's the food?", opcoes: ['hungry', 'thirsty', 'clean'], certa: 0, traducao: 'O bebê está com fome. Cadê a comida?' },
+    { frase: 'Greyhounds are very ___ dogs.', opcoes: ['slow', 'lazy', 'fast'], certa: 2, traducao: 'Greyhounds são cachorros muito rápidos.' },
+    { frase: 'The Great Dane is a very ___ dog.', opcoes: ['small', 'big', 'short'], certa: 1, traducao: 'O Dogue Alemão (Great Dane) é um cachorro muito grande.' },
+    { frase: "It's a Ferrari. It's a very ___ car.", opcoes: ['fast', 'cheap', 'slow'], certa: 0, traducao: 'É uma Ferrari. É um carro muito rápido.' },
+    { frase: 'Our dog is ___ old.', opcoes: ['a', 'very', 'an'], certa: 1, traducao: 'O nosso cachorro é muito velho.' },
+    { instrucao: CERTA, opcoes: ['Their dogs are friendlys.', 'Their dogs is friendly.', 'Their dogs are friendly.'], certa: 2, traducao: 'Os cachorros deles são amigáveis.' },
+    { instrucao: CERTA, opcoes: ['Is it a green house?', 'Is it a house green?', 'Is it an green house?'], certa: 0, traducao: 'É uma casa verde?' },
+    { instrucao: CERTA, opcoes: ['Labradors are dogs friendly.', 'Labradors are friendly dogs.', 'Labradors friendly are dogs.'], certa: 1, traducao: 'Labradores são cachorros amigáveis.' }
+  ]
+});
+</script>
+</body>
+</html>

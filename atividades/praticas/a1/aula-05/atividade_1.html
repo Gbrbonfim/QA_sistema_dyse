@@ -25,10 +25,10 @@
 const PAIS = { it: 'Italy', es: 'Spain', fr: 'France', pt: 'Portugal', jp: 'Japan', cn: 'China', kr: 'South Korea', 'in': 'India', de: 'Germany', at: 'Austria', ch: 'Switzerland',
   pk: 'Pakistan', th: 'Thailand', 'gb-eng': 'England', us: 'The USA', ca: 'Canada', au: 'Australia', mx: 'Mexico', ar: 'Argentina', br: 'Brazil', ru: 'Russia', gr: 'Greece' };
 const op = (...cs) => cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' }));
-const CUMP = 'Escute o cumprimento e escolha o país';
+const CUMP = 'Listen to the greeting and choose the country';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 5, num: 1, tipo: 'imagem',
-  instrucao: 'Escute a frase e escolha o país',
+  instrucao: 'Listen to the sentence and choose the country',
   itens: [
     { audioTexto: "She's from Italy.", opcoes: op('it', 'es', 'fr', 'pt'), certa: 0 },
     { audioTexto: "They aren't from Japan. They're from China.", opcoes: op('jp', 'cn', 'kr', 'in'), certa: 1 },

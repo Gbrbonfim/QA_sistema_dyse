@@ -46,7 +46,7 @@ const prox = (k, opcoes, certa, traducao) => ({
 });
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 9, num: 3, tipo: 'escolha',
-  instrucao: 'Leia a conversa e escolha a próxima fala',
+  instrucao: 'Read the conversation and choose the next line',
   itens: [
     prox(1, ['My favorite color is green. And you?', 'I favorite color is green. And you?', 'Lasagna! And you?'], 0, 'Minha cor favorita é verde. E você?'),
     prox(2, ["Pasta! I'm a pasta fan!", 'My favorite color is purple.', 'Her favorite color is purple.'], 1, 'Minha cor favorita é roxo.'),
@@ -60,14 +60,14 @@ DysePratica.iniciar({
     prox(10, ['Bad Guy. Billie Eilish is my favorite singer.', 'Bad Guy. Billie Eilish is I favorite singer.', 'Lasagna! And you?'], 0, 'Bad Guy. A Billie Eilish é a minha cantora favorita.'),
     prox(11, ['Yes, she is. And her songs are great!', "Billie Eilish? She's American!", "Billie Eilish? Her's American!"], 1, 'Billie Eilish? Ela é americana!'),
     prox(12, ['Yes, she is. And she songs are great!', "Pasta! I'm a pasta fan!", 'Yes, she is. And her songs are great!'], 2, 'Sim, ela é. E as músicas dela são ótimas!'),
-    { instrucao: 'Qual é a cor favorita do Sam?', frase: 'His favorite color is ___.', opcoes: ['green', 'purple', 'pink'], certa: 0, traducao: 'A cor favorita dele é verde.' },
-    { instrucao: 'Qual é a cor favorita da Bia?', frase: 'Her favorite color is ___.', opcoes: ['green', 'purple', 'black'], certa: 1, traducao: 'A cor favorita dela é roxo.' },
-    { instrucao: 'Qual é a comida favorita do Sam?', frase: 'His favorite food is ___.', opcoes: ['lasagna', 'pizza', 'pasta'], certa: 2, traducao: 'A comida favorita dele é macarrão.' },
-    { instrucao: 'Qual é o nome do cachorro do Sam?', frase: 'Its name is ___.', opcoes: ['Toby', 'Mia', 'Lulu'], certa: 0, traducao: 'O nome dele é Toby.' },
-    { instrucao: 'Complete a frase sobre os gatos da Bia:', frase: '___ names are Mia and Lulu.', opcoes: ['His', 'Their', 'Its'], certa: 1, traducao: 'Os nomes deles são Mia e Lulu.' },
-    { instrucao: 'Quem é a cantora favorita da Bia?', frase: 'Her favorite singer is ___.', opcoes: ['Bruno Mars', 'Adele', 'Billie Eilish'], certa: 2, traducao: 'A cantora favorita dela é a Billie Eilish.' },
-    { instrucao: 'Qual é a nacionalidade da Billie Eilish?', frase: "She's ___.", opcoes: ['American', 'English', 'Brazilian'], certa: 0, traducao: 'Ela é americana.' },
-    { instrucao: 'Quem é o cantor favorito do Sam?', frase: 'His favorite singer is ___.', opcoes: ['Billie Eilish', 'Bruno Mars', 'Toby'], certa: 1, traducao: 'O cantor favorito dele é o Bruno Mars.' }
+    { instrucao: "What's Sam's favorite color?", frase: 'His favorite color is ___.', opcoes: ['green', 'purple', 'pink'], certa: 0, traducao: 'A cor favorita dele é verde.' },
+    { instrucao: "What's Bia's favorite color?", frase: 'Her favorite color is ___.', opcoes: ['green', 'purple', 'black'], certa: 1, traducao: 'A cor favorita dela é roxo.' },
+    { instrucao: "What's Sam's favorite food?", frase: 'His favorite food is ___.', opcoes: ['lasagna', 'pizza', 'pasta'], certa: 2, traducao: 'A comida favorita dele é macarrão.' },
+    { instrucao: "What's the name of Sam's dog?", frase: 'Its name is ___.', opcoes: ['Toby', 'Mia', 'Lulu'], certa: 0, traducao: 'O nome dele é Toby.' },
+    { instrucao: "Complete the sentence about Bia's cats:", frase: '___ names are Mia and Lulu.', opcoes: ['His', 'Their', 'Its'], certa: 1, traducao: 'Os nomes deles são Mia e Lulu.' },
+    { instrucao: "Who is Bia's favorite singer?", frase: 'Her favorite singer is ___.', opcoes: ['Bruno Mars', 'Adele', 'Billie Eilish'], certa: 2, traducao: 'A cantora favorita dela é a Billie Eilish.' },
+    { instrucao: "What's Billie Eilish's nationality?", frase: "She's ___.", opcoes: ['American', 'English', 'Brazilian'], certa: 0, traducao: 'Ela é americana.' },
+    { instrucao: "Who is Sam's favorite singer?", frase: 'His favorite singer is ___.', opcoes: ['Billie Eilish', 'Bruno Mars', 'Toby'], certa: 1, traducao: 'O cantor favorito dele é o Bruno Mars.' }
   ]
 });
 </script>

@@ -24,10 +24,10 @@
 const PAIS = { ar: 'Argentina', mx: 'Mexico', pt: 'Portugal', au: 'Australia', ie: 'Ireland', cl: 'Chile', co: 'Colombia', pe: 'Peru', kr: 'South Korea', eg: 'Egypt', gr: 'Greece', se: 'Sweden',
   br: 'Brazil', jp: 'Japan', it: 'Italy', ch: 'Switzerland', fr: 'France', 'in': 'India', cn: 'China', de: 'Germany', 'gb-eng': 'England', us: 'The USA', ca: 'Canada', es: 'Spain' };
 const op = (...cs) => cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' }));
-const FAMOSO = 'Escute sobre a pessoa famosa e escolha o país dela';
+const FAMOSO = 'Listen to the famous person and choose the country';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 1, num: 6, tipo: 'imagem',
-  instrucao: 'Escute a frase e escolha a bandeira do país',
+  instrucao: 'Listen to the sentence and choose the flag',
   itens: [
     { audioTexto: 'Sofia and Leo are from Argentina.', opcoes: op('ar', 'gr', 'se', 'pe'), certa: 0 },
     { audioTexto: 'Mia is from Ireland.', opcoes: op('it', 'ie', 'mx', 'in'), certa: 1 },

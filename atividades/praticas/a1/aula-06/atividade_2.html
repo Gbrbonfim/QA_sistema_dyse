@@ -22,11 +22,11 @@
    hotel: first name, last name, address, phone number, e-mail; How do you spell...?; Could you
    repeat, please?; Enjoy your stay; You're welcome). Conteúdo NOVO: outras respostas e frases.
    A isca é sempre uma palavra que não cabe em nenhuma posição. 20 questões. */
-const P = 'Monte a pergunta da recepção:';
-const R = 'Monte a resposta do hóspede:';
+const P = "Make the receptionist's question:";
+const R = "Make the guest's answer:";
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 6, num: 2, tipo: 'montar',
-  instrucao: 'Clique nas palavras e monte a frase (uma palavra sobra)',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
   itens: [
     { contexto: P, palavras: ["What's", 'your', 'first', 'name'], isca: ['you'], fim: '?', traducao: 'Qual é o seu primeiro nome?' },
     { contexto: P, palavras: ["What's", 'your', 'last', 'name'], isca: ['you'], fim: '?', traducao: 'Qual é o seu sobrenome?' },
@@ -43,11 +43,11 @@ DysePratica.iniciar({
     { contexto: R, palavras: ["I'm", 'from', 'Brazil'], isca: ['is'], fim: '.', traducao: 'Eu sou do Brasil.' },
     { contexto: R, palavras: ["You're", 'welcome'], isca: ['Your'], fim: '.', traducao: 'De nada.' },
     { contexto: R, palavras: ['Sure.', 'C-O-S-T-A'], isca: ['Are'], fim: '.', traducao: 'Claro. C-O-S-T-A.' },
-    { contexto: 'Monte a pergunta do hóspede:', palavras: ['Where', 'is', 'the', 'gym'], isca: ['are'], fim: '?', traducao: 'Onde fica a academia?' },
-    { contexto: 'Monte a pergunta do hóspede:', palavras: ['Where', 'are', 'the', 'towels'], isca: ['is'], fim: '?', traducao: 'Onde estão as toalhas?' },
-    { contexto: 'Monte a pergunta do hóspede:', palavras: ['Is', 'it', 'a', 'double', 'bed'], isca: ['an'], fim: '?', traducao: 'É uma cama de casal?' },
-    { contexto: 'Monte a resposta da recepção:', palavras: ['No,', "it's", 'a', 'single', 'bed'], isca: ['an'], fim: '.', traducao: 'Não, é uma cama de solteiro.' },
-    { contexto: 'Monte a pergunta do hóspede:', palavras: ['Is', 'breakfast', 'in', 'the', 'bar'], isca: ['Are'], fim: '?', traducao: 'O café da manhã é no bar?' }
+    { contexto: "Make the guest's question:", palavras: ['Where', 'is', 'the', 'gym'], isca: ['are'], fim: '?', traducao: 'Onde fica a academia?' },
+    { contexto: "Make the guest's question:", palavras: ['Where', 'are', 'the', 'towels'], isca: ['is'], fim: '?', traducao: 'Onde estão as toalhas?' },
+    { contexto: "Make the guest's question:", palavras: ['Is', 'it', 'a', 'double', 'bed'], isca: ['an'], fim: '?', traducao: 'É uma cama de casal?' },
+    { contexto: "Make the receptionist's answer:", palavras: ['No,', "it's", 'a', 'single', 'bed'], isca: ['an'], fim: '.', traducao: 'Não, é uma cama de solteiro.' },
+    { contexto: "Make the guest's question:", palavras: ['Is', 'breakfast', 'in', 'the', 'bar'], isca: ['Are'], fim: '?', traducao: 'O café da manhã é no bar?' }
   ]
 });
 </script>

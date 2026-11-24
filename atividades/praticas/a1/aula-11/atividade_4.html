@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 11 · Describe a dog</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 11 · Fala
+   Alinhado ao slide "Class 11: Dog Lovers" — Vocabulary (listen and repeat os adjetivos),
+   Grammar Point (adjetivo + substantivo ligados: "a friendly dog") e Speaking and Writing ("My
+   favorite dog is the Poodle..."). Conteúdo NOVO: outras raças e frases. 20 questões. */
+const PAL = 'Listen and record the word';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 11, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'friendly', traducao: 'amigável', nota: 'São duas sílabas: FREND-ly.' },
+    { instrucao: PAL, frase: 'hungry', traducao: 'com fome' },
+    { instrucao: PAL, frase: 'thirsty', traducao: 'com sede', nota: 'O "th" é com a língua entre os dentes.' },
+    { instrucao: PAL, frase: 'expensive', traducao: 'caro' },
+    { instrucao: PAL, frase: 'lazy', traducao: 'preguiçoso', nota: 'Soa como "LEI-zi".' },
+    { instrucao: PAL, frase: 'smart', traducao: 'esperto, inteligente' },
+    { instrucao: PAL, frase: 'noisy', traducao: 'barulhento', nota: 'Soa como "NÓI-zi".' },
+    { instrucao: PAL, frase: 'cute', traducao: 'fofo' },
+    { instrucao: PAL, frase: 'clean', traducao: 'limpo' },
+    { instrucao: PAL, frase: 'unfriendly', traducao: 'pouco amigável' },
+    { frase: "It's a small dog.", dica: 0, traducao: 'É um cachorro pequeno.' },
+    { frase: "They're big dogs.", dica: 0, traducao: 'Eles são cachorros grandes.', nota: 'Big não ganha "s": big dogs.' },
+    { frase: 'Poodles are smart dogs.', dica: 0, traducao: 'Poodles são cachorros espertos.' },
+    { frase: 'The French Bulldog is lazy.', dica: 0, traducao: 'O Buldogue Francês é preguiçoso.' },
+    { frase: 'The baby is very hungry.', dica: 0, traducao: 'O bebê está com muita fome.' },
+    { frase: "It isn't a good laptop.", dica: 0, traducao: 'Não é um notebook bom.' },
+    { frase: 'Greyhounds are fast dogs.', dica: 0, traducao: 'Greyhounds são cachorros rápidos.' },
+    { frase: 'Chihuahuas are small dogs from Mexico.', dica: 0, traducao: 'Chihuahuas são cachorros pequenos do México.' },
+    { frase: 'My favorite dog is the Labrador. Labradors are friendly.', dica: 0, traducao: 'Meu cachorro favorito é o Labrador. Labradores são amigáveis.' },
+    { frase: "Is it a cheap phone? No, it's expensive.", dica: 0, traducao: 'É um celular barato? Não, é caro.' }
+  ]
+});
+</script>
+</body>
+</html>

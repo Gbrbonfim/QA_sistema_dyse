@@ -301,7 +301,7 @@
   /* IMAGEM — escute e escolha */
   function renderImagem(item){
     const main = $('#pxMain');
-    main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Escute e escolha a imagem correta') + '</p>' +
+    main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Listen and choose the right picture') + '</p>' +
       '<div class="px-imgs">' + item.opcoes.map((o, k) =>
         '<button type="button" class="px-img" id="pxImg' + k + '" onclick="DysePratica._img(' + k + ')">' +
           '<span class="key">' + 'ABCDEFGH'[k] + '</span><span class="ph">' +
@@ -361,10 +361,10 @@
           '<i class="tm">' + hora(k) + ((c.lado || 'a') === 'b' ? ' ' + I('done_all', 'tick') : '') + '</i></div>').join('') +
         '<div class="px-bubble ' + (item.ladoProximo || 'a') + ' next" id="pxNext"><b>' + esc(item.quemProximo || '') + '</b>' +
           '<span class="typing"><span></span><span></span><span></span></span></div></div>' +
-        '<div class="px-phone-bar"><span>Escolha a resposta abaixo…</span><span class="snd">' + I('send') + '</span></div></div>';
+        '<div class="px-phone-bar"><span>Choose the answer below…</span><span class="snd">' + I('send') + '</span></div></div>';
       S.cur.horaProx = hora(item.chat.length);
     }
-    main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Selecione uma opção para completar a frase') + '</p>' + topo +
+    main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Choose an option to complete the sentence') + '</p>' + topo +
       (item.frase ? '<div class="px-sentence" id="pxSent">' + frasePreenchida(item, null) + '</div>' : '') +
       '<div class="px-opts">' + item.opcoes.map((o, k) =>
         '<button type="button" class="px-opt" id="pxOpt' + k + '" onclick="DysePratica._sel(' + k + ')"><span class="dot">' + 'ABCDEFGH'[k] + '</span><span>' + esc(o) + '</span></button>').join('') + '</div>';
@@ -416,7 +416,7 @@
     S.cur.banco = shuffle(pecas.map((t, k) => ({ t: t, k: k })), S.i + 3);
     S.cur.slots = Array(item.palavras.length).fill(null);
     const main = $('#pxMain');
-    main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Clique nas palavras e monte a frase') + '</p>' +
+    main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Click the words and make the sentence') + '</p>' +
       (item.contexto ? '<div class="px-ctx">' + esc(item.contexto) + '</div>' : '') +
       '<div class="px-slots" id="pxSlots"></div><div class="px-bank" id="pxBank"></div>';
     desenharMontar();
@@ -589,7 +589,7 @@
   function renderFala(item){
     item.completa = item.frase;
     const main = $('#pxMain');
-    main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Escute e grave') + '</p>' +
+    main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Listen and record') + '</p>' +
       '<div class="px-scene"><div class="card">' + I('record_voice_over') + '</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>' +
       '<div class="px-words" id="pxWords"></div>' +
       '<div id="pxGauge"></div><div class="px-heard" id="pxHeard"></div>' +

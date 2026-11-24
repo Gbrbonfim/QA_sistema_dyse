@@ -22,11 +22,11 @@
    (forme a pergunta; cuidado com o "from") e short answers. Conteúdo NOVO: outras pessoas.
    A pergunta começa com Is/Are maiúsculo e a resposta com Yes,/No, — só uma ordem possível.
    A isca é sempre uma forma errada do verbo. 20 questões. */
-const PERG = 'Monte a pergunta:';
-const RESP = 'Monte a resposta curta:';
+const PERG = 'Make the question:';
+const RESP = 'Make the short answer:';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 4, num: 2, tipo: 'montar',
-  instrucao: 'Clique nas palavras e monte a frase (uma palavra sobra)',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
   itens: [
     { contexto: PERG + ' Elena / Greek?', palavras: ['Is', 'Elena', 'Greek'], isca: ['Are'], fim: '?', traducao: 'A Elena é grega?' },
     { contexto: PERG + ' you / Mexican?', palavras: ['Are', 'you', 'Mexican'], isca: ['Is'], fim: '?', traducao: 'Você é mexicano(a)?' },
@@ -44,10 +44,10 @@ DysePratica.iniciar({
     { contexto: RESP + ' "Is he from Austria?" (não)', palavras: ['No,', 'he', "isn't"], isca: ["aren't"], fim: '.', traducao: 'Não, ele não é.' },
     { contexto: RESP + ' "Are we in class 4?" (não)', palavras: ['No,', 'we', "aren't"], isca: ["isn't"], fim: '.', traducao: 'Não, nós não estamos.' },
     { contexto: RESP + ' "Is pizza Italian?" (sim)', palavras: ['Yes,', 'it', 'is'], isca: ['am'], fim: '.', traducao: 'Sim, é.' },
-    { contexto: 'Responda sobre o Luka Dončić (esloveno): "Is he Austrian?" (1/2)', palavras: ['No,', 'he', "isn't"], isca: ["aren't"], fim: '.', traducao: 'Não, ele não é.' },
-    { contexto: 'Responda sobre o Luka Dončić (esloveno): "Is he Austrian?" (2/2)', palavras: ["He's", 'Slovenian'], isca: ['His'], fim: '.', traducao: 'Ele é esloveno.' },
-    { contexto: 'Responda sobre o Papa Francisco (argentino): "Is he Italian?" (1/2)', palavras: ['No,', 'he', "isn't"], isca: ["aren't"], fim: '.', traducao: 'Não, ele não é.' },
-    { contexto: 'Responda sobre o Papa Francisco (argentino): "Is he Italian?" (2/2)', palavras: ["He's", 'Argentinian'], isca: ['His'], fim: '.', traducao: 'Ele é argentino.' }
+    { contexto: 'Answer about Luka Dončić (Slovenian): "Is he Austrian?" (1/2)', palavras: ['No,', 'he', "isn't"], isca: ["aren't"], fim: '.', traducao: 'Não, ele não é.' },
+    { contexto: 'Answer about Luka Dončić (Slovenian): "Is he Austrian?" (2/2)', palavras: ["He's", 'Slovenian'], isca: ['His'], fim: '.', traducao: 'Ele é esloveno.' },
+    { contexto: 'Answer about Pope Francis (Argentinian): "Is he Italian?" (1/2)', palavras: ['No,', 'he', "isn't"], isca: ["aren't"], fim: '.', traducao: 'Não, ele não é.' },
+    { contexto: 'Answer about Pope Francis (Argentinian): "Is he Italian?" (2/2)', palavras: ["He's", 'Argentinian'], isca: ['His'], fim: '.', traducao: 'Ele é argentino.' }
   ]
 });
 </script>

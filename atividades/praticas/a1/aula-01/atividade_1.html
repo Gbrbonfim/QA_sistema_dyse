@@ -24,10 +24,10 @@
 const PAIS = { ar: 'Argentina', mx: 'Mexico', pt: 'Portugal', au: 'Australia', ie: 'Ireland', cl: 'Chile', co: 'Colombia', pe: 'Peru', kr: 'South Korea', eg: 'Egypt', gr: 'Greece', se: 'Sweden',
   br: 'Brazil', jp: 'Japan', it: 'Italy', ch: 'Switzerland', fr: 'France', 'in': 'India', cn: 'China', de: 'Germany', 'gb-eng': 'England', us: 'The USA', ca: 'Canada', es: 'Spain' };
 const op = (...cs) => cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' }));
-const FRASE = 'Escute a frase e escolha a bandeira do país';
+const FRASE = 'Listen to the sentence and choose the flag';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 1, num: 1, tipo: 'imagem',
-  instrucao: 'Escute o país e escolha a bandeira certa',
+  instrucao: 'Listen to the country and choose the right flag',
   itens: [
     { audioTexto: 'Argentina', opcoes: op('ar', 'mx', 'pt', 'au'), certa: 0 },
     { audioTexto: 'Mexico', opcoes: op('co', 'mx', 'pe', 'cl'), certa: 1 },

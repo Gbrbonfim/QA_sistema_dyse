@@ -43,7 +43,7 @@ const prox = (k, opcoes, certa, traducao) => ({
 });
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 5, num: 3, tipo: 'escolha',
-  instrucao: 'Leia a conversa e escolha a próxima fala',
+  instrucao: 'Read the conversation and choose the next line',
   itens: [
     prox(1, ["Nice to meet you too. I'm Tom.", 'Bye, Laura!', 'Really? In England, we greet with a handshake.'], 0, 'Prazer em te conhecer também. Eu sou o Tom.'),
     prox(2, ["No, it isn't. But it's common in France.", 'Are you from the USA, Tom?', 'Bye, Laura!'], 1, 'Você é dos Estados Unidos, Tom?'),
@@ -56,15 +56,15 @@ DysePratica.iniciar({
     prox(9, ['Wow! And in Japan, people is bow.', 'Are you from the USA?', 'Wow! And in Japan, people bow.'], 2, 'Uau! E no Japão, as pessoas fazem reverência.'),
     prox(10, ['Cool! See you later, Tom!', 'Cool! See you later, Laura!', "I'm from Brazil."], 0, 'Legal! Até mais, Tom!'),
     prox(11, ['Bye, Tom!', 'Bye, Laura!', "I'm from England."], 1, 'Tchau, Laura!'),
-    { instrucao: 'De onde a Laura é?', frase: 'Laura is from ___.', opcoes: ['England', 'Brazil', 'the USA'], certa: 1, traducao: 'A Laura é do Brasil.' },
-    { instrucao: 'De onde o Tom é?', frase: 'Tom is from ___.', opcoes: ['England', 'the USA', 'France'], certa: 0, traducao: 'O Tom é da Inglaterra.' },
-    { instrucao: 'O Tom é dos Estados Unidos?', frase: 'No, he ___ from the USA.', opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'Não, ele não é dos Estados Unidos.' },
-    { instrucao: 'Como as pessoas se cumprimentam no Brasil?', frase: 'In Brazil, people greet with ___.', opcoes: ['a handshake', 'an air kiss', 'a bow'], certa: 1, traducao: 'No Brasil, as pessoas cumprimentam com um beijo no ar.' },
-    { instrucao: 'E na Inglaterra?', frase: 'In England, people greet with ___.', opcoes: ['an air kiss', 'a bow', 'a handshake'], certa: 2, traducao: 'Na Inglaterra, as pessoas cumprimentam com um aperto de mão.' },
-    { instrucao: 'O beijo no ar é comum na Inglaterra?', frase: 'No, it ___.', opcoes: ["isn't", "aren't", 'am not'], certa: 0, traducao: 'Não, não é.' },
-    { instrucao: 'Onde o beijo no ar é triplo, segundo a Laura?', frase: "In ___, it's triple.", opcoes: ['France', 'Russia', 'Brazil'], certa: 1, traducao: 'Na Rússia, é triplo.' },
-    { instrucao: 'O que as pessoas fazem no Japão, segundo o Tom?', frase: 'In Japan, people ___.', opcoes: ['kiss', 'show their tongue', 'bow'], certa: 2, traducao: 'No Japão, as pessoas fazem reverência.' },
-    { instrucao: 'Complete a pergunta da Laura:', frase: '___ the air kiss common in England?', opcoes: ['Are', 'Is', 'Am'], certa: 1, traducao: 'O beijo no ar é comum na Inglaterra?' }
+    { instrucao: 'Where is Laura from?', frase: 'Laura is from ___.', opcoes: ['England', 'Brazil', 'the USA'], certa: 1, traducao: 'A Laura é do Brasil.' },
+    { instrucao: 'Where is Tom from?', frase: 'Tom is from ___.', opcoes: ['England', 'the USA', 'France'], certa: 0, traducao: 'O Tom é da Inglaterra.' },
+    { instrucao: 'Is Tom from the USA?', frase: 'No, he ___ from the USA.', opcoes: ["isn't", "aren't", "'m not"], certa: 0, traducao: 'Não, ele não é dos Estados Unidos.' },
+    { instrucao: 'How do people say hello in Brazil?', frase: 'In Brazil, people greet with ___.', opcoes: ['a handshake', 'an air kiss', 'a bow'], certa: 1, traducao: 'No Brasil, as pessoas cumprimentam com um beijo no ar.' },
+    { instrucao: 'And in England?', frase: 'In England, people greet with ___.', opcoes: ['an air kiss', 'a bow', 'a handshake'], certa: 2, traducao: 'Na Inglaterra, as pessoas cumprimentam com um aperto de mão.' },
+    { instrucao: 'Is the air kiss common in England?', frase: 'No, it ___.', opcoes: ["isn't", "aren't", 'am not'], certa: 0, traducao: 'Não, não é.' },
+    { instrucao: 'Laura talks about a triple air kiss. Where?', frase: "In ___, it's triple.", opcoes: ['France', 'Russia', 'Brazil'], certa: 1, traducao: 'Na Rússia, é triplo.' },
+    { instrucao: 'Tom talks about Japan. What do people do there?', frase: 'In Japan, people ___.', opcoes: ['kiss', 'show their tongue', 'bow'], certa: 2, traducao: 'No Japão, as pessoas fazem reverência.' },
+    { instrucao: "Complete Laura's question:", frase: '___ the air kiss common in England?', opcoes: ['Are', 'Is', 'Am'], certa: 1, traducao: 'O beijo no ar é comum na Inglaterra?' }
   ]
 });
 </script>

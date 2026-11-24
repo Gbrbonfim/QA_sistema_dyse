@@ -25,10 +25,10 @@
 const MOEDA_IC = { '£': 'currency_pound', '$': 'attach_money', '€': 'euro' };
 const ic = l => /p$/.test(l) ? 'currency_pound' : (MOEDA_IC[l.charAt(0)] || 'sell');
 const op = (...ls) => ls.map(l => ({ label: l, icon: ic(l) }));
-const PRECO = 'Escute e escolha o preço';
+const PRECO = 'Listen and choose the price';
 DysePratica.iniciar({
   course: 'ativ-a1', aula: 8, num: 1, tipo: 'imagem',
-  instrucao: 'Escute e escolha o número',
+  instrucao: 'Listen and choose the number',
   itens: [
     { audioTexto: 'thirteen', opcoes: op('13', '30', '3', '31'), certa: 0, traducao: 'treze' },
     { audioTexto: 'forty', opcoes: op('14', '40', '4', '44'), certa: 1, traducao: 'quarenta' },
