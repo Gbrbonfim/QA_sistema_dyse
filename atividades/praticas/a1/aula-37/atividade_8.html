@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 38 Â· Tell me about your birthday</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 38 · Leitura
+   Alinhado ao slide "Class 37 and 38: Let's Celebrate" (parte Class 38) — Listening (duas
+   crianças contam o último aniversário) e Speaking and Writing (entrevistar o colega sobre um
+   aniversário marcante). Conteúdo NOVO: a Bia entrevista o Tom sobre o aniversário de 18 anos
+   dele. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Bia', 'Tom, tell me about a memorable birthday.'],
+  ['Tom', 'OK! My eighteenth birthday was amazing.'],
+  ['Bia', 'When was it?'],
+  ['Tom', 'It was on Friday, March 3rd.'],
+  ['Bia', 'Where did you go?'],
+  ['Tom', 'We didn\'t go out. We had a party at home.'],
+  ['Bia', 'How many people did you invite?'],
+  ['Tom', 'I invited thirty people!'],
+  ['Bia', 'Wow! What did you eat?'],
+  ['Tom', 'We ate pizza and a big chocolate cake.'],
+  ['Bia', 'What did you do?'],
+  ['Tom', 'We danced and sang Happy Birthday.'],
+  ['Bia', 'Did you get any presents?'],
+  ['Tom', 'Yes, I did. My parents gave me a guitar.'],
+  ['Bia', 'What time did the party finish?'],
+  ['Tom', 'It finished at two in the morning!']
+];
+const lado = q => q === 'Bia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 37, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['OK! My eighteenth birthday was amazing.', 'OK! My eighteenth birthday is amazing next year.', 'OK! My eighteenth birthday were amazing.'], 0, 'Tá! O meu aniversário de 18 anos foi incrível.'),
+    prox(2, ['When did it?', 'When was it?', 'When were it?'], 1, 'Quando foi?'),
+    prox(3, ['It is on Friday, March 3rd.', 'It did on Friday, March 3rd.', 'It was on Friday, March 3rd.'], 2, 'Foi na sexta-feira, 3 de março.'),
+    prox(4, ['Where did you go?', 'Where did you went?', 'Where you went?'], 0, 'Para onde vocês foram?'),
+    prox(5, ["We didn't went out.", "We didn't go out. We had a party at home.", "We don't go out. We have a party at home."], 1, 'Nós não saímos. Fizemos uma festa em casa.'),
+    prox(6, ['How many people you invited?', 'How many people did you invited?', 'How many people did you invite?'], 2, 'Quantas pessoas você convidou?'),
+    prox(7, ['I invited thirty people!', 'I invite thirty people yesterday!', 'I did invited thirty people!'], 0, 'Eu convidei trinta pessoas!'),
+    prox(8, ['Wow! What did you ate?', 'Wow! What did you eat?', 'Wow! What you ate?'], 1, 'Nossa! O que vocês comeram?'),
+    prox(9, ['We eated pizza and a big cake.', 'We eat pizza last night.', 'We ate pizza and a big chocolate cake.'], 2, 'Nós comemos pizza e um bolo de chocolate grande.'),
+    prox(10, ['What did you do?', 'What did you did?', 'What you did do?'], 0, 'O que vocês fizeram?'),
+    prox(11, ['We dance and sing Happy Birthday yesterday.', 'We danced and sang Happy Birthday.', 'We danced and singed Happy Birthday.'], 1, 'Nós dançamos e cantamos parabéns.'),
+    prox(12, ['Did you got any presents?', 'You did get any presents?', 'Did you get any presents?'], 2, 'Você ganhou algum presente?'),
+    { instrucao: 'How old was Tom on that birthday?', frase: 'He was ___.', opcoes: ['eighteen', 'eight', 'thirty'], certa: 0, traducao: 'Ele tinha dezoito anos.' },
+    { instrucao: 'When was the party?', frase: 'On Friday, March ___.', opcoes: ['30th', '3rd', '18th'], certa: 1, completa: 'On Friday, March third.', traducao: 'Na sexta-feira, 3 de março.' },
+    { instrucao: 'Where was the party?', frase: 'At ___.', opcoes: ['a restaurant', 'the park', 'home'], certa: 2, traducao: 'Em casa.' },
+    { instrucao: 'How many people did Tom invite?', frase: '___ people.', opcoes: ['Thirty', 'Thirteen', 'Eighteen'], certa: 0, traducao: 'Trinta pessoas.' },
+    { instrucao: 'What did they eat?', frase: 'Pizza and a chocolate ___.', opcoes: ['ice cream', 'cake', 'sandwich'], certa: 1, traducao: 'Pizza e um bolo de chocolate.' },
+    { instrucao: 'What did they do at the party?', frase: 'They ___ and sang Happy Birthday.', opcoes: ['cooked', 'had a picnic', 'danced'], certa: 2, traducao: 'Eles dançaram e cantaram parabéns.' },
+    { instrucao: 'What did Tom\'s parents give him?', frase: 'A ___.', opcoes: ['guitar', 'computer', 'bike'], certa: 0, traducao: 'Um violão.' },
+    { instrucao: 'What time did the party finish?', frase: 'At ___ in the morning.', opcoes: ['eight', 'two', 'three'], certa: 1, traducao: 'Às duas da manhã.' }
+  ]
+});
+</script>
+</body>
+</html>

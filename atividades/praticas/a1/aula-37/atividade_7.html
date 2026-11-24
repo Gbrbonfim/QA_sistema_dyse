@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 38 Â· My memorable birthday</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 38 · Escrita
+   Alinhado ao slide "Class 37 and 38: Let's Celebrate" (parte Class 38) — Speaking and Writing
+   (perguntas sobre um aniversário marcante: When was it? Who did you go with? Where did you go?
+   What did you eat / drink? Did you get any presents? What did you do? How old were you? How
+   many people did you invite? What was the weather like? What time did the party start?) e
+   exercício 7 (ordenar perguntas). Conteúdo NOVO. 20 questões: 10 perguntas + 10 respostas. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 37, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Quando foi?'), palavras: ['When', 'was', 'it'], isca: ['did'], fim: '?', traducao: 'Quando foi?' },
+    { contexto: M('Com quem você foi?'), palavras: ['Who', 'did', 'you', 'go', 'with'], isca: ['went'], fim: '?', traducao: 'Com quem você foi?' },
+    { contexto: M('Para onde vocês foram?'), palavras: ['Where', 'did', 'you', 'go'], isca: ['was'], fim: '?', traducao: 'Para onde vocês foram?' },
+    { contexto: M('O que vocês comeram?'), palavras: ['What', 'did', 'you', 'eat'], isca: ['ate'], fim: '?', traducao: 'O que vocês comeram?' },
+    { contexto: M('Você ganhou algum presente?'), palavras: ['Did', 'you', 'get', 'any', 'presents'], isca: ['got'], fim: '?', traducao: 'Você ganhou algum presente?' },
+    { contexto: M('Quantos anos você tinha?'), palavras: ['How', 'old', 'were', 'you'], isca: ['did'], fim: '?', traducao: 'Quantos anos você tinha?' },
+    { contexto: M('Quantas pessoas você convidou?'), palavras: ['How', 'many', 'people', 'did', 'you', 'invite'], isca: ['invited'], fim: '?', traducao: 'Quantas pessoas você convidou?' },
+    { contexto: M('Como estava o tempo?'), palavras: ['What', 'was', 'the', 'weather', 'like'], isca: ['did'], fim: '?', traducao: 'Como estava o tempo?' },
+    { contexto: M('A que horas a festa começou?'), palavras: ['What', 'time', 'did', 'the', 'party', 'start'], isca: ['started'], fim: '?', traducao: 'A que horas a festa começou?' },
+    { contexto: M('Que presente a Carla deu para a amiga dela?'), palavras: ['What', 'present', 'did', 'Carla', 'give', 'her', 'friend'], isca: ['gave'], fim: '?', traducao: 'Que presente a Carla deu para a amiga dela?' },
+    { contexto: M('Foi no sábado, 12 de abril.'), palavras: ['It', 'was', 'on', 'Saturday,', 'April', '12th'], isca: ['were'], fim: '.', traducao: 'Foi no sábado, 12 de abril.' },
+    { contexto: M('Eu fui com os meus amigos.'), palavras: ['I', 'went', 'with', 'my', 'friends'], isca: ['go'], fim: '.', traducao: 'Eu fui com os meus amigos.' },
+    { contexto: M('Nós fomos a um restaurante italiano.'), palavras: ['We', 'went', 'to', 'an', 'Italian', 'restaurant'], isca: ['did'], fim: '.', traducao: 'Nós fomos a um restaurante italiano.' },
+    { contexto: M('Nós comemos pizza e bolo.'), palavras: ['We', 'ate', 'pizza', 'and', 'cake'], isca: ['eat'], fim: '.', traducao: 'Nós comemos pizza e bolo.' },
+    { contexto: M('Nós bebemos refrigerante.'), palavras: ['We', 'drank', 'soft', 'drinks'], isca: ['drink'], fim: '.', traducao: 'Nós bebemos refrigerante.' },
+    { contexto: M('Eu ganhei um computador.'), palavras: ['I', 'got', 'a', 'computer'], isca: ['get'], fim: '.', traducao: 'Eu ganhei um computador.' },
+    { contexto: M('Eu tinha quinze anos.'), palavras: ['I', 'was', 'fifteen', 'years', 'old'], isca: ['had'], fim: '.', traducao: 'Eu tinha quinze anos.' },
+    { contexto: M('Eu convidei vinte pessoas.'), palavras: ['I', 'invited', 'twenty', 'people'], isca: ['invite'], fim: '.', traducao: 'Eu convidei vinte pessoas.' },
+    { contexto: M('Nós dançamos e cantamos parabéns.'), palavras: ['We', 'danced', 'and', 'sang', 'Happy', 'Birthday'], isca: ['sing'], fim: '.', traducao: 'Nós dançamos e cantamos parabéns.' },
+    { contexto: M('Começou às oito e terminou à meia-noite.'), palavras: ['It', 'started', 'at', 'eight', 'and', 'finished', 'at', 'midnight'], isca: ['starts'], fim: '.', traducao: 'Começou às oito e terminou à meia-noite.' }
+  ]
+});
+</script>
+</body>
+</html>

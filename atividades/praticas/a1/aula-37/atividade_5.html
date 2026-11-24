@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 37 Â· Past simple irregular</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 37 · Gramática
+   Alinhado ao slide "Class 37 and 38: Let's Celebrate" (parte Class 37) — Grammar Point: regulares
+   (-ed) x irregulares (mudam no passado); verbo no passado só na afirmativa; didn't / Did + forma
+   base; could / couldn't (sem did); expressões de tempo. Conteúdo NOVO. 24 questões. */
+const REG = 'Which verb is REGULAR (it finishes with -ed in the past)?';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 37, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'We ___ to the park yesterday.', opcoes: ['go', 'went', 'goed'], certa: 1, traducao: 'Nós fomos ao parque ontem.' },
+    { frase: 'My mother ___ $100 on food last week.', opcoes: ['spent', 'spend', 'spended'], certa: 0, traducao: 'A minha mãe gastou 100 dólares em comida semana passada.' },
+    { frase: 'James ___ breakfast with us this morning.', opcoes: ['has', 'haved', 'had'], certa: 2, traducao: 'O James tomou café da manhã com a gente hoje de manhã.' },
+    { frase: 'I ___ a delicious sandwich last night.', opcoes: ['ate', 'eated', 'eat'], certa: 0, traducao: 'Eu comi um sanduíche delicioso ontem à noite.' },
+    { frase: 'She ___ me a beautiful card.', opcoes: ['gives', 'gave', 'gived'], certa: 1, traducao: 'Ela me deu um cartão lindo.' },
+    { frase: 'The children ___ a lot of presents.', opcoes: ['getted', 'get', 'got'], certa: 2, traducao: 'As crianças ganharam muitos presentes.' },
+    { frase: 'They ___ soft drinks at the party.', opcoes: ['drank', 'drinked', 'drink'], certa: 0, traducao: 'Eles beberam refrigerante na festa.' },
+    { frase: 'I ___ my homework this morning.', opcoes: ['do', 'did', 'doed'], certa: 1, traducao: 'Eu fiz a lição de casa hoje de manhã.' },
+    { frase: "I didn't ___ my keys.", opcoes: ['found', 'finded', 'find'], certa: 2, traducao: 'Eu não encontrei as minhas chaves.' },
+    { frase: "She didn't ___ the cake.", opcoes: ['make', 'made', 'makes'], certa: 0, traducao: 'Ela não fez o bolo.' },
+    { frase: 'Did you ___ to the beach last weekend?', opcoes: ['went', 'go', 'goes'], certa: 1, traducao: 'Você foi à praia no fim de semana passado?' },
+    { frase: 'What did he ___ you?', opcoes: ['gave', 'gives', 'give'], certa: 2, traducao: 'O que ele te deu?' },
+    { frase: 'When I was a child, I ___ eat vegetables easily.', opcoes: ['could', 'can', 'does'], certa: 0, traducao: 'Quando eu era criança, eu comia legumes facilmente.' },
+    { frase: "I'm sorry, I ___ go to your party.", opcoes: ["didn't could", "couldn't", "can't not"], certa: 1, traducao: 'Desculpe, eu não pude ir à sua festa.' },
+    { frase: '___ you give Jane a present?', opcoes: ['Did could', 'Can did', 'Could'], certa: 2, traducao: 'Você poderia dar um presente para a Jane?' },
+    { frase: 'I ate pizza ___.', opcoes: ['last night', 'every day', 'tomorrow'], certa: 0, traducao: 'Eu comi pizza ontem à noite.' },
+    { frase: 'We spent the day with my family ___.', opcoes: ['next Saturday', 'last Saturday', 'every Saturday'], certa: 1, traducao: 'Nós passamos o dia com a minha família sábado passado.' },
+    { instrucao: REG, opcoes: ['make', 'find', 'want'], certa: 2, completa: 'want, wanted', traducao: 'want → wanted (regular).' },
+    { instrucao: REG, opcoes: ['start', 'spend', 'give'], certa: 0, completa: 'start, started', traducao: 'start → started (regular).' },
+    { instrucao: 'What is the past of "can"?', opcoes: ['canned', 'could', 'did can'], certa: 1, completa: 'could', traducao: 'can → could.' },
+    { instrucao: CERTA, opcoes: ['I didn\'t went to school.', 'I not went to school.', 'I didn\'t go to school.'], certa: 2, traducao: 'Eu não fui para a escola.' },
+    { instrucao: CERTA, opcoes: ['Did you eat the cake?', 'Did you ate the cake?', 'You did eat the cake?'], certa: 0, traducao: 'Você comeu o bolo?' },
+    { instrucao: CERTA, opcoes: ['He couldn\'t swimmed.', 'He couldn\'t swim.', 'He didn\'t could swim.'], certa: 1, traducao: 'Ele não sabia nadar.' },
+    { instrucao: CERTA, opcoes: ['How much you spent?', 'How much did you spent?', 'How much did you spend?'], certa: 2, traducao: 'Quanto você gastou?' }
+  ]
+});
+</script>
+</body>
+</html>

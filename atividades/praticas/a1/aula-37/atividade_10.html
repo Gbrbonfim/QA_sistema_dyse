@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 38 Â· Birthday questions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 38 · Gramática
+   Alinhado ao slide "Class 37 and 38: Let's Celebrate" (parte Class 38) — Speaking and Writing
+   (completar perguntas com was / did / were / get / invite / start) e exercício 7 (ordem das
+   perguntas: How much did you spend...? Could grandma make...? Who did you go to the party
+   with?), mais o vocabulário de aniversário. Conteúdo NOVO e mais difícil. 24 questões. */
+const CERTA = 'Which question is correct?';
+const ANS = 'Choose the best answer';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 37, num: 10, tipo: 'escolha',
+  instrucao: 'Complete the question',
+  itens: [
+    { frase: 'When ___ your last birthday?', opcoes: ['was', 'did', 'were'], certa: 0, traducao: 'Quando foi o seu último aniversário?' },
+    { frase: 'Who ___ you go with?', opcoes: ['were', 'did', 'was'], certa: 1, traducao: 'Com quem você foi?' },
+    { frase: 'How old ___ you?', opcoes: ['did', 'was', 'were'], certa: 2, traducao: 'Quantos anos você tinha?' },
+    { frase: 'What ___ the weather like?', opcoes: ['was', 'were', 'did'], certa: 0, traducao: 'Como estava o tempo?' },
+    { frase: 'How many people did you ___?', opcoes: ['invited', 'invite', 'inviting'], certa: 1, traducao: 'Quantas pessoas você convidou?' },
+    { frase: 'Did you ___ any presents?', opcoes: ['got', 'gets', 'get'], certa: 2, traducao: 'Você ganhou algum presente?' },
+    { frase: 'What time did the party ___?', opcoes: ['finish', 'finished', 'was'], certa: 0, traducao: 'A que horas a festa terminou?' },
+    { frase: 'What ___ you drink?', opcoes: ['was', 'did', 'were'], certa: 1, traducao: 'O que você bebeu?' },
+    { instrucao: ANS, frase: 'When was it? ___', opcoes: ['I went with my parents.', 'It was sunny.', 'It was on Sunday, May 5th.'], certa: 2, traducao: 'Foi no domingo, 5 de maio.' },
+    { instrucao: ANS, frase: 'Who did you go with? ___', opcoes: ['I went with my cousins.', 'We went to a party.', 'I was ten.'], certa: 0, traducao: 'Eu fui com os meus primos.' },
+    { instrucao: ANS, frase: 'What was the weather like? ___', opcoes: ['It started at seven.', 'It was cold and rainy.', 'It was on Monday.'], certa: 1, traducao: 'Estava frio e chuvoso.' },
+    { instrucao: ANS, frase: 'How many people did you invite? ___', opcoes: ['I was fifteen.', 'I got a phone.', 'I invited forty people.'], certa: 2, traducao: 'Eu convidei quarenta pessoas.' },
+    { instrucao: ANS, frase: 'What did you do? ___', opcoes: ['We sang and danced.', 'We went with friends.', 'It finished at ten.'], certa: 0, traducao: 'Nós cantamos e dançamos.' },
+    { instrucao: CERTA, opcoes: ['How much you spent on the cake?', 'How much did you spend on the cake?', 'How much did you spent on the cake?'], certa: 1, traducao: 'Quanto você gastou no bolo?' },
+    { instrucao: CERTA, opcoes: ['Did could grandma make a cake?', 'Grandma could make a cake did?', 'Could grandma make a cake?'], certa: 2, traducao: 'A vovó pôde fazer um bolo?' },
+    { instrucao: CERTA, opcoes: ['When did he celebrate his birthday?', 'When he celebrated his birthday?', 'When did he celebrated his birthday?'], certa: 0, traducao: 'Quando ele comemorou o aniversário?' },
+    { instrucao: CERTA, opcoes: ['Who you went to the party with?', 'Who did you go to the party with?', 'Who did you went to the party with?'], certa: 1, traducao: 'Com quem você foi à festa?' },
+    { instrucao: CERTA, opcoes: ['How many pieces of cake you ate?', 'How many pieces of cake did you ate?', 'How many pieces of cake did you eat?'], certa: 2, traducao: 'Quantos pedaços de bolo você comeu?' },
+    { frase: 'We bought eight ___ for the cake.', opcoes: ['candles', 'soft drinks', 'champagne'], certa: 0, traducao: 'Nós compramos oito velas para o bolo.' },
+    { frase: 'We ___ Happy Birthday to Grandma.', opcoes: ['danced', 'sang', 'opened'], certa: 1, traducao: 'Nós cantamos parabéns para a vovó.' },
+    { frase: 'The children ___ their presents after the cake.', opcoes: ['cooked', 'drank', 'opened'], certa: 2, traducao: 'As crianças abriram os presentes depois do bolo.' },
+    { frase: 'It was a beautiful day, so we ___ a picnic in the park.', opcoes: ['had', 'did', 'made'], certa: 0, traducao: 'Estava um dia lindo, então fizemos um piquenique no parque.' },
+    { frase: "I didn't go out. I ___ at home.", opcoes: ['went', 'stayed', 'opened'], certa: 1, traducao: 'Eu não saí. Fiquei em casa.' },
+    { frase: 'The adults drank champagne and the children drank ___.', opcoes: ['candles', 'pizza', 'soft drinks'], certa: 2, traducao: 'Os adultos beberam champanhe e as crianças beberam refrigerante.' }
+  ]
+});
+</script>
+</body>
+</html>

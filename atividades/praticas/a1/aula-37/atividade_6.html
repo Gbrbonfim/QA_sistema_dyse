@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 38 Â· Birthday words</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 38 · Escuta
+   Alinhado ao slide "Class 37 and 38: Let's Celebrate" (parte Class 38) — Vocabulary: Birthdays
+   (lugares: a restaurant, a party, stayed at home; coisas: balloons, a cake, candles,
+   decorations; comida e bebida: sweets, pizza, soft drinks, champagne; o que fez: sang Happy
+   Birthday, danced, had a picnic, opened presents, had fun, cooked). Conteúdo NOVO: frases
+   inéditas. 24 questões: 16 palavras + 8 frases. */
+const IC = { 'a restaurant': 'restaurant', 'a party': 'celebration', 'stayed at home': 'home', 'balloons': 'festival',
+  'a cake': 'cake', 'candles': 'candle', 'decorations': 'local_florist', 'sweets': 'cookie', 'pizza': 'local_pizza',
+  'soft drinks': 'local_drink', 'champagne': 'wine_bar', 'sang Happy Birthday': 'music_note', 'danced': 'nightlife',
+  'had a picnic': 'park', 'opened presents': 'redeem', 'cooked': 'cooking' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const F = 'Listen and choose the picture';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 37, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose the birthday word',
+  itens: [
+    { audioTexto: 'a restaurant', opcoes: op('a restaurant', 'a party', 'stayed at home', 'had a picnic'), certa: 0 },
+    { audioTexto: 'a party', opcoes: op('a cake', 'a party', 'a restaurant', 'danced'), certa: 1 },
+    { audioTexto: 'stayed at home', opcoes: op('had a picnic', 'cooked', 'stayed at home', 'a party'), certa: 2 },
+    { audioTexto: 'balloons', opcoes: op('candles', 'decorations', 'sweets', 'balloons'), certa: 3 },
+    { audioTexto: 'a cake', opcoes: op('a cake', 'pizza', 'sweets', 'candles'), certa: 0 },
+    { audioTexto: 'candles', opcoes: op('balloons', 'candles', 'champagne', 'a cake'), certa: 1 },
+    { audioTexto: 'decorations', opcoes: op('opened presents', 'balloons', 'decorations', 'candles'), certa: 2 },
+    { audioTexto: 'sweets', opcoes: op('pizza', 'soft drinks', 'a cake', 'sweets'), certa: 3 },
+    { audioTexto: 'pizza', opcoes: op('pizza', 'sweets', 'cooked', 'a restaurant'), certa: 0 },
+    { audioTexto: 'soft drinks', opcoes: op('champagne', 'soft drinks', 'pizza', 'balloons'), certa: 1 },
+    { audioTexto: 'champagne', opcoes: op('soft drinks', 'sweets', 'champagne', 'candles'), certa: 2 },
+    { audioTexto: 'sang Happy Birthday', opcoes: op('danced', 'opened presents', 'cooked', 'sang Happy Birthday'), certa: 3 },
+    { audioTexto: 'danced', opcoes: op('danced', 'sang Happy Birthday', 'had a picnic', 'stayed at home'), certa: 0 },
+    { audioTexto: 'had a picnic', opcoes: op('a party', 'had a picnic', 'a restaurant', 'cooked'), certa: 1 },
+    { audioTexto: 'opened presents', opcoes: op('decorations', 'danced', 'opened presents', 'a cake'), certa: 2 },
+    { audioTexto: 'cooked', opcoes: op('had a picnic', 'pizza', 'stayed at home', 'cooked'), certa: 3 },
+    { instrucao: F, audioTexto: 'We bought a lot of balloons for the party.', opcoes: op('balloons', 'candles', 'sweets'), certa: 0 },
+    { instrucao: F, audioTexto: 'We bought ten candles for the cake.', opcoes: op('decorations', 'candles', 'champagne'), certa: 1 },
+    { instrucao: F, audioTexto: 'We went to a restaurant for my birthday.', opcoes: op('a party', 'stayed at home', 'a restaurant'), certa: 2 },
+    { instrucao: F, audioTexto: 'Everybody sang Happy Birthday to me.', opcoes: op('sang Happy Birthday', 'danced', 'opened presents'), certa: 0 },
+    { instrucao: F, audioTexto: 'The children drank soft drinks.', opcoes: op('champagne', 'soft drinks', 'pizza'), certa: 1 },
+    { instrucao: F, audioTexto: 'I opened my presents after lunch.', opcoes: op('cooked', 'had a picnic', 'opened presents'), certa: 2 },
+    { instrucao: F, audioTexto: 'It was sunny, so we had a picnic in the park.', opcoes: op('had a picnic', 'stayed at home', 'a restaurant'), certa: 0 },
+    { instrucao: F, audioTexto: 'My dad cooked lunch for the family.', opcoes: op('danced', 'cooked', 'sweets'), certa: 1 }
+  ]
+});
+</script>
+</body>
+</html>

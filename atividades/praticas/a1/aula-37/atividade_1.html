@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 37 Â· Irregular verbs</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 37 · Escuta
+   Alinhado ao slide "Class 37 and 38: Let's Celebrate" (parte Class 37) — Grammar Point: Past
+   Simple Irregular Verbs (find/found, can't/couldn't, make/made, spend/spent, have/had, do/did,
+   give/gave, eat/ate, drink/drank, go/went, get/got) e start/want como regulares; expressões de
+   tempo (yesterday, last night, this morning, last Saturday). Conteúdo NOVO: outras frases.
+   24 questões: 12 "ouça o passado e escolha o verbo" + 12 "passado ou presente?". */
+const IC = { find: 'search', make: 'cake', spend: 'payments', have: 'breakfast_dining', do: 'task_alt', give: 'redeem',
+  eat: 'restaurant', drink: 'local_drink', go: 'directions_walk', get: 'card_giftcard', can: 'check_circle', start: 'play_arrow',
+  'past (finished)': 'history', 'present (every day)': 'event_repeat' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const V = 'Listen to the verb in the past. Which verb is it?';
+const PP = 'Listen: is it the past or the present?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 37, num: 1, tipo: 'imagem',
+  instrucao: V,
+  itens: [
+    { audioTexto: 'found', opcoes: op('find', 'give', 'make', 'have'), certa: 0 },
+    { audioTexto: 'made', opcoes: op('drink', 'make', 'start', 'eat'), certa: 1 },
+    { audioTexto: 'spent', opcoes: op('start', 'get', 'spend', 'find'), certa: 2 },
+    { audioTexto: 'had', opcoes: op('give', 'do', 'go', 'have'), certa: 3 },
+    { audioTexto: 'did', opcoes: op('do', 'drink', 'can', 'eat'), certa: 0 },
+    { audioTexto: 'gave', opcoes: op('get', 'give', 'go', 'make'), certa: 1 },
+    { audioTexto: 'ate', opcoes: op('have', 'drink', 'eat', 'spend'), certa: 2 },
+    { audioTexto: 'drank', opcoes: op('eat', 'do', 'find', 'drink'), certa: 3 },
+    { audioTexto: 'went', opcoes: op('go', 'give', 'get', 'start'), certa: 0 },
+    { audioTexto: 'got', opcoes: op('go', 'get', 'can', 'give'), certa: 1 },
+    { audioTexto: 'could', opcoes: op('do', 'make', 'can', 'find'), certa: 2 },
+    { audioTexto: 'started', opcoes: op('spend', 'eat', 'have', 'start'), certa: 3 },
+    { instrucao: PP, audioTexto: 'I found my keys yesterday.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'We have lunch at home every day.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'She made a chocolate cake last Sunday.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'My father drinks coffee in the morning.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'They went to the park last Saturday.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'I do my homework after school.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'He gave me a present.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'We eat pizza on Fridays.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: 'I spent a lot of money this morning.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'My sister gets up early.', opcoes: op('past (finished)', 'present (every day)'), certa: 1 },
+    { instrucao: PP, audioTexto: "I couldn't go to the party.", opcoes: op('past (finished)', 'present (every day)'), certa: 0 },
+    { instrucao: PP, audioTexto: 'We ate a lot of sweets last night.', opcoes: op('past (finished)', 'present (every day)'), certa: 0 }
+  ]
+});
+</script>
+</body>
+</html>

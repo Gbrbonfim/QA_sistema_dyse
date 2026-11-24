@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 37 Â· I went, I made, I found</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 37 · Escrita
+   Alinhado ao slide "Class 37 and 38: Let's Celebrate" (parte Class 37) — Grammar Point: Past
+   Simple Irregular Verbs (afirmativa com o verbo no passado; negativa e pergunta com didn't / Did
+   + verbo na forma base; could / couldn't sem did) e exercícios 4–7. Conteúdo NOVO. O contexto
+   traz a frase em português; a isca é o verbo na forma errada para aquela frase. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 37, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu encontrei o meu celular no carro.'), palavras: ['I', 'found', 'my', 'phone', 'in', 'the', 'car'], isca: ['find'], fim: '.', traducao: 'Eu encontrei o meu celular no carro.' },
+    { contexto: M('A minha avó fez um bolo ontem.'), palavras: ['My', 'grandma', 'made', 'a', 'cake', 'yesterday'], isca: ['makes'], fim: '.', traducao: 'A minha avó fez um bolo ontem.' },
+    { contexto: M('Nós gastamos cinquenta dólares em comida.'), palavras: ['We', 'spent', 'fifty', 'dollars', 'on', 'food'], isca: ['spend'], fim: '.', traducao: 'Nós gastamos cinquenta dólares em comida.' },
+    { contexto: M('Ele tomou café da manhã às sete.'), palavras: ['He', 'had', 'breakfast', 'at', 'seven'], isca: ['has'], fim: '.', traducao: 'Ele tomou café da manhã às sete.' },
+    { contexto: M('Eles foram para a praia sábado passado.'), palavras: ['They', 'went', 'to', 'the', 'beach', 'last', 'Saturday'], isca: ['go'], fim: '.', traducao: 'Eles foram para a praia sábado passado.' },
+    { contexto: M('Ela me deu um livro.'), palavras: ['She', 'gave', 'me', 'a', 'book'], isca: ['gives'], fim: '.', traducao: 'Ela me deu um livro.' },
+    { contexto: M('Eu bebi dois copos de água hoje de manhã.'), palavras: ['I', 'drank', 'two', 'glasses', 'of', 'water', 'this', 'morning'], isca: ['drink'], fim: '.', traducao: 'Eu bebi dois copos de água hoje de manhã.' },
+    { contexto: M('As crianças comeram pizza ontem à noite.'), palavras: ['The', 'children', 'ate', 'pizza', 'last', 'night'], isca: ['eat'], fim: '.', traducao: 'As crianças comeram pizza ontem à noite.' },
+    { contexto: M('Eu ganhei muitos presentes.'), palavras: ['I', 'got', 'a', 'lot', 'of', 'presents'], isca: ['get'], fim: '.', traducao: 'Eu ganhei muitos presentes.' },
+    { contexto: M('Eu não encontrei as minhas chaves.'), palavras: ['I', "didn't", 'find', 'my', 'keys'], isca: ['found'], fim: '.', traducao: 'Eu não encontrei as minhas chaves.' },
+    { contexto: M('Nós não fomos ao parque ontem.'), palavras: ['We', "didn't", 'go', 'to', 'the', 'park', 'yesterday'], isca: ['went'], fim: '.', traducao: 'Nós não fomos ao parque ontem.' },
+    { contexto: M('Ele não fez a lição de casa.'), palavras: ['He', "didn't", 'do', 'his', 'homework'], isca: ['did'], fim: '.', traducao: 'Ele não fez a lição de casa.' },
+    { contexto: M('Você comeu o bolo?'), palavras: ['Did', 'you', 'eat', 'the', 'cake'], isca: ['ate'], fim: '?', traducao: 'Você comeu o bolo?' },
+    { contexto: M('Ela te deu um presente?'), palavras: ['Did', 'she', 'give', 'you', 'a', 'present'], isca: ['gave'], fim: '?', traducao: 'Ela te deu um presente?' },
+    { contexto: M('Quanto você gastou?'), palavras: ['How', 'much', 'did', 'you', 'spend'], isca: ['spent'], fim: '?', traducao: 'Quanto você gastou?' },
+    { contexto: M('O que vocês beberam na festa?'), palavras: ['What', 'did', 'you', 'drink', 'at', 'the', 'party'], isca: ['drank'], fim: '?', traducao: 'O que vocês beberam na festa?' },
+    { contexto: M('Eu não pude ir à aula.'), palavras: ['I', "couldn't", 'go', 'to', 'class'], isca: ["didn't"], fim: '.', traducao: 'Eu não pude ir à aula.' },
+    { contexto: M('Quando era criança, ela sabia nadar.'), palavras: ['When', 'she', 'was', 'a', 'child,', 'she', 'could', 'swim'], isca: ['can'], fim: '.', traducao: 'Quando era criança, ela sabia nadar.' },
+    { contexto: M('Você pode me ajudar, por favor?'), palavras: ['Could', 'you', 'help', 'me,', 'please'], isca: ['Did'], fim: '?', traducao: 'Você pode me ajudar, por favor?' },
+    { contexto: M('Ele sabia tocar violão, mas não sabia tocar bateria.'), palavras: ['He', 'could', 'play', 'the', 'guitar,', 'but', 'he', "couldn't", 'play', 'the', 'drums'], isca: ["didn't"], fim: '.', traducao: 'Ele sabia tocar violão, mas não sabia tocar bateria.' }
+  ]
+});
+</script>
+</body>
+</html>

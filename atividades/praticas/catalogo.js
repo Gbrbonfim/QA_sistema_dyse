@@ -375,6 +375,22 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 36', titulo: 'Say it with -ed', tipo: 'Escute e grave', treina: 'Fala · Pronúncia do -ed', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 36', titulo: 'Past simple review', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 37,
+        titulo: "Class 37 and 38 · Let's Celebrate",
+        atividades: [
+          { num: 1, parte: 'Class 37', titulo: 'Irregular verbs', tipo: 'Escute e escolha', treina: 'Escuta · Passado irregular', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 37', titulo: 'I went, I made, I found', tipo: 'Monte a frase', treina: 'Escrita · Past simple', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 37', titulo: 'A budget party', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 37', titulo: 'Say it in the past', tipo: 'Escute e grave', treina: 'Fala · Passado irregular', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 37', titulo: 'Past simple irregular', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 38', titulo: 'Birthday words', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 38', titulo: 'My memorable birthday', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 38', titulo: 'Tell me about your birthday', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 38', titulo: 'Ask about a birthday', tipo: 'Escute e grave', treina: 'Fala · Perguntas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 38', titulo: 'Birthday questions', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
