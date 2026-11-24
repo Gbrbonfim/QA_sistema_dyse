@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 09 · Our favorite things</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 09 · Leitura
+   Alinhado ao slide "Class 9: What's your Favorite?" — Reading (entrevistas sobre favoritos) e
+   Speaking ("ask and answer questions with a partner"). Conteúdo NOVO: Bia e Sam trocam os
+   favoritos; as perguntas de compreensão pedem his / her / its / their.
+   Fatos reais: Bad Guy é da Billie Eilish; Billie Eilish e Bruno Mars são americanos.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Bia', "Hi, Sam! What's your favorite color?"],
+  ['Sam', 'My favorite color is green. And you?'],
+  ['Bia', 'My favorite color is purple.'],
+  ['Sam', "Cool! What's your favorite food?"],
+  ['Bia', 'Lasagna! And you?'],
+  ['Sam', "Pasta! I'm a pasta fan!"],
+  ['Bia', "Ha ha! What's your favorite animal?"],
+  ['Sam', 'The dog. I have a dog. Its name is Toby.'],
+  ['Bia', 'Cool! I have two cats. Their names are Mia and Lulu.'],
+  ['Sam', "Nice! What's your favorite song?"],
+  ['Bia', 'Bad Guy. Billie Eilish is my favorite singer.'],
+  ['Sam', "Billie Eilish? She's American!"],
+  ['Bia', 'Yes, she is. And her songs are great!'],
+  ['Sam', "My favorite singer is Bruno Mars. He's American too!"]
+];
+const lado = q => q === 'Bia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 9, num: 3, tipo: 'escolha',
+  instrucao: 'Leia a conversa e escolha a próxima fala',
+  itens: [
+    prox(1, ['My favorite color is green. And you?', 'I favorite color is green. And you?', 'Lasagna! And you?'], 0, 'Minha cor favorita é verde. E você?'),
+    prox(2, ["Pasta! I'm a pasta fan!", 'My favorite color is purple.', 'Her favorite color is purple.'], 1, 'Minha cor favorita é roxo.'),
+    prox(3, ['Yes, she is.', 'The dog. I have a dog.', "Cool! What's your favorite food?"], 2, 'Legal! Qual é a sua comida favorita?'),
+    prox(4, ['Lasagna! And you?', 'My favorite color is green.', 'Bad Guy.'], 0, 'Lasanha! E você?'),
+    prox(5, ["Billie Eilish? She's American!", "Pasta! I'm a pasta fan!", "Pasta! My a pasta fan!"], 1, 'Macarrão! Eu sou fã de macarrão!'),
+    prox(6, ['Cool! I have two cats.', "Nice! What's your favorite song?", "Ha ha! What's your favorite animal?"], 2, 'Haha! Qual é o seu animal favorito?'),
+    prox(7, ['The dog. I have a dog. Its name is Toby.', "The dog. I have a dog. It's name is Toby.", 'The dog. I have a dog. His name are Toby.'], 0, 'O cachorro. Eu tenho um cachorro. O nome dele é Toby.'),
+    prox(8, ['Cool! I have two cats. They names are Mia and Lulu.', 'Cool! I have two cats. Their names are Mia and Lulu.', 'Cool! I have two cats. There names are Mia and Lulu.'], 1, 'Legal! Eu tenho dois gatos. Os nomes deles são Mia e Lulu.'),
+    prox(9, ["Billie Eilish? She's American!", 'My favorite color is purple.', "Nice! What's your favorite song?"], 2, 'Legal! Qual é a sua música favorita?'),
+    prox(10, ['Bad Guy. Billie Eilish is my favorite singer.', 'Bad Guy. Billie Eilish is I favorite singer.', 'Lasagna! And you?'], 0, 'Bad Guy. A Billie Eilish é a minha cantora favorita.'),
+    prox(11, ['Yes, she is. And her songs are great!', "Billie Eilish? She's American!", "Billie Eilish? Her's American!"], 1, 'Billie Eilish? Ela é americana!'),
+    prox(12, ['Yes, she is. And she songs are great!', "Pasta! I'm a pasta fan!", 'Yes, she is. And her songs are great!'], 2, 'Sim, ela é. E as músicas dela são ótimas!'),
+    { instrucao: 'Qual é a cor favorita do Sam?', frase: 'His favorite color is ___.', opcoes: ['green', 'purple', 'pink'], certa: 0, traducao: 'A cor favorita dele é verde.' },
+    { instrucao: 'Qual é a cor favorita da Bia?', frase: 'Her favorite color is ___.', opcoes: ['green', 'purple', 'black'], certa: 1, traducao: 'A cor favorita dela é roxo.' },
+    { instrucao: 'Qual é a comida favorita do Sam?', frase: 'His favorite food is ___.', opcoes: ['lasagna', 'pizza', 'pasta'], certa: 2, traducao: 'A comida favorita dele é macarrão.' },
+    { instrucao: 'Qual é o nome do cachorro do Sam?', frase: 'Its name is ___.', opcoes: ['Toby', 'Mia', 'Lulu'], certa: 0, traducao: 'O nome dele é Toby.' },
+    { instrucao: 'Complete a frase sobre os gatos da Bia:', frase: '___ names are Mia and Lulu.', opcoes: ['His', 'Their', 'Its'], certa: 1, traducao: 'Os nomes deles são Mia e Lulu.' },
+    { instrucao: 'Quem é a cantora favorita da Bia?', frase: 'Her favorite singer is ___.', opcoes: ['Bruno Mars', 'Adele', 'Billie Eilish'], certa: 2, traducao: 'A cantora favorita dela é a Billie Eilish.' },
+    { instrucao: 'Qual é a nacionalidade da Billie Eilish?', frase: "She's ___.", opcoes: ['American', 'English', 'Brazilian'], certa: 0, traducao: 'Ela é americana.' },
+    { instrucao: 'Quem é o cantor favorito do Sam?', frase: 'His favorite singer is ___.', opcoes: ['Billie Eilish', 'Bruno Mars', 'Toby'], certa: 1, traducao: 'O cantor favorito dele é o Bruno Mars.' }
+  ]
+});
+</script>
+</body>
+</html>

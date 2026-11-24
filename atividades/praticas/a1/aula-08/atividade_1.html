@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 08 · Numbers and prices</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 08 · Escuta
+   Alinhado ao slide "Class 08: Is it cheap or expensive?" — Vocabulary (números 1–100, o par
+   -teen / -ty) e Functional Skills (dizer preços em libras, dólares e euros). Conteúdo NOVO:
+   outros números e outros preços, com as armadilhas 13/30, 14/40, pounds/dollars.
+   24 questões: 10 números + 14 preços. */
+const MOEDA_IC = { '£': 'currency_pound', '$': 'attach_money', '€': 'euro' };
+const ic = l => /p$/.test(l) ? 'currency_pound' : (MOEDA_IC[l.charAt(0)] || 'sell');
+const op = (...ls) => ls.map(l => ({ label: l, icon: ic(l) }));
+const PRECO = 'Escute e escolha o preço';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 8, num: 1, tipo: 'imagem',
+  instrucao: 'Escute e escolha o número',
+  itens: [
+    { audioTexto: 'thirteen', opcoes: op('13', '30', '3', '31'), certa: 0, traducao: 'treze' },
+    { audioTexto: 'forty', opcoes: op('14', '40', '4', '44'), certa: 1, traducao: 'quarenta' },
+    { audioTexto: 'fifteen', opcoes: op('50', '5', '15', '55'), certa: 2, traducao: 'quinze' },
+    { audioTexto: 'sixty', opcoes: op('16', '66', '6', '60'), certa: 3, traducao: 'sessenta' },
+    { audioTexto: 'eighteen', opcoes: op('18', '80', '8', '88'), certa: 0, traducao: 'dezoito' },
+    { audioTexto: 'seventy-two', opcoes: op('27', '72', '70', '12'), certa: 1, traducao: 'setenta e dois' },
+    { audioTexto: 'ninety-nine', opcoes: op('19', '90', '99', '89'), certa: 2, traducao: 'noventa e nove' },
+    { audioTexto: 'eleven', opcoes: op('7', '12', '70', '11'), certa: 3, traducao: 'onze' },
+    { audioTexto: 'thirty-five', opcoes: op('35', '53', '25', '45'), certa: 0, traducao: 'trinta e cinco' },
+    { audioTexto: 'one hundred', opcoes: op('10', '100', '1000', '110'), certa: 1, traducao: 'cem' },
+    { instrucao: PRECO, audioTexto: "It's four pounds fifty.", opcoes: op('£4.50', '£14.50', '£40.50', '$4.50'), certa: 0, traducao: 'Custa quatro libras e cinquenta.' },
+    { instrucao: PRECO, audioTexto: "They're eighty-nine pence.", opcoes: op('19p', '89p', '98p', '£89'), certa: 1, traducao: 'Custam oitenta e nove centavos (de libra).' },
+    { instrucao: PRECO, audioTexto: "It's twelve dollars and thirty cents.", opcoes: op('$20.30', '$12.13', '$12.30', '€12.30'), certa: 2, traducao: 'Custa doze dólares e trinta centavos.' },
+    { instrucao: PRECO, audioTexto: "How much is the salmon? It's sixteen euros.", opcoes: op('€60', '$16', '€6', '€16'), certa: 3, traducao: 'Quanto custa o salmão? Custa dezesseis euros.' },
+    { instrucao: PRECO, audioTexto: 'The chicken is seven pounds ninety-nine.', opcoes: op('£7.99', '£7.90', '£9.99', '£70.99'), certa: 0, traducao: 'O frango custa sete libras e noventa e nove.' },
+    { instrucao: PRECO, audioTexto: "They're two dollars and fifty cents.", opcoes: op('$2.15', '$2.50', '$5.20', '£2.50'), certa: 1, traducao: 'Custam dois dólares e cinquenta centavos.' },
+    { instrucao: PRECO, audioTexto: 'The milk is one euro and twenty cents.', opcoes: op('€1.02', '€2.20', '€1.20', '$1.20'), certa: 2, traducao: 'O leite custa um euro e vinte centavos.' },
+    { instrucao: PRECO, audioTexto: 'The avocados are three pounds seventy.', opcoes: op('£3.17', '£7.30', '£30.70', '£3.70'), certa: 3, traducao: 'Os abacates custam três libras e setenta.' },
+    { instrucao: PRECO, audioTexto: "It's fifty-five dollars and forty cents.", opcoes: op('$55.40', '$45.50', '$55.14', '$15.40'), certa: 0, traducao: 'Custa cinquenta e cinco dólares e quarenta centavos.' },
+    { instrucao: PRECO, audioTexto: 'The steak is nineteen pounds eighty.', opcoes: op('£90.80', '£19.80', '£19.18', '£18.90'), certa: 1, traducao: 'O bife custa dezenove libras e oitenta.' },
+    { instrucao: PRECO, audioTexto: "They're thirty pence.", opcoes: op('13p', '£30', '30p', '33p'), certa: 2, traducao: 'Custam trinta centavos (de libra).' },
+    { instrucao: PRECO, audioTexto: "It's sixty-four euros and fifteen cents.", opcoes: op('€64.50', '€46.15', '€60.15', '€64.15'), certa: 3, traducao: 'Custa sessenta e quatro euros e quinze centavos.' },
+    { instrucao: PRECO, audioTexto: 'The pineapple is two pounds forty-five.', opcoes: op('£2.45', '£2.54', '£45.20', '£2.40'), certa: 0, traducao: 'O abacaxi custa duas libras e quarenta e cinco.' },
+    { instrucao: PRECO, audioTexto: "It's ninety-nine dollars and ninety-nine cents. It's expensive!", opcoes: op('$9.99', '$99.99', '$19.99', '$90.90'), certa: 1, traducao: 'Custa noventa e nove dólares e noventa e nove centavos. É caro!' }
+  ]
+});
+</script>
+</body>
+</html>

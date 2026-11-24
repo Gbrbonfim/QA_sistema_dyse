@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 09 · His or her?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 09 · Escuta
+   Alinhado ao slide "Class 9: What's your Favorite?" — Vocabulary (favorite things: color,
+   number, animal, drink, food, TV show, artist, hobby, object, song) e Grammar Point (possessive
+   adjectives). Conteúdo NOVO: outras frases; foco no som de his x her. As figuras são ícones.
+   24 questões: 10 categorias + 14 possessivos. */
+const IC = { color: 'palette', number: '123', animal: 'pets', drink: 'local_cafe', food: 'restaurant', 'TV show': 'tv',
+  artist: 'mic', hobby: 'sports_esports', object: 'smartphone', song: 'music_note', movie: 'movie', book: 'menu_book',
+  my: 'person', your: 'face', his: 'man', her: 'woman', its: 'pets', our: 'groups', their: 'group' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const POS = 'Escute e escolha a palavra de posse que você ouviu';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 9, num: 1, tipo: 'imagem',
+  instrucao: 'Escute a pergunta e escolha o assunto',
+  itens: [
+    { audioTexto: "What's your favorite animal?", opcoes: op('animal', 'drink', 'food', 'color'), certa: 0 },
+    { audioTexto: "What's your favorite drink?", opcoes: op('food', 'drink', 'song', 'number'), certa: 1 },
+    { audioTexto: "What's your favorite color?", opcoes: op('number', 'object', 'color', 'hobby'), certa: 2 },
+    { audioTexto: "What's your favorite song?", opcoes: op('artist', 'TV show', 'movie', 'song'), certa: 3 },
+    { audioTexto: "What's your favorite number?", opcoes: op('number', 'color', 'book', 'animal'), certa: 0 },
+    { audioTexto: "What's your favorite hobby?", opcoes: op('object', 'hobby', 'artist', 'drink'), certa: 1 },
+    { audioTexto: "What's your favorite TV show?", opcoes: op('movie', 'song', 'TV show', 'book'), certa: 2 },
+    { audioTexto: "What's your favorite food?", opcoes: op('drink', 'animal', 'hobby', 'food'), certa: 3 },
+    { audioTexto: "What's your favorite artist?", opcoes: op('artist', 'song', 'object', 'number'), certa: 0 },
+    { audioTexto: "What's your favorite object?", opcoes: op('hobby', 'object', 'color', 'movie'), certa: 1 },
+    { instrucao: POS, audioTexto: 'His favorite food is pasta.', opcoes: op('his', 'her', 'its', 'their'), certa: 0 },
+    { instrucao: POS, audioTexto: 'Her favorite drink is coffee.', opcoes: op('his', 'her', 'our', 'my'), certa: 1 },
+    { instrucao: POS, audioTexto: 'Their favorite color is green.', opcoes: op('our', 'his', 'their', 'her'), certa: 2 },
+    { instrucao: POS, audioTexto: "It's a dog. Its name is Max.", opcoes: op('his', 'her', 'their', 'its'), certa: 3 },
+    { instrucao: POS, audioTexto: 'Our favorite TV show is Friends.', opcoes: op('our', 'their', 'your', 'my'), certa: 0 },
+    { instrucao: POS, audioTexto: 'Is your favorite number seven?', opcoes: op('my', 'your', 'our', 'her'), certa: 1 },
+    { instrucao: POS, audioTexto: 'My favorite hobby is video games.', opcoes: op('your', 'his', 'my', 'our'), certa: 2 },
+    { instrucao: POS, audioTexto: "Her name is Taylor Swift. She's American.", opcoes: op('his', 'its', 'their', 'her'), certa: 3 },
+    { instrucao: POS, audioTexto: "His name is Lionel Messi. He's from Argentina.", opcoes: op('his', 'her', 'its', 'our'), certa: 0 },
+    { instrucao: POS, audioTexto: 'Their names are Anna and Tom.', opcoes: op('our', 'their', 'his', 'your'), certa: 1 },
+    { instrucao: POS, audioTexto: "It's a rabbit. Its eyes are red.", opcoes: op('her', 'his', 'its', 'their'), certa: 2 },
+    { instrucao: POS, audioTexto: 'Is his favorite color red?', opcoes: op('her', 'its', 'their', 'his'), certa: 3 },
+    { instrucao: POS, audioTexto: 'Her favorite artist is Adele.', opcoes: op('her', 'his', 'our', 'my'), certa: 0 },
+    { instrucao: POS, audioTexto: "What's their favorite food?", opcoes: op('your', 'their', 'our', 'his'), certa: 1 }
+  ]
+});
+</script>
+</body>
+</html>

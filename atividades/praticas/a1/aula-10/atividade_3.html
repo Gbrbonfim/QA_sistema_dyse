@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 10 · Who is she?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 10 · Leitura
+   Alinhado ao slide "Class 10: Famous Families 1" — Vocabulary (texto da Haley: I have a
+   brother. His name is... / Who is Paula? She is my sister) e Grammar Point (genitivo 's).
+   Conteúdo NOVO: a Nina mostra uma foto da família para o Leo. As perguntas de compreensão
+   pedem o parentesco com 's. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Leo', 'Nina, who is she?'],
+  ['Nina', "She's my mom. Her name is Rosa."],
+  ['Leo', 'And who is he?'],
+  ['Nina', "He's my dad, Carlos."],
+  ['Leo', 'Who are the two boys?'],
+  ['Nina', "They're my brothers, Tiago and Rafa."],
+  ['Leo', 'And the baby?'],
+  ['Nina', "She's my sister's daughter. Her name is Lia."],
+  ['Leo', "So you're Lia's aunt!"],
+  ['Nina', 'Yes, I am! And Tiago and Rafa are her uncles.'],
+  ['Leo', 'Cool! And who is she, with Lia?'],
+  ['Nina', "She's my grandmother, Ana. She's my mom's mother."],
+  ['Leo', 'Your family is big!'],
+  ['Nina', 'Yes, it is! I love my family!']
+];
+const lado = q => q === 'Leo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 10, num: 3, tipo: 'escolha',
+  instrucao: 'Leia a conversa e escolha a próxima fala',
+  itens: [
+    prox(1, ["She's my mom. Her name is Rosa.", "She's my mom. His name is Rosa.", "They're my brothers."], 0, 'Ela é a minha mãe. O nome dela é Rosa.'),
+    prox(2, ['Who are the two boys?', 'And who is he?', 'Your family is big!'], 1, 'E quem é ele?'),
+    prox(3, ["She's my grandmother, Ana.", 'Yes, I am!', "He's my dad, Carlos."], 2, 'Ele é o meu pai, Carlos.'),
+    prox(4, ['Who are the two boys?', 'Who is the two boys?', "So you're Lia's aunt!"], 0, 'Quem são os dois meninos?'),
+    prox(5, ["He's my dad, Carlos.", "They're my brothers, Tiago and Rafa.", "They're my brother, Tiago and Rafa."], 1, 'Eles são os meus irmãos, Tiago e Rafa.'),
+    prox(6, ['Your family is big!', 'Cool! And who is she, with Lia?', 'And the baby?'], 2, 'E o bebê?'),
+    prox(7, ["She's my sister's daughter. Her name is Lia.", "She's the daughter of my sister's. Her name is Lia.", "She's my sister daughter. Her name is Lia."], 0, 'Ela é a filha da minha irmã. O nome dela é Lia.'),
+    prox(8, ['And who is he?', "So you're Lia's aunt!", "So you're Lia's uncle!"], 1, 'Então você é tia da Lia!'),
+    prox(9, ['Yes, I am! And Tiago and Rafa are his uncles.', "She's my mom.", 'Yes, I am! And Tiago and Rafa are her uncles.'], 2, 'Sim, sou! E o Tiago e o Rafa são os tios dela.'),
+    prox(10, ['Cool! And who is she, with Lia?', 'Cool! And who are she, with Lia?', 'Nina, who is she?'], 0, 'Legal! E quem é ela, com a Lia?'),
+    prox(11, ["She's my grandmother, Ana. She's my mom's mother.", "She's my grandmother, Ana. She's my mom's sister.", "He's my dad, Carlos."], 0, 'Ela é a minha avó, Ana. Ela é a mãe da minha mãe.'),
+    prox(12, ['And the baby?', 'Your family is big!', 'Who are the two boys?'], 1, 'A sua família é grande!'),
+    { instrucao: 'Quem é a Rosa?', frase: "Rosa is Nina's ___.", opcoes: ['mother', 'sister', 'aunt'], certa: 0, traducao: 'A Rosa é a mãe da Nina.' },
+    { instrucao: 'Quem é o Carlos para a Rosa?', frase: "Carlos is Rosa's ___.", opcoes: ['son', 'husband', 'brother'], certa: 1, traducao: 'O Carlos é o marido da Rosa.' },
+    { instrucao: 'Quem são o Tiago e o Rafa?', frase: "Tiago and Rafa are Nina's ___.", opcoes: ['cousins', 'uncles', 'brothers'], certa: 2, traducao: 'O Tiago e o Rafa são os irmãos da Nina.' },
+    { instrucao: 'Quem é a Lia?', frase: "Lia is Nina's sister's ___.", opcoes: ['daughter', 'mother', 'son'], certa: 0, traducao: 'A Lia é a filha da irmã da Nina.' },
+    { instrucao: 'O que a Nina é da Lia?', frase: "Nina is Lia's ___.", opcoes: ['sister', 'aunt', 'mother'], certa: 1, traducao: 'A Nina é tia da Lia.' },
+    { instrucao: 'O que o Tiago é da Lia?', frase: "Tiago is Lia's ___.", opcoes: ['brother', 'father', 'uncle'], certa: 2, traducao: 'O Tiago é tio da Lia.' },
+    { instrucao: 'Quem é a Ana para a Nina?', frase: "Ana is Nina's ___.", opcoes: ['grandmother', 'granddaughter', 'aunt'], certa: 0, traducao: 'A Ana é a avó da Nina.' },
+    { instrucao: 'Quem é a Ana para a Rosa?', frase: "Ana is Rosa's ___.", opcoes: ['sister', 'mother', 'daughter'], certa: 1, traducao: 'A Ana é a mãe da Rosa.' }
+  ]
+});
+</script>
+</body>
+</html>

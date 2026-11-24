@@ -86,6 +86,39 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'In my bag', tipo: 'Escute e grave', treina: 'Fala · Vocabulário', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'A, an or nothing?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 8,
+        titulo: 'Class 08 · Is it cheap or expensive?',
+        atividades: [
+          { num: 1, titulo: 'Numbers and prices', tipo: 'Escute e escolha', treina: 'Escuta · Números', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'How much is it?', tipo: 'Monte a frase', treina: 'Escrita · Preços', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'At the market', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Say the price', tipo: 'Escute e grave', treina: 'Fala · Números', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Plurals and prices', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
+        aula: 9,
+        titulo: "Class 09 · What's your Favorite?",
+        atividades: [
+          { num: 1, titulo: 'His or her?', tipo: 'Escute e escolha', treina: 'Escuta · Possessivos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'My, his, her, their', tipo: 'Monte a frase', treina: 'Escrita · Possessivos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Our favorite things', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Present your favorites', tipo: 'Escute e grave', treina: 'Fala · Apresentação', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Possessive adjectives', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
+        aula: 10,
+        titulo: 'Class 10 · Famous Families 1',
+        atividades: [
+          { num: 1, titulo: 'Family words', tipo: 'Escute e escolha', treina: 'Escuta · Família', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "Kate is William's wife", tipo: 'Monte a frase', treina: "Escrita · Genitivo 's", minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Who is she?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Talk about a family', tipo: 'Escute e grave', treina: 'Fala · Família', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: "Family and 's", tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

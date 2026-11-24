@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 09 · My, his, her, their</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 09 · Escrita
+   Alinhado ao slide "Class 9: What's your Favorite?" — Grammar Point (subject pronouns x
+   possessive adjectives) e Vocabulary (favorite things). Conteúdo NOVO: outras frases, algumas
+   com duas partes. A isca é o subject pronoun (o erro clássico "She favorite...") ou It's no
+   lugar de Its — nunca forma outra frase certa. 20 questões. */
+const POS = 'Monte a frase com a palavra de posse certa:';
+const FAV = 'Monte a pergunta ou a resposta sobre favoritos:';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 9, num: 2, tipo: 'montar',
+  instrucao: 'Clique nas palavras e monte a frase (uma palavra sobra)',
+  itens: [
+    { contexto: POS, palavras: ['My', 'favorite', 'color', 'is', 'blue'], isca: ['I'], fim: '.', traducao: 'Minha cor favorita é azul.' },
+    { contexto: POS, palavras: ['His', 'name', 'is', 'Lucas'], isca: ['He'], fim: '.', traducao: 'O nome dele é Lucas.' },
+    { contexto: POS, palavras: ['Her', 'favorite', 'drink', 'is', 'tea'], isca: ['She'], fim: '.', traducao: 'A bebida favorita dela é chá.' },
+    { contexto: POS, palavras: ['Their', 'names', 'are', 'Anna', 'and', 'Tom'], isca: ['They'], fim: '.', traducao: 'Os nomes deles são Anna e Tom.' },
+    { contexto: POS, palavras: ['Our', 'teacher', 'is', 'from', 'England'], isca: ['We'], fim: '.', traducao: 'Nosso professor é da Inglaterra.' },
+    { contexto: POS, palavras: ['Its', 'name', 'is', 'Max'], isca: ["It's"], fim: '.', traducao: 'O nome dele (do cachorro) é Max.' },
+    { contexto: POS, palavras: ['Its', 'eyes', 'are', 'red'], isca: ["It's"], fim: '.', traducao: 'Os olhos dele (do coelho) são vermelhos.' },
+    { contexto: POS, palavras: ['Your', 'bag', 'is', 'here'], isca: ['You'], fim: '.', traducao: 'Sua bolsa está aqui.' },
+    { contexto: POS, palavras: ['Her', 'favorite', 'artist', 'is', 'Adele'], isca: ['She'], fim: '.', traducao: 'A artista favorita dela é a Adele.' },
+    { contexto: POS, palavras: ['His', 'favorite', 'hobby', 'is', 'video', 'games'], isca: ['He'], fim: '.', traducao: 'O hobby favorito dele é videogame.' },
+    { contexto: POS, palavras: ['Our', 'favorite', 'TV', 'show', 'is', 'Friends'], isca: ['We'], fim: '.', traducao: 'Nossa série favorita é Friends.' },
+    { contexto: POS, palavras: ['They', 'are', 'from', 'Brazil.', 'Their', 'surname', 'is', 'Silva'], isca: ['There'], fim: '.', traducao: 'Eles são do Brasil. O sobrenome deles é Silva.' },
+    { contexto: POS, palavras: ['We', 'are', 'Brazilian'], isca: ['Our'], fim: '.', traducao: 'Nós somos brasileiros.' },
+    { contexto: POS, palavras: ['My', 'partner', 'is', 'Carol.', 'Her', 'favorite', 'number', 'is', 'ten'], isca: ['She'], fim: '.', traducao: 'Minha dupla é a Carol. O número favorito dela é dez.' },
+    { contexto: POS, palavras: ['His', 'favorite', 'food', 'is', 'pasta', 'and', 'his', 'favorite', 'drink', 'is', 'water'], isca: ['he'], fim: '.', traducao: 'A comida favorita dele é macarrão e a bebida favorita dele é água.' },
+    { contexto: FAV, palavras: ["What's", 'your', 'favorite', 'food'], isca: ['you'], fim: '?', traducao: 'Qual é a sua comida favorita?' },
+    { contexto: FAV, palavras: ['Is', 'your', 'favorite', 'number', 'seven'], isca: ['you'], fim: '?', traducao: 'O seu número favorito é sete?' },
+    { contexto: FAV, palavras: ["What's", 'her', 'favorite', 'song'], isca: ['she'], fim: '?', traducao: 'Qual é a música favorita dela?' },
+    { contexto: FAV, palavras: ["What's", 'his', 'favorite', 'movie'], isca: ['he'], fim: '?', traducao: 'Qual é o filme favorito dele?' },
+    { contexto: FAV, palavras: ['Is', 'their', 'favorite', 'color', 'green'], isca: ['they'], fim: '?', traducao: 'A cor favorita deles é verde?' }
+  ]
+});
+</script>
+</body>
+</html>

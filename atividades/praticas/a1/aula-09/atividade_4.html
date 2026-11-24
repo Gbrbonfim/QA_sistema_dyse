@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 09 · Present your favorites</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 09 · Fala
+   Alinhado ao slide "Class 9: What's your Favorite?" — Vocabulary (listen and repeat), Grammar
+   Point (listen and repeat: His name is... / Her name is...) e Speaking ("present your
+   favorites to the class"). Conteúdo NOVO: outras frases, mais longas no fim. 20 questões. */
+const PAL = 'Escute e grave a palavra';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 9, num: 4, tipo: 'fala',
+  instrucao: 'Escute e grave a frase inteira',
+  itens: [
+    { instrucao: PAL, frase: 'favorite', traducao: 'favorito', nota: 'São três sílabas e a força fica no começo: FAY-vo-rit.' },
+    { instrucao: PAL, frase: 'color', traducao: 'cor' },
+    { instrucao: PAL, frase: 'animal', traducao: 'animal', nota: 'A força fica no começo: A-ni-mal.' },
+    { instrucao: PAL, frase: 'number', traducao: 'número' },
+    { instrucao: PAL, frase: 'artist', traducao: 'artista' },
+    { instrucao: PAL, frase: 'hobby', traducao: 'hobby, passatempo' },
+    { instrucao: PAL, frase: 'object', traducao: 'objeto', nota: 'A força fica no começo: OB-ject.' },
+    { instrucao: PAL, frase: 'purple', traducao: 'roxo' },
+    { instrucao: PAL, frase: 'rabbit', traducao: 'coelho' },
+    { instrucao: PAL, frase: 'song', traducao: 'música, canção' },
+    { frase: "What's your favorite color?", dica: 0, traducao: 'Qual é a sua cor favorita?' },
+    { frase: 'My favorite color is purple.', dica: 0, traducao: 'Minha cor favorita é roxo.' },
+    { frase: 'His favorite food is pasta.', dica: 0, traducao: 'A comida favorita dele é macarrão.', nota: 'His tem o "i" curto: HIZ.' },
+    { frase: 'Her favorite drink is tea.', dica: 0, traducao: 'A bebida favorita dela é chá.', nota: 'Her soa como "RR" com a boca meio aberta: HER.' },
+    { frase: 'Their names are Anna and Tom.', dica: 0, traducao: 'Os nomes deles são Anna e Tom.', aceita: { there: 'their' } },
+    { frase: 'Our teacher is from England.', dica: 0, traducao: 'Nosso professor é da Inglaterra.', aceita: { hour: 'our' } },
+    { frase: 'Is your favorite number seven?', dica: 0, traducao: 'O seu número favorito é sete?' },
+    { frase: "What's her favorite song?", dica: 0, traducao: 'Qual é a música favorita dela?' },
+    { frase: 'My partner is Carol. Her favorite animal is the cat.', dica: 0, traducao: 'Minha dupla é a Carol. O animal favorito dela é o gato.' },
+    { frase: 'His name is Lucas and his favorite hobby is video games.', dica: 0, traducao: 'O nome dele é Lucas e o hobby favorito dele é videogame.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 08 · Say the price</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 08 · Fala
+   Alinhado ao slide "Class 08: Is it cheap or expensive?" — Vocabulary (números: a força no
+   -TEEN e no começo do -ty; comida do mercado) e Functional Skills (perguntar e dizer preços).
+   Conteúdo NOVO: outros produtos e preços. Números e preços vêm por extenso; o motor converte
+   o que o reconhecimento escreve com algarismos ("£4.50"). 20 questões. */
+const PAL = 'Escute e grave a palavra';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 8, num: 4, tipo: 'fala',
+  instrucao: 'Escute e grave a frase inteira',
+  itens: [
+    { instrucao: PAL, frase: 'thirteen', traducao: 'treze', nota: 'A força fica no fim: thir-TEEN.' },
+    { instrucao: PAL, frase: 'thirty', traducao: 'trinta', nota: 'A força fica no começo: THIR-ty.' },
+    { instrucao: PAL, frase: 'fifteen', traducao: 'quinze', nota: 'A força fica no fim: fif-TEEN.' },
+    { instrucao: PAL, frase: 'fifty', traducao: 'cinquenta', nota: 'A força fica no começo: FIF-ty.' },
+    { instrucao: PAL, frase: 'pineapple', traducao: 'abacaxi' },
+    { instrucao: PAL, frase: 'avocado', traducao: 'abacate' },
+    { instrucao: PAL, frase: 'salmon', traducao: 'salmão', nota: 'O L não se fala: SA-mon.' },
+    { instrucao: PAL, frase: 'vegetables', traducao: 'legumes e verduras', nota: 'São só três sílabas: VEJ-ta-bles.' },
+    { instrucao: PAL, frase: 'cheese', traducao: 'queijo' },
+    { instrucao: PAL, frase: 'expensive', traducao: 'caro' },
+    { frase: 'How much is the cheese?', dica: 0, traducao: 'Quanto custa o queijo?' },
+    { frase: 'How much are the apples?', dica: 0, traducao: 'Quanto custam as maçãs?' },
+    { frase: "It's four pounds fifty.", dica: 0, traducao: 'Custa quatro libras e cinquenta.' },
+    { frase: "They're eighty-nine pence.", dica: 0, traducao: 'Custam oitenta e nove centavos (de libra).' },
+    { frase: "It's twelve dollars and thirty cents.", dica: 0, traducao: 'Custa doze dólares e trinta centavos.' },
+    { frase: 'The salmon is expensive.', dica: 0, traducao: 'O salmão é caro.' },
+    { frase: 'The tomatoes are cheap.', dica: 0, traducao: 'Os tomates são baratos.' },
+    { frase: 'Two pineapples, please.', dica: 0, traducao: 'Dois abacaxis, por favor.' },
+    { frase: "Is it cheap? No, it isn't.", dica: 0, traducao: 'É barato? Não, não é.' },
+    { frase: 'The chocolate is three euros and fifty cents.', dica: 0, traducao: 'O chocolate custa três euros e cinquenta centavos.' }
+  ]
+});
+</script>
+</body>
+</html>

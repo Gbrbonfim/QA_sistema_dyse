@@ -473,8 +473,35 @@
 
   /* FALA — escute e grave */
   const CONTR = { "what's":"what is", "i'm":"i am", "it's":"it is", "he's":"he is", "she's":"she is", "you're":"you are", "we're":"we are", "they're":"they are", "that's":"that is", "where's":"where is", "let's":"let us", "isn't":"is not", "aren't":"are not", "isnt":"is not", "arent":"are not","whats":"what is", "im":"i am", "hes":"he is", "shes":"she is", "youre":"you are", "theyre":"they are", "thats":"that is", "wheres":"where is" };
+  /* O reconhecimento de voz escreve números com algarismos ("13", "£4.50",
+     "7:30"); a frase da atividade vem por extenso. Converte antes de comparar. */
+  const UNI = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+  const DEZ = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+  function numExt(n){
+    n = parseInt(n, 10);
+    if(n < 20) return UNI[n];
+    if(n < 100) return DEZ[Math.floor(n / 10)] + (n % 10 ? ' ' + UNI[n % 10] : '');
+    if(n < 1000) return UNI[Math.floor(n / 100)] + ' hundred' + (n % 100 ? ' ' + numExt(n % 100) : '');
+    if(n < 10000) return UNI[Math.floor(n / 1000)] + ' thousand' + (n % 1000 ? ' ' + numExt(n % 1000) : '');
+    return String(n);
+  }
+  const MOEDA = { '£': ['pound', 'pounds'], '$': ['dollar', 'dollars'], '€': ['euro', 'euros'] };
+  function numPorExtenso(w){
+    const h = /^(\d{1,2}):(\d{2})$/.exec(w);
+    if(h) return numExt(h[1]) + (+h[2] ? ' ' + (+h[2] < 10 ? 'oh ' : '') + numExt(h[2]) : " o'clock");
+    const m = /^([£$€])?(\d{1,4})(?:[.,](\d{2}))?(p)?$/.exec(w);
+    if(!m) return w;
+    if(m[4]) return numExt(m[2]) + ' pence';
+    if(!m[1]) return numExt(m[2]) + (m[3] ? ' ' + numExt(m[3]) : '');
+    const nome = MOEDA[m[1]];
+    let s = numExt(m[2]) + ' ' + nome[+m[2] === 1 ? 0 : 1];
+    if(m[3] && +m[3]) s += m[1] === '£' ? ' ' + numExt(m[3]) : ' and ' + numExt(m[3]) + ' cents';
+    return s;
+  }
   function norm(txt){
     return String(txt || '').toLowerCase().replace(/[’`]/g, "'").split(/\s+/)
+      .map(w => numPorExtenso(w.replace(/[.,!?;:"]+$/, '')))
+      .join(' ').replace(/-/g, ' ').split(/\s+/)
       .map(w => w.replace(/[^a-z']/g, '')).filter(Boolean)
       .map(w => CONTR[w] || w.replace(/'/g, '')).join(' ').split(' ').filter(Boolean);
   }

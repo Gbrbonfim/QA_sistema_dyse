@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 10 · Family words</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 10 · Escuta
+   Alinhado ao slide "Class 10: Famous Families 1" — Vocabulary (husband, wife, mother, father,
+   son, daughter, grandmother, grandson, stepmother, parents, aunt, uncle, cousin) e Grammar
+   Point (genitivo 's). Conteúdo NOVO: outras famílias famosas, com fatos verdadeiros (família
+   real britânica, família Smith, Modern Family). As figuras são ícones.
+   24 questões: 12 palavras + 12 frases. */
+const IC = { mother: 'woman', father: 'man', wife: 'woman', husband: 'man', son: 'boy', daughter: 'girl',
+  brother: 'boy', sister: 'girl', grandmother: 'elderly_woman', grandfather: 'elderly', grandson: 'boy',
+  granddaughter: 'girl', aunt: 'woman_2', uncle: 'man_2', cousin: 'person', parents: 'escalator_warning',
+  stepmother: 'woman_2', baby: 'child_care', children: 'groups' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const FRASE = 'Escute a frase e escolha a palavra de família';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 10, num: 1, tipo: 'imagem',
+  instrucao: 'Escute a palavra e escolha',
+  itens: [
+    { audioTexto: 'mother', opcoes: op('mother', 'father', 'daughter', 'son'), certa: 0 },
+    { audioTexto: 'father', opcoes: op('mother', 'father', 'brother', 'grandfather'), certa: 1 },
+    { audioTexto: 'daughter', opcoes: op('son', 'mother', 'daughter', 'sister'), certa: 2 },
+    { audioTexto: 'son', opcoes: op('daughter', 'uncle', 'father', 'son'), certa: 3 },
+    { audioTexto: 'wife', opcoes: op('wife', 'husband', 'aunt', 'sister'), certa: 0 },
+    { audioTexto: 'husband', opcoes: op('wife', 'husband', 'uncle', 'son'), certa: 1 },
+    { audioTexto: 'grandmother', opcoes: op('mother', 'granddaughter', 'grandmother', 'stepmother'), certa: 2 },
+    { audioTexto: 'grandfather', opcoes: op('father', 'grandson', 'uncle', 'grandfather'), certa: 3 },
+    { audioTexto: 'aunt', opcoes: op('aunt', 'uncle', 'cousin', 'mother'), certa: 0 },
+    { audioTexto: 'uncle', opcoes: op('aunt', 'uncle', 'cousin', 'brother'), certa: 1 },
+    { audioTexto: 'cousin', opcoes: op('uncle', 'aunt', 'cousin', 'children'), certa: 2 },
+    { audioTexto: 'parents', opcoes: op('children', 'cousin', 'baby', 'parents'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "Prince William is King Charles's son.", opcoes: op('son', 'brother', 'father', 'grandson'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "Kate is William's wife.", opcoes: op('sister', 'wife', 'mother', 'daughter'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "Harry is William's brother.", opcoes: op('son', 'uncle', 'brother', 'cousin'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "Charlotte is William and Kate's daughter.", opcoes: op('sister', 'granddaughter', 'aunt', 'daughter'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "King Charles is George's grandfather.", opcoes: op('grandfather', 'father', 'uncle', 'grandson'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "Harry is George's uncle.", opcoes: op('father', 'uncle', 'brother', 'cousin'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "Archie is George's cousin.", opcoes: op('brother', 'uncle', 'cousin', 'son'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "Camilla is William's stepmother.", opcoes: op('mother', 'grandmother', 'aunt', 'stepmother'), certa: 3 },
+    { instrucao: FRASE, audioTexto: "Will Smith and Jada are Willow's parents.", opcoes: op('parents', 'children', 'cousin', 'grandfather'), certa: 0 },
+    { instrucao: FRASE, audioTexto: "Willow is Jaden Smith's sister.", opcoes: op('daughter', 'sister', 'wife', 'mother'), certa: 1 },
+    { instrucao: FRASE, audioTexto: "Who is Dylan? He's Poppy's father.", opcoes: op('husband', 'brother', 'father', 'son'), certa: 2 },
+    { instrucao: FRASE, audioTexto: "Gloria is Joe's mother.", opcoes: op('grandmother', 'stepmother', 'aunt', 'mother'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

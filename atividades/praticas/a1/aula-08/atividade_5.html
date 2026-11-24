@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 08 · Plurals and prices</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 08 · Gramática
+   Alinhado ao slide "Class 08: Is it cheap or expensive?" — Grammar Point (plural: +s; +es
+   depois de s, sh, ch, x, z; consoante + y → ies) e Functional Skills (How much is / are, It's /
+   They're, jeito certo de dizer preços). Conteúdo NOVO e mais difícil: outras palavras, inclusive
+   vogal + y (key → keys). 24 questões: 11 plurais + 6 is/are + 5 preços e números + 2 frase correta. */
+const PL = 'Escolha o plural certo';
+const PRECO = 'Como se diz este preço?';
+const NUM = 'Como se escreve este número?';
+const CERTA = 'Qual frase está correta?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 8, num: 5, tipo: 'escolha',
+  instrucao: 'Complete a frase',
+  itens: [
+    { instrucao: PL, frase: 'a peach → two ___', opcoes: ['peachs', 'peaches', 'peachies'], certa: 1, traducao: 'um pêssego → dois pêssegos' },
+    { instrucao: PL, frase: 'a cherry → two ___', opcoes: ['cherries', 'cherrys', 'cherryes'], certa: 0, traducao: 'uma cereja → duas cerejas' },
+    { instrucao: PL, frase: 'a sandwich → two ___', opcoes: ['sandwichs', 'sandwichies', 'sandwiches'], certa: 2, traducao: 'um sanduíche → dois sanduíches' },
+    { instrucao: PL, frase: 'a city → two ___', opcoes: ['citys', 'cities', 'cityes'], certa: 1, traducao: 'uma cidade → duas cidades' },
+    { instrucao: PL, frase: 'a boy → two ___', opcoes: ['boies', 'boyes', 'boys'], certa: 2, traducao: 'um menino → dois meninos (vogal + y: só +s)' },
+    { instrucao: PL, frase: 'a bus → two ___', opcoes: ['buses', 'buss', 'busies'], certa: 0, traducao: 'um ônibus → dois ônibus' },
+    { instrucao: PL, frase: 'a country → two ___', opcoes: ['countrys', 'countries', 'countryes'], certa: 1, traducao: 'um país → dois países' },
+    { instrucao: PL, frase: 'a dish → two ___', opcoes: ['dishs', 'dishies', 'dishes'], certa: 2, traducao: 'um prato → dois pratos' },
+    { instrucao: PL, frase: 'a baby → two ___', opcoes: ['babies', 'babys', 'babyes'], certa: 0, traducao: 'um bebê → dois bebês' },
+    { instrucao: PL, frase: 'a glass → two ___', opcoes: ['glass', 'glasses', 'glasss'], certa: 1, traducao: 'um copo → dois copos' },
+    { instrucao: PL, frase: 'a key → two ___', opcoes: ['keies', 'keyes', 'keys'], certa: 2, traducao: 'uma chave → duas chaves (vogal + y: só +s)' },
+    { frase: 'How much ___ the milk?', opcoes: ['is', 'are'], certa: 0, traducao: 'Quanto custa o leite?' },
+    { frase: 'How much ___ the eggs?', opcoes: ['is', 'are'], certa: 1, traducao: 'Quanto custam os ovos?' },
+    { frase: 'How much is the bread? ___ two euros.', opcoes: ["It's", "They're"], certa: 0, traducao: 'Quanto custa o pão? Custa dois euros.' },
+    { frase: 'How much are the peaches? ___ ninety pence.', opcoes: ["It's", "They're"], certa: 1, traducao: 'Quanto custam os pêssegos? Custam noventa centavos (de libra).' },
+    { frase: 'The vegetables ___ cheap.', opcoes: ['is', 'are', 'am'], certa: 1, traducao: 'Os legumes são baratos.' },
+    { frase: "The steak is ___. It's thirty pounds!", opcoes: ['cheap', 'expensive'], certa: 1, traducao: 'O bife é caro. Custa trinta libras!' },
+    { instrucao: PRECO, frase: '£5.20 → ___', opcoes: ['five pounds twenty', 'five pound twenty', 'five pounds and twenty cents'], certa: 0, traducao: 'cinco libras e vinte' },
+    { instrucao: PRECO, frase: '$8.50 → ___', opcoes: ['eight dollars fifty pence', 'eight dollars and fifty cents', 'eight dollar and fifty cent'], certa: 1, traducao: 'oito dólares e cinquenta centavos' },
+    { instrucao: PRECO, frase: '€14.99 → ___', opcoes: ['forty euros and ninety-nine cents', 'fourteen euro ninety-nine pence', 'fourteen euros and ninety-nine cents'], certa: 2, traducao: 'catorze euros e noventa e nove centavos' },
+    { instrucao: NUM, frase: '70 → ___', opcoes: ['seventeen', 'seventy', 'seven'], certa: 1, traducao: 'setenta' },
+    { instrucao: NUM, frase: '19 → ___', opcoes: ['nineteen', 'ninety', 'nine'], certa: 0, traducao: 'dezenove' },
+    { instrucao: CERTA, opcoes: ['How much are the cheese?', 'How much is the cheese?', 'How much is the cheeses?'], certa: 1, traducao: 'Quanto custa o queijo?' },
+    { instrucao: CERTA, opcoes: ['The apples is cheap.', 'The apple are cheap.', 'The apples are cheap.'], certa: 2, traducao: 'As maçãs são baratas.' }
+  ]
+});
+</script>
+</body>
+</html>

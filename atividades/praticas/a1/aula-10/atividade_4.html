@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 10 · Talk about a family</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 10 · Fala
+   Alinhado ao slide "Class 10: Famous Families 1" — Vocabulary (read and listen; family words)
+   e Grammar Point ('s de posse, com o mesmo som de /s/ /z/ das contrações). Conteúdo NOVO:
+   outras famílias (fatos verdadeiros). Sem "Charles's": o reconhecimento escreve de jeitos
+   diferentes. 20 questões. */
+const PAL = 'Escute e grave a palavra';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 10, num: 4, tipo: 'fala',
+  instrucao: 'Escute e grave a frase inteira',
+  itens: [
+    { instrucao: PAL, frase: 'mother', traducao: 'mãe', nota: 'O "th" é com a língua entre os dentes.' },
+    { instrucao: PAL, frase: 'father', traducao: 'pai' },
+    { instrucao: PAL, frase: 'brother', traducao: 'irmão' },
+    { instrucao: PAL, frase: 'daughter', traducao: 'filha', nota: 'O "gh" não se fala: DÓ-ter.' },
+    { instrucao: PAL, frase: 'husband', traducao: 'marido' },
+    { instrucao: PAL, frase: 'grandmother', traducao: 'avó' },
+    { instrucao: PAL, frase: 'aunt', traducao: 'tia' },
+    { instrucao: PAL, frase: 'uncle', traducao: 'tio' },
+    { instrucao: PAL, frase: 'cousin', traducao: 'primo, prima', nota: 'Soa como "CÂ-zin".' },
+    { instrucao: PAL, frase: 'parents', traducao: 'pais (pai e mãe)', nota: 'Não é "parentes": parents = pai e mãe.' },
+    { frase: "Kate is William's wife.", dica: 0, traducao: 'A Kate é a esposa do William.' },
+    { frase: "Harry is William's brother.", dica: 0, traducao: 'O Harry é o irmão do William.' },
+    { frase: "Willow is Jaden's sister.", dica: 0, traducao: 'A Willow é a irmã do Jaden.' },
+    { frase: "Who is she? She's my aunt.", dica: 0, traducao: 'Quem é ela? Ela é a minha tia.' },
+    { frase: 'My mom is Claire and my dad is Phil.', dica: 0, traducao: 'A minha mãe é a Claire e o meu pai é o Phil.' },
+    { frase: 'I have a brother. His name is Luke.', dica: 0, traducao: 'Eu tenho um irmão. O nome dele é Luke.' },
+    { frase: 'They are my parents.', dica: 0, traducao: 'Eles são os meus pais.' },
+    { frase: "George is Kate's son.", dica: 0, traducao: 'O George é o filho da Kate.' },
+    { frase: "Archie is George's cousin.", dica: 0, traducao: 'O Archie é o primo do George.' },
+    { frase: 'I have two cousins. Their names are Ana and Leo.', dica: 0, traducao: 'Eu tenho dois primos. Os nomes deles são Ana e Leo.', aceita: { there: 'their' } }
+  ]
+});
+</script>
+</body>
+</html>

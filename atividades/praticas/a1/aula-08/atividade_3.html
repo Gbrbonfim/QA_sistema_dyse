@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 08 · At the market</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 08 · Leitura
+   Alinhado ao slide "Class 08: Is it cheap or expensive?" — Functional Skills (conversas de
+   preço no mercado) e Talking Point (cheap ou expensive?). Conteúdo NOVO: Kate compra num
+   mercado em Londres e o Nick é o vendedor. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Kate', 'Good morning! How much are the apples?'],
+  ['Nick', "Good morning! They're two pounds."],
+  ['Kate', "Two pounds? They're cheap!"],
+  ['Nick', 'Yes, they are. And the peaches are cheap too.'],
+  ['Kate', 'Great! And how much is the cheese?'],
+  ['Nick', "It's six pounds fifty."],
+  ['Kate', "Six pounds fifty? It's expensive!"],
+  ['Nick', "No, it isn't. It's French cheese!"],
+  ['Kate', 'OK. How much is the salmon?'],
+  ['Nick', "It's twelve pounds ninety-nine."],
+  ['Kate', "Oh no! It's expensive too! Two avocados, please."],
+  ['Nick', 'Two avocados... two pounds forty, please.'],
+  ['Kate', 'Here you are. Thank you!'],
+  ['Nick', 'Thank you! Bye!']
+];
+const lado = q => q === 'Kate' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 8, num: 3, tipo: 'escolha',
+  instrucao: 'Leia a conversa e escolha a próxima fala',
+  itens: [
+    prox(1, ["Good morning! They're two pounds.", "Good morning! It's two pounds.", 'Thank you! Bye!'], 0, 'Bom dia! Custam duas libras.'),
+    prox(2, ['How much is the salmon?', "Two pounds? They're cheap!", 'Here you are. Thank you!'], 1, 'Duas libras? Estão baratas!'),
+    prox(3, ["No, it isn't. It's French cheese!", 'Yes, it is. And the peaches is cheap too.', 'Yes, they are. And the peaches are cheap too.'], 2, 'Sim, estão. E os pêssegos estão baratos também.'),
+    prox(4, ['Great! And how much is the cheese?', 'Great! And how much are the cheese?', "Oh no! It's expensive too!"], 0, 'Ótimo! E quanto custa o queijo?'),
+    prox(5, ["They're six pounds fifty.", "It's six pounds fifty.", 'Thank you! Bye!'], 1, 'Custa seis libras e cinquenta.'),
+    prox(6, ['OK. How much is the salmon?', 'Here you are. Thank you!', "Six pounds fifty? It's expensive!"], 2, 'Seis libras e cinquenta? É caro!'),
+    prox(7, ["No, it isn't. It's French cheese!", "No, it aren't. It's French cheese!", "Good morning! They're two pounds."], 0, 'Não, não é. É queijo francês!'),
+    prox(8, ["Two pounds? They're cheap!", 'OK. How much is the salmon?', 'Yes, they are.'], 1, 'Tá bom. Quanto custa o salmão?'),
+    prox(9, ["It's twelve pound ninety-nine.", "They're twelve pounds ninety-nine.", "It's twelve pounds ninety-nine."], 2, 'Custa doze libras e noventa e nove.'),
+    prox(10, ["Oh no! It's expensive too! Two avocados, please.", "Oh no! It's expensive too! Two avocado, please.", 'Good morning! How much are the apples?'], 0, 'Ah, não! É caro também! Dois abacates, por favor.'),
+    prox(11, ["It's French cheese!", 'Two avocados... two pounds forty, please.', 'Great! And how much is the cheese?'], 1, 'Dois abacates... duas libras e quarenta, por favor.'),
+    prox(12, ["Six pounds fifty? It's expensive!", 'Yes, they are.', 'Here you are. Thank you!'], 2, 'Aqui está. Obrigada!'),
+    { instrucao: 'Quanto custam as maçãs?', frase: "They're ___ pounds.", opcoes: ['two', 'twelve', 'six'], certa: 0, traducao: 'Custam duas libras.' },
+    { instrucao: 'As maçãs são baratas ou caras?', frase: "They're ___.", opcoes: ['expensive', 'cheap', 'French'], certa: 1, traducao: 'Elas são baratas.' },
+    { instrucao: 'Quanto custa o queijo?', frase: "It's six pounds ___.", opcoes: ['fifteen', 'fifty-five', 'fifty'], certa: 2, traducao: 'Custa seis libras e cinquenta.' },
+    { instrucao: 'De onde é o queijo?', frase: "It's ___ cheese.", opcoes: ['French', 'Italian', 'English'], certa: 0, traducao: 'É queijo francês.' },
+    { instrucao: 'Quanto custa o salmão?', frase: "It's ___ pounds ninety-nine.", opcoes: ['two', 'twelve', 'twenty'], certa: 1, traducao: 'Custa doze libras e noventa e nove.' },
+    { instrucao: 'O que a Kate acha do salmão?', frase: "It's ___.", opcoes: ['cheap', 'French', 'expensive'], certa: 2, traducao: 'É caro.' },
+    { instrucao: 'O que a Kate compra no fim?', frase: 'Two ___, please.', opcoes: ['avocados', 'apples', 'peaches'], certa: 0, traducao: 'Dois abacates, por favor.' },
+    { instrucao: 'Qual é a moeda do mercado?', frase: 'The prices are in ___.', opcoes: ['dollars', 'pounds', 'euros'], certa: 1, traducao: 'Os preços estão em libras.' }
+  ]
+});
+</script>
+</body>
+</html>

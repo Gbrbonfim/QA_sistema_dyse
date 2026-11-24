@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 08 · How much is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 08 · Escrita
+   Alinhado ao slide "Class 08: Is it cheap or expensive?" — Functional Skills (How much is /
+   How much are...? It's / They're + preço), cheap / expensive e Grammar Point (plural +s, +es,
+   +ies). Conteúdo NOVO: outros produtos e preços. A isca é is/are trocado ou o plural escrito
+   errado — nunca forma outra frase certa. 20 questões. */
+const PR = 'Monte a pergunta ou a resposta sobre preço:';
+const PL = 'Monte a frase com o plural certo:';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 8, num: 2, tipo: 'montar',
+  instrucao: 'Clique nas palavras e monte a frase (uma palavra sobra)',
+  itens: [
+    { contexto: PR, palavras: ['How', 'much', 'is', 'the', 'cheese'], isca: ['are'], fim: '?', traducao: 'Quanto custa o queijo?' },
+    { contexto: PR, palavras: ['How', 'much', 'are', 'the', 'apples'], isca: ['is'], fim: '?', traducao: 'Quanto custam as maçãs?' },
+    { contexto: PR, palavras: ["It's", 'four', 'pounds', 'fifty'], isca: ['are'], fim: '.', traducao: 'Custa quatro libras e cinquenta.' },
+    { contexto: PR, palavras: ["They're", 'two', 'dollars'], isca: ['is'], fim: '.', traducao: 'Custam dois dólares.' },
+    { contexto: PR, palavras: ['How', 'much', 'are', 'the', 'eggs'], isca: ['is'], fim: '?', traducao: 'Quanto custam os ovos?' },
+    { contexto: PR, palavras: ['How', 'much', 'is', 'the', 'water'], isca: ['are'], fim: '?', traducao: 'Quanto custa a água?' },
+    { contexto: PR, palavras: ['The', 'salmon', 'is', 'expensive'], isca: ['are'], fim: '.', traducao: 'O salmão é caro.' },
+    { contexto: PR, palavras: ['The', 'tomatoes', 'are', 'cheap'], isca: ['is'], fim: '.', traducao: 'Os tomates são baratos.' },
+    { contexto: PR, palavras: ['Is', 'the', 'chicken', 'cheap'], isca: ['are'], fim: '?', traducao: 'O frango é barato?' },
+    { contexto: PR, palavras: ['No,', 'it', "isn't"], isca: ["aren't"], fim: '.', traducao: 'Não, não é.' },
+    { contexto: PR, palavras: ['The', 'peaches', 'are', 'eighty-nine', 'pence'], isca: ['is'], fim: '.', traducao: 'Os pêssegos custam oitenta e nove centavos (de libra).' },
+    { contexto: PR, palavras: ['The', 'chocolate', 'is', 'two', 'euros'], isca: ['are'], fim: '.', traducao: 'O chocolate custa dois euros.' },
+    { contexto: PR, palavras: ['How', 'much', 'is', 'it'], isca: ['are'], fim: '?', traducao: 'Quanto custa?' },
+    { contexto: PR, palavras: ["It's", 'twelve', 'dollars', 'and', 'fifty', 'cents'], isca: ['pence'], fim: '.', traducao: 'Custa doze dólares e cinquenta centavos.' },
+    { contexto: PL, palavras: ['Two', 'pineapples,', 'please'], isca: ['pineapple'], fim: '.', traducao: 'Dois abacaxis, por favor.' },
+    { contexto: PL, palavras: ['I', 'have', 'three', 'boxes'], isca: ['boxs'], fim: '.', traducao: 'Eu tenho três caixas.' },
+    { contexto: PL, palavras: ['I', 'have', 'two', 'cherries'], isca: ['cherrys'], fim: '.', traducao: 'Eu tenho duas cerejas.' },
+    { contexto: PL, palavras: ['The', 'sandwiches', 'are', 'cheap'], isca: ['sandwichs'], fim: '.', traducao: 'Os sanduíches são baratos.' },
+    { contexto: PL, palavras: ['My', 'glasses', 'are', 'expensive'], isca: ['glass'], fim: '.', traducao: 'Meus óculos são caros.' },
+    { contexto: PL, palavras: ['How', 'much', 'are', 'the', 'avocados'], isca: ['is'], fim: '?', traducao: 'Quanto custam os abacates?' }
+  ]
+});
+</script>
+</body>
+</html>
