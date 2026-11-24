@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 42 Â· Where are you going?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 42 · Leitura
+   Alinhado ao slide "Class 42: Let's Travel" — Role-Play (destinos famosos e o que fazer lá;
+   falar dos planos de viagem com o present continuous para o futuro) e Writing (dream vacation).
+   Conteúdo NOVO: a Bruna conta para o André os planos da viagem para Nova York. Fato verdadeiro: o
+   Central Park fica em Nova York. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['André', 'Bruna! Are you traveling on vacation?'],
+  ['Bruna', 'Yes! I\'m going to New York next month.'],
+  ['André', 'Wow! Who are you going with?'],
+  ['Bruna', 'I\'m going with my best friend, Carol.'],
+  ['André', 'How are you traveling?'],
+  ['Bruna', 'We\'re flying from São Paulo on the 5th.'],
+  ['André', 'Where are you staying?'],
+  ['Bruna', 'We\'re staying in an apartment with my cousin.'],
+  ['André', 'What are you doing there?'],
+  ['Bruna', 'We\'re walking in the city and visiting Central Park.'],
+  ['André', 'Are you going shopping?'],
+  ['Bruna', 'Of course! But I\'m not buying a lot of things.'],
+  ['André', 'What are you packing?'],
+  ['Bruna', 'I\'m taking my sneakers, jeans and a jacket.'],
+  ['André', 'Are you exchanging money?'],
+  ['Bruna', 'No, I\'m not. I\'m using my credit card.']
+];
+const lado = q => q === 'André' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 42, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes! I'm going to New York next month.", 'Yes! I go to New York last month.', "Yes! I'm go to New York next month."], 0, 'Sim! Vou para Nova York no mês que vem.'),
+    prox(2, ['Wow! Who do you going with?', 'Wow! Who are you going with?', 'Wow! Who you are going with?'], 1, 'Nossa! Com quem você vai?'),
+    prox(3, ["I going with my best friend.", "I'm go with my best friend.", "I'm going with my best friend, Carol."], 2, 'Vou com a minha melhor amiga, a Carol.'),
+    prox(4, ['How are you traveling?', 'How do you traveling?', 'How you are traveling?'], 0, 'Como vocês vão viajar?'),
+    prox(5, ["We flying from São Paulo.", "We're flying from São Paulo on the 5th.", "We're fly from São Paulo on the 5th."], 1, 'Vamos voar de São Paulo no dia 5.'),
+    prox(6, ['Where do you staying?', 'Where you staying?', 'Where are you staying?'], 2, 'Onde vocês vão ficar?'),
+    prox(7, ["We're staying in an apartment with my cousin.", "We stayed in an apartment next month.", "We're stay in an apartment."], 0, 'Vamos ficar num apartamento com a minha prima.'),
+    prox(8, ['What do you doing there?', 'What are you doing there?', 'What you doing there?'], 1, 'O que vocês vão fazer lá?'),
+    prox(9, ["We walk in the city next month.", "We're walk in the city.", "We're walking in the city and visiting Central Park."], 2, 'Vamos andar pela cidade e visitar o Central Park.'),
+    prox(10, ['Are you going shopping?', 'Do you going shopping?', 'Is you going shopping?'], 0, 'Vocês vão fazer compras?'),
+    prox(11, ["Of course! But I don't buying a lot.", "Of course! But I'm not buying a lot of things.", "Of course! But I not buying a lot."], 1, 'Claro! Mas não vou comprar muita coisa.'),
+    prox(15, ["No, I don't. I'm using my credit card.", "No, I'm not. I using my credit card.", "No, I'm not. I'm using my credit card."], 2, 'Não. Vou usar o meu cartão de crédito.'),
+    { instrucao: 'Where is Bruna going?', frase: 'To ___.', opcoes: ['New York', 'Paris', 'Tokyo'], certa: 0, traducao: 'Para Nova York.' },
+    { instrucao: 'When is she going?', frase: 'Next ___.', opcoes: ['week', 'month', 'year'], certa: 1, traducao: 'No mês que vem.' },
+    { instrucao: 'Who is she going with?', frase: 'With her best friend, ___.', opcoes: ['André', 'her cousin', 'Carol'], certa: 2, traducao: 'Com a melhor amiga, a Carol.' },
+    { instrucao: 'How are they traveling?', frase: 'By ___.', opcoes: ['plane', 'car', 'bus'], certa: 0, traducao: 'De avião.' },
+    { instrucao: 'Where are they staying?', frase: 'In an ___ with her cousin.', opcoes: ['hotel', 'apartment', 'house'], certa: 1, completa: 'In an apartment with her cousin.', traducao: 'Num apartamento com a prima dela.' },
+    { instrucao: 'What park are they visiting?', frase: '___ Park.', opcoes: ['Hyde', 'Ibirapuera', 'Central'], certa: 2, traducao: 'O Central Park.' },
+    { instrucao: 'What is Bruna packing?', frase: 'Sneakers, jeans and a ___.', opcoes: ['jacket', 'swimsuit', 'dress'], certa: 0, traducao: 'Tênis, calça jeans e uma jaqueta.' },
+    { instrucao: 'Is she exchanging money?', frase: "No, she ___.", opcoes: ["doesn't", "isn't", "wasn't"], certa: 1, traducao: 'Não, não vai.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 42 Â· Travel plans</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 42 · Escuta
+   Alinhado ao slide "Class 42: Let's Travel" — os planos da Cris antes da viagem (pay my bills, go
+   shopping for clothes, buy sunscreen, pack my bags, have lunch with a friend, exchange money, go
+   to the hairdresser, go to the airport and fly) e Listening 2 (o que cada um leva na mala:
+   boots, swimsuit, jacket, shoes, dress, sunscreen, map, camera). Conteúdo NOVO: outras frases.
+   24 questões: 12 preparativos + 12 itens da mala. */
+const IC = { 'pay bills': 'receipt_long', 'go shopping for clothes': 'checkroom', 'buy sunscreen': 'sunny', 'pack bags': 'luggage',
+  'have lunch with a friend': 'restaurant', 'exchange money': 'currency_exchange', 'go to the hairdresser': 'content_cut',
+  'go to the airport': 'flight_takeoff', 'boots': 'hiking', 'swimsuit': 'pool', 'jacket': 'checkroom', 'map': 'map',
+  'camera': 'photo_camera', 'sunscreen': 'sunny', 'credit card': 'credit_card', 'dress': 'styler' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const MALA = 'Listen: what is the person taking?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 42, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the travel plan',
+  itens: [
+    { audioTexto: "On Monday, I'm paying my bills.", opcoes: op('pay bills', 'exchange money', 'pack bags', 'go to the airport'), certa: 0 },
+    { audioTexto: "She's going shopping for clothes on Tuesday.", opcoes: op('go to the hairdresser', 'go shopping for clothes', 'buy sunscreen', 'pay bills'), certa: 1 },
+    { audioTexto: "We're buying sunscreen for the beach.", opcoes: op('exchange money', 'pack bags', 'buy sunscreen', 'have lunch with a friend'), certa: 2 },
+    { audioTexto: "I'm packing my bags on Wednesday night.", opcoes: op('go to the airport', 'pay bills', 'go shopping for clothes', 'pack bags'), certa: 3 },
+    { audioTexto: "He's having lunch with Carol on Thursday.", opcoes: op('have lunch with a friend', 'go to the hairdresser', 'exchange money', 'buy sunscreen'), certa: 0 },
+    { audioTexto: "I'm exchanging money on Friday.", opcoes: op('pay bills', 'exchange money', 'pack bags', 'go shopping for clothes'), certa: 1 },
+    { audioTexto: "My mom is going to the hairdresser on Saturday.", opcoes: op('have lunch with a friend', 'buy sunscreen', 'go to the hairdresser', 'go to the airport'), certa: 2 },
+    { audioTexto: "On Sunday, we're going to the airport. We're flying to Dubai!", opcoes: op('pack bags', 'exchange money', 'pay bills', 'go to the airport'), certa: 3 },
+    { audioTexto: "Are you paying the bills before the trip?", opcoes: op('pay bills', 'go to the airport', 'buy sunscreen', 'go to the hairdresser'), certa: 0 },
+    { audioTexto: "They aren't exchanging money. They're using a credit card.", opcoes: op('exchange money', 'credit card', 'map', 'camera'), certa: 1 },
+    { audioTexto: "I'm not going to the hairdresser. I'm packing my bags.", opcoes: op('go to the hairdresser', 'pay bills', 'pack bags', 'go shopping for clothes'), certa: 2 },
+    { audioTexto: "Is she buying new clothes for the trip?", opcoes: op('buy sunscreen', 'pack bags', 'exchange money', 'go shopping for clothes'), certa: 3 },
+    { instrucao: MALA, audioTexto: "I'm going to the mountains. I'm taking my boots.", opcoes: op('boots', 'swimsuit', 'dress', 'sunscreen'), certa: 0 },
+    { instrucao: MALA, audioTexto: "I'm going to the beach. I'm taking my swimsuit.", opcoes: op('jacket', 'swimsuit', 'boots', 'map'), certa: 1 },
+    { instrucao: MALA, audioTexto: "It's cold there, so I'm taking a jacket.", opcoes: op('swimsuit', 'sunscreen', 'jacket', 'camera'), certa: 2 },
+    { instrucao: MALA, audioTexto: "I'm taking a map of the city.", opcoes: op('camera', 'credit card', 'boots', 'map'), certa: 3 },
+    { instrucao: MALA, audioTexto: "I'm taking my camera. I love taking photos.", opcoes: op('camera', 'map', 'dress', 'jacket'), certa: 0 },
+    { instrucao: MALA, audioTexto: "It's hot and sunny, so I'm taking sunscreen.", opcoes: op('boots', 'sunscreen', 'jacket', 'credit card'), certa: 1 },
+    { instrucao: MALA, audioTexto: "I'm packing a beautiful dress for the party.", opcoes: op('swimsuit', 'boots', 'dress', 'map'), certa: 2 },
+    { instrucao: MALA, audioTexto: "I'm not taking money. I'm taking my credit card.", opcoes: op('map', 'camera', 'sunscreen', 'credit card'), certa: 3 },
+    { instrucao: MALA, audioTexto: "We're walking a lot, so I'm taking my boots.", opcoes: op('boots', 'dress', 'swimsuit', 'camera'), certa: 0 },
+    { instrucao: MALA, audioTexto: "I can't wait to swim in the sea! Where's my swimsuit?", opcoes: op('jacket', 'swimsuit', 'map', 'credit card'), certa: 1 },
+    { instrucao: MALA, audioTexto: "Paris is cold and windy in winter. I'm taking my jacket.", opcoes: op('sunscreen', 'dress', 'jacket', 'swimsuit'), certa: 2 },
+    { instrucao: MALA, audioTexto: "I don't know the city, so I'm taking a map.", opcoes: op('camera', 'boots', 'sunscreen', 'map'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

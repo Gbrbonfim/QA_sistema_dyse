@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 42 Â· My travel arrangements</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 42 · Escrita
+   Alinhado ao slide "Class 42: Let's Travel" — Grammar Point 4 (travel arrangements no present
+   continuous para o futuro: afirmativa, negativa e pergunta) e Writing (plan your dream
+   vacation: Where are you going? When? How are you traveling? Who with? Where are you staying?
+   What are you packing? What are you doing there?). Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 42, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu vou pagar as minhas contas na segunda.'), palavras: ["I'm", 'paying', 'my', 'bills', 'on', 'Monday'], isca: ['pay'], fim: '.', traducao: 'Eu vou pagar as minhas contas na segunda.' },
+    { contexto: M('Nós vamos arrumar as malas no sábado de manhã.'), palavras: ['We', 'are', 'packing', 'our', 'bags', 'on', 'Saturday', 'morning'], isca: ['is'], fim: '.', traducao: 'Nós vamos arrumar as malas no sábado de manhã.' },
+    { contexto: M('Ela vai trocar dinheiro amanhã.'), palavras: ["She's", 'exchanging', 'money', 'tomorrow'], isca: ['exchanges'], fim: '.', traducao: 'Ela vai trocar dinheiro amanhã.' },
+    { contexto: M('Eu vou comprar uma mala nova na próxima sexta.'), palavras: ["I'm", 'buying', 'a', 'new', 'travel', 'bag', 'next', 'Friday'], isca: ['buy'], fim: '.', traducao: 'Eu vou comprar uma mala nova na próxima sexta.' },
+    { contexto: M('Eles não vão voar amanhã.'), palavras: ['They', "aren't", 'flying', 'tomorrow'], isca: ["isn't"], fim: '.', traducao: 'Eles não vão voar amanhã.' },
+    { contexto: M('Ela não vai viajar de carro.'), palavras: ['She', "isn't", 'traveling', 'by', 'car'], isca: ["doesn't"], fim: '.', traducao: 'Ela não vai viajar de carro.' },
+    { contexto: M('Nós vamos deixar o cachorro com os nossos pais.'), palavras: ["We're", 'leaving', 'the', 'dog', 'with', 'our', 'parents'], isca: ['leave'], fim: '.', traducao: 'Nós vamos deixar o cachorro com os nossos pais.' },
+    { contexto: M('Você vai comprar roupas de verão para a viagem?'), palavras: ['Are', 'you', 'buying', 'summer', 'clothes', 'for', 'the', 'trip'], isca: ['Do'], fim: '?', traducao: 'Você vai comprar roupas de verão para a viagem?' },
+    { contexto: M('Ele vai ficar num hotel?'), palavras: ['Is', 'he', 'staying', 'in', 'a', 'hotel'], isca: ['Are'], fim: '?', traducao: 'Ele vai ficar num hotel?' },
+    { contexto: M('Para onde você vai?'), palavras: ['Where', 'are', 'you', 'going'], isca: ['do'], fim: '?', traducao: 'Para onde você vai?' },
+    { contexto: M('Quando você vai?'), palavras: ['When', 'are', 'you', 'going'], isca: ['is'], fim: '?', traducao: 'Quando você vai?' },
+    { contexto: M('Como você vai viajar?'), palavras: ['How', 'are', 'you', 'traveling'], isca: ['travel'], fim: '?', traducao: 'Como você vai viajar?' },
+    { contexto: M('Com quem você vai?'), palavras: ['Who', 'are', 'you', 'going', 'with'], isca: ['go'], fim: '?', traducao: 'Com quem você vai?' },
+    { contexto: M('O que você vai levar na mala?'), palavras: ['What', 'are', 'you', 'packing'], isca: ['pack'], fim: '?', traducao: 'O que você vai levar na mala?' },
+    { contexto: M('Eu vou para Tóquio em abril.'), palavras: ["I'm", 'going', 'to', 'Tokyo', 'in', 'April'], isca: ['go'], fim: '.', traducao: 'Eu vou para Tóquio em abril.' },
+    { contexto: M('Eu vou de avião com a minha irmã.'), palavras: ["I'm", 'traveling', 'by', 'plane', 'with', 'my', 'sister'], isca: ['travel'], fim: '.', traducao: 'Eu vou de avião com a minha irmã.' },
+    { contexto: M('Nós vamos ficar num hotel perto do centro.'), palavras: ["We're", 'staying', 'in', 'a', 'hotel', 'near', 'the', 'center'], isca: ['stay'], fim: '.', traducao: 'Nós vamos ficar num hotel perto do centro.' },
+    { contexto: M('Eu vou levar uma jaqueta e o meu mapa.'), palavras: ["I'm", 'taking', 'a', 'jacket', 'and', 'my', 'map'], isca: ['take'], fim: '.', traducao: 'Eu vou levar uma jaqueta e o meu mapa.' },
+    { contexto: M('Nós vamos visitar templos e comer sushi.'), palavras: ["We're", 'visiting', 'temples', 'and', 'eating', 'sushi'], isca: ['visit'], fim: '.', traducao: 'Nós vamos visitar templos e comer sushi.' },
+    { contexto: M('Eu mal posso esperar!'), palavras: ['I', "can't", 'wait'], isca: ["don't"], fim: '!', traducao: 'Eu mal posso esperar!' }
+  ]
+});
+</script>
+</body>
+</html>

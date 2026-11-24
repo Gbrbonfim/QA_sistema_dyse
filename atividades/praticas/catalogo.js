@@ -424,6 +424,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'What are you doing tomorrow?', tipo: 'Escute e grave', treina: 'Fala · Futuro', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Present continuous for the future', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 42,
+        titulo: "Class 42 · Let's Travel",
+        atividades: [
+          { num: 1, titulo: 'Travel plans', tipo: 'Escute e escolha', treina: 'Escuta · Viagem', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'My travel arrangements', tipo: 'Monte a frase', treina: 'Escrita · Futuro', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Where are you going?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My dream vacation', tipo: 'Escute e grave', treina: 'Fala · Futuro', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: "Let's travel: grammar", tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

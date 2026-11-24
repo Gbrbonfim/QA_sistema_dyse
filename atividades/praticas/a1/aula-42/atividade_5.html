@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE Â· A1 Â· Aula 42 Â· Let's travel: grammar</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 42 · Gramática
+   Alinhado ao slide "Class 42: Let's Travel" — Warm Up (vacation, beach, plane, travel bag,
+   hotels, credit card), Grammar Point (present continuous para o futuro: -ing com consoante
+   dobrada e sem o "e": shopping, exchanging, having; negativa e pergunta) e Listening 2 (o que
+   levar). Conteúdo NOVO e mais difícil, com fatos verdadeiros: Tóquio fica no Japão; o Central
+   Park fica em Nova York. 24 questões. */
+const CERTA = 'Which sentence is correct?';
+const ING = 'Choose the correct -ing form';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 42, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'I usually travel by ___. It\'s fast.', opcoes: ['plane', 'hotel', 'credit card'], certa: 0, traducao: 'Eu geralmente viajo de avião. É rápido.' },
+    { frase: 'I always use my credit ___ to pay for things.', opcoes: ['bag', 'card', 'map'], certa: 1, traducao: 'Eu sempre uso o meu cartão de crédito para pagar as coisas.' },
+    { frase: 'I prefer going to the ___ to going to the mountains.', opcoes: ['airport', 'hairdresser', 'beach'], certa: 2, traducao: 'Eu prefiro ir à praia a ir para as montanhas.' },
+    { frase: 'I never have a lot of things in my travel ___.', opcoes: ['bag', 'card', 'bill'], certa: 0, traducao: 'Eu nunca tenho muitas coisas na minha mala.' },
+    { instrucao: ING, frase: 'shop → ___', opcoes: ['shoping', 'shopping', 'shopeing'], certa: 1, completa: 'shopping', traducao: 'shop → shopping (dobra o p).' },
+    { instrucao: ING, frase: 'have → ___', opcoes: ['haveing', 'havving', 'having'], certa: 2, completa: 'having', traducao: 'have → having (tira o e).' },
+    { instrucao: ING, frase: 'exchange → ___', opcoes: ['exchanging', 'exchangeing', 'exchangging'], certa: 0, completa: 'exchanging', traducao: 'exchange → exchanging (tira o e).' },
+    { instrucao: ING, frase: 'pay → ___', opcoes: ['paing', 'paying', 'payying'], certa: 1, completa: 'paying', traducao: 'pay → paying.' },
+    { frase: 'On Wednesday, I ___ packing my bags.', opcoes: ['is', 'are', 'am'], certa: 2, traducao: 'Na quarta, vou arrumar as malas.' },
+    { frase: 'My parents ___ flying to Lisbon on Sunday.', opcoes: ['are', 'is', 'am'], certa: 0, traducao: 'Os meus pais vão voar para Lisboa no domingo.' },
+    { frase: "She ___ traveling by car. She's taking the bus.", opcoes: ["aren't", "isn't", "doesn't"], certa: 1, traducao: 'Ela não vai viajar de carro. Vai de ônibus.' },
+    { frase: "We ___ leaving the cat with our parents.", opcoes: ['is', 'am', 'are'], certa: 2, traducao: 'Nós vamos deixar o gato com os nossos pais.' },
+    { frase: '___ he staying in a hotel?', opcoes: ['Is', 'Are', 'Does'], certa: 0, traducao: 'Ele vai ficar num hotel?' },
+    { frase: 'Where ___ you going on vacation?', opcoes: ['is', 'are', 'do'], certa: 1, traducao: 'Para onde você vai nas férias?' },
+    { frase: 'Who is she ___ with?', opcoes: ['go', 'goes', 'going'], certa: 2, traducao: 'Com quem ela vai?' },
+    { frase: "It's hot and sunny in Rio. I'm taking my ___.", opcoes: ['swimsuit', 'boots', 'jacket'], certa: 0, traducao: 'Está quente e ensolarado no Rio. Vou levar a minha roupa de banho.' },
+    { frase: "We're visiting the mountains. It's cold, so I'm taking warm ___.", opcoes: ['sunscreen', 'clothes', 'swimsuits'], certa: 1, traducao: 'Vamos visitar as montanhas. Está frio, então vou levar roupas quentes.' },
+    { frase: "I'm visiting temples and eating sushi in ___.", opcoes: ['Paris', 'New York', 'Tokyo'], certa: 2, traducao: 'Vou visitar templos e comer sushi em Tóquio.' },
+    { frase: "We're visiting Central Park in ___.", opcoes: ['New York', 'Paris', 'Tokyo'], certa: 0, traducao: 'Vamos visitar o Central Park em Nova York.' },
+    { frase: "I'm visiting Paris ___.", opcoes: ['last month', 'next month', 'yesterday'], certa: 1, traducao: 'Vou visitar Paris no mês que vem.' },
+    { instrucao: CERTA, opcoes: ['They not flying tomorrow.', "They don't flying tomorrow.", "They aren't flying tomorrow."], certa: 2, traducao: 'Eles não vão voar amanhã.' },
+    { instrucao: CERTA, opcoes: ['Are you buying summer clothes for the trip?', 'Do you buying summer clothes for the trip?', 'You are buy summer clothes for the trip?'], certa: 0, traducao: 'Você vai comprar roupas de verão para a viagem?' },
+    { instrucao: CERTA, opcoes: ["I'm buy a new travel bag next Friday.", "I'm buying a new travel bag next Friday.", 'I buying a new travel bag next Friday.'], certa: 1, traducao: 'Vou comprar uma mala nova na próxima sexta.' },
+    { instrucao: CERTA, opcoes: ['What you are packing?', 'What do you packing?', 'What are you packing?'], certa: 2, traducao: 'O que você vai levar na mala?' }
+  ]
+});
+</script>
+</body>
+</html>
