@@ -622,6 +622,7 @@ details.pratica-aula[open] > summary .chev{transform:rotate(90deg);}
 details.pratica-aula > summary .pa-lib{font-size:.74rem; color:var(--seal-soft); opacity:.8; margin-left:4px; white-space:nowrap;}
 details.pratica-aula > .pa-body{padding:0 14px 10px;}
 .pt-cont{font-size:.74rem; color:var(--seal-soft); opacity:.8; white-space:nowrap;}
+.manage-row.lib-todas{background:var(--antique-soft); border-radius:10px; padding-left:12px; padding-right:12px; margin-bottom:12px;}
 
 /* ---------- CAIXA SUSPENSA (details/summary nativo — sem JS) ---------- */
 details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
@@ -3178,7 +3179,36 @@ body.dyse-modal-open{overflow:hidden;}
     return '<details class="dyse-collapsible manage-course-block">' +
       '<summary class="manage-course-title"><span>' + escapeHtmlLocal(info.nome) + (info.extra ? ' <span style="font-size:.72rem; font-weight:500; opacity:.65;">· material extra</span>' : '') +
         ' <span class="pill-count">' + totalAtividadesPratica(info.slug) + '</span></span><span class="chevron">›</span></summary>' +
-      '<div class="manage-course-body">' + corpo + '</div></details>';
+      '<div class="manage-course-body">' +
+        '<div class="manage-row lib-todas"><div class="info"><b>Liberar todas</b> as atividades do ' + escapeHtmlLocal(info.nome) + '</div>' +
+          '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" class="pratica-toggle-material" onchange="togglePraticaMaterialToda(this)"><span class="slider"></span></label></div></div>' +
+        corpo + '</div></details>';
+  }
+  // Liga o "Liberar todas" do material quando todas as atividades dele estão liberadas.
+  function sincronizarMaterialPratica(raiz){
+    if(!raiz) return;
+    const caixas = raiz.matches && raiz.matches('details.manage-course-block') ? [raiz] : Array.from(raiz.querySelectorAll('details.manage-course-block'));
+    caixas.forEach(d => {
+      const m = d.querySelector('.pratica-toggle-material');
+      if(!m) return;
+      const ts = Array.from(d.querySelectorAll('.pratica-toggle'));
+      m.checked = ts.length > 0 && ts.every(t => t.checked);
+    });
+  }
+  // "Liberar todas" do material: uma gravação só, para a turma toda ou para o aluno.
+  async function togglePraticaMaterialToda(input){
+    const porTurma = !!input.closest('#praticasTurmaBox');
+    const ids = porTurma ? idsAlunosDaTurmaPratica() : [document.getElementById('praticaAlunoSel').value].filter(Boolean);
+    const caixa = input.closest('details.manage-course-block');
+    const toggles = Array.from(caixa.querySelectorAll('.pratica-toggle'));
+    const alvo = porTurma ? toggles : toggles.filter(t => t.checked !== input.checked);
+    if(input.checked && !confirm('Liberar todas as ' + toggles.length + ' atividades deste material ' + (porTurma ? 'para a turma toda' : 'para este aluno') + '?')){ input.checked = false; return; }
+    input.disabled = true;
+    const { error } = await dyseSetPraticasVarios(ids, alvo.map(itemDoToggle), input.checked);
+    input.disabled = false;
+    if(error){ console.error('togglePraticaMaterialToda:', error); input.checked = !input.checked; alert('Não foi possível salvar. Tente de novo.'); return; }
+    alvo.forEach(t => { t.checked = input.checked; if(porTurma) marcarContTurma(t, input.checked, ids.length); });
+    caixa.querySelectorAll('details.pratica-aula').forEach(a => { const t = a.querySelector('.pratica-toggle'); if(t) contarLiberadasAula(t); });
   }
   async function loadPraticasAlunos(){
     const sel = document.getElementById('praticaAlunoSel');
@@ -3267,6 +3297,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(seq !== PRATICA_TURMA_SEQ) return;
     box.innerHTML = '<p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">Ligar libera a atividade para os <b>' + total + ' aluno' + (total > 1 ? 's' : '') +
         '</b> da turma de uma vez. Aluno que entrar na turma depois precisa ser liberado de novo.</p>' + corpo;
+    sincronizarMaterialPratica(box);
   }
   const idsAlunosDaTurmaPratica = () => {
     const turmaId = document.getElementById('praticaTurmaSel').value;
@@ -3459,6 +3490,7 @@ body.dyse-modal-open{overflow:hidden;}
     });
     if(document.getElementById('praticaAlunoSel').value !== alunoId) return;   // trocou de aluno no meio
     box.innerHTML = corpo;
+    sincronizarMaterialPratica(box);
   }
 
   /* Agrupa as atividades do material por AULA dada. Um PowerPoint que dura
@@ -3493,6 +3525,7 @@ body.dyse-modal-open{overflow:hidden;}
     if(lb) lb.textContent = n + '/' + ts.length + ' liberadas';
     const todas = caixa.querySelector('.pratica-toggle-aula');
     if(todas) todas.checked = ts.length > 0 && n === ts.length;
+    sincronizarMaterialPratica(caixa.closest('details.manage-course-block'));
   }
 
   async function liberarRefazerPratica(course, aula, num, btn){
@@ -3579,20 +3612,56 @@ body.dyse-modal-open{overflow:hidden;}
           '<div class="manage-row-actions">' +
             '<a class="btn btn-preview" href="' + activityUrl(course.id, a.num) + '" target="_blank" rel="noopener">' + MI('visibility') + ' Visualizar</a>' +
             '<label class="dyse-toggle">' +
-              '<input type="checkbox" ' + (isOn ? 'checked' : '') + ' onchange="togglePublish(\'' + course.id + '\', ' + a.num + ', this.checked)">' +
+              '<input type="checkbox" class="curso-toggle" data-course="' + course.id + '" data-num="' + a.num + '" ' + (isOn ? 'checked' : '') + ' onchange="togglePublishCurso(this)">' +
               '<span class="slider"></span>' +
             '</label>' +
           '</div>' +
         '</div>';
       }).join('');
+      // "Liberar todas" do curso: só as atividades que a gestão já liberou para os professores.
+      const liberaveis = course.activities.filter(a => releasedMap[a.num] !== undefined ? releasedMap[a.num] : true);
+      const todasOn = liberaveis.length > 0 && liberaveis.every(a => !!publishedMap[a.num]);
       blocos[course.id] =
         '<details class="dyse-collapsible manage-course-block">' +
           '<summary class="manage-course-title"><span>' + escapeHtmlLocal(course.name) + ' <span class="pill-count">' + course.activities.length + '</span></span><span class="chevron">›</span></summary>' +
           '<div class="manage-course-body"><p style="font-size:.8rem; color:var(--seal-soft); margin:0 0 12px;">No ' + escapeHtmlLocal(course.name) +
-            ' a liberação vale para todos os alunos que usam o ' + escapeHtmlLocal(course.name) + '.</p>' + rows + '</div>' +
+            ' a liberação vale para todos os alunos que usam o ' + escapeHtmlLocal(course.name) + '.</p>' +
+            '<div class="manage-row lib-todas"><div class="info"><b>Liberar todas</b> as atividades do ' + escapeHtmlLocal(course.name) + '</div>' +
+              '<div class="manage-row-actions"><label class="dyse-toggle"><input type="checkbox" class="curso-toggle-todas" ' + (todasOn ? 'checked' : '') +
+                ' onchange="togglePublishCursoTodas(this)"><span class="slider"></span></label></div></div>' +
+            rows + '</div>' +
         '</details>';
     }
     return blocos;
+  }
+
+  /* TOEFL (curso antigo): liberação geral. Depois de gravar, refaz o bloco em
+     cache para a próxima turma/aluno aberto já mostrar o estado novo. */
+  function sincronizarCursoTodas(caixa){
+    const m = caixa && caixa.querySelector('.curso-toggle-todas');
+    if(!m) return;
+    const ts = Array.from(caixa.querySelectorAll('.curso-toggle'));
+    m.checked = ts.length > 0 && ts.every(t => t.checked);
+  }
+  async function togglePublishCurso(input){
+    input.disabled = true;
+    const { error } = await dyseSetPublished(input.dataset.course, +input.dataset.num, input.checked);
+    input.disabled = false;
+    if(error){ console.error('togglePublishCurso:', error); input.checked = !input.checked; alert('Não foi possível salvar. Tente de novo.'); return; }
+    sincronizarCursoTodas(input.closest('details.manage-course-block'));
+    PRATICAS_CTX.cursosPromessa = montarBlocosCursosAntigos();
+  }
+  async function togglePublishCursoTodas(input){
+    const caixa = input.closest('details.manage-course-block');
+    const ts = Array.from(caixa.querySelectorAll('.curso-toggle')).filter(t => t.checked !== input.checked);
+    if(input.checked && !confirm('Liberar todas as atividades deste curso para todos os alunos que usam ele?')){ input.checked = false; return; }
+    input.disabled = true;
+    const res = await Promise.all(ts.map(t => dyseSetPublished(t.dataset.course, +t.dataset.num, input.checked)));
+    input.disabled = false;
+    res.forEach((r, i) => { if(!r.error) ts[i].checked = input.checked; else console.error('togglePublishCursoTodas:', r.error); });
+    if(res.some(r => r.error)) alert('Algumas atividades não foram salvas. Tente de novo.');
+    sincronizarCursoTodas(caixa);
+    PRATICAS_CTX.cursosPromessa = montarBlocosCursosAntigos();
   }
 
   async function loadMaterialPanel(){
