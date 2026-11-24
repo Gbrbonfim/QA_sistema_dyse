@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 28 · What's the weather like?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 28 · Escuta
+   Alinhado ao slide "Class 28: Surviving the Weather!" — Vocabulary: Seasons and the Weather
+   (winter, summer, spring, fall; sunny, rainy, cloudy, snowy, windy, warm, hot, cold) e Grammar
+   Point (present continuous na pergunta e na negativa: Is it raining? No, it isn't. It's
+   snowing.). Conteúdo NOVO: outras frases. As figuras são ícones. 24 questões: 12 palavras +
+   12 perguntas e respostas. */
+const IC = { sunny: 'sunny', rainy: 'rainy', cloudy: 'cloud', snowy: 'weather_snowy', windy: 'air', warm: 'thermometer', hot: 'heat',
+  cold: 'severe_cold', winter: 'ac_unit', summer: 'beach_access', spring: 'local_florist', fall: 'nature' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const QA = 'Listen to the question and the answer. What is the weather like?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 28, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the weather or the season',
+  itens: [
+    { audioTexto: "It's sunny.", opcoes: op('sunny', 'rainy', 'cloudy', 'windy'), certa: 0 },
+    { audioTexto: "It's rainy.", opcoes: op('snowy', 'rainy', 'sunny', 'cold'), certa: 1 },
+    { audioTexto: "It's cloudy.", opcoes: op('windy', 'sunny', 'cloudy', 'warm'), certa: 2 },
+    { audioTexto: "It's snowy.", opcoes: op('rainy', 'cloudy', 'cold', 'snowy'), certa: 3 },
+    { audioTexto: "It's windy.", opcoes: op('windy', 'warm', 'sunny', 'snowy'), certa: 0 },
+    { audioTexto: "It's warm.", opcoes: op('cold', 'warm', 'windy', 'cloudy'), certa: 1 },
+    { audioTexto: "It's very cold.", opcoes: op('hot', 'warm', 'cold', 'sunny'), certa: 2 },
+    { audioTexto: "It's very hot!", opcoes: op('cold', 'windy', 'snowy', 'hot'), certa: 3 },
+    { audioTexto: 'winter', opcoes: op('winter', 'summer', 'spring', 'fall'), certa: 0 },
+    { audioTexto: 'summer', opcoes: op('spring', 'summer', 'winter', 'fall'), certa: 1 },
+    { audioTexto: 'spring', opcoes: op('fall', 'winter', 'spring', 'summer'), certa: 2 },
+    { audioTexto: 'fall', opcoes: op('summer', 'spring', 'winter', 'fall'), certa: 3 },
+    { instrucao: QA, audioTexto: "Is it raining? No, it isn't. It's snowing.", opcoes: op('snowy', 'rainy', 'sunny', 'cloudy'), certa: 0 },
+    { instrucao: QA, audioTexto: "Is it snowing today? No, it isn't. It's raining.", opcoes: op('snowy', 'rainy', 'windy', 'hot'), certa: 1 },
+    { instrucao: QA, audioTexto: "Are you wearing a coat? No, I'm not. It's very hot today.", opcoes: op('cold', 'snowy', 'hot', 'rainy'), certa: 2 },
+    { instrucao: QA, audioTexto: "Is she carrying an umbrella? Yes, she is. It's raining.", opcoes: op('sunny', 'snowy', 'windy', 'rainy'), certa: 3 },
+    { instrucao: QA, audioTexto: "Is he wearing a scarf and gloves? Yes, he is. It's very cold.", opcoes: op('cold', 'hot', 'warm', 'sunny'), certa: 0 },
+    { instrucao: QA, audioTexto: "Are they wearing sunglasses? Yes, they are. It's sunny.", opcoes: op('cloudy', 'sunny', 'rainy', 'snowy'), certa: 1 },
+    { instrucao: QA, audioTexto: "Is the sun shining? No, it isn't. It's cloudy.", opcoes: op('sunny', 'hot', 'cloudy', 'snowy'), certa: 2 },
+    { instrucao: QA, audioTexto: "Is my hat flying? Yes, it is! It's very windy.", opcoes: op('rainy', 'snowy', 'sunny', 'windy'), certa: 3 },
+    { instrucao: QA, audioTexto: "Are the children playing in the snow? Yes, they are.", opcoes: op('snowy', 'rainy', 'hot', 'windy'), certa: 0 },
+    { instrucao: QA, audioTexto: "Are you wearing a sweater? No, I'm not. It isn't cold. It's warm.", opcoes: op('cold', 'warm', 'snowy', 'windy'), certa: 1 },
+    { instrucao: QA, audioTexto: "Is it raining? No, it isn't. It's sunny. Let's go out now!", opcoes: op('rainy', 'snowy', 'sunny', 'windy'), certa: 2 },
+    { instrucao: QA, audioTexto: "Are they swimming in the sea? Yes, they are. It's summer and it's very hot.", opcoes: op('cold', 'snowy', 'windy', 'hot'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

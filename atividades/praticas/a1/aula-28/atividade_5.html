@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 28 · Present continuous: all forms</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 28 · Gramática
+   Alinhado ao slide "Class 28: Surviving the Weather!" — Grammar Point (present continuous nas 3
+   formas, sempre com to be, nunca do / does) e Vocabulary (estações, tempo e roupas para cada
+   tempo). Conteúdo NOVO e mais difícil: escolher a roupa pelo tempo e a forma certa da pergunta /
+   negativa. 24 questões. */
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 28, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: '___ it raining?', opcoes: ['Is', 'Does', 'Are'], certa: 0, traducao: 'Está chovendo?' },
+    { frase: '___ they having dinner?', opcoes: ['Do', 'Are', 'Is'], certa: 1, traducao: 'Eles estão jantando?' },
+    { frase: '___ I doing the right exercise?', opcoes: ['Is', 'Do', 'Am'], certa: 2, traducao: 'Eu estou fazendo o exercício certo?' },
+    { frase: "He ___ working today.", opcoes: ["isn't", "doesn't", "aren't"], certa: 0, traducao: 'Ele não está trabalhando hoje.' },
+    { frase: "We ___ watching TV.", opcoes: ["isn't", "aren't", "don't"], certa: 1, traducao: 'Nós não estamos assistindo TV.' },
+    { frase: "I ___ writing in the book.", opcoes: ["don't", "isn't", "'m not"], certa: 2, traducao: 'Eu não estou escrevendo no livro.' },
+    { frase: 'Is she running in the park now? Yes, she ___.', opcoes: ['is', 'does', 'are'], certa: 0, traducao: 'Ela está correndo no parque agora? Sim, está.' },
+    { frase: "Are you using a computer now? No, I ___.", opcoes: ["don't", "'m not", "isn't"], certa: 1, traducao: 'Você está usando um computador agora? Não, não estou.' },
+    { frase: "Are they wearing school uniforms? No, they ___.", opcoes: ["don't", "isn't", "aren't"], certa: 2, traducao: 'Eles estão usando uniforme? Não, não estão.' },
+    { frase: 'Is your sister ___ in the new shop?', opcoes: ['working', 'work', 'works'], certa: 0, traducao: 'A sua irmã está trabalhando na loja nova?' },
+    { frase: "It's raining. Take an ___.", opcoes: ['scarf', 'umbrella', 'gloves'], certa: 1, completa: "It's raining. Take an umbrella.", traducao: 'Está chovendo. Leve um guarda-chuva.' },
+    { frase: "It's snowing. I'm wearing a thick winter ___.", opcoes: ['top', 'shorts', 'coat'], certa: 2, traducao: 'Está nevando. Eu estou usando um casaco grosso de inverno.' },
+    { frase: "It's sunny and hot. She's wearing ___.", opcoes: ['sunglasses', 'gloves', 'a scarf'], certa: 0, traducao: 'Está ensolarado e quente. Ela está usando óculos de sol.' },
+    { frase: "It's very ___. Are you wearing gloves?", opcoes: ['hot', 'cold', 'warm'], certa: 1, traducao: 'Está muito frio. Você está usando luvas?' },
+    { frase: 'Winter, spring, summer and ___.', opcoes: ['sunny', 'snowy', 'fall'], certa: 2, traducao: 'Inverno, primavera, verão e outono.' },
+    { frase: "When it's summer in Brazil, it's ___ in Canada.", opcoes: ['winter', 'summer', 'spring'], certa: 0, traducao: 'Quando é verão no Brasil, é inverno no Canadá.' },
+    { frase: "What's the weather ___ today?", opcoes: ['how', 'like', 'is'], certa: 1, traducao: 'Como está o tempo hoje?' },
+    { frase: "John and I ___ staying at home today because it's cold.", opcoes: ["isn't", "don't", "aren't"], certa: 2, traducao: 'O John e eu não vamos ficar em casa hoje porque está frio.' },
+    { frase: "It isn't raining. ___ go out now.", opcoes: ["Let's", 'Lets', 'Let'], certa: 0, traducao: 'Não está chovendo. Vamos sair agora.' },
+    { frase: "___ you going home now? It's only four o'clock.", opcoes: ['Do', 'Are', 'Is'], certa: 1, traducao: 'Você está indo para casa agora? São só quatro horas.' },
+    { instrucao: CERTA, opcoes: ['Does it raining?', 'Is it rain?', 'Is it raining?'], certa: 2, traducao: 'Está chovendo?' },
+    { instrucao: CERTA, opcoes: ["She isn't wearing a jacket.", "She doesn't wearing a jacket.", "She not wearing a jacket."], certa: 0, traducao: 'Ela não está usando jaqueta.' },
+    { instrucao: CERTA, opcoes: ['Are your parents work now?', 'Are your parents working now?', 'Do your parents working now?'], certa: 1, traducao: 'Seus pais estão trabalhando agora?' },
+    { instrucao: CERTA, opcoes: ["They don't painting the house.", "They aren't paint the house.", "They aren't painting the house."], certa: 2, traducao: 'Eles não estão pintando a casa.' }
+  ]
+});
+</script>
+</body>
+</html>

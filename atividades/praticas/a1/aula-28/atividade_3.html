@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 28 · Weather call</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 28 · Leitura
+   Alinhado ao slide "Class 28: Surviving the Weather!" — Talking Point (What season is it where
+   you live? What's the weather like?) e Speaking (What are you wearing today? What is your family
+   doing now?). Conteúdo NOVO: a Ana (no Brasil) e o primo Jack (no Canadá) conversam por vídeo.
+   Fato verdadeiro: quando é verão no Brasil, é inverno no Canadá (hemisférios opostos).
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ana', "Hi, Jack! What's the weather like in Toronto today?"],
+  ['Jack', "It's very cold! It's snowing. It's winter here."],
+  ['Ana', "Wow! Here in Brazil it's summer. It's very hot!"],
+  ['Jack', 'Are you wearing shorts?'],
+  ['Ana', "Yes, I am! I'm wearing shorts and flip flops."],
+  ['Jack', "I'm wearing a thick winter coat, a scarf and gloves!"],
+  ['Ana', 'Ha ha! Are you going to school today?'],
+  ['Jack', "No, I'm not. The school is closed. I'm staying at home."],
+  ['Ana', 'What are your parents doing?'],
+  ['Jack', "My dad is making hot chocolate and my mom is reading a book."],
+  ['Ana', 'Nice! Is your sister playing in the snow?'],
+  ['Jack', "Yes, she is! She's wearing boots and a hat."],
+  ['Ana', "I'm going to the beach now. Bye, Jack!"],
+  ['Jack', 'Bye! Have fun in the sun!']
+];
+const lado = q => q === 'Ana' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 28, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["It's very cold! It's snowing. It's winter here.", "It's very cold! It snowing. It's winter here.", "It's very cold! It's snowwing."], 0, 'Está muito frio! Está nevando. É inverno aqui.'),
+    prox(2, ["Wow! Here in Brazil it's winter too.", "Wow! Here in Brazil it's summer. It's very hot!", 'Bye, Jack!'], 1, 'Nossa! Aqui no Brasil é verão. Está muito quente!'),
+    prox(3, ['Do you wearing shorts?', 'You are wearing shorts?', 'Are you wearing shorts?'], 2, 'Você está de short?'),
+    prox(4, ["Yes, I am! I'm wearing shorts and flip flops.", "Yes, I do! I'm wearing shorts.", "Yes, I am! I wearing shorts and flip flops."], 0, 'Sim! Eu estou de short e chinelo.'),
+    prox(5, ["I'm wear a thick winter coat.", "I'm wearing a thick winter coat, a scarf and gloves!", 'Are you going to school today?'], 1, 'Eu estou usando um casaco grosso de inverno, um cachecol e luvas!'),
+    prox(6, ['Bye!', 'Ha ha! Do you going to school today?', 'Ha ha! Are you going to school today?'], 2, 'Haha! Você vai à escola hoje?'),
+    prox(7, ["No, I'm not. The school is closed. I'm staying at home.", "No, I don't. I'm staying at home.", "No, I'm not. I staying at home."], 0, 'Não. A escola está fechada. Eu vou ficar em casa.'),
+    prox(8, ['What do your parents doing?', 'What are your parents doing?', 'What is your parents doing?'], 1, 'O que os seus pais estão fazendo?'),
+    prox(9, ['My dad make hot chocolate.', 'My dad is makeing hot chocolate.', 'My dad is making hot chocolate and my mom is reading a book.'], 2, 'Meu pai está fazendo chocolate quente e minha mãe está lendo um livro.'),
+    prox(10, ['Nice! Is your sister playing in the snow?', 'Nice! Does your sister playing in the snow?', 'Nice! Is your sister play in the snow?'], 0, 'Legal! A sua irmã está brincando na neve?'),
+    prox(11, ["Yes, she does! She's wearing boots.", "Yes, she is! She's wearing boots and a hat.", "Yes, she is! She wearing boots and a hat."], 1, 'Sim! Ela está usando botas e um chapéu.'),
+    prox(12, ['Are you wearing shorts?', "It's very cold!", "I'm going to the beach now. Bye, Jack!"], 2, 'Eu estou indo à praia agora. Tchau, Jack!'),
+    { instrucao: "What's the weather like in Toronto?", frase: "It's cold and ___.", opcoes: ['snowy', 'sunny', 'hot'], certa: 0, traducao: 'Está frio e com neve.' },
+    { instrucao: 'What season is it in Brazil?', frase: "It's ___.", opcoes: ['winter', 'summer', 'fall'], certa: 1, traducao: 'É verão.' },
+    { instrucao: 'Is Jack going to school today?', frase: "No, he ___.", opcoes: ["doesn't", "aren't", "isn't"], certa: 2, traducao: 'Não, ele não está.' },
+    { instrucao: 'What is Ana wearing?', frase: 'Shorts and ___.', opcoes: ['flip flops', 'boots', 'gloves'], certa: 0, traducao: 'Short e chinelo.' },
+    { instrucao: "What is Jack's dad doing?", frase: "He's making hot ___.", opcoes: ['coffee', 'chocolate', 'soup'], certa: 1, traducao: 'Ele está fazendo chocolate quente.' },
+    { instrucao: "What is Jack's mom doing?", frase: "She's reading a ___.", opcoes: ['message', 'menu', 'book'], certa: 2, traducao: 'Ela está lendo um livro.' },
+    { instrucao: "What is Jack's sister doing?", frase: "She's playing in the ___.", opcoes: ['snow', 'sea', 'park'], certa: 0, traducao: 'Ela está brincando na neve.' },
+    { instrucao: 'Where is Ana going?', frase: 'To the ___.', opcoes: ['school', 'beach', 'gym'], certa: 1, traducao: 'À praia.' }
+  ]
+});
+</script>
+</body>
+</html>

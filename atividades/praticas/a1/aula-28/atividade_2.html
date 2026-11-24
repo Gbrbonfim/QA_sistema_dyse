@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 28 · Is it raining?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 28 · Escrita
+   Alinhado ao slide "Class 28: Surviving the Weather!" — Grammar Point (present continuous nas 3
+   formas: Is it raining? It isn't raining. Are they having dinner?) e exercício 3 (+ / - / ?).
+   Conteúdo NOVO: outras frases. O contexto traz a frase em português. A isca é do / does / don't
+   (o present continuous usa sempre o to be) ou o verbo sem -ing. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 28, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Está chovendo?'), palavras: ['Is', 'it', 'raining'], isca: ['Does'], fim: '?', traducao: 'Está chovendo?' },
+    { contexto: M('Não está chovendo. Vamos sair agora.'), palavras: ['It', "isn't", 'raining.', "Let's", 'go', 'out', 'now'], isca: ["doesn't"], fim: '.', traducao: 'Não está chovendo. Vamos sair agora.' },
+    { contexto: M('Seus pais estão trabalhando agora?'), palavras: ['Are', 'your', 'parents', 'working', 'now'], isca: ['Do'], fim: '?', traducao: 'Seus pais estão trabalhando agora?' },
+    { contexto: M('Meu irmão não está jogando futebol hoje.'), palavras: ['My', 'brother', "isn't", 'playing', 'football', 'today'], isca: ["doesn't"], fim: '.', traducao: 'Meu irmão não está jogando futebol hoje.' },
+    { contexto: M('Ela está usando óculos de sol porque está ensolarado.'), palavras: ['She', 'is', 'wearing', 'sunglasses', 'because', "it's", 'sunny'], isca: ['wears'], fim: '.', traducao: 'Ela está usando óculos de sol porque está ensolarado.' },
+    { contexto: M('Você está indo para casa agora?'), palavras: ['Are', 'you', 'going', 'home', 'now'], isca: ['Do'], fim: '?', traducao: 'Você está indo para casa agora?' },
+    { contexto: M('Eu não estou usando jeans. É uma festa formal.'), palavras: ["I'm", 'not', 'wearing', 'jeans.', "It's", 'a', 'formal', 'party'], isca: ["don't"], fim: '.', traducao: 'Eu não estou usando jeans. É uma festa formal.' },
+    { contexto: M('Ela não está usando jaqueta.'), palavras: ['She', "isn't", 'wearing', 'a', 'jacket'], isca: ['wear'], fim: '.', traducao: 'Ela não está usando jaqueta.' },
+    { contexto: M('A sua irmã está trabalhando na loja nova?'), palavras: ['Is', 'your', 'sister', 'working', 'in', 'the', 'new', 'shop'], isca: ['Does'], fim: '?', traducao: 'A sua irmã está trabalhando na loja nova?' },
+    { contexto: M('As crianças estão comendo pipoca.'), palavras: ['The', 'children', 'are', 'eating', 'popcorn'], isca: ['is'], fim: '.', traducao: 'As crianças estão comendo pipoca.' },
+    { contexto: M('Eles estão morando na França agora?'), palavras: ['Are', 'they', 'living', 'in', 'France', 'now'], isca: ['Do'], fim: '?', traducao: 'Eles estão morando na França agora?' },
+    { contexto: M('Eles não estão pintando a casa hoje.'), palavras: ['They', "aren't", 'painting', 'the', 'house', 'today'], isca: ["don't"], fim: '.', traducao: 'Eles não estão pintando a casa hoje.' },
+    { contexto: M('Sim, ela está. Ela está indo para a academia.'), palavras: ['Yes,', 'she', 'is.', "She's", 'going', 'to', 'the', 'gym'], isca: ['does'], fim: '.', traducao: 'Sim, ela está. Ela está indo para a academia.' },
+    { contexto: M('Não, eles não estão. Eles estão de pijama.'), palavras: ['No,', 'they', "aren't.", "They're", 'wearing', 'pajamas'], isca: ["don't"], fim: '.', traducao: 'Não, eles não estão. Eles estão de pijama.' },
+    { contexto: M('Está nevando hoje?'), palavras: ['Is', 'it', 'snowing', 'today'], isca: ['snows'], fim: '?', traducao: 'Está nevando hoje?' },
+    { contexto: M('Como está o tempo hoje?'), palavras: ["What's", 'the', 'weather', 'like', 'today'], isca: ['how'], fim: '?', traducao: 'Como está o tempo hoje?' },
+    { contexto: M('Ela está carregando um guarda-chuva.'), palavras: ["She's", 'carrying', 'an', 'umbrella'], isca: ['a'], fim: '.', traducao: 'Ela está carregando um guarda-chuva.' },
+    { contexto: M('Eu estou usando um cachecol e luvas.'), palavras: ["I'm", 'wearing', 'a', 'scarf', 'and', 'gloves'], isca: ['wear'], fim: '.', traducao: 'Eu estou usando um cachecol e luvas.' },
+    { contexto: M('Você está se sentindo cansado hoje?'), palavras: ['Are', 'you', 'feeling', 'tired', 'today'], isca: ['Do'], fim: '?', traducao: 'Você está se sentindo cansado hoje?' },
+    { contexto: M('O que a sua família está fazendo agora?'), palavras: ['What', 'is', 'your', 'family', 'doing', 'now'], isca: ['does'], fim: '?', traducao: 'O que a sua família está fazendo agora?' }
+  ]
+});
+</script>
+</body>
+</html>

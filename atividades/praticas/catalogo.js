@@ -288,6 +288,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: "Say what you're wearing", tipo: 'Escute e grave', treina: 'Fala · Roupas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Present continuous', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 28,
+        titulo: 'Class 28 · Surviving the Weather!',
+        atividades: [
+          { num: 1, titulo: "What's the weather like?", tipo: 'Escute e escolha', treina: 'Escuta · Tempo', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Is it raining?', tipo: 'Monte a frase', treina: 'Escrita · Present continuous', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Weather call', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Talk about the weather', tipo: 'Escute e grave', treina: 'Fala · Tempo', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Present continuous: all forms', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
