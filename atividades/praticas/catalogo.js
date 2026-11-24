@@ -321,6 +321,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Review: speak', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Review: grammar', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 31,
+        titulo: 'Class 31 · Is there a kitchen?',
+        atividades: [
+          { num: 1, titulo: 'Rooms and furniture', tipo: 'Escute e escolha', treina: 'Escuta · Casa', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'There is, there are', tipo: 'Monte a frase', treina: 'Escrita · There to be', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'A new apartment', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Describe your house', tipo: 'Escute e grave', treina: 'Fala · Casa', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Some or any?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

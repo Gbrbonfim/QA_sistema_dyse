@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 31 · Describe your house</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 31 · Fala
+   Alinhado ao slide "Class 31: Is there a kitchen?" — Vocabulary (listen and check), Grammar Point
+   (There's com contração; There are...) e Writing and Speaking ("Write a short description of
+   your house... Present it to the class"). Conteúdo NOVO: outras frases. 20 questões. */
+const PAL = 'Listen and record the words';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 31, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { instrucao: PAL, frase: 'living room', traducao: 'sala de estar' },
+    { instrucao: PAL, frase: 'dining room', traducao: 'sala de jantar' },
+    { instrucao: PAL, frase: 'bathroom', traducao: 'banheiro' },
+    { instrucao: PAL, frase: 'garage', traducao: 'garagem', nota: 'Soa como "ga-RÁJ" (americano).' },
+    { instrucao: PAL, frase: 'armchair', traducao: 'poltrona' },
+    { instrucao: PAL, frase: 'closet', traducao: 'armário embutido, closet' },
+    { instrucao: PAL, frase: 'shelves', traducao: 'prateleiras' },
+    { instrucao: PAL, frase: 'stove', traducao: 'fogão' },
+    { frase: "There's a table in the kitchen.", dica: 0, traducao: 'Tem uma mesa na cozinha.', nota: "There's soa como \"DÉRZ\"." },
+    { frase: 'There are two sofas in the living room.', dica: 0, traducao: 'Tem dois sofás na sala de estar.' },
+    { frase: 'There are some plants in the hall.', dica: 0, traducao: 'Tem algumas plantas no corredor.' },
+    { frase: "There isn't an armchair in the bedroom.", dica: 0, traducao: 'Não tem poltrona no quarto.' },
+    { frase: "There aren't any books on the shelves.", dica: 0, traducao: 'Não tem nenhum livro nas prateleiras.' },
+    { frase: 'Is there a car in the garage?', dica: 0, traducao: 'Tem um carro na garagem?' },
+    { frase: "Yes, there is.", dica: 0, traducao: 'Sim, tem.' },
+    { frase: 'Are there any plants in the living room?', dica: 0, traducao: 'Tem plantas na sala de estar?' },
+    { frase: "No, there aren't.", dica: 0, traducao: 'Não, não tem.' },
+    { frase: 'In my house, there are three bedrooms and two bathrooms.', dica: 0, traducao: 'Na minha casa, tem três quartos e dois banheiros.' },
+    { frase: "There isn't a garage, but there's a small garden.", dica: 0, traducao: 'Não tem garagem, mas tem um jardim pequeno.' },
+    { frase: 'In my bedroom, there is a bed, a desk and a lamp.', dica: 0, traducao: 'No meu quarto, tem uma cama, uma escrivaninha e um abajur.' }
+  ]
+});
+</script>
+</body>
+</html>

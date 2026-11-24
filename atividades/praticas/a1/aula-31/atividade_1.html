@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 31 · Rooms and furniture</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 31 · Escuta
+   Alinhado ao slide "Class 31: Is there a kitchen?" — Vocabulary (bedroom, bathroom, garage,
+   kitchen, hall, living room, dining room, garden, study; sofa, stove, bed, lamp, chairs, plant,
+   coffee table, shower, closet, shelves, armchair, desk, table) e Grammar Point (there is / there
+   are; isn't / aren't any). Conteúdo NOVO: o aluno ouve o que TEM e o que NÃO tem e escolhe o que
+   existe. As figuras são ícones. 24 questões: 12 palavras + 12 frases. */
+const IC = { bedroom: 'bedroom_parent', bathroom: 'bathtub', garage: 'garage', kitchen: 'kitchen', hall: 'door_front',
+  'living room': 'living', 'dining room': 'dining', garden: 'yard', study: 'desk', sofa: 'weekend', stove: 'oven', bed: 'bed',
+  lamp: 'table_lamp', chairs: 'chair_alt', plant: 'potted_plant', 'coffee table': 'table_bar', shower: 'shower', closet: 'door_sliding',
+  shelves: 'shelves', armchair: 'chair', desk: 'desk', table: 'table_restaurant', TV: 'tv' };
+const op = (...cs) => cs.map(c => ({ label: c, icon: IC[c] }));
+const TEM = 'Listen. Choose the thing that IS in the room';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 31, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the room or the thing',
+  itens: [
+    { audioTexto: 'a kitchen', opcoes: op('kitchen', 'bathroom', 'garage', 'study'), certa: 0 },
+    { audioTexto: 'a living room', opcoes: op('dining room', 'living room', 'bedroom', 'hall'), certa: 1 },
+    { audioTexto: 'a garage', opcoes: op('garden', 'kitchen', 'garage', 'hall'), certa: 2 },
+    { audioTexto: 'a study', opcoes: op('bedroom', 'bathroom', 'dining room', 'study'), certa: 3 },
+    { audioTexto: 'a hall', opcoes: op('hall', 'garden', 'kitchen', 'study'), certa: 0 },
+    { audioTexto: 'a dining room', opcoes: op('living room', 'dining room', 'bathroom', 'garage'), certa: 1 },
+    { audioTexto: 'a garden', opcoes: op('garage', 'hall', 'garden', 'bedroom'), certa: 2 },
+    { audioTexto: 'a bathroom', opcoes: op('bedroom', 'kitchen', 'study', 'bathroom'), certa: 3 },
+    { audioTexto: 'a stove', opcoes: op('stove', 'shower', 'shelves', 'sofa'), certa: 0 },
+    { audioTexto: 'an armchair', opcoes: op('chairs', 'armchair', 'sofa', 'table'), certa: 1 },
+    { audioTexto: 'shelves', opcoes: op('closet', 'desk', 'shelves', 'lamp'), certa: 2 },
+    { audioTexto: 'a closet', opcoes: op('shelves', 'shower', 'stove', 'closet'), certa: 3 },
+    { instrucao: TEM, audioTexto: "There's a sofa, but there isn't a TV.", opcoes: op('sofa', 'TV', 'armchair', 'lamp'), certa: 0 },
+    { instrucao: TEM, audioTexto: "There isn't a desk. There's a bed.", opcoes: op('desk', 'bed', 'closet', 'shelves'), certa: 1 },
+    { instrucao: TEM, audioTexto: "There aren't any chairs, but there's a table.", opcoes: op('chairs', 'sofa', 'table', 'armchair'), certa: 2 },
+    { instrucao: TEM, audioTexto: "There isn't a TV in the kitchen. There's a stove.", opcoes: op('shower', 'TV', 'lamp', 'stove'), certa: 3 },
+    { instrucao: TEM, audioTexto: "There are some plants in the hall.", opcoes: op('plant', 'lamp', 'chairs', 'TV'), certa: 0 },
+    { instrucao: TEM, audioTexto: "There isn't an armchair, but there are two chairs.", opcoes: op('armchair', 'chairs', 'sofa', 'desk'), certa: 1 },
+    { instrucao: TEM, audioTexto: "There aren't any books, but there are some shelves.", opcoes: op('desk', 'closet', 'shelves', 'table'), certa: 2 },
+    { instrucao: TEM, audioTexto: "Is there a stove in the kitchen? Yes, there is.", opcoes: op('shower', 'TV', 'sofa', 'stove'), certa: 3 },
+    { instrucao: TEM, audioTexto: "Is there a TV in the bedroom? No, there isn't. There's a lamp.", opcoes: op('lamp', 'TV', 'sofa', 'stove'), certa: 0 },
+    { instrucao: TEM, audioTexto: "Are there any lamps in the study? No, there aren't. There's a desk.", opcoes: op('lamp', 'desk', 'bed', 'shower'), certa: 1 },
+    { instrucao: TEM, audioTexto: "There isn't a closet in the bedroom. There are some shelves.", opcoes: op('closet', 'stove', 'shelves', 'TV'), certa: 2 },
+    { instrucao: TEM, audioTexto: "There's a coffee table in the living room.", opcoes: op('desk', 'table', 'stove', 'coffee table'), certa: 3 }
+  ]
+});
+</script>
+</body>
+</html>

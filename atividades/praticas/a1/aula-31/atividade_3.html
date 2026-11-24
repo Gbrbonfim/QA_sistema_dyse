@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 31 · A new apartment</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 31 · Leitura
+   Alinhado ao slide "Class 31: Is there a kitchen?" — Listening and Watching (casas diferentes),
+   Grammar Point (Is there...? Are there any...? + short answers) e Writing ("Say what is there in
+   every room"). Conteúdo NOVO: o Rafa pergunta à corretora sobre um apartamento para alugar.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Rafa', 'Hi! I have some questions about the apartment.'],
+  ['Kelly', 'Sure! Ask me.'],
+  ['Rafa', 'How many bedrooms are there?'],
+  ['Kelly', 'There are two bedrooms and one bathroom.'],
+  ['Rafa', 'Is there a garage?'],
+  ['Kelly', "No, there isn't. But there's a small garden."],
+  ['Rafa', 'Nice! Is there a stove in the kitchen?'],
+  ['Kelly', "Yes, there is. And there are some cabinets too."],
+  ['Rafa', 'Are there any chairs in the dining room?'],
+  ['Kelly', "Yes, there are. There's a table and four chairs."],
+  ['Rafa', 'Great! Is there a desk? I work at home.'],
+  ['Kelly', "There isn't a desk, but there's a big table in the study."],
+  ['Rafa', "Perfect! I can work there. Can I see it today?"],
+  ['Kelly', 'Of course! Come at three.']
+];
+const lado = q => q === 'Rafa' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 31, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Sure! Ask me.', 'Sure! Ask I.', 'Yes, there is.'], 0, 'Claro! Pode perguntar.'),
+    prox(2, ['How many bedrooms is there?', 'How many bedrooms are there?', 'How many bedroom are there?'], 1, 'Quantos quartos tem?'),
+    prox(3, ['There is two bedrooms.', 'There are two bedroom and one bathroom.', 'There are two bedrooms and one bathroom.'], 2, 'Tem dois quartos e um banheiro.'),
+    prox(4, ['Is there a garage?', 'Are there a garage?', 'Is there any garage?'], 0, 'Tem garagem?'),
+    prox(5, ["No, there aren't. But there's a garden.", "No, there isn't. But there's a small garden.", "No, it isn't. But there's a small garden."], 1, 'Não, não tem. Mas tem um jardim pequeno.'),
+    prox(6, ['Are there a stove in the kitchen?', 'Is there any stove?', 'Nice! Is there a stove in the kitchen?'], 2, 'Legal! Tem fogão na cozinha?'),
+    prox(7, ['Yes, there is. And there are some cabinets too.', 'Yes, there is. And there are any cabinets too.', 'Yes, there are. And there is some cabinets.'], 0, 'Sim, tem. E tem alguns armários também.'),
+    prox(8, ['Are there some chairs in the dining room?', 'Are there any chairs in the dining room?', 'Is there any chairs in the dining room?'], 1, 'Tem cadeiras na sala de jantar?'),
+    prox(9, ["Yes, there is. There's a table and four chairs.", "Yes, they are. There's a table.", "Yes, there are. There's a table and four chairs."], 2, 'Sim, tem. Tem uma mesa e quatro cadeiras.'),
+    prox(10, ['Great! Is there a desk? I work at home.', 'Great! Are there a desk? I work at home.', 'Of course!'], 0, 'Ótimo! Tem escrivaninha? Eu trabalho em casa.'),
+    prox(11, ["There aren't a desk, but there's a big table.", "There isn't a desk, but there's a big table in the study.", "There isn't any desk, but there are a big table."], 1, 'Não tem escrivaninha, mas tem uma mesa grande no escritório.'),
+    prox(12, ['Is there a garage?', 'Sure! Ask me.', 'Perfect! I can work there. Can I see it today?'], 2, 'Perfeito! Eu posso trabalhar lá. Posso ver hoje?'),
+    { instrucao: 'How many bedrooms are there?', frase: 'There are ___ bedrooms.', opcoes: ['two', 'three', 'one'], certa: 0, traducao: 'Tem dois quartos.' },
+    { instrucao: 'Is there a garage?', frase: "No, there ___.", opcoes: ["aren't", "isn't", "doesn't"], certa: 1, traducao: 'Não, não tem.' },
+    { instrucao: 'What is there outside?', frase: 'A small ___.', opcoes: ['garage', 'study', 'garden'], certa: 2, traducao: 'Um jardim pequeno.' },
+    { instrucao: 'Is there a stove in the kitchen?', frase: 'Yes, there ___.', opcoes: ['is', 'are', 'has'], certa: 0, traducao: 'Sim, tem.' },
+    { instrucao: 'How many chairs are there in the dining room?', frase: '___.', opcoes: ['Two', 'Four', 'Six'], certa: 1, traducao: 'Quatro.' },
+    { instrucao: 'Is there a desk?', frase: "No, but there's a big ___ in the study.", opcoes: ['sofa', 'bed', 'table'], certa: 2, traducao: 'Não, mas tem uma mesa grande no escritório.' },
+    { instrucao: 'Where does Rafa work?', frase: 'At ___.', opcoes: ['home', 'school', 'a café'], certa: 0, traducao: 'Em casa.' },
+    { instrucao: 'What time can Rafa see the apartment?', frase: "At ___ o'clock.", opcoes: ['two', 'three', 'four'], certa: 1, completa: "At three o'clock.", traducao: 'Às três horas.' }
+  ]
+});
+</script>
+</body>
+</html>

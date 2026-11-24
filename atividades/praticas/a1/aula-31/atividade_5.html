@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 · Aula 31 · Some or any?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Class 31 · Gramática
+   Alinhado ao slide "Class 31: Is there a kitchen?" — Grammar Point (there is singular / there are
+   plural; some na afirmativa; any na negativa e na pergunta; short answers) e Vocabulary (o que
+   fica em cada cômodo). Conteúdo NOVO e mais difícil: concordância com is / are e some / any
+   juntos. 24 questões. */
+const ROOM = 'Where is it usually?';
+const CERTA = 'Which sentence is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a1', aula: 31, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: "There ___ a table in the kitchen.", opcoes: ['is', 'are'], certa: 0, traducao: 'Tem uma mesa na cozinha.' },
+    { frase: 'There ___ two sofas in the living room.', opcoes: ['is', 'are'], certa: 1, traducao: 'Tem dois sofás na sala de estar.' },
+    { frase: 'There are ___ plants in the garden.', opcoes: ['any', 'a', 'some'], certa: 2, traducao: 'Tem algumas plantas no jardim.' },
+    { frase: "There aren't ___ books on the shelves.", opcoes: ['any', 'some', 'a'], certa: 0, traducao: 'Não tem nenhum livro nas prateleiras.' },
+    { frase: 'Are there ___ chairs in the dining room?', opcoes: ['some', 'any', 'a'], certa: 1, traducao: 'Tem cadeiras na sala de jantar?' },
+    { frase: '___ there a car in the garage?', opcoes: ['Are', 'Does', 'Is'], certa: 2, traducao: 'Tem um carro na garagem?' },
+    { frase: '___ there any lamps in the study?', opcoes: ['Are', 'Is', 'Do'], certa: 0, traducao: 'Tem abajures no escritório?' },
+    { frase: "Is there a TV in the kitchen? No, there ___.", opcoes: ["aren't", "isn't", "don't"], certa: 1, traducao: 'Tem TV na cozinha? Não, não tem.' },
+    { frase: 'Are there any plants in the hall? Yes, there ___.', opcoes: ['is', 'have', 'are'], certa: 2, traducao: 'Tem plantas no corredor? Sim, tem.' },
+    { frase: "There ___ an armchair in the bedroom.", opcoes: ["isn't", "aren't", "don't"], certa: 0, traducao: 'Não tem poltrona no quarto.' },
+    { frase: "There ___ any cabinets in the bathroom.", opcoes: ["isn't", "aren't", "doesn't"], certa: 1, traducao: 'Não tem armários no banheiro.' },
+    { frase: "There's ___ mirror in the hall.", opcoes: ['some', 'any', 'a'], certa: 2, traducao: 'Tem um espelho no corredor.' },
+    { frase: 'In my house, ___ three bedrooms.', opcoes: ['there are', 'there is', 'it has'], certa: 0, traducao: 'Na minha casa, tem três quartos.' },
+    { instrucao: ROOM, frase: 'a stove → in the ___', opcoes: ['bedroom', 'kitchen', 'garage'], certa: 1, traducao: 'um fogão → na cozinha' },
+    { instrucao: ROOM, frase: 'a shower → in the ___', opcoes: ['study', 'hall', 'bathroom'], certa: 2, traducao: 'um chuveiro → no banheiro' },
+    { instrucao: ROOM, frase: 'a car → in the ___', opcoes: ['garage', 'garden', 'kitchen'], certa: 0, traducao: 'um carro → na garagem' },
+    { instrucao: ROOM, frase: 'a bed and a closet → in the ___', opcoes: ['living room', 'bedroom', 'dining room'], certa: 1, traducao: 'uma cama e um armário → no quarto' },
+    { instrucao: ROOM, frase: 'a sofa and a coffee table → in the ___', opcoes: ['bathroom', 'garage', 'living room'], certa: 2, traducao: 'um sofá e uma mesa de centro → na sala de estar' },
+    { instrucao: ROOM, frase: 'a desk and shelves with books → in the ___', opcoes: ['study', 'kitchen', 'garden'], certa: 0, traducao: 'uma escrivaninha e prateleiras com livros → no escritório' },
+    { frase: "The house is very ___. It's only one meter wide!", opcoes: ['tall', 'narrow', 'big'], certa: 1, traducao: 'A casa é muito estreita. Tem só um metro de largura!' },
+    { instrucao: CERTA, opcoes: ['There are a sofa in the living room.', 'There is two sofas in the living room.', 'There is a sofa in the living room.'], certa: 2, traducao: 'Tem um sofá na sala de estar.' },
+    { instrucao: CERTA, opcoes: ["There aren't any chairs.", "There aren't some chairs.", "There isn't any chairs."], certa: 0, traducao: 'Não tem nenhuma cadeira.' },
+    { instrucao: CERTA, opcoes: ['Is there any plants?', 'Are there any plants?', 'Are there some plant?'], certa: 1, traducao: 'Tem plantas?' },
+    { instrucao: CERTA, opcoes: ['Have a garage in your house?', 'Is a garage in your house?', 'Is there a garage in your house?'], certa: 2, traducao: 'Tem garagem na sua casa?' }
+  ]
+});
+</script>
+</body>
+</html>
