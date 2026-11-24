@@ -593,6 +593,23 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
   border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;
 }
 
+/* ---------- Busca de aluno (Gerenciar Atividades): mostra todos e filtra ao digitar ---------- */
+.aluno-busca{position:relative; width:100%; max-width:460px;}
+.aluno-busca > .msr{position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--seal-soft); opacity:.55; pointer-events:none;}
+.dash-filter .aluno-busca input{width:100%; box-sizing:border-box; padding-left:40px; padding-right:40px; background:#fff; color:var(--seal);}
+.dash-filter .aluno-busca input:focus{outline:none; border-color:var(--amaranth);}
+.ab-limpar{position:absolute; right:6px; top:50%; transform:translateY(-50%); display:none; border:0; background:none; cursor:pointer; color:var(--seal-soft); opacity:.6; padding:6px; line-height:0; border-radius:50%;}
+.ab-limpar:hover{opacity:1; background:var(--antique-soft);}
+.aluno-busca.tem-texto .ab-limpar{display:block;}
+.ab-lista{display:none; position:absolute; z-index:40; left:0; right:0; top:calc(100% + 4px); background:#fff; border:1px solid #eee0cf; border-radius:var(--radius-sm); box-shadow:var(--shadow-card); max-height:320px; overflow-y:auto; padding:4px 0;}
+.ab-lista.aberta{display:block;}
+.ab-grupo{font-size:.72rem; font-weight:700; color:var(--seal); padding:10px 14px 4px; opacity:.8;}
+.ab-op{padding:9px 14px 9px 26px; font-size:.85rem; color:var(--seal-soft); cursor:pointer;}
+.ab-op:hover, .ab-op.ativo{background:var(--antique-soft);}
+.ab-op.sel{font-weight:600; color:var(--amaranth);}
+.ab-vazio{padding:12px 14px; font-size:.85rem; color:var(--seal-soft); opacity:.7;}
+@media (max-width:640px){ .dash-filter .aluno-busca input{font-size:16px;} .ab-op{padding-top:11px; padding-bottom:11px;} }
+
 /* ---------- CAIXA SUSPENSA (details/summary nativo — sem JS) ---------- */
 details.dyse-collapsible{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); margin-bottom:14px; overflow:hidden;}
 details.dyse-collapsible > summary{
@@ -1022,14 +1039,21 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 
   <div id="panelManage" style="display:none;">
-    <details class="dyse-collapsible manage-course-block" open style="margin-bottom:22px;">
+    <details class="dyse-collapsible manage-course-block" open style="margin-bottom:22px; overflow:visible;">
       <summary class="manage-course-title"><span>Atividades por aluno</span><span class="chevron">›</span></summary>
       <div class="manage-course-body">
         <p style="color:var(--seal-soft); font-size:.85rem; margin:0 0 12px;">
           O aluno vê todas as atividades do nível dele, mas só faz as que você liberar <b>para ele</b>. Escolha o aluno e ligue as atividades. Em <b>Visualizar</b> você testa a atividade antes (seu resultado não é salvo).
         </p>
         <div class="dash-filter" style="margin-bottom:10px;">
-          <select id="praticaAlunoSel" onchange="renderPraticasAluno()"><option value="">Carregando alunos...</option></select>
+          <div class="aluno-busca" id="praticaAlunoBusca">
+            <span class="msr" aria-hidden="true">search</span>
+            <input type="text" id="praticaAlunoInput" placeholder="Carregando alunos..." autocomplete="off" role="combobox" aria-controls="praticaAlunoLista" aria-expanded="false"
+              onfocus="abrirListaAlunosPratica()" onclick="abrirListaAlunosPratica()" oninput="filtrarAlunosPratica()" onkeydown="teclaAlunosPratica(event)">
+            <button type="button" class="ab-limpar" title="Limpar" aria-label="Limpar busca" onmousedown="event.preventDefault()" onclick="limparAlunoPratica()"><span class="msr" aria-hidden="true">close</span></button>
+            <div class="ab-lista" id="praticaAlunoLista" role="listbox"></div>
+          </div>
+          <input type="hidden" id="praticaAlunoSel" value="">
         </div>
         <div id="praticasAlunoBox"></div>
       </div>
@@ -3085,16 +3109,123 @@ body.dyse-modal-open{overflow:hidden;}
     PRATICAS_CTX.alunos = alunos.filter(a => a.turma_id);
     PRATICAS_CTX.turmas = {}; turmas.forEach(t => PRATICAS_CTX.turmas[t.id] = t);
     PRATICAS_CTX.turmaMaterias = tms;
-    const atual = sel.value;
-    const porTurma = {};
-    PRATICAS_CTX.alunos.forEach(a => { const t = PRATICAS_CTX.turmas[a.turma_id]; const nome = t ? t.name : 'Sem turma'; (porTurma[nome] = porTurma[nome] || []).push(a); });
-    sel.innerHTML = '<option value="">Escolha um aluno…</option>' + Object.keys(porTurma).sort().map(nome =>
-      '<optgroup label="' + escapeHtmlLocal(nome) + '">' + porTurma[nome].map(a =>
-        '<option value="' + a.id + '">' + escapeHtmlLocal(a.full_name || a.email || a.id) + '</option>').join('') + '</optgroup>').join('');
-    if(!PRATICAS_CTX.alunos.length) sel.innerHTML = '<option value="">Nenhum aluno com turma vinculada</option>';
-    if(atual) sel.value = atual;
+    const input = document.getElementById('praticaAlunoInput');
+    const atual = PRATICAS_CTX.alunos.find(a => a.id === sel.value);
+    sel.value = atual ? atual.id : '';
+    input.value = atual ? nomeAlunoPratica(atual) : '';
+    input.placeholder = PRATICAS_CTX.alunos.length ? 'Digite o nome do aluno…' : 'Nenhum aluno com turma vinculada';
+    atualizarLimparAlunoPratica();
+    if(document.getElementById('praticaAlunoLista').classList.contains('aberta')) renderListaAlunosPratica(input.value);
     renderPraticasAluno();
   }
+
+  /* Busca de aluno: ao abrir mostra TODOS (por turma); ao digitar, só os
+     nomes que têm todas as palavras digitadas (sem diferenciar acento). */
+  const nomeAlunoPratica = a => a.full_name || a.email || a.id;
+  const normBuscaAluno = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  function renderListaAlunosPratica(termo){
+    const lista = document.getElementById('praticaAlunoLista');
+    const palavras = normBuscaAluno(termo).split(/\s+/).filter(Boolean);
+    const escolhido = document.getElementById('praticaAlunoSel').value;
+    const porTurma = {};
+    PRATICAS_CTX.alunos.forEach(a => {
+      const nome = normBuscaAluno(nomeAlunoPratica(a));
+      if(palavras.length && !palavras.every(p => nome.indexOf(p) >= 0)) return;
+      const t = PRATICAS_CTX.turmas[a.turma_id];
+      const tn = t ? t.name : 'Sem turma';
+      (porTurma[tn] = porTurma[tn] || []).push(a);
+    });
+    const grupos = Object.keys(porTurma).sort((x, y) => x.localeCompare(y, 'pt-BR'));
+    if(!grupos.length){
+      lista.innerHTML = '<div class="ab-vazio">' + (PRATICAS_CTX.alunos.length ? 'Nenhum aluno encontrado.' : 'Nenhum aluno com turma vinculada.') + '</div>';
+      return;
+    }
+    lista.innerHTML = grupos.map(g => '<div class="ab-grupo">' + escapeHtmlLocal(g) + '</div>' +
+      porTurma[g].sort((x, y) => nomeAlunoPratica(x).localeCompare(nomeAlunoPratica(y), 'pt-BR')).map(a =>
+        '<div class="ab-op' + (a.id === escolhido ? ' sel' : '') + '" role="option" data-id="' + a.id + '" onmousedown="event.preventDefault()" onclick="escolherAlunoPratica(this.dataset.id)">' +
+        escapeHtmlLocal(nomeAlunoPratica(a)) + '</div>').join('')).join('');
+  }
+  function abrirListaAlunosPratica(){
+    const input = document.getElementById('praticaAlunoInput');
+    const lista = document.getElementById('praticaAlunoLista');
+    if(lista.classList.contains('aberta')) return;
+    // Com aluno já escolhido, abre mostrando todos e deixa o texto selecionado para digitar por cima.
+    renderListaAlunosPratica(document.getElementById('praticaAlunoSel').value ? '' : input.value);
+    lista.classList.add('aberta');
+    input.setAttribute('aria-expanded', 'true');
+    if(document.getElementById('praticaAlunoSel').value) input.select();
+  }
+  function fecharListaAlunosPratica(){
+    const lista = document.getElementById('praticaAlunoLista');
+    const input = document.getElementById('praticaAlunoInput');
+    lista.classList.remove('aberta');
+    input.setAttribute('aria-expanded', 'false');
+    // Saiu sem escolher: volta a mostrar o aluno que estava escolhido.
+    const atual = PRATICAS_CTX.alunos.find(a => a.id === document.getElementById('praticaAlunoSel').value);
+    input.value = atual ? nomeAlunoPratica(atual) : '';
+    atualizarLimparAlunoPratica();
+  }
+  function filtrarAlunosPratica(){
+    const input = document.getElementById('praticaAlunoInput');
+    renderListaAlunosPratica(input.value);
+    document.getElementById('praticaAlunoLista').classList.add('aberta');
+    input.setAttribute('aria-expanded', 'true');
+    atualizarLimparAlunoPratica();
+  }
+  function escolherAlunoPratica(id){
+    const aluno = PRATICAS_CTX.alunos.find(a => a.id === id);
+    if(!aluno) return;
+    document.getElementById('praticaAlunoSel').value = id;
+    fecharListaAlunosPratica();
+    document.getElementById('praticaAlunoInput').blur();
+    renderPraticasAluno();
+  }
+  function limparAlunoPratica(){
+    const input = document.getElementById('praticaAlunoInput');
+    document.getElementById('praticaAlunoSel').value = '';
+    input.value = '';
+    atualizarLimparAlunoPratica();
+    renderPraticasAluno();
+    renderListaAlunosPratica('');
+    document.getElementById('praticaAlunoLista').classList.add('aberta');
+    input.setAttribute('aria-expanded', 'true');
+    input.focus();
+  }
+  function atualizarLimparAlunoPratica(){
+    document.getElementById('praticaAlunoBusca').classList.toggle('tem-texto', !!document.getElementById('praticaAlunoInput').value);
+  }
+  function teclaAlunosPratica(ev){
+    const lista = document.getElementById('praticaAlunoLista');
+    const ops = Array.from(lista.querySelectorAll('.ab-op'));
+    let i = ops.findIndex(o => o.classList.contains('ativo'));
+    if(ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+      ev.preventDefault();
+      if(!lista.classList.contains('aberta')) abrirListaAlunosPratica();
+      if(!ops.length) return;
+      if(i >= 0) ops[i].classList.remove('ativo');
+      i = ev.key === 'ArrowDown' ? (i + 1) % ops.length : (i <= 0 ? ops.length - 1 : i - 1);
+      ops[i].classList.add('ativo');
+      ops[i].scrollIntoView({ block: 'nearest' });
+    } else if(ev.key === 'Enter'){
+      ev.preventDefault();
+      const alvo = i >= 0 ? ops[i] : (ops.length === 1 ? ops[0] : null);
+      if(alvo) escolherAlunoPratica(alvo.dataset.id);
+    } else if(ev.key === 'Escape'){
+      fecharListaAlunosPratica();
+    } else if(ev.key === 'Tab'){
+      fecharListaAlunosPratica();
+    }
+  }
+  document.addEventListener('mousedown', ev => {
+    const box = document.getElementById('praticaAlunoBusca');
+    const lista = document.getElementById('praticaAlunoLista');
+    if(box && lista && lista.classList.contains('aberta') && !box.contains(ev.target)) fecharListaAlunosPratica();
+  });
+  document.addEventListener('touchstart', ev => {
+    const box = document.getElementById('praticaAlunoBusca');
+    const lista = document.getElementById('praticaAlunoLista');
+    if(box && lista && lista.classList.contains('aberta') && !box.contains(ev.target)) fecharListaAlunosPratica();
+  }, { passive: true });
 
   async function renderPraticasAluno(){
     const box = document.getElementById('praticasAlunoBox');
