@@ -577,6 +577,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'I can do it!', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Review 1-12', tipo: 'Make a Choice', treina: 'Gramática · Revisão', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 14,
+        titulo: 'Class 14 · Exams Be Like',
+        atividades: [
+          { num: 1, titulo: 'What does "can" mean here?', tipo: 'Escute e escolha', treina: 'Escuta · Can', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Can I use a calculator?', tipo: 'Monte a frase', treina: 'Escrita · Can', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'The night before the exam', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Can you...?', tipo: 'Escute e grave', treina: 'Fala · Can', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: "Can and can't", tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

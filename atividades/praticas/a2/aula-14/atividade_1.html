@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 14 · What does "can" mean here?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 14 · Escuta (Exams Be Like)
+   Alinhado aos slides "Grammar Point: can for ability, permission, and possibility... polite
+   requests" e "Listening: match conversations and what they are about". Conteúdo NOVO: o aluno
+   ouve a frase e diz para que o can / can't está sendo usado. 24 questões. */
+const IC = { 'ability': 'emoji_objects', 'permission': 'verified', 'a polite request': 'volunteer_activism', 'possibility': 'event_available' };
+const T = ['ability', 'permission', 'a polite request', 'possibility'];
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 14, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what does "can" mean here?',
+  itens: [
+    q('My sister can speak English and French.', 0),
+    q('You can use a calculator in this exam.', 1),
+    q('Can you help me with this exercise, please?', 2),
+    q("I'm free on Friday, so I can study with you.", 3),
+    q("He can't swim, but he can play tennis very well.", 0),
+    q("You can't use your phone during the exam. It's not allowed.", 1),
+    q('Can you lend me a pen, please?', 2),
+    q("I can't meet you after class. I have a dentist appointment.", 3),
+    q('My grandfather can play the piano.', 0),
+    q('Students can leave the room after ten o\'clock.', 1),
+    q('Can you open the window, please?', 2),
+    q("We can have the exam on Monday or Tuesday. Both days are OK.", 3),
+    q("Can your son ride a bike? Yes, he's very good!", 0),
+    q("The teacher says we can't talk in the library.", 1),
+    q('Can you repeat the question, please?', 2),
+    q("It's raining, so we can't go to the beach today.", 3),
+    q('I can draw very well, but I can\'t sing.', 0),
+    q('In this school, you can wear jeans on Fridays.', 1),
+    q("Can you close the door, please? It's cold.", 2),
+    q("Sorry, I can't finish the report today. I'm too busy.", 3),
+    q('Dogs can hear very well.', 0),
+    q("You can't bring food to the classroom.", 1),
+    q('Can you speak more slowly, please?', 2),
+    q('The museum is open late, so we can go after dinner.', 3)
+  ]
+});
+</script>
+</body>
+</html>

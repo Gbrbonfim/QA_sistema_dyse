@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 14 · Can I use a calculator?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 14 · Escrita (Exams Be Like)
+   Alinhado ao slide "Grammar Point" — can + infinitivo (sem to), can't, pergunta Can + sujeito +
+   verbo, e os jeitos informais "I have no idea how to..." / "There's no way I can...".
+   Conteúdo NOVO sobre provas e escola. A isca é a forma errada (to, cans, do...). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 14, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu posso usar uma calculadora?'), palavras: ['Can', 'I', 'use', 'a', 'calculator'], isca: ['Do'], fim: '?', traducao: 'Posso usar uma calculadora?' },
+    { contexto: M('Ela sabe falar três línguas.'), palavras: ['She', 'can', 'speak', 'three', 'languages'], isca: ['to'], fim: '.', traducao: 'Ela sabe falar três línguas.' },
+    { contexto: M('Vocês não podem usar o celular na prova.'), palavras: ['You', "can't", 'use', 'your', 'phone', 'in', 'the', 'exam'], isca: ["don't"], fim: '.', traducao: 'Vocês não podem usar o celular na prova.' },
+    { contexto: M('Você pode me ajudar, por favor?'), palavras: ['Can', 'you', 'help', 'me,', 'please'], isca: ['to'], fim: '?', traducao: 'Você pode me ajudar, por favor?' },
+    { contexto: M('Ele não consegue terminar a prova em dez minutos.'), palavras: ['He', "can't", 'finish', 'the', 'exam', 'in', 'ten', 'minutes'], isca: ['finishes'], fim: '.', traducao: 'Ele não consegue terminar a prova em dez minutos.' },
+    { contexto: M('Não faço ideia de como fazer a parte A.'), palavras: ['I', 'have', 'no', 'idea', 'how', 'to', 'do', 'part', 'A'], isca: ['can'], fim: '.', traducao: 'Não faço ideia de como fazer a parte A.' },
+    { contexto: M('Não tem como eu estudar tudo hoje.'), palavras: ["There's", 'no', 'way', 'I', 'can', 'study', 'everything', 'today'], isca: ['to'], fim: '.', traducao: 'Não tem como eu estudar tudo hoje.' },
+    { contexto: M('A Sara pode estudar comigo esta semana.'), palavras: ['Sara', 'can', 'study', 'with', 'me', 'this', 'week'], isca: ['cans'], fim: '.', traducao: 'A Sara pode estudar comigo esta semana.' },
+    { contexto: M('Você pode me emprestar a sua folha de fórmulas?'), palavras: ['Can', 'you', 'lend', 'me', 'your', 'formula', 'sheet'], isca: ['Are'], fim: '?', traducao: 'Você pode me emprestar a sua folha de fórmulas?' },
+    { contexto: M('Nós podemos começar a prova agora?'), palavras: ['Can', 'we', 'start', 'the', 'exam', 'now'], isca: ['starting'], fim: '?', traducao: 'Podemos começar a prova agora?' },
+    { contexto: M('Eu não lembro a resposta.'), palavras: ['I', "can't", 'remember', 'the', 'answer'], isca: ['to'], fim: '.', traducao: 'Não consigo lembrar a resposta.' },
+    { contexto: M('O professor consegue resolver o problema.'), palavras: ['The', 'teacher', 'can', 'solve', 'the', 'problem'], isca: ['solves'], fim: '.', traducao: 'O professor consegue resolver o problema.' },
+    { contexto: M('Eu sou bom em matemática.'), palavras: ["I'm", 'good', 'at', 'math'], isca: ['in'], fim: '.', traducao: 'Sou bom em matemática.' },
+    { contexto: M('Ela é ruim em química.'), palavras: ["She's", 'bad', 'at', 'chemistry'], isca: ['in'], fim: '.', traducao: 'Ela é ruim em química.' },
+    { contexto: M('Qual é a sua matéria favorita?'), palavras: ["What's", 'your', 'favorite', 'school', 'subject'], isca: ['you'], fim: '?', traducao: 'Qual é a sua matéria favorita?' },
+    { contexto: M('Eu estudo muito antes de uma prova.'), palavras: ['I', 'study', 'hard', 'before', 'an', 'exam'], isca: ['a'], fim: '.', traducao: 'Estudo muito antes de uma prova.' },
+    { contexto: M('Você consegue fazer uma apresentação em inglês?'), palavras: ['Can', 'you', 'give', 'a', 'presentation', 'in', 'English'], isca: ['Do'], fim: '?', traducao: 'Você consegue fazer uma apresentação em inglês?' },
+    { contexto: M('Não, não consigo.'), palavras: ['No,', 'I', "can't"], isca: ["don't"], fim: '.', traducao: 'Não, não consigo.' },
+    { contexto: M('Sim, eu posso fazer uma pausa de manhã.'), palavras: ['Yes,', 'I', 'can', 'have', 'a', 'break', 'in', 'the', 'morning'], isca: ['at'], fim: '.', traducao: 'Sim, posso fazer uma pausa de manhã.' },
+    { contexto: M('Ele fica ansioso antes das provas.'), palavras: ['He', 'feels', 'anxious', 'before', 'exams'], isca: ['feel'], fim: '.', traducao: 'Ele fica ansioso antes das provas.' }
+  ]
+});
+</script>
+</body>
+</html>

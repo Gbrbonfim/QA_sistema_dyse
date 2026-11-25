@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 14 · Can and can't</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 14 · Gramática (Exams Be Like)
+   Alinhado aos slides "Grammar Point" e "Rewrite the sentences" — can / can't + infinitivo sem
+   to, a forma de pergunta, o mesmo can para todas as pessoas, e os sentidos (ability,
+   permission, possibility, request) com as expressões "It's not possible", "It's not
+   permitted", "I have no idea", "There's no way". Conteúdo NOVO. 24 questões. */
+const SAME = 'Choose the sentence with the same meaning';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 14, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'My brother ___ play the drums.', opcoes: ['can', 'cans', 'can to'], certa: 0, traducao: 'O meu irmão sabe tocar bateria.' },
+    { frase: 'She ___ English, but not German.', opcoes: ['can speaks', 'can speak', 'cans speak'], certa: 1, traducao: 'Ela fala inglês, mas não alemão.' },
+    { frase: '___ you help me? This exercise is too difficult!', opcoes: ['Do', 'Are', 'Can'], certa: 2, traducao: 'Você pode me ajudar? Este exercício é difícil demais!' },
+    { frase: "We ___ use a calculator. The teacher doesn't allow it.", opcoes: ["can't", "don't can", "can"], certa: 0, traducao: 'Não podemos usar calculadora. O professor não permite.' },
+    { frase: 'Sorry, but I ___ how to do this exercise.', opcoes: ["can remember", "can't remember", "don't can remember"], certa: 1, traducao: 'Desculpe, mas não lembro como fazer este exercício.' },
+    { frase: '___ I see your notes, please?', opcoes: ['Do', 'Am', 'Can'], certa: 2, traducao: 'Posso ver as suas anotações, por favor?' },
+    { frase: "Sara ___ for the exam with me this week. She's free.", opcoes: ['can study', "can't study", 'can studies'], certa: 0, traducao: 'A Sara pode estudar comigo esta semana. Ela está livre.' },
+    { frase: "Can you swim? Yes, I ___.", opcoes: ['do', 'can', 'am'], certa: 1, traducao: 'Você sabe nadar? Sim, sei.' },
+    { frase: "Can they come to the party? No, they ___.", opcoes: ["don't", "aren't", "can't"], certa: 2, traducao: 'Eles podem vir à festa? Não, não podem.' },
+    { frase: "I'm good ___ math.", opcoes: ['at', 'in', 'on'], certa: 0, traducao: 'Sou bom em matemática.' },
+    { frase: "Before an exam, I study ___.", opcoes: ['hardly', 'hard', 'hards'], certa: 1, traducao: 'Antes de uma prova, estudo muito.' },
+    { frase: "I have no idea how ___ this formula.", opcoes: ['use', 'can use', 'to use'], certa: 2, traducao: 'Não faço ideia de como usar esta fórmula.' },
+    { frase: "There's no way I ___ finish it today.", opcoes: ['can', 'to', 'can to'], certa: 0, traducao: 'Não tem como eu terminar isso hoje.' },
+    { instrucao: SAME, frase: 'The teacher knows how to solve the problem. = ___', opcoes: ['The teacher can solve the problem.', "The teacher can't solve the problem.", 'The teacher can to solve the problem.'], certa: 0, traducao: 'O professor consegue resolver o problema.' },
+    { instrucao: SAME, frase: "Mark can't meet me after work. = ___", opcoes: ["It's possible for Mark to meet me.", "It's not possible for Mark to meet me after work.", "It's not permitted for Mark to work."], certa: 1, traducao: 'Não é possível o Mark me encontrar depois do trabalho.' },
+    { instrucao: SAME, frase: 'Is it OK if we start the exam now? = ___', opcoes: ['Do we start the exam now?', 'We can start the exam now.', 'Can we start the exam now?'], certa: 2, traducao: 'Podemos começar a prova agora?' },
+    { instrucao: SAME, frase: "You can't use a formula sheet in the final exam. = ___", opcoes: ["It's not permitted to use a formula sheet in the final exam.", "It's permitted to use a formula sheet.", "You have no idea how to use a formula sheet."], certa: 0, traducao: 'Não é permitido usar folha de fórmulas na prova final.' },
+    { instrucao: SAME, frase: 'Please lend me a pen. = ___', opcoes: ['You can lend me a pen.', 'Can you lend me a pen, please?', "Can I lend you a pen?"], certa: 1, traducao: 'Você pode me emprestar uma caneta, por favor?' },
+    { instrucao: SAME, frase: "It's possible for Anna to do the exam on Monday. = ___", opcoes: ["Anna can't do the exam on Monday.", 'Anna has no idea about the exam.', 'Anna can do the exam on Monday.'], certa: 2, traducao: 'A Anna pode fazer a prova na segunda.' },
+    { instrucao: SAME, frase: "I don't know how to use this machine. = ___", opcoes: ['I have no idea how to use this machine.', 'I can use this machine.', "There's a way to use this machine."], certa: 0, traducao: 'Não faço ideia de como usar esta máquina.' },
+    { instrucao: SAME, frase: "I can't do it without a calculator. = ___", opcoes: ['I can do it without a calculator.', "There's no way I can do it without a calculator.", "I have no calculator to do."], certa: 1, traducao: 'Não tem como eu fazer isso sem calculadora.' },
+    { frase: 'He cheats on exams. He ___ answers from his classmates.', opcoes: ['gives', 'writes', 'copies'], certa: 2, traducao: 'Ele cola nas provas. Copia respostas dos colegas.' },
+    { frase: 'My favorite school ___ is history.', opcoes: ['subject', 'teacher', 'exam'], certa: 0, traducao: 'A minha matéria favorita é história.' },
+    { frase: "I'm not good or bad at English. I'm ___ at it.", opcoes: ['hard', 'okay', 'worried'], certa: 1, traducao: 'Não sou bom nem ruim em inglês. Sou razoável.' }
+  ]
+});
+</script>
+</body>
+</html>

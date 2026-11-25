@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 14 · The night before the exam</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 14 · Leitura (Exams Be Like)
+   Alinhado aos slides "Warm Up: how do you feel if you have an exam? What do you do the night
+   before?", "Talking Point: school subjects" e "Grammar Point: can / can't". Conteúdo NOVO: a
+   Bia e o Leo conversam na noite antes da prova de química. 20 questões: 12 de "próxima fala"
+   + 8 de compreensão. */
+const D = [
+  ['Bia', 'Leo, our chemistry exam is tomorrow! How do you feel?'],
+  ['Leo', "I'm really worried. I'm bad at chemistry."],
+  ['Bia', "Don't worry! I can help you tonight."],
+  ['Leo', "Thanks! I have no idea how to do the exercises on page ten."],
+  ['Bia', 'They are easy. Can you come to my house at seven?'],
+  ['Leo', "Sorry, I can't. I have a guitar class at seven."],
+  ['Bia', 'OK. Can you come at eight?'],
+  ['Leo', 'Yes, I can. Can I bring my sister? She has the same exam.'],
+  ['Bia', 'Of course! Can we use calculators in the exam?'],
+  ['Leo', "Yes, we can. But we can't use formula sheets."],
+  ['Bia', 'Oh no! I can\'t remember all the formulas!'],
+  ['Leo', "There's no way I can remember them all too!"],
+  ['Bia', "Let's write them on cards and study together."],
+  ['Leo', 'Good idea! What do you usually do the night before an exam?'],
+  ['Bia', 'I review the topics and go to bed early.'],
+  ['Leo', "Me too. Let's not study after eleven!"]
+];
+const lado = q => q === 'Bia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 14, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I'm really worried. I'm bad at chemistry.", "I'm really worried. I'm bad in chemistry.", "I really worried. I'm bad at chemistry."], 0, 'Estou muito preocupado. Sou ruim em química.'),
+    prox(2, ["Don't worry! I can to help you tonight.", "Don't worry! I can help you tonight.", "Don't worry! I cans help you tonight."], 1, 'Não se preocupe! Posso te ajudar hoje à noite.'),
+    prox(3, ["Thanks! I have no idea how do the exercises.", "Thanks! I no have idea how to do the exercises.", "Thanks! I have no idea how to do the exercises on page ten."], 2, 'Obrigado! Não faço ideia de como fazer os exercícios da página dez.'),
+    prox(4, ['They are easy. Can you come to my house at seven?', 'They are easy. Do you can come to my house at seven?', 'They are easy. You can come to my house at seven?'], 0, 'São fáceis. Você pode vir à minha casa às sete?'),
+    prox(5, ["Sorry, I don't can. I have a guitar class at seven.", "Sorry, I can't. I have a guitar class at seven.", "Sorry, I can. I have a guitar class at seven."], 1, 'Desculpe, não posso. Tenho aula de violão às sete.'),
+    prox(7, ['Yes, I do. Can I bring my sister?', 'Yes, I can. Can I to bring my sister?', 'Yes, I can. Can I bring my sister? She has the same exam.'], 2, 'Sim, posso. Posso levar a minha irmã? Ela tem a mesma prova.'),
+    prox(8, ['Of course! Can we use calculators in the exam?', 'Of course! Can we using calculators in the exam?', 'Of course! We can use calculators in the exam?'], 0, 'Claro! Podemos usar calculadora na prova?'),
+    prox(9, ["Yes, we can. But we don't can use formula sheets.", "Yes, we can. But we can't use formula sheets.", "Yes, we do. But we can't use formula sheets."], 1, 'Sim. Mas não podemos usar folha de fórmulas.'),
+    prox(11, ["There's no way I can remembering them all!", "There's no way I can to remember them all!", "There's no way I can remember them all too!"], 2, 'Também não tem como eu lembrar de todas!'),
+    prox(12, ["Let's write them on cards and study together.", "Let's to write them on cards and study together.", "Let's writing them on cards."], 0, 'Vamos escrevê-las em cartões e estudar juntos.'),
+    prox(14, ['I review the topics and go to bed late.', 'I review the topics and go to bed early.', 'I reviews the topics and go to bed early.'], 1, 'Reviso os assuntos e vou dormir cedo.'),
+    prox(15, ["Me too. Let's don't study after eleven!", "Me too. Don't let's study after eleven!", "Me too. Let's not study after eleven!"], 2, 'Eu também. Não vamos estudar depois das onze!'),
+    { instrucao: 'What exam do they have tomorrow?', frase: 'A ___ exam.', opcoes: ['chemistry', 'math', 'history'], certa: 0, traducao: 'Uma prova de química.' },
+    { instrucao: 'How does Leo feel?', frase: "He's ___.", opcoes: ['relaxed', 'worried', 'excited'], certa: 1, traducao: 'Ele está preocupado.' },
+    { instrucao: "Why can't Leo go at seven?", frase: 'He has a ___ class.', opcoes: ['chemistry', 'dance', 'guitar'], certa: 2, traducao: 'Ele tem aula de violão.' },
+    { instrucao: 'What time is Leo going to Bia\'s house?', frase: 'At ___.', opcoes: ['eight', 'seven', 'eleven'], certa: 0, traducao: 'Às oito.' },
+    { instrucao: 'Who is going with Leo?', frase: 'His ___.', opcoes: ['brother', 'sister', 'cousin'], certa: 1, traducao: 'A irmã dele.' },
+    { instrucao: 'What can they use in the exam?', frase: '___.', opcoes: ['Formula sheets', 'Phones', 'Calculators'], certa: 2, traducao: 'Calculadoras.' },
+    { instrucao: "What can't they use?", frase: '___.', opcoes: ['Formula sheets', 'Calculators', 'Pens'], certa: 0, traducao: 'Folhas de fórmulas.' },
+    { instrucao: 'What does Bia do the night before an exam?', frase: 'She reviews the topics and goes to bed ___.', opcoes: ['late', 'early', 'at midnight'], certa: 1, traducao: 'Ela revisa e vai dormir cedo.' }
+  ]
+});
+</script>
+</body>
+</html>
