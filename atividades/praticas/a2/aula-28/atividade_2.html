@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 28 · There was, there were</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 28 · Escrita (Two Cities, Two Worlds)
+   Alinhado ao "Grammar Point" — there was / there were (afirmativa, negativa com wasn't /
+   weren't, perguntas Was there...? / Were there any...? / How many... were there?), com a /
+   an, some, any, e aos lugares da cidade (museum, theatre, park, bakery, square...). Conteúdo
+   NOVO. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 28, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Havia um pequeno mercado na praça.'), palavras: ['There', 'was', 'a', 'small', 'market', 'in', 'the', 'square'], isca: ['were'], fim: '.', traducao: 'Havia um pequeno mercado na praça.' },
+    { contexto: M('Havia muitos teatros na cidade.'), palavras: ['There', 'were', 'many', 'theatres', 'in', 'the', 'city'], isca: ['was'], fim: '.', traducao: 'Havia muitos teatros na cidade.' },
+    { contexto: M('Não havia muitos parques.'), palavras: ['There', "weren't", 'many', 'parks'], isca: ["wasn't"], fim: '.', traducao: 'Não havia muitos parques.' },
+    { contexto: M('Não havia um hospital na nossa cidade.'), palavras: ['There', "wasn't", 'a', 'hospital', 'in', 'our', 'town'], isca: ["weren't"], fim: '.', traducao: 'Não havia hospital na nossa cidade.' },
+    { contexto: M('Havia uma estação de trem aqui há cinquenta anos?'), palavras: ['Was', 'there', 'a', 'train', 'station', 'here', '50', 'years', 'ago'], isca: ['Were'], fim: '?', traducao: 'Havia uma estação de trem aqui há 50 anos?' },
+    { contexto: M('Sim, havia.'), palavras: ['Yes,', 'there', 'was'], isca: ['it'], fim: '.', traducao: 'Sim, havia.' },
+    { contexto: M('Havia cafés em Paris nos anos 1800?'), palavras: ['Were', 'there', 'any', 'cafés', 'in', 'Paris', 'in', 'the', '1800s'], isca: ['some'], fim: '?', traducao: 'Havia cafés em Paris nos anos 1800?' },
+    { contexto: M('Quantos mercados havia na cidade?'), palavras: ['How', 'many', 'markets', 'were', 'there', 'in', 'the', 'city'], isca: ['much'], fim: '?', traducao: 'Quantos mercados havia na cidade?' },
+    { contexto: M('Havia três grandes mercados.'), palavras: ['There', 'were', 'three', 'big', 'markets'], isca: ['was'], fim: '.', traducao: 'Havia três grandes mercados.' },
+    { contexto: M('Não havia um teatro, mas havia um cinema pequeno.'), palavras: ['There', "wasn't", 'a', 'theatre,', 'but', 'there', 'was', 'a', 'small', 'cinema'], isca: ['any'], fim: '.', traducao: 'Não havia teatro, mas havia um cinema pequeno.' },
+    { contexto: M('Não havia nenhum ponto de ônibus.'), palavras: ['There', "weren't", 'any', 'bus', 'stops'], isca: ['some'], fim: '.', traducao: 'Não havia nenhum ponto de ônibus.' },
+    { contexto: M('As crianças não brincavam lá fora porque não havia parques.'), palavras: ['The', 'children', "didn't", 'play', 'outside', 'because', 'there', "weren't", 'any', 'parks'], isca: ["wasn't"], fim: '.', traducao: 'As crianças não brincavam fora porque não havia parques.' },
+    { contexto: M('Hoje há mais de quatrocentos parques em Paris.'), palavras: ['Today,', 'there', 'are', 'more', 'than', '400', 'parks', 'in', 'Paris'], isca: ['were'], fim: '.', traducao: 'Hoje há mais de 400 parques em Paris.' },
+    { contexto: M('Tem uma padaria perto da minha casa.'), palavras: ["There's", 'a', 'bakery', 'near', 'my', 'house'], isca: ['an'], fim: '.', traducao: 'Tem uma padaria perto da minha casa.' },
+    { contexto: M('Tem um shopping onde você mora?'), palavras: ['Is', 'there', 'a', 'shopping', 'center', 'where', 'you', 'live'], isca: ['Are'], fim: '?', traducao: 'Tem shopping onde você mora?' },
+    { contexto: M('Eu comprei remédio na farmácia.'), palavras: ['I', 'bought', 'medicine', 'at', 'the', 'chemist'], isca: ['bakery'], fim: '.', traducao: 'Comprei remédio na farmácia.' },
+    { contexto: M('Nós vimos leões e girafas no zoológico.'), palavras: ['We', 'saw', 'lions', 'and', 'giraffes', 'at', 'the', 'zoo'], isca: ['museum'], fim: '.', traducao: 'Vimos leões e girafas no zoológico.' },
+    { contexto: M('Ela mandou uma carta dos correios.'), palavras: ['She', 'sent', 'a', 'letter', 'from', 'the', 'post', 'office'], isca: ['police'], fim: '.', traducao: 'Ela mandou uma carta dos correios.' },
+    { contexto: M('Não havia muitos prédios altos antes.'), palavras: ['There', "weren't", 'many', 'tall', 'buildings', 'before'], isca: ["wasn't"], fim: '.', traducao: 'Não havia muitos prédios altos antes.' },
+    { contexto: M('Havia um lindo jardim no centro.'), palavras: ['There', 'was', 'a', 'beautiful', 'garden', 'in', 'the', 'center'], isca: ['were'], fim: '.', traducao: 'Havia um lindo jardim no centro.' }
+  ]
+});
+</script>
+</body>
+</html>

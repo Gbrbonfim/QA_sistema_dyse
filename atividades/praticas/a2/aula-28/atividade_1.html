@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 28 · Which number do you hear?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 28 · Escuta (Two Cities, Two Worlds)
+   Alinhado ao "Vocabulary: High Numbers" (456, 1,400, 35,000, 2,700,000...) e aos lugares da
+   cidade com there was / there were. Conteúdo NOVO: o aluno ouve a frase e escolhe o número.
+   24 questões. */
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: 'tag' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 28, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the number you hear',
+  itens: [
+    q('There are about one hundred and thirty museums in the city.', '130', '113', '1,300'),
+    q('The museum has over thirty-five thousand artworks.', '35,000', '3,500', '350,000'),
+    q('There are more than two hundred and thirty theatres in London.', '230', '213', '2,300'),
+    q('Paris has over four hundred parks and gardens.', '400', '4,000', '40'),
+    q('There are more than three thousand parks in London.', '3,000', '300', '30,000'),
+    q('In the past, there were only four hundred and fifty-six houses here.', '456', '465', '546'),
+    q('Our town had nine hundred and eighty-seven people in 1900.', '987', '978', '789'),
+    q('There were one thousand four hundred students at the school.', '1,400', '1,040', '14,000'),
+    q('There were three thousand four hundred and thirty-eight books in the old library.', '3,438', '3,348', '4,338'),
+    q('The stadium has seven thousand seven hundred seats.', '7,700', '7,070', '77,000'),
+    q('Sixty thousand people visited the zoo last month.', '60,000', '16,000', '6,000'),
+    q('The shopping center has one hundred and forty thousand visitors a week.', '140,000', '114,000', '14,000'),
+    q('Fifty million tourists visit the country every year.', '50,000,000', '15,000,000', '5,000,000'),
+    q('Two million seven hundred thousand people live in the city.', '2,700,000', '2,070,000', '270,000'),
+    q('There are about fifteen thousand restaurants in the city.', '15,000', '50,000', '1,500'),
+    q('There are around three thousand five hundred pubs.', '3,500', '3,050', '35,000'),
+    q('There are more than thirty thousand bakeries.', '30,000', '13,000', '3,000'),
+    q('Ninety national cuisines are represented in the city.', '90', '19', '9'),
+    q('In 1950, there were only one thousand two hundred cars in the town.', '1,200', '120', '12,000'),
+    q('The new hospital has two hundred and fifty beds.', '250', '215', '2,500'),
+    q('The old square was eight hundred years old.', '800', '80', '8,000'),
+    q('Twenty thousand people live near the bus station.', '20,000', '2,000', '200,000'),
+    q('The department store has one hundred and eighteen shops inside.', '118', '180', '1,180'),
+    q('Seventy-four restaurants in the city have a Michelin star.', '74', '47', '704')
+  ]
+});
+</script>
+</body>
+</html>

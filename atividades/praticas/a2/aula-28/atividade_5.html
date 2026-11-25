@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 28 · There was / there were</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 28 · Gramática (Two Cities, Two Worlds)
+   Alinhado ao "Grammar Point" (there was / there were + a, an, some, any; perguntas e
+   respostas curtas), ao "Warm Up" (Londres x Paris), ao "Reading" (museus, teatros, parques,
+   skyscrapers, rooftop) e aos lugares da cidade. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 28, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'How many markets ___ in the city 50 years ago?', opcoes: ['were there', 'was there', 'there were'], certa: 0, traducao: 'Quantos mercados havia na cidade há 50 anos?' },
+    { frase: '___ three big markets.', opcoes: ['There was', 'There were', 'Were there'], certa: 1, traducao: 'Havia três grandes mercados.' },
+    { frase: '___ a theatre in the city centre? No, there wasn\'t.', opcoes: ['Were there', 'There was', 'Was there'], certa: 2, traducao: 'Havia um teatro no centro? Não.' },
+    { frase: 'There was a station, but there ___ any bus stops.', opcoes: ["weren't", "wasn't", "aren't"], certa: 0, traducao: 'Havia uma estação, mas não havia pontos de ônibus.' },
+    { frase: 'People didn\'t buy bread because there ___ bakery near their homes.', opcoes: ["weren't any", "wasn't a", "wasn't any"], certa: 1, traducao: 'As pessoas não compravam pão porque não havia padaria perto de casa.' },
+    { frase: "Artists didn't show their work because there ___ art galleries.", opcoes: ["wasn't a", "wasn't any", "weren't any"], certa: 2, traducao: 'Os artistas não mostravam o trabalho porque não havia galerias de arte.' },
+    { frase: "Tourists couldn't get information because there ___ tourist office.", opcoes: ["wasn't a", "weren't a", "weren't any"], certa: 0, traducao: 'Os turistas não conseguiam informação porque não havia posto de turismo.' },
+    { frase: 'Were there many cafés in Paris in the 1800s? No, there ___.', opcoes: ["wasn't", "weren't", "didn't"], certa: 1, traducao: 'Havia muitos cafés em Paris nos anos 1800? Não.' },
+    { frase: 'Was there a train station here 50 years ago? Yes, there ___.', opcoes: ['were', 'is', 'was'], certa: 2, traducao: 'Havia uma estação de trem aqui há 50 anos? Sim.' },
+    { frase: 'We use there was / there were to talk about the ___.', opcoes: ['past', 'present', 'future'], certa: 0, traducao: 'Usamos there was / there were para falar do passado.' },
+    { frase: 'In the past, there weren\'t many museums, but now there ___ more than 130.', opcoes: ['were', 'are', 'was'], certa: 1, traducao: 'No passado, não havia muitos museus, mas agora há mais de 130.' },
+    { frase: 'Big Ben is a famous clock tower in ___.', opcoes: ['Paris', 'Rome', 'London'], certa: 2, traducao: 'O Big Ben é uma torre de relógio famosa em Londres.' },
+    { frase: 'The Louvre Museum is in ___.', opcoes: ['Paris', 'London', 'Madrid'], certa: 0, traducao: 'O Museu do Louvre fica em Paris.' },
+    { frase: 'The river in London is called the ___.', opcoes: ['Seine', 'Thames', 'Nile'], certa: 1, traducao: 'O rio de Londres se chama Tâmisa.' },
+    { frase: 'The nickname of ___ is "The City of Light".', opcoes: ['London', 'New York', 'Paris'], certa: 2, traducao: 'O apelido de Paris é "Cidade Luz".' },
+    { frase: 'Very tall buildings, like The Shard, are ___.', opcoes: ['skyscrapers', 'squares', 'car parks'], certa: 0, traducao: 'Prédios muito altos, como The Shard, são arranha-céus.' },
+    { frase: 'A restaurant on the top of a building is a ___ restaurant.', opcoes: ['underground', 'rooftop', 'market'], certa: 1, traducao: 'Um restaurante no topo de um prédio é um restaurante rooftop.' },
+    { frase: 'You buy medicine at the ___.', opcoes: ['bakery', 'bank', 'chemist'], certa: 2, traducao: 'Você compra remédio na farmácia.' },
+    { frase: 'You send letters at the ___.', opcoes: ['post office', 'police station', 'art gallery'], certa: 0, traducao: 'Você manda cartas nos correios.' },
+    { frase: 'You leave your car at the ___.', opcoes: ['bus station', 'car park', 'square'], certa: 1, traducao: 'Você deixa o carro no estacionamento.' },
+    { frase: 'You see paintings at the ___.', opcoes: ['zoo', 'supermarket', 'art gallery'], certa: 2, traducao: 'Você vê pinturas na galeria de arte.' },
+    { frase: 'In London, the underground is also called the ___.', opcoes: ['Tube', 'Metro', 'Train'], certa: 0, traducao: 'Em Londres, o metrô também é chamado de Tube.' },
+    { frase: '35,000 = thirty-five ___.', opcoes: ['hundred', 'thousand', 'million'], certa: 1, traducao: '35.000 = trinta e cinco mil.' },
+    { frase: '2,700,000 = two million seven hundred ___.', opcoes: ['hundred', 'million', 'thousand'], certa: 2, traducao: '2.700.000 = dois milhões e setecentos mil.' }
+  ]
+});
+</script>
+</body>
+</html>

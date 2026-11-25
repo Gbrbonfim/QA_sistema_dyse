@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 28 · My town then and now</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 28 · Leitura (Two Cities, Two Worlds)
+   Alinhado ao "Reading" (Famous Cities: Then and Now), ao "Writing And Speaking" (a cidade no
+   passado e hoje: população, lugares) e a there was / there were x there is / there are.
+   Conteúdo NOVO: o Charles pergunta à avó Rosa como era a cidade dela antigamente.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Charles', 'Grandma, how was our town in the past?'],
+  ['Rosa', 'It was very small. There were only five thousand people.'],
+  ['Charles', 'Wow! And now there are fifty thousand. Was there a hospital?'],
+  ['Rosa', "No, there wasn't. People went to the next city."],
+  ['Charles', 'Were there any supermarkets?'],
+  ['Rosa', "No, there weren't. But there was a big market in the square."],
+  ['Charles', 'Was there a cinema?'],
+  ['Rosa', 'Yes, there was one small cinema. I went there every Saturday!'],
+  ['Charles', 'How many schools were there?'],
+  ['Rosa', 'There were two schools. Now there are eight.'],
+  ['Charles', 'Were there any parks?'],
+  ['Rosa', 'There was one park near the church. We played there every day.'],
+  ['Charles', 'Is the park still there?'],
+  ['Rosa', "Yes, it is! But now there's a shopping center next to it."],
+  ['Charles', 'What was your favorite place?'],
+  ['Rosa', 'The bakery. There was a bakery on my street, and the bread was delicious.'],
+  ['Charles', 'Is there a bakery on your street now?'],
+  ['Rosa', "No, there isn't. Now there's a bank there."]
+];
+const lado = q => q === 'Charles' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 28, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['It was very small. There were only five thousand people.', 'It was very small. There was only five thousand people.', 'It is very small. There are only five thousand people.'], 0, 'Era muito pequena. Havia só cinco mil pessoas.'),
+    prox(3, ["No, there weren't. People went to the next city.", "No, there wasn't. People went to the next city.", "No, it wasn't. People go to the next city."], 1, 'Não, não havia. As pessoas iam à cidade vizinha.'),
+    prox(4, ['Was there any supermarkets?', 'Were there some supermarkets?', 'Were there any supermarkets?'], 2, 'Havia supermercados?'),
+    prox(5, ["No, there weren't. But there was a big market in the square.", "No, there wasn't. But there were a big market in the square.", "No, there weren't. But there is a big market in the square."], 0, 'Não, não havia. Mas havia um grande mercado na praça.'),
+    prox(6, ['Were there a cinema?', 'Was there a cinema?', 'There was a cinema?'], 1, 'Havia um cinema?'),
+    prox(7, ['Yes, there were one small cinema. I went there every Saturday!', 'Yes, there was one small cinema. I go there every Saturday!', 'Yes, there was one small cinema. I went there every Saturday!'], 2, 'Sim, havia um cinema pequeno. Eu ia lá todo sábado!'),
+    prox(8, ['How many schools were there?', 'How much schools were there?', 'How many schools was there?'], 0, 'Quantas escolas havia?'),
+    prox(9, ['There was two schools. Now there are eight.', 'There were two schools. Now there are eight.', 'There were two schools. Now there were eight.'], 1, 'Havia duas escolas. Agora há oito.'),
+    prox(11, ['There were one park near the church.', 'There is one park near the church. We play there every day.', 'There was one park near the church. We played there every day.'], 2, 'Havia um parque perto da igreja. Brincávamos lá todo dia.'),
+    prox(13, ["Yes, it is! But now there's a shopping center next to it.", "Yes, there was! But now there's a shopping center next to it.", "Yes, it is! But now there are a shopping center next to it."], 0, 'Sim! Mas agora tem um shopping ao lado.'),
+    prox(15, ['The bakery. There were a bakery on my street.', 'The bakery. There was a bakery on my street, and the bread was delicious.', 'The bank. There was a bank on my street.'], 1, 'A padaria. Havia uma padaria na minha rua, e o pão era delicioso.'),
+    prox(17, ["No, there aren't. Now there's a bank there.", "No, there wasn't. Now there was a bank there.", "No, there isn't. Now there's a bank there."], 2, 'Não, não tem. Agora tem um banco lá.'),
+    { instrucao: 'How many people lived in the town in the past?', frase: '___ people.', opcoes: ['5,000', '50,000', '500'], certa: 0, traducao: 'Cinco mil pessoas.' },
+    { instrucao: 'How many people live there now?', frase: '___ people.', opcoes: ['5,000', '50,000', '15,000'], certa: 1, traducao: 'Cinquenta mil pessoas.' },
+    { instrucao: 'Where did people go when they were sick?', frase: 'To the ___.', opcoes: ['chemist', 'market', 'next city'], certa: 2, traducao: 'À cidade vizinha.' },
+    { instrucao: 'Where was the big market?', frase: 'In the ___.', opcoes: ['square', 'park', 'church'], certa: 0, traducao: 'Na praça.' },
+    { instrucao: 'When did Rosa go to the cinema?', frase: 'Every ___.', opcoes: ['Sunday', 'Saturday', 'day'], certa: 1, traducao: 'Todo sábado.' },
+    { instrucao: 'How many schools are there now?', frase: '___.', opcoes: ['Two', 'Five', 'Eight'], certa: 2, traducao: 'Oito.' },
+    { instrucao: 'What is next to the park now?', frase: 'A ___.', opcoes: ['shopping center', 'church', 'bank'], certa: 0, traducao: 'Um shopping.' },
+    { instrucao: 'What is on Rosa\'s street now?', frase: 'A ___.', opcoes: ['bakery', 'bank', 'café'], certa: 1, traducao: 'Um banco.' }
+  ]
+});
+</script>
+</body>
+</html>

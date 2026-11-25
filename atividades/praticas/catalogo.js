@@ -708,6 +708,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'My favorite restaurant', tipo: 'Escute e grave', treina: 'Fala · There is / there are', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'There is / there are + some / any', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 28,
+        titulo: 'Class 28 · Two Cities, Two Worlds',
+        atividades: [
+          { num: 1, titulo: 'Which number do you hear?', tipo: 'Escute e escolha', treina: 'Escuta · Números altos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'There was, there were', tipo: 'Monte a frase', treina: 'Escrita · There was / were', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'My town then and now', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Then and now', tipo: 'Escute e grave', treina: 'Fala · Lugares da cidade', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'There was / there were', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
