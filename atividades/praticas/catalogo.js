@@ -839,6 +839,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 41', titulo: 'My shopping experiences', tipo: 'Escute e grave', treina: 'Fala · Experiências', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 41', titulo: 'Present perfect or past simple?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 43,
+        titulo: 'Class 43 · Review Classes 34-43',
+        atividades: [
+          { num: 1, titulo: 'What kind of sentence?', tipo: 'Escute e escolha', treina: 'Escuta · Revisão', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Review: make the sentence', tipo: 'Monte a frase', treina: 'Escrita · Revisão', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'End of the course', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Can you do it?', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Review: grammar', tipo: 'Make a Choice', treina: 'Gramática · Revisão', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

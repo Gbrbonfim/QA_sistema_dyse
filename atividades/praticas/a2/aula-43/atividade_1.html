@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 43 · What kind of sentence?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 43 · Escuta (Review Classes 34-43)
+   Revisão das aulas 34 a 43 ("Talking Point"): superlativos, be going to (planos), present
+   perfect (experiências com Have you ever...?) e pedidos educados com Could...? Conteúdo
+   NOVO: o aluno ouve a frase e escolhe o tipo. 24 questões. */
+const IC = { 'Superlative': 'trending_up', 'Plan (going to)': 'event_upcoming', 'Life experience': 'done_all', 'Polite request (Could...?)': 'volunteer_activism' };
+const T = Object.keys(IC);
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 43, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what kind of sentence is it?',
+  itens: [
+    q('The Burj Khalifa is the tallest building in the world.', 0),
+    q("I'm going to visit my grandparents next weekend.", 1),
+    q("I've been to Argentina twice.", 2),
+    q('Could you help me with my bag, please?', 3),
+    q('This is the most beautiful beach in Brazil.', 0),
+    q("We're going to study in Canada next year.", 1),
+    q('Have you ever eaten sushi?', 2),
+    q('Could you open the window, please?', 3),
+    q('That was the worst movie of my life!', 0),
+    q('She is going to start a new job next month.', 1),
+    q("I've never driven a car in another country.", 2),
+    q('Could I have a glass of water, please?', 3),
+    q('The Louvre is the most visited museum in the world.', 0),
+    q('Are you going to travel on your next vacation?', 1),
+    q('Has he ever seen the Northern Lights?', 2),
+    q('Could you repeat that, please?', 3),
+    q('My grandmother is the oldest person in my family.', 0),
+    q("They're going to buy a new house.", 1),
+    q("We've visited fifty countries.", 2),
+    q('Could you tell me where the station is?', 3),
+    q('This is the cheapest restaurant in town.', 0),
+    q("I'm going to learn Spanish next year.", 1),
+    q("Have you ever been to an Amazon Go store?", 2),
+    q('Could I use your phone, please?', 3)
+  ]
+});
+</script>
+</body>
+</html>

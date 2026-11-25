@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 43 · Review: make the sentence</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 43 · Escrita (Review Classes 34-43)
+   Revisão das aulas 34 a 43: superlativos, be going to, verbo + to (would like, want, hope,
+   learn), artigos com tecnologia, pedidos com Could...?, present perfect (Have you ever...?)
+   x past simple, been x gone e perguntas com Do / Did / Are you...? Conteúdo NOVO. A isca é
+   a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 43, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('A Grande Muralha é a muralha mais longa do mundo.'), palavras: ['The', 'Great', 'Wall', 'is', 'the', 'longest', 'wall', 'in', 'the', 'world'], isca: ['longer'], fim: '.', traducao: 'A Grande Muralha é a muralha mais longa do mundo.' },
+    { contexto: M('Qual é o lugar mais bonito da sua cidade?'), palavras: ["What's", 'the', 'most', 'beautiful', 'place', 'in', 'your', 'city'], isca: ['more'], fim: '?', traducao: 'Qual é o lugar mais bonito da sua cidade?' },
+    { contexto: M('Eu vou visitar os meus avós no próximo fim de semana.'), palavras: ["I'm", 'going', 'to', 'visit', 'my', 'grandparents', 'next', 'weekend'], isca: ['visiting'], fim: '.', traducao: 'Vou visitar os meus avós no próximo fim de semana.' },
+    { contexto: M('O que você vai fazer no mês que vem?'), palavras: ['What', 'are', 'you', 'going', 'to', 'do', 'next', 'month'], isca: ['is'], fim: '?', traducao: 'O que você vai fazer no mês que vem?' },
+    { contexto: M('Eu gostaria de aprender a tocar violão.'), palavras: ["I'd", 'like', 'to', 'learn', 'to', 'play', 'the', 'guitar'], isca: ['learning'], fim: '.', traducao: 'Eu gostaria de aprender a tocar violão.' },
+    { contexto: M('Eu espero viajar pelo mundo.'), palavras: ['I', 'hope', 'to', 'travel', 'the', 'world'], isca: ['traveling'], fim: '.', traducao: 'Espero viajar pelo mundo.' },
+    { contexto: M('Eu uso um assistente de voz todo dia.'), palavras: ['I', 'use', 'a', 'voice', 'assistant', 'every', 'day'], isca: ['an'], fim: '.', traducao: 'Uso um assistente de voz todo dia.' },
+    { contexto: M('As pessoas usam a internet em todo lugar.'), palavras: ['People', 'use', 'the', 'internet', 'everywhere'], isca: ['a'], fim: '.', traducao: 'As pessoas usam a internet em todo lugar.' },
+    { contexto: M('Você poderia me ajudar, por favor?'), palavras: ['Could', 'you', 'help', 'me,', 'please'], isca: ['helping'], fim: '?', traducao: 'Você poderia me ajudar, por favor?' },
+    { contexto: M('Eu poderia tomar um copo de água, por favor?'), palavras: ['Could', 'I', 'have', 'a', 'glass', 'of', 'water,', 'please'], isca: ['some'], fim: '?', traducao: 'Eu poderia tomar um copo de água, por favor?' },
+    { contexto: M('Você já foi a um país asiático?'), palavras: ['Have', 'you', 'ever', 'been', 'to', 'an', 'Asian', 'country'], isca: ['went'], fim: '?', traducao: 'Você já foi a um país asiático?' },
+    { contexto: M('Sim, já. Eu fui ao Japão em 2022.'), palavras: ['Yes,', 'I', 'have.', 'I', 'went', 'to', 'Japan', 'in', '2022'], isca: ['gone'], fim: '.', traducao: 'Sim. Fui ao Japão em 2022.' },
+    { contexto: M('Eu nunca comi insetos.'), palavras: ["I've", 'never', 'eaten', 'insects'], isca: ['ate'], fim: '.', traducao: 'Nunca comi insetos.' },
+    { contexto: M('Ela foi ao shopping. (Ela está lá agora.)'), palavras: ["She's", 'gone', 'to', 'the', 'mall'], isca: ['been'], fim: '.', traducao: 'Ela foi ao shopping.' },
+    { contexto: M('Você gosta de comprar pela internet?'), palavras: ['Do', 'you', 'like', 'shopping', 'online'], isca: ['Are'], fim: '?', traducao: 'Você gosta de comprar pela internet?' },
+    { contexto: M('Você foi à praia no sábado?'), palavras: ['Did', 'you', 'go', 'to', 'the', 'beach', 'on', 'Saturday'], isca: ['Have'], fim: '?', traducao: 'Você foi à praia no sábado?' },
+    { contexto: M('Você está cansado hoje?'), palavras: ['Are', 'you', 'tired', 'today'], isca: ['Do'], fim: '?', traducao: 'Você está cansado hoje?' },
+    { contexto: M('Eu vou levar uma jaqueta porque vai fazer frio.'), palavras: ["I'm", 'going', 'to', 'take', 'a', 'jacket', 'because', "it's", 'going', 'to', 'be', 'cold'], isca: ['go'], fim: '.', traducao: 'Vou levar uma jaqueta porque vai fazer frio.' },
+    { contexto: M('Este é o melhor dia da minha vida!'), palavras: ['This', 'is', 'the', 'best', 'day', 'of', 'my', 'life'], isca: ['goodest'], fim: '!', traducao: 'Este é o melhor dia da minha vida!' },
+    { contexto: M('Eu nunca fui a uma loja sem caixa.'), palavras: ["I've", 'never', 'been', 'to', 'a', 'store', 'with', 'no', 'checkout'], isca: ['gone'], fim: '.', traducao: 'Nunca fui a uma loja sem caixa.' }
+  ]
+});
+</script>
+</body>
+</html>

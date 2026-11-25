@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 43 · End of the course</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 43 · Leitura (Review Classes 34-43)
+   Revisão das aulas 34 a 43 numa conversa: planos com be going to, sonhos com would like to,
+   superlativos, tecnologia, Have you ever...? x past simple e pedido com Could...? Conteúdo
+   NOVO: a Mia e o Diego conversam no fim do curso. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Mia', 'Diego, our course is almost finished! What are you going to do next year?'],
+  ['Diego', "I'm going to study in Australia. I've already booked the flight!"],
+  ['Mia', 'Wow! Have you ever been to Australia?'],
+  ['Diego', "No, I haven't. But my sister went there in 2023. She loved it."],
+  ['Mia', 'What would you like to do there?'],
+  ['Diego', "I'd like to see the Sydney Opera House. It's the most famous building in the country."],
+  ['Mia', 'Cool! Are you going to work there too?'],
+  ['Diego', "Yes, I'm going to work in a café. I want to improve my English."],
+  ['Mia', 'Great idea! I hope to travel next year too.'],
+  ['Diego', 'Where would you like to go?'],
+  ['Mia', 'Japan! I think it has the best food in the world.'],
+  ['Diego', 'Have you ever eaten real Japanese food?'],
+  ['Mia', 'Yes, I have. I ate sushi in São Paulo last month. It was amazing!'],
+  ['Diego', 'Nice! Could you send me some photos of your trip next year?'],
+  ['Mia', 'Of course! And could you send me photos of Australia?'],
+  ['Diego', 'Sure! I\'m going to post a lot on social media.'],
+  ['Mia', 'Perfect!']
+];
+const lado = q => q === 'Mia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 43, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I'm going to study in Australia. I've already booked the flight!", "I going to study in Australia. I've already book the flight!", "I'm going to studying in Australia. I already booked the flight!"], 0, 'Vou estudar na Austrália. Já reservei o voo!'),
+    prox(2, ['Wow! Did you ever been to Australia?', 'Wow! Have you ever been to Australia?', 'Wow! Have you ever went to Australia?'], 1, 'Uau! Você já foi à Austrália?'),
+    prox(3, ["No, I didn't. But my sister has gone there in 2023.", "No, I haven't. But my sister has been there in 2023.", "No, I haven't. But my sister went there in 2023. She loved it."], 2, 'Não. Mas a minha irmã foi lá em 2023. Ela adorou.'),
+    prox(4, ['What would you like to do there?', 'What would you like doing there?', 'What do you would like to do there?'], 0, 'O que você gostaria de fazer lá?'),
+    prox(5, ["I'd like to see the Sydney Opera House. It's the more famous building in the country.", "I'd like to see the Sydney Opera House. It's the most famous building in the country.", "I'd like seeing the Sydney Opera House. It's the famousest building."], 1, 'Eu gostaria de ver a Ópera de Sydney. É o prédio mais famoso do país.'),
+    prox(6, ['Cool! Do you going to work there too?', 'Cool! Are you go to work there too?', 'Cool! Are you going to work there too?'], 2, 'Legal! Você vai trabalhar lá também?'),
+    prox(7, ["Yes, I'm going to work in a café. I want to improve my English.", "Yes, I'm going to work in a café. I want improving my English.", "Yes, I going to work in a café. I want to improve my English."], 0, 'Sim, vou trabalhar num café. Quero melhorar o meu inglês.'),
+    prox(9, ['Where would you like going?', 'Where would you like to go?', 'Where you would like to go?'], 1, 'Para onde você gostaria de ir?'),
+    prox(10, ['Japan! I think it has the goodest food in the world.', 'Japan! I think it has the better food in the world.', 'Japan! I think it has the best food in the world.'], 2, 'Japão! Acho que tem a melhor comida do mundo.'),
+    prox(11, ['Have you ever eaten real Japanese food?', 'Have you ever ate real Japanese food?', 'Did you ever eaten real Japanese food?'], 0, 'Você já comeu comida japonesa de verdade?'),
+    prox(12, ["Yes, I have. I've eaten sushi in São Paulo last month.", 'Yes, I have. I ate sushi in São Paulo last month. It was amazing!', 'Yes, I did. I eat sushi in São Paulo last month.'], 1, 'Sim. Comi sushi em São Paulo no mês passado. Foi incrível!'),
+    prox(13, ['Nice! Could you sending me some photos of your trip next year?', 'Nice! Could you to send me some photos of your trip next year?', 'Nice! Could you send me some photos of your trip next year?'], 2, 'Legal! Você poderia me mandar umas fotos da sua viagem no ano que vem?'),
+    { instrucao: 'What is Diego going to do next year?', frase: 'Study in ___.', opcoes: ['Australia', 'Japan', 'Canada'], certa: 0, traducao: 'Estudar na Austrália.' },
+    { instrucao: 'Has Diego been to Australia?', frase: "No, he ___.", opcoes: ["didn't", "hasn't", "isn't"], certa: 1, traducao: 'Não.' },
+    { instrucao: 'When did his sister go to Australia?', frase: 'In ___.', opcoes: ['2022', '2024', '2023'], certa: 2, traducao: 'Em 2023.' },
+    { instrucao: 'What would Diego like to see?', frase: 'The Sydney ___.', opcoes: ['Opera House', 'Tower', 'Bridge'], certa: 0, traducao: 'A Ópera de Sydney.' },
+    { instrucao: 'Where is Diego going to work?', frase: 'In a ___.', opcoes: ['school', 'café', 'hotel'], certa: 1, traducao: 'Num café.' },
+    { instrucao: 'Where would Mia like to go?', frase: 'To ___.', opcoes: ['Australia', 'Italy', 'Japan'], certa: 2, traducao: 'Ao Japão.' },
+    { instrucao: 'Where did Mia eat sushi?', frase: 'In ___.', opcoes: ['São Paulo', 'Tokyo', 'Rio'], certa: 0, traducao: 'Em São Paulo.' },
+    { instrucao: 'Where is Diego going to post photos?', frase: 'On social ___.', opcoes: ['apps', 'media', 'sites'], certa: 1, traducao: 'Nas redes sociais.' }
+  ]
+});
+</script>
+</body>
+</html>
