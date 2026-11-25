@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 12 · Who is she?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 12 · Escuta (Family Stories)
+   Alinhado ao slide "Vocabulary" (árvore genealógica) — aunt, uncle, cousin, grandmother,
+   grandfather, mother-in-law, husband, daughter. Conteúdo NOVO: o aluno ouve a relação com o
+   genitivo 's ("my father's mother") e escolhe a palavra da família. 24 questões. */
+const IC = { 'aunt': 'woman', 'uncle': 'man', 'cousin': 'diversity_3', 'grandmother': 'elderly_woman', 'grandfather': 'elderly', 'mother-in-law': 'family_restroom', 'husband': 'man_4', 'daughter': 'girl' };
+const A = ['aunt', 'uncle', 'cousin', 'grandmother'];
+const B = ['grandfather', 'mother-in-law', 'husband', 'daughter'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 12, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: who is this person to me?',
+  itens: [
+    qa("Carla is my mother's sister.", 0),
+    qa("Peter is my father's brother.", 1),
+    qa("Julia is my uncle's daughter.", 2),
+    qa("Rose is my father's mother.", 3),
+    qa("My dad's sister lives in Chile.", 0),
+    qa("My mom's brother is a pilot.", 1),
+    qa("Tom is my aunt's son.", 2),
+    qa("My mom's mother makes great cakes.", 3),
+    qa("Anna is my father's sister. She's a doctor.", 0),
+    qa("Mark is married to my mother's sister.", 1),
+    qa("Leo and I have the same grandparents. His father is my uncle.", 2),
+    qa("She's my mother's mother. She's ninety today!", 3),
+    qb("Paul is my mother's father.", 0),
+    qb("Helen is my wife's mother.", 1),
+    qb("Ben is married to me. We have two children.", 2),
+    qb("Lily is my son's sister.", 3),
+    qb("My father's father lives on a farm.", 0),
+    qb("My husband's mother visits us every Sunday.", 1),
+    qb("I'm Maria and this is the man I married.", 2),
+    qb("She's my little girl. She's six.", 3),
+    qb("My dad's father is eighty years old.", 0),
+    qb("I love my wife's mother. She's very funny.", 1),
+    qb('Carlos and I are married. He is a great cook!', 2),
+    qb("Clara is my son Pedro's sister.", 3)
+  ]
+});
+</script>
+</body>
+</html>

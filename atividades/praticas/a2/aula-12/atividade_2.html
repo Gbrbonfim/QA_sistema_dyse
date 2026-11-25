@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 12 · My family tree</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 12 · Escrita (Family Stories)
+   Alinhado ao slide "Grammar Point: what does the 's mean?" — pessoa + 's para família e
+   coisas, plural regular (parents'), plural irregular (children's), dois nomes (Ella and
+   Alexander's), nomes terminados em s, e Who / Whose. Conteúdo NOVO. A isca é a forma
+   errada do genitivo. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 12, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('A Julia é a irmã do Pedro.'), palavras: ['Julia', 'is', "Pedro's", 'sister'], isca: ['Pedro'], fim: '.', traducao: 'A Julia é a irmã do Pedro.' },
+    { contexto: M('Este é o carro dos meus pais.'), palavras: ['This', 'is', 'my', "parents'", 'car'], isca: ["parent's"], fim: '.', traducao: 'Este é o carro dos meus pais.' },
+    { contexto: M('Este é o quarto das crianças.'), palavras: ['This', 'is', 'the', "children's", 'room'], isca: ["childrens'"], fim: '.', traducao: 'Este é o quarto das crianças.' },
+    { contexto: M('O Rui é o pai da Ana e do Leo.'), palavras: ['Rui', 'is', 'Ana', 'and', "Leo's", 'father'], isca: ["Ana's"], fim: '.', traducao: 'O Rui é o pai da Ana e do Leo.' },
+    { contexto: M('A minha tia é a irmã da minha mãe.'), palavras: ['My', 'aunt', 'is', 'my', "mother's", 'sister'], isca: ['mother'], fim: '.', traducao: 'A minha tia é a irmã da minha mãe.' },
+    { contexto: M('O meu primo é o filho do meu tio.'), palavras: ['My', 'cousin', 'is', 'my', "uncle's", 'son'], isca: ['uncles'], fim: '.', traducao: 'O meu primo é o filho do meu tio.' },
+    { contexto: M('A mãe da minha esposa é a minha sogra.'), palavras: ['My', "wife's", 'mother', 'is', 'my', 'mother-in-law'], isca: ['wifes'], fim: '.', traducao: 'A mãe da minha esposa é a minha sogra.' },
+    { contexto: M('A sala dos professores fica ali.'), palavras: ['The', "teachers'", 'room', 'is', 'over', 'there'], isca: ['teacher'], fim: '.', traducao: 'A sala dos professores fica ali.' },
+    { contexto: M('O banheiro feminino fica ali.'), palavras: ['The', "women's", 'restroom', 'is', 'over', 'there'], isca: ["womens'"], fim: '.', traducao: 'O banheiro feminino fica ali.' },
+    { contexto: M('Esta é a irmã do Lucas.'), palavras: ['This', 'is', "Lucas'", 'sister'], isca: ["Luca's"], fim: '.', traducao: 'Esta é a irmã do Lucas.' },
+    { contexto: M('A porta da casa está aberta.'), palavras: ['The', 'door', 'of', 'the', 'house', 'is', 'open'], isca: ["house's"], fim: '.', traducao: 'A porta da casa está aberta.' },
+    { contexto: M('Os meus avós moram no Chile.'), palavras: ['My', 'grandparents', 'live', 'in', 'Chile'], isca: ['lives'], fim: '.', traducao: 'Os meus avós moram no Chile.' },
+    { contexto: M('De quem é este celular?'), palavras: ['Whose', 'phone', 'is', 'this'], isca: ['Who'], fim: '?', traducao: 'De quem é este celular?' },
+    { contexto: M('É o celular do meu namorado.'), palavras: ["It's", 'my', "boyfriend's", 'phone'], isca: ['boyfriend'], fim: '.', traducao: 'É o celular do meu namorado.' },
+    { contexto: M('Quem é o homem na foto?'), palavras: ['Who', 'is', 'the', 'man', 'in', 'the', 'photo'], isca: ['Whose'], fim: '?', traducao: 'Quem é o homem na foto?' },
+    { contexto: M('Ele é o meu tio.'), palavras: ["He's", 'my', 'uncle'], isca: ['His'], fim: '.', traducao: 'Ele é o meu tio.' },
+    { contexto: M('De quem é esta jaqueta amarela?'), palavras: ['Whose', 'is', 'this', 'yellow', 'jacket'], isca: ["Who's"], fim: '?', traducao: 'De quem é esta jaqueta amarela?' },
+    { contexto: M('Quem é a namorada dele?'), palavras: ["Who's", 'his', 'girlfriend'], isca: ['Whose'], fim: '?', traducao: 'Quem é a namorada dele?' },
+    { contexto: M('As filhas do John têm 8 anos.'), palavras: ["John's", 'daughters', 'are', 'eight'], isca: ['John'], fim: '.', traducao: 'As filhas do John têm oito anos.' },
+    { contexto: M('Eles são os amigos do meu irmão.'), palavras: ['They', 'are', 'my', "brother's", 'friends'], isca: ["friends'"], fim: '.', traducao: 'Eles são os amigos do meu irmão.' }
+  ]
+});
+</script>
+</body>
+</html>

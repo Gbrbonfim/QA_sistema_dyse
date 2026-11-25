@@ -555,6 +555,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'My housework routine', tipo: 'Escute e grave', treina: 'Fala · Frequência', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Adverbs of frequency', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 12,
+        titulo: 'Class 12 · Family Stories',
+        atividades: [
+          { num: 1, titulo: 'Who is she?', tipo: 'Escute e escolha', treina: 'Escuta · Família', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'My family tree', tipo: 'Monte a frase', treina: "Escrita · Genitivo 's", minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Family photo', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Talk about your family', tipo: 'Escute e grave', treina: 'Fala · Família', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: "Possessive 's, who and whose", tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 12 · Possessive 's, who and whose</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 12 · Gramática (Family Stories)
+   Alinhado ao "Grammar Point" — genitivo 's (pessoa + 's; parents'; children's; Ella and
+   Alexander's; James' / James's; "the door of the house", não "the house's door"), 's = is x
+   possessivo, Whose x Who's, e o vocabulário da família. Conteúdo NOVO. 24 questões. */
+const OK = 'Which is correct?';
+const S = "What does the 's mean here?";
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 12, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: OK, frase: "It's ___.", opcoes: ["my sister's party", "my party's sister", "my sisters party"], certa: 0, traducao: 'É a festa da minha irmã.' },
+    { instrucao: OK, frase: 'This is ___.', opcoes: ["my parent's cars", "my parents' car", "my parents car's"], certa: 1, traducao: 'Este é o carro dos meus pais.' },
+    { instrucao: OK, frase: 'They are ___.', opcoes: ["friends' my brother", "my brothers friend's", "my brother's friends"], certa: 2, traducao: 'Eles são os amigos do meu irmão.' },
+    { instrucao: OK, frase: 'The ___ restroom is over there.', opcoes: ["women's", "womens'", "woman's (many women)"], certa: 0, traducao: 'O banheiro feminino fica ali.' },
+    { instrucao: OK, frase: '___ is open.', opcoes: ["The house's door", 'The door of the house', "The door's house"], certa: 1, traducao: 'A porta da casa está aberta.' },
+    { instrucao: OK, frase: 'That is ___ mother.', opcoes: ["Susana's and Fabiola", "Susana and Fabiola", "Susana and Fabiola's"], certa: 2, traducao: 'Aquela é a mãe da Susana e da Fabiola.' },
+    { instrucao: OK, frase: 'Do you know Lucas? This is ___ sister!', opcoes: ["Lucas'", "Luca's", "Lucas"], certa: 0, traducao: 'Você conhece o Lucas? Esta é a irmã do Lucas!' },
+    { frase: '___ phone is this? It\'s my boyfriend\'s.', opcoes: ["Who's", 'Whose', 'Who'], certa: 1, traducao: 'De quem é este celular? É do meu namorado.' },
+    { frase: '___ the man with Roger? He\'s his brother.', opcoes: ['Whose', 'Who', "Who's"], certa: 2, traducao: 'Quem é o homem com o Roger? É o irmão dele.' },
+    { frase: '___ bike is that? It\'s Carla\'s.', opcoes: ['Whose', "Who's", 'Who'], certa: 0, traducao: 'De quem é aquela bicicleta? É da Carla.' },
+    { frase: '___ your English teacher?', opcoes: ['Whose', "Who's", 'Who are'], certa: 1, traducao: 'Quem é o seu professor de inglês?' },
+    { frase: '___ is this yellow jacket?', opcoes: ["Who's", 'Who', 'Whose'], certa: 2, traducao: 'De quem é esta jaqueta amarela?' },
+    { instrucao: S, frase: "Martha's mother is a teacher. ('s = ___)", opcoes: ['possessive', 'is', 'has'], certa: 0, traducao: "A mãe da Martha é professora. ('s = possessivo)" },
+    { instrucao: S, frase: "His sister's really tall. ('s = ___)", opcoes: ['possessive', 'is', 'does'], certa: 1, traducao: "A irmã dele é muito alta. ('s = is)" },
+    { instrucao: S, frase: "My cousin's house is quite big. ('s = ___)", opcoes: ['is', 'does', 'possessive'], certa: 2, traducao: "A casa do meu primo é bem grande. ('s = possessivo)" },
+    { instrucao: S, frase: "Their uncle's a doctor. ('s = ___)", opcoes: ['is', 'possessive', 'has'], certa: 0, traducao: "O tio deles é médico. ('s = is)" },
+    { frase: "My mother's sister is my ___.", opcoes: ['cousin', 'aunt', 'niece'], certa: 1, traducao: 'A irmã da minha mãe é a minha tia.' },
+    { frase: "My uncle's son is my ___.", opcoes: ['brother', 'uncle', 'cousin'], certa: 2, traducao: 'O filho do meu tio é o meu primo.' },
+    { frase: "My father's father is my ___.", opcoes: ['grandfather', 'great-grandfather', 'uncle'], certa: 0, traducao: 'O pai do meu pai é o meu avô.' },
+    { frase: "My wife's mother is my ___.", opcoes: ['aunt', 'mother-in-law', 'grandmother'], certa: 1, traducao: 'A mãe da minha esposa é a minha sogra.' },
+    { frase: "My grandparents' parents are my ___.", opcoes: ['parents', 'cousins', 'great-grandparents'], certa: 2, traducao: 'Os pais dos meus avós são os meus bisavós.' },
+    { frase: 'My father and my mother are my ___.', opcoes: ['parents', 'relatives', 'grandparents'], certa: 0, traducao: 'O meu pai e a minha mãe são os meus pais.' },
+    { frase: 'Amal is married to George. She is his ___.', opcoes: ['daughter', 'wife', 'sister'], certa: 1, traducao: 'A Amal é casada com o George. Ela é a esposa dele.' },
+    { frase: 'Ella and Alexander are George\'s ___. He is their father.', opcoes: ['parents', 'cousins', 'children'], certa: 2, traducao: 'A Ella e o Alexander são os filhos do George. Ele é o pai deles.' }
+  ]
+});
+</script>
+</body>
+</html>

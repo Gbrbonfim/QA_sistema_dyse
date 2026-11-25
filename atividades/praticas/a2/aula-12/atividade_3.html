@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 12 · Family photo</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 12 · Leitura (Family Stories)
+   Alinhado aos slides "Listening: Patricia describing her family" e "Speaking: Who is the
+   woman? She's my sister." — família, idades, profissões, 's, Who / Whose. Conteúdo NOVO: o
+   Mike mostra uma foto da família para a Ana. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Ana', 'Is this your family, Mike?'],
+  ['Mike', "Yes, it is! It's my grandmother's birthday party."],
+  ['Ana', "Who's the woman with the cake?"],
+  ['Mike', "That's my grandmother, Rose. She's eighty."],
+  ['Ana', 'And who are the two men with her?'],
+  ['Mike', "My father and my uncle Paul. Paul is my dad's brother."],
+  ['Ana', 'What does your uncle do?'],
+  ['Mike', "He's a lawyer. He works in Chicago."],
+  ['Ana', "Who's the girl with the guitar?"],
+  ['Mike', "That's my cousin Lily. She's Paul's daughter."],
+  ['Ana', "Whose dog is that? It's so cute!"],
+  ['Mike', "It's my sister's dog. His name is Max."],
+  ['Ana', 'Is your sister in the photo?'],
+  ['Mike', "Yes, she's the tall woman with curly hair."],
+  ['Ana', 'And where are you?'],
+  ['Mike', "I'm not in the photo. I'm the photographer!"]
+];
+const lado = q => q === 'Ana' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 12, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes, it is! It's my grandmother's birthday party.", "Yes, it is! It's my grandmothers birthday party.", "Yes, it is! It's the party's of my grandmother."], 0, 'Sim! É a festa de aniversário da minha avó.'),
+    prox(2, ["Whose the woman with the cake?", "Who's the woman with the cake?", "Who the woman with the cake?"], 1, 'Quem é a mulher com o bolo?'),
+    prox(3, ["That's my grandfather, Rose. She's eighty.", "That's my grandmother, Rose. Her eighty.", "That's my grandmother, Rose. She's eighty."], 2, 'É a minha avó, Rose. Ela tem oitenta anos.'),
+    prox(5, ["My father and my uncle Paul. Paul is my dad's brother.", "My father and my uncle Paul. Paul is my dads brother.", "My father and my aunt Paul. Paul is my dad's sister."], 0, 'O meu pai e o meu tio Paul. O Paul é irmão do meu pai.'),
+    prox(6, ['What does your uncle do?', 'What do your uncle do?', 'What is your uncle do?'], 1, 'O que o seu tio faz?'),
+    prox(7, ["He's lawyer. He work in Chicago.", "His a lawyer. He works in Chicago.", "He's a lawyer. He works in Chicago."], 2, 'Ele é advogado. Trabalha em Chicago.'),
+    prox(9, ["That's my cousin Lily. She's Paul's daughter.", "That's my cousin Lily. She's Paul daughter.", "That's my cousin Lily. She's Paul's son."], 0, 'É a minha prima Lily. Ela é filha do Paul.'),
+    prox(10, ["Who's dog is that? It's so cute!", "Whose dog is that? It's so cute!", "Who dog is that? It's so cute!"], 1, 'De quem é aquele cachorro? Ele é tão fofo!'),
+    prox(11, ["It's my sisters dog. His name is Max.", "It's my sister dog's. His name is Max.", "It's my sister's dog. His name is Max."], 2, 'É o cachorro da minha irmã. O nome dele é Max.'),
+    prox(12, ['Is your sister in the photo?', 'Does your sister in the photo?', 'Is your sister\'s in the photo?'], 0, 'A sua irmã está na foto?'),
+    prox(13, ["Yes, she's the short woman with straight hair.", "Yes, she's the tall woman with curly hair.", "Yes, her the tall woman with curly hair."], 1, 'Sim, ela é a mulher alta de cabelo cacheado.'),
+    prox(15, ["I'm in the photo, with my grandmother.", "I not in the photo. I'm the photographer!", "I'm not in the photo. I'm the photographer!"], 2, 'Não estou na foto. Sou o fotógrafo!'),
+    { instrucao: 'Whose birthday party is it?', frase: "It's Mike's ___ party.", opcoes: ["grandmother's", "sister's", "cousin's"], certa: 0, traducao: 'É a festa da avó do Mike.' },
+    { instrucao: 'How old is Rose?', frase: "She's ___.", opcoes: ['seventy', 'eighty', 'ninety'], certa: 1, traducao: 'Ela tem oitenta anos.' },
+    { instrucao: 'Who is Paul?', frase: "He's Mike's ___.", opcoes: ['father', 'cousin', 'uncle'], certa: 2, traducao: 'Ele é o tio do Mike.' },
+    { instrucao: "What is Paul's job?", frase: "He's a ___.", opcoes: ['lawyer', 'doctor', 'photographer'], certa: 0, traducao: 'Ele é advogado.' },
+    { instrucao: 'Who is Lily?', frase: "She's Mike's ___.", opcoes: ['sister', 'cousin', 'aunt'], certa: 1, traducao: 'Ela é a prima do Mike.' },
+    { instrucao: 'Whose dog is Max?', frase: "It's Mike's ___ dog.", opcoes: ["uncle's", "cousin's", "sister's"], certa: 2, traducao: 'É o cachorro da irmã do Mike.' },
+    { instrucao: "What does Mike's sister look like?", frase: "She's tall with ___ hair.", opcoes: ['curly', 'straight', 'blond'], certa: 0, traducao: 'Ela é alta, de cabelo cacheado.' },
+    { instrucao: 'Why is Mike not in the photo?', frase: "He's the ___.", opcoes: ['lawyer', 'photographer', 'singer'], certa: 1, traducao: 'Ele é o fotógrafo.' }
+  ]
+});
+</script>
+</body>
+</html>
