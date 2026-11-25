@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 21 · Jobs: -er, -or, -ist, -ian</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 21 · Gramática (They Were Fantastic!)
+   Alinhado ao "Reading And Vocabulary" — profissões formadas com -er / -or (verbos: paint →
+   painter, act → actor, invent → inventor) e -ist / -ian (substantivos: science → scientist,
+   politics → politician, math → mathematician), e was / is nas biografias. Conteúdo NOVO.
+   24 questões. */
+const JOB = 'Choose the job';
+const ORIG = 'Which word gives origin to this job?';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 20, num: 10, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: JOB, frase: 'paint → ___', opcoes: ['painter', 'paintist', 'paintian'], certa: 0, traducao: 'pintar → pintor' },
+    { instrucao: JOB, frase: 'write → ___', opcoes: ['writist', 'writer', 'writor'], certa: 1, traducao: 'escrever → escritor' },
+    { instrucao: JOB, frase: 'activism → ___', opcoes: ['activer', 'activian', 'activist'], certa: 2, traducao: 'ativismo → ativista' },
+    { instrucao: JOB, frase: 'politics → ___', opcoes: ['politician', 'politicer', 'politicist'], certa: 0, traducao: 'política → político' },
+    { instrucao: JOB, frase: 'invent → ___', opcoes: ['inventist', 'inventor', 'inventian'], certa: 1, traducao: 'inventar → inventor' },
+    { instrucao: JOB, frase: 'art → ___', opcoes: ['arter', 'artor', 'artist'], certa: 2, traducao: 'arte → artista' },
+    { instrucao: JOB, frase: 'dance → ___', opcoes: ['dancer', 'dancist', 'dancian'], certa: 0, traducao: 'dançar → dançarino' },
+    { instrucao: JOB, frase: 'act → ___', opcoes: ['acter', 'actor', 'actist'], certa: 1, traducao: 'atuar → ator' },
+    { instrucao: JOB, frase: 'science → ___', opcoes: ['sciencer', 'sciencian', 'scientist'], certa: 2, traducao: 'ciência → cientista' },
+    { instrucao: JOB, frase: 'sing → ___', opcoes: ['singer', 'singor', 'singist'], certa: 0, traducao: 'cantar → cantor' },
+    { instrucao: JOB, frase: 'music → ___', opcoes: ['musicer', 'musician', 'musicist'], certa: 1, traducao: 'música → músico' },
+    { instrucao: JOB, frase: 'teach → ___', opcoes: ['teachist', 'teachor', 'teacher'], certa: 2, traducao: 'ensinar → professor' },
+    { instrucao: ORIG, frase: 'mathematician ← ___', opcoes: ['math', 'mathematic', 'matter'], certa: 0, traducao: 'matemático ← matemática' },
+    { instrucao: ORIG, frase: 'chemist ← ___', opcoes: ['chemical', 'chemistry', 'chess'], certa: 1, traducao: 'químico ← química' },
+    { instrucao: ORIG, frase: 'physicist ← ___', opcoes: ['physical', 'physic', 'physics'], certa: 2, traducao: 'físico ← física' },
+    { instrucao: ORIG, frase: 'educator ← ___', opcoes: ['education', 'educated', 'educate story'], certa: 0, traducao: 'educador ← educação' },
+    { frase: 'Agatha Christie ___ born in 1890.', opcoes: ['is', 'was', 'were'], certa: 1, traducao: 'A Agatha Christie nasceu em 1890.' },
+    { frase: "Today, Agatha Christie's books ___ still very popular.", opcoes: ['was', 'is', 'are'], certa: 2, traducao: 'Hoje, os livros da Agatha Christie ainda são muito populares.' },
+    { frase: 'Serena Williams ___ a famous tennis player.', opcoes: ['is', 'were', 'are'], certa: 0, traducao: 'A Serena Williams é uma tenista famosa.' },
+    { frase: 'Frida Kahlo was a famous ___ from Mexico.', opcoes: ['paint', 'painter', 'painting'], certa: 1, traducao: 'A Frida Kahlo foi uma pintora famosa do México.' },
+    { frase: 'Her ___ are in museums everywhere.', opcoes: ['painters', 'paint', 'paintings'], certa: 2, traducao: 'As pinturas dela estão em museus de todo lugar.' },
+    { frase: 'Ella Fitzgerald was a great jazz ___.', opcoes: ['singer', 'sing', 'song'], certa: 0, traducao: 'A Ella Fitzgerald foi uma grande cantora de jazz.' },
+    { frase: 'Marta is a football ___. She plays for Brazil.', opcoes: ['playing', 'player', 'play'], certa: 1, traducao: 'A Marta é jogadora de futebol. Ela joga pela seleção brasileira.' },
+    { frase: 'Rosa Parks fought for equal rights. She was an ___.', opcoes: ['actor', 'inventor', 'activist'], certa: 2, traducao: 'A Rosa Parks lutou por direitos iguais. Ela foi uma ativista.' }
+  ]
+});
+</script>
+</body>
+</html>

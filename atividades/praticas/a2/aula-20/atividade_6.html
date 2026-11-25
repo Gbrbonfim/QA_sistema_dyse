@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 21 · What was her job?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 21 · Escuta (They Were Fantastic!)
+   Alinhado ao "Reading And Vocabulary: make the words for the jobs" — painter, writer,
+   scientist, activist, inventor, politician, singer, player. Conteúdo NOVO e verdadeiro: o
+   aluno ouve uma frase sobre uma mulher famosa ou o que alguém faz e escolhe a profissão.
+   24 questões. */
+const IC = { 'painter': 'brush', 'writer': 'edit_note', 'scientist': 'science', 'activist': 'campaign', 'inventor': 'engineering', 'politician': 'account_balance', 'singer': 'mic', 'player': 'sports_soccer' };
+const A = ['painter', 'writer', 'scientist', 'activist'];
+const B = ['inventor', 'politician', 'singer', 'player'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 20, num: 6, tipo: 'imagem',
+  instrucao: 'Listen: what is or was her job?',
+  itens: [
+    qa('Tarsila do Amaral painted a famous picture called Abaporu.', 0),
+    qa('Agatha Christie wrote a lot of detective stories.', 1),
+    qa('Marie Curie studied physics and chemistry.', 2),
+    qa('Rosa Parks fought for the rights of Black people in the USA.', 3),
+    qa('She paints pictures of flowers and sells them.', 0),
+    qa('Clarice Lispector wrote books in Portuguese.', 1),
+    qa('She is a chemist and she works on new medicines.', 2),
+    qa('She fights for girls\' right to education.', 3),
+    qa('Frida Kahlo painted a lot of self-portraits.', 0),
+    qa('My aunt writes books for children.', 1),
+    qa("She studies the stars and the planets.", 2),
+    qa('She goes to the streets and fights for the planet.', 3),
+    qb('Hedy Lamarr was an actress, but she also invented new technology.', 0),
+    qb('She works in the government in Brasília.', 1),
+    qb('Ella Fitzgerald sang jazz and had a beautiful voice.', 2),
+    qb('Marta plays football for the Brazilian team.', 3),
+    qb('She has great ideas and creates new machines.', 0),
+    qb('She works for the government of her country.', 1),
+    qb('Beyoncé sings and dances on stage.', 2),
+    qb('Serena Williams won twenty-three Grand Slam titles in tennis.', 3),
+    qb('She has a great idea for a new robot.', 0),
+    qb('She wants to be the president of her country.', 1),
+    qb('She sings at weddings and parties.', 2),
+    qb('She plays basketball for her university team.', 3)
+  ]
+});
+</script>
+</body>
+</html>

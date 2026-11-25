@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 20 · Women in history</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 20 · Escrita (They Were Fantastic!)
+   Alinhado ao "Grammar Point: Past Simple of be" — was / were, wasn't / weren't, perguntas
+   invertidas (Was she...?), "was born" e expressões de passado (yesterday, last year, in
+   1963). Conteúdo NOVO, com fatos verdadeiros. A isca é was x were. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 20, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('A Marie Curie era cientista.'), palavras: ['Marie', 'Curie', 'was', 'a', 'scientist'], isca: ['were'], fim: '.', traducao: 'A Marie Curie era cientista.' },
+    { contexto: M('Ela nasceu na Polônia.'), palavras: ['She', 'was', 'born', 'in', 'Poland'], isca: ['is'], fim: '.', traducao: 'Ela nasceu na Polônia.' },
+    { contexto: M('A Amelia Earhart era piloto.'), palavras: ['Amelia', 'Earhart', 'was', 'a', 'pilot'], isca: ['were'], fim: '.', traducao: 'A Amelia Earhart era piloto.' },
+    { contexto: M('A Ada Lovelace e a Grace Hopper foram pioneiras da computação.'), palavras: ['Ada', 'Lovelace', 'and', 'Grace', 'Hopper', 'were', 'computer', 'pioneers'], isca: ['was'], fim: '.', traducao: 'A Ada Lovelace e a Grace Hopper foram pioneiras da computação.' },
+    { contexto: M('Ela não era professora de matemática.'), palavras: ['She', "wasn't", 'a', 'math', 'teacher'], isca: ["weren't"], fim: '.', traducao: 'Ela não era professora de matemática.' },
+    { contexto: M('Eles não eram astronautas.'), palavras: ['They', "weren't", 'astronauts'], isca: ["wasn't"], fim: '.', traducao: 'Eles não eram astronautas.' },
+    { contexto: M('Ela era química?'), palavras: ['Was', 'she', 'a', 'chemist'], isca: ['Were'], fim: '?', traducao: 'Ela era química?' },
+    { contexto: M('Elas eram cientistas?'), palavras: ['Were', 'they', 'scientists'], isca: ['Was'], fim: '?', traducao: 'Elas eram cientistas?' },
+    { contexto: M('Onde você nasceu?'), palavras: ['Where', 'were', 'you', 'born'], isca: ['was'], fim: '?', traducao: 'Onde você nasceu?' },
+    { contexto: M('Onde você estava no fim de semana passado?'), palavras: ['Where', 'were', 'you', 'last', 'weekend'], isca: ['did'], fim: '?', traducao: 'Onde você estava no fim de semana passado?' },
+    { contexto: M('Você estava em casa hoje de manhã?'), palavras: ['Were', 'you', 'at', 'home', 'this', 'morning'], isca: ['Did'], fim: '?', traducao: 'Você estava em casa hoje de manhã?' },
+    { contexto: M('Eu estava cansado ontem à noite.'), palavras: ['I', 'was', 'tired', 'yesterday', 'evening'], isca: ['were'], fim: '.', traducao: 'Eu estava cansado ontem à noite.' },
+    { contexto: M('Nós estávamos no trabalho às nove.'), palavras: ['We', 'were', 'at', 'work', 'at', 'nine'], isca: ['was'], fim: '.', traducao: 'Estávamos no trabalho às nove.' },
+    { contexto: M('A minha avó nasceu no Japão em 1940.'), palavras: ['My', 'grandma', 'was', 'born', 'in', 'Japan', 'in', '1940'], isca: ['is'], fim: '.', traducao: 'A minha avó nasceu no Japão em 1940.' },
+    { contexto: M('Ontem foi terça.'), palavras: ['Yesterday', 'was', 'Tuesday'], isca: ['is'], fim: '.', traducao: 'Ontem foi terça.' },
+    { contexto: M('Hoje é quarta.'), palavras: ['Today', 'is', 'Wednesday'], isca: ['was'], fim: '.', traducao: 'Hoje é quarta.' },
+    { contexto: M('Os meus livros estavam na mesa à tarde.'), palavras: ['My', 'books', 'were', 'on', 'the', 'desk', 'in', 'the', 'afternoon'], isca: ['was'], fim: '.', traducao: 'Os meus livros estavam na mesa à tarde.' },
+    { contexto: M('Por que a sua mãe estava brava?'), palavras: ['Why', 'was', 'your', 'mom', 'angry'], isca: ['were'], fim: '?', traducao: 'Por que a sua mãe estava brava?' },
+    { contexto: M('Porque eu estava atrasado para a escola.'), palavras: ['Because', 'I', 'was', 'late', 'for', 'school'], isca: ['were'], fim: '.', traducao: 'Porque eu estava atrasado para a escola.' },
+    { contexto: M('Essas mulheres não eram bem pagas.'), palavras: ['These', 'women', "weren't", 'paid', 'well'], isca: ["wasn't"], fim: '.', traducao: 'Essas mulheres não eram bem pagas.' }
+  ]
+});
+</script>
+</body>
+</html>

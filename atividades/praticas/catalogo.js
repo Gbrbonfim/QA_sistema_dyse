@@ -626,6 +626,22 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 19', titulo: 'What do you love doing?', tipo: 'Escute e grave', treina: 'Fala · Gostos', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 19', titulo: 'Verbs + ing', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 20,
+        titulo: 'Class 20 and 21 · They Were Fantastic!',
+        atividades: [
+          { num: 1, parte: 'Class 20', titulo: 'Was or were?', tipo: 'Escute e escolha', treina: 'Escuta · Was / were', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 20', titulo: 'Women in history', tipo: 'Monte a frase', treina: 'Escrita · Was / were', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 20', titulo: 'At the science museum', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 20', titulo: 'Where were you?', tipo: 'Escute e grave', treina: 'Fala · Was / were', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 20', titulo: 'Past of be', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 21', titulo: 'What was her job?', tipo: 'Escute e escolha', treina: 'Escuta · Profissões', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 21', titulo: 'Write her biography', tipo: 'Monte a frase', treina: 'Escrita · Biografias', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 21', titulo: 'Our presentation', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 21', titulo: 'Famous women', tipo: 'Escute e grave', treina: 'Fala · Biografias', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 21', titulo: 'Jobs: -er, -or, -ist, -ian', tipo: 'Make a Choice', treina: 'Gramática · Profissões', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

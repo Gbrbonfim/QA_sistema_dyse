@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 20 · At the science museum</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 20 · Leitura (They Were Fantastic!)
+   Alinhado ao "Watching And Listening" (mulheres importantes da ciência e do espaço) e ao
+   "Grammar Point: was / were". Conteúdo NOVO, com fatos verdadeiros: a Nina e o Paul visitam uma
+   exposição sobre mulheres na ciência. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Nina', 'Look, Paul! This is Marie Curie. She was a scientist.'],
+  ['Paul', 'Was she French?'],
+  ['Nina', 'No, she was Polish. She was born in Poland in 1867.'],
+  ['Paul', 'Wow. Was she famous?'],
+  ['Nina', 'Yes! She was the first woman to win a Nobel Prize.'],
+  ['Paul', 'Amazing! And who is that woman with the plane?'],
+  ['Nina', "That's Amelia Earhart. She was an American pilot."],
+  ['Paul', 'Was she the first woman to fly across the Atlantic alone?'],
+  ['Nina', 'Yes, she was! That was in 1932.'],
+  ['Paul', 'And these two women? Were they scientists too?'],
+  ['Nina', 'They were computer pioneers. Ada Lovelace was born in London.'],
+  ['Paul', 'Where were you last Sunday, Nina? You weren\'t at the party.'],
+  ['Nina', 'I was here, at the museum. It was great!'],
+  ['Paul', 'Were your friends with you?'],
+  ['Nina', "No, they weren't. I was alone."],
+  ['Paul', "Well, now you aren't alone. Let's see the next room!"]
+];
+const lado = q => q === 'Nina' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 20, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Was she French?', 'Were she French?', 'She was French?'], 0, 'Ela era francesa?'),
+    prox(2, ['No, she were Polish. She was born in Poland.', 'No, she was Polish. She was born in Poland in 1867.', 'No, she is Polish. She is born in Poland.'], 1, 'Não, ela era polonesa. Nasceu na Polônia em 1867.'),
+    prox(3, ['Wow. Were she famous?', 'Wow. Did she famous?', 'Wow. Was she famous?'], 2, 'Uau. Ela era famosa?'),
+    prox(4, ['Yes! She was the first woman to win a Nobel Prize.', 'Yes! She were the first woman to win a Nobel Prize.', 'No! She was the last woman to win a Nobel Prize.'], 0, 'Sim! Ela foi a primeira mulher a ganhar um Prêmio Nobel.'),
+    prox(6, ["That's Amelia Earhart. She were an American pilot.", "That's Amelia Earhart. She was an American pilot.", "That's Amelia Earhart. She was a American pilot."], 1, 'É a Amelia Earhart. Ela era uma piloto americana.'),
+    prox(7, ['Were she the first woman to fly across the Atlantic alone?', 'She was the first woman to fly alone?', 'Was she the first woman to fly across the Atlantic alone?'], 2, 'Ela foi a primeira mulher a cruzar o Atlântico sozinha?'),
+    prox(8, ['Yes, she was! That was in 1932.', 'Yes, she were! That was in 1932.', 'Yes, she did! That was in 1932.'], 0, 'Sim! Isso foi em 1932.'),
+    prox(9, ['And these two women? Was they scientists too?', 'And these two women? Were they scientists too?', 'And these two women? Are they was scientists?'], 1, 'E estas duas mulheres? Elas também eram cientistas?'),
+    prox(11, ["Where was you last Sunday? You wasn't at the party.", "Where were you last Sunday? You was at the party.", "Where were you last Sunday, Nina? You weren't at the party."], 2, 'Onde você estava no domingo passado, Nina? Você não estava na festa.'),
+    prox(12, ['I was here, at the museum. It was great!', 'I were here, at the museum. It was great!', 'I was here, at the museum. It were great!'], 0, 'Eu estava aqui, no museu. Foi ótimo!'),
+    prox(13, ['Was your friends with you?', 'Were your friends with you?', 'Your friends were with you?'], 1, 'Os seus amigos estavam com você?'),
+    prox(14, ["No, they wasn't. I was alone.", "No, they weren't. I were alone.", "No, they weren't. I was alone."], 2, 'Não. Eu estava sozinha.'),
+    { instrucao: 'Where was Marie Curie born?', frase: 'In ___.', opcoes: ['Poland', 'France', 'England'], certa: 0, traducao: 'Na Polônia.' },
+    { instrucao: 'When was Marie Curie born?', frase: 'In ___.', opcoes: ['1932', '1867', '1815'], certa: 1, traducao: 'Em 1867.' },
+    { instrucao: 'Why was Marie Curie famous?', frase: 'She was the first woman to win a ___.', opcoes: ['race', 'football game', 'Nobel Prize'], certa: 2, traducao: 'Ela foi a primeira mulher a ganhar um Prêmio Nobel.' },
+    { instrucao: 'What was Amelia Earhart\'s job?', frase: 'She was a ___.', opcoes: ['pilot', 'scientist', 'writer'], certa: 0, traducao: 'Ela era piloto.' },
+    { instrucao: 'When did Amelia Earhart fly across the Atlantic alone?', frase: 'In ___.', opcoes: ['1867', '1932', '1997'], certa: 1, traducao: 'Em 1932.' },
+    { instrucao: 'Where was Ada Lovelace born?', frase: 'In ___.', opcoes: ['Paris', 'New York', 'London'], certa: 2, traducao: 'Em Londres.' },
+    { instrucao: 'Where was Nina last Sunday?', frase: 'At the ___.', opcoes: ['museum', 'party', 'airport'], certa: 0, traducao: 'No museu.' },
+    { instrucao: 'Were Nina\'s friends with her?', frase: 'No, they ___.', opcoes: ["wasn't", "weren't", "aren't"], certa: 1, traducao: 'Não, não estavam.' }
+  ]
+});
+</script>
+</body>
+</html>

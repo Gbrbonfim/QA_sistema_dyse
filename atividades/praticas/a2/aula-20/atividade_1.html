@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 20 · Was or were?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 20 · Escuta (They Were Fantastic!)
+   Alinhado ao "Grammar Point: Past Simple of be" — was, were, wasn't, weren't. Conteúdo NOVO
+   (mulheres da história e situações do dia a dia, fatos verdadeiros): o aluno ouve a frase e
+   escolhe a forma que ouviu. 24 questões. */
+const IC = { 'was': 'person', 'were': 'groups', "wasn't": 'person_off', "weren't": 'group_off' };
+const T = ['was', 'were', "wasn't", "weren't"];
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 20, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which form of "be" do you hear?',
+  itens: [
+    q('Marie Curie was a famous scientist.', 0),
+    q('The first computers were very big.', 1),
+    q("Amelia Earhart wasn't a teacher.", 2),
+    q("We weren't at home last night.", 3),
+    q('I was very tired yesterday evening.', 0),
+    q('My grandparents were born in Italy.', 1),
+    q("The movie wasn't very good.", 2),
+    q("They weren't at school on Monday.", 3),
+    q('Ada Lovelace was born in London.', 0),
+    q('You were late for class this morning.', 1),
+    q("She wasn't happy with her test.", 2),
+    q("The museums weren't open on Sunday.", 3),
+    q('Was she a writer?', 0),
+    q('Were you at the party on Saturday?', 1),
+    q("No, it wasn't expensive.", 2),
+    q("No, they weren't in Paris.", 3),
+    q('Agatha Christie was a writer of detective stories.', 0),
+    q('Where were you at nine yesterday?', 1),
+    q("The test wasn't difficult.", 2),
+    q("My parents weren't rich.", 3),
+    q('It was cold and rainy last weekend.', 0),
+    q('The streets were empty at midnight.', 1),
+    q("I wasn't at work yesterday.", 2),
+    q("The children weren't hungry after the party.", 3)
+  ]
+});
+</script>
+</body>
+</html>

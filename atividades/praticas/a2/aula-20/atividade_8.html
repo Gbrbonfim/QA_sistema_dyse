@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 21 · Our presentation</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 21 · Leitura (They Were Fantastic!)
+   Alinhado ao "Writing And Speaking: make a list of important women... use present and past of
+   be" e às biografias do "Reading". Conteúdo NOVO, com fatos verdadeiros: a Bia e o Sam preparam
+   uma apresentação sobre a Tarsila do Amaral e a Marta. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Bia', "Sam, let's talk about two Brazilian women in our presentation."],
+  ['Sam', 'Good idea! Who are they?'],
+  ['Bia', 'Tarsila do Amaral and Marta.'],
+  ['Sam', 'Who was Tarsila do Amaral?'],
+  ['Bia', 'She was a painter. She was born in 1886, in São Paulo.'],
+  ['Sam', 'What is her most famous painting?'],
+  ['Bia', "It's Abaporu. It's from 1928."],
+  ['Sam', 'Cool! And Marta? Is she a singer?'],
+  ['Bia', "No, she isn't! She's a football player."],
+  ['Sam', 'Oh, right! Where was she born?'],
+  ['Bia', 'She was born in Alagoas, in 1986.'],
+  ['Sam', 'Is she famous around the world?'],
+  ['Bia', 'Yes, she is! She was the FIFA World Player of the Year six times.'],
+  ['Sam', 'Wow! Both women were fantastic.'],
+  ['Bia', "Yes! Let's make the slides tonight."],
+  ['Sam', "OK. I'm a good designer. I can do the pictures!"]
+];
+const lado = q => q === 'Bia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 20, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Good idea! Who are they?', 'Good idea! Who is they?', 'Good idea! Who they are?'], 0, 'Boa ideia! Quem são elas?'),
+    prox(3, ['Who were Tarsila do Amaral?', 'Who was Tarsila do Amaral?', 'Who did Tarsila do Amaral?'], 1, 'Quem foi a Tarsila do Amaral?'),
+    prox(4, ['She was a paint. She was born in 1886.', 'She is a painter. She is born in 1886.', 'She was a painter. She was born in 1886, in São Paulo.'], 2, 'Ela foi pintora. Nasceu em 1886, em São Paulo.'),
+    prox(5, ['What is her most famous painting?', 'What are her most famous painting?', 'What is her most famous painter?'], 0, 'Qual é a pintura mais famosa dela?'),
+    prox(6, ["It's Abaporu. It were from 1928.", "It's Abaporu. It's from 1928.", "It's Abaporu. It's in 1928 from."], 1, 'É o Abaporu. É de 1928.'),
+    prox(7, ['Cool! And Marta? Was she a singer yesterday?', 'Cool! And Marta? Is she singer?', 'Cool! And Marta? Is she a singer?'], 2, 'Legal! E a Marta? Ela é cantora?'),
+    prox(8, ["No, she isn't! She's a football player.", "No, she wasn't! She's a football play.", "No, she isn't! She's a football playing."], 0, 'Não! Ela é jogadora de futebol.'),
+    prox(9, ['Oh, right! Where were she born?', 'Oh, right! Where was she born?', 'Oh, right! Where is she born?'], 1, 'Ah, é! Onde ela nasceu?'),
+    prox(10, ['She is born in Alagoas, in 1986.', 'She were born in Alagoas, in 1986.', 'She was born in Alagoas, in 1986.'], 2, 'Ela nasceu em Alagoas, em 1986.'),
+    prox(11, ['Is she famous around the world?', 'Was she famous around the world now?', 'Does she famous around the world?'], 0, 'Ela é famosa no mundo todo?'),
+    prox(13, ['Wow! Both women was fantastic.', 'Wow! Both women were fantastic.', 'Wow! Both women is fantastic.'], 1, 'Uau! As duas mulheres foram fantásticas.'),
+    prox(15, ["OK. I'm a good design. I can do the pictures!", "OK. I'm a good designer. I can to do the pictures!", "OK. I'm a good designer. I can do the pictures!"], 2, 'OK. Sou um bom designer. Posso fazer as imagens!'),
+    { instrucao: 'What was Tarsila do Amaral\'s job?', frase: 'She was a ___.', opcoes: ['painter', 'writer', 'singer'], certa: 0, traducao: 'Ela foi pintora.' },
+    { instrucao: 'When was Tarsila born?', frase: 'In ___.', opcoes: ['1928', '1886', '1986'], certa: 1, traducao: 'Em 1886.' },
+    { instrucao: 'What is her most famous painting?', frase: '___.', opcoes: ['The Mona Lisa', 'Emma', 'Abaporu'], certa: 2, traducao: 'O Abaporu.' },
+    { instrucao: "What is Marta's job?", frase: "She's a football ___.", opcoes: ['player', 'singer', 'teacher'], certa: 0, traducao: 'Ela é jogadora de futebol.' },
+    { instrucao: 'Where was Marta born?', frase: 'In ___.', opcoes: ['São Paulo', 'Alagoas', 'Rio'], certa: 1, traducao: 'Em Alagoas.' },
+    { instrucao: 'How many times was Marta the FIFA World Player of the Year?', frase: '___ times.', opcoes: ['Three', 'Four', 'Six'], certa: 2, traducao: 'Seis vezes.' },
+    { instrucao: 'When are they making the slides?', frase: '___.', opcoes: ['Tonight', 'Tomorrow', 'Last night'], certa: 0, traducao: 'Hoje à noite.' },
+    { instrucao: 'What is Sam good at?', frase: "He's a good ___.", opcoes: ['painter', 'designer', 'player'], certa: 1, traducao: 'Ele é um bom designer.' }
+  ]
+});
+</script>
+</body>
+</html>
