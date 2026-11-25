@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 42 · Questions for an influencer</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 42 · Escrita (Ask Me a Question)
+   Formação de perguntas em todos os tempos do A2 (question word + auxiliar + sujeito) e
+   perguntas que começam com auxiliar (is/am/are, do/does, can, was/were, did, have). Conteúdo
+   NOVO: perguntas para um influencer. A isca é o auxiliar errado ou a forma errada do verbo.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 42, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the question (one word is extra)',
+  itens: [
+    { contexto: M('Com que frequência você posta no Instagram?'), palavras: ['How', 'often', 'do', 'you', 'post', 'on', 'Instagram'], isca: ['does'], fim: '?', traducao: 'Com que frequência você posta no Instagram?' },
+    { contexto: M('Sobre o que vai ser o seu próximo vídeo?'), palavras: ['What', 'is', 'your', 'next', 'video', 'going', 'to', 'be', 'about'], isca: ['are'], fim: '?', traducao: 'Sobre o que vai ser o seu próximo vídeo?' },
+    { contexto: M('Quando você começou o seu canal?'), palavras: ['When', 'did', 'you', 'start', 'your', 'channel'], isca: ['started'], fim: '?', traducao: 'Quando você começou o seu canal?' },
+    { contexto: M('Quantos seguidores você tem?'), palavras: ['How', 'many', 'followers', 'do', 'you', 'have'], isca: ['much'], fim: '?', traducao: 'Quantos seguidores você tem?' },
+    { contexto: M('Você está feliz com o seu último post?'), palavras: ['Are', 'you', 'happy', 'with', 'your', 'latest', 'post'], isca: ['Do'], fim: '?', traducao: 'Você está feliz com o seu último post?' },
+    { contexto: M('Você pode compartilhar umas dicas de livros?'), palavras: ['Can', 'you', 'share', 'some', 'book', 'tips'], isca: ['sharing'], fim: '?', traducao: 'Você pode compartilhar umas dicas de livros?' },
+    { contexto: M('O que você está fazendo neste momento?'), palavras: ['What', 'are', 'you', 'doing', 'at', 'the', 'moment'], isca: ['do'], fim: '?', traducao: 'O que você está fazendo neste momento?' },
+    { contexto: M('Em que você estava trabalhando ontem?'), palavras: ['What', 'were', 'you', 'working', 'on', 'yesterday'], isca: ['was'], fim: '?', traducao: 'Em que você estava trabalhando ontem?' },
+    { contexto: M('Você já conheceu uma pessoa famosa?'), palavras: ['Have', 'you', 'ever', 'met', 'a', 'famous', 'person'], isca: ['meet'], fim: '?', traducao: 'Você já conheceu uma pessoa famosa?' },
+    { contexto: M('Você vai viajar este ano?'), palavras: ['Are', 'you', 'going', 'to', 'travel', 'this', 'year'], isca: ['Do'], fim: '?', traducao: 'Você vai viajar este ano?' },
+    { contexto: M('Ela cria todo o conteúdo dela?'), palavras: ['Does', 'she', 'create', 'all', 'her', 'content'], isca: ['creates'], fim: '?', traducao: 'Ela cria todo o conteúdo dela?' },
+    { contexto: M('Você estava online ontem à noite?'), palavras: ['Were', 'you', 'online', 'last', 'night'], isca: ['Did'], fim: '?', traducao: 'Você estava online ontem à noite?' },
+    { contexto: M('Onde você gosta de ir para relaxar?'), palavras: ['Where', 'do', 'you', 'like', 'to', 'go', 'to', 'relax'], isca: ['does'], fim: '?', traducao: 'Aonde você gosta de ir para relaxar?' },
+    { contexto: M('Por que você sempre parece tão feliz?'), palavras: ['Why', 'do', 'you', 'always', 'look', 'so', 'happy'], isca: ['are'], fim: '?', traducao: 'Por que você sempre parece tão feliz?' },
+    { contexto: M('De quem é essa câmera?'), palavras: ['Whose', 'camera', 'is', 'this'], isca: ['Who'], fim: '?', traducao: 'De quem é esta câmera?' },
+    { contexto: M('Quem edita os seus vídeos?'), palavras: ['Who', 'edits', 'your', 'videos'], isca: ['Whose'], fim: '?', traducao: 'Quem edita os seus vídeos?' },
+    { contexto: M('Quanto custa o seu microfone?'), palavras: ['How', 'much', 'is', 'your', 'microphone'], isca: ['many'], fim: '?', traducao: 'Quanto custa o seu microfone?' },
+    { contexto: M('Você testou algo novo no seu último vídeo?'), palavras: ['Did', 'you', 'try', 'something', 'new', 'in', 'your', 'last', 'video'], isca: ['tried'], fim: '?', traducao: 'Você testou algo novo no seu último vídeo?' },
+    { contexto: M('Quantos anos você tinha quando começou?'), palavras: ['How', 'old', 'were', 'you', 'when', 'you', 'started'], isca: ['did'], fim: '?', traducao: 'Quantos anos você tinha quando começou?' },
+    { contexto: M('Ela estava gravando quando você ligou?'), palavras: ['Was', 'she', 'recording', 'when', 'you', 'called'], isca: ['Did'], fim: '?', traducao: 'Ela estava gravando quando você ligou?' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -863,6 +863,17 @@ window.DYSE_PRATICAS = {
         ]
       },
       {
+        aula: 42,
+        titulo: 'Class 42 · Ask Me a Question',
+        atividades: [
+          { num: 1, titulo: 'Short answers', tipo: 'Escute e escolha', treina: 'Escuta · Short answers', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Questions for an influencer', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Q&A with a travel influencer', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Ask me a question', tipo: 'Escute e grave', treina: 'Fala · Perguntas e entonação', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Questions in all tenses', tipo: 'Make a Choice', treina: 'Gramática · Perguntas em todos os tempos', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
         aula: 43,
         titulo: 'Class 43 · Review Classes 34-43',
         atividades: [

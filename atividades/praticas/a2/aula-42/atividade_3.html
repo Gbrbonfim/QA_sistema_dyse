@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 42 · Q&A with a travel influencer</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 42 · Leitura (Ask Me a Question)
+   Alinhado ao Q&A do slide e às perguntas em todos os tempos com short answers. Conteúdo NOVO:
+   a apresentadora Kate entrevista a Bia, uma influencer de viagens (personagem fictícia).
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Kate', 'Welcome, Bia! Are you ready for some questions from your fans?'],
+  ['Bia', 'Yes, I am! I love Q&As.'],
+  ['Kate', 'First question: how often do you post new videos?'],
+  ['Bia', 'I post three times a week, on Mondays, Wednesdays and Fridays.'],
+  ['Kate', 'When did you start your channel?'],
+  ['Bia', 'I started it in 2019. I was twenty-two years old.'],
+  ['Kate', 'Have you ever been to Asia?'],
+  ['Bia', "Yes, I have. I've been to Thailand and Vietnam."],
+  ['Kate', 'What were you doing last week? Your fans want to know!'],
+  ['Bia', 'I was traveling in Chile. I was visiting the Atacama Desert.'],
+  ['Kate', 'Wow! Does your team travel with you?'],
+  ['Bia', "No, it doesn't. My team works from home. They help me with the editing."],
+  ['Kate', 'Can you speak other languages?'],
+  ['Bia', 'Yes, I can. I speak English and Spanish.'],
+  ['Kate', 'Are you going to visit a new country this year?'],
+  ['Bia', "Yes, I am. I'm going to visit Egypt in December."],
+  ['Kate', 'Last question: what are you doing right now?'],
+  ['Bia', "I'm answering your questions, of course! Ha ha!"]
+];
+const lado = q => q === 'Kate' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 42, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I am! I love Q&As.', 'Yes, I do! I love Q&As.', 'Yes, I have! I love Q&As.'], 0, 'Sim! Adoro Q&As.'),
+    prox(2, ['First question: how often you post new videos?', 'First question: how often do you post new videos?', 'First question: how often does you post new videos?'], 1, 'Primeira pergunta: com que frequência você posta vídeos novos?'),
+    prox(4, ['When you started your channel?', 'When did you started your channel?', 'When did you start your channel?'], 2, 'Quando você começou o seu canal?'),
+    prox(5, ['I started it in 2019. I was twenty-two years old.', 'I start it in 2019. I had twenty-two years.', 'I started it in 2019. I were twenty-two years old.'], 0, 'Comecei em 2019. Eu tinha vinte e dois anos.'),
+    prox(6, ['Did you ever been to Asia?', 'Have you ever been to Asia?', 'Have you ever went to Asia?'], 1, 'Você já foi à Ásia?'),
+    prox(7, ["Yes, I did. I've went to Thailand and Vietnam.", "Yes, I am. I've been to Thailand and Vietnam.", "Yes, I have. I've been to Thailand and Vietnam."], 2, 'Sim. Já fui à Tailândia e ao Vietnã.'),
+    prox(9, ['I was traveling in Chile. I was visiting the Atacama Desert.', 'I were traveling in Chile. I was visit the Atacama Desert.', 'I did travel in Chile. I visiting the Atacama Desert.'], 0, 'Eu estava viajando pelo Chile. Estava visitando o Deserto do Atacama.'),
+    prox(10, ['Wow! Do your team travel with you?', 'Wow! Does your team travel with you?', 'Wow! Does your team travels with you?'], 1, 'Uau! A sua equipe viaja com você?'),
+    prox(12, ['Can you speaking other languages?', 'Do you can speak other languages?', 'Can you speak other languages?'], 2, 'Você fala outras línguas?'),
+    prox(13, ['Yes, I can. I speak English and Spanish.', 'Yes, I do. I can speaking English and Spanish.', 'Yes, I am. I speak English and Spanish.'], 0, 'Sim. Falo inglês e espanhol.'),
+    prox(15, ["Yes, I do. I'm going visit Egypt in December.", "Yes, I am. I'm going to visit Egypt in December.", "Yes, I am. I going to visit Egypt in December."], 1, 'Sim. Vou visitar o Egito em dezembro.'),
+    prox(16, ['Last question: what do you doing right now?', 'Last question: what you are doing right now?', 'Last question: what are you doing right now?'], 2, 'Última pergunta: o que você está fazendo agora?'),
+    { instrucao: 'How often does Bia post new videos?', frase: '___ times a week.', opcoes: ['Three', 'Two', 'Five'], certa: 0, traducao: 'Três vezes por semana.' },
+    { instrucao: 'When did Bia start her channel?', frase: 'In ___.', opcoes: ['2022', '2019', '2009'], certa: 1, traducao: 'Em 2019.' },
+    { instrucao: 'Which countries in Asia has she been to?', frase: 'Thailand and ___.', opcoes: ['Japan', 'China', 'Vietnam'], certa: 2, traducao: 'Tailândia e Vietnã.' },
+    { instrucao: 'Where was she traveling last week?', frase: 'In ___.', opcoes: ['Chile', 'Egypt', 'Peru'], certa: 0, traducao: 'No Chile.' },
+    { instrucao: 'Does her team travel with her?', frase: '___. They work from home.', opcoes: ['Yes, it does', "No, it doesn't", "No, it isn't"], certa: 1, traducao: 'Não. Eles trabalham de casa.' },
+    { instrucao: 'How does her team help her?', frase: 'With the ___.', opcoes: ['photos', 'travel', 'editing'], certa: 2, traducao: 'Com a edição.' },
+    { instrucao: 'What languages does Bia speak?', frase: 'English and ___.', opcoes: ['Spanish', 'French', 'Italian'], certa: 0, traducao: 'Inglês e espanhol.' },
+    { instrucao: 'Where is she going to travel in December?', frase: 'To ___.', opcoes: ['Thailand', 'Egypt', 'Chile'], certa: 1, traducao: 'Para o Egito.' }
+  ]
+});
+</script>
+</body>
+</html>

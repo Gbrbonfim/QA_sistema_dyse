@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 42 · Short answers</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 42 · Escuta (Ask Me a Question)
+   Perguntas em todos os tempos do A2 (be presente/passado, present simple, can, present
+   continuous, past continuous, past simple, present perfect, be going to) e short answers com
+   o auxiliar certo, como no slide. Conteúdo NOVO: o aluno ouve a pergunta e escolhe a
+   resposta curta correta. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const nomes = iscas.slice(0, 3);
+  nomes.splice(pos, 0, certa);
+  return { audioTexto, opcoes: nomes.map(c => ({ label: c, icon: /^Yes/.test(c) ? 'check_circle' : 'cancel' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 42, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the question and choose the correct short answer',
+  itens: [
+    q('Do you post videos every day?', 'Yes, I do.', ['Yes, I am.', 'Yes, I have.', 'Yes, I did.']),
+    q('Are you happy with your new apartment?', 'Yes, I am.', ['Yes, I do.', 'Yes, I was.', 'Yes, I have.']),
+    q('Can you speak Spanish?', 'No, I can\'t.', ["No, I don't.", "No, I'm not.", "No, I haven't."]),
+    q('Did you answer your followers last night?', 'Yes, I did.', ['Yes, I do.', 'Yes, I was.', 'Yes, I have.']),
+    q('Have you ever met a famous actor?', "No, I haven't.", ["No, I didn't.", "No, I don't.", "No, I wasn't."]),
+    q('Were you online yesterday?', 'Yes, I was.', ['Yes, I did.', 'Yes, I were.', 'Yes, I am.']),
+    q('Is she recording a video right now?', 'Yes, she is.', ['Yes, she does.', 'Yes, she was.', 'Yes, she has.']),
+    q('Does your brother help you with the editing?', "No, he doesn't.", ["No, he isn't.", "No, he didn't.", "No, he hasn't."]),
+    q('Are you going to travel this year?', 'Yes, I am.', ['Yes, I go.', 'Yes, I do.', 'Yes, I can.']),
+    q('Was she dancing at the party?', "No, she wasn't.", ["No, she didn't.", "No, she isn't.", "No, she doesn't."]),
+    q('Has he ever been to Japan?', 'Yes, he has.', ['Yes, he is.', 'Yes, he did.', 'Yes, he does.']),
+    q('Were they working on a new project last week?', 'Yes, they were.', ['Yes, they did.', 'Yes, they are.', 'Yes, they was.']),
+    q('Can your sister cook?', 'Yes, she can.', ['Yes, she does.', 'Yes, she is.', 'Yes, she has.']),
+    q('Did they like your last video?', "No, they didn't.", ["No, they weren't.", "No, they don't.", "No, they haven't."]),
+    q('Are your parents watching TV?', "No, they aren't.", ["No, they don't.", "No, they didn't.", "No, they haven't."]),
+    q('Is your favorite singer British?', 'Yes, she is.', ['Yes, she does.', 'Yes, she has.', 'Yes, she can.']),
+    q('Have you finished your homework?', 'Yes, I have.', ['Yes, I was.', 'Yes, I am.', 'Yes, I do.']),
+    q('Does she create all her content?', 'Yes, she does.', ['Yes, she is.', 'Yes, she did.', 'Yes, she has.']),
+    q('Was the concert good?', 'Yes, it was.', ['Yes, it did.', 'Yes, it is.', 'Yes, it has.']),
+    q('Is he going to start a new channel?', "No, he isn't.", ["No, he doesn't.", "No, he can't.", "No, he hasn't."]),
+    q('Were you sleeping when I called?', 'Yes, I was.', ['Yes, I did.', 'Yes, I were.', 'Yes, I am.']),
+    q('Did you go to the conference last month?', "No, I didn't.", ["No, I wasn't.", "No, I don't.", "No, I haven't."]),
+    q('Do your friends follow you on social media?', 'Yes, they do.', ['Yes, they are.', 'Yes, they have.', 'Yes, they did.']),
+    q('Have they ever worked with a big brand?', "No, they haven't.", ["No, they didn't.", "No, they aren't.", "No, they don't."])
+  ]
+});
+</script>
+</body>
+</html>

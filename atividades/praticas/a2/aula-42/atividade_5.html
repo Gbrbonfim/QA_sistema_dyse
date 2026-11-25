@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 42 · Questions in all tenses</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 42 · Gramática (Ask Me a Question)
+   Auxiliar certo para cada tempo (am/is/are, do/does, can, was/were, did, have/has, be going
+   to), ordem question word + auxiliar + sujeito, question words (what, when, where, why, who,
+   whose, how, how old, how often, how many, how much) e short answers. Conteúdo NOVO.
+   24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 42, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the question',
+  itens: [
+    { frase: '___ you happy with your new phone?', opcoes: ['Are', 'Do', 'Have'], certa: 0, traducao: 'Você está feliz com o seu celular novo?' },
+    { frase: '___ she post videos every day?', opcoes: ['Is', 'Does', 'Do'], certa: 1, traducao: 'Ela posta vídeos todo dia?' },
+    { frase: '___ you play the piano?', opcoes: ['Are', 'Have', 'Can'], certa: 2, traducao: 'Você sabe tocar piano?' },
+    { frase: '___ they watching a series right now?', opcoes: ['Are', 'Do', 'Did'], certa: 0, traducao: 'Eles estão assistindo a uma série agora?' },
+    { frase: '___ she sleeping when you arrived?', opcoes: ['Did', 'Was', 'Were'], certa: 1, traducao: 'Ela estava dormindo quando você chegou?' },
+    { frase: '___ you at the gym yesterday?', opcoes: ['Did', 'Was', 'Were'], certa: 2, traducao: 'Você estava na academia ontem?' },
+    { frase: '___ you watch the game last night?', opcoes: ['Did', 'Were', 'Have'], certa: 0, traducao: 'Você assistiu ao jogo ontem à noite?' },
+    { frase: '___ you ever eaten Thai food?', opcoes: ['Did', 'Have', 'Are'], certa: 1, traducao: 'Você já comeu comida tailandesa?' },
+    { frase: '___ he ever been to London?', opcoes: ['Have', 'Did', 'Has'], certa: 2, traducao: 'Ele já foi a Londres?' },
+    { frase: 'Are you ___ to visit your parents this weekend?', opcoes: ['going', 'go', 'goes'], certa: 0, traducao: 'Você vai visitar os seus pais este fim de semana?' },
+    { frase: 'Where ___ you buy that jacket?', opcoes: ['were', 'did', 'have'], certa: 1, traducao: 'Onde você comprou essa jaqueta?' },
+    { frase: 'What ___ you doing at 8 p.m. yesterday?', opcoes: ['did', 'was', 'were'], certa: 2, traducao: 'O que você estava fazendo às 8 da noite ontem?' },
+    { frase: '___ do you go to the gym? — Three times a week.', opcoes: ['How often', 'How many', 'When'], certa: 0, traducao: 'Com que frequência você vai à academia? — Três vezes por semana.' },
+    { frase: '___ followers does she have?', opcoes: ['How much', 'How many', 'How often'], certa: 1, traducao: 'Quantos seguidores ela tem?' },
+    { frase: '___ is this bag? — Fifty dollars.', opcoes: ['How many', 'How old', 'How much'], certa: 2, traducao: 'Quanto custa esta bolsa? — Cinquenta dólares.' },
+    { frase: '___ phone is this? — It\'s Maria\'s.', opcoes: ['Whose', 'Who', 'Where'], certa: 0, traducao: 'De quem é este celular? — É da Maria.' },
+    { frase: '___ is your favorite actor? — Tom Holland.', opcoes: ['Whose', 'Who', 'Where'], certa: 1, traducao: 'Quem é o seu ator favorito? — Tom Holland.' },
+    { frase: '___ is your brother? — He\'s twenty-five.', opcoes: ['How much', 'How many', 'How old'], certa: 2, traducao: 'Quantos anos tem o seu irmão? — Ele tem vinte e cinco.' },
+    { frase: '___ did you move to Rio? — Because of my job.', opcoes: ['Why', 'When', 'Where'], certa: 0, traducao: 'Por que você se mudou para o Rio? — Por causa do meu trabalho.' },
+    { frase: 'Do you like pizza? — Yes, I ___.', opcoes: ['am', 'do', 'have'], certa: 1, traducao: 'Você gosta de pizza? — Sim.' },
+    { frase: "Have you finished the project? — No, I ___.", opcoes: ["wasn't", "don't", "haven't"], certa: 2, traducao: 'Você terminou o projeto? — Não.' },
+    { frase: "Were they at the concert? — Yes, they ___.", opcoes: ['were', 'did', 'are'], certa: 0, traducao: 'Eles estavam no show? — Sim.' },
+    { frase: 'Is she going to call you? — Yes, she ___.', opcoes: ['does', 'is', 'goes'], certa: 1, traducao: 'Ela vai te ligar? — Sim.' },
+    { instrucao: 'Which question is correct?', frase: '___', opcoes: ['Where you did go?', 'Where did you went?', 'Where did you go?'], certa: 2, traducao: 'Aonde você foi?' }
+  ]
+});
+</script>
+</body>
+</html>

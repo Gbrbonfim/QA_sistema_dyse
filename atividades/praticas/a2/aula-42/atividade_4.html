@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 42 · Ask me a question</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 42 · Fala (Ask Me a Question)
+   Alinhado ao role-play (entrevista com um influencer, perguntas em vários tempos + short
+   answers) e ao foco fonético: entonação descendente em Wh-questions e ascendente em yes/no
+   questions. Conteúdo NOVO. 20 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 42, num: 4, tipo: 'fala',
+  instrucao: 'Listen and record the whole sentence',
+  itens: [
+    { frase: 'Are you happy with your new home?', dica: 0, traducao: 'Você está feliz com a sua casa nova?' },
+    { frase: 'Yes, I am. I love it!', dica: 0, traducao: 'Sim. Eu adoro!' },
+    { frase: 'How often do you post on social media?', dica: 0, traducao: 'Com que frequência você posta nas redes sociais?' },
+    { frase: 'Does your team help you with the videos?', dica: 0, traducao: 'A sua equipe te ajuda com os vídeos?' },
+    { frase: "No, it doesn't. I do everything.", dica: 0, traducao: 'Não. Eu faço tudo.' },
+    { frase: 'Can you share some book tips?', dica: 0, traducao: 'Você pode compartilhar umas dicas de livros?' },
+    { frase: 'What are you doing at the moment?', dica: 0, traducao: 'O que você está fazendo neste momento?' },
+    { frase: 'Were you at the party last night?', dica: 0, traducao: 'Você estava na festa ontem à noite?' },
+    { frase: "No, I wasn't. I was working.", dica: 0, traducao: 'Não. Eu estava trabalhando.' },
+    { frase: 'What were you doing at ten o\'clock?', dica: 0, traducao: 'O que você estava fazendo às dez horas?' },
+    { frase: 'Did you answer your fans yesterday?', dica: 0, traducao: 'Você respondeu aos seus fãs ontem?' },
+    { frase: 'Yes, I did. I answered fifty questions.', dica: 0, traducao: 'Sim. Respondi a cinquenta perguntas.' },
+    { frase: 'Have you ever met a famous person?', dica: 0, traducao: 'Você já conheceu uma pessoa famosa?' },
+    { frase: "No, I haven't, but I'd like to.", dica: 0, traducao: 'Não, mas eu gostaria.' },
+    { frase: 'Are you going to travel this year?', dica: 0, traducao: 'Você vai viajar este ano?' },
+    { frase: 'Where are you going to go?', dica: 0, traducao: 'Para onde você vai?' },
+    { frase: 'When did you start your channel?', dica: 0, traducao: 'Quando você começou o seu canal?' },
+    { frase: 'How many followers do you have?', dica: 0, traducao: 'Quantos seguidores você tem?' },
+    { frase: 'Whose idea was it?', dica: 0, traducao: 'De quem foi a ideia?' },
+    { frase: 'Why do you always look so happy?', dica: 0, traducao: 'Por que você sempre parece tão feliz?' }
+  ]
+});
+</script>
+</body>
+</html>
