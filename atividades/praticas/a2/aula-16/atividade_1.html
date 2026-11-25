@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 16 · Holiday activities</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 16 · Escuta (Holidays in Spain)
+   Alinhado ao slide "Vocabulary" — go hiking, go sightseeing, go shopping, lie on the beach,
+   pack bags, buy souvenirs, try local food, go bike riding. Conteúdo NOVO: o aluno ouve alguém
+   contando das férias e escolhe a atividade. 24 questões. */
+const IC = { 'go hiking': 'hiking', 'go sightseeing': 'photo_camera', 'go shopping': 'shopping_bag', 'lie on the beach': 'beach_access', 'pack bags': 'luggage', 'buy souvenirs': 'redeem', 'try local food': 'ramen_dining', 'go bike riding': 'directions_bike' };
+const A = ['go hiking', 'go sightseeing', 'go shopping', 'lie on the beach'];
+const B = ['pack bags', 'buy souvenirs', 'try local food', 'go bike riding'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 16, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what are they doing on holiday?',
+  itens: [
+    qa("We're walking up the mountain. It's a long walk, but the view is amazing!", 0),
+    qa("We're visiting the old churches and the famous museums today.", 1),
+    qa("I'm at the mall and I'm buying new clothes and shoes.", 2),
+    qa("I'm lying in the sun and listening to the sea.", 3),
+    qa('They go hiking in the national park every summer.', 0),
+    qa("We're taking photos of the famous places in Rome.", 1),
+    qa("My wife loves the stores here. She's buying a new dress.", 2),
+    qa("We don't do much. We just relax on the sand all day.", 3),
+    qa('I always wear boots when I walk in the mountains.', 0),
+    qa('Today we are seeing the Eiffel Tower and the Louvre.', 1),
+    qa('She always spends a lot of money in the shops on holiday.', 2),
+    qa("I'm on the beach with a book and a cold drink.", 3),
+    qb("I'm putting my clothes in my bag. We leave tomorrow!", 0),
+    qb("I'm buying a small Eiffel Tower for my mother.", 1),
+    qb("I'm eating paella. It's a typical dish here in Spain!", 2),
+    qb("We're riding our bikes along the river.", 3),
+    qb('I always pack my bags the night before the trip.', 0),
+    qb('He buys a T-shirt with the city name in every country he visits.', 1),
+    qb("In Japan, I always eat what local people eat.", 2),
+    qb("Let's go around the city by bike!", 3),
+    qb("Don't forget to put your sandals in your bag!", 0),
+    qb('These little gifts from Paris are for my friends at home.', 1),
+    qb('I want to eat the typical food of every place I visit.', 2),
+    qb('On holiday, we ride our bikes every morning.', 3)
+  ]
+});
+</script>
+</body>
+</html>

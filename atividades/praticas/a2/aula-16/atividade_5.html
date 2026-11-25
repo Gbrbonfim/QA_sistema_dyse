@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 16 · Present simple or continuous?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 16 · Gramática (Holidays in Spain)
+   Alinhado ao "Grammar Point" e ao "HOMEWORK: circle the correct form" — present simple
+   (hábitos, rotina, fatos: always, usually, every summer, how often) x present continuous
+   (agora e por agora: now, right now, look!, today, this week, this time), e o vocabulário de
+   férias. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 16, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'Where ___ so fast? To the station?', opcoes: ['are you going', 'do you go', 'you go'], certa: 0, traducao: 'Aonde você está indo tão rápido? Para a estação?' },
+    { frase: 'I ___ the train to Madrid right now.', opcoes: ['take', 'am taking', 'takes'], certa: 1, traducao: 'Estou pegando o trem para Madri agora.' },
+    { frase: 'What ___ every summer?', opcoes: ['is your family doing', 'your family does', 'does your family do'], certa: 2, traducao: 'O que a sua família faz todo verão?' },
+    { frase: 'They ___ to the beach every summer.', opcoes: ['go', 'are going', 'goes'], certa: 0, traducao: 'Eles vão à praia todo verão.' },
+    { frase: 'Look! She ___ pictures of the sunset.', opcoes: ['takes', 'is taking', 'take'], certa: 1, traducao: 'Olha! Ela está tirando fotos do pôr do sol.' },
+    { frase: 'She always ___ beautiful photos.', opcoes: ['is taking', 'take', 'takes'], certa: 2, traducao: 'Ela sempre tira fotos lindas.' },
+    { frase: 'How often ___ new countries?', opcoes: ['do you visit', 'are you visiting', 'you visit'], certa: 0, traducao: 'Com que frequência você visita países novos?' },
+    { frase: 'I usually ___ a new country every year.', opcoes: ['am visiting', 'visit', 'visits'], certa: 1, traducao: 'Normalmente visito um país novo todo ano.' },
+    { frase: 'Right now, we ___ our bags for the trip.', opcoes: ['pack', 'packs', 'are packing'], certa: 2, traducao: 'Agora estamos fazendo as malas para a viagem.' },
+    { frase: 'I always ___ a lot of clothes!', opcoes: ['need', 'am needing', 'needing'], certa: 0, traducao: 'Eu sempre preciso de muitas roupas!' },
+    { frase: 'They ___ on the beach every day on holiday.', opcoes: ['are lying', 'lie', 'lies'], certa: 1, traducao: 'Eles deitam na praia todo dia nas férias.' },
+    { frase: 'We usually stay at the Ocean Hotel, but this time we ___ at the Sun Palace.', opcoes: ['stay', 'stays', "'re staying"], certa: 2, traducao: 'Normalmente ficamos no Ocean Hotel, mas desta vez estamos no Sun Palace.' },
+    { frase: "I usually travel for work, but today I ___ on holiday!", opcoes: ["'m going", 'go', 'goes'], certa: 0, traducao: 'Normalmente viajo a trabalho, mas hoje estou saindo de férias!' },
+    { frase: "Shh! The baby ___.", opcoes: ['sleeps', 'is sleeping', 'sleep'], certa: 1, traducao: 'Shh! O bebê está dormindo.' },
+    { frase: 'My father ___ in a bank. (a fact)', opcoes: ['is working', 'work', 'works'], certa: 2, traducao: 'O meu pai trabalha num banco.' },
+    { frase: 'This week, she ___ from home.', opcoes: ["'s working", 'work', 'works every'], certa: 0, traducao: 'Esta semana, ela está trabalhando de casa.' },
+    { frase: 'We need to ___ in Barcelona at 10 a.m.', opcoes: ['stay', 'arrive', 'pack'], certa: 1, traducao: 'Precisamos chegar em Barcelona às 10h.' },
+    { frase: 'Before a trip, I ___ my bags.', opcoes: ['wear', 'arrive', 'pack'], certa: 2, traducao: 'Antes de uma viagem, faço as malas.' },
+    { frase: 'In the winter, I ___ boots and warm clothes.', opcoes: ['wear', 'pack in', 'go'], certa: 0, traducao: 'No inverno, uso botas e roupas quentes.' },
+    { frase: 'We love walking in the mountains. We often go ___.', opcoes: ['shopping', 'hiking', 'souvenirs'], certa: 1, traducao: 'Adoramos caminhar nas montanhas. Fazemos trilha com frequência.' },
+    { frase: 'I want to see the famous places. Let\'s go ___!', opcoes: ['hiking', 'shopping', 'sightseeing'], certa: 2, traducao: 'Quero ver os lugares famosos. Vamos fazer turismo!' },
+    { frase: 'In Mexico, I always try the ___ food.', opcoes: ['local', 'souvenir', 'hostel'], certa: 0, traducao: 'No México, sempre experimento a comida local.' },
+    { frase: "We don't have much money, so we stay in a ___.", opcoes: ['five-star hotel', 'hostel', 'castle'], certa: 1, traducao: 'Não temos muito dinheiro, então ficamos num hostel.' },
+    { frase: 'I want something to remember the trip. Let\'s buy some ___.', opcoes: ['boots', 'bags', 'souvenirs'], certa: 2, traducao: 'Quero algo para lembrar da viagem. Vamos comprar lembrancinhas.' }
+  ]
+});
+</script>
+</body>
+</html>

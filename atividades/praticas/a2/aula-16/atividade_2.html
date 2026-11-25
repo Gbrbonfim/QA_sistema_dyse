@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 16 · Usually... but today</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 16 · Escrita (Holidays in Spain)
+   Alinhado aos slides "Listening" (I normally use this computer, but today I'm using my laptop)
+   e "Grammar Point" — present simple para hábitos e fatos, present continuous para agora e
+   "around now" (today, this week, this time), com o vocabulário de férias. Conteúdo NOVO. A
+   isca é a forma do outro tempo verbal. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 16, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu normalmente vou de carro, mas hoje estou indo de trem.'), palavras: ['I', 'usually', 'go', 'by', 'car,', 'but', 'today', "I'm", 'going', 'by', 'train'], isca: ['goes'], fim: '.', traducao: 'Normalmente vou de carro, mas hoje estou indo de trem.' },
+    { contexto: M('Nós normalmente ficamos num hotel, mas desta vez estamos ficando num hostel.'), palavras: ['We', 'usually', 'stay', 'in', 'a', 'hotel,', 'but', 'this', 'time', "we're", 'staying', 'in', 'a', 'hostel'], isca: ['stays'], fim: '.', traducao: 'Normalmente ficamos num hotel, mas desta vez estamos num hostel.' },
+    { contexto: M('Ela está fazendo as malas agora.'), palavras: ["She's", 'packing', 'her', 'bags', 'now'], isca: ['packs'], fim: '.', traducao: 'Ela está fazendo as malas agora.' },
+    { contexto: M('Eu sempre faço as malas na noite anterior.'), palavras: ['I', 'always', 'pack', 'my', 'bags', 'the', 'night', 'before'], isca: ['packing'], fim: '.', traducao: 'Sempre faço as malas na noite anterior.' },
+    { contexto: M('Nós chegamos em Madri amanhã às dez.'), palavras: ['We', 'arrive', 'in', 'Madrid', 'tomorrow', 'at', 'ten'], isca: ['on'], fim: '.', traducao: 'Chegamos em Madri amanhã às dez.' },
+    { contexto: M('Olha! Ele está usando meia com sandália!'), palavras: ['Look!', "He's", 'wearing', 'socks', 'and', 'sandals'], isca: ['wears'], fim: '!', traducao: 'Olha! Ele está usando meia com sandália!' },
+    { contexto: M('Os alemães amam viajar.'), palavras: ['Germans', 'love', 'to', 'travel'], isca: ['loving'], fim: '.', traducao: 'Os alemães amam viajar.' },
+    { contexto: M('Eles fazem trilha nas montanhas todo verão.'), palavras: ['They', 'go', 'hiking', 'in', 'the', 'mountains', 'every', 'summer'], isca: ['are'], fim: '.', traducao: 'Eles fazem trilha nas montanhas todo verão.' },
+    { contexto: M('Esta semana estamos fazendo passeios turísticos em Roma.'), palavras: ['This', 'week', "we're", 'going', 'sightseeing', 'in', 'Rome'], isca: ['go'], fim: '.', traducao: 'Esta semana estamos fazendo turismo em Roma.' },
+    { contexto: M('Eu sempre experimento a comida local.'), palavras: ['I', 'always', 'try', 'the', 'local', 'food'], isca: ['trying'], fim: '.', traducao: 'Sempre experimento a comida local.' },
+    { contexto: M('O que você está fazendo agora?'), palavras: ['What', 'are', 'you', 'doing', 'now'], isca: ['do'], fim: '?', traducao: 'O que você está fazendo agora?' },
+    { contexto: M('O que a sua família faz todo verão?'), palavras: ['What', 'does', 'your', 'family', 'do', 'every', 'summer'], isca: ['is'], fim: '?', traducao: 'O que a sua família faz todo verão?' },
+    { contexto: M('Eles vão à praia.'), palavras: ['They', 'go', 'to', 'the', 'beach'], isca: ['going'], fim: '.', traducao: 'Eles vão à praia.' },
+    { contexto: M('Você está assistindo a alguma série agora?'), palavras: ['Are', 'you', 'watching', 'any', 'TV', 'shows', 'right', 'now'], isca: ['Do'], fim: '?', traducao: 'Você está assistindo a alguma série agora?' },
+    { contexto: M('Que livro você está lendo no momento?'), palavras: ['What', 'book', 'are', 'you', 'reading', 'at', 'the', 'moment'], isca: ['do'], fim: '?', traducao: 'Que livro você está lendo no momento?' },
+    { contexto: M('Com que frequência você visita países novos?'), palavras: ['How', 'often', 'do', 'you', 'visit', 'new', 'countries'], isca: ['are'], fim: '?', traducao: 'Com que frequência você visita países novos?' },
+    { contexto: M('Olha! Ela está tirando fotos do pôr do sol.'), palavras: ['Look!', "She's", 'taking', 'pictures', 'of', 'the', 'sunset'], isca: ['takes'], fim: '.', traducao: 'Olha! Ela está tirando fotos do pôr do sol.' },
+    { contexto: M('Ela sempre tira fotos lindas.'), palavras: ['She', 'always', 'takes', 'beautiful', 'photos'], isca: ['taking'], fim: '.', traducao: 'Ela sempre tira fotos lindas.' },
+    { contexto: M('Eu compro lembrancinhas para os meus amigos.'), palavras: ['I', 'buy', 'souvenirs', 'for', 'my', 'friends'], isca: ['buying'], fim: '.', traducao: 'Compro lembrancinhas para os meus amigos.' },
+    { contexto: M('Nós estamos deitados na praia agora.'), palavras: ["We're", 'lying', 'on', 'the', 'beach', 'now'], isca: ['lie'], fim: '.', traducao: 'Estamos deitados na praia agora.' }
+  ]
+});
+</script>
+</body>
+</html>

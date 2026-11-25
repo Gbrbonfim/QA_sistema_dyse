@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 16 · Hannah on holiday</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 16 · Leitura (Holidays in Spain)
+   Alinhado aos slides "Watching and Listening" (alemães nas férias em Mallorca) e "Grammar
+   Point" — o que a pessoa normalmente faz (present simple) e o que está fazendo nestas férias
+   (present continuous), com o vocabulário de viagem. Conteúdo NOVO: a Hannah, de Hamburgo,
+   está de férias em Lisboa e o amigo Tom liga para ela. 20 questões: 12 de "próxima fala" + 8
+   de compreensão. */
+const D = [
+  ['Tom', 'Hi, Hannah! Where are you? What are you doing?'],
+  ['Hannah', "Hi, Tom! I'm in Lisbon! I'm on holiday with my sister."],
+  ['Tom', 'Lisbon? Do you usually go on holiday in Portugal?'],
+  ['Hannah', 'No, we usually go to the mountains in Austria.'],
+  ['Tom', 'Where are you staying?'],
+  ['Hannah', "We're staying in a small hostel near the river."],
+  ['Tom', 'Nice! What are you doing right now?'],
+  ['Hannah', "We're eating pastéis de nata in a café."],
+  ['Tom', 'Do you always try the local food?'],
+  ['Hannah', 'Yes, I do. I love trying new things.'],
+  ['Tom', "And what's your sister doing?"],
+  ['Hannah', "She's buying souvenirs for our parents."],
+  ['Tom', 'Are you going sightseeing today?'],
+  ['Hannah', "Yes. This afternoon we're visiting the castle."],
+  ['Tom', "Have fun! And don't wear socks and sandals!"],
+  ['Hannah', "Ha ha! Don't worry, I'm wearing trainers!"]
+];
+const lado = q => q === 'Hannah' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 16, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi, Tom! I'm in Lisbon! I'm on holiday with my sister.", "Hi, Tom! I'm in Lisbon! I go on holiday with my sister now.", "Hi, Tom! I in Lisbon! I'm on holiday."], 0, 'Oi, Tom! Estou em Lisboa! Estou de férias com a minha irmã.'),
+    prox(2, ['Lisbon? Are you usually going on holiday in Portugal?', 'Lisbon? Do you usually go on holiday in Portugal?', 'Lisbon? Does you usually go on holiday in Portugal?'], 1, 'Lisboa? Você normalmente passa as férias em Portugal?'),
+    prox(3, ["No, we're usually going to the mountains.", "No, we usually goes to the mountains in Austria.", 'No, we usually go to the mountains in Austria.'], 2, 'Não, normalmente vamos para as montanhas na Áustria.'),
+    prox(4, ['Where are you staying?', 'Where do you staying?', 'Where you are staying?'], 0, 'Onde vocês estão hospedados?'),
+    prox(5, ["We stay in a small hostel near the river now.", "We're staying in a small hostel near the river.", "We're stay in a small hostel near the river."], 1, 'Estamos num hostel pequeno perto do rio.'),
+    prox(7, ["We eat pastéis de nata in a café right now.", "We're eat pastéis de nata in a café.", "We're eating pastéis de nata in a café."], 2, 'Estamos comendo pastéis de nata num café.'),
+    prox(8, ['Do you always try the local food?', 'Are you always trying the local food?', 'Do you always trying the local food?'], 0, 'Você sempre experimenta a comida local?'),
+    prox(9, ["Yes, I am. I love trying new things.", "Yes, I do. I love trying new things.", "Yes, I do. I'm loving try new things."], 1, 'Sim. Adoro experimentar coisas novas.'),
+    prox(11, ["She buys souvenirs for our parents now.", "She's buy souvenirs for our parents.", "She's buying souvenirs for our parents."], 2, 'Ela está comprando lembrancinhas para os nossos pais.'),
+    prox(12, ['Are you going sightseeing today?', 'Do you going sightseeing today?', 'Are you go sightseeing today?'], 0, 'Vocês vão fazer turismo hoje?'),
+    prox(13, ["Yes. This afternoon we visit the castle every day.", "Yes. This afternoon we're visiting the castle.", "Yes. This afternoon we're visit the castle."], 1, 'Sim. Hoje à tarde vamos visitar o castelo.'),
+    prox(15, ["Ha ha! Don't worry, I wear trainers right now!", "Ha ha! Don't worry, I'm wear trainers!", "Ha ha! Don't worry, I'm wearing trainers!"], 2, 'Ha ha! Não se preocupe, estou de tênis!'),
+    { instrucao: 'Where is Hannah?', frase: 'In ___.', opcoes: ['Lisbon', 'Hamburg', 'Austria'], certa: 0, traducao: 'Em Lisboa.' },
+    { instrucao: 'Who is she on holiday with?', frase: 'With her ___.', opcoes: ['parents', 'sister', 'friend Tom'], certa: 1, traducao: 'Com a irmã.' },
+    { instrucao: 'Where do they usually go on holiday?', frase: 'To the ___ in Austria.', opcoes: ['beaches', 'cities', 'mountains'], certa: 2, traducao: 'Para as montanhas na Áustria.' },
+    { instrucao: 'Where are they staying?', frase: 'In a small ___.', opcoes: ['hostel', 'hotel', 'house'], certa: 0, traducao: 'Num hostel pequeno.' },
+    { instrucao: 'What is Hannah doing right now?', frase: "She's ___ in a café.", opcoes: ['drinking coffee', 'eating pastéis de nata', 'buying souvenirs'], certa: 1, traducao: 'Ela está comendo pastéis de nata num café.' },
+    { instrucao: "What is Hannah's sister doing?", frase: "She's buying ___.", opcoes: ['clothes', 'food', 'souvenirs'], certa: 2, traducao: 'Ela está comprando lembrancinhas.' },
+    { instrucao: 'What are they doing this afternoon?', frase: "They're visiting the ___.", opcoes: ['castle', 'museum', 'beach'], certa: 0, traducao: 'Vão visitar o castelo.' },
+    { instrucao: 'What is Hannah wearing?', frase: '___.', opcoes: ['Socks and sandals', 'Trainers', 'Boots'], certa: 1, traducao: 'Tênis.' }
+  ]
+});
+</script>
+</body>
+</html>
