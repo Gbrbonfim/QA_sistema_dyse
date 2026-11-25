@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 33 · A trip to Lisbon</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 33 · Leitura (Review Classes 25-32)
+   Revisão das aulas 25 a 32 numa conversa: as últimas férias (then, after that), past
+   continuous, uma foto favorita, there is / there was, comida (some / any, how much / many) e
+   comparativos. Conteúdo NOVO: a Julia conta ao Sam sobre a viagem a Lisboa.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Sam', 'Hi, Julia! How was your holiday in Lisbon?'],
+  ['Julia', 'Amazing! First, we visited the old town. Then we went to a museum.'],
+  ['Sam', 'What were you doing when you took this photo?'],
+  ['Julia', 'We were walking near the river when the sun went down.'],
+  ['Sam', "It's beautiful! Were there many tourists?"],
+  ['Julia', 'Yes, there were a lot of tourists everywhere.'],
+  ['Sam', 'Is there a good restaurant near your hotel?'],
+  ['Julia', 'Yes, there is. There are some great fish restaurants.'],
+  ['Sam', 'How much fish did you eat?'],
+  ['Julia', 'A lot! And I ate a few pastries every morning.'],
+  ['Sam', 'Is Lisbon bigger than Porto?'],
+  ['Julia', 'Yes, it is. But I think Porto is more relaxing.'],
+  ['Sam', 'Was the weather good?'],
+  ['Julia', 'It was hotter than in Brazil! But it was sunny every day.'],
+  ['Sam', 'Did you have any problems?'],
+  ['Julia', 'Just one. While I was taking pictures, someone took my sunglasses!'],
+  ['Sam', 'Oh no! But it sounds like a great trip.'],
+  ['Julia', 'It was. I want to go back next year!']
+];
+const lado = q => q === 'Sam' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 33, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Amazing! First, we visited the old town. Then we went to a museum.', 'Amazing! First, we visit the old town. After we went to a museum.', 'Amazing! First, we visited the old town. Then we goed to a museum.'], 0, 'Incrível! Primeiro, visitamos o centro histórico. Depois fomos a um museu.'),
+    prox(2, ['What did you doing when you took this photo?', 'What were you doing when you took this photo?', 'What were you doing when you were taking this photo?'], 1, 'O que você estava fazendo quando tirou esta foto?'),
+    prox(3, ['We walked near the river while the sun went down.', 'We were walking near the river when the sun was going down.', 'We were walking near the river when the sun went down.'], 2, 'Estávamos andando perto do rio quando o sol se pôs.'),
+    prox(4, ["It's beautiful! Were there many tourists?", "It's beautiful! Was there many tourists?", "It's beautiful! There were many tourists?"], 0, 'Que linda! Havia muitos turistas?'),
+    prox(5, ['Yes, there was a lot of tourists everywhere.', 'Yes, there were a lot of tourists everywhere.', 'Yes, there were a lot tourists everywhere.'], 1, 'Sim, havia muitos turistas em todo lugar.'),
+    prox(6, ['Are there a good restaurant near your hotel?', 'Is there any good restaurant near your hotel?', 'Is there a good restaurant near your hotel?'], 2, 'Tem um restaurante bom perto do seu hotel?'),
+    prox(7, ['Yes, there is. There are some great fish restaurants.', 'Yes, there is. There are any great fish restaurants.', 'Yes, it is. There is some great fish restaurants.'], 0, 'Sim, tem. Há uns restaurantes de peixe ótimos.'),
+    prox(8, ['How many fish did you eat?', 'How much fish did you eat?', 'How much fish did you ate?'], 1, 'Quanto peixe você comeu?'),
+    prox(9, ['A lot! And I ate a little pastries every morning.', 'A lot! And I ate any pastries every morning.', 'A lot! And I ate a few pastries every morning.'], 2, 'Muito! E comi alguns doces todas as manhãs.'),
+    prox(10, ['Is Lisbon bigger than Porto?', 'Is Lisbon more big than Porto?', 'Is Lisbon biger than Porto?'], 0, 'Lisboa é maior do que o Porto?'),
+    prox(11, ['Yes, it is. But I think Porto is relaxinger.', 'Yes, it is. But I think Porto is more relaxing.', 'Yes, it is. But I think Porto is more relaxing that Lisbon.'], 1, 'Sim. Mas acho o Porto mais tranquilo.'),
+    prox(15, ['Just one. While I was taking pictures, someone was taking my sunglasses!', 'Just one. When I took pictures, someone taked my sunglasses!', 'Just one. While I was taking pictures, someone took my sunglasses!'], 2, 'Só um. Enquanto eu tirava fotos, alguém pegou os meus óculos de sol!'),
+    { instrucao: 'What did Julia do first?', frase: 'She visited the ___.', opcoes: ['old town', 'museum', 'beach'], certa: 0, traducao: 'Ela visitou o centro histórico.' },
+    { instrucao: 'What were they doing when Julia took the photo?', frase: 'They were walking near the ___.', opcoes: ['hotel', 'river', 'museum'], certa: 1, traducao: 'Estavam andando perto do rio.' },
+    { instrucao: 'What kind of restaurants are near the hotel?', frase: '___ restaurants.', opcoes: ['Pizza', 'Meat', 'Fish'], certa: 2, traducao: 'Restaurantes de peixe.' },
+    { instrucao: 'What did Julia eat every morning?', frase: 'A few ___.', opcoes: ['pastries', 'eggs', 'apples'], certa: 0, traducao: 'Alguns doces.' },
+    { instrucao: 'Which city is bigger?', frase: '___.', opcoes: ['Porto', 'Lisbon', 'Both are the same'], certa: 1, traducao: 'Lisboa.' },
+    { instrucao: 'Which city is more relaxing, for Julia?', frase: '___.', opcoes: ['Lisbon', 'Rio', 'Porto'], certa: 2, traducao: 'O Porto.' },
+    { instrucao: 'How was the weather?', frase: 'It was ___ than in Brazil.', opcoes: ['hotter', 'colder', 'rainier'], certa: 0, traducao: 'Estava mais quente do que no Brasil.' },
+    { instrucao: 'What did someone take?', frase: 'Her ___.', opcoes: ['camera', 'sunglasses', 'bag'], certa: 1, traducao: 'Os óculos de sol dela.' }
+  ]
+});
+</script>
+</body>
+</html>

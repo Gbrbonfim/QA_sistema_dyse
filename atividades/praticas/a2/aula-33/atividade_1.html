@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 33 · What is it about?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 33 · Escuta (Review Classes 25-32)
+   Revisão das aulas 25 a 32: past continuous (ação em andamento no passado), there was /
+   there were (o que existia), quantidades (how much / how many, a lot of, a few, a little) e
+   comparativos. Conteúdo NOVO: o aluno ouve a frase e escolhe do que ela trata. 24 questões. */
+const IC = { 'Action in progress in the past': 'history', 'Things that existed in the past': 'location_city', 'Quantity': 'format_list_numbered', 'Comparison': 'compare_arrows' };
+const T = Object.keys(IC);
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 33, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what is the sentence about?',
+  itens: [
+    q('At eight last night, I was cooking dinner.', 0),
+    q('There was a small cinema in my town.', 1),
+    q('How much water do you drink a day?', 2),
+    q('My brother is taller than my dad.', 3),
+    q('They were cleaning the beach when they found the bottle.', 0),
+    q("There weren't any parks near my house.", 1),
+    q('I eat a few cookies on the weekend.', 2),
+    q('Running is harder than walking.', 3),
+    q('While we were taking a photo, a dog ran into the shot.', 0),
+    q('Was there a hospital here fifty years ago?', 1),
+    q("I don't drink much coffee.", 2),
+    q('This restaurant is more expensive than that one.', 3),
+    q('It was raining when I woke up.', 0),
+    q('There were three big markets in the city.', 1),
+    q('How many eggs do you eat in a week?', 2),
+    q('My mother drives more carefully than my father.', 3),
+    q('What were you doing at nine yesterday?', 0),
+    q('In the past, there was a bakery on my street.', 1),
+    q('We eat a lot of rice in Brazil.', 2),
+    q('The pizza here is better than at home.', 3),
+    q('She was smiling when the wind blew her hat away.', 0),
+    q("There wasn't a train station in the old town.", 1),
+    q('There are about nine teaspoons of sugar in a can of soda.', 2),
+    q('My sister is healthier than me.', 3)
+  ]
+});
+</script>
+</body>
+</html>

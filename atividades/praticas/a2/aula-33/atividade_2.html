@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 33 · Review: make the sentence</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 33 · Escrita (Review Classes 25-32)
+   Revisão das aulas 25 a 32: past continuous, past simple x past continuous (when / while),
+   time sequencers, there is / are + some / any, there was / were, a / an / some / any,
+   how much / many e quantidades, comparativos. Conteúdo NOVO. A isca é a forma errada.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 33, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Às oito ontem, eu estava assistindo TV.'), palavras: ['At', 'eight', 'yesterday,', 'I', 'was', 'watching', 'TV'], isca: ['were'], fim: '.', traducao: 'Às oito ontem, eu estava vendo TV.' },
+    { contexto: M('Eles não estavam dormindo.'), palavras: ['They', "weren't", 'sleeping'], isca: ["wasn't"], fim: '.', traducao: 'Eles não estavam dormindo.' },
+    { contexto: M('Eu estava andando quando vi o meu amigo.'), palavras: ['I', 'was', 'walking', 'when', 'I', 'saw', 'my', 'friend'], isca: ['seeing'], fim: '.', traducao: 'Eu estava andando quando vi o meu amigo.' },
+    { contexto: M('O telefone tocou enquanto ela estava cozinhando.'), palavras: ['The', 'phone', 'rang', 'while', 'she', 'was', 'cooking'], isca: ['ringed'], fim: '.', traducao: 'O telefone tocou enquanto ela cozinhava.' },
+    { contexto: M('Depois disso, nós fomos para casa.'), palavras: ['After', 'that,', 'we', 'went', 'home'], isca: ['goed'], fim: '.', traducao: 'Depois disso, fomos para casa.' },
+    { contexto: M('Tem uma mesa perto da janela?'), palavras: ['Is', 'there', 'a', 'table', 'by', 'the', 'window'], isca: ['Are'], fim: '?', traducao: 'Tem uma mesa perto da janela?' },
+    { contexto: M('Tem alguns cardápios na mesa.'), palavras: ['There', 'are', 'some', 'menus', 'on', 'the', 'table'], isca: ['any'], fim: '.', traducao: 'Tem alguns cardápios na mesa.' },
+    { contexto: M('Não tinha nenhum parque na minha cidade.'), palavras: ['There', "weren't", 'any', 'parks', 'in', 'my', 'town'], isca: ["wasn't"], fim: '.', traducao: 'Não havia parques na minha cidade.' },
+    { contexto: M('Havia um mercado pequeno na praça.'), palavras: ['There', 'was', 'a', 'small', 'market', 'in', 'the', 'square'], isca: ['were'], fim: '.', traducao: 'Havia um mercadinho na praça.' },
+    { contexto: M('Eu como uma maçã depois do treino.'), palavras: ['I', 'eat', 'an', 'apple', 'after', 'training'], isca: ['a'], fim: '.', traducao: 'Como uma maçã depois do treino.' },
+    { contexto: M('Não tem açúcar no meu café.'), palavras: ['There', "isn't", 'any', 'sugar', 'in', 'my', 'coffee'], isca: ['some'], fim: '.', traducao: 'Não tem açúcar no meu café.' },
+    { contexto: M('Quantos ovos você come?'), palavras: ['How', 'many', 'eggs', 'do', 'you', 'eat'], isca: ['much'], fim: '?', traducao: 'Quantos ovos você come?' },
+    { contexto: M('Quanta água você bebe?'), palavras: ['How', 'much', 'water', 'do', 'you', 'drink'], isca: ['many'], fim: '?', traducao: 'Quanta água você bebe?' },
+    { contexto: M('Eu não como muitos doces.'), palavras: ['I', "don't", 'eat', 'many', 'sweets'], isca: ['much'], fim: '.', traducao: 'Não como muitos doces.' },
+    { contexto: M('Eu comi uma fatia de pizza.'), palavras: ['I', 'had', 'a', 'slice', 'of', 'pizza'], isca: ['bowl'], fim: '.', traducao: 'Comi uma fatia de pizza.' },
+    { contexto: M('A minha irmã é mais alta do que eu.'), palavras: ['My', 'sister', 'is', 'taller', 'than', 'me'], isca: ['more'], fim: '.', traducao: 'A minha irmã é mais alta do que eu.' },
+    { contexto: M('Este restaurante é melhor do que aquele.'), palavras: ['This', 'restaurant', 'is', 'better', 'than', 'that', 'one'], isca: ['gooder'], fim: '.', traducao: 'Este restaurante é melhor do que aquele.' },
+    { contexto: M('A minha mãe dirige com mais cuidado do que o meu pai.'), palavras: ['My', 'mother', 'drives', 'more', 'carefully', 'than', 'my', 'father'], isca: ['carefullier'], fim: '.', traducao: 'A minha mãe dirige com mais cuidado do que o meu pai.' },
+    { contexto: M('O meu irmão tirou essa foto quando estávamos na praia.'), palavras: ['My', 'brother', 'took', 'this', 'photo', 'when', 'we', 'were', 'at', 'the', 'beach'], isca: ['taked'], fim: '.', traducao: 'O meu irmão tirou esta foto quando estávamos na praia.' },
+    { contexto: M('Anos depois, um homem encontrou a garrafa.'), palavras: ['Years', 'later,', 'a', 'man', 'found', 'the', 'bottle'], isca: ['finded'], fim: '.', traducao: 'Anos depois, um homem encontrou a garrafa.' }
+  ]
+});
+</script>
+</body>
+</html>

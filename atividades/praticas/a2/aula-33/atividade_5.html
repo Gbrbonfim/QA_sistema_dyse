@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 33 · Review: grammar</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 33 · Gramática (Review Classes 25-32)
+   Revisão das aulas 25 a 32: past continuous, past simple x continuous (when / while), time
+   sequencers, there is / are e there was / were + a / some / any, a / an / some / any com
+   comida, how much / many e quantidades, embalagens e comparativos. Conteúdo NOVO.
+   24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 33, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'What ___ you doing at 8 p.m. yesterday?', opcoes: ['were', 'was', 'did'], certa: 0, traducao: 'O que você estava fazendo às 20h ontem?' },
+    { frase: 'She ___ a book when the lights went out.', opcoes: ['read', 'was reading', 'were reading'], certa: 1, traducao: 'Ela estava lendo um livro quando a luz acabou.' },
+    { frase: 'I was walking on the beach when I ___ the bottle.', opcoes: ['was seeing', 'see', 'saw'], certa: 2, traducao: 'Eu estava andando na praia quando vi a garrafa.' },
+    { frase: '___ I was cooking, my friend called.', opcoes: ['While', 'Then', 'After that'], certa: 0, traducao: 'Enquanto eu cozinhava, o meu amigo ligou.' },
+    { frase: 'I wrote the letter. ___, I put it in an envelope.', opcoes: ['While', 'Then', 'When'], certa: 1, traducao: 'Escrevi a carta. Depois, coloquei num envelope.' },
+    { frase: '___ any free tables now?', opcoes: ['Is there', 'There are', 'Are there'], certa: 2, traducao: 'Tem mesas livres agora?' },
+    { frase: "There isn't ___ oven in the café.", opcoes: ['an', 'a', 'any'], certa: 0, traducao: 'Não tem forno no café.' },
+    { frase: 'There are ___ clean plates in the kitchen.', opcoes: ['any', 'some', 'a'], certa: 1, traducao: 'Tem alguns pratos limpos na cozinha.' },
+    { frase: '___ a theatre in the old town? No, there wasn\'t.', opcoes: ['Were there', 'There was', 'Was there'], certa: 2, traducao: 'Havia um teatro no centro antigo? Não.' },
+    { frase: 'In the past, there ___ many parks in the city.', opcoes: ["weren't", "wasn't", "isn't"], certa: 0, traducao: 'No passado, não havia muitos parques na cidade.' },
+    { frase: 'Athletes usually eat ___ banana before training.', opcoes: ['an', 'a', 'some'], certa: 1, traducao: 'Os atletas geralmente comem uma banana antes do treino.' },
+    { frase: "I didn't drink ___ coffee this morning.", opcoes: ['some', 'a', 'any'], certa: 2, traducao: 'Não bebi café hoje de manhã.' },
+    { frase: 'Can I have ___ water, please?', opcoes: ['some', 'any', 'a few'], certa: 0, traducao: 'Pode me dar água, por favor?' },
+    { frase: 'How ___ sugar do you put in your coffee?', opcoes: ['many', 'much', 'lot'], certa: 1, traducao: 'Quanto açúcar você coloca no café?' },
+    { frase: 'How ___ meals do you cook at home in a week?', opcoes: ['much', 'lot', 'many'], certa: 2, traducao: 'Quantas refeições você cozinha em casa por semana?' },
+    { frase: 'I usually have tea and ___ cookies in the morning.', opcoes: ['a few', 'a little', 'much'], certa: 0, traducao: 'Geralmente tomo chá e como alguns biscoitos de manhã.' },
+    { frase: "My sister doesn't eat ___ chocolate.", opcoes: ['many', 'much', 'a few'], certa: 1, traducao: 'A minha irmã não come muito chocolate.' },
+    { frase: 'We always have a ___ of milk in the fridge.', opcoes: ['slice', 'bowl', 'carton'], certa: 2, traducao: 'Sempre temos uma caixa de leite na geladeira.' },
+    { frase: 'My brother is ___ than my father.', opcoes: ['taller', 'more tall', 'tallest'], certa: 0, traducao: 'O meu irmão é mais alto do que o meu pai.' },
+    { frase: 'Playing a sport is ___ than going to the gym.', opcoes: ['excitinger', 'more exciting', 'more excitinger'], certa: 1, traducao: 'Praticar um esporte é mais emocionante do que ir à academia.' },
+    { frase: 'Today\'s weather is ___ than yesterday\'s. It\'s raining again!', opcoes: ['gooder', 'better', 'worse'], certa: 2, traducao: 'O tempo hoje está pior do que ontem. Está chovendo de novo!' },
+    { frase: 'She runs ___ than her friends.', opcoes: ['faster', 'more fast', 'fastly'], certa: 0, traducao: 'Ela corre mais rápido do que as amigas.' },
+    { frase: 'He drives ___ than his brother. He never has accidents.', opcoes: ['carefuller', 'more carefully', 'more careful'], certa: 1, traducao: 'Ele dirige com mais cuidado do que o irmão. Nunca sofre acidentes.' },
+    { frase: 'Eating vegetables is ___ than eating fast food.', opcoes: ['healthyer', 'more healthy', 'healthier'], certa: 2, traducao: 'Comer legumes é mais saudável do que comer fast food.' }
+  ]
+});
+</script>
+</body>
+</html>

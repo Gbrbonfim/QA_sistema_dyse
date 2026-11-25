@@ -752,6 +752,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Which one do you prefer?', tipo: 'Escute e grave', treina: 'Fala · Comparativos', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Comparatives', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 33,
+        titulo: 'Class 33 · Review Classes 25-32',
+        atividades: [
+          { num: 1, titulo: 'What is it about?', tipo: 'Escute e escolha', treina: 'Escuta · Revisão', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Review: make the sentence', tipo: 'Monte a frase', treina: 'Escrita · Revisão', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'A trip to Lisbon', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Can you do it?', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Review: grammar', tipo: 'Make a Choice', treina: 'Gramática · Revisão', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
