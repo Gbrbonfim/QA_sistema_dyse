@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 39 · Which participle?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 39 · Escuta (Family on Tour)
+   Alinhado ao "Vocabulary: Irregular Past Participles" (been, gone, seen, taken, eaten, made,
+   bought, gotten, had, driven) e ao present perfect. Conteúdo NOVO: o aluno ouve a frase e
+   escolhe o particípio que ouviu. 24 questões. */
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: 'flight_takeoff' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 38, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose the past participle you hear',
+  itens: [
+    q("We've been to three countries this year.", 'been', 'gone', 'seen'),
+    q("They've gone on holiday.", 'gone', 'been', 'done'),
+    q('Have you ever seen a famous landmark?', 'seen', 'been', 'eaten'),
+    q('She has taken beautiful photos of the trip.', 'taken', 'made', 'had'),
+    q('Have you ever eaten sushi in Japan?', 'eaten', 'seen', 'gotten'),
+    q('My parents have made a plan for the next vacation.', 'made', 'had', 'taken'),
+    q('He has bought a new suitcase for his trip.', 'bought', 'gotten', 'driven'),
+    q("I've gotten my boarding pass ready.", 'gotten', 'bought', 'gone'),
+    q("We've had a great time at the beach.", 'had', 'made', 'been'),
+    q("I've never driven a car in another country.", 'driven', 'taken', 'eaten'),
+    q('Has she ever been to Asia?', 'been', 'seen', 'had'),
+    q("He's gone to the supermarket. He isn't here.", 'gone', 'driven', 'bought'),
+    q("I've never seen a wild animal.", 'seen', 'eaten', 'made'),
+    q('Have they taken the bus to the airport?', 'taken', 'gotten', 'been'),
+    q("We've eaten local food in every city.", 'eaten', 'had', 'gone'),
+    q('Have you made new friends on your trip?', 'made', 'bought', 'seen'),
+    q("She's bought a souvenir for her mother.", 'bought', 'taken', 'driven'),
+    q("Have you had any problems while traveling?", 'had', 'made', 'gotten'),
+    q('My dad has driven for hours today.', 'driven', 'been', 'eaten'),
+    q("We haven't gotten our tickets.", 'gotten', 'gone', 'seen'),
+    q("I've been to Peru twice.", 'been', 'had', 'bought'),
+    q('Has he seen the Northern Lights?', 'seen', 'taken', 'gone'),
+    q("They've taken a lot of videos.", 'taken', 'eaten', 'made'),
+    q("I've never eaten insects!", 'eaten', 'driven', 'had')
+  ]
+});
+</script>
+</body>
+</html>

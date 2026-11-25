@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 39 · Travel experiences</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 39 · Leitura (Family on Tour)
+   Alinhado ao "Speaking" (Have you ever...? Se sim: When? Where? With who? How was it? Se
+   não: Would you like to? Why or why not?) e aos particípios irregulares. Conteúdo NOVO: a
+   Emily e o Tom conversam sobre experiências de viagem. 20 questões: 12 de "próxima fala" +
+   8 de compreensão. */
+const D = [
+  ['Emily', 'Tom, have you ever been to an Asian country?'],
+  ['Tom', 'Yes, I have. I went to Thailand in 2022.'],
+  ['Emily', 'Cool! How was it?'],
+  ['Tom', 'It was amazing. Have you ever been there?'],
+  ['Emily', "No, I haven't. But I'd love to go!"],
+  ['Tom', 'Have you ever driven a car in another country?'],
+  ['Emily', 'Yes, I have. I drove in Portugal last year.'],
+  ['Tom', 'Was it difficult?'],
+  ['Emily', 'A little. The streets were very narrow!'],
+  ['Tom', 'Have you ever eaten something strange on a trip?'],
+  ['Emily', "Yes! I've eaten insects in Mexico. They were good!"],
+  ['Tom', "Really? I've never eaten insects. I wouldn't like to!"],
+  ['Emily', 'Ha ha! Have you ever had a problem while traveling?'],
+  ['Tom', "Yes. I've lost my passport once. It was terrible!"],
+  ['Emily', 'Oh no! Where did you lose it?'],
+  ['Tom', 'At the airport in Bangkok. But I found it two hours later.'],
+  ['Emily', "Lucky you! I've never lost anything on a trip."]
+];
+const lado = q => q === 'Emily' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 38, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I have. I went to Thailand in 2022.', 'Yes, I have. I have gone to Thailand in 2022.', 'Yes, I did. I been to Thailand in 2022.'], 0, 'Sim. Fui à Tailândia em 2022.'),
+    prox(3, ['It was amazing. Have you ever went there?', 'It was amazing. Have you ever been there?', 'It was amazing. Did you ever been there?'], 1, 'Foi incrível. Você já foi lá?'),
+    prox(4, ["No, I didn't. But I'd love to go!", "No, I hasn't. But I'd love to go!", "No, I haven't. But I'd love to go!"], 2, 'Não. Mas eu adoraria ir!'),
+    prox(5, ['Have you ever driven a car in another country?', 'Have you ever drove a car in another country?', 'Have you ever drive a car in another country?'], 0, 'Você já dirigiu em outro país?'),
+    prox(6, ["Yes, I have. I've driven in Portugal last year.", 'Yes, I have. I drove in Portugal last year.', 'Yes, I have. I drived in Portugal last year.'], 1, 'Sim. Dirigi em Portugal no ano passado.'),
+    prox(9, ['Have you ever ate something strange on a trip?', 'Did you ever eaten something strange on a trip?', 'Have you ever eaten something strange on a trip?'], 2, 'Você já comeu algo estranho numa viagem?'),
+    prox(10, ["Yes! I've eaten insects in Mexico. They were good!", "Yes! I've ate insects in Mexico. They were good!", "Yes! I've eat insects in Mexico. They were good!"], 0, 'Sim! Já comi insetos no México. Eram bons!'),
+    prox(11, ["Really? I've ever eaten insects. I wouldn't like to!", "Really? I've never eaten insects. I wouldn't like to!", "Really? I never have eaten insects."], 1, 'Sério? Nunca comi insetos. Eu não gostaria!'),
+    prox(12, ['Ha ha! Have you ever have a problem while traveling?', 'Ha ha! Has you ever had a problem while traveling?', 'Ha ha! Have you ever had a problem while traveling?'], 2, 'Ha ha! Você já teve algum problema viajando?'),
+    prox(13, ["Yes. I've lost my passport once. It was terrible!", "Yes. I've lose my passport once. It was terrible!", "Yes. I has lost my passport once. It was terrible!"], 0, 'Sim. Já perdi o passaporte uma vez. Foi horrível!'),
+    prox(14, ['Oh no! Where have you lost it last year?', 'Oh no! Where did you lose it?', 'Oh no! Where did you lost it?'], 1, 'Ah, não! Onde você perdeu?'),
+    prox(16, ["Lucky you! I've ever lost anything on a trip.", "Lucky you! I've never lose anything on a trip.", "Lucky you! I've never lost anything on a trip."], 2, 'Que sorte! Nunca perdi nada numa viagem.'),
+    { instrucao: 'Which Asian country has Tom been to?', frase: '___.', opcoes: ['Thailand', 'Japan', 'China'], certa: 0, traducao: 'A Tailândia.' },
+    { instrucao: 'Has Emily been to Thailand?', frase: "No, she ___.", opcoes: ["didn't", "hasn't", "isn't"], certa: 1, traducao: 'Não.' },
+    { instrucao: 'Where has Emily driven a car?', frase: 'In ___.', opcoes: ['Mexico', 'Spain', 'Portugal'], certa: 2, traducao: 'Em Portugal.' },
+    { instrucao: 'Why was it a little difficult?', frase: 'The streets were very ___.', opcoes: ['narrow', 'busy', 'dark'], certa: 0, traducao: 'As ruas eram muito estreitas.' },
+    { instrucao: 'What has Emily eaten in Mexico?', frase: '___.', opcoes: ['Sushi', 'Insects', 'Snakes'], certa: 1, traducao: 'Insetos.' },
+    { instrucao: 'Has Tom ever eaten insects?', frase: 'No, he has ___ eaten insects.', opcoes: ['ever', 'already', 'never'], certa: 2, traducao: 'Não, ele nunca comeu insetos.' },
+    { instrucao: 'What has Tom lost once?', frase: 'His ___.', opcoes: ['passport', 'phone', 'bag'], certa: 0, traducao: 'O passaporte.' },
+    { instrucao: 'When did he find it?', frase: 'Two ___ later.', opcoes: ['days', 'hours', 'weeks'], certa: 1, traducao: 'Duas horas depois.' }
+  ]
+});
+</script>
+</body>
+</html>

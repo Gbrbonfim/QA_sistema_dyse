@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 39 · Have you ever...?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 39 · Escrita (Family on Tour)
+   Alinhado ao "Grammar Point" (present perfect com ever / never para experiências de vida) e
+   ao "Vocabulary: Irregular Past Participles" (been, gone, seen, taken, eaten, made, bought,
+   gotten, had, driven). Conteúdo NOVO. A isca é a forma do past simple ou outra forma errada.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 38, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Você já foi a um país asiático?'), palavras: ['Have', 'you', 'ever', 'been', 'to', 'an', 'Asian', 'country'], isca: ['was'], fim: '?', traducao: 'Você já foi a um país asiático?' },
+    { contexto: M('Você já viu um animal selvagem viajando?'), palavras: ['Have', 'you', 'ever', 'seen', 'a', 'wild', 'animal', 'while', 'traveling'], isca: ['saw'], fim: '?', traducao: 'Você já viu um animal selvagem viajando?' },
+    { contexto: M('Você já comeu comida local em outro país?'), palavras: ['Have', 'you', 'ever', 'eaten', 'local', 'food', 'in', 'another', 'country'], isca: ['ate'], fim: '?', traducao: 'Você já comeu comida local em outro país?' },
+    { contexto: M('Você já dirigiu um carro em outro país?'), palavras: ['Have', 'you', 'ever', 'driven', 'a', 'car', 'in', 'another', 'country'], isca: ['drove'], fim: '?', traducao: 'Você já dirigiu em outro país?' },
+    { contexto: M('Você já tirou fotos de algo incrível?'), palavras: ['Have', 'you', 'ever', 'taken', 'photos', 'of', 'something', 'amazing'], isca: ['took'], fim: '?', traducao: 'Você já tirou fotos de algo incrível?' },
+    { contexto: M('Você já comprou uma lembrancinha?'), palavras: ['Have', 'you', 'ever', 'bought', 'a', 'souvenir'], isca: ['buyed'], fim: '?', traducao: 'Você já comprou uma lembrancinha?' },
+    { contexto: M('Você já fez amigos numa viagem?'), palavras: ['Have', 'you', 'ever', 'made', 'new', 'friends', 'on', 'a', 'trip'], isca: ['maked'], fim: '?', traducao: 'Você já fez amigos numa viagem?' },
+    { contexto: M('Você já teve um problema viajando?'), palavras: ['Have', 'you', 'ever', 'had', 'a', 'problem', 'while', 'traveling'], isca: ['haved'], fim: '?', traducao: 'Você já teve um problema viajando?' },
+    { contexto: M('Eu nunca trabalhei num escritório.'), palavras: ["I've", 'never', 'worked', 'in', 'an', 'office'], isca: ['ever'], fim: '.', traducao: 'Nunca trabalhei num escritório.' },
+    { contexto: M('Eu nunca dirigi um carro em outro país.'), palavras: ["I've", 'never', 'driven', 'a', 'car', 'in', 'another', 'country'], isca: ['drove'], fim: '.', traducao: 'Nunca dirigi em outro país.' },
+    { contexto: M('Ela nunca comeu sushi.'), palavras: ["She's", 'never', 'eaten', 'sushi'], isca: ['ate'], fim: '.', traducao: 'Ela nunca comeu sushi.' },
+    { contexto: M('Nós fomos a três países neste ano.'), palavras: ["We've", 'been', 'to', 'three', 'countries', 'this', 'year'], isca: ['went'], fim: '.', traducao: 'Fomos a três países neste ano.' },
+    { contexto: M('Eles saíram de férias. (Não estão aqui.)'), palavras: ["They've", 'gone', 'on', 'holiday'], isca: ['went'], fim: '.', traducao: 'Eles saíram de férias.' },
+    { contexto: M('Ela tirou fotos lindas da viagem.'), palavras: ["She's", 'taken', 'beautiful', 'photos', 'of', 'the', 'trip'], isca: ['took'], fim: '.', traducao: 'Ela tirou fotos lindas da viagem.' },
+    { contexto: M('Os meus pais fizeram um plano para as próximas férias.'), palavras: ['My', 'parents', 'have', 'made', 'a', 'plan', 'for', 'the', 'next', 'vacation'], isca: ['has'], fim: '.', traducao: 'Os meus pais fizeram um plano para as próximas férias.' },
+    { contexto: M('Ele comprou uma mala nova.'), palavras: ['He', 'has', 'bought', 'a', 'new', 'suitcase'], isca: ['have'], fim: '.', traducao: 'Ele comprou uma mala nova.' },
+    { contexto: M('Nós nos divertimos muito na praia.'), palavras: ["We've", 'had', 'a', 'great', 'time', 'at', 'the', 'beach'], isca: ['has'], fim: '.', traducao: 'Nós nos divertimos muito na praia.' },
+    { contexto: M('Eu já consegui o meu cartão de embarque.'), palavras: ["I've", 'gotten', 'my', 'boarding', 'pass'], isca: ['getted'], fim: '.', traducao: 'Já peguei o meu cartão de embarque.' },
+    { contexto: M('Você já ficou num hostel?'), palavras: ['Have', 'you', 'ever', 'stayed', 'in', 'a', 'hostel'], isca: ['stay'], fim: '?', traducao: 'Você já ficou num hostel?' },
+    { contexto: M('Como foi?'), palavras: ['How', 'was', 'it'], isca: ['were'], fim: '?', traducao: 'Como foi?' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 39 · Irregular past participles</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 39 · Gramática (Family on Tour)
+   Alinhado ao "Vocabulary: Irregular Past Participles" (be → was/were → been; go → went →
+   gone; see → saw → seen; take → took → taken; eat → ate → eaten; make → made → made; buy →
+   bought → bought; get → got → gotten; have → had → had; drive → drove → driven), a ever /
+   never e ao homework. Conteúdo NOVO. 24 questões. */
+const PP = 'Choose the past participle';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 38, num: 10, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: PP, frase: 'be → was / were → ___', opcoes: ['been', 'being', 'beed'], certa: 0, traducao: 'ser/estar → foi → sido/estado' },
+    { instrucao: PP, frase: 'go → went → ___', opcoes: ['goed', 'gone', 'went'], certa: 1, traducao: 'ir → foi → ido' },
+    { instrucao: PP, frase: 'see → saw → ___', opcoes: ['saw', 'seed', 'seen'], certa: 2, traducao: 'ver → viu → visto' },
+    { instrucao: PP, frase: 'take → took → ___', opcoes: ['taken', 'took', 'taked'], certa: 0, traducao: 'pegar/tirar → tirou → tirado' },
+    { instrucao: PP, frase: 'eat → ate → ___', opcoes: ['ate', 'eaten', 'eated'], certa: 1, traducao: 'comer → comeu → comido' },
+    { instrucao: PP, frase: 'make → made → ___', opcoes: ['maked', 'maken', 'made'], certa: 2, traducao: 'fazer → fez → feito' },
+    { instrucao: PP, frase: 'buy → bought → ___', opcoes: ['bought', 'buyed', 'boughten'], certa: 0, traducao: 'comprar → comprou → comprado' },
+    { instrucao: PP, frase: 'drive → drove → ___', opcoes: ['drove', 'driven', 'drived'], certa: 1, traducao: 'dirigir → dirigiu → dirigido' },
+    { frase: "We've ___ to three countries this year.", opcoes: ['went', 'go', 'been'], certa: 2, traducao: 'Fomos a três países neste ano.' },
+    { frase: 'She has ___ beautiful photos of the trip.', opcoes: ['taken', 'took', 'take'], certa: 0, traducao: 'Ela tirou fotos lindas da viagem.' },
+    { frase: 'Have you ever ___ sushi in Japan?', opcoes: ['ate', 'eaten', 'eat'], certa: 1, traducao: 'Você já comeu sushi no Japão?' },
+    { frase: 'My parents have ___ a plan for the next vacation.', opcoes: ['make', 'maked', 'made'], certa: 2, traducao: 'Os meus pais fizeram um plano para as próximas férias.' },
+    { frase: "They've ___ on holiday. They aren't at home.", opcoes: ['gone', 'went', 'go'], certa: 0, traducao: 'Eles saíram de férias. Não estão em casa.' },
+    { frase: 'He has ___ a new suitcase for his trip.', opcoes: ['buy', 'bought', 'buyed'], certa: 1, traducao: 'Ele comprou uma mala nova para a viagem.' },
+    { frase: 'Have you ever ___ a famous landmark?', opcoes: ['saw', 'see', 'seen'], certa: 2, traducao: 'Você já viu um lugar famoso?' },
+    { frase: "We've ___ a great time at the beach.", opcoes: ['had', 'have', 'haved'], certa: 0, traducao: 'Nós nos divertimos muito na praia.' },
+    { frase: "I've never ___ a car in another country.", opcoes: ['drove', 'driven', 'drive'], certa: 1, traducao: 'Nunca dirigi em outro país.' },
+    { frase: "I've ___ my boarding pass ready.", opcoes: ['get', 'getted', 'gotten'], certa: 2, traducao: 'Já deixei o cartão de embarque pronto.' },
+    { frase: 'Have you ___ been to an Asian country?', opcoes: ['ever', 'never', 'already'], certa: 0, traducao: 'Você já foi a um país asiático?' },
+    { frase: "I've ___ worked in an office. (at no time in my life)", opcoes: ['ever', 'never', 'already'], certa: 1, traducao: 'Nunca trabalhei num escritório. (em nenhum momento da vida)' },
+    { frase: 'We use ever and never to talk about life ___.', opcoes: ['plans', 'rules', 'experiences'], certa: 2, traducao: 'Usamos ever e never para falar de experiências de vida.' },
+    { frase: 'Have you ever seen a wild animal? ___, I have. I saw a lion in Africa.', opcoes: ['Yes', 'No', 'Never'], certa: 0, traducao: 'Você já viu um animal selvagem? Sim. Vi um leão na África.' },
+    { frase: 'Have you ever been to Japan? Yes, I have. I ___ there in 2020.', opcoes: ['have gone', 'went', 'been'], certa: 1, traducao: 'Você já foi ao Japão? Sim. Fui lá em 2020.' },
+    { frase: "He's ___ to the market. He isn't here now.", opcoes: ['been', 'went', 'gone'], certa: 2, traducao: 'Ele foi ao mercado. Não está aqui agora.' }
+  ]
+});
+</script>
+</body>
+</html>

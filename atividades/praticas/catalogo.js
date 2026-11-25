@@ -807,6 +807,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Technology in my life', tipo: 'Escute e grave', treina: 'Fala · Tecnologia', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Articles: the, a, an', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 38,
+        titulo: 'Class 38 and 39 · Family on Tour',
+        atividades: [
+          { num: 1, parte: 'Class 38', titulo: 'When did it happen?', tipo: 'Escute e escolha', treina: 'Escuta · Tempos verbais', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 38', titulo: "We've visited 50 countries", tipo: 'Monte a frase', treina: 'Escrita · Present perfect', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 38', titulo: 'A family on tour', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 38', titulo: 'What have you done?', tipo: 'Escute e grave', treina: 'Fala · Present perfect', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 38', titulo: 'Present perfect', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 39', titulo: 'Which participle?', tipo: 'Escute e escolha', treina: 'Escuta · Particípios', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 39', titulo: 'Have you ever...?', tipo: 'Monte a frase', treina: 'Escrita · Ever / never', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 39', titulo: 'Travel experiences', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 39', titulo: 'Have you ever been there?', tipo: 'Escute e grave', treina: 'Fala · Experiências', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 39', titulo: 'Irregular past participles', tipo: 'Make a Choice', treina: 'Gramática · Particípios', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

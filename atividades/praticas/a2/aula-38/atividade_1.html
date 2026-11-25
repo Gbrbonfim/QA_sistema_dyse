@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 38 · When did it happen?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 38 · Escuta (Family on Tour)
+   Alinhado ao "Grammar Point" — present perfect (passado sem dizer quando; experiências;
+   eventos recentes) x past simple (sabemos quando) x present continuous (agora / este
+   período). Conteúdo NOVO sobre viagens em família: o aluno ouve e escolhe. 24 questões. */
+const IC = { 'Past simple (we know when)': 'event', 'Present perfect (we don\'t say when)': 'done_all', 'Present continuous (now)': 'schedule' };
+const T = Object.keys(IC);
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 38, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which tense is it?',
+  itens: [
+    q('We visited Japan last year.', 0),
+    q("We've visited fifty countries.", 1),
+    q('We are traveling around the world.', 2),
+    q('I booked the tickets yesterday.', 0),
+    q("I've already booked all the tickets.", 1),
+    q('The kids are studying on their iPads now.', 2),
+    q('She started a travel blog in 2023.', 0),
+    q("She's started a travel blog.", 1),
+    q('They are staying at a hotel this week.', 2),
+    q('We sold our house two years ago.', 0),
+    q('We have sold everything.', 1),
+    q('My dad is driving to the airport right now.', 2),
+    q('He lost his keys this morning.', 0),
+    q("Oh no! I've lost my keys.", 1),
+    q('Look! The plane is landing.', 2),
+    q('They arrived in Canada on Monday.', 0),
+    q('Have they arrived in Canada?', 1),
+    q('We are visiting our grandparents this month.', 2),
+    q('I went to Italy in 2019.', 0),
+    q("I've never been to Italy.", 1),
+    q('Is she packing her suitcase?', 2),
+    q('Did you see the Eiffel Tower last summer?', 0),
+    q('Have you ever seen the Eiffel Tower?', 1),
+    q('What are you doing at the moment?', 2)
+  ]
+});
+</script>
+</body>
+</html>

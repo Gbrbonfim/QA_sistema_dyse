@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 38 · We've visited 50 countries</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 38 · Escrita (Family on Tour)
+   Alinhado ao "Grammar Point" — present perfect: have / has + particípio; contrações ('ve,
+   's, haven't, hasn't); perguntas (Have they arrived...? Has he...?) e respostas curtas;
+   particípios regulares iguais ao passado (booked, visited, planned). Conteúdo NOVO.
+   A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 38, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Nós vendemos tudo.'), palavras: ['We', 'have', 'sold', 'everything'], isca: ['has'], fim: '.', traducao: 'Vendemos tudo.' },
+    { contexto: M('Eu já reservei todas as passagens.'), palavras: ['I', 'have', 'already', 'booked', 'all', 'the', 'tickets'], isca: ['book'], fim: '.', traducao: 'Já reservei todas as passagens.' },
+    { contexto: M('Nós escaneamos os livros.'), palavras: ["We've", 'scanned', 'the', 'books'], isca: ['scan'], fim: '.', traducao: 'Escaneamos os livros.' },
+    { contexto: M('Ela planejou a viagem.'), palavras: ["She's", 'planned', 'the', 'trip'], isca: ['plan'], fim: '.', traducao: 'Ela planejou a viagem.' },
+    { contexto: M('Ele visitou cinquenta países.'), palavras: ["He's", 'visited', '50', 'countries'], isca: ['have'], fim: '.', traducao: 'Ele já visitou 50 países.' },
+    { contexto: M('Eles não arrumaram as roupas.'), palavras: ['They', "haven't", 'packed', 'their', 'clothes'], isca: ["hasn't"], fim: '.', traducao: 'Eles não arrumaram as roupas.' },
+    { contexto: M('Ele não ligou para o hotel.'), palavras: ['He', "hasn't", 'called', 'the', 'hotel'], isca: ["haven't"], fim: '.', traducao: 'Ele não ligou para o hotel.' },
+    { contexto: M('Nós não reservamos o hotel.'), palavras: ['We', "haven't", 'booked', 'the', 'hotel'], isca: ["didn't"], fim: '.', traducao: 'Não reservamos o hotel.' },
+    { contexto: M('Ela não começou a viagem.'), palavras: ['She', "hasn't", 'started', 'the', 'trip'], isca: ['start'], fim: '.', traducao: 'Ela não começou a viagem.' },
+    { contexto: M('Eles chegaram ao Canadá?'), palavras: ['Have', 'they', 'arrived', 'in', 'Canada'], isca: ['Has'], fim: '?', traducao: 'Eles chegaram ao Canadá?' },
+    { contexto: M('Ele escaneou o livro?'), palavras: ['Has', 'he', 'scanned', 'the', 'book'], isca: ['Have'], fim: '?', traducao: 'Ele escaneou o livro?' },
+    { contexto: M('Sim, eu já.'), palavras: ['Yes,', 'I', 'have'], isca: ['did'], fim: '.', traducao: 'Sim, já.' },
+    { contexto: M('Não, eles não.'), palavras: ['No,', 'they', "haven't"], isca: ["hasn't"], fim: '.', traducao: 'Não.' },
+    { contexto: M('Eu comecei um blog de viagem.'), palavras: ["I've", 'started', 'a', 'travel', 'blog'], isca: ['starting'], fim: '.', traducao: 'Comecei um blog de viagem.' },
+    { contexto: M('A minha amiga não planejou a viagem.'), palavras: ['My', 'friend', "hasn't", 'planned', 'the', 'trip'], isca: ["haven't"], fim: '.', traducao: 'A minha amiga não planejou a viagem.' },
+    { contexto: M('Nós arrumamos as malas.'), palavras: ["We've", 'packed', 'our', 'suitcases'], isca: ['pack'], fim: '.', traducao: 'Arrumamos as malas.' },
+    { contexto: M('Você decidiu para onde ir?'), palavras: ['Have', 'you', 'decided', 'where', 'to', 'go'], isca: ['Did'], fim: '?', traducao: 'Você decidiu para onde ir?' },
+    { contexto: M('As crianças limparam o quarto?'), palavras: ['Have', 'the', 'kids', 'cleaned', 'their', 'room'], isca: ['Has'], fim: '?', traducao: 'As crianças limparam o quarto?' },
+    { contexto: M('Os meus pais me ajudaram a me preparar.'), palavras: ['My', 'parents', 'have', 'helped', 'me', 'prepare'], isca: ['has'], fim: '.', traducao: 'Os meus pais me ajudaram a me preparar.' },
+    { contexto: M('Choveu todos os dias nesta semana.'), palavras: ["It's", 'rained', 'every', 'day', 'this', 'week'], isca: ['rain'], fim: '.', traducao: 'Choveu todos os dias nesta semana.' }
+  ]
+});
+</script>
+</body>
+</html>

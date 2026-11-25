@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 38 · A family on tour</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 38 · Leitura (Family on Tour)
+   Alinhado ao vídeo da família Goy (família multicultural, 15 meses de viagem, 50 países;
+   venderam tudo, juntaram milhas com cartões de crédito, livros escaneados em iPads, a mãe
+   ensina as crianças) e ao present perfect. Conteúdo NOVO: uma repórter entrevista a Lucia,
+   mãe de outra família que viaja pelo mundo. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Reporter', 'Hi, Lucia! Your family is traveling around the world, right?'],
+  ['Lucia', "Yes! We're traveling for a year. We've visited twenty countries so far."],
+  ['Reporter', 'Wow! What have you done to prepare for the trip?'],
+  ['Lucia', "We've sold our car and we've saved a lot of money."],
+  ['Reporter', 'Have you booked all the flights?'],
+  ['Lucia', "Not all. We've booked the flights to Asia, but we haven't booked the flights to Africa."],
+  ['Reporter', 'What about the kids? Do they go to school?'],
+  ['Lucia', "No, they don't. I teach them. We've scanned all their books."],
+  ['Reporter', 'Has your son learned a new language?'],
+  ['Lucia', 'Yes, he has! He speaks a little Spanish now.'],
+  ['Reporter', 'Great! Have you had any problems?'],
+  ['Lucia', 'Yes, a few. My husband has lost his passport twice!'],
+  ['Reporter', 'Oh no! Has he found it?'],
+  ['Lucia', "Yes, he has. But now I keep all the documents!"],
+  ['Reporter', 'What has your family learned from traveling?'],
+  ['Lucia', "We've learned to be open and patient, and to appreciate life."],
+  ['Reporter', 'Thank you, Lucia. Have a great trip!']
+];
+const lado = q => q === 'Reporter' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 38, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes! We're traveling for a year. We've visited twenty countries so far.", "Yes! We're traveling for a year. We've visit twenty countries so far.", "Yes! We're traveling for a year. We has visited twenty countries."], 0, 'Sim! Estamos viajando por um ano. Já visitamos vinte países.'),
+    prox(2, ['Wow! What did you done to prepare for the trip?', 'Wow! What have you done to prepare for the trip?', 'Wow! What has you done to prepare for the trip?'], 1, 'Uau! O que vocês fizeram para se preparar para a viagem?'),
+    prox(3, ["We've sell our car and we've save a lot of money.", "We has sold our car.", "We've sold our car and we've saved a lot of money."], 2, 'Vendemos o carro e economizamos bastante dinheiro.'),
+    prox(4, ['Have you booked all the flights?', 'Has you booked all the flights?', 'Have you book all the flights?'], 0, 'Vocês reservaram todos os voos?'),
+    prox(5, ["Not all. We've booked the flights to Asia, but we hasn't booked the flights to Africa.", "Not all. We've booked the flights to Asia, but we haven't booked the flights to Africa.", "Not all. We booked the flights to Asia, but we haven't book the flights to Africa."], 1, 'Nem todos. Reservamos os voos para a Ásia, mas não os voos para a África.'),
+    prox(7, ["No, they don't. I teach them. We've scan all their books.", "No, they haven't. I teach them.", "No, they don't. I teach them. We've scanned all their books."], 2, 'Não. Eu ensino. Escaneamos todos os livros deles.'),
+    prox(8, ['Has your son learned a new language?', 'Have your son learned a new language?', 'Has your son learn a new language?'], 0, 'O seu filho aprendeu uma língua nova?'),
+    prox(9, ['Yes, he have! He speaks a little Spanish now.', 'Yes, he has! He speaks a little Spanish now.', 'Yes, he did has! He speaks a little Spanish now.'], 1, 'Sim! Ele fala um pouco de espanhol agora.'),
+    prox(10, ['Great! Has you had any problems?', 'Great! Have you have any problems?', 'Great! Have you had any problems?'], 2, 'Ótimo! Vocês tiveram algum problema?'),
+    prox(11, ['Yes, a few. My husband has lost his passport twice!', 'Yes, a few. My husband have lost his passport twice!', 'Yes, a few. My husband has lose his passport twice!'], 0, 'Sim, alguns. O meu marido já perdeu o passaporte duas vezes!'),
+    prox(13, ["Yes, he have. But now I keep all the documents!", "Yes, he has. But now I keep all the documents!", "Yes, he is. But now I keep all the documents!"], 1, 'Sim. Mas agora eu guardo todos os documentos!'),
+    prox(15, ["We've learn to be open and patient.", "We has learned to be open and patient.", "We've learned to be open and patient, and to appreciate life."], 2, 'Aprendemos a ser abertos e pacientes, e a valorizar a vida.'),
+    { instrucao: 'How long is the family traveling?', frase: 'For a ___.', opcoes: ['year', 'month', 'week'], certa: 0, traducao: 'Por um ano.' },
+    { instrucao: 'How many countries have they visited so far?', frase: '___.', opcoes: ['Fifty', 'Twenty', 'Fifteen'], certa: 1, traducao: 'Vinte.' },
+    { instrucao: 'What have they sold?', frase: 'Their ___.', opcoes: ['house', 'books', 'car'], certa: 2, traducao: 'O carro.' },
+    { instrucao: 'Which flights haven\'t they booked?', frase: 'The flights to ___.', opcoes: ['Africa', 'Asia', 'Europe'], certa: 0, traducao: 'Os voos para a África.' },
+    { instrucao: 'Who teaches the kids?', frase: 'Their ___.', opcoes: ['father', 'mother', 'teacher'], certa: 1, traducao: 'A mãe.' },
+    { instrucao: 'What language does the son speak a little now?', frase: '___.', opcoes: ['French', 'English', 'Spanish'], certa: 2, traducao: 'Espanhol.' },
+    { instrucao: 'What has the husband lost twice?', frase: 'His ___.', opcoes: ['passport', 'phone', 'wallet'], certa: 0, traducao: 'O passaporte.' },
+    { instrucao: 'Who keeps the documents now?', frase: '___.', opcoes: ['The husband', 'Lucia', 'The kids'], certa: 1, traducao: 'A Lucia.' }
+  ]
+});
+</script>
+</body>
+</html>
