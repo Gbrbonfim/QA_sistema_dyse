@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 6 · Imperatives and Let's</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 06 · Gramática (How do you feel? What do you eat?)
+   Alinhado ao slide "Grammar Point" — imperativo (+ verbo / - Don't + verbo), Let's + verbo e
+   Let's not + verbo, e o sentimento certo para cada situação. Conteúdo NOVO. 24 questões. */
+const FEEL = 'Choose the right feeling';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 6, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: "___ worried. You're a great student!", opcoes: ["Don't be", "Don't", 'Not be'], certa: 0, traducao: 'Não fique preocupado. Você é um ótimo aluno!' },
+    { frase: "It's cold in here. ___ the window, please.", opcoes: ['Closing', 'Close', 'To close'], certa: 1, traducao: 'Está frio aqui. Feche a janela, por favor.' },
+    { frase: "The restaurant is closed. ___ find another one.", opcoes: ["Let's to", "Let's not", "Let's"], certa: 2, traducao: 'O restaurante está fechado. Vamos achar outro.' },
+    { frase: "It's late. ___ watch another episode.", opcoes: ["Let's not", "Let's don't", "Don't let's"], certa: 0, traducao: 'Está tarde. Não vamos ver outro episódio.' },
+    { frase: "I'm bored. ___ on the TV and watch something.", opcoes: ["Don't turn", 'Turn', 'Turning'], certa: 1, traducao: 'Estou entediado. Ligue a TV e assista a algo.' },
+    { frase: "Time is up! ___ writing, please.", opcoes: ['Stopping', 'To stop', 'Stop'], certa: 2, traducao: 'O tempo acabou! Parem de escrever, por favor.' },
+    { frase: "Bye! ___ your umbrella. It's raining!", opcoes: ["Don't forget", 'Forget', "Let's forget"], certa: 0, traducao: 'Tchau! Não esqueça o guarda-chuva. Está chovendo!' },
+    { frase: "___ another brownie. You had three!", opcoes: ['Eat', "Don't eat", "Let's eat"], certa: 1, traducao: 'Não coma outro brownie. Você comeu três!' },
+    { frase: "We have a week off. ___ on holiday!", opcoes: ["Let's going", "Let's not go", "Let's go"], certa: 2, traducao: 'Temos uma semana de folga. Vamos viajar!' },
+    { frase: "Bruna can't carry all those bags. ___ her.", opcoes: ["Let's help", "Let's not help", "Don't help"], certa: 0, traducao: 'A Bruna não consegue carregar todas aquelas sacolas. Vamos ajudá-la.' },
+    { frase: "___ angry with your sister. She's only four.", opcoes: ["Don't", "Don't be", 'Be'], certa: 1, traducao: 'Não fique bravo com a sua irmã. Ela só tem quatro anos.' },
+    { frase: "___ positive! You can do it!", opcoes: ['Are', "Don't be", 'Be'], certa: 2, traducao: 'Seja positivo! Você consegue!' },
+    { instrucao: FEEL, frase: "We're going on a school trip tomorrow. We're super ___!", opcoes: ['excited', 'bored', 'angry'], certa: 0, traducao: 'Vamos fazer uma excursão amanhã. Estamos superanimados!' },
+    { instrucao: FEEL, frase: "It's Friday night and I'm watching a good film. I'm ___.", opcoes: ['stressed', 'relaxed', 'worried'], certa: 1, traducao: 'É sexta à noite e estou vendo um bom filme. Estou relaxado.' },
+    { instrucao: FEEL, frase: "I don't like my job anymore. I'm ___ with it.", opcoes: ['excited', 'comfortable', 'disappointed'], certa: 2, traducao: 'Não gosto mais do meu trabalho. Estou decepcionado com ele.' },
+    { instrucao: FEEL, frase: 'We need to finish ten reports today. I\'m ___.', opcoes: ['stressed', 'relaxed', 'bored'], certa: 0, traducao: 'Precisamos terminar dez relatórios hoje. Estou estressado.' },
+    { instrucao: FEEL, frase: "My exam is tomorrow, but my grades are very good. I'm ___.", opcoes: ['angry', 'positive', 'bored'], certa: 1, traducao: 'A minha prova é amanhã, mas as minhas notas são muito boas. Estou confiante.' },
+    { instrucao: FEEL, frase: "There's nothing on TV and my friends are busy. I'm ___.", opcoes: ['excited', 'stressed', 'bored'], certa: 2, traducao: 'Não tem nada na TV e os meus amigos estão ocupados. Estou entediado.' },
+    { instrucao: FEEL, frase: "I didn't have lunch. I'm really ___.", opcoes: ['hungry', 'angry', 'relaxed'], certa: 0, traducao: 'Não almocei. Estou com muita fome.' },
+    { instrucao: FEEL, frase: "My son isn't home yet and it's midnight. I'm ___.", opcoes: ['relaxed', 'worried', 'excited'], certa: 1, traducao: 'O meu filho ainda não chegou e é meia-noite. Estou preocupado.' },
+    { frase: "I'm worried ___ my test.", opcoes: ['with', 'on', 'about'], certa: 2, traducao: 'Estou preocupado com a minha prova.' },
+    { frase: "I'm disappointed ___ my new phone.", opcoes: ['with', 'on', 'to'], certa: 0, traducao: 'Estou decepcionado com o meu celular novo.' },
+    { frase: "I'm excited ___ the party!", opcoes: ['with', 'about', 'on'], certa: 1, traducao: 'Estou animado com a festa!' },
+    { frase: "Don't ___ angry with me!", opcoes: ['are', 'is', 'be'], certa: 2, traducao: 'Não fique bravo comigo!' }
+  ]
+});
+</script>
+</body>
+</html>

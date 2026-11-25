@@ -501,6 +501,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'How tall is he?', tipo: 'Escute e grave', treina: 'Fala · Alturas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Adjectives and modifiers', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 6,
+        titulo: 'Class 06 · How do you feel? What do you eat?',
+        atividades: [
+          { num: 1, titulo: 'How do they feel?', tipo: 'Escute e escolha', treina: 'Escuta · Sentimentos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "Don't worry, let's go!", tipo: 'Monte a frase', treina: 'Escrita · Imperativo', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Feeding your feelings', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Give advice', tipo: 'Escute e grave', treina: 'Fala · Conselhos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: "Imperatives and Let's", tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

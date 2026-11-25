@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 6 · How do they feel?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 06 · Escuta (How do you feel? What do you eat?)
+   Alinhado aos slides "Vocabulary" e "Listening: how are the people feeling?" — stressed,
+   relaxed, bored, excited, angry, worried, disappointed, hungry. Conteúdo NOVO: o aluno ouve
+   uma situação e escolhe o sentimento. 24 questões. */
+const IC = { 'stressed': 'sentiment_stressed', 'relaxed': 'self_improvement', 'bored': 'sentiment_neutral', 'excited': 'celebration', 'angry': 'sentiment_extremely_dissatisfied', 'worried': 'sentiment_worried', 'disappointed': 'sentiment_dissatisfied', 'hungry': 'restaurant' };
+const A = ['stressed', 'relaxed', 'bored', 'excited'];
+const B = ['angry', 'worried', 'disappointed', 'hungry'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 6, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: how does the person feel?',
+  itens: [
+    qa('I have three reports and two meetings today. I have no time!', 0),
+    qa("I'm on the sofa with a cup of tea and a good book.", 1),
+    qa("There's nothing to do and nothing on TV.", 2),
+    qa("We're going to Disney tomorrow! I can't wait!", 3),
+    qa('My boss wants everything today. Too many things!', 0),
+    qa("It's Sunday morning. I'm in the garden, listening to music.", 1),
+    qa('This class is really long and the teacher is very slow.', 2),
+    qa('My favorite band is playing in my city next week!', 3),
+    qa('I have exams every day this week and I can\'t sleep.', 0),
+    qa("I'm on the beach. No phone, no work. Perfect!", 1),
+    qa("It's raining and my friends can't come. I have nothing to do.", 2),
+    qa("It's my birthday party tonight! Everybody is coming!", 3),
+    qb('My brother is using my computer again! Stop it!', 0),
+    qb("My daughter isn't home and it's two in the morning.", 1),
+    qb("The movie wasn't very good. I wanted more.", 2),
+    qb("I didn't have breakfast or lunch today.", 3),
+    qb("The children can't stop making noise!", 0),
+    qb("I have a big test tomorrow and I didn't study.", 1),
+    qb("I wanted the job, but they didn't call me.", 2),
+    qb('What time is dinner? I want to eat now!', 3),
+    qb('Someone ate my sandwich! Who did it?!', 0),
+    qb("My son is in the hospital. I'm waiting for news.", 1),
+    qb("The concert isn't happening. We wanted to go so much!", 2),
+    qb('I want a big plate of pasta right now!', 3)
+  ]
+});
+</script>
+</body>
+</html>

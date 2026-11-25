@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 6 · Don't worry, let's go!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 06 · Escrita (How do you feel? What do you eat?)
+   Alinhado ao slide "Grammar Point" — imperativo afirmativo (verbo), negativo (Don't + verbo),
+   please para ser educado, sugestões com Let's + verbo e Let's not + verbo, e frases com os
+   sentimentos. Conteúdo NOVO. A isca é a forma errada (Not, to, Let's don't...). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 6, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Não se preocupe.'), palavras: ["Don't", 'worry'], isca: ['Not'], fim: '.', traducao: 'Não se preocupe.' },
+    { contexto: M('Seja positivo!'), palavras: ['Be', 'positive'], isca: ['Are'], fim: '!', traducao: 'Seja positivo!' },
+    { contexto: M('Feche a janela, por favor.'), palavras: ['Close', 'the', 'window,', 'please'], isca: ['to'], fim: '.', traducao: 'Feche a janela, por favor.' },
+    { contexto: M('Não coma chocolate antes do jantar.'), palavras: ["Don't", 'eat', 'chocolate', 'before', 'dinner'], isca: ['eating'], fim: '.', traducao: 'Não coma chocolate antes do jantar.' },
+    { contexto: M('Vamos assistir a um filme!'), palavras: ["Let's", 'watch', 'a', 'movie'], isca: ['watching'], fim: '!', traducao: 'Vamos assistir a um filme!' },
+    { contexto: M('Não vamos pedir pizza hoje.'), palavras: ["Let's", 'not', 'order', 'pizza', 'today'], isca: ["don't"], fim: '.', traducao: 'Não vamos pedir pizza hoje.' },
+    { contexto: M('Não fique bravo com a sua irmã.'), palavras: ["Don't", 'be', 'angry', 'with', 'your', 'sister'], isca: ['are'], fim: '.', traducao: 'Não fique bravo com a sua irmã.' },
+    { contexto: M('Não esqueça as chaves.'), palavras: ["Don't", 'forget', 'the', 'keys'], isca: ['Not'], fim: '.', traducao: 'Não esqueça as chaves.' },
+    { contexto: M('Sente-se no sofá, por favor.'), palavras: ['Sit', 'on', 'the', 'sofa,', 'please'], isca: ['Sitting'], fim: '.', traducao: 'Sente-se no sofá, por favor.' },
+    { contexto: M('Vamos dar uma caminhada.'), palavras: ["Let's", 'go', 'for', 'a', 'walk'], isca: ['to'], fim: '.', traducao: 'Vamos dar uma caminhada.' },
+    { contexto: M('Não vamos comer biscoitos agora.'), palavras: ["Let's", 'not', 'eat', 'biscuits', 'now'], isca: ["don't"], fim: '.', traducao: 'Não vamos comer biscoitos agora.' },
+    { contexto: M('Estou entediado. Vamos ao parque!'), palavras: ["I'm", 'bored.', "Let's", 'go', 'to', 'the', 'park'], isca: ['boring.'], fim: '!', traducao: 'Estou entediado. Vamos ao parque!' },
+    { contexto: M('Estou animada com a viagem.'), palavras: ["I'm", 'excited', 'about', 'the', 'trip'], isca: ['exciting'], fim: '.', traducao: 'Estou animada com a viagem.' },
+    { contexto: M('Ela está preocupada com a prova.'), palavras: ["She's", 'worried', 'about', 'the', 'test'], isca: ['worry'], fim: '.', traducao: 'Ela está preocupada com a prova.' },
+    { contexto: M('Ele está decepcionado com o emprego.'), palavras: ["He's", 'disappointed', 'with', 'his', 'job'], isca: ['her'], fim: '.', traducao: 'Ele está decepcionado com o emprego dele.' },
+    { contexto: M('Quando estou estressado, como chocolate.'), palavras: ['When', "I'm", 'stressed,', 'I', 'eat', 'chocolate'], isca: ['eats'], fim: '.', traducao: 'Quando estou estressado, como chocolate.' },
+    { contexto: M('Eu nunca como pipoca.'), palavras: ['I', 'never', 'eat', 'popcorn'], isca: ["don't"], fim: '.', traducao: 'Eu nunca como pipoca.' },
+    { contexto: M('Eu às vezes como sorvete à noite.'), palavras: ['I', 'sometimes', 'eat', 'ice', 'cream', 'at', 'night'], isca: ['eats'], fim: '.', traducao: 'Eu às vezes como sorvete à noite.' },
+    { contexto: M('Pare de comer batatinhas!'), palavras: ['Stop', 'eating', 'crisps'], isca: ['eat'], fim: '!', traducao: 'Pare de comer batatinhas!' },
+    { contexto: M('Vamos ajudá-la.'), palavras: ["Let's", 'help', 'her'], isca: ['she'], fim: '.', traducao: 'Vamos ajudá-la.' }
+  ]
+});
+</script>
+</body>
+</html>

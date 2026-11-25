@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 6 · Feeding your feelings</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 06 · Leitura (How do you feel? What do you eat?)
+   Alinhado ao blog "Feeding Your Feelings" e ao "Speaking" (A: I'm stressed... B: Don't be
+   stressed. Let's...!) — sentimentos, comida que comemos por emoção ("Am I really hungry?") e
+   conselhos com imperativos e Let's. Conteúdo NOVO: a Bruna está estressada e o Paul ajuda.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Paul', 'Hi, Bruna! Are you OK? You look stressed.'],
+  ['Bruna', "I am! I have two reports to finish today and I'm really tired."],
+  ['Paul', 'Oh, no! Is that chocolate on your desk?'],
+  ['Bruna', 'Yes. When I\'m stressed, I always eat chocolate.'],
+  ['Paul', 'Are you really hungry?'],
+  ['Bruna', "No, I'm not. I had a big lunch."],
+  ['Paul', "So, it's not about food! Don't eat more chocolate."],
+  ['Bruna', "You're right. But I'm worried about my reports."],
+  ['Paul', "Don't be worried. You're a great worker!"],
+  ['Bruna', "Thanks, Paul. You're a good friend."],
+  ['Paul', "Let's go for a walk. It's only ten minutes."],
+  ['Bruna', "Good idea! Let's not stay here all afternoon."],
+  ['Paul', 'And after work, call a friend or watch a good movie.'],
+  ['Bruna', "Yes! Let's watch a movie together on Friday."],
+  ['Paul', "Great! Let's eat popcorn, but just a little!"],
+  ['Bruna', "Ha ha! Don't worry. I'm feeling positive now!"]
+];
+const lado = q => q === 'Bruna' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 6, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I am! I have two reports to finish today and I'm really tired.", "I'm not! I'm on vacation and I'm relaxed.", "I do! I have two reports to finish today."], 0, 'Estou! Tenho dois relatórios para terminar hoje e estou muito cansada.'),
+    prox(3, ["Yes. When I'm relaxed, I never eat chocolate.", "Yes. When I'm stressed, I always eat chocolate.", "Yes. When I stressed, I always eats chocolate."], 1, 'Sim. Quando estou estressada, sempre como chocolate.'),
+    prox(4, ['Do you really hungry?', 'Are you really angry?', 'Are you really hungry?'], 2, 'Você está realmente com fome?'),
+    prox(5, ["No, I'm not. I had a big lunch.", "No, I don't. I had a big lunch.", "Yes, I'm very hungry. I didn't have lunch."], 0, 'Não. Almocei bastante.'),
+    prox(6, ["So, it's about food! Eat more chocolate.", "So, it's not about food! Don't eat more chocolate.", "So, it's not about food! Not eat more chocolate."], 1, 'Então não é sobre comida! Não coma mais chocolate.'),
+    prox(7, ["You're right. But I'm excited about my reports.", "You're right. But I worried about my reports.", "You're right. But I'm worried about my reports."], 2, 'Você tem razão. Mas estou preocupada com os meus relatórios.'),
+    prox(8, ["Don't be worried. You're a great worker!", "Don't worried. You're a great worker!", "Be worried. You're a terrible worker!"], 0, 'Não fique preocupada. Você é uma ótima profissional!'),
+    prox(10, ["Let's going for a walk.", "Let's go for a walk. It's only ten minutes.", "Let's to go for a walk."], 1, 'Vamos dar uma caminhada. São só dez minutos.'),
+    prox(11, ["Good idea! Let's don't stay here all afternoon.", "Good idea! Don't let's stay here.", "Good idea! Let's not stay here all afternoon."], 2, 'Boa ideia! Não vamos ficar aqui a tarde toda.'),
+    prox(12, ['And after work, call a friend or watch a good movie.', 'And after work, calling a friend or watching a movie.', 'And after work, to call a friend.'], 0, 'E depois do trabalho, ligue para um amigo ou assista a um bom filme.'),
+    prox(13, ["Yes! Let's watching a movie together on Friday.", "Yes! Let's watch a movie together on Friday.", "Yes! We let's watch a movie on Friday."], 1, 'Sim! Vamos ver um filme juntos na sexta.'),
+    prox(15, ["Ha ha! Don't worry. I'm feeling stressed now!", "Ha ha! Not worry. I'm feeling positive now!", "Ha ha! Don't worry. I'm feeling positive now!"], 2, 'Ha ha! Não se preocupe. Estou me sentindo positiva agora!'),
+    { instrucao: 'How does Bruna feel at the start?', frase: "She's ___ and tired.", opcoes: ['stressed', 'relaxed', 'bored'], certa: 0, traducao: 'Ela está estressada e cansada.' },
+    { instrucao: "What does Bruna eat when she's stressed?", frase: '___.', opcoes: ['Popcorn', 'Chocolate', 'Biscuits'], certa: 1, traducao: 'Chocolate.' },
+    { instrucao: 'Is Bruna really hungry?', frase: "No. She had a big ___.", opcoes: ['breakfast', 'dinner', 'lunch'], certa: 2, traducao: 'Não. Ela almoçou bastante.' },
+    { instrucao: 'Why is Bruna worried?', frase: 'Because of her ___.', opcoes: ['reports', 'friends', 'lunch'], certa: 0, traducao: 'Por causa dos relatórios.' },
+    { instrucao: "What is Paul's first suggestion?", frase: "Let's go for a ___.", opcoes: ['coffee', 'walk', 'movie'], certa: 1, traducao: 'Vamos dar uma caminhada.' },
+    { instrucao: 'What can Bruna do after work?', frase: 'Call a friend or watch a good ___.', opcoes: ['game', 'show', 'movie'], certa: 2, traducao: 'Ligar para um amigo ou ver um bom filme.' },
+    { instrucao: 'When are they watching a movie together?', frase: 'On ___.', opcoes: ['Friday', 'Saturday', 'Monday'], certa: 0, traducao: 'Na sexta.' },
+    { instrucao: 'How does Bruna feel at the end?', frase: "She's feeling ___.", opcoes: ['worried', 'positive', 'angry'], certa: 1, traducao: 'Ela está se sentindo positiva.' }
+  ]
+});
+</script>
+</body>
+</html>
