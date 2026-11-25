@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 30 · Much, many, a few, a little</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 30 · Gramática (That's Sweet!)
+   Alinhado ao "Grammar Point" (How much + incontável, How many + contável; a lot of / a
+   little / a few / not much / not many / not any), ao vídeo do açúcar e ao "Vocabulary" das
+   embalagens. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 30, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'How ___ milk do you drink every day?', opcoes: ['much', 'many', 'lot'], certa: 0, traducao: 'Quanto leite você bebe por dia?' },
+    { frase: 'How ___ sweets do you eat in a day?', opcoes: ['much', 'many', 'little'], certa: 1, traducao: 'Quantos doces você come por dia?' },
+    { frase: 'How ___ ice cream do you eat in the summer?', opcoes: ['many', 'few', 'much'], certa: 2, traducao: 'Quanto sorvete você toma no verão?' },
+    { frase: 'How ___ times do you eat out with your family in a month?', opcoes: ['many', 'much', 'lot'], certa: 0, traducao: 'Quantas vezes você come fora com a família por mês?' },
+    { frase: 'We use "How many" with ___ nouns.', opcoes: ['uncountable', 'countable', 'all'], certa: 1, traducao: 'Usamos "How many" com substantivos contáveis.' },
+    { frase: 'We use "How much" with ___ nouns.', opcoes: ['countable', 'plural', 'uncountable'], certa: 2, traducao: 'Usamos "How much" com substantivos incontáveis.' },
+    { frase: "I don't add ___ sugar to my coffee.", opcoes: ['much', 'many', 'a few'], certa: 0, traducao: 'Não coloco muito açúcar no café.' },
+    { frase: "We don't drink ___ Coke during the week.", opcoes: ['a lot', 'a lot of', 'many'], certa: 1, traducao: 'Não bebemos muita Coca durante a semana.' },
+    { frase: 'How much bread do you eat in a day? ___.', opcoes: ['A few', 'Many', 'A little'], certa: 2, traducao: 'Quanto pão você come por dia? Um pouco.' },
+    { frase: "My sister doesn't eat ___ chocolate.", opcoes: ['much', 'many', 'a few'], certa: 0, traducao: 'A minha irmã não come muito chocolate.' },
+    { frase: "I didn't buy ___ apples.", opcoes: ['much', 'many', 'a little'], certa: 1, traducao: 'Não comprei muitas maçãs.' },
+    { frase: 'We eat ___ rice with our meals.', opcoes: ['many', 'a few', 'a lot of'], certa: 2, traducao: 'Comemos muito arroz nas refeições.' },
+    { frase: 'Do you drink much juice at breakfast? No, not ___.', opcoes: ['much', 'many', 'any'], certa: 0, traducao: 'Você bebe muito suco no café da manhã? Não muito.' },
+    { frase: "Tim ate some cookies, but he didn't eat ___ crackers.", opcoes: ['much', 'many', 'a little'], certa: 1, traducao: 'O Tim comeu uns biscoitos, mas não comeu muitas bolachas salgadas.' },
+    { frase: 'I usually have tea and ___ cookies in the morning.', opcoes: ['a little', 'much', 'a few'], certa: 2, traducao: 'Geralmente tomo chá e como alguns biscoitos de manhã.' },
+    { frase: "How many carrots do you eat? I don't eat ___. I don't like carrots.", opcoes: ['any', 'much', 'a little'], certa: 0, traducao: 'Quantas cenouras você come? Nenhuma. Não gosto de cenoura.' },
+    { frase: 'To find the number of teaspoons of sugar, you ___ the grams by four.', opcoes: ['multiply', 'divide', 'add'], certa: 1, traducao: 'Para achar o número de colheres de chá de açúcar, você divide os gramas por quatro.' },
+    { frase: '40 grams of sugar = ___ teaspoons.', opcoes: ['8', '12', '10'], certa: 2, traducao: '40 gramas de açúcar = 10 colheres de chá.' },
+    { frase: 'She put some butter on a ___ of bread.', opcoes: ['slice', 'jar', 'can'], certa: 0, traducao: 'Ela passou manteiga numa fatia de pão.' },
+    { frase: 'There is a ___ of honey in the cupboard.', opcoes: ['slice', 'jar', 'bowl'], certa: 1, traducao: 'Tem um pote de mel no armário.' },
+    { frase: 'My grandmother made a big ___ of chicken soup.', opcoes: ['slice', 'packet', 'bowl'], certa: 2, traducao: 'A minha avó fez uma tigela grande de canja.' },
+    { frase: 'I drink a ___ of Coke almost every day.', opcoes: ['can', 'slice', 'bowl'], certa: 0, traducao: 'Bebo uma lata de Coca quase todo dia.' },
+    { frase: 'I always have a ___ of milk in the fridge.', opcoes: ['slice', 'carton', 'bowl'], certa: 1, traducao: 'Sempre tenho uma caixa de leite na geladeira.' },
+    { frase: 'Can you bring me a ___ of water, please?', opcoes: ['slice', 'jar', 'bottle'], certa: 2, traducao: 'Você pode me trazer uma garrafa de água, por favor?' }
+  ]
+});
+</script>
+</body>
+</html>

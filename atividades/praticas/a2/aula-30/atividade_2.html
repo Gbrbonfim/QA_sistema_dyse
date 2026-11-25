@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 30 · How much sugar?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 30 · Escrita (That's Sweet!)
+   Alinhado ao "Grammar Point" — How much...? (incontáveis) x How many...? (contáveis) e as
+   quantidades: a lot of, a little / a few, not much / not many, not any. E ao "Vocabulary"
+   das embalagens. Conteúdo NOVO. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 30, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Quanto açúcar você come?'), palavras: ['How', 'much', 'sugar', 'do', 'you', 'eat'], isca: ['many'], fim: '?', traducao: 'Quanto açúcar você come?' },
+    { contexto: M('Quantos doces você come?'), palavras: ['How', 'many', 'sweets', 'do', 'you', 'eat'], isca: ['much'], fim: '?', traducao: 'Quantos doces você come?' },
+    { contexto: M('Quanta água você bebe por dia?'), palavras: ['How', 'much', 'water', 'do', 'you', 'drink', 'a', 'day'], isca: ['many'], fim: '?', traducao: 'Quanta água você bebe por dia?' },
+    { contexto: M('Quantos ovos você come por semana?'), palavras: ['How', 'many', 'eggs', 'do', 'you', 'eat', 'a', 'week'], isca: ['much'], fim: '?', traducao: 'Quantos ovos você come por semana?' },
+    { contexto: M('Eu como muito açúcar.'), palavras: ['I', 'eat', 'a', 'lot', 'of', 'sugar'], isca: ['many'], fim: '.', traducao: 'Como muito açúcar.' },
+    { contexto: M('Eu como um pouco de chocolate.'), palavras: ['I', 'eat', 'a', 'little', 'chocolate'], isca: ['few'], fim: '.', traducao: 'Como um pouco de chocolate.' },
+    { contexto: M('Eu como alguns biscoitos.'), palavras: ['I', 'eat', 'a', 'few', 'cookies'], isca: ['little'], fim: '.', traducao: 'Como alguns biscoitos.' },
+    { contexto: M('Eu não como muito pão.'), palavras: ['I', "don't", 'eat', 'much', 'bread'], isca: ['many'], fim: '.', traducao: 'Não como muito pão.' },
+    { contexto: M('Eu não como muitos salgadinhos.'), palavras: ['I', "don't", 'eat', 'many', 'snacks'], isca: ['much'], fim: '.', traducao: 'Não como muitos salgadinhos.' },
+    { contexto: M('Eu não bebo nenhum refrigerante.'), palavras: ['I', "don't", 'drink', 'any', 'soda'], isca: ['some'], fim: '.', traducao: 'Não bebo refrigerante nenhum.' },
+    { contexto: M('Eu não coloco muito açúcar no meu café.'), palavras: ['I', "don't", 'add', 'much', 'sugar', 'to', 'my', 'coffee'], isca: ['many'], fim: '.', traducao: 'Não coloco muito açúcar no café.' },
+    { contexto: M('Nós comemos muito arroz.'), palavras: ['We', 'eat', 'a', 'lot', 'of', 'rice'], isca: ['many'], fim: '.', traducao: 'Comemos muito arroz.' },
+    { contexto: M('Quantas maçãs você comprou?'), palavras: ['How', 'many', 'apples', 'did', 'you', 'buy'], isca: ['much'], fim: '?', traducao: 'Quantas maçãs você comprou?' },
+    { contexto: M('Eu tomo chá e como alguns biscoitos de manhã.'), palavras: ['I', 'have', 'tea', 'and', 'a', 'few', 'cookies', 'in', 'the', 'morning'], isca: ['little'], fim: '.', traducao: 'Tomo chá e como alguns biscoitos de manhã.' },
+    { contexto: M('Eu adoro comer uma fatia de pizza.'), palavras: ['I', 'love', 'having', 'a', 'slice', 'of', 'pizza'], isca: ['bowl'], fim: '.', traducao: 'Adoro comer uma fatia de pizza.' },
+    { contexto: M('Eu sempre levo uma garrafa de água.'), palavras: ['I', 'always', 'carry', 'a', 'bottle', 'of', 'water'], isca: ['slice'], fim: '.', traducao: 'Sempre levo uma garrafa de água.' },
+    { contexto: M('Eu sempre tenho uma caixa de leite na geladeira.'), palavras: ['I', 'always', 'have', 'a', 'carton', 'of', 'milk', 'in', 'the', 'fridge'], isca: ['slice'], fim: '.', traducao: 'Sempre tenho uma caixa de leite na geladeira.' },
+    { contexto: M('Tem um pote de mel no armário.'), palavras: ["There's", 'a', 'jar', 'of', 'honey', 'in', 'the', 'cupboard'], isca: ['slice'], fim: '.', traducao: 'Tem um pote de mel no armário.' },
+    { contexto: M('Ela comeu uma tigela de cereal.'), palavras: ['She', 'ate', 'a', 'bowl', 'of', 'cereal'], isca: ['slice'], fim: '.', traducao: 'Ela comeu uma tigela de cereal.' },
+    { contexto: M('Tem nove colheres de chá de açúcar numa lata de refrigerante.'), palavras: ['There', 'are', 'nine', 'teaspoons', 'of', 'sugar', 'in', 'a', 'can', 'of', 'soda'], isca: ['is'], fim: '.', traducao: 'Há nove colheres de chá de açúcar numa lata de refrigerante.' }
+  ]
+});
+</script>
+</body>
+</html>

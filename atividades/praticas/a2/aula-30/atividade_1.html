@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 30 · Which container?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 30 · Escuta (That's Sweet!)
+   Alinhado ao "Vocabulary" — tin, box, packet, slice, can, bottle, jar, carton, bowl.
+   Conteúdo NOVO: o aluno ouve a frase e escolhe a embalagem/porção que ouviu. 24 questões. */
+const IC = { tin: 'inventory', box: 'inventory_2', packet: 'shopping_bag', slice: 'local_pizza', can: 'local_drink', bottle: 'water_bottle', jar: 'kitchen', carton: 'package_2', bowl: 'soup_kitchen' };
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: IC[label] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 30, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which container or portion do you hear?',
+  itens: [
+    q('I had a slice of cake after lunch.', 'slice', 'bowl', 'box'),
+    q('Can you buy a bottle of water, please?', 'bottle', 'carton', 'jar'),
+    q('He eats a bowl of soup every night.', 'bowl', 'slice', 'can'),
+    q('She gave me a box of chocolates.', 'box', 'tin', 'packet'),
+    q('There is a can of soda in the fridge.', 'can', 'jar', 'bowl'),
+    q('We need a carton of milk.', 'carton', 'bottle', 'box'),
+    q('I bought a jar of honey at the market.', 'jar', 'can', 'packet'),
+    q('Open a packet of cookies, please.', 'packet', 'slice', 'carton'),
+    q('There is a tin of tomatoes in the cupboard.', 'tin', 'box', 'bowl'),
+    q('My brother ate three slices of pizza!', 'slice', 'jar', 'tin'),
+    q('I always carry a bottle of water in my bag.', 'bottle', 'bowl', 'packet'),
+    q('For breakfast, I have a bowl of cereal with fruit.', 'bowl', 'box', 'can'),
+    q('The kids want a box of cereal with a toy inside.', 'box', 'carton', 'slice'),
+    q('He drinks a can of Coke almost every day.', 'can', 'packet', 'jar'),
+    q('Is there a carton of orange juice?', 'carton', 'tin', 'bowl'),
+    q('We buy a jar of jam every week.', 'jar', 'bottle', 'slice'),
+    q('I bought a packet of tea bags.', 'packet', 'can', 'bottle'),
+    q('He opened a tin of salmon for lunch.', 'tin', 'carton', 'box'),
+    q('She put some butter on a slice of bread.', 'slice', 'packet', 'tin'),
+    q('Two bottles of juice, please.', 'bottle', 'slice', 'bowl'),
+    q('My grandmother made a big bowl of chicken soup.', 'bowl', 'jar', 'carton'),
+    q('This box of cookies is my favorite!', 'box', 'can', 'bottle'),
+    q('There are nine teaspoons of sugar in a can of soda.', 'can', 'bowl', 'tin'),
+    q('There is a jar of peanut butter on the table.', 'jar', 'packet', 'slice')
+  ]
+});
+</script>
+</body>
+</html>

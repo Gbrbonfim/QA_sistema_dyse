@@ -730,6 +730,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'My food plan', tipo: 'Escute e grave', treina: 'Fala · Alimentação', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Countable and uncountable', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 30,
+        titulo: "Class 30 · That's Sweet!",
+        atividades: [
+          { num: 1, titulo: 'Which container?', tipo: 'Escute e escolha', treina: 'Escuta · Embalagens', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'How much sugar?', tipo: 'Monte a frase', treina: 'Escrita · How much / many', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Are you healthy?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'How much? How many?', tipo: 'Escute e grave', treina: 'Fala · Quantidades', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Much, many, a few, a little', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

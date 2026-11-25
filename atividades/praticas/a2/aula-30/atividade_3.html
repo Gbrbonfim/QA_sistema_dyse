@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 30 · Are you healthy?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 30 · Leitura (That's Sweet!)
+   Alinhado ao "Listening" (Who do you think is healthy?), ao vídeo do açúcar (uma lata de
+   refrigerante tem cerca de nove colheres de chá; para achar as colheres, divide-se os gramas
+   por quatro), ao jogo "How much / many" e ao "food diary". Conteúdo NOVO: a Mia e o Jake
+   comparam o que comem. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Mia', 'Jake, how much water do you drink a day?'],
+  ['Jake', "Not much. I drink a lot of soda. About three cans a day."],
+  ['Mia', 'Three cans? Do you know how much sugar is in a can of soda?'],
+  ['Jake', 'No. How much?'],
+  ['Mia', 'About nine teaspoons!'],
+  ['Jake', "Wow! That's a lot of sugar. How do you know?"],
+  ['Mia', 'I watched a video. You divide the grams of sugar by four.'],
+  ['Jake', 'Interesting. And how many sweets do you eat?'],
+  ['Mia', "I don't eat many sweets. Just a few cookies on the weekend."],
+  ['Jake', 'And what did you eat yesterday?'],
+  ['Mia', 'A bowl of cereal with fruit, a sandwich and some fish with vegetables.'],
+  ['Jake', 'I had two slices of pizza and a box of chocolates.'],
+  ['Mia', 'How many vegetables do you eat?'],
+  ['Jake', "I don't eat any vegetables. I don't like them."],
+  ['Mia', 'Jake! You need to eat a little salad every day.'],
+  ['Jake', "OK, OK. I can try. And I can carry a bottle of water with me."],
+  ['Mia', 'Great idea!']
+];
+const lado = q => q === 'Mia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 30, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Not much. I drink a lot of soda. About three cans a day.', 'Not many. I drink a lot of soda. About three cans a day.', 'Not much. I drink a lot soda. About three cans a day.'], 0, 'Não muito. Bebo muito refrigerante. Umas três latas por dia.'),
+    prox(2, ['Three cans? Do you know how many sugar is in a can of soda?', 'Three cans? Do you know how much sugar is in a can of soda?', 'Three cans? Do you know how much sugars are in a can?'], 1, 'Três latas? Você sabe quanto açúcar tem numa lata de refrigerante?'),
+    prox(3, ['No. How many?', 'No. How much sugars?', 'No. How much?'], 2, 'Não. Quanto?'),
+    prox(4, ['About nine teaspoons!', 'About nine bottles!', 'About nine slices!'], 0, 'Cerca de nove colheres de chá!'),
+    prox(5, ["Wow! That's a lot of sugar. How do you know?", "Wow! That's a few sugar. How do you know?", "Wow! That's many sugar. How do you know?"], 0, 'Uau! Isso é muito açúcar. Como você sabe?'),
+    prox(6, ['I watched a video. You multiply the grams of sugar by four.', 'I watched a video. You divide the grams of sugar by four.', 'I watched a video. You add four to the grams of sugar.'], 1, 'Vi um vídeo. Você divide os gramas de açúcar por quatro.'),
+    prox(7, ['Interesting. And how much sweets do you eat?', 'Interesting. And how many sweet do you eat?', 'Interesting. And how many sweets do you eat?'], 2, 'Interessante. E quantos doces você come?'),
+    prox(8, ["I don't eat many sweets. Just a few cookies on the weekend.", "I don't eat much sweets. Just a little cookies on the weekend.", "I don't eat many sweets. Just a little cookies on the weekend."], 0, 'Não como muitos doces. Só alguns biscoitos no fim de semana.'),
+    prox(10, ['A slice of cereal with fruit, a sandwich and some fish.', 'A bowl of cereal with fruit, a sandwich and some fish with vegetables.', 'A can of cereal with fruit and a sandwich.'], 1, 'Uma tigela de cereal com fruta, um sanduíche e peixe com legumes.'),
+    prox(12, ['How much vegetables do you eat?', 'How many vegetable do you eat?', 'How many vegetables do you eat?'], 2, 'Quantos legumes você come?'),
+    prox(13, ["I don't eat any vegetables. I don't like them.", "I don't eat some vegetables. I don't like them.", "I don't eat much vegetables. I don't like it."], 0, 'Não como legumes. Não gosto deles.'),
+    prox(14, ['Jake! You need to eat a few salad every day.', 'Jake! You need to eat a little salad every day.', 'Jake! You need to eat many salad every day.'], 1, 'Jake! Você precisa comer um pouco de salada todo dia.'),
+    { instrucao: 'How many cans of soda does Jake drink a day?', frase: 'About ___.', opcoes: ['three', 'two', 'nine'], certa: 0, traducao: 'Umas três.' },
+    { instrucao: 'How much sugar is in a can of soda?', frase: 'About nine ___.', opcoes: ['grams', 'teaspoons', 'cups'], certa: 1, traducao: 'Cerca de nove colheres de chá.' },
+    { instrucao: 'How do you find the number of teaspoons?', frase: 'You ___ the grams by four.', opcoes: ['multiply', 'add', 'divide'], certa: 2, traducao: 'Você divide os gramas por quatro.' },
+    { instrucao: 'When does Mia eat cookies?', frase: 'On the ___.', opcoes: ['weekend', 'morning', 'Mondays'], certa: 0, traducao: 'No fim de semana.' },
+    { instrucao: 'What did Mia have for breakfast?', frase: 'A bowl of ___ with fruit.', opcoes: ['soup', 'cereal', 'rice'], certa: 1, traducao: 'Uma tigela de cereal com fruta.' },
+    { instrucao: 'How many slices of pizza did Jake eat?', frase: '___.', opcoes: ['One', 'Three', 'Two'], certa: 2, traducao: 'Duas.' },
+    { instrucao: 'Why doesn\'t Jake eat vegetables?', frase: "He doesn't ___ them.", opcoes: ['like', 'buy', 'have'], certa: 0, traducao: 'Ele não gosta deles.' },
+    { instrucao: 'Who is healthier?', frase: '___.', opcoes: ['Jake', 'Mia', 'Both'], certa: 1, traducao: 'A Mia.' }
+  ]
+});
+</script>
+</body>
+</html>
