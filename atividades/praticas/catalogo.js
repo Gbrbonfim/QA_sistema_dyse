@@ -474,6 +474,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'This is me in a minute', tipo: 'Escute e grave', treina: 'Fala · Apresentação', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Possessive adjectives', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 3,
+        titulo: 'Class 03 and 04 · Famous Bedrooms',
+        atividades: [
+          { num: 1, parte: 'Class 03', titulo: 'Which room is it?', tipo: 'Escute e escolha', treina: 'Escuta · Casa', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 03', titulo: 'Dream bedrooms', tipo: 'Monte a frase', treina: 'Escrita · Descrição', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 03', titulo: "Lucas's new bedroom", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 03', titulo: 'Things in my house', tipo: 'Escute e grave', treina: 'Fala · Vocabulário', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 03', titulo: 'Rooms and furniture', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 04', titulo: 'Where is it?', tipo: 'Escute e escolha', treina: 'Escuta · Preposições', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 04', titulo: 'In, on, under...', tipo: 'Monte a frase', treina: 'Escrita · Preposições', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 04', titulo: 'Show me your bedroom', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 04', titulo: 'Describe your bedroom', tipo: 'Escute e grave', treina: 'Fala · Descrição', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 04', titulo: 'Prepositions of place', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

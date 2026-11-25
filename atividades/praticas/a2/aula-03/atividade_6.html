@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 4 · Where is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 04 · Escuta (Famous Bedrooms)
+   Alinhado ao slide "Vocabulary" — preposições de lugar in, on, under, behind, between, over.
+   Conteúdo NOVO: o aluno ouve onde a coisa está e escolhe a preposição que ouviu. 24 questões. */
+const IC = { 'in': 'inventory_2', 'on': 'vertical_align_top', 'under': 'vertical_align_bottom', 'behind': 'flip_to_back', 'between': 'compare_arrows', 'over': 'arrow_upward' };
+const A = ['in', 'on', 'under', 'behind'];
+const B = ['between', 'over', 'under', 'behind'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 3, num: 6, tipo: 'imagem',
+  instrucao: 'Listen: where is it?',
+  itens: [
+    qa('My keys are in my bag.', 0),
+    qa('The pillows are on the sofa.', 1),
+    qa('The cat is under the table.', 2),
+    qa('My bag is behind the door.', 3),
+    qa('The towels are in the cupboard.', 0),
+    qa('Your phone is on the kitchen table.', 1),
+    qa('My shoes are under the bed.', 2),
+    qa('The guitar is behind the armchair.', 3),
+    qa("Dad's in the garden.", 0),
+    qa('The plates are on the shelves.', 1),
+    qa('The dog is sleeping under the coffee table.', 2),
+    qa('The boxes are behind the sofa.', 3),
+    qb('The lamp is between the bed and the window.', 0),
+    qb('The clock is over the door.', 1),
+    qb('The toys are under the bunk bed.', 2),
+    qb('The bike is behind the house.', 3),
+    qb('The plant is between the sofa and the armchair.', 0),
+    qb('There are three pictures over the bed.', 1),
+    qb('The ball is under the car.', 2),
+    qb('The mirror is behind the door.', 3),
+    qb('The bathroom is between the kitchen and my bedroom.', 0),
+    qb('My posters are over my desk.', 1),
+    qb("Look under the pillow! There's a gift for you.", 2),
+    qb('The children are behind the tree.', 3)
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 4 · Show me your bedroom</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 04 · Leitura (Famous Bedrooms)
+   Alinhado ao slide "Listening: three people talking about their bedrooms" — descrever o
+   quarto com adjetivos (comfortable, cool, modern) e preposições (on, over, between, behind,
+   under). Conteúdo NOVO: Sophie, Diego e Mike descrevem os quartos num chat. 20 questões:
+   12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Sophie', "Hi, guys! Let's describe our bedrooms!"],
+  ['Diego', "OK! My bedroom is small, but it's very comfortable."],
+  ['Sophie', "What's on your bed, Diego?"],
+  ['Diego', 'Some pillows and a green blanket.'],
+  ['Mike', 'My bedroom is cool! I love music, so I have a guitar on the wall.'],
+  ['Sophie', 'Is your guitar over your bed?'],
+  ['Mike', "No, it isn't. It's over my desk."],
+  ['Diego', "And where's your bed, Mike?"],
+  ['Mike', "It's between the window and the door."],
+  ['Diego', 'What about you, Sophie?'],
+  ['Sophie', 'My bedroom is very modern. The mirror is behind the door.'],
+  ['Diego', 'Where are your plants?'],
+  ['Sophie', "They're on the floor, between the armchair and the shelves."],
+  ['Mike', 'And your cat?'],
+  ['Sophie', "It's under my bed, of course!"],
+  ['Diego', 'Ha ha! Cats love it under the bed.']
+];
+const lado = q => q === 'Sophie' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 3, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["OK! My bedroom is small, but it's very comfortable.", "OK! My bedroom are small, but it's comfortable.", "OK! Me bedroom is small, but its comfortable."], 0, 'OK! O meu quarto é pequeno, mas é muito confortável.'),
+    prox(2, ["What's in your bed, Diego?", "What's on your bed, Diego?", "What are on your bed, Diego?"], 1, 'O que tem na sua cama, Diego?'),
+    prox(3, ['Some pillows and a green blanket under the floor.', 'Some pillow and a green blankets.', 'Some pillows and a green blanket.'], 2, 'Alguns travesseiros e um cobertor verde.'),
+    prox(5, ['Is your guitar over your bed?', 'Is you guitar over your bed?', 'Are your guitar over your bed?'], 0, 'O seu violão fica acima da sua cama?'),
+    prox(6, ["No, it don't. It's over my desk.", "No, it isn't. It's over my desk.", "No, it isn't. Its over my desk."], 1, 'Não. Fica acima da minha escrivaninha.'),
+    prox(7, ["And where are your bed, Mike?", "And where your bed is, Mike?", "And where's your bed, Mike?"], 2, 'E onde fica a sua cama, Mike?'),
+    prox(8, ["It's between the window and the door.", "It's between the window.", "Its between the window and the door."], 0, 'Fica entre a janela e a porta.'),
+    prox(10, ['My bedroom is very modern. The mirror are behind the door.', 'My bedroom is very modern. The mirror is behind the door.', 'My bedroom very modern. The mirror is behind of the door.'], 1, 'O meu quarto é muito moderno. O espelho fica atrás da porta.'),
+    prox(11, ['Where is your plants?', 'Where your plants are?', 'Where are your plants?'], 2, 'Onde estão as suas plantas?'),
+    prox(12, ["They're on the floor, between the armchair and the shelves.", "Their on the floor, between the armchair and the shelves.", "It's on the floor, between the armchair and the shelves."], 0, 'Estão no chão, entre a poltrona e as prateleiras.'),
+    prox(14, ["It's over my bed, of course!", "It's under my bed, of course!", "Its under my bed, of course!"], 1, 'Está embaixo da minha cama, claro!'),
+    prox(15, ['Ha ha! Cats love it over the bed.', 'Ha ha! Cats loves it under the bed.', 'Ha ha! Cats love it under the bed.'], 2, 'Ha ha! Gatos adoram ficar embaixo da cama.'),
+    { instrucao: "How is Diego's bedroom?", frase: "Small, but very ___.", opcoes: ['comfortable', 'modern', 'cool'], certa: 0, traducao: 'Pequeno, mas muito confortável.' },
+    { instrucao: "What color is Diego's blanket?", frase: "It's ___.", opcoes: ['blue', 'green', 'pink'], certa: 1, traducao: 'É verde.' },
+    { instrucao: "Where is Mike's guitar?", frase: "It's over his ___.", opcoes: ['bed', 'door', 'desk'], certa: 2, traducao: 'Fica acima da escrivaninha dele.' },
+    { instrucao: "Where is Mike's bed?", frase: 'Between the window and the ___.', opcoes: ['door', 'desk', 'shelves'], certa: 0, traducao: 'Entre a janela e a porta.' },
+    { instrucao: "How is Sophie's bedroom?", frase: 'Very ___.', opcoes: ['small', 'modern', 'dusty'], certa: 1, traducao: 'Muito moderno.' },
+    { instrucao: "Where is Sophie's mirror?", frase: '___ the door.', opcoes: ['Over', 'Under', 'Behind'], certa: 2, traducao: 'Atrás da porta.' },
+    { instrucao: "Where are Sophie's plants?", frase: 'On the ___.', opcoes: ['floor', 'shelves', 'desk'], certa: 0, traducao: 'No chão.' },
+    { instrucao: "Where is Sophie's cat?", frase: '___ her bed.', opcoes: ['On', 'Under', 'Over'], certa: 1, traducao: 'Embaixo da cama dela.' }
+  ]
+});
+</script>
+</body>
+</html>

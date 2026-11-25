@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 4 · Prepositions of place</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 04 · Gramática (Famous Bedrooms)
+   Alinhado aos slides "Vocabulary" e "Listening" — in, on, under, behind, between, over e os
+   adjetivos para descrever quartos (comfortable, cool, modern, dusty). Conteúdo NOVO. As pistas
+   da frase deixam só uma preposição possível. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 3, num: 10, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'My clothes are ___ the cupboard.', opcoes: ['in', 'between', 'over'], certa: 0, traducao: 'As minhas roupas estão no armário.' },
+    { frase: 'The plant is ___ the sofa and the armchair.', opcoes: ['under', 'between', 'in'], certa: 1, traducao: 'A planta está entre o sofá e a poltrona.' },
+    { frase: 'Your phone is ___ the table, with the cups and plates.', opcoes: ['between', 'under', 'on'], certa: 2, traducao: 'O seu celular está na mesa, com as xícaras e os pratos.' },
+    { frase: 'The cat is on the floor, ___ the table.', opcoes: ['under', 'over', 'on'], certa: 0, traducao: 'O gato está no chão, embaixo da mesa.' },
+    { frase: 'The pictures are on the wall, ___ the bed.', opcoes: ['under', 'over', 'in'], certa: 1, traducao: 'Os quadros estão na parede, acima da cama.' },
+    { frase: "I can't see the TV. You're ___ it!", opcoes: ['between', 'in', 'behind'], certa: 2, traducao: 'Não consigo ver a TV. Você está atrás dela!' },
+    { frase: 'The milk is ___ the fridge.', opcoes: ['in', 'over', 'between'], certa: 0, traducao: 'O leite está na geladeira.' },
+    { frase: 'My bedroom is ___ the bathroom and the kitchen.', opcoes: ['over', 'between', 'in'], certa: 1, traducao: 'O meu quarto fica entre o banheiro e a cozinha.' },
+    { frase: 'The books are ___ the shelves.', opcoes: ['between', 'under', 'on'], certa: 2, traducao: 'Os livros estão nas prateleiras.' },
+    { frase: 'The clock is on the wall, ___ the door.', opcoes: ['over', 'under', 'in'], certa: 0, traducao: 'O relógio está na parede, acima da porta.' },
+    { frase: "The garden is ___ the house. You can't see it from the street.", opcoes: ['on', 'behind', 'between'], certa: 1, traducao: 'O jardim fica atrás da casa. Não dá para vê-lo da rua.' },
+    { frase: 'Sit ___ the sofa, please.', opcoes: ['between', 'over', 'on'], certa: 2, traducao: 'Sente-se no sofá, por favor.' },
+    { frase: 'The shoes are on the floor, ___ the bed.', opcoes: ['under', 'over', 'on'], certa: 0, traducao: 'Os sapatos estão no chão, embaixo da cama.' },
+    { frase: 'She is ___ her room now. She is studying.', opcoes: ['on', 'in', 'over'], certa: 1, traducao: 'Ela está no quarto dela agora. Está estudando.' },
+    { frase: 'The coffee table is ___ the two armchairs.', opcoes: ['in', 'on', 'between'], certa: 2, traducao: 'A mesinha de centro fica entre as duas poltronas.' },
+    { frase: 'The pillows are ___ the bed.', opcoes: ['on', 'between', 'over'], certa: 0, traducao: 'Os travesseiros estão na cama.' },
+    { frase: "The bed is on a platform, so the toys are ___ it.", opcoes: ['over', 'under', 'between'], certa: 1, traducao: 'A cama fica numa plataforma, então os brinquedos ficam embaixo dela.' },
+    { frase: 'The keys are ___ my bag.', opcoes: ['between', 'over', 'in'], certa: 2, traducao: 'As chaves estão na minha bolsa.' },
+    { frase: 'This armchair is so ___! I can sleep in it.', opcoes: ['comfortable', 'dusty', 'small'], certa: 0, traducao: 'Esta poltrona é tão confortável! Consigo dormir nela.' },
+    { frase: 'Wow, your bedroom is so ___! I love the posters.', opcoes: ['dusty', 'cool', 'uncomfortable'], certa: 1, traducao: 'Uau, o seu quarto é tão legal! Amo os pôsteres.' },
+    { frase: 'Everything is new and white. It\'s a ___ bedroom.', opcoes: ['dusty', 'old', 'modern'], certa: 2, traducao: 'Tudo é novo e branco. É um quarto moderno.' },
+    { frase: 'We never clean this room. It\'s very ___.', opcoes: ['dusty', 'modern', 'cool'], certa: 0, traducao: 'Nunca limpamos este quarto. Está muito empoeirado.' },
+    { frase: 'Where ___ my glasses? Are they on the table?', opcoes: ['is', 'are', 'am'], certa: 1, traducao: 'Onde estão os meus óculos? Estão na mesa?' },
+    { frase: 'Where ___ the cat? Is it under the sofa?', opcoes: ['are', 'am', 'is'], certa: 2, traducao: 'Onde está o gato? Está embaixo do sofá?' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 3 · Rooms and furniture</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 03 · Gramática (Famous Bedrooms)
+   Alinhado aos slides "Warm Up" e "Reading" — vocabulário da casa (pillow, blanket, shelves,
+   cupboard, mirror, lamp, armchair, fridge, stove, bath) com is / are, has / have, was / were.
+   Conteúdo NOVO. 24 questões. */
+const VOC = 'Choose the right word';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 3, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: VOC, frase: 'I sleep with my head on a soft ___.', opcoes: ['pillow', 'mirror', 'shelf'], certa: 0, traducao: 'Durmo com a cabeça num travesseiro macio.' },
+    { instrucao: VOC, frase: "It's cold. I need a warm ___.", opcoes: ['lamp', 'blanket', 'balcony'], certa: 1, traducao: 'Está frio. Preciso de um cobertor quente.' },
+    { instrucao: VOC, frase: 'Look at yourself in the ___!', opcoes: ['fridge', 'pillow', 'mirror'], certa: 2, traducao: 'Olhe-se no espelho!' },
+    { instrucao: VOC, frase: 'The milk and the cheese are in the ___.', opcoes: ['fridge', 'cupboard', 'bath'], certa: 0, traducao: 'O leite e o queijo estão na geladeira.' },
+    { instrucao: VOC, frase: 'My books are on the ___.', opcoes: ['stove', 'shelves', 'shower'], certa: 1, traducao: 'Os meus livros estão nas prateleiras.' },
+    { instrucao: VOC, frase: "It's dark. Turn on the ___, please.", opcoes: ['sofa', 'blanket', 'lamp'], certa: 2, traducao: 'Está escuro. Acenda o abajur, por favor.' },
+    { instrucao: VOC, frase: 'I cook pasta on the ___.', opcoes: ['stove', 'armchair', 'bed'], certa: 0, traducao: 'Cozinho macarrão no fogão.' },
+    { instrucao: VOC, frase: 'Grandpa reads the newspaper in his ___.', opcoes: ['fridge', 'armchair', 'bath'], certa: 1, traducao: 'O vovô lê o jornal na poltrona dele.' },
+    { instrucao: VOC, frase: 'My brother sleeps on the top of our ___ bed.', opcoes: ['coffee', 'sofa', 'bunk'], certa: 2, traducao: 'O meu irmão dorme na parte de cima do nosso beliche.' },
+    { instrucao: VOC, frase: 'We can see the sea from our ___.', opcoes: ['balcony', 'cupboard', 'pillow'], certa: 0, traducao: 'Podemos ver o mar da nossa varanda.' },
+    { instrucao: VOC, frase: "Harry's cupboard was small and ___.", opcoes: ['modern', 'dusty', 'bright'], certa: 1, traducao: 'O armário do Harry era pequeno e empoeirado.' },
+    { instrucao: VOC, frase: 'This bed is very ___. I sleep really well!', opcoes: ['dusty', 'small', 'comfortable'], certa: 2, traducao: 'Esta cama é muito confortável. Durmo muito bem!' },
+    { frase: 'The pillows ___ pink and purple.', opcoes: ['are', 'is', 'has'], certa: 0, traducao: 'Os travesseiros são rosa e roxos.' },
+    { frase: 'The bed ___ on a platform.', opcoes: ['are', 'is', 'have'], certa: 1, traducao: 'A cama fica numa plataforma.' },
+    { frase: 'Her bedroom ___ a suite bathroom.', opcoes: ['have', 'are', 'has'], certa: 2, traducao: 'O quarto dela tem um banheiro de suíte.' },
+    { frase: 'We ___ two bathrooms in our house.', opcoes: ['have', 'has', 'are'], certa: 0, traducao: 'Temos dois banheiros na nossa casa.' },
+    { frase: 'My shelves ___ full of books.', opcoes: ['is', 'are', 'has'], certa: 1, traducao: 'As minhas prateleiras estão cheias de livros.' },
+    { frase: "Harry's room ___ small and full of spiders.", opcoes: ['were', 'are', 'was'], certa: 2, traducao: 'O quarto do Harry era pequeno e cheio de aranhas.' },
+    { frase: 'Andy ___ a lot of toys in his bedroom.', opcoes: ['has', 'have', 'is'], certa: 0, traducao: 'O Andy tem muitos brinquedos no quarto dele.' },
+    { frase: 'The walls in my bedroom ___ blue.', opcoes: ['is', 'are', 'has'], certa: 1, traducao: 'As paredes do meu quarto são azuis.' },
+    { frase: '___ your bedroom have a balcony?', opcoes: ['Is', 'Do', 'Does'], certa: 2, traducao: 'O seu quarto tem varanda?' },
+    { frase: '___ the towels in the bathroom?', opcoes: ['Are', 'Is', 'Do'], certa: 0, traducao: 'As toalhas estão no banheiro?' },
+    { frase: "My parents' bedroom ___ very modern.", opcoes: ['are', 'is', 'have'], certa: 1, traducao: 'O quarto dos meus pais é muito moderno.' },
+    { frase: "This ___ a typical bedroom. It's a basement!", opcoes: ["aren't", "don't", "isn't"], certa: 2, traducao: 'Isto não é um quarto típico. É um porão!' }
+  ]
+});
+</script>
+</body>
+</html>

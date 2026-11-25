@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 4 · In, on, under...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 04 · Escrita (Famous Bedrooms)
+   Alinhado ao slide "Vocabulary" — frases com in, on, under, behind, between, over sobre
+   onde as coisas estão num quarto e numa casa. Conteúdo NOVO. A isca é outra preposição ou a
+   forma errada do be. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 3, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('O meu celular está na minha bolsa.'), palavras: ['My', 'phone', 'is', 'in', 'my', 'bag'], isca: ['on'], fim: '.', traducao: 'O meu celular está na minha bolsa.' },
+    { contexto: M('Os travesseiros estão na cama.'), palavras: ['The', 'pillows', 'are', 'on', 'the', 'bed'], isca: ['in'], fim: '.', traducao: 'Os travesseiros estão na cama.' },
+    { contexto: M('O cachorro está embaixo da mesa.'), palavras: ['The', 'dog', 'is', 'under', 'the', 'table'], isca: ['over'], fim: '.', traducao: 'O cachorro está embaixo da mesa.' },
+    { contexto: M('A bicicleta está atrás da porta.'), palavras: ['The', 'bike', 'is', 'behind', 'the', 'door'], isca: ['between'], fim: '.', traducao: 'A bicicleta está atrás da porta.' },
+    { contexto: M('O abajur está entre a cama e a janela.'), palavras: ['The', 'lamp', 'is', 'between', 'the', 'bed', 'and', 'the', 'window'], isca: ['behind'], fim: '.', traducao: 'O abajur está entre a cama e a janela.' },
+    { contexto: M('O relógio está acima da porta.'), palavras: ['The', 'clock', 'is', 'over', 'the', 'door'], isca: ['under'], fim: '.', traducao: 'O relógio está acima da porta.' },
+    { contexto: M('As minhas roupas estão no armário.'), palavras: ['My', 'clothes', 'are', 'in', 'the', 'cupboard'], isca: ['is'], fim: '.', traducao: 'As minhas roupas estão no armário.' },
+    { contexto: M('Os livros estão nas prateleiras.'), palavras: ['The', 'books', 'are', 'on', 'the', 'shelves'], isca: ['is'], fim: '.', traducao: 'Os livros estão nas prateleiras.' },
+    { contexto: M('Os sapatos dele estão embaixo da cama.'), palavras: ['His', 'shoes', 'are', 'under', 'the', 'bed'], isca: ["He's"], fim: '.', traducao: 'Os sapatos dele estão embaixo da cama.' },
+    { contexto: M('A planta está entre o sofá e a poltrona.'), palavras: ['The', 'plant', 'is', 'between', 'the', 'sofa', 'and', 'the', 'armchair'], isca: ['are'], fim: '.', traducao: 'A planta está entre o sofá e a poltrona.' },
+    { contexto: M('Os quadros estão acima do sofá.'), palavras: ['The', 'pictures', 'are', 'over', 'the', 'sofa'], isca: ['is'], fim: '.', traducao: 'Os quadros estão acima do sofá.' },
+    { contexto: M('O violão está atrás da poltrona.'), palavras: ['The', 'guitar', 'is', 'behind', 'the', 'armchair'], isca: ['are'], fim: '.', traducao: 'O violão está atrás da poltrona.' },
+    { contexto: M('Ela está no quarto dela agora.'), palavras: ['She', 'is', 'in', 'her', 'room', 'now'], isca: ['on'], fim: '.', traducao: 'Ela está no quarto dela agora.' },
+    { contexto: M('O gato está dormindo no sofá.'), palavras: ['The', 'cat', 'is', 'sleeping', 'on', 'the', 'sofa'], isca: ['in'], fim: '.', traducao: 'O gato está dormindo no sofá.' },
+    { contexto: M('Os brinquedos estão embaixo do beliche.'), palavras: ['The', 'toys', 'are', 'under', 'the', 'bunk', 'bed'], isca: ['over'], fim: '.', traducao: 'Os brinquedos estão embaixo do beliche.' },
+    { contexto: M('Onde estão as minhas chaves?'), palavras: ['Where', 'are', 'my', 'keys'], isca: ['is'], fim: '?', traducao: 'Onde estão as minhas chaves?' },
+    { contexto: M('Elas estão na mesinha de centro.'), palavras: ["They're", 'on', 'the', 'coffee', 'table'], isca: ['Their'], fim: '.', traducao: 'Elas estão na mesinha de centro.' },
+    { contexto: M('O meu quarto fica entre a cozinha e o banheiro.'), palavras: ['My', 'bedroom', 'is', 'between', 'the', 'kitchen', 'and', 'the', 'bathroom'], isca: ['behind'], fim: '.', traducao: 'O meu quarto fica entre a cozinha e o banheiro.' },
+    { contexto: M('O espelho está acima da escrivaninha.'), palavras: ['The', 'mirror', 'is', 'over', 'the', 'desk'], isca: ['under'], fim: '.', traducao: 'O espelho está acima da escrivaninha.' },
+    { contexto: M('O carro está atrás da casa.'), palavras: ['The', 'car', 'is', 'behind', 'the', 'house'], isca: ['between'], fim: '.', traducao: 'O carro está atrás da casa.' }
+  ]
+});
+</script>
+</body>
+</html>

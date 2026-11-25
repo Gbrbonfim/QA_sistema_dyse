@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 3 · Lucas's new bedroom</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 03 · Leitura (Famous Bedrooms)
+   Alinhado ao slide "Reading" — descrever um quarto (modern, comfortable, pillows, shelves,
+   cupboard) e falar dos quartos famosos do texto (Andy em Toy Story; o cupboard do Harry
+   Potter, small and dusty). Conteúdo NOVO: a Emma visita o quarto novo do Lucas. 20 questões:
+   12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Emma', 'Wow, Lucas! Is this your new bedroom?'],
+  ['Lucas', 'Yes, it is! Do you like it?'],
+  ['Emma', "I love it! It's very modern."],
+  ['Lucas', 'Thanks! The bed is new and very comfortable.'],
+  ['Emma', 'Your pillows are cool. Are they from Japan?'],
+  ['Lucas', "No, they aren't. They're from a small shop in my street."],
+  ['Emma', 'Where are your books?'],
+  ['Lucas', "They're on the shelves, near the window."],
+  ['Emma', "And what's in the cupboard?"],
+  ['Lucas', 'My clothes and some old toys.'],
+  ['Emma', 'Old toys? Like in Toy Story?'],
+  ['Lucas', "Ha ha! Yes! Andy's bedroom is my favorite movie bedroom."],
+  ['Emma', "My favorite is Harry Potter's cupboard."],
+  ['Lucas', 'Really? It was small and dusty!'],
+  ['Emma', "I know, but it's iconic!"],
+  ['Lucas', "Come on, let's have some coffee in the kitchen."]
+];
+const lado = q => q === 'Emma' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 3, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, it is! Do you like it?', 'Yes, I am! Do you like it?', 'Yes, it does! Are you like it?'], 0, 'Sim! Você gostou?'),
+    prox(2, ["I love it! It's very old and dusty.", "I love it! It's very modern.", "I love it! Its very modern."], 1, 'Amei! É muito moderno.'),
+    prox(3, ['Thanks! The bed are new and very comfortable.', 'Thanks! The bed is new, but very uncomfortable.', 'Thanks! The bed is new and very comfortable.'], 2, 'Obrigado! A cama é nova e muito confortável.'),
+    prox(4, ['Your pillows are cool. Are they from Japan?', "You're pillows are cool. Is they from Japan?", 'Your pillows is cool. Are they from Japan?'], 0, 'Os seus travesseiros são legais. Eles são do Japão?'),
+    prox(5, ["No, they isn't. They're from a small shop.", "No, they aren't. They're from a small shop in my street.", "No, they don't. Their from a small shop."], 1, 'Não. São de uma lojinha da minha rua.'),
+    prox(7, ["It's on the shelves, near the window.", "Their on the shelves, near the window.", "They're on the shelves, near the window."], 2, 'Estão nas prateleiras, perto da janela.'),
+    prox(9, ['My clothes and some old toys.', 'Me clothes and some old toys.', 'My clothes is in the bathroom.'], 0, 'As minhas roupas e alguns brinquedos antigos.'),
+    prox(11, ["Ha ha! Yes! Andy's bedroom are my favorite.", "Ha ha! Yes! Andy's bedroom is my favorite movie bedroom.", "Ha ha! Yes! Andy bedroom is my favorite."], 1, 'Ha ha! Sim! O quarto do Andy é o meu quarto de filme favorito.'),
+    prox(12, ["My favorite are Harry Potter's cupboard.", "My favorite is Harry Potters cupboard's.", "My favorite is Harry Potter's cupboard."], 2, 'O meu favorito é o armário do Harry Potter.'),
+    prox(13, ['Really? It was small and dusty!', 'Really? It were small and dusty!', 'Really? It is big and modern!'], 0, 'Sério? Era pequeno e empoeirado!'),
+    prox(14, ["I know, but its iconic!", "I know, but it's iconic!", "I know, but they're iconic!"], 1, 'Eu sei, mas é icônico!'),
+    prox(15, ["Come on, let's have some coffee in the bathroom.", "Come on, let's having some coffee in the kitchen.", "Come on, let's have some coffee in the kitchen."], 2, 'Vamos tomar um café na cozinha.'),
+    { instrucao: "What does Emma think of Lucas's bedroom?", frase: "It's very ___.", opcoes: ['modern', 'small', 'dusty'], certa: 0, traducao: 'É muito moderno.' },
+    { instrucao: 'How is the bed?', frase: "It's new and very ___.", opcoes: ['old', 'comfortable', 'small'], certa: 1, traducao: 'É nova e muito confortável.' },
+    { instrucao: 'Where are the pillows from?', frase: 'From a small ___ in his street.', opcoes: ['cupboard', 'house', 'shop'], certa: 2, traducao: 'De uma lojinha na rua dele.' },
+    { instrucao: "Where are Lucas's books?", frase: 'On the ___.', opcoes: ['shelves', 'bed', 'floor'], certa: 0, traducao: 'Nas prateleiras.' },
+    { instrucao: "What's in the cupboard?", frase: 'His clothes and some old ___.', opcoes: ['books', 'toys', 'pillows'], certa: 1, traducao: 'As roupas dele e alguns brinquedos antigos.' },
+    { instrucao: "What's Lucas's favorite movie bedroom?", frase: "___ bedroom.", opcoes: ["Harry's", "Emma's", "Andy's"], certa: 2, traducao: 'O quarto do Andy.' },
+    { instrucao: "What's Emma's favorite movie bedroom?", frase: "Harry Potter's ___.", opcoes: ['cupboard', 'bedroom', 'kitchen'], certa: 0, traducao: 'O armário do Harry Potter.' },
+    { instrucao: 'Where are they going now?', frase: 'To the ___.', opcoes: ['living room', 'kitchen', 'bathroom'], certa: 1, traducao: 'Para a cozinha.' }
+  ]
+});
+</script>
+</body>
+</html>

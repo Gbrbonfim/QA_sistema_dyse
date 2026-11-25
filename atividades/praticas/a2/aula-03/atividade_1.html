@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 3 · Which room is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 03 · Escuta (Famous Bedrooms)
+   Alinhado ao slide "Warm Up: where in a house do you normally see them?" — coisas da casa
+   (pillows, blanket, bunk bed, posters, lamp, sofa, armchair, coffee table, fridge, stove,
+   bath, shower...). Conteúdo NOVO: o aluno ouve a frase e diz em que cômodo ela acontece.
+   24 questões. */
+const IC = { 'bedroom': 'bed', 'kitchen': 'kitchen', 'bathroom': 'bathtub', 'living room': 'chair' };
+const T = ['bedroom', 'kitchen', 'bathroom', 'living room'];
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 3, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which room is it?',
+  itens: [
+    q('The pillows and the blanket are on my bed.', 0),
+    q('The fridge is new and very big.', 1),
+    q('I take a bath every night.', 2),
+    q('We watch TV on the sofa.', 3),
+    q('I sleep in a bunk bed with my brother.', 0),
+    q('Mom is cooking dinner on the stove.', 1),
+    q('I brush my teeth and take a shower here.', 2),
+    q('Our family photos are on the coffee table.', 3),
+    q('My lamp is on the desk, near my bed.', 0),
+    q('I make coffee and toast here every morning.', 1),
+    q('The towels are near the shower.', 2),
+    q('The armchair and the sofa are very comfortable.', 3),
+    q('My pillows are pink and purple.', 0),
+    q('The milk is in the fridge.', 1),
+    q('The bath is white and the floor is blue.', 2),
+    q('My grandpa reads in his armchair every evening.', 3),
+    q('I have posters of my favorite bands over my bed.', 0),
+    q('The stove is very hot. Be careful!', 1),
+    q("Where's the toilet paper?", 2),
+    q('We play board games on the coffee table.', 3),
+    q('I sleep with a teddy bear and a warm blanket.', 0),
+    q('Wash the plates and cups after lunch, please.', 1),
+    q('My toothbrush and toothpaste are here.', 2),
+    q('Our guests sleep on the sofa.', 3)
+  ]
+});
+</script>
+</body>
+</html>
