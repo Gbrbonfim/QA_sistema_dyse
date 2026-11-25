@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 25 · A message in a bottle</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 25 · Leitura (A Childhood Story)
+   Alinhado à história do vídeo (mensagem numa garrafa jogada num bayou perto de Houston em
+   1995 e encontrada 27 anos depois numa limpeza de praia), ao past continuous e aos time
+   sequencers. Conteúdo NOVO: a Ana conta ao Leo uma história parecida que aconteceu com ela.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Leo', 'Hi, Ana! What were you doing on Saturday morning?'],
+  ['Ana', 'I was cleaning a beach with some volunteers.'],
+  ['Leo', 'Nice! Was it hot?'],
+  ['Ana', 'Yes, the sun was shining. And guess what? I found a bottle!'],
+  ['Leo', 'A bottle? Where was it?'],
+  ['Ana', 'It was in the sand. I was picking up some plastic when I saw it.'],
+  ['Leo', 'Was there a message inside?'],
+  ['Ana', 'Yes! But I couldn\'t open it, so I broke the bottle.'],
+  ['Leo', 'What did the message say?'],
+  ['Ana', 'Two girls wrote it in 2005, when they were eight.'],
+  ['Leo', 'Wow! Twenty years ago! Did you call them?'],
+  ['Ana', "I tried. I called the number on the note, but it didn't work."],
+  ['Leo', 'Oh no! What did you do after that?'],
+  ['Ana', 'Then I looked for their names on Facebook, and I found one of them!'],
+  ['Leo', 'Amazing! What was she doing when you sent the message?'],
+  ['Ana', 'She was having lunch with her kids. She was very surprised!'],
+  ['Leo', 'What a story! Was she happy?'],
+  ['Ana', 'Yes! She cried when she read my message.']
+];
+const lado = q => q === 'Leo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 25, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I was cleaning a beach with some volunteers.', 'I were cleaning a beach with some volunteers.', 'I was clean a beach with some volunteers.'], 0, 'Eu estava limpando uma praia com uns voluntários.'),
+    prox(3, ['Yes, the sun were shining. And guess what? I found a bottle!', 'Yes, the sun was shining. And guess what? I found a bottle!', 'Yes, the sun was shine. And guess what? I find a bottle!'], 1, 'Sim, o sol estava brilhando. E adivinha? Achei uma garrafa!'),
+    prox(5, ['It was in the sand. I picking up some plastic when I saw it.', 'It was in the sand. I was picking up some plastic when I was seeing it.', 'It was in the sand. I was picking up some plastic when I saw it.'], 2, 'Estava na areia. Eu estava recolhendo plástico quando a vi.'),
+    prox(6, ['Was there a message inside?', 'Were there a message inside?', 'Did there a message inside?'], 0, 'Tinha uma mensagem dentro?'),
+    prox(7, ["Yes! But I can't open it, so I break the bottle.", "Yes! But I couldn't open it, so I broke the bottle.", "Yes! But I couldn't open it, so I breaked the bottle."], 1, 'Sim! Mas não consegui abrir, então quebrei a garrafa.'),
+    prox(8, ['What did the message said?', 'What the message said?', 'What did the message say?'], 2, 'O que a mensagem dizia?'),
+    prox(9, ['Two girls wrote it in 2005, when they were eight.', 'Two girls writed it in 2005, when they were eight.', 'Two girls wrote it in 2005, when they was eight.'], 0, 'Duas meninas escreveram em 2005, quando tinham oito anos.'),
+    prox(11, ["I tried. I called the number on the note, but it worked.", "I tried. I called the number on the note, but it didn't work.", "I tryed. I called the number on the note, but it didn't worked."], 1, 'Tentei. Liguei para o número do bilhete, mas não funcionou.'),
+    prox(12, ['Oh no! What did you do after?', 'Oh no! What were you do after that?', 'Oh no! What did you do after that?'], 2, 'Ah, não! O que você fez depois disso?'),
+    prox(13, ['Then I looked for their names on Facebook, and I found one of them!', 'After I looked for their names on Facebook, and I found one of them!', 'Then I was look for their names on Facebook.'], 0, 'Então procurei os nomes delas no Facebook e encontrei uma!'),
+    prox(14, ['Amazing! What she was doing when you sent the message?', 'Amazing! What was she doing when you sent the message?', 'Amazing! What did she doing when you sent the message?'], 1, 'Incrível! O que ela estava fazendo quando você mandou a mensagem?'),
+    prox(15, ['She had lunch with her kids when I was sending the message.', 'She were having lunch with her kids. She was very surprised!', 'She was having lunch with her kids. She was very surprised!'], 2, 'Ela estava almoçando com os filhos. Ficou muito surpresa!'),
+    { instrucao: 'What was Ana doing on Saturday morning?', frase: 'She was ___ a beach.', opcoes: ['cleaning', 'visiting', 'painting'], certa: 0, traducao: 'Ela estava limpando uma praia.' },
+    { instrucao: 'Where was the bottle?', frase: 'In the ___.', opcoes: ['water', 'sand', 'trash'], certa: 1, traducao: 'Na areia.' },
+    { instrucao: 'How did Ana get the message?', frase: 'She ___ the bottle.', opcoes: ['opened', 'washed', 'broke'], certa: 2, traducao: 'Ela quebrou a garrafa.' },
+    { instrucao: 'When did the girls write the message?', frase: 'In ___.', opcoes: ['2005', '1995', '2015'], certa: 0, traducao: 'Em 2005.' },
+    { instrucao: 'How old were the girls?', frase: 'They were ___.', opcoes: ['ten', 'eight', 'twelve'], certa: 1, traducao: 'Elas tinham oito anos.' },
+    { instrucao: 'Did the phone number work?', frase: "No, it ___.", opcoes: ["wasn't", "doesn't", "didn't"], certa: 2, traducao: 'Não, não funcionou.' },
+    { instrucao: 'Where did Ana find one of the girls?', frase: 'On ___.', opcoes: ['Facebook', 'TV', 'the beach'], certa: 0, traducao: 'No Facebook.' },
+    { instrucao: 'What was the woman doing when Ana sent the message?', frase: 'She was having lunch with her ___.', opcoes: ['friends', 'kids', 'parents'], certa: 1, traducao: 'Ela estava almoçando com os filhos.' }
+  ]
+});
+</script>
+</body>
+</html>

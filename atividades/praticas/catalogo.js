@@ -675,6 +675,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Can you talk about it?', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Review: grammar', tipo: 'Make a Choice', treina: 'Gramática · Revisão', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 25,
+        titulo: 'Class 25 · A Childhood Story',
+        atividades: [
+          { num: 1, titulo: 'What was happening?', tipo: 'Escute e escolha', treina: 'Escuta · Past continuous', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'I was walking when...', tipo: 'Monte a frase', treina: 'Escrita · Past continuous', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'A message in a bottle', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'What were you doing?', tipo: 'Escute e grave', treina: 'Fala · Past continuous', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Past continuous and sequencers', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

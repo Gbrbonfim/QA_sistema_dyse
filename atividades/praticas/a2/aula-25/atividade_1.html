@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 25 · What was happening?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 25 · Escuta (A Childhood Story)
+   Alinhado ao "Grammar Point" — past continuous para a ação longa em andamento que foi
+   interrompida por uma ação curta (past simple), com when / while. Conteúdo NOVO: o aluno
+   ouve a frase e escolhe o que a pessoa ESTAVA FAZENDO (a ação curta é um distrator).
+   24 questões. */
+const IC = {
+  reading: 'menu_book', calling: 'call', cooking: 'cooking', sleeping: 'bedtime', driving: 'directions_car',
+  swimming: 'pool', running: 'directions_run', 'watching TV': 'tv', walking: 'directions_walk', studying: 'school',
+  dancing: 'music_note', 'taking a shower': 'shower', eating: 'restaurant', shopping: 'shopping_cart',
+  'playing soccer': 'sports_soccer', 'taking pictures': 'photo_camera', writing: 'edit'
+};
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: IC[label] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 25, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what was the person doing?',
+  itens: [
+    q('I was reading a book when my sister called me.', 'reading', 'calling', 'sleeping'),
+    q('She was cooking dinner when the lights went out.', 'cooking', 'watching TV', 'reading'),
+    q('We were swimming in the sea when it started to rain.', 'swimming', 'running', 'walking'),
+    q('He was sleeping when the phone rang.', 'sleeping', 'calling', 'eating'),
+    q('They were walking on the beach when they found a bottle.', 'walking', 'swimming', 'shopping'),
+    q('I was driving to work when I saw the accident.', 'driving', 'walking', 'running'),
+    q('My dad was watching TV when I got home.', 'watching TV', 'reading', 'cooking'),
+    q('She was taking a shower when the doorbell rang.', 'taking a shower', 'sleeping', 'dancing'),
+    q('We were eating lunch when our friends arrived.', 'eating', 'cooking', 'shopping'),
+    q('He was running in the park when he fell.', 'running', 'walking', 'playing soccer'),
+    q('I was studying for my exam when you texted me.', 'studying', 'writing', 'watching TV'),
+    q('They were dancing at the party when the music stopped.', 'dancing', 'eating', 'swimming'),
+    q('My mom was shopping when she lost her wallet.', 'shopping', 'driving', 'walking'),
+    q('The kids were playing soccer when it started to snow.', 'playing soccer', 'running', 'swimming'),
+    q('I was taking pictures of the sunset when my phone died.', 'taking pictures', 'calling', 'reading'),
+    q('She was writing a letter when her cat jumped on the table.', 'writing', 'studying', 'eating'),
+    q('While I was cooking, my husband called.', 'cooking', 'calling', 'eating'),
+    q('While we were walking home, we saw an old friend.', 'walking', 'driving', 'shopping'),
+    q('While she was reading, she fell asleep.', 'reading', 'sleeping', 'writing'),
+    q('While they were swimming, someone took their bags.', 'swimming', 'shopping', 'running'),
+    q('At 9 p.m. yesterday, I was watching TV.', 'watching TV', 'sleeping', 'studying'),
+    q('At 7 a.m., my brother was taking a shower.', 'taking a shower', 'cooking', 'running'),
+    q('At midnight, we were dancing at a party.', 'dancing', 'sleeping', 'driving'),
+    q('This morning at eight, I was driving to the office.', 'driving', 'walking', 'eating')
+  ]
+});
+</script>
+</body>
+</html>
