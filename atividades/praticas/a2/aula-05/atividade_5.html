@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 5 · Adjectives and modifiers</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 05 · Gramática (They're Really Tall!)
+   Alinhado ao slide "Grammar Point" (regras dos adjetivos) e às tarefas de opostos — adjetivo
+   antes do substantivo e depois do be, sem plural, a x an, posição do modifier, e opostos
+   (tall / short, old / young, cheap / expensive, fast / slow, strong / weak, easy / difficult).
+   Conteúdo NOVO. 24 questões. */
+const OK = 'Which sentence is correct?';
+const OPP = 'Choose the opposite';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 5, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: OK, frase: '___', opcoes: ['She has curly hair.', 'She has hair curly.', 'She has curlys hair.'], certa: 0, traducao: 'Ela tem cabelo cacheado.' },
+    { instrucao: OK, frase: '___', opcoes: ['They are a friendly players.', 'They are friendly players.', 'They are friendlys players.'], certa: 1, traducao: 'Eles são jogadores simpáticos.' },
+    { instrucao: OK, frase: '___', opcoes: ["He's tall very.", "He's very talls.", "He's very tall."], certa: 2, traducao: 'Ele é muito alto.' },
+    { instrucao: OK, frase: '___', opcoes: ['This is an old car.', 'This is a old car.', 'This is old a car.'], certa: 0, traducao: 'Este é um carro velho.' },
+    { instrucao: OK, frase: '___', opcoes: ['My house new is.', 'My house is new.', 'My house is news.'], certa: 1, traducao: 'A minha casa é nova.' },
+    { instrucao: OK, frase: '___', opcoes: ['They are fasts runners.', 'They are runners fast.', 'They are fast runners.'], certa: 2, traducao: 'Eles são corredores rápidos.' },
+    { frase: "It's ___ easy test.", opcoes: ['an', 'a', 'the a'], certa: 0, traducao: 'É uma prova fácil.' },
+    { frase: "He's ___ strong man.", opcoes: ['an', 'very a', 'a very'], certa: 2, traducao: 'Ele é um homem muito forte.' },
+    { frase: "She's ___ old woman.", opcoes: ['a', 'an', 'very'], certa: 1, traducao: 'Ela é uma senhora idosa.' },
+    { frase: 'Those are ___ cameras.', opcoes: ['cheap', 'cheaps', 'a cheap'], certa: 0, traducao: 'Aquelas são câmeras baratas.' },
+    { frase: 'My brother is ___ tall. He is tall, but not very tall.', opcoes: ['really', 'quite', 'very'], certa: 1, traducao: 'O meu irmão é bem alto. É alto, mas não muito.' },
+    { frase: "Shaquille O'Neal is seven feet one inch. He's ___ tall!", opcoes: ['quite', 'not', 'really'], certa: 2, traducao: 'O Shaquille O\'Neal tem 7 pés e 1 polegada. Ele é muito alto!' },
+    { frase: "Grandpa doesn't have any hair. He's ___.", opcoes: ['bald', 'blond', 'slim'], certa: 0, traducao: 'O vovô não tem cabelo. Ele é careca.' },
+    { frase: "My sister's hair isn't dark. It's ___.", opcoes: ['curly', 'blond', 'straight'], certa: 1, traducao: 'O cabelo da minha irmã não é escuro. É loiro.' },
+    { frase: "Lucy's hair is very straight, but her sister's is really ___.", opcoes: ['long', 'dark', 'curly'], certa: 2, traducao: 'O cabelo da Lucy é bem liso, mas o da irmã dela é muito cacheado.' },
+    { frase: "Ana is ___. Let's buy her a small T-shirt.", opcoes: ['slim', 'strong', 'tall'], certa: 0, traducao: 'A Ana é magra. Vamos comprar uma camiseta pequena para ela.' },
+    { instrucao: OPP, frase: 'tall ↔ ___', opcoes: ['slim', 'short', 'bald'], certa: 1, traducao: 'alto ↔ baixo' },
+    { instrucao: OPP, frase: 'old ↔ ___', opcoes: ['strong', 'fast', 'young'], certa: 2, traducao: 'velho ↔ jovem' },
+    { instrucao: OPP, frase: 'cheap ↔ ___', opcoes: ['expensive', 'easy', 'ugly'], certa: 0, traducao: 'barato ↔ caro' },
+    { instrucao: OPP, frase: 'fast ↔ ___', opcoes: ['weak', 'slow', 'short'], certa: 1, traducao: 'rápido ↔ lento' },
+    { instrucao: OPP, frase: 'strong ↔ ___', opcoes: ['slow', 'difficult', 'weak'], certa: 2, traducao: 'forte ↔ fraco' },
+    { instrucao: OPP, frase: 'easy ↔ ___', opcoes: ['difficult', 'expensive', 'sad'], certa: 0, traducao: 'fácil ↔ difícil' },
+    { instrucao: OPP, frase: 'friendly ↔ ___', opcoes: ['ugly', 'unfriendly', 'unhappy'], certa: 1, traducao: 'simpático ↔ antipático' },
+    { instrucao: OPP, frase: 'beautiful ↔ ___', opcoes: ['sad', 'weak', 'ugly'], certa: 2, traducao: 'bonito ↔ feio' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 5 · At the airport</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 05 · Leitura (They're Really Tall!)
+   Alinhado aos slides "Reading" e "Vocabulary: Adjectives" — descrever a aparência (tall,
+   medium-height, slim, curly / straight / blond / dark hair, beard, mustache, bald) com very /
+   really / quite e altura em metros. Conteúdo NOVO: a Bia vai buscar o primo Sam no aeroporto
+   e a amiga Carol ajuda a encontrá-lo. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Carol', "So, what does your cousin look like?"],
+  ['Bia', "He's really tall. He's one point nine five meters."],
+  ['Carol', 'Wow! Is he slim?'],
+  ['Bia', "Yes, he's quite slim."],
+  ['Carol', 'What color is his hair?'],
+  ['Bia', 'He has short dark hair.'],
+  ['Carol', 'Is his hair curly?'],
+  ['Bia', "No, it isn't. It's straight."],
+  ['Carol', 'Does he have a beard?'],
+  ['Bia', 'Yes, he has a beard, but he doesn\'t have a mustache.'],
+  ['Carol', 'Look! Is that him? The tall man with a red bag?'],
+  ['Bia', "No, that man is bald! Sam isn't bald."],
+  ['Carol', 'What about the man near the café?'],
+  ['Bia', "Yes! That's Sam! Sam! Over here!"],
+  ['Sam', 'Hi, Bia! You look great!'],
+  ['Bia', 'Thanks! Sam, this is my friend Carol.']
+];
+const lado = q => q === 'Bia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 5, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["He's really tall. He's one point nine five meters.", "He's tall really. He's one point nine five meters.", "He's a really talls man."], 0, 'Ele é muito alto. Tem 1,95 m.'),
+    prox(2, ['Wow! Is he slim?', 'Wow! Does he slim?', 'Wow! Is slim he?'], 1, 'Uau! Ele é magro?'),
+    prox(3, ["Yes, he's slim quite.", "Yes, he quite slim.", "Yes, he's quite slim."], 2, 'Sim, ele é bem magro.'),
+    prox(5, ['He has short dark hair.', 'He has hair short dark.', 'He have short dark hair.'], 0, 'Ele tem cabelo escuro curto.'),
+    prox(6, ['Is curly his hair?', 'Is his hair curly?', 'Does his hair curly?'], 1, 'O cabelo dele é cacheado?'),
+    prox(7, ["No, it doesn't. It's straight.", "No, it isn't. It's curly.", "No, it isn't. It's straight."], 2, 'Não. É liso.'),
+    prox(9, ["Yes, he has a beard, but he doesn't have a mustache.", "Yes, he has an beard, but he doesn't have a mustache.", "Yes, he have a beard, but he don't have a mustache."], 0, 'Sim, ele tem barba, mas não tem bigode.'),
+    prox(10, ['Look! Is that him? The man tall with a bag red?', 'Look! Is that him? The tall man with a red bag?', 'Look! Is that him? The talls man with a red bag?'], 1, 'Olha! É ele? O homem alto com uma bolsa vermelha?'),
+    prox(11, ["Yes, that's him!", "No, that man is very slim! Sam is slim.", "No, that man is bald! Sam isn't bald."], 2, 'Não, aquele homem é careca! O Sam não é careca.'),
+    prox(13, ["Yes! That's Sam! Sam! Over here!", "No! That's Sam! Over here!", "Yes! That's Sam's! Over here!"], 0, 'Sim! É o Sam! Sam! Aqui!'),
+    prox(14, ['Hi, Bia! You look greats!', 'Hi, Bia! You look great!', 'Hi, Bia! You great look!'], 1, 'Oi, Bia! Você está ótima!'),
+    prox(15, ['Thanks! Sam, this is my friend Carol. She is bald.', 'Thanks! Sam, these is my friend Carol.', 'Thanks! Sam, this is my friend Carol.'], 2, 'Obrigada! Sam, esta é a minha amiga Carol.'),
+    { instrucao: 'How tall is Sam?', frase: "He's ___ meters.", opcoes: ['one point nine five', 'one point five nine', 'two point nine five'], certa: 0, traducao: 'Ele tem 1,95 m.' },
+    { instrucao: 'Is Sam slim?', frase: "Yes, he's ___ slim.", opcoes: ['not', 'quite', 'a'], certa: 1, traducao: 'Sim, ele é bem magro.' },
+    { instrucao: "What is Sam's hair like?", frase: 'Short, dark and ___.', opcoes: ['curly', 'blond', 'straight'], certa: 2, traducao: 'Curto, escuro e liso.' },
+    { instrucao: 'Does Sam have a beard?', frase: 'Yes, he ___.', opcoes: ['does', 'is', 'has'], certa: 0, traducao: 'Sim, tem.' },
+    { instrucao: 'Does Sam have a mustache?', frase: 'No, he ___.', opcoes: ["isn't", "doesn't", "hasn't a"], certa: 1, traducao: 'Não, não tem.' },
+    { instrucao: 'Why is the man with the red bag not Sam?', frase: 'Because he is ___.', opcoes: ['tall', 'slim', 'bald'], certa: 2, traducao: 'Porque ele é careca.' },
+    { instrucao: 'Where is Sam?', frase: 'Near the ___.', opcoes: ['café', 'bag', 'door'], certa: 0, traducao: 'Perto do café.' },
+    { instrucao: 'Who is Carol?', frase: "Bia's ___.", opcoes: ['cousin', 'friend', 'sister'], certa: 1, traducao: 'A amiga da Bia.' }
+  ]
+});
+</script>
+</body>
+</html>

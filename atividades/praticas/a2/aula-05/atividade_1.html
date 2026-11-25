@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 5 · What do they look like?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 05 · Escuta (They're Really Tall!)
+   Alinhado ao slide "Vocabulary: Adjectives" — tall, short, bald, strong, curly hair, straight
+   hair, blond hair, a beard. Conteúdo NOVO: o aluno ouve a descrição de uma pessoa e escolhe a
+   característica. 24 questões. */
+const IC = { 'tall': 'height', 'short': 'child_care', 'bald': 'face', 'strong': 'fitness_center', 'curly hair': 'waves', 'straight hair': 'straighten', 'blond hair': 'face_3', 'a beard': 'face_6' };
+const A = ['tall', 'short', 'bald', 'strong'];
+const B = ['curly hair', 'straight hair', 'blond hair', 'a beard'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 5, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what does the person look like?',
+  itens: [
+    qa("My uncle plays basketball. He's two meters tall.", 0),
+    qa("My grandma is only one point five meters. She's very short.", 1),
+    qa("My father doesn't have any hair.", 2),
+    qa('He goes to the gym every day. His arms are really big!', 3),
+    qa("Jake is six feet four inches. He's really tall.", 0),
+    qa("Ana is one point five five meters. She's quite short.", 1),
+    qa('The singer has no hair at all.', 2),
+    qa("She's a bodybuilder. Look at her arms!", 3),
+    qa('The players on my volleyball team are very tall.', 0),
+    qa("My little sister is very short. She's only six.", 1),
+    qa("Grandpa is bald. He always wears a hat.", 2),
+    qa("My brother is really strong, like a superhero!", 3),
+    qb('Look at the baby! Her hair is very curly.', 0),
+    qb("Lucy's hair is long and very straight.", 1),
+    qb('My cousin has blond hair and blue eyes.', 2),
+    qb('My teacher has a long beard and a mustache.', 3),
+    qb('I have curly dark hair, like my mother.', 0),
+    qb("Her hair isn't curly. It's straight.", 1),
+    qb("He has short blond hair. It isn't dark.", 2),
+    qb("Dad has a beard now. It's short and gray.", 3),
+    qb('Her hair is short and curly.', 0),
+    qb('I have straight dark hair.', 1),
+    qb('The twins have long blond hair.', 2),
+    qb('The man in the photo has a big black beard.', 3)
+  ]
+});
+</script>
+</body>
+</html>

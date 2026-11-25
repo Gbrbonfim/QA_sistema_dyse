@@ -554,12 +554,18 @@
       return m < 30 ? numExt(m) + ' past ' + numExt(h) : numExt(60 - m) + ' to ' + numExt(prox);
     });
   }
+  /* Altura/medida dita como "one point nine five" vira "1.95" no reconhecimento.
+     Se a frase da atividade usa "point", o decimal é reescrito do mesmo jeito. */
+  function decimalNoEstilo(frase, ouvido){
+    if(!/\bpoint\b/i.test(frase)) return ouvido;
+    return String(ouvido || '').replace(/\b(\d{1,3})[.,](\d{1,3})\b/g, (s, a, b) => numExt(a) + ' point ' + b.split('').map(d => UNI[+d]).join(' '));
+  }
   function avaliarFala(item, ouvido){
     const aceita = item.aceita || {};
     const tokens = item.frase.split(/\s+/);
     const exp = [];
     tokens.forEach((t, k) => norm(t).forEach(p => exp.push({ p: somDe(p), k: k })));
-    ouvido = horaNoEstilo(item.frase, ouvido);
+    ouvido = decimalNoEstilo(item.frase, horaNoEstilo(item.frase, ouvido));
     const brutas = String(ouvido || '').trim().split(/\s+/).filter(Boolean);
     const heard = [];
     brutas.forEach((w, b) => norm(w).forEach(p => heard.push({ p: somDe(aceita[p] || p), b: b })));

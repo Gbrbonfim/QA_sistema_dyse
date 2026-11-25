@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 5 · Very, really, quite</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 05 · Escrita (They're Really Tall!)
+   Alinhado aos slides "Vocabulary: Adjectives" e "Grammar Point" — o adjetivo vem antes do
+   substantivo e depois do be, não vai para o plural, "an" antes de vogal, e o modifier (very,
+   really, quite) vem antes do adjetivo; alturas em feet/inches e meters. Conteúdo NOVO. A isca é
+   a forma errada (talls, a old, hair curly...). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 5, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ela tem cabelo cacheado.'), palavras: ['She', 'has', 'curly', 'hair'], isca: ['have'], fim: '.', traducao: 'Ela tem cabelo cacheado.' },
+    { contexto: M('Ele é muito alto e magro.'), palavras: ["He's", 'very', 'tall', 'and', 'slim'], isca: ['talls'], fim: '.', traducao: 'Ele é muito alto e magro.' },
+    { contexto: M('Eles são jogadores muito rápidos.'), palavras: ["They're", 'really', 'fast', 'players'], isca: ['fasts'], fim: '.', traducao: 'Eles são jogadores muito rápidos.' },
+    { contexto: M('O meu avô é careca.'), palavras: ['My', 'grandfather', 'is', 'bald'], isca: ['are'], fim: '.', traducao: 'O meu avô é careca.' },
+    { contexto: M('Eu tenho cabelo liso e escuro.'), palavras: ['I', 'have', 'straight', 'dark', 'hair'], isca: ['has'], fim: '.', traducao: 'Eu tenho cabelo liso e escuro.' },
+    { contexto: M('Ele tem barba e bigode.'), palavras: ['He', 'has', 'a', 'beard', 'and', 'a', 'mustache'], isca: ['an'], fim: '.', traducao: 'Ele tem barba e bigode.' },
+    { contexto: M('Ela é uma mulher bonita.'), palavras: ["She's", 'a', 'beautiful', 'woman'], isca: ['an'], fim: '.', traducao: 'Ela é uma mulher bonita.' },
+    { contexto: M('É um prédio antigo.'), palavras: ["It's", 'an', 'old', 'building'], isca: ['a'], fim: '.', traducao: 'É um prédio antigo.' },
+    { contexto: M('Este é um exercício fácil.'), palavras: ['This', 'is', 'an', 'easy', 'exercise'], isca: ['a'], fim: '.', traducao: 'Este é um exercício fácil.' },
+    { contexto: M('O meu irmão é bem alto.'), palavras: ['My', 'brother', 'is', 'quite', 'tall'], isca: ['talls'], fim: '.', traducao: 'O meu irmão é bem alto (alto, mas não muito).' },
+    { contexto: M('Estes hotéis são baratos.'), palavras: ['These', 'hotels', 'are', 'cheap'], isca: ['cheaps'], fim: '.', traducao: 'Estes hotéis são baratos.' },
+    { contexto: M('A minha casa é nova.'), palavras: ['My', 'house', 'is', 'new'], isca: ['news'], fim: '.', traducao: 'A minha casa é nova.' },
+    { contexto: M('Ele não é muito forte.'), palavras: ['He', "isn't", 'very', 'strong'], isca: ["aren't"], fim: '.', traducao: 'Ele não é muito forte.' },
+    { contexto: M('Eles são bem jovens.'), palavras: ["They're", 'quite', 'young'], isca: ['youngs'], fim: '.', traducao: 'Eles são bem jovens.' },
+    { contexto: M('A prova é muito difícil.'), palavras: ['The', 'test', 'is', 'really', 'difficult'], isca: ['difficults'], fim: '.', traducao: 'A prova é muito difícil.' },
+    { contexto: M('Ela tem cabelo loiro curto.'), palavras: ['She', 'has', 'short', 'blond', 'hair'], isca: ['hairs'], fim: '.', traducao: 'Ela tem cabelo loiro curto.' },
+    { contexto: M('Qual é a sua altura?'), palavras: ['How', 'tall', 'are', 'you'], isca: ['is'], fim: '?', traducao: 'Qual é a sua altura? (Quão alto você é?)' },
+    { contexto: M('Qual é a altura do seu pai?'), palavras: ['How', 'tall', 'is', 'your', 'father'], isca: ['are'], fim: '?', traducao: 'Qual é a altura do seu pai?' },
+    { contexto: M('Ele tem seis pés e duas polegadas de altura.'), palavras: ["He's", 'six', 'feet', 'two', 'inches', 'tall'], isca: ['foot'], fim: '.', traducao: 'Ele tem 6 pés e 2 polegadas (1,88 m).' },
+    { contexto: M('Eu tenho um vírgula sete metros de altura.'), palavras: ["I'm", 'one', 'point', 'seven', 'meters', 'tall'], isca: ['comma'], fim: '.', traducao: 'Tenho 1,70 m de altura.' }
+  ]
+});
+</script>
+</body>
+</html>

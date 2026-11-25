@@ -490,6 +490,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 04', titulo: 'Describe your bedroom', tipo: 'Escute e grave', treina: 'Fala · Descrição', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 04', titulo: 'Prepositions of place', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 5,
+        titulo: "Class 05 · They're Really Tall!",
+        atividades: [
+          { num: 1, titulo: 'What do they look like?', tipo: 'Escute e escolha', treina: 'Escuta · Aparência', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Very, really, quite', tipo: 'Monte a frase', treina: 'Escrita · Adjetivos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'At the airport', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'How tall is he?', tipo: 'Escute e grave', treina: 'Fala · Alturas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Adjectives and modifiers', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
