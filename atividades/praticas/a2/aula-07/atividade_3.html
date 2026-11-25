@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 7 · A day in the life of a freshman</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 07 · Leitura (It's my life)
+   Alinhado ao texto "A Day in the Life of a First-Year Student" e ao vocabulário (freshman,
+   wake up, eat breakfast, enjoy, research, hang out, pretty cool, glad) + at / in / on.
+   Conteúdo NOVO: a Mia, caloura numa universidade em Toronto, conta o dia dela ao Leo.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Leo', 'Hi, Mia! How is your first year at university?'],
+  ['Mia', "It's pretty cool! I'm really glad I'm here."],
+  ['Leo', 'Where do you live?'],
+  ['Mia', 'I live in a student house with four other freshmen.'],
+  ['Leo', 'What time do you wake up?'],
+  ['Mia', 'I wake up at seven on weekdays.'],
+  ['Leo', 'Where do you eat breakfast?'],
+  ['Mia', 'I eat breakfast in the big hall with my friends.'],
+  ['Leo', 'Do you have classes in the afternoon?'],
+  ['Mia', 'Yes, I do. And on Wednesdays I work on a research project.'],
+  ['Leo', 'Do you enjoy your classes?'],
+  ['Mia', 'I really enjoy them, especially my biology seminar.'],
+  ['Leo', 'What do you do at the weekend?'],
+  ['Mia', 'I hang out with my friends. We go to the lake.'],
+  ['Leo', 'And what do you do in the evening?'],
+  ['Mia', 'I study in the library and I go home at nine.']
+];
+const lado = q => q === 'Mia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 7, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["It's pretty cool! I'm really glad I'm here.", "It's pretty cool! I'm really sad I'm here.", "It's pretty cool! I really glad I'm here."], 0, 'É bem legal! Estou muito feliz de estar aqui.'),
+    prox(2, ['Where you live?', 'Where do you live?', 'Where are you live?'], 1, 'Onde você mora?'),
+    prox(3, ['I live on a student house with four other freshmen.', 'I lives in a student house with four other freshmen.', 'I live in a student house with four other freshmen.'], 2, 'Moro numa casa de estudantes com outros quatro calouros.'),
+    prox(5, ['I wake up at seven on weekdays.', 'I wake up in seven on weekdays.', 'I wake up at seven in weekdays.'], 0, 'Acordo às sete nos dias de semana.'),
+    prox(6, ['Where do you eat breakfast at?', 'Where do you eat breakfast?', 'Where you eat breakfast?'], 1, 'Onde você toma café da manhã?'),
+    prox(7, ['I eat breakfast at the big hall in my friends.', 'I eats breakfast in the big hall.', 'I eat breakfast in the big hall with my friends.'], 2, 'Tomo café no salão grande com os meus amigos.'),
+    prox(9, ['Yes, I do. And on Wednesdays I work on a research project.', 'Yes, I am. And in Wednesdays I work on a research project.', 'Yes, I do. And at Wednesdays I works on a research project.'], 0, 'Sim. E às quartas trabalho num projeto de pesquisa.'),
+    prox(10, ['Are you enjoy your classes?', 'Do you enjoy your classes?', 'Do you enjoys your classes?'], 1, 'Você gosta das suas aulas?'),
+    prox(11, ["I really don't enjoy them.", 'I really enjoys them, especially my biology seminar.', 'I really enjoy them, especially my biology seminar.'], 2, 'Gosto muito, principalmente do meu seminário de biologia.'),
+    prox(12, ['What do you do at the weekend?', 'What do you do in the weekend at?', 'What you do at the weekend?'], 0, 'O que você faz no fim de semana?'),
+    prox(13, ['I hang out with my friends. We go at the lake.', 'I hang out with my friends. We go to the lake.', 'I hangs out with my friends. We go to the lake.'], 1, 'Saio com os meus amigos. Vamos ao lago.'),
+    prox(15, ['I study in the library and I go to home at nine.', 'I study on the library and I go home in nine.', 'I study in the library and I go home at nine.'], 2, 'Estudo na biblioteca e vou para casa às nove.'),
+    { instrucao: 'How does Mia feel about university?', frase: "She's ___.", opcoes: ['glad', 'bored', 'worried'], certa: 0, traducao: 'Ela está feliz.' },
+    { instrucao: 'Where does Mia live?', frase: 'In a ___.', opcoes: ['big hall', 'student house', 'library'], certa: 1, traducao: 'Numa casa de estudantes.' },
+    { instrucao: 'What time does Mia wake up on weekdays?', frase: 'At ___.', opcoes: ['nine', 'six', 'seven'], certa: 2, traducao: 'Às sete.' },
+    { instrucao: 'Where does she eat breakfast?', frase: 'In the big ___.', opcoes: ['hall', 'house', 'lake'], certa: 0, traducao: 'No salão grande.' },
+    { instrucao: 'When does she work on a research project?', frase: 'On ___.', opcoes: ['Mondays', 'Wednesdays', 'Fridays'], certa: 1, traducao: 'Às quartas.' },
+    { instrucao: "What's her favorite class?", frase: 'Her ___ seminar.', opcoes: ['history', 'English', 'biology'], certa: 2, traducao: 'O seminário de biologia.' },
+    { instrucao: 'What does she do at the weekend?', frase: 'She ___ with her friends.', opcoes: ['hangs out', 'studies', 'works'], certa: 0, traducao: 'Ela sai com os amigos.' },
+    { instrucao: 'What time does she go home?', frase: 'At ___.', opcoes: ['seven', 'nine', 'midnight'], certa: 1, traducao: 'Às nove.' }
+  ]
+});
+</script>
+</body>
+</html>

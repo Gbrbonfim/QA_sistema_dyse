@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 8 · Her study routine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 08 · Escrita (It's my life)
+   Alinhado ao texto "The Daily Study Routine of a First-Class Cambridge Graduate" e às regras
+   do Simple Present (-s, -es, -ies, has, goes, does; don't / doesn't; Do / Does?). Conteúdo
+   NOVO. A isca é a forma errada do verbo. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 7, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ela acorda às seis.'), palavras: ['She', 'wakes', 'up', 'at', 'six'], isca: ['wake'], fim: '.', traducao: 'Ela acorda às seis.' },
+    { contexto: M('Ela estuda na biblioteca.'), palavras: ['She', 'studies', 'in', 'the', 'library'], isca: ['studys'], fim: '.', traducao: 'Ela estuda na biblioteca.' },
+    { contexto: M('Ele assiste a um documentário à noite.'), palavras: ['He', 'watches', 'a', 'documentary', 'at', 'night'], isca: ['watchs'], fim: '.', traducao: 'Ele assiste a um documentário à noite.' },
+    { contexto: M('Ela tem frutas no café da manhã.'), palavras: ['She', 'has', 'fruit', 'for', 'breakfast'], isca: ['haves'], fim: '.', traducao: 'Ela come frutas no café da manhã.' },
+    { contexto: M('Ele vai à biblioteca às oito.'), palavras: ['He', 'goes', 'to', 'the', 'library', 'at', 'eight'], isca: ['gos'], fim: '.', traducao: 'Ele vai à biblioteca às oito.' },
+    { contexto: M('Ela relaxa no parque.'), palavras: ['She', 'relaxes', 'in', 'the', 'park'], isca: ['relaxs'], fim: '.', traducao: 'Ela relaxa no parque.' },
+    { contexto: M('Ele termina as aulas às cinco.'), palavras: ['He', 'finishes', 'his', 'classes', 'at', 'five'], isca: ['finishs'], fim: '.', traducao: 'Ele termina as aulas às cinco.' },
+    { contexto: M('Ela não gosta de comida pesada.'), palavras: ['She', "doesn't", 'like', 'heavy', 'food'], isca: ['likes'], fim: '.', traducao: 'Ela não gosta de comida pesada.' },
+    { contexto: M('Ele não estuda à noite.'), palavras: ['He', "doesn't", 'study', 'at', 'night'], isca: ['studies'], fim: '.', traducao: 'Ele não estuda à noite.' },
+    { contexto: M('Nós não temos prova amanhã.'), palavras: ['We', "don't", 'have', 'an', 'exam', 'tomorrow'], isca: ["doesn't"], fim: '.', traducao: 'Nós não temos prova amanhã.' },
+    { contexto: M('Eles não trabalham aos domingos.'), palavras: ['They', "don't", 'work', 'on', 'Sundays'], isca: ["doesn't"], fim: '.', traducao: 'Eles não trabalham aos domingos.' },
+    { contexto: M('Eu não sei a resposta.'), palavras: ['I', "don't", 'know', 'the', 'answer'], isca: ["doesn't"], fim: '.', traducao: 'Eu não sei a resposta.' },
+    { contexto: M('Ela estuda à tarde?'), palavras: ['Does', 'she', 'study', 'in', 'the', 'afternoon'], isca: ['studies'], fim: '?', traducao: 'Ela estuda à tarde?' },
+    { contexto: M('Você tem uma rotina de estudo?'), palavras: ['Do', 'you', 'have', 'a', 'study', 'routine'], isca: ['Does'], fim: '?', traducao: 'Você tem uma rotina de estudo?' },
+    { contexto: M('A sua escola abre aos sábados?'), palavras: ['Does', 'your', 'school', 'open', 'on', 'Saturdays'], isca: ['opens'], fim: '?', traducao: 'A sua escola abre aos sábados?' },
+    { contexto: M('Os seus colegas te ajudam?'), palavras: ['Do', 'your', 'colleagues', 'help', 'you'], isca: ['Does'], fim: '?', traducao: 'Os seus colegas te ajudam?' },
+    { contexto: M('O seu chefe te dá muitas coisas para fazer?'), palavras: ['Does', 'your', 'boss', 'give', 'you', 'a', 'lot', 'of', 'things', 'to', 'do'], isca: ['gives'], fim: '?', traducao: 'O seu chefe te dá muitas coisas para fazer?' },
+    { contexto: M('Ele encontra os amigos no jantar.'), palavras: ['He', 'meets', 'his', 'friends', 'for', 'dinner'], isca: ['meet'], fim: '.', traducao: 'Ele encontra os amigos no jantar.' },
+    { contexto: M('A professora ensina em Oxford.'), palavras: ['The', 'teacher', 'teaches', 'at', 'Oxford'], isca: ['teachs'], fim: '.', traducao: 'A professora ensina em Oxford.' },
+    { contexto: M('Ela faz as tarefas domésticas.'), palavras: ['She', 'does', 'the', 'housework'], isca: ['dos'], fim: '.', traducao: 'Ela faz as tarefas domésticas.' }
+  ]
+});
+</script>
+</body>
+</html>

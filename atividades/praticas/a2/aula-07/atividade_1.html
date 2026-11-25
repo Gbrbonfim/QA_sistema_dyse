@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 7 · At, in, on or to?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 07 · Escuta (It's my life)
+   Alinhado ao slide "Grammar Point: at, in, on, to" — at (horas, night, midday, the weekend,
+   Christmas), in (the morning, meses, estações, anos), on (dias, datas), go to (work, school,
+   the gym). Conteúdo NOVO: o aluno ouve a frase e escolhe a preposição que ouviu. 24 questões. */
+const IC = { 'at': 'schedule', 'in': 'calendar_month', 'on': 'today', 'to': 'arrow_forward' };
+const T = ['at', 'in', 'on', 'to'];
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 7, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which preposition do you hear?',
+  itens: [
+    q('My first class is at eight fifteen.', 0),
+    q('I study in the evening.', 1),
+    q("I'm really busy on Mondays.", 2),
+    q('She goes to the gym every day.', 3),
+    q('We have lunch at midday.', 0),
+    q('My birthday is in March.', 1),
+    q('The party is on Saturday night.', 2),
+    q('They go to school by bus.', 3),
+    q('I never drink coffee at night.', 0),
+    q('It snows a lot in the winter.', 1),
+    q('Her exam is on the fifth of June.', 2),
+    q('Do you go to work by car?', 3),
+    q('We visit my grandparents at Christmas.', 0),
+    q('I was born in 2005.', 1),
+    q('We play football on Sunday mornings.', 2),
+    q('I usually go to bed early.', 3),
+    q('What do you do at the weekend?', 0),
+    q('I get up early in the morning.', 1),
+    q('The museum is closed on Tuesdays.', 2),
+    q('My father walks to the market.', 3),
+    q('The store closes at midnight.', 0),
+    q("It's very hot in the summer.", 1),
+    q('I hang out with my friends on Fridays.', 2),
+    q('Let\'s go to the movies tonight!', 3)
+  ]
+});
+</script>
+</body>
+</html>

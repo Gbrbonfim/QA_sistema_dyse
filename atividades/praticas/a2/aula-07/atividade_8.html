@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 8 · Lena's study routine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 08 · Leitura (It's my life)
+   Alinhado ao texto "The Daily Study Routine of a First-Class Cambridge Graduate" — rotina de
+   estudo hora a hora no Simple Present (exercise, library, playlist, lunch, breaks, dinner with
+   friends, documentaries, me time) com afirmativa, negativa e perguntas. Conteúdo NOVO: o Pedro
+   entrevista a Lena, estudante de medicina em Lisboa. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão (na 3ª pessoa: she studies, she doesn't...). */
+const D = [
+  ['Pedro', 'Lena, you have great grades. Do you study all day?'],
+  ['Lena', "No, I don't! I have a strategic routine."],
+  ['Pedro', 'What time do you wake up?'],
+  ['Lena', 'I wake up at six and I go running.'],
+  ['Pedro', 'What do you have for breakfast?'],
+  ['Lena', 'I have yogurt and some fruit.'],
+  ['Pedro', 'Where do you study?'],
+  ['Lena', 'I go to the library and I study until midday.'],
+  ['Pedro', 'Do you listen to music when you study?'],
+  ['Lena', "No, I don't. I like silence."],
+  ['Pedro', 'Do you take breaks?'],
+  ['Lena', 'Yes, I do. I relax in the garden after lunch.'],
+  ['Pedro', 'Does your boyfriend study medicine too?'],
+  ['Lena', "No, he doesn't. He studies music."],
+  ['Pedro', 'What do you do in the evening?'],
+  ['Lena', "I have dinner with friends. I don't study at night!"]
+];
+const lado = q => q === 'Lena' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 7, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["No, I don't! I have a strategic routine.", "No, I doesn't! I have a strategic routine.", "No, I'm not! I has a strategic routine."], 0, 'Não! Tenho uma rotina estratégica.'),
+    prox(2, ['What time you wake up?', 'What time do you wake up?', 'What time does you wake up?'], 1, 'A que horas você acorda?'),
+    prox(3, ['I wakes up at six and I goes running.', 'I wake up in six and I go running.', 'I wake up at six and I go running.'], 2, 'Acordo às seis e vou correr.'),
+    prox(5, ['I have yogurt and some fruit.', 'I has yogurt and some fruit.', 'I having yogurt and some fruit.'], 0, 'Como iogurte e um pouco de fruta.'),
+    prox(6, ['Where you study?', 'Where do you study?', 'Where does you study?'], 1, 'Onde você estuda?'),
+    prox(7, ['I go at the library and I study until midday.', 'I goes to the library and I studies until midday.', 'I go to the library and I study until midday.'], 2, 'Vou à biblioteca e estudo até o meio-dia.'),
+    prox(9, ["No, I don't. I like silence.", "No, I doesn't. I like silence.", "No, I not. I like silence."], 0, 'Não. Gosto de silêncio.'),
+    prox(10, ['Are you take breaks?', 'Do you take breaks?', 'Does you take breaks?'], 1, 'Você faz pausas?'),
+    prox(11, ['Yes, I am. I relax in the garden after lunch.', 'Yes, I do. I relaxes in the garden after lunch.', 'Yes, I do. I relax in the garden after lunch.'], 2, 'Sim. Relaxo no jardim depois do almoço.'),
+    prox(12, ['Does your boyfriend study medicine too?', 'Do your boyfriend study medicine too?', 'Does your boyfriend studies medicine too?'], 0, 'O seu namorado também estuda medicina?'),
+    prox(13, ["No, he don't. He study music.", "No, he doesn't. He studies music.", "No, he doesn't. He studys music."], 1, 'Não. Ele estuda música.'),
+    prox(15, ["I have dinner with friends. I doesn't study at night!", "I has dinner with friends. I don't study at night!", "I have dinner with friends. I don't study at night!"], 2, 'Janto com amigos. Não estudo à noite!'),
+    { instrucao: 'What time does Lena wake up?', frase: 'She ___ up at six.', opcoes: ['wakes', 'wake', 'waking'], certa: 0, traducao: 'Ela acorda às seis.' },
+    { instrucao: 'What does Lena do after she wakes up?', frase: 'She goes ___.', opcoes: ['swimming', 'running', 'to work'], certa: 1, traducao: 'Ela vai correr.' },
+    { instrucao: 'What does she have for breakfast?', frase: 'She ___ yogurt and some fruit.', opcoes: ['have', 'haves', 'has'], certa: 2, traducao: 'Ela come iogurte e fruta.' },
+    { instrucao: 'Where does she study in the morning?', frase: 'In the ___.', opcoes: ['library', 'garden', 'café'], certa: 0, traducao: 'Na biblioteca.' },
+    { instrucao: 'Does she listen to music when she studies?', frase: 'No, she ___.', opcoes: ["don't", "doesn't", "isn't"], certa: 1, traducao: 'Não.' },
+    { instrucao: 'Where does she relax after lunch?', frase: 'In the ___.', opcoes: ['library', 'park', 'garden'], certa: 2, traducao: 'No jardim.' },
+    { instrucao: 'What does her boyfriend study?', frase: 'He ___ music.', opcoes: ['studies', 'study', 'studys'], certa: 0, traducao: 'Ele estuda música.' },
+    { instrucao: 'Does she study at night?', frase: "No, she ___ study at night.", opcoes: ["don't", "doesn't", "isn't"], certa: 1, traducao: 'Não, ela não estuda à noite.' }
+  ]
+});
+</script>
+</body>
+</html>

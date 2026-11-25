@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 8 · Affirmative, negative or question?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 08 · Escuta (It's my life)
+   Alinhado ao slide "Grammar Point" (quadro do Simple Present: studies / doesn't study / Does
+   ... study?) — o aluno ouve uma frase sobre rotina de estudo e diz se é afirmativa, negativa
+   ou pergunta. Conteúdo NOVO. 24 questões. */
+const IC = { 'affirmative (+)': 'add', 'negative (−)': 'remove', 'question (?)': 'help_outline' };
+const T = ['affirmative (+)', 'negative (−)', 'question (?)'];
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 7, num: 6, tipo: 'imagem',
+  instrucao: 'Listen: what kind of sentence is it?',
+  itens: [
+    q('She studies in the library every afternoon.', 0),
+    q("He doesn't like heavy food.", 1),
+    q('Does your brother work on Saturdays?', 2),
+    q('He teaches history at a big school.', 0),
+    q('My roommate watches documentaries at night.', 0),
+    q("We don't have lessons on Saturdays.", 1),
+    q('Do you listen to music when you study?', 2),
+    q("I don't watch TV in the morning.", 1),
+    q('Ben has eggs and toast for breakfast.', 0),
+    q("Ana doesn't finish her classes early.", 1),
+    q('Does the library open on Sundays?', 2),
+    q('Does your teacher give you homework?', 2),
+    q('My parents go to bed at ten.', 0),
+    q("I don't know the answer.", 1),
+    q('Do your friends play football?', 2),
+    q('My sister plays the piano very well.', 0),
+    q('He relaxes in the park after lunch.', 0),
+    q("The professor doesn't give us a lot of homework.", 1),
+    q('Does she meet her friends for dinner?', 2),
+    q("My dad doesn't drink coffee.", 1),
+    q('We usually travel to matches by bus.', 0),
+    q("They don't study on Friday nights.", 1),
+    q('What time do you wake up?', 2),
+    q('Where do you have lunch?', 2)
+  ]
+});
+</script>
+</body>
+</html>

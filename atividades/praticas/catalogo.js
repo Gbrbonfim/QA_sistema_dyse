@@ -512,6 +512,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Give advice', tipo: 'Escute e grave', treina: 'Fala · Conselhos', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: "Imperatives and Let's", tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 7,
+        titulo: "Class 07 and 08 · It's my life",
+        atividades: [
+          { num: 1, parte: 'Class 07', titulo: 'At, in, on or to?', tipo: 'Escute e escolha', treina: 'Escuta · Preposições de tempo', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 07', titulo: 'My weekly routine', tipo: 'Monte a frase', treina: 'Escrita · Rotina', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 07', titulo: 'A day in the life of a freshman', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 07', titulo: 'Ask and answer', tipo: 'Escute e grave', treina: 'Fala · Rotina', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 07', titulo: 'Prepositions of time', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 08', titulo: 'Affirmative, negative or question?', tipo: 'Escute e escolha', treina: 'Escuta · Present simple', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 08', titulo: 'Her study routine', tipo: 'Monte a frase', treina: 'Escrita · Present simple', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 08', titulo: "Lena's study routine", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 08', titulo: 'Talk about her day', tipo: 'Escute e grave', treina: 'Fala · 3ª pessoa', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 08', titulo: 'Simple present', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
