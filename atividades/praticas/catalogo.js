@@ -590,6 +590,17 @@ window.DYSE_PRATICAS = {
         ]
       },
       {
+        aula: 15,
+        titulo: "Class 15 · We're Working From Home",
+        atividades: [
+          { num: 1, titulo: 'Where are they?', tipo: 'Escute e escolha', treina: 'Escuta · Cômodos da casa', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Working from home', tipo: 'Monte a frase', treina: 'Escrita · Present continuous', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'A busy day at home', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: "What's happening at home?", tipo: 'Escute e grave', treina: 'Fala · Present continuous', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Present continuous', tipo: 'Make a Choice', treina: 'Gramática · Present continuous', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
         aula: 16,
         titulo: 'Class 16 · Holidays in Spain',
         atividades: [

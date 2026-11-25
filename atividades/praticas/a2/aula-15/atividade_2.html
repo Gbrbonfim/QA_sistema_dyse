@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 15 · Working from home</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 15 · Escrita (We're Working From Home)
+   Present continuous nas três formas (am/is/are + -ing) e as regras de ortografia do slide
+   (-e: making; consoante dobrada: getting, running, swimming). Conteúdo NOVO sobre trabalhar
+   de casa. A isca é a forma errada (sem o be, -ing com erro de ortografia ou be errado).
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 15, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu estou trabalhando de casa hoje.'), palavras: ["I'm", 'working', 'from', 'home', 'today'], isca: ['work'], fim: '.', traducao: 'Estou trabalhando de casa hoje.' },
+    { contexto: M('Ela está escrevendo um e-mail para o chefe.'), palavras: ["She's", 'writing', 'an', 'email', 'to', 'her', 'boss'], isca: ['writeing'], fim: '.', traducao: 'Ela está escrevendo um e-mail para o chefe.' },
+    { contexto: M('As crianças estão fazendo muito barulho.'), palavras: ['The', 'children', 'are', 'making', 'a', 'lot', 'of', 'noise'], isca: ['is'], fim: '.', traducao: 'As crianças estão fazendo muito barulho.' },
+    { contexto: M('O cachorro está latindo.'), palavras: ['The', 'dog', 'is', 'barking'], isca: ['are'], fim: '.', traducao: 'O cachorro está latindo.' },
+    { contexto: M('A internet não está funcionando.'), palavras: ['The', 'internet', "isn't", 'working'], isca: ["aren't"], fim: '.', traducao: 'A internet não está funcionando.' },
+    { contexto: M('Você está me ouvindo?'), palavras: ['Are', 'you', 'listening', 'to', 'me'], isca: ['Is'], fim: '?', traducao: 'Você está me ouvindo?' },
+    { contexto: M('Ele está correndo no parque.'), palavras: ["He's", 'running', 'in', 'the', 'park'], isca: ['runing'], fim: '.', traducao: 'Ele está correndo no parque.' },
+    { contexto: M('Nós estamos nadando na piscina.'), palavras: ["We're", 'swimming', 'in', 'the', 'pool'], isca: ['swiming'], fim: '.', traducao: 'Estamos nadando na piscina.' },
+    { contexto: M('Eu estou tendo muitas distrações em casa.'), palavras: ["I'm", 'getting', 'a', 'lot', 'of', 'distractions', 'at', 'home'], isca: ['geting'], fim: '.', traducao: 'Estou tendo muitas distrações em casa.' },
+    { contexto: M('Ela não está trabalhando no escritório hoje.'), palavras: ['She', "isn't", 'working', 'in', 'the', 'office', 'today'], isca: ["aren't"], fim: '.', traducao: 'Ela não está trabalhando no escritório hoje.' },
+    { contexto: M('O que você está fazendo?'), palavras: ['What', 'are', 'you', 'doing'], isca: ['do'], fim: '?', traducao: 'O que você está fazendo?' },
+    { contexto: M('Os vizinhos estão dando uma festa.'), palavras: ['The', 'neighbors', 'are', 'having', 'a', 'party'], isca: ['haveing'], fim: '.', traducao: 'Os vizinhos estão dando uma festa.' },
+    { contexto: M('Eu não estou usando o Wi-Fi.'), palavras: ["I'm", 'not', 'using', 'the', 'Wi-Fi'], isca: ["isn't"], fim: '.', traducao: 'Não estou usando o Wi-Fi.' },
+    { contexto: M('Ele está dirigindo para o trabalho.'), palavras: ["He's", 'driving', 'to', 'work'], isca: ['driveing'], fim: '.', traducao: 'Ele está dirigindo para o trabalho.' },
+    { contexto: M('Eles estão assistindo a uma aula online.'), palavras: ["They're", 'watching', 'a', 'class', 'online'], isca: ['watch'], fim: '.', traducao: 'Eles estão assistindo a uma aula online.' },
+    { contexto: M('Ela está falando ao telefone?'), palavras: ['Is', 'she', 'talking', 'on', 'the', 'phone'], isca: ['Are'], fim: '?', traducao: 'Ela está falando ao telefone?' },
+    { contexto: M('Nós não estamos jogando, mãe. Estamos estudando.'), palavras: ['We', "aren't", 'playing,', 'Mom.', "We're", 'studying'], isca: ["isn't"], fim: '.', traducao: 'Não estamos jogando, mãe. Estamos estudando.' },
+    { contexto: M('Os pedreiros estão trabalhando aqui hoje?'), palavras: ['Are', 'the', 'builders', 'working', 'here', 'today'], isca: ['Is'], fim: '?', traducao: 'Os pedreiros estão trabalhando aqui hoje?' },
+    { contexto: M('Eu estou parando o carro na garagem.'), palavras: ["I'm", 'stopping', 'the', 'car', 'in', 'the', 'garage'], isca: ['stoping'], fim: '.', traducao: 'Estou parando o carro na garagem.' },
+    { contexto: M('O bebê da Jane está chorando.'), palavras: ["Jane's", 'baby', 'is', 'crying'], isca: ['cry'], fim: '.', traducao: 'O bebê da Jane está chorando.' }
+  ]
+});
+</script>
+</body>
+</html>
