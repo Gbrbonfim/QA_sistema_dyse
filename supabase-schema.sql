@@ -4808,6 +4808,20 @@ as $$
     where (lower(trim(p.role)) = 'student' or p.also_student)
       and coalesce(p.situacao_financeira, 'ativo') not in ('cancelado', 'encerrado')
   ),
+  -- Atividades liberadas no mês e quantas foram concluídas até o fim do mês.
+  ativ as (
+    select l.aluno_id,
+           count(*)::int as liberadas,
+           count(*) filter (where exists (
+             select 1 from public.activity_results r
+             where r.user_id = l.aluno_id and r.course = l.course and r.aula = l.aula
+               and r.activity_num = l.activity_num and r.status = 'concluida'
+               and (coalesce(r.created_at, r.updated_at) at time zone 'America/Sao_Paulo')::date <= lim.m1
+           ))::int as feitas
+    from public.aluno_atividades_liberadas l, lim
+    where l.liberada and (l.liberada_em at time zone 'America/Sao_Paulo')::date between lim.m0 and lim.m1
+    group by l.aluno_id
+  ),
   -- Presença: chamadas do mês fora de recesso/feriado; só presente/falta contam.
   pres as (
     select sp.aluno_id,
@@ -4839,22 +4853,6 @@ as $$
     where sp.presente and date_trunc('week', e.data)::date in (select semana from semanas_com_speaking)
     group by sp.aluno_id
   ),
-  -- Meta semanal (24/11/2026): no máximo 5 atividades por semana contam; a meta
-  -- do mês é 5 x semanas letivas do mês e cada atividade vale 50 / meta.
-  nsem as (select count(*)::int as n from semanas),
-  ativ as (
-    select x.user_id as aluno_id, sum(least(x.n, 5))::int as feitas
-    from (
-      select r.user_id,
-             date_trunc('week', (coalesce(r.created_at, r.updated_at) at time zone 'America/Sao_Paulo'))::date as semana,
-             count(*) as n
-      from public.activity_results r
-      where r.course like 'ativ-%' and r.status = 'concluida'
-      group by 1, 2
-    ) x
-    where x.semana in (select semana from semanas)
-    group by x.user_id
-  ),
   -- Qualidade do estudo: atividades concluídas no mês.
   qual as (
     select r.user_id,
@@ -4870,14 +4868,14 @@ as $$
   ),
   prev as (select count(*)::int as n from semanas_com_speaking)
   select a.id, a.full_name, (a.entrada <= lim.m0) as elegivel, a.entrada,
-         least(coalesce(at.feitas, 0), 5 * nsem.n), 5 * nsem.n,
-         round(case when nsem.n = 0 then 50 else 50.0 * least(coalesce(at.feitas, 0), 5 * nsem.n) / (5 * nsem.n) end, 1),
+         coalesce(at.feitas, 0), coalesce(at.liberadas, 0),
+         round(case when coalesce(at.liberadas, 0) = 0 then 50 else 50.0 * at.feitas / at.liberadas end, 1),
          coalesce(pr.presente, 0), coalesce(pr.contadas, 0),
          round(case when coalesce(pr.contadas, 0) = 0 then 30 else 30.0 * pr.presente / pr.contadas end, 1),
          coalesce(sk.semanas, 0), prev.n,
          round(case when prev.n = 0 then 20 else 20.0 * least(coalesce(sk.semanas, 0), prev.n) / prev.n end, 1),
          round(
-           (case when nsem.n = 0 then 50 else 50.0 * least(coalesce(at.feitas, 0), 5 * nsem.n) / (5 * nsem.n) end) +
+           (case when coalesce(at.liberadas, 0) = 0 then 50 else 50.0 * at.feitas / at.liberadas end) +
            (case when coalesce(pr.contadas, 0) = 0 then 30 else 30.0 * pr.presente / pr.contadas end) +
            (case when prev.n = 0 then 20 else 20.0 * least(coalesce(sk.semanas, 0), prev.n) / prev.n end), 1),
          case when coalesce(q.total, 0) > 0 then round(100.0 * q.primeira / q.total, 1) end,
@@ -4886,7 +4884,6 @@ as $$
   from alunos a
   cross join lim
   cross join prev
-  cross join nsem
   left join ativ at on at.aluno_id = a.id
   left join pres pr on pr.aluno_id = a.id
   left join spk sk on sk.aluno_id = a.id

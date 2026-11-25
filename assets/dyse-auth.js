@@ -659,6 +659,10 @@ function dyseSemanaAtualSP(){
   return { inicio: ymd + 'T00:00:00-03:00', diasParaVoltar: 7 - dow };
 }
 async function dyseMetaSemanal(){
+  // Sem limite semanal (usuário, 25/11/2026): o aluno faz todas as atividades que a
+  // professora liberar. Retornar null desliga a trava e o aviso de meta na Área do
+  // Aluno e no fim da atividade. A nova regra será definida em fevereiro/2027.
+  return null;
   const session = await dyseGetSession();
   if(!session) return null;
   const sem = dyseSemanaAtualSP();
@@ -708,7 +712,7 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
     : p + 'º';
   const partes = r => r.pts_atividades == null ? '' :
     '<div class="dy-rank-parts">' +
-      '<span title="Atividades feitas no mês (até ' + DYSE_META_SEMANAL + ' por semana) ÷ meta do mês"><b>' + num(r.pts_atividades) + '</b>/50 atividades <small>(' + r.atividades_feitas + ' de ' + r.atividades_liberadas + ')</small></span>' +
+      '<span title="Atividades feitas ÷ liberadas no mês"><b>' + num(r.pts_atividades) + '</b>/50 atividades <small>(' + r.atividades_feitas + ' de ' + r.atividades_liberadas + ')</small></span>' +
       '<span title="Presenças ÷ aulas do mês (faltas justificadas, gravada e remarcou não contam)"><b>' + num(r.pts_presenca) + '</b>/30 presença <small>(' + r.aulas_presente + ' de ' + r.aulas_contadas + ')</small></span>' +
       '<span title="Semanas em que foi ao Speaking ÷ semanas com Speaking no mês"><b>' + num(r.pts_speaking) + '</b>/20 speaking <small>(' + r.speaking_semanas + ' de ' + r.speaking_previstas + ')</small></span>' +
       (r.qualidade != null ? '<span title="Desempate: % de acertos de primeira nas atividades do mês">' + num(r.qualidade) + '% de primeira</span>' : '') +
@@ -773,7 +777,7 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
       '<div class="dy-rank-card">' + linhas + '</div>' +
       (naoElegiveis.length ? '<p class="dy-rank-fora"><b>Começam a pontuar no mês seguinte</b> (entraram depois do dia 1º): ' + naoElegiveis.map(r => esc(r.nome || 'Aluno(a)')).join(', ') + '.</p>' : '') +
       minha +
-      '<p class="dy-rank-how"><b>Como funciona:</b> média de 0 a 100 no mês — <b>50</b> pelas atividades (meta de ' + DYSE_META_SEMANAL + ' por semana; cada atividade feita vale a sua parte dos 50 do mês), ' +
+      '<p class="dy-rank-how"><b>Como funciona:</b> média de 0 a 100 no mês — <b>50</b> pelas atividades (feitas ÷ liberadas no mês), ' +
       '<b>30</b> pela presença nas aulas (falta justificada, "vai assistir gravada" e "remarcou" não contam como falta) e ' +
       '<b>20</b> pelo Speaking Club (ir pelo menos 1 vez por semana). Feriados e recessos do calendário não contam. ' +
       'Empate: vence quem tem mais acertos de primeira, depois menos erros, depois menos tempo nas atividades e, por último, quem está há mais tempo na DYSE.</p>' +
