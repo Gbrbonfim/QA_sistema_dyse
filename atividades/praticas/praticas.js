@@ -1012,7 +1012,10 @@
       const { error } = await dyseSaveResult(S.cfg.course, S.cfg.num, S.info.atividade.titulo, report, meta, S.cfg.aula);
       salvo = error ? '<div class="px-ctx" style="color:var(--bad);">Não consegui salvar seu resultado. Verifique a internet e fale com a professora.</div>' : '';
     }
-    const prox = S.staff ? null : await proximaLiberada();
+    // Com a meta da semana cumprida, não abre a próxima: mostra o aviso de voltar na segunda.
+    const ms = S.staff ? null : await dyseMetaSemanal();
+    const metaOk = !!(ms && ms.atingida);
+    const prox = (S.staff || metaOk) ? null : await proximaLiberada();
     banner(null);
     $('#pxFoot').style.display = 'none';
     const pctAcerto = Math.round((acertos / n) * 100);
@@ -1022,8 +1025,9 @@
         '<h2>' + (p.perfeita ? 'Perfeita!' : prec >= 0.7 ? 'Mandou bem!' : 'Bom treino!') + '</h2><p>' + esc(S.info.atividade.titulo) + ' · Aula ' + String(S.cfg.aula).padStart(2, '0') + '</p></div>' +
       '<div class="px-res-total" style="margin-bottom:16px;"><span>' + (S.refazendo ? 'Pontos do treino' : 'Pontos DYSE') +
         '<small style="display:block; font-size:.72rem; opacity:.7; font-weight:500;">de ' + p.max + ' possíveis · ' +
-        (S.refazendo ? 'no ranking continua valendo a 1ª vez' + (S.pontosOriginais != null ? ' (' + S.pontosOriginais + ' pts)' : '') : 'contam no Ranking') +
+        (S.refazendo ? 'treino, não conta na meta da semana' : 'seu desempenho nesta atividade') +
         '</small></span><b>' + p.total + ' pts</b></div>' +
+      (metaOk ? cartaoMetaSemanal(ms) : (ms ? '<p class="px-ctx" style="text-align:center;">Meta da semana: ' + ms.feitas + ' de ' + ms.meta + ' atividades</p>' : '')) +
       linksFim(prox) +
       '<div class="px-res-card" style="margin-top:16px;"><h3>Como você pontuou</h3>' +
         '<div class="px-res-line"><div class="ic">' + I('target') + '</div><div class="txt">Acertos de primeira<small>' + p.primeira + ' × ' + DYSE_PONTOS.primeira + ' pts</small></div><div class="pts">+' + p.det.primeira + '</div></div>' +
@@ -1074,6 +1078,21 @@
     if(prox) iniciarContagem(dysePraticaUrl(prox.nivel, prox.aula, prox.num));
   }
 
+  /* Meta da semana cumprida: o aluno volta na segunda para as próximas. */
+  function cartaoMetaSemanal(ms){
+    return '<div class="px-res-card" style="text-align:center;"><h3>' + I('emoji_events') + ' Meta da semana concluída!</h3>' +
+      '<p style="margin:6px 0 0;">Você fez as ' + ms.meta + ' atividades desta semana. Volte ' + esc(dyseVolteEmTexto(ms.diasParaVoltar)) +
+      ' para fazer as próximas.</p></div>';
+  }
+  function telaMetaSemanal(ms){
+    document.body.innerHTML =
+      '<header class="px-top"><div class="px-top-row"><span class="px-mark">dyse</span>' +
+        '<div class="px-title"><b>' + esc(S.info.atividade.titulo) + '</b><small>' + esc(S.info.nivelNome) + ' · Aula ' + String(S.cfg.aula).padStart(2, '0') + '</small></div>' +
+        '<button class="px-close" onclick="location.href=\'/area-do-aluno.html#praticas\'">Sair</button></div></header>' +
+      '<div class="px-result">' + cartaoMetaSemanal(ms) +
+        '<button class="px-btn ghost" onclick="location.href=\'/area-do-aluno.html#praticas\'">Voltar para Atividades</button></div>';
+  }
+
   /* ---------- API pública ---------- */
   window.DysePratica = {
     async iniciar(cfg){
@@ -1101,6 +1120,11 @@
         if(res && res.status === 'concluida' && podeRefazer){
           S.refazendo = true;
           S.pontosOriginais = res.pontos_ranking != null ? res.pontos_ranking : (res.meta && res.meta.pontos);
+        }
+        // Meta semanal: com as atividades da semana feitas, não começa outra nova.
+        if(!S.refazendo){
+          const ms = await dyseMetaSemanal();
+          if(ms && ms.atingida){ telaMetaSemanal(ms); return; }
         }
       }
       const g = lerProgresso();

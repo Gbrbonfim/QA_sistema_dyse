@@ -1538,7 +1538,8 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
       wrap.innerHTML = avisoVazio('hourglass_empty', 'Atividades em preparação.', 'Assim que as atividades do seu nível ficarem prontas, elas aparecem aqui.');
       return;
     }
-    const [liberadas, refazer, sessao] = await Promise.all([dyseMinhasPraticasLiberadas(), dyseMinhasPraticasRefazer(), sb.auth.getSession()]);
+    const [liberadas, refazer, sessao, metaSem] = await Promise.all([dyseMinhasPraticasLiberadas(), dyseMinhasPraticasRefazer(), sb.auth.getSession(), dyseMetaSemanal()]);
+    const metaOk = !!(metaSem && metaSem.atingida);
     pintarBadgePraticas(niveis, liberadas);
     // Atividade começada e não terminada: o progresso fica guardado no aparelho
     // por 15 min depois da última resposta (praticas.js). Mostra "Continuar".
@@ -1581,6 +1582,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
             const pts = res.meta && res.meta.pontos != null ? res.meta.pontos + ' pts' : 'Feita';
             return '<div class="pr-row done" title="Concluída — pra refazer, peça à professora">' + miolo('<span class="pr-st ok">' + MI('check') + ' ' + pts + '</span>') + '</div>';
           }
+          if(metaOk){
+            return '<div class="pr-row locked" title="Meta da semana concluída: volte na segunda-feira">' + miolo('<span class="pr-st">' + MI('event_available') + '</span>') + '</div>';
+          }
           const prog = progressoDe(nivel.course, aula.aula, at.num);
           if(prog){
             const url = dysePraticaUrl(slug, aula.aula, at.num);
@@ -1611,7 +1615,14 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
           '<div class="pr-prog"><i style="width:' + Math.round(feitas / total * 100) + '%"></i></div></summary>' + grupos + '</details>';
       }).join('');
     }).join('');
-    wrap.innerHTML = (retomar
+    const metaHtml = metaSem
+      ? '<div class="pr-resume" style="cursor:default;">' + MI(metaOk ? 'emoji_events' : 'flag') + '<span><b>' +
+          (metaOk ? 'Meta da semana concluída!' : 'Meta da semana: ' + metaSem.feitas + ' de ' + metaSem.meta + ' atividades') + '</b><small>' +
+          (metaOk ? 'Volte ' + escapeHtmlLocal(dyseVolteEmTexto(metaSem.diasParaVoltar)) + ' para fazer as próximas.'
+                  : 'Faça ' + metaSem.meta + ' atividades por semana. A semana recomeça toda segunda-feira.') + '</small></span></div>'
+      : '';
+    if(metaOk) retomar = null;
+    wrap.innerHTML = metaHtml + (retomar
       ? '<a class="pr-resume" href="' + retomar.url + '">' + MI('history') + '<span><b>Continuar de onde parou</b><small>' + escapeHtmlLocal(retomar.titulo) +
         ' · questão ' + retomar.questao + (retomar.total ? ' de ' + retomar.total : '') + ' · restam <span data-expira="' + retomar.expira + '">' + faltaTexto(retomar.expira) + '</span></small></span>' +
         '<span class="go">' + MI('arrow_forward') + '</span></a>'

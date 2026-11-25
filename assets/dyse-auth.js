@@ -645,6 +645,33 @@ async function dyseRankingMensalAvisos(mes){
   const { data, error } = await sb.rpc('ranking_mensal_avisos', { p_mes: mes || null });
   return error ? [] : (data || []);
 }
+/* Meta semanal de atividades (igual para todos os níveis): o aluno faz no máximo
+   DYSE_META_SEMANAL atividades por semana, mesmo que a professora tenha liberado
+   mais. A semana vai de segunda 00:00 a domingo 23:59 (horário de Brasília). No
+   ranking do mês, cada atividade vale 50 / (meta semanal x semanas letivas). */
+const DYSE_META_SEMANAL = 5;
+function dyseSemanaAtualSP(){
+  const sp = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+  const dow = (sp.getDay() + 6) % 7;   // 0 = segunda
+  const seg = new Date(sp.getFullYear(), sp.getMonth(), sp.getDate() - dow);
+  const p2 = n => String(n).padStart(2, '0');
+  const ymd = seg.getFullYear() + '-' + p2(seg.getMonth() + 1) + '-' + p2(seg.getDate());
+  return { inicio: ymd + 'T00:00:00-03:00', diasParaVoltar: 7 - dow };
+}
+async function dyseMetaSemanal(){
+  const session = await dyseGetSession();
+  if(!session) return null;
+  const sem = dyseSemanaAtualSP();
+  const { count, error } = await sb.from('activity_results').select('user_id', { count: 'exact', head: true })
+    .eq('user_id', session.user.id).like('course', 'ativ-%').eq('status', 'concluida').gte('created_at', sem.inicio);
+  if(error){ console.error('dyseMetaSemanal', error); return null; }
+  const feitas = count || 0;
+  return { feitas, meta: DYSE_META_SEMANAL, atingida: feitas >= DYSE_META_SEMANAL, diasParaVoltar: sem.diasParaVoltar };
+}
+function dyseVolteEmTexto(dias){
+  return dias <= 1 ? 'amanhã (segunda-feira)' : 'em ' + dias + ' dias (na segunda-feira)';
+}
+
 // Compatibilidade: o antigo ranking por pontos.
 async function dyseRankingAtividades(){
   const { data, error } = await sb.rpc('ranking_atividades');
@@ -681,7 +708,7 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
     : p + 'º';
   const partes = r => r.pts_atividades == null ? '' :
     '<div class="dy-rank-parts">' +
-      '<span title="Atividades feitas ÷ liberadas no mês"><b>' + num(r.pts_atividades) + '</b>/50 atividades <small>(' + r.atividades_feitas + ' de ' + r.atividades_liberadas + ')</small></span>' +
+      '<span title="Atividades feitas no mês (até ' + DYSE_META_SEMANAL + ' por semana) ÷ meta do mês"><b>' + num(r.pts_atividades) + '</b>/50 atividades <small>(' + r.atividades_feitas + ' de ' + r.atividades_liberadas + ')</small></span>' +
       '<span title="Presenças ÷ aulas do mês (faltas justificadas, gravada e remarcou não contam)"><b>' + num(r.pts_presenca) + '</b>/30 presença <small>(' + r.aulas_presente + ' de ' + r.aulas_contadas + ')</small></span>' +
       '<span title="Semanas em que foi ao Speaking ÷ semanas com Speaking no mês"><b>' + num(r.pts_speaking) + '</b>/20 speaking <small>(' + r.speaking_semanas + ' de ' + r.speaking_previstas + ')</small></span>' +
       (r.qualidade != null ? '<span title="Desempate: % de acertos de primeira nas atividades do mês">' + num(r.qualidade) + '% de primeira</span>' : '') +
@@ -746,7 +773,7 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
       '<div class="dy-rank-card">' + linhas + '</div>' +
       (naoElegiveis.length ? '<p class="dy-rank-fora"><b>Começam a pontuar no mês seguinte</b> (entraram depois do dia 1º): ' + naoElegiveis.map(r => esc(r.nome || 'Aluno(a)')).join(', ') + '.</p>' : '') +
       minha +
-      '<p class="dy-rank-how"><b>Como funciona:</b> média de 0 a 100 no mês — <b>50</b> pelas atividades (feitas ÷ liberadas no mês), ' +
+      '<p class="dy-rank-how"><b>Como funciona:</b> média de 0 a 100 no mês — <b>50</b> pelas atividades (meta de ' + DYSE_META_SEMANAL + ' por semana; cada atividade feita vale a sua parte dos 50 do mês), ' +
       '<b>30</b> pela presença nas aulas (falta justificada, "vai assistir gravada" e "remarcou" não contam como falta) e ' +
       '<b>20</b> pelo Speaking Club (ir pelo menos 1 vez por semana). Feriados e recessos do calendário não contam. ' +
       'Empate: vence quem tem mais acertos de primeira, depois menos erros, depois menos tempo nas atividades e, por último, quem está há mais tempo na DYSE.</p>' +
