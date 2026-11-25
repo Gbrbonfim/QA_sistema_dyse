@@ -65,20 +65,15 @@
   let AUDIO_ATUAL = null;
   function pararAudio(){
     if(AUDIO_ATUAL){ try{ AUDIO_ATUAL.pause(); }catch(e){} AUDIO_ATUAL = null; }
-    // Só cancela se houver fala em andamento: no iPhone, cancel() seguido de
-    // speak() na mesma hora faz a fala nova sair muda.
-    if(window.speechSynthesis && (speechSynthesis.speaking || speechSynthesis.pending)){ speechSynthesis.cancel(); return true; }
     return false;
   }
-  /* iPhone/iPad: a fala do navegador só toca depois de um toque do usuário.
-     Chamado no toque em "Começar" para liberar o som da atividade inteira. */
+  /* iPhone/iPad: o som só toca depois de um toque do usuário. Chamado no toque
+     em "Começar": toca um silêncio curto e libera o áudio da atividade inteira. */
   function desbloquearAudio(){
     try{
-      if(window.speechSynthesis){
-        const u = new SpeechSynthesisUtterance(' ');
-        u.volume = 0; u.lang = 'en-US';
-        speechSynthesis.speak(u);
-      }
+      const a = new Audio(URL.createObjectURL(new Blob([SILENCIO_MP3], { type: 'audio/mpeg' })));
+      a.volume = 0;
+      a.play().catch(() => {});
     }catch(e){}
   }
   /* Texto que o motor fala em cada item (o mesmo que o script de geração usa). */
@@ -98,19 +93,11 @@
     return { texto: t.trim(), quem: quem };
   }
 
-  /* ---------- áudio: voz do navegador em inglês (reserva) ---------- */
-  let VOZ = null;
-  function escolherVoz(){
-    const vs = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
-    VOZ = vs.find(v => /en-US/i.test(v.lang) && /Google|Samantha|Jenny|Aria|Natural/i.test(v.name))
-       || vs.find(v => /en-US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
-  }
-  if(window.speechSynthesis){ escolherVoz(); speechSynthesis.onvoiceschanged = escolherVoz; }
-  /* Áudios gerados pela api/gerar-audio.js ficam no Supabase Storage (bucket
-     público "audios-atividades", mesmo nome de arquivo). Se a frase ainda não
-     tiver áudio lá, cai na voz do navegador. */
+  /* Áudios gerados pela api/gerar-audio.js (ElevenLabs) ficam no Supabase
+     Storage (bucket público "audios-atividades", mesmo nome de arquivo). Só
+     esses áudios tocam: a voz do navegador não é usada (decisão de 25/11/2026).
+     Frase nova sem áudio: gerar em /atividades/praticas/gerar-audios.html. */
   const AUDIO_BUCKET = 'https://vnpjsjrqghttsagbssxx.supabase.co/storage/v1/object/public/audios-atividades/';
-  const SEM_AUDIO = {};   // chaves que já falharam nesta página: vai direto pra voz do navegador
   /* Meio segundo de silêncio antes de cada áudio: a saída de som (fone, Bluetooth,
      depois de usar o microfone) demora para "acordar" e engolia o começo das
      frases curtas ("Peru", "Egypt"). Os MP3 da atividade são baixados logo no
@@ -132,31 +119,14 @@
     });
   }
   function falar(texto, rate, quem){
-    const cancelou = pararAudio();
+    pararAudio();
     const chave = chaveAudio(texto, vozPara(texto, quem));
     const local = window.DYSE_AUDIOS && window.DYSE_AUDIOS[chave];
-    if(AUDIO_PRONTO[chave] || local || !SEM_AUDIO[chave]){
-      const a = new Audio(AUDIO_PRONTO[chave] || (local ? '/atividades/praticas/audio/' + chave + '.mp3' : AUDIO_BUCKET + chave + '.mp3'));
-      a.playbackRate = rate && rate < 0.8 ? 0.75 : 1;   // "Devagar" sem distorcer a voz
-      AUDIO_ATUAL = a;
-      let caiu = false;
-      const reserva = () => { if(caiu || AUDIO_ATUAL !== a) return; caiu = true; SEM_AUDIO[chave] = 1; falarNavegador(texto, rate, false); };
-      a.onerror = reserva;
-      a.play().catch(e => { if(!e || e.name !== 'AbortError') reserva(); });
-      return;
-    }
-    falarNavegador(texto, rate, cancelou);
-  }
-  let FALA_ATUAL = null;   // referência viva: o Safari/Chrome descartam a fala se ela for "coletada"
-  function falarNavegador(texto, rate, aposCancelar){
-    if(!window.speechSynthesis) return;
-    if(!VOZ) escolherVoz();
-    const u = FALA_ATUAL = new SpeechSynthesisUtterance(texto);
-    u.lang = 'en-US'; u.rate = rate || 0.92; u.volume = 1;
-    if(VOZ) u.voice = VOZ;
-    const ir = () => { if(speechSynthesis.paused) speechSynthesis.resume(); speechSynthesis.speak(u); };
-    // Logo depois de cancel(), o iPhone precisa de um respiro antes de falar de novo.
-    if(aposCancelar) setTimeout(ir, 120); else ir();
+    const a = new Audio(AUDIO_PRONTO[chave] || (local ? '/atividades/praticas/audio/' + chave + '.mp3' : AUDIO_BUCKET + chave + '.mp3'));
+    a.playbackRate = rate && rate < 0.8 ? 0.75 : 1;   // "Devagar" sem distorcer a voz
+    AUDIO_ATUAL = a;
+    a.onerror = () => console.error('Áudio da atividade não encontrado:', chave, texto);
+    a.play().catch(e => { if(!e || e.name !== 'AbortError') console.error('Áudio da atividade não tocou:', chave, e); });
   }
 
   /* ---------- topo / barra / banner ---------- */
