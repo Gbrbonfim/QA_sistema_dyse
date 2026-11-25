@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 17 · What should I wear?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 17 · Leitura (Today's Outfit)
+   Alinhado ao infográfico (pense no que vai fazer, veja o tempo, comece por uma peça-chave,
+   troque se não ficar bom, tudo bem mudar de ideia) e aos object pronouns. Conteúdo NOVO: a
+   Mia vai a uma festa e pede ajuda ao irmão, o Leo. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Mia', "Leo, can you help me? I'm going out tonight and I have no idea what to wear."],
+  ['Leo', 'Sure! Where are you going?'],
+  ['Mia', "To Sara's birthday party. It's at a restaurant."],
+  ['Leo', "OK. Check the weather first. It's cold tonight."],
+  ['Mia', 'Hmm. What about my black dress? I love it.'],
+  ['Leo', "Good idea! Start with it. It's your key item."],
+  ['Mia', 'And these red shoes? Do you like them?'],
+  ['Leo', "Not really. They don't match the dress."],
+  ['Mia', "You're right. I'm wearing my black boots then."],
+  ['Leo', "Great. And take your jacket. You need it tonight."],
+  ['Mia', "I don't like this jacket now. I'm changing my mind!"],
+  ['Leo', "That's OK! Try the gray coat. It looks good on you."],
+  ['Mia', 'Perfect! Can you take a photo of me?'],
+  ['Leo', 'Sure. Smile! You look great.'],
+  ['Mia', 'Thanks, Leo! Can I give you a hug?'],
+  ['Leo', 'Ha ha! Yes. Now go! Your friends are waiting for you.']
+];
+const lado = q => q === 'Mia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 17, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Sure! Where are you going?', 'Sure! Where do you going?', 'Sure! Where you are going?'], 0, 'Claro! Aonde você vai?'),
+    prox(2, ["To Sara's birthday party. It's at a restaurant.", "To Sara birthday party. Its at a restaurant.", "To Saras' birthday party."], 1, 'Para a festa de aniversário da Sara. É num restaurante.'),
+    prox(4, ['Hmm. What about my black dress? I love her.', 'Hmm. What about my black dress? I love its.', 'Hmm. What about my black dress? I love it.'], 2, 'Hum. E o meu vestido preto? Eu amo ele.'),
+    prox(5, ["Good idea! Start with it. It's your key item.", "Good idea! Start with them. It's your key item.", "Good idea! Start with its."], 0, 'Boa ideia! Comece por ele. É a sua peça-chave.'),
+    prox(6, ['And these red shoes? Do you like they?', 'And these red shoes? Do you like them?', 'And these red shoes? Do you like it?'], 1, 'E estes sapatos vermelhos? Você gosta deles?'),
+    prox(7, ["Not really. Them don't match the dress.", "Not really. They doesn't match the dress.", "Not really. They don't match the dress."], 2, 'Na verdade, não. Não combinam com o vestido.'),
+    prox(9, ['Great. And take your jacket. You need it tonight.', 'Great. And take your jacket. You need them tonight.', 'Great. And take your jacket. You need its tonight.'], 0, 'Ótimo. E leve a sua jaqueta. Você vai precisar dela hoje.'),
+    prox(10, ["I don't like this jacket now. I'm changing my head!", "I don't like this jacket now. I'm changing my mind!", "I don't like this jacket now. I'm change my mind!"], 1, 'Não gosto mais desta jaqueta. Estou mudando de ideia!'),
+    prox(11, ["That's OK! Try the gray coat. It looks good on your.", "That's OK! Try the gray coat. It looks good in you.", "That's OK! Try the gray coat. It looks good on you."], 2, 'Tudo bem! Experimente o casaco cinza. Fica bem em você.'),
+    prox(12, ['Perfect! Can you take a photo of me?', 'Perfect! Can you take a photo of I?', 'Perfect! Can you take a photo of my?'], 0, 'Perfeito! Você pode tirar uma foto minha?'),
+    prox(14, ['Thanks, Leo! Can I give your a hug?', 'Thanks, Leo! Can I give you a hug?', 'Thanks, Leo! Can I give he a hug?'], 1, 'Obrigada, Leo! Posso te dar um abraço?'),
+    prox(15, ['Ha ha! Yes. Now go! Your friends are waiting for your.', 'Ha ha! Yes. Now go! Your friends are waiting for they.', 'Ha ha! Yes. Now go! Your friends are waiting for you.'], 2, 'Ha ha! Sim. Agora vai! Os seus amigos estão te esperando.'),
+    { instrucao: 'Where is Mia going tonight?', frase: "To Sara's ___.", opcoes: ['birthday party', 'house', 'school'], certa: 0, traducao: 'Ao aniversário da Sara.' },
+    { instrucao: 'What does Leo tell her to check first?', frase: 'The ___.', opcoes: ['shoes', 'weather', 'restaurant'], certa: 1, traducao: 'O tempo.' },
+    { instrucao: "What is Mia's key item?", frase: 'Her black ___.', opcoes: ['boots', 'coat', 'dress'], certa: 2, traducao: 'O vestido preto.' },
+    { instrucao: "Why doesn't Leo like the red shoes?", frase: "They don't ___ the dress.", opcoes: ['match', 'look', 'wear'], certa: 0, traducao: 'Não combinam com o vestido.' },
+    { instrucao: 'What is Mia wearing on her feet?', frase: 'Her black ___.', opcoes: ['shoes', 'boots', 'sandals'], certa: 1, traducao: 'As botas pretas.' },
+    { instrucao: 'Does Mia wear her jacket?', frase: "No. She's wearing the gray ___.", opcoes: ['dress', 'sweater', 'coat'], certa: 2, traducao: 'Não. Ela vai com o casaco cinza.' },
+    { instrucao: 'What does Mia ask Leo to do?', frase: 'Take a ___ of her.', opcoes: ['photo', 'coat', 'look'], certa: 0, traducao: 'Tirar uma foto dela.' },
+    { instrucao: 'Who is waiting for Mia?', frase: 'Her ___.', opcoes: ['brother', 'friends', 'parents'], certa: 1, traducao: 'Os amigos dela.' }
+  ]
+});
+</script>
+</body>
+</html>

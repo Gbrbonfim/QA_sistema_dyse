@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 17 · I love it!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 17 · Escrita (Today's Outfit)
+   Alinhado ao "Grammar Point" e às tarefas de casa — object pronouns (me, you, him, her, it, us,
+   them) depois do verbo e da preposição, em contraste com subject pronouns, e o vocabulário de
+   roupas (match, look good, comfy, pick, change your mind). Conteúdo NOVO. A isca é o pronome
+   errado. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 17, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu amo estes jeans. Quero comprá-los.'), palavras: ['I', 'love', 'these', 'jeans.', 'I', 'want', 'to', 'buy', 'them'], isca: ['they'], fim: '.', traducao: 'Amo estes jeans. Quero comprá-los.' },
+    { contexto: M('A Sara está usando um vestido novo. Eu gosto muito dele.'), palavras: ['I', 'really', 'like', 'it'], isca: ['its'], fim: '.', traducao: 'Gosto muito dele (do vestido).' },
+    { contexto: M('Você pode me ajudar?'), palavras: ['Can', 'you', 'help', 'me'], isca: ['I'], fim: '?', traducao: 'Você pode me ajudar?' },
+    { contexto: M('A Monica não sabe o que vestir. Ajude-a!'), palavras: ['Help', 'her'], isca: ['she'], fim: '!', traducao: 'Ajude-a!' },
+    { contexto: M('O meu irmão não é cuidadoso. Eu não dou as minhas roupas para ele.'), palavras: ['I', "don't", 'give', 'him', 'my', 'clothes'], isca: ['he'], fim: '.', traducao: 'Não dou as minhas roupas para ele.' },
+    { contexto: M('Você quer vir com a gente?'), palavras: ['Do', 'you', 'want', 'to', 'come', 'with', 'us'], isca: ['we'], fim: '?', traducao: 'Você quer vir com a gente?' },
+    { contexto: M('Onde está a minha jaqueta? Não consigo encontrá-la.'), palavras: ["I", "can't", 'find', 'it'], isca: ['her'], fim: '.', traducao: 'Não consigo encontrá-la.' },
+    { contexto: M('Estou falando com você! Por que você não está me ouvindo?'), palavras: ['Why', "aren't", 'you', 'listening', 'to', 'me'], isca: ['I'], fim: '?', traducao: 'Por que você não está me ouvindo?' },
+    { contexto: M('O Julio é o vendedor novo. Dê as instruções a ele.'), palavras: ['Give', 'him', 'the', 'instructions'], isca: ['his'], fim: '.', traducao: 'Dê as instruções a ele.' },
+    { contexto: M('A mamãe quer um chapéu. Vou dar um novo para ela.'), palavras: ["I'm", 'giving', 'her', 'a', 'new', 'one'], isca: ['she'], fim: '.', traducao: 'Vou dar um novo para ela.' },
+    { contexto: M('Estes sapatos são pequenos demais. Não consigo usá-los.'), palavras: ['These', 'shoes', 'are', 'too', 'small.', 'I', "can't", 'wear', 'them'], isca: ['it'], fim: '.', traducao: 'Estes sapatos são pequenos demais. Não consigo usá-los.' },
+    { contexto: M('Ela gosta da gente.'), palavras: ['She', 'likes', 'us'], isca: ['our'], fim: '.', traducao: 'Ela gosta da gente.' },
+    { contexto: M('Eu escolho as minhas roupas na noite anterior.'), palavras: ['I', 'pick', 'my', 'clothes', 'the', 'night', 'before'], isca: ['me'], fim: '.', traducao: 'Escolho as minhas roupas na noite anterior.' },
+    { contexto: M('A sua bolsa combina com os seus sapatos.'), palavras: ['Your', 'bag', 'matches', 'your', 'shoes'], isca: ['match'], fim: '.', traducao: 'A sua bolsa combina com os seus sapatos.' },
+    { contexto: M('Este vestido fica bem em você.'), palavras: ['This', 'dress', 'looks', 'good', 'on', 'you'], isca: ['your'], fim: '.', traducao: 'Este vestido fica bem em você.' },
+    { contexto: M('Tudo bem mudar de ideia.'), palavras: ["It's", 'okay', 'to', 'change', 'your', 'mind'], isca: ['you'], fim: '.', traducao: 'Tudo bem mudar de ideia.' },
+    { contexto: M('Este moletom é muito confortável.'), palavras: ['This', 'sweater', 'is', 'really', 'comfy'], isca: ['are'], fim: '.', traducao: 'Este suéter é muito confortável.' },
+    { contexto: M('Nós vamos sair hoje à noite.'), palavras: ["We're", 'going', 'out', 'tonight'], isca: ['Us'], fim: '.', traducao: 'Vamos sair hoje à noite.' },
+    { contexto: M('Eu separo as minhas roupas na cama.'), palavras: ['I', 'lay', 'out', 'my', 'clothes', 'on', 'the', 'bed'], isca: ['me'], fim: '.', traducao: 'Separo as minhas roupas na cama.' },
+    { contexto: M('Nós precisamos de casacos novos. Vamos comprá-los neste fim de semana.'), palavras: ["Let's", 'buy', 'them', 'this', 'weekend'], isca: ['they'], fim: '.', traducao: 'Vamos comprá-los neste fim de semana.' }
+  ]
+});
+</script>
+</body>
+</html>

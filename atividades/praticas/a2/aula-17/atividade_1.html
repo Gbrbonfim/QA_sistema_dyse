@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 17 · What are they talking about?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 17 · Escuta (Today's Outfit)
+   Alinhado ao "Grammar Point: what does the underlined word refer to?" — object pronouns (it,
+   them, her, him, us) e roupas. Conteúdo NOVO: o aluno ouve a frase com o pronome e escolhe a
+   quem ou a que ele se refere. 24 questões. */
+const IC = { 'the jacket': 'apparel', 'the shoes': 'footprint', 'my sister': 'woman', 'my brother': 'man', 'the dress': 'checkroom', 'the socks': 'laundry', 'my parents': 'elderly', 'my friend and me': 'group' };
+const A = ['the jacket', 'the shoes', 'my sister', 'my brother'];
+const B = ['the dress', 'the socks', 'my parents', 'my friend and me'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 17, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what or who is the person talking about?',
+  itens: [
+    qa("It's warm and it has big pockets. I wear it in the winter.", 0),
+    qa("They're too small. I can't wear them.", 1),
+    qa("She can't decide what to wear. Let's help her.", 2),
+    qa('He never picks his clothes the night before. I always tell him!', 3),
+    qa("I can't find it! It's black, and I need it for the cold.", 0),
+    qa("They're new trainers. I'm wearing them for the first time.", 1),
+    qa("She's wearing my shirt! I need to talk to her.", 2),
+    qa("He's taking my T-shirts again. I don't give him my clothes!", 3),
+    qa('Put it on. It\'s cold outside!', 0),
+    qa("Look at them! They're black and white. Very nice!", 1),
+    qa("She's my little sister. I always help her with her hair.", 2),
+    qa("He's tall like my father. My jeans are too short for him.", 3),
+    qb("It's red and long. I'm wearing it to the party.", 0),
+    qb("They're dirty. Put them in the laundry basket.", 1),
+    qb('They live in a small town. I visit them every month.', 2),
+    qb("We're going shopping. Do you want to come with us?", 3),
+    qb('I love it! It matches my new shoes.', 0),
+    qb('One is blue and one is green. They don\'t match!', 1),
+    qb('Mom and Dad are coming to dinner. I\'m cooking for them.', 2),
+    qb('Can you take a photo of us? We look good today!', 3),
+    qb("It's comfy and it looks good on me. I'm buying it!", 0),
+    qb("They're warm. I wear them with my boots.", 1),
+    qb("They're old now, but they always give me good ideas about clothes.", 2),
+    qb('Our teacher is giving us a test today.', 3)
+  ]
+});
+</script>
+</body>
+</html>

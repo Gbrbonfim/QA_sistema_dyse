@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 17 · Object pronouns</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 17 · Gramática (Today's Outfit)
+   Alinhado ao "Grammar Point" e ao texto "Choosing Clothes for the Day" — subject pronouns (I,
+   he, she, we, they) x object pronouns (me, him, her, us, them), it x its, e o vocabulário do
+   infográfico (match, lay out, change your mind, look right, go out, pick, look good, comfy).
+   Conteúdo NOVO. 24 questões. */
+const SIN = 'Choose the word or phrase with the same meaning';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 17, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'I love these jeans. I want to buy ___.', opcoes: ['them', 'they', 'it'], certa: 0, traducao: 'Amo estes jeans. Quero comprá-los.' },
+    { frase: 'Carla is wearing a new skirt. I really like ___.', opcoes: ['her', 'it', 'its'], certa: 1, traducao: 'A Carla está usando uma saia nova. Gosto muito dela (da saia).' },
+    { frase: "Can you give this scarf to John? He needs ___.", opcoes: ['him', 'them', 'it'], certa: 2, traducao: 'Você pode dar este cachecol ao John? Ele precisa dele.' },
+    { frase: 'My friends and I want new shoes. Do you want to come with ___?', opcoes: ['us', 'we', 'our'], certa: 0, traducao: 'Os meus amigos e eu queremos sapatos novos. Quer vir com a gente?' },
+    { frase: 'Julio is the new shop assistant. Give ___ the instructions, please.', opcoes: ['he', 'him', 'his'], certa: 1, traducao: 'O Julio é o vendedor novo. Dê as instruções a ele, por favor.' },
+    { frase: 'Mom wants a hat. I\'m giving ___ a new one.', opcoes: ['she', 'his', 'her'], certa: 2, traducao: 'A mamãe quer um chapéu. Vou dar um novo para ela.' },
+    { frase: "We can't find our coats. Can you help ___?", opcoes: ['us', 'we', 'them'], certa: 0, traducao: 'Não conseguimos achar os nossos casacos. Você pode nos ajudar?' },
+    { frase: 'Can you give ___ these gloves? I don\'t have my gloves today!', opcoes: ['I', 'me', 'my'], certa: 1, traducao: 'Você pode me dar estas luvas? Não estou com as minhas luvas hoje!' },
+    { frase: "I have too many clothes. I don't know where to put ___.", opcoes: ['it', 'they', 'them'], certa: 2, traducao: 'Tenho roupas demais. Não sei onde colocá-las.' },
+    { frase: '___ likes to wear jeans and a T-shirt.', opcoes: ['He', 'Him', 'His'], certa: 0, traducao: 'Ele gosta de usar jeans e camiseta.' },
+    { frase: 'He usually asks ___, "Does this look good?"', opcoes: ['I', 'me', 'my'], certa: 1, traducao: 'Ele normalmente me pergunta: "Isto fica bom?"' },
+    { frase: "The shoes are nice, but he isn't sure if he likes ___.", opcoes: ['they', 'it', 'them'], certa: 2, traducao: 'Os sapatos são bonitos, mas ele não tem certeza se gosta deles.' },
+    { frase: "___ need to leave soon. Let's go!", opcoes: ['We', 'Us', 'Our'], certa: 0, traducao: 'Precisamos sair logo. Vamos!' },
+    { frase: "My brother is looking for his jacket because ___ is cold outside.", opcoes: ['its', 'it', 'he'], certa: 1, traducao: 'O meu irmão está procurando a jaqueta porque está frio lá fora.' },
+    { frase: "___ are very nice shoes!", opcoes: ['Them', 'It', 'They'], certa: 2, traducao: 'São sapatos muito bonitos!' },
+    { frase: "I'm talking to you. Why aren't you listening to ___?", opcoes: ['me', 'I', 'you'], certa: 0, traducao: 'Estou falando com você. Por que você não está me ouvindo?' },
+    { instrucao: SIN, frase: 'match = ___', opcoes: ['combine', 'buy', 'wash'], certa: 0, traducao: 'combinar' },
+    { instrucao: SIN, frase: 'pick = ___', opcoes: ['wear', 'select', 'change'], certa: 1, traducao: 'escolher' },
+    { instrucao: SIN, frase: 'comfy = ___', opcoes: ['expensive', 'beautiful', 'comfortable'], certa: 2, traducao: 'confortável' },
+    { instrucao: SIN, frase: 'change your mind = ___', opcoes: ['have a different opinion', 'change your clothes', 'go home'], certa: 0, traducao: 'mudar de ideia' },
+    { instrucao: SIN, frase: 'go out = ___', opcoes: ['stay at home', 'leave home to have fun', 'go to bed'], certa: 1, traducao: 'sair para se divertir' },
+    { instrucao: SIN, frase: 'lay out = ___', opcoes: ['wash', 'buy', 'put on a surface, like the bed'], certa: 2, traducao: 'separar, estender sobre uma superfície' },
+    { instrucao: SIN, frase: 'look good = ___', opcoes: ['nice to look at', 'look for', 'not match'], certa: 0, traducao: 'ficar bonito' },
+    { instrucao: SIN, frase: 'look right = ___', opcoes: ['look to the right', 'seem correct', 'look tired'], certa: 1, traducao: 'parecer certo, ficar bem' }
+  ]
+});
+</script>
+</body>
+</html>
