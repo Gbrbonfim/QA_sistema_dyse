@@ -448,6 +448,23 @@ window.DYSE_PRATICAS = {
         ]
       }
     ]
+  },
+  a2: {
+    course: 'ativ-a2',
+    nome: 'A2',
+    aulas: [
+      {
+        aula: 1,
+        titulo: 'Class 01 · Welcome Class',
+        atividades: [
+          { num: 1, titulo: 'What is it about?', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Interview questions', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'A day in the life of a baker', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'All about me', tipo: 'Escute e grave', treina: 'Fala · Entrevista', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'How much do you remember?', tipo: 'Make a Choice', treina: 'Gramática · Revisão do A1', minutos: '10 - 12', questoes: 24 }
+        ]
+      }
+    ]
   }
 };
 

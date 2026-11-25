@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 1 · Interview questions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 01 · Escrita (Welcome Class)
+   Alinhado ao slide "Talking Point" — entrevista pessoal (família, onde mora, trabalho, hobby,
+   rotina, frequência, roupa, can, where were you, what did you do, birthday) e respostas sobre
+   si mesmo. Conteúdo NOVO. O contexto traz a frase em português; a isca é a forma errada.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 1, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Onde a sua família mora?'), palavras: ['Where', 'does', 'your', 'family', 'live'], isca: ['do'], fim: '?', traducao: 'Onde a sua família mora?' },
+    { contexto: M('O que o seu pai faz?'), palavras: ['What', 'does', 'your', 'father', 'do'], isca: ['is'], fim: '?', traducao: 'O que o seu pai faz (de profissão)?' },
+    { contexto: M('Você gosta da sua escola?'), palavras: ['Do', 'you', 'like', 'your', 'school'], isca: ['Are'], fim: '?', traducao: 'Você gosta da sua escola?' },
+    { contexto: M('Qual é o seu esporte favorito?'), palavras: ["What's", 'your', 'favorite', 'sport'], isca: ['does'], fim: '?', traducao: 'Qual é o seu esporte favorito?' },
+    { contexto: M('A que horas você vai para a cama?'), palavras: ['What', 'time', 'do', 'you', 'go', 'to', 'bed'], isca: ['are'], fim: '?', traducao: 'A que horas você vai para a cama?' },
+    { contexto: M('Com que frequência você vai à academia?'), palavras: ['How', 'often', 'do', 'you', 'go', 'to', 'the', 'gym'], isca: ['are'], fim: '?', traducao: 'Com que frequência você vai à academia?' },
+    { contexto: M('O que você está vestindo hoje?'), palavras: ['What', 'are', 'you', 'wearing', 'today'], isca: ['do'], fim: '?', traducao: 'O que você está vestindo hoje?' },
+    { contexto: M('Você sabe cozinhar?'), palavras: ['Can', 'you', 'cook'], isca: ['Are'], fim: '?', traducao: 'Você sabe cozinhar?' },
+    { contexto: M('Onde você estava no sábado à noite?'), palavras: ['Where', 'were', 'you', 'on', 'Saturday', 'night'], isca: ['did'], fim: '?', traducao: 'Onde você estava no sábado à noite?' },
+    { contexto: M('O que você comeu no almoço ontem?'), palavras: ['What', 'did', 'you', 'eat', 'for', 'lunch', 'yesterday'], isca: ['were'], fim: '?', traducao: 'O que você comeu no almoço ontem?' },
+    { contexto: M('Como foi o seu último fim de semana?'), palavras: ['How', 'was', 'your', 'last', 'weekend'], isca: ['were'], fim: '?', traducao: 'Como foi o seu último fim de semana?' },
+    { contexto: M('Quando é o aniversário da sua mãe?'), palavras: ['When', 'is', 'your', "mother's", 'birthday'], isca: ['does'], fim: '?', traducao: 'Quando é o aniversário da sua mãe?' },
+    { contexto: M('Está calor na sua cidade hoje?'), palavras: ['Is', 'it', 'hot', 'in', 'your', 'city', 'today'], isca: ['Does'], fim: '?', traducao: 'Está calor na sua cidade hoje?' },
+    { contexto: M('Eu moro num apartamento pequeno.'), palavras: ['I', 'live', 'in', 'a', 'small', 'apartment'], isca: ['lives'], fim: '.', traducao: 'Eu moro num apartamento pequeno.' },
+    { contexto: M('Eu sou enfermeira num hospital.'), palavras: ["I'm", 'a', 'nurse', 'in', 'a', 'hospital'], isca: ['an'], fim: '.', traducao: 'Eu sou enfermeira num hospital.' },
+    { contexto: M('Eu normalmente uso jeans no trabalho.'), palavras: ['I', 'usually', 'wear', 'jeans', 'at', 'work'], isca: ['wearing'], fim: '.', traducao: 'Eu normalmente uso jeans no trabalho.' },
+    { contexto: M('Hoje eu estou usando um vestido azul.'), palavras: ['Today', "I'm", 'wearing', 'a', 'blue', 'dress'], isca: ['wear'], fim: '.', traducao: 'Hoje eu estou usando um vestido azul.' },
+    { contexto: M('Ontem eu estava em casa às nove.'), palavras: ['Yesterday', 'I', 'was', 'at', 'home', 'at', 'nine'], isca: ['were'], fim: '.', traducao: 'Ontem eu estava em casa às nove.' },
+    { contexto: M('Eu sei tocar violão, mas não sei desenhar.'), palavras: ['I', 'can', 'play', 'the', 'guitar,', 'but', 'I', "can't", 'draw'], isca: ["don't"], fim: '.', traducao: 'Eu sei tocar violão, mas não sei desenhar.' },
+    { contexto: M('O meu último aniversário foi ótimo.'), palavras: ['My', 'last', 'birthday', 'was', 'great'], isca: ['were'], fim: '.', traducao: 'O meu último aniversário foi ótimo.' }
+  ]
+});
+</script>
+</body>
+</html>

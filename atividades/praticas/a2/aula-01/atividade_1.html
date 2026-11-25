@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 1 · What is it about?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 01 · Escuta (Welcome Class)
+   Alinhado ao slide "How Much Do You Remember?" — categorias do A1 (food and drinks, clothes,
+   jobs, weather, sports, hobbies, things in your bag, your home). Conteúdo NOVO: o aluno ouve
+   uma frase e diz de que categoria ela fala. 24 questões. */
+const IC = {
+  'food and drinks': 'restaurant', 'clothes': 'checkroom', 'jobs': 'work', 'weather': 'partly_cloudy_day',
+  'sports': 'sports_soccer', 'hobbies': 'palette', 'things in your bag': 'backpack', 'your home': 'home'
+};
+const A = ['food and drinks', 'clothes', 'jobs', 'weather'];
+const B = ['sports', 'hobbies', 'things in your bag', 'your home'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 1, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what is it about?',
+  itens: [
+    qa('I love chocolate cake and hot tea.', 0),
+    qa("He's wearing a white shirt and black shoes.", 1),
+    qa('My mother is a teacher at a big school.', 2),
+    qa("It's sunny and hot in Rio today.", 3),
+    qa('Do you want some orange juice?', 0),
+    qa('I need new jeans and a T-shirt.', 1),
+    qa('My brother is a doctor. He works in a hospital.', 2),
+    qa("It's raining. Don't forget your umbrella!", 3),
+    qa('We eat rice, beans and chicken on Sundays.', 0),
+    qa('She always wears a dress and a hat to parties.', 1),
+    qa('Carlos is a taxi driver in New York.', 2),
+    qa("It's cloudy and windy this morning.", 3),
+    qb('I play volleyball on the beach on Saturdays.', 0),
+    qb('My hobby is painting pictures of animals.', 1),
+    qb('I always have my keys and my wallet with me.', 2),
+    qb('Our kitchen is small, but the living room is big.', 3),
+    qb('He swims at the club every morning.', 0),
+    qb('She reads books and plays the piano in her free time.', 1),
+    qb("Where's my phone? It's not in my bag!", 2),
+    qb('My bedroom has a big bed and a desk.', 3),
+    qb('Do you play tennis or golf?', 0),
+    qb('I love dancing and taking photos at the weekend.', 1),
+    qb('I have a pen, a notebook and some gum in my bag.', 2),
+    qb('We have two bathrooms and a small garden.', 3)
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 1 · A day in the life of a baker</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 01 · Leitura (Welcome Class)
+   Alinhado ao slide "Listening" — a rotina de uma profissional (o que faz primeiro, depois, à
+   tarde; mora longe do trabalho?; o que está fazendo no momento; de onde é a família).
+   Conteúdo NOVO: a Julia entrevista o Leo, padeiro em Chicago. 20 questões: 12 de "próxima
+   fala" + 8 de compreensão. */
+const D = [
+  ['Julia', 'Hi, Leo! What do you do?'],
+  ['Leo', "I'm a baker. I have a small bakery in Chicago."],
+  ['Julia', 'Where is your family from?'],
+  ['Leo', 'My parents are from Portugal, but I was born here.'],
+  ['Julia', 'What time do you wake up?'],
+  ['Leo', 'I wake up at three in the morning.'],
+  ['Julia', 'Wow! What do you do first?'],
+  ['Leo', 'First, I drink a coffee. Then I go to the bakery and make the bread.'],
+  ['Julia', 'Do you live far from work?'],
+  ['Leo', "No, I don't. I live five minutes from the bakery."],
+  ['Julia', 'What do you do in the afternoon?'],
+  ['Leo', 'I take my dog for a walk in the park.'],
+  ['Julia', 'What are you doing at the moment?'],
+  ['Leo', "I'm making a new chocolate cake for the bakery."],
+  ['Julia', 'What time do you go to bed?'],
+  ['Leo', "I go to bed at eight. I'm always tired at night!"]
+];
+const lado = q => q === 'Julia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 1, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I'm a baker. I have a small bakery in Chicago.", "I'm baker. I has a small bakery in Chicago.", 'I am a baker. I having a small bakery in Chicago.'], 0, 'Sou padeiro. Tenho uma padaria pequena em Chicago.'),
+    prox(2, ['Where are your family from?', 'Where is your family from?', 'Where does your family from?'], 1, 'De onde é a sua família?'),
+    prox(3, ['My parents is from Portugal, but I born here.', 'My parents are from Portugal, but I am born here yesterday.', 'My parents are from Portugal, but I was born here.'], 2, 'Os meus pais são de Portugal, mas eu nasci aqui.'),
+    prox(4, ['What time do you wake up?', 'What time are you wake up?', 'What time you wake up?'], 0, 'A que horas você acorda?'),
+    prox(5, ['I wakes up at three in the morning.', 'I wake up at three in the morning.', 'I woke up at three in the morning every day.'], 1, 'Eu acordo às três da manhã.'),
+    prox(7, ['First, I drinks a coffee. Then I goes to the bakery.', 'First, I drinking a coffee. Then I go to the bakery.', 'First, I drink a coffee. Then I go to the bakery and make the bread.'], 2, 'Primeiro, tomo um café. Depois vou para a padaria e faço o pão.'),
+    prox(8, ['Do you live far from work?', 'Are you live far from work?', 'Does you live far from work?'], 0, 'Você mora longe do trabalho?'),
+    prox(9, ["No, I'm not. I live five minutes from the bakery.", "No, I don't. I live five minutes from the bakery.", "No, I doesn't. I lives five minutes from the bakery."], 1, 'Não. Moro a cinco minutos da padaria.'),
+    prox(11, ['I takes my dog for a walk in the park.', 'I taking my dog for a walk in the park.', 'I take my dog for a walk in the park.'], 2, 'Levo o meu cachorro para passear no parque.'),
+    prox(12, ['What are you doing at the moment?', 'What do you doing at the moment?', 'What are you do at the moment?'], 0, 'O que você está fazendo no momento?'),
+    prox(13, ['I make a new chocolate cake at the moment.', "I'm making a new chocolate cake for the bakery.", "I'm make a new chocolate cake for the bakery."], 1, 'Estou fazendo um bolo de chocolate novo para a padaria.'),
+    prox(15, ["I goes to bed at eight. I'm always tired!", "I'm go to bed at eight. I always tired at night!", "I go to bed at eight. I'm always tired at night!"], 2, 'Vou para a cama às oito. Estou sempre cansado à noite!'),
+    { instrucao: "What's Leo's job?", frase: "He's a ___.", opcoes: ['baker', 'chef', 'doctor'], certa: 0, traducao: 'Ele é padeiro.' },
+    { instrucao: "Where are Leo's parents from?", frase: 'From ___.', opcoes: ['Chicago', 'Portugal', 'Italy'], certa: 1, traducao: 'De Portugal.' },
+    { instrucao: 'What time does Leo wake up?', frase: 'At ___ in the morning.', opcoes: ['five', 'eight', 'three'], certa: 2, traducao: 'Às três da manhã.' },
+    { instrucao: 'What does Leo do first?', frase: 'He drinks a ___.', opcoes: ['coffee', 'juice', 'tea'], certa: 0, traducao: 'Ele toma um café.' },
+    { instrucao: 'Does Leo live far from work?', frase: "No, he ___.", opcoes: ["isn't", "doesn't", "can't"], certa: 1, traducao: 'Não, não mora.' },
+    { instrucao: 'What does Leo do in the afternoon?', frase: 'He takes his ___ for a walk.', opcoes: ['son', 'mother', 'dog'], certa: 2, traducao: 'Ele leva o cachorro para passear.' },
+    { instrucao: 'What is Leo doing at the moment?', frase: "He's making a ___.", opcoes: ['chocolate cake', 'pizza', 'sandwich'], certa: 0, traducao: 'Ele está fazendo um bolo de chocolate.' },
+    { instrucao: 'What time does Leo go to bed?', frase: 'At ___.', opcoes: ['ten', 'eight', 'nine'], certa: 1, traducao: 'Às oito.' }
+  ]
+});
+</script>
+</body>
+</html>
