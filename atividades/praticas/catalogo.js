@@ -686,6 +686,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'What were you doing?', tipo: 'Escute e grave', treina: 'Fala · Past continuous', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Past continuous and sequencers', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 26,
+        titulo: 'Class 26 · Photos That Tell Stories',
+        atividades: [
+          { num: 1, titulo: 'What interrupted the photo?', tipo: 'Escute e escolha', treina: 'Escuta · Past simple x continuous', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'While I was taking photos...', tipo: 'Monte a frase', treina: 'Escrita · When / while', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'The story behind the photo', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Describe your favorite photo', tipo: 'Escute e grave', treina: 'Fala · Descrever uma foto', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Past simple or past continuous?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

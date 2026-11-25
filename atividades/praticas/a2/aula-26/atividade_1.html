@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 26 · What interrupted the photo?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 26 · Escuta (Photos That Tell Stories)
+   Alinhado ao "Grammar Point: Past Simple x Past Continuous" — a ação longa (past
+   continuous, no fundo) e a ação curta que interrompe (past simple, com when / while).
+   Conteúdo NOVO sobre fotos: o aluno ouve e escolhe o que INTERROMPEU a ação. 24 questões. */
+const IC = {
+  'a dog': 'pets', 'the rain': 'rainy', 'the wind': 'air', 'a bird': 'flutter_dash', 'the phone': 'call',
+  'a friend': 'person', 'the baby': 'child_care', 'a car': 'directions_car', 'the lights': 'lightbulb', 'the music': 'music_note'
+};
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: IC[label] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 26, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what interrupted the action?',
+  itens: [
+    q('I was taking a selfie when a dog jumped on me.', 'a dog', 'a bird', 'the wind'),
+    q('We were taking photos on the beach when it started to rain.', 'the rain', 'the wind', 'a car'),
+    q('She was smiling for the camera when the wind blew her hat away.', 'the wind', 'the rain', 'a dog'),
+    q('I was taking a picture of the sea when a bird landed on my camera.', 'a bird', 'a dog', 'the baby'),
+    q('He was looking at old photos when the phone rang.', 'the phone', 'the music', 'a friend'),
+    q('I was trying to get the perfect shot when my friend arrived.', 'a friend', 'the phone', 'the lights'),
+    q('We were taking a family photo when the baby started to cry.', 'the baby', 'a dog', 'the music'),
+    q('She was photographing the old church when a car stopped in front of her.', 'a car', 'a bird', 'the rain'),
+    q('We were looking at the photo album when the lights went out.', 'the lights', 'the phone', 'the wind'),
+    q('They were taking a group photo when the music started.', 'the music', 'the baby', 'a car'),
+    q('While my sister was taking a picture of me, a dog ran into the shot.', 'a dog', 'a friend', 'the lights'),
+    q('While we were walking in the park, it started to rain.', 'the rain', 'the music', 'a bird'),
+    q('While I was taking a photo of the sunset, a bird flew in front of the sun.', 'a bird', 'the wind', 'a car'),
+    q('While he was printing his photos, the phone rang.', 'the phone', 'the baby', 'the rain'),
+    q('While I was posting my photo, my best friend called my name.', 'a friend', 'a dog', 'the lights'),
+    q('While she was sleeping, the baby woke up.', 'the baby', 'the phone', 'the wind'),
+    q('I was holding my camera on the bridge when the wind became very strong.', 'the wind', 'a bird', 'the music'),
+    q('We were walking in the old town when a car almost hit us.', 'a car', 'the rain', 'a friend'),
+    q('The kids were dancing at the party when the lights went out.', 'the lights', 'the music', 'the phone'),
+    q('I was reading when the music from next door became very loud.', 'the music', 'the lights', 'a dog'),
+    q('My dad was taking a picture of the mountains when a dog started to bark.', 'a dog', 'the baby', 'a car'),
+    q('We were having a picnic when the rain came.', 'the rain', 'a bird', 'the phone'),
+    q('I was recording a video when a bird took my sandwich!', 'a bird', 'a dog', 'a friend'),
+    q('She was taking a photo of the city when the phone died.', 'the phone', 'the lights', 'the wind')
+  ]
+});
+</script>
+</body>
+</html>

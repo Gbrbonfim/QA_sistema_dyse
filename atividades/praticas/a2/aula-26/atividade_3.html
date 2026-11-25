@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 26 · The story behind the photo</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 26 · Leitura (Photos That Tell Stories)
+   Alinhado ao "Warm Up" (do you like taking photos? what do you use? selfies), ao "Reading"
+   (histórias por trás das fotos, incluindo Paraty) e ao "Describing a photo" (quando, onde,
+   com quem, por que gosta). Past simple x past continuous. Conteúdo NOVO: o Tom mostra à
+   Julia a foto favorita dele. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Julia', 'Do you like taking photos, Tom?'],
+  ['Tom', 'Yes, I love it! I usually take photos with my smartphone.'],
+  ['Julia', 'What do you usually take photos of?'],
+  ['Tom', 'Places, mostly. I don\'t like taking selfies.'],
+  ['Julia', 'Can I see your favorite photo?'],
+  ['Tom', 'Sure! Look. I took it in Paraty last summer.'],
+  ['Julia', 'It\'s beautiful! What were you doing when you took it?'],
+  ['Tom', 'I was walking in the old town when I saw these kids.'],
+  ['Julia', 'What were they doing?'],
+  ['Tom', 'They were playing in the water. The streets were full of water!'],
+  ['Julia', 'Really? Why?'],
+  ['Tom', 'The water level was rising while I was walking in the center.'],
+  ['Julia', 'Were the people worried?'],
+  ['Tom', 'Some were calm, but others were trying to move their cars.'],
+  ['Julia', 'Why do you love this photo?'],
+  ['Tom', 'Because the kids were so happy. It always makes me smile.'],
+  ['Julia', 'It tells a great story!'],
+  ['Tom', 'Thanks! Now show me your favorite photo!']
+];
+const lado = q => q === 'Julia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 26, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I love it! I usually take photos with my smartphone.', 'Yes, I love it! I usually taking photos with my smartphone.', 'Yes, I love it! I am usually take photos.'], 0, 'Sim, adoro! Geralmente tiro fotos com o celular.'),
+    prox(2, ['What do you usually taking photos of?', 'What do you usually take photos of?', 'What you usually take photos of?'], 1, 'Do que você geralmente tira fotos?'),
+    prox(5, ['Sure! Look. I was taking it in Paraty last summer.', 'Sure! Look. I take it in Paraty last summer.', 'Sure! Look. I took it in Paraty last summer.'], 2, 'Claro! Olha. Tirei em Paraty no verão passado.'),
+    prox(6, ["It's beautiful! What were you doing when you took it?", "It's beautiful! What did you doing when you took it?", "It's beautiful! What were you doing while you took it?"], 0, 'Que linda! O que você estava fazendo quando a tirou?'),
+    prox(7, ['I walked in the old town while I saw these kids.', 'I was walking in the old town when I saw these kids.', 'I was walking in the old town when I was seeing these kids.'], 1, 'Eu estava andando no centro histórico quando vi essas crianças.'),
+    prox(8, ['What they were doing?', 'What did they doing?', 'What were they doing?'], 2, 'O que elas estavam fazendo?'),
+    prox(9, ['They were playing in the water. The streets were full of water!', 'They was playing in the water. The streets were full of water!', 'They were play in the water.'], 0, 'Elas estavam brincando na água. As ruas estavam cheias de água!'),
+    prox(11, ['The water level rose when I was walk in the center.', 'The water level was rising while I was walking in the center.', 'The water level was rising when I walking in the center.'], 1, 'O nível da água estava subindo enquanto eu andava pelo centro.'),
+    prox(12, ['Was the people worried?', 'Did the people worried?', 'Were the people worried?'], 2, 'As pessoas estavam preocupadas?'),
+    prox(13, ['Some were calm, but others were trying to move their cars.', 'Some were calm, because others were trying to move their cars.', 'Some was calm, but others was trying to move their cars.'], 0, 'Alguns estavam calmos, mas outros tentavam tirar os carros.'),
+    prox(14, ['Why you love this photo?', 'Why do you love this photo?', 'Why are you love this photo?'], 1, 'Por que você ama esta foto?'),
+    prox(15, ['But the kids were so happy. It always makes me smile.', 'Because the kids were so happy. It always make me smile.', 'Because the kids were so happy. It always makes me smile.'], 2, 'Porque as crianças estavam tão felizes. Ela sempre me faz sorrir.'),
+    { instrucao: 'What does Tom usually use to take photos?', frase: 'His ___.', opcoes: ['smartphone', 'camera', 'tablet'], certa: 0, traducao: 'O celular dele.' },
+    { instrucao: 'What does Tom usually take photos of?', frase: '___, mostly.', opcoes: ['People', 'Places', 'Animals'], certa: 1, traducao: 'Lugares, principalmente.' },
+    { instrucao: 'Does Tom like taking selfies?', frase: 'No, he ___.', opcoes: ["isn't", "didn't", "doesn't"], certa: 2, traducao: 'Não, ele não gosta.' },
+    { instrucao: 'Where did Tom take his favorite photo?', frase: 'In ___.', opcoes: ['Paraty', 'London', 'Bangkok'], certa: 0, traducao: 'Em Paraty.' },
+    { instrucao: 'When did he take it?', frase: 'Last ___.', opcoes: ['winter', 'summer', 'year'], certa: 1, traducao: 'No verão passado.' },
+    { instrucao: 'What was Tom doing when he saw the kids?', frase: 'He was ___ in the old town.', opcoes: ['running', 'driving', 'walking'], certa: 2, traducao: 'Ele estava andando no centro histórico.' },
+    { instrucao: 'What were the kids doing?', frase: 'They were ___ in the water.', opcoes: ['playing', 'swimming', 'sleeping'], certa: 0, traducao: 'Elas estavam brincando na água.' },
+    { instrucao: 'What were some people trying to move?', frase: 'Their ___.', opcoes: ['houses', 'cars', 'dogs'], certa: 1, traducao: 'Os carros.' }
+  ]
+});
+</script>
+</body>
+</html>

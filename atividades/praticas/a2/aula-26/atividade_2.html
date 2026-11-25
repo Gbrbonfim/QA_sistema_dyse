@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 26 · While I was taking photos...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 26 · Escrita (Photos That Tell Stories)
+   Alinhado ao "Grammar Point: Past Simple x Past Continuous" (ação longa x curta; when com o
+   past simple que interrompe; while com o past continuous) e ao "Describing a photo"
+   (because, but, how, always, on a trip, in + país). Conteúdo NOVO. A isca é a forma errada.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 26, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu estava tirando fotos quando um pássaro pousou na minha câmera.'), palavras: ['I', 'was', 'taking', 'photos', 'when', 'a', 'bird', 'landed', 'on', 'my', 'camera'], isca: ['landing'], fim: '.', traducao: 'Eu estava tirando fotos quando um pássaro pousou na minha câmera.' },
+    { contexto: M('Meu amigo chegou enquanto eu estava tirando uma selfie.'), palavras: ['My', 'friend', 'arrived', 'while', 'I', 'was', 'taking', 'a', 'selfie'], isca: ['took'], fim: '.', traducao: 'O meu amigo chegou enquanto eu tirava uma selfie.' },
+    { contexto: M('Ela estava sorrindo quando o fotógrafo tirou a foto.'), palavras: ['She', 'was', 'smiling', 'when', 'the', 'photographer', 'took', 'the', 'photo'], isca: ['taking'], fim: '.', traducao: 'Ela estava sorrindo quando o fotógrafo tirou a foto.' },
+    { contexto: M('Enquanto eles estavam explorando a cidade, encontraram um mural.'), palavras: ['While', 'they', 'were', 'exploring', 'the', 'city,', 'they', 'found', 'a', 'mural'], isca: ['was'], fim: '.', traducao: 'Enquanto exploravam a cidade, encontraram um mural.' },
+    { contexto: M('Eu estava andando na praia quando vi o pôr do sol.'), palavras: ['I', 'was', 'walking', 'on', 'the', 'beach', 'when', 'I', 'saw', 'the', 'sunset'], isca: ['seeing'], fim: '.', traducao: 'Eu estava andando na praia quando vi o pôr do sol.' },
+    { contexto: M('Um cachorro correu para a foto.'), palavras: ['A', 'dog', 'ran', 'into', 'the', 'shot'], isca: ['runned'], fim: '.', traducao: 'Um cachorro entrou correndo na foto.' },
+    { contexto: M('Nós estávamos olhando fotos antigas.'), palavras: ['We', 'were', 'looking', 'at', 'old', 'photos'], isca: ['was'], fim: '.', traducao: 'Estávamos olhando fotos antigas.' },
+    { contexto: M('O vento levou o chapéu dela.'), palavras: ['The', 'wind', 'blew', 'her', 'hat', 'away'], isca: ['blowed'], fim: '.', traducao: 'O vento levou o chapéu dela.' },
+    { contexto: M('Começou a chover enquanto nós estávamos tirando fotos.'), palavras: ['It', 'started', 'to', 'rain', 'while', 'we', 'were', 'taking', 'photos'], isca: ['took'], fim: '.', traducao: 'Começou a chover enquanto tirávamos fotos.' },
+    { contexto: M('Ele estava ajustando a câmera quando alguém pediu informação.'), palavras: ['He', 'was', 'adjusting', 'his', 'camera', 'when', 'someone', 'asked', 'for', 'directions'], isca: ['asking'], fim: '.', traducao: 'Ele estava ajustando a câmera quando alguém pediu informação.' },
+    { contexto: M('Você estava tirando fotos quando o show começou?'), palavras: ['Were', 'you', 'taking', 'photos', 'when', 'the', 'show', 'started'], isca: ['Did'], fim: '?', traducao: 'Você estava tirando fotos quando o show começou?' },
+    { contexto: M('O que você estava fazendo quando tirou essa foto?'), palavras: ['What', 'were', 'you', 'doing', 'when', 'you', 'took', 'this', 'photo'], isca: ['taking'], fim: '?', traducao: 'O que você estava fazendo quando tirou esta foto?' },
+    { contexto: M('Eu não estava olhando para a câmera.'), palavras: ['I', "wasn't", 'looking', 'at', 'the', 'camera'], isca: ["didn't"], fim: '.', traducao: 'Eu não estava olhando para a câmera.' },
+    { contexto: M('O meu irmão tirou a foto quando nós estávamos numa trilha.'), palavras: ['My', 'brother', 'took', 'the', 'photo', 'when', 'we', 'were', 'on', 'a', 'hiking', 'trip'], isca: ['in'], fim: '.', traducao: 'O meu irmão tirou a foto quando estávamos numa trilha.' },
+    { contexto: M('Nós ficamos numa cabana na Suíça.'), palavras: ['We', 'stayed', 'in', 'a', 'cabin', 'in', 'Switzerland'], isca: ['on'], fim: '.', traducao: 'Ficamos numa cabana na Suíça.' },
+    { contexto: M('Estava muito frio, mas a vista era linda.'), palavras: ['It', 'was', 'very', 'cold,', 'but', 'the', 'view', 'was', 'beautiful'], isca: ['because'], fim: '.', traducao: 'Estava muito frio, mas a vista era linda.' },
+    { contexto: M('Eu amo o nascer do sol porque é calmo e colorido.'), palavras: ['I', 'love', 'sunrises', 'because', 'they', 'are', 'calm', 'and', 'colorful'], isca: ['but'], fim: '.', traducao: 'Amo o nascer do sol porque é calmo e colorido.' },
+    { contexto: M('Essa foto sempre me faz sorrir.'), palavras: ['This', 'photo', 'always', 'makes', 'me', 'smile'], isca: ['make'], fim: '.', traducao: 'Esta foto sempre me faz sorrir.' },
+    { contexto: M('Ela me lembra como a natureza é linda.'), palavras: ['It', 'reminds', 'me', 'of', 'how', 'beautiful', 'nature', 'is'], isca: ['what'], fim: '.', traducao: 'Ela me lembra como a natureza é linda.' },
+    { contexto: M('Você gosta de tirar selfies?'), palavras: ['Do', 'you', 'like', 'taking', 'selfies'], isca: ['take'], fim: '?', traducao: 'Você gosta de tirar selfies?' }
+  ]
+});
+</script>
+</body>
+</html>
