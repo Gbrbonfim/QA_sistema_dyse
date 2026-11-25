@@ -15,7 +15,8 @@
 #>
 param(
   [string]$Nivel = '',          # vazio = todos os níveis
-  [switch]$SoListar
+  [switch]$SoListar,
+  [switch]$Fila                 # grava atividades/praticas/audio/fila.json (todas as frases) e para
 )
 $ErrorActionPreference = 'Stop'
 $raiz = Split-Path -Parent $PSScriptRoot
@@ -65,6 +66,16 @@ foreach($x in $lista){ if($x.texto -and -not $unicas.ContainsKey($x.chave)){ $un
 $faltam = @($unicas.Values | Where-Object { -not (Test-Path (Join-Path $audioDir ($_.chave + '.mp3'))) })
 $chars = ($faltam | ForEach-Object { $_.texto.Length } | Measure-Object -Sum).Sum
 Write-Host ("Atividades lidas: {0} · frases únicas: {1} · faltam gerar: {2} ({3} caracteres)" -f $arquivos.Count, $unicas.Count, $faltam.Count, [int]$chars)
+
+if($Fila){
+  # Lista usada pela página /atividades/praticas/gerar-audios.html (gera pelo servidor, com a chave da Vercel).
+  New-Item -ItemType Directory -Force $audioDir | Out-Null
+  $itens = $unicas.Values | Sort-Object chave | ForEach-Object { [ordered]@{ t = $_.texto; v = $_.voz; c = $_.chave } }
+  $json = ConvertTo-Json -InputObject @($itens) -Compress -Depth 3
+  [IO.File]::WriteAllText((Join-Path $audioDir 'fila.json'), $json, (New-Object System.Text.UTF8Encoding($false)))
+  Write-Host ("fila.json: {0} frases" -f @($itens).Count)
+  return
+}
 
 if($SoListar){
   $faltam | Sort-Object chave | ForEach-Object { Write-Host ("  [{0}] {1}" -f $_.voz, $_.texto) }
