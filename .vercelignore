@@ -1,0 +1,6 @@
+# Arquivos internos: ficam no repositório, mas não vão para o site público.
+*.sql
+scripts/
+backups/
+*.pdf
+*.md

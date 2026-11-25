@@ -5069,3 +5069,69 @@ begin
 end;
 $$;
 grant execute on function public.graduar_turma(uuid) to authenticated;
+
+-- 41) Auditoria 24/11/2026 — segurança, bug de gravação e desempenho (idempotente).
+
+-- 41.1) BUG: a unicidade antiga (aluno, curso, atividade) impedia salvar a mesma
+--       atividade em outra aula (ex.: atividade 1 da aula 3 depois da aula 1).
+--       A chave certa é (aluno, curso, aula, atividade), que já existe.
+alter table public.activity_results drop constraint if exists activity_results_user_id_course_activity_num_key;
+
+-- 41.2) SEGURANÇA: funções do Asaas sem checagem de quem chama. Só o servidor
+--       (service_role) e o pg_cron (postgres) podem executá-las.
+revoke execute on function public.fn_asaas_suspender(uuid, text) from public, anon, authenticated;
+revoke execute on function public.fn_asaas_reativar(uuid, text) from public, anon, authenticated;
+revoke execute on function public.fn_asaas_cron_inadimplencia() from public, anon, authenticated;
+grant execute on function public.fn_asaas_suspender(uuid, text) to service_role;
+grant execute on function public.fn_asaas_reativar(uuid, text) to service_role;
+grant execute on function public.fn_asaas_cron_inadimplencia() to service_role;
+
+-- 41.3) SEGURANÇA: funções que só fazem sentido com login; visitante (anon) fora.
+revoke execute on function public.ranking_atividades() from public, anon;
+revoke execute on function public.ranking_mensal(date) from public, anon;
+revoke execute on function public.ranking_mensal_avisos(date) from public, anon;
+revoke execute on function public.speaking_alunos() from public, anon;
+revoke execute on function public.modalidade_alunos(uuid[]) from public, anon;
+revoke execute on function public.minhas_aulas_registradas(text) from public, anon;
+revoke execute on function public.graduar_turma(uuid) from public, anon;
+revoke execute on function public.atualizar_link_drive_turma(uuid, text) from public, anon;
+revoke execute on function public.atualizar_link_meet_turma(uuid, text) from public, anon;
+grant execute on function public.ranking_atividades() to authenticated;
+grant execute on function public.ranking_mensal(date) to authenticated;
+grant execute on function public.ranking_mensal_avisos(date) to authenticated;
+grant execute on function public.speaking_alunos() to authenticated;
+grant execute on function public.modalidade_alunos(uuid[]) to authenticated;
+grant execute on function public.minhas_aulas_registradas(text) to authenticated;
+grant execute on function public.graduar_turma(uuid) to authenticated;
+grant execute on function public.atualizar_link_drive_turma(uuid, text) to authenticated;
+grant execute on function public.atualizar_link_meet_turma(uuid, text) to authenticated;
+
+-- 41.4) SEGURANÇA: search_path fixo nas funções de trigger apontadas pelo linter.
+alter function public.marca_liberada_em() set search_path = public;
+alter function public.sync_presenca_status() set search_path = public;
+
+-- 41.5) DESEMPENHO: auth.uid()/auth.role() nas políticas viram (select ...), calculado
+--       uma vez por consulta em vez de uma vez por linha. Roda de novo sem efeito.
+do $$
+declare p record; q text; c text; cmd text;
+begin
+  for p in select schemaname, tablename, policyname, qual, with_check from pg_policies
+           where schemaname = 'public'
+             and (coalesce(qual, '') ~* '(?<!select )auth\.(uid|role|jwt)\(\)' or coalesce(with_check, '') ~* '(?<!select )auth\.(uid|role|jwt)\(\)')
+  loop
+    q := regexp_replace(p.qual, '(?<!select )auth\.(uid|role|jwt)\(\)', '(select auth.\1())', 'gi');
+    c := regexp_replace(p.with_check, '(?<!select )auth\.(uid|role|jwt)\(\)', '(select auth.\1())', 'gi');
+    cmd := format('alter policy %I on %I.%I', p.policyname, p.schemaname, p.tablename);
+    if q is not null then cmd := cmd || ' using (' || q || ')'; end if;
+    if c is not null then cmd := cmd || ' with check (' || c || ')'; end if;
+    execute cmd;
+  end loop;
+end $$;
+
+-- 41.6) DESEMPENHO: índices para as buscas mais usadas sem índice próprio.
+create index if not exists idx_registros_classe_nivel_aula on public.registros_classe (nivel_aula_id);
+create index if not exists idx_registros_classe_turma on public.registros_classe (turma_id);
+create index if not exists idx_registro_classe_sessao_turma_data on public.registro_classe_sessao (turma_id, data_aula);
+create index if not exists idx_activity_results_user_status_criado on public.activity_results (user_id, status, created_at);
+create index if not exists idx_horario_sugestoes_teacher on public.horario_sugestoes (teacher_id);
+create index if not exists idx_horario_sugestoes_turma on public.horario_sugestoes (turma_id);

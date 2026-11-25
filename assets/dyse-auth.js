@@ -1176,6 +1176,7 @@ async function dyseCreateNivelAula(materiaSlug, numero, topico, materialUrl){
     .insert({ materia_slug: materiaSlug, numero: numero, topico: topico, material_url: materialUrl || null })
     .select('*')
     .maybeSingle();
+  dyseLimparCacheNivelAulas();
   return { data, error };
 }
 
@@ -2655,18 +2656,32 @@ async function dyseListNiveis(){
    devem oferecer aulas ativas. Telas de HISTÓRICO (Report Card, histórico
    acadêmico do aluno) precisam ver TODAS, mesmo desativadas depois — senão
    um registro_classe antigo perde a referência de número/tópico da aula. */
+/* Aulas de um nível: a lista quase não muda e era a consulta mais chamada do
+   banco (várias telas pedem a mesma lista). Guarda por 2 minutos na página e
+   limpa sempre que a gestão cria, edita, ativa/desativa ou apaga uma aula. */
+const DYSE_CACHE_NIVEL_AULAS = {};
+function dyseLimparCacheNivelAulas(){ Object.keys(DYSE_CACHE_NIVEL_AULAS).forEach(k => delete DYSE_CACHE_NIVEL_AULAS[k]); }
 async function dyseListNivelAulas(materiaSlug, incluirInativas){
   if(!materiaSlug) return [];
-  let query = sb.from('nivel_aulas').select('*').eq('materia_slug', materiaSlug).order('numero', { ascending: true });
-  if(!incluirInativas) query = query.eq('ativo', true);
-  const { data, error } = await query;
-  return error ? [] : data;
+  const chave = materiaSlug + '|' + (incluirInativas ? 1 : 0);
+  const c = DYSE_CACHE_NIVEL_AULAS[chave];
+  if(c && Date.now() - c.em < 120000) return (await c.p).slice();   // cópia: quem chama pode ordenar/filtrar
+  const p = (async () => {
+    let query = sb.from('nivel_aulas').select('*').eq('materia_slug', materiaSlug).order('numero', { ascending: true });
+    if(!incluirInativas) query = query.eq('ativo', true);
+    const { data, error } = await query;
+    if(error){ delete DYSE_CACHE_NIVEL_AULAS[chave]; return []; }
+    return data;
+  })();
+  DYSE_CACHE_NIVEL_AULAS[chave] = { em: Date.now(), p };
+  return (await p).slice();
 }
 
 /* Link do material BASE (Google Slides/Drive) de uma aula do nível — o
    "modelo". Só admin (RLS de nivel_aulas já restringe update a is_admin()). */
 async function dyseUpdateNivelAulaMaterial(nivelAulaId, url){
   const { error } = await sb.from('nivel_aulas').update({ material_url: (url || '').trim() || null }).eq('id', nivelAulaId);
+  dyseLimparCacheNivelAulas();
   return { error };
 }
 
@@ -2769,11 +2784,13 @@ async function dyseSetAulasAtivasTurma(turmaId, nivelAulaIds, ativo){
    em vez de excluir. */
 async function dyseSetNivelAulaAtivo(nivelAulaId, ativo){
   const { error } = await sb.from('nivel_aulas').update({ ativo: !!ativo }).eq('id', nivelAulaId);
+  dyseLimparCacheNivelAulas();
   return { error };
 }
 
 async function dyseDeleteNivelAula(nivelAulaId){
   const { error } = await sb.from('nivel_aulas').delete().eq('id', nivelAulaId);
+  dyseLimparCacheNivelAulas();
   return { error };
 }
 
