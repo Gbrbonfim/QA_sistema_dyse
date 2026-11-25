@@ -859,6 +859,21 @@ body.dyse-modal-open{overflow:hidden;}
 .chamada-status.st-presente{border-color:#bfe3cc; background:#eaf7ee; color:var(--ok);}
 .chamada-status.st-falta{border-color:#f3c9c6; background:#fbeceb; color:var(--bad);}
 .chamada-status.st-justificada, .chamada-status.st-gravada, .chamada-status.st-remarcou{border-color:#f2d9b0; background:#fdf0dd; color:#a06a2e;}
+/* Histórico da chamada: cada aula abre a lista de alunos com a situação. */
+#chamadaHistoricoTable tr.hist-linha{cursor:pointer;}
+#chamadaHistoricoTable tr.hist-linha:hover td{background:#fff7ef;}
+#chamadaHistoricoTable .hist-acoes{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+#chamadaHistoricoTable .hist-toggle{border:none; background:transparent; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; cursor:pointer; color:var(--seal); flex:none;}
+#chamadaHistoricoTable .hist-toggle:hover{background:#f6e9dc;}
+#chamadaHistoricoTable .hist-toggle .msr{font-size:22px; transition:transform .2s;}
+#chamadaHistoricoTable tr.aberta .hist-toggle .msr{transform:rotate(180deg);}
+#chamadaHistoricoTable tr.hist-detalhe > td{background:#fffaf4; padding:12px 16px 14px;}
+#chamadaHistoricoTable .hist-resumo{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;}
+#chamadaHistoricoTable .hist-alunos{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:6px 18px;}
+#chamadaHistoricoTable .hist-alunos li{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid #f3e7d8; font-size:.85rem; color:var(--seal);}
+#chamadaHistoricoTable .hist-st{display:inline-block; padding:3px 10px; border-radius:999px; font-size:.72rem; font-weight:700; white-space:nowrap; background:#fdf0dd; color:#a06a2e;}
+#chamadaHistoricoTable .hist-st.st-presente{background:#eaf7ee; color:var(--ok);}
+#chamadaHistoricoTable .hist-st.st-falta{background:#fbeceb; color:var(--bad);}
 
 /* Relatório das Práticas: erros primeiro, em destaque */
 .pr-foco{border:2px solid #f3c9c6; background:#fdf3f2; border-radius:18px; padding:14px 16px; margin-bottom:16px;}
@@ -1982,15 +1997,46 @@ body.dyse-modal-open{overflow:hidden;}
     const session = await dyseGetSession();
     const sessoes = await dyseListSessoesTurma(turmaId, mes);
     const minhas = sessoes.filter(s => s.professor_id === session.user.id);
+    const nomePorId = {};
+    CHAMADA_STUDENTS.forEach(a => { nomePorId[a.id] = a.full_name || a.email || ''; });
     const linhas = await Promise.all(minhas.map(async s => {
       const presencas = await dyseListPresencasSessao(s.id);
       const presentes = presencas.filter(p => p.presente).length;
-      return '<tr><td>' + formatDateBR(s.data) + '</td><td>' + presentes + '/' + presencas.length + '</td>' +
-        '<td><button type="button" class="btn btn-danger btn-xs" onclick="handleDesfazerChamada(' + s.id + ')">Desfazer</button></td></tr>';
+      // Lista suspensa: quem veio e quem não veio naquela aula (presentes por último).
+      const alunos = presencas.map(p => ({ nome: nomePorId[p.aluno_id] || 'Aluno que saiu da turma', st: p.status || (p.presente ? 'presente' : 'falta') }))
+        .sort((a, b) => (a.st === 'presente') - (b.st === 'presente') || a.nome.localeCompare(b.nome));
+      const lista = alunos.length
+        ? alunos.map(a => '<li><span>' + escapeHtmlLocal(a.nome) + '</span><span class="hist-st st-' + escapeHtmlLocal(a.st) + '">' + escapeHtmlLocal(CHAMADA_STATUS_NOME[a.st] || a.st) + '</span></li>').join('')
+        : '<li><span style="opacity:.6;">Nenhum aluno nesta chamada.</span></li>';
+      // Relatório da aula: quantos em cada situação (presentes, faltas, justificadas...).
+      const contagem = {};
+      alunos.forEach(a => { contagem[a.st] = (contagem[a.st] || 0) + 1; });
+      const resumo = ['presente', 'falta', 'justificada', 'gravada', 'remarcou'].concat(Object.keys(contagem))
+        .filter((st, i, arr) => contagem[st] && arr.indexOf(st) === i)
+        .map(st => {
+          const rot = { presente: ['presente', 'presentes'], falta: ['falta', 'faltas'], justificada: ['falta justificada', 'faltas justificadas'],
+            gravada: ['vai assistir gravada', 'vão assistir gravada'], remarcou: ['remarcou', 'remarcaram'] }[st];
+          const txt = rot ? rot[contagem[st] === 1 ? 0 : 1] : (CHAMADA_STATUS_NOME[st] || st);
+          return '<span class="hist-st st-' + escapeHtmlLocal(st) + '">' + contagem[st] + ' ' + escapeHtmlLocal(txt) + '</span>';
+        }).join('');
+      return '<tr class="hist-linha" onclick="toggleHistoricoChamada(this, event)" title="Ver os alunos desta aula"><td>' + formatDateBR(s.data) + '</td><td>' + presentes + '/' + presencas.length + '</td>' +
+        '<td><div class="hist-acoes"><button type="button" class="btn btn-danger btn-xs" onclick="event.stopPropagation(); handleDesfazerChamada(' + s.id + ')">Desfazer</button>' +
+        '<button type="button" class="hist-toggle" aria-expanded="false" aria-label="Ver alunos"><span class="msr" aria-hidden="true">expand_more</span></button></div></td></tr>' +
+        '<tr class="hist-detalhe" style="display:none;"><td colspan="3">' + (resumo ? '<div class="hist-resumo">' + resumo + '</div>' : '') + '<ul class="hist-alunos">' + lista + '</ul></td></tr>';
     }));
     document.getElementById('chamadaHistoricoBody').innerHTML = linhas.length
       ? linhas.join('')
       : '<tr><td colspan="3" style="text-align:center; opacity:.6;">Nenhuma aula registrada este mês.</td></tr>';
+  }
+
+  function toggleHistoricoChamada(tr, ev){
+    if(ev && ev.target.closest('.btn-danger')) return;
+    const det = tr.nextElementSibling;
+    const abrir = det.style.display === 'none';
+    det.style.display = abrir ? '' : 'none';
+    tr.classList.toggle('aberta', abrir);
+    const bt = tr.querySelector('.hist-toggle');
+    if(bt) bt.setAttribute('aria-expanded', abrir ? 'true' : 'false');
   }
 
   /* Desfaz uma chamada já salva (a professora marcou errado e quer
