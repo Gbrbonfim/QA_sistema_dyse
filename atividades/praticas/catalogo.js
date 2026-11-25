@@ -763,6 +763,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Can you do it?', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Review: grammar', tipo: 'Make a Choice', treina: 'Gramática · Revisão', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 34,
+        titulo: 'Class 34 · Can You Go on Top of the Burj Khalifa?',
+        atividades: [
+          { num: 1, titulo: 'Taller or the tallest?', tipo: 'Escute e escolha', treina: 'Escuta · Superlativos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'The tallest building in the world', tipo: 'Monte a frase', treina: 'Escrita · Superlativos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Tourist in my town', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Famous landmarks', tipo: 'Escute e grave', treina: 'Fala · Superlativos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Superlatives', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

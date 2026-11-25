@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 34 · Superlatives</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 34 · Gramática (Can You Go on Top of the Burj Khalifa?)
+   Alinhado ao "Grammar Point" (superlativos: the + -est, consoante dobrada, -iest, the most /
+   the least, irregulares; comparativo para 2 coisas x superlativo para 1 num grupo; in the
+   world / in the city / of all), ao "Warm Up" sobre o Burj Khalifa e ao homework.
+   Conteúdo NOVO. 24 questões. */
+const SUP = 'Choose the superlative';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 34, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: SUP, frase: 'tall → ___', opcoes: ['the tallest', 'the most tall', 'the taller'], certa: 0, traducao: 'alto → o mais alto' },
+    { instrucao: SUP, frase: 'hot → ___', opcoes: ['the hotest', 'the hottest', 'the most hot'], certa: 1, traducao: 'quente → o mais quente' },
+    { instrucao: SUP, frase: 'easy → ___', opcoes: ['the easyest', 'the most easy', 'the easiest'], certa: 2, traducao: 'fácil → o mais fácil' },
+    { instrucao: SUP, frase: 'beautiful → ___', opcoes: ['the most beautiful', 'the beautifulest', 'the more beautiful'], certa: 0, traducao: 'bonito → o mais bonito' },
+    { instrucao: SUP, frase: 'good → ___', opcoes: ['the goodest', 'the best', 'the better'], certa: 1, traducao: 'bom → o melhor' },
+    { instrucao: SUP, frase: 'bad → ___', opcoes: ['the baddest', 'the worse', 'the worst'], certa: 2, traducao: 'ruim → o pior' },
+    { instrucao: SUP, frase: 'far → ___', opcoes: ['the farthest', 'the farest', 'the most far'], certa: 0, traducao: 'longe → o mais distante' },
+    { instrucao: SUP, frase: 'busy → ___', opcoes: ['the busyest', 'the busiest', 'the most busy'], certa: 1, traducao: 'movimentado → o mais movimentado' },
+    { frase: 'The Burj Khalifa is in ___.', opcoes: ['New York', 'London', 'Dubai'], certa: 2, traducao: 'O Burj Khalifa fica em Dubai.' },
+    { frase: 'The Burj Khalifa is ___ meters tall.', opcoes: ['828', '500', '1,000'], certa: 0, traducao: 'O Burj Khalifa tem 828 metros de altura.' },
+    { frase: 'The Burj Khalifa has ___ floors.', opcoes: ['50', '163', '125'], certa: 1, traducao: 'O Burj Khalifa tem 163 andares.' },
+    { frase: 'The Burj Khalifa was completed in ___.', opcoes: ['1999', '2020', '2010'], certa: 2, traducao: 'O Burj Khalifa foi concluído em 2010.' },
+    { frase: 'The Burj Khalifa is ___ building in the world.', opcoes: ['the tallest', 'taller', 'the most tall'], certa: 0, traducao: 'O Burj Khalifa é o prédio mais alto do mundo.' },
+    { frase: 'The Eiffel Tower is ___ than the Leaning Tower of Pisa.', opcoes: ['the tallest', 'taller', 'tallest'], certa: 1, traducao: 'A Torre Eiffel é mais alta do que a Torre de Pisa.' },
+    { frase: 'We use superlatives for one thing in a ___.', opcoes: ['pair', 'sentence', 'group'], certa: 2, traducao: 'Usamos superlativos para uma coisa num grupo.' },
+    { frase: 'The Great Pyramid of Giza is ___ pyramid in Egypt.', opcoes: ['the oldest', 'older', 'the most old'], certa: 0, traducao: 'A Grande Pirâmide de Gizé é a pirâmide mais antiga do Egito.' },
+    { frase: 'The Amazon Rainforest is ___ the Congo Rainforest.', opcoes: ['the largest', 'larger than', 'more large than'], certa: 1, traducao: 'A Floresta Amazônica é maior do que a Floresta do Congo.' },
+    { frase: 'The Louvre Museum is ___ museum in the world.', opcoes: ['more visited', 'the visitedest', 'the most visited'], certa: 2, traducao: 'O Museu do Louvre é o museu mais visitado do mundo.' },
+    { frase: 'The Leaning Tower of Pisa is ___ the Torre del Oro in Spain.', opcoes: ['more famous than', 'the most famous', 'famouser than'], certa: 0, traducao: 'A Torre de Pisa é mais famosa do que a Torre del Oro na Espanha.' },
+    { frase: 'The Great Wall of China is ___ structure ever built by humans.', opcoes: ['longer', 'the longest', 'the most long'], certa: 1, traducao: 'A Grande Muralha da China é a estrutura mais longa já construída por humanos.' },
+    { frase: 'Machu Picchu is one of the most beautiful places ___ all.', opcoes: ['in', 'on', 'of'], certa: 2, traducao: 'Machu Picchu é um dos lugares mais lindos de todos.' },
+    { frase: 'That city was ___ interesting place we visited. It was boring!', opcoes: ['the least', 'the most', 'less'], certa: 0, traducao: 'Aquela cidade foi o lugar menos interessante que visitamos. Foi chato!' },
+    { frase: 'The Burj Khalifa has restaurants and a ___ inside.', opcoes: ['school', 'hotel', 'zoo'], certa: 1, traducao: 'O Burj Khalifa tem restaurantes e um hotel dentro.' },
+    { frase: 'The Eiffel Tower is the tallest structure ___ Paris.', opcoes: ['of', 'on', 'in'], certa: 2, traducao: 'A Torre Eiffel é a estrutura mais alta de Paris.' }
+  ]
+});
+</script>
+</body>
+</html>

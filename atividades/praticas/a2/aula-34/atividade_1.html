@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 34 · Taller or the tallest?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 34 · Escuta (Can You Go on Top of the Burj Khalifa?)
+   Alinhado ao "Grammar Point" — superlativos (the tallest, the hottest, the prettiest, the
+   most beautiful, the least interesting, the best, the worst, the farthest) x comparativos.
+   Conteúdo NOVO sobre lugares famosos: o aluno ouve a frase e escolhe a forma que ouviu.
+   24 questões. */
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: 'apartment' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 34, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the form you hear',
+  itens: [
+    q('The Burj Khalifa is the tallest building in the world.', 'the tallest', 'taller', 'tall'),
+    q('The Eiffel Tower is taller than the Leaning Tower of Pisa.', 'taller', 'the tallest', 'tall'),
+    q('That desert is the hottest place on Earth.', 'the hottest', 'hotter', 'hot'),
+    q('Today is hotter than yesterday.', 'hotter', 'the hottest', 'hot'),
+    q('The Taj Mahal is one of the prettiest buildings in the world.', 'the prettiest', 'prettier', 'pretty'),
+    q('Machu Picchu is one of the most beautiful places of all.', 'the most beautiful', 'more beautiful', 'beautiful'),
+    q('That city was the least interesting place we visited.', 'the least interesting', 'less interesting', 'the most interesting'),
+    q('The Louvre has the best art collection in the world.', 'the best', 'better', 'good'),
+    q('That was the worst view from a tall building!', 'the worst', 'worse', 'bad'),
+    q('The Moon is the farthest place a human traveled to.', 'the farthest', 'farther', 'far'),
+    q('The Great Wall of China is the longest wall in the world.', 'the longest', 'longer', 'long'),
+    q('The Amazon Rainforest is larger than the Congo Rainforest.', 'larger', 'the largest', 'large'),
+    q('This is the cheapest place to go shopping.', 'the cheapest', 'cheaper', 'cheap'),
+    q('What is the oldest building in your city?', 'the oldest', 'older', 'old'),
+    q('The Great Pyramid of Giza is the oldest pyramid in Egypt.', 'the oldest', 'older', 'old'),
+    q('The Louvre is the most visited museum in the world.', 'the most visited', 'more visited', 'visited'),
+    q('The bus is the easiest way to get around the city.', 'the easiest', 'easier', 'easy'),
+    q('The view was better than I imagined.', 'better', 'the best', 'good'),
+    q('This hotel is more comfortable than the other one.', 'more comfortable', 'the most comfortable', 'comfortable'),
+    q('It is the most famous landmark in the country.', 'the most famous', 'more famous', 'famous'),
+    q('The Colosseum was bigger than I thought.', 'bigger', 'the biggest', 'big'),
+    q('Times Square is one of the busiest places in New York.', 'the busiest', 'busier', 'busy'),
+    q('Our trip to Rome was the most exciting trip of my life.', 'the most exciting', 'more exciting', 'exciting'),
+    q('The food here is worse than at the hotel.', 'worse', 'the worst', 'bad')
+  ]
+});
+</script>
+</body>
+</html>

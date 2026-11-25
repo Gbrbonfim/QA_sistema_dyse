@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 34 · The tallest building in the world</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 34 · Escrita (Can You Go on Top of the Burj Khalifa?)
+   Alinhado ao "Grammar Point" — superlativos com the + -est, consoante dobrada (the hottest),
+   -y → -iest (the prettiest, the easiest), the most / the least + adjetivo longo, irregulares
+   (the best, the worst, the farthest) e as expressões in the world / in the city / of all /
+   one of the... Conteúdo NOVO. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 34, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('O Burj Khalifa é o prédio mais alto do mundo.'), palavras: ['The', 'Burj', 'Khalifa', 'is', 'the', 'tallest', 'building', 'in', 'the', 'world'], isca: ['of'], fim: '.', traducao: 'O Burj Khalifa é o prédio mais alto do mundo.' },
+    { contexto: M('Fica em Dubai.'), palavras: ['It', 'is', 'in', 'Dubai'], isca: ['on'], fim: '.', traducao: 'Fica em Dubai.' },
+    { contexto: M('Tem cento e sessenta e três andares.'), palavras: ['It', 'has', '163', 'floors'], isca: ['have'], fim: '.', traducao: 'Tem 163 andares.' },
+    { contexto: M('Tem restaurantes e um hotel dentro.'), palavras: ['It', 'has', 'restaurants', 'and', 'a', 'hotel', 'inside'], isca: ['an'], fim: '.', traducao: 'Tem restaurantes e um hotel dentro.' },
+    { contexto: M('Esse deserto é o lugar mais quente da Terra.'), palavras: ['That', 'desert', 'is', 'the', 'hottest', 'place', 'on', 'Earth'], isca: ['hotest'], fim: '.', traducao: 'Esse deserto é o lugar mais quente da Terra.' },
+    { contexto: M('O Taj Mahal é um dos prédios mais bonitos do mundo.'), palavras: ['The', 'Taj', 'Mahal', 'is', 'one', 'of', 'the', 'prettiest', 'buildings', 'in', 'the', 'world'], isca: ['prettyest'], fim: '.', traducao: 'O Taj Mahal é um dos prédios mais bonitos do mundo.' },
+    { contexto: M('Machu Picchu é um dos lugares mais lindos de todos.'), palavras: ['Machu', 'Picchu', 'is', 'one', 'of', 'the', 'most', 'beautiful', 'places', 'of', 'all'], isca: ['beautifulest'], fim: '.', traducao: 'Machu Picchu é um dos lugares mais lindos de todos.' },
+    { contexto: M('Aquela cidade foi o lugar menos interessante da viagem.'), palavras: ['That', 'city', 'was', 'the', 'least', 'interesting', 'place', 'on', 'the', 'trip'], isca: ['less'], fim: '.', traducao: 'Aquela cidade foi o lugar menos interessante da viagem.' },
+    { contexto: M('O Louvre tem a melhor coleção de arte do mundo.'), palavras: ['The', 'Louvre', 'has', 'the', 'best', 'art', 'collection', 'in', 'the', 'world'], isca: ['goodest'], fim: '.', traducao: 'O Louvre tem a melhor coleção de arte do mundo.' },
+    { contexto: M('Essa foi a pior vista de um prédio alto!'), palavras: ['That', 'was', 'the', 'worst', 'view', 'from', 'a', 'tall', 'building'], isca: ['baddest'], fim: '!', traducao: 'Essa foi a pior vista de um prédio alto!' },
+    { contexto: M('A Lua é o lugar mais distante aonde um ser humano viajou.'), palavras: ['The', 'Moon', 'is', 'the', 'farthest', 'place', 'a', 'human', 'traveled', 'to'], isca: ['farest'], fim: '.', traducao: 'A Lua é o lugar mais distante aonde um humano viajou.' },
+    { contexto: M('A Torre Eiffel é a estrutura mais alta de Paris.'), palavras: ['The', 'Eiffel', 'Tower', 'is', 'the', 'tallest', 'structure', 'in', 'Paris'], isca: ['taller'], fim: '.', traducao: 'A Torre Eiffel é a estrutura mais alta de Paris.' },
+    { contexto: M('A Torre Eiffel é mais alta do que a Torre de Pisa.'), palavras: ['The', 'Eiffel', 'Tower', 'is', 'taller', 'than', 'the', 'Tower', 'of', 'Pisa'], isca: ['tallest'], fim: '.', traducao: 'A Torre Eiffel é mais alta do que a Torre de Pisa.' },
+    { contexto: M('Qual é o parque mais bonito?'), palavras: ["What's", 'the', 'most', 'beautiful', 'park'], isca: ['more'], fim: '?', traducao: 'Qual é o parque mais bonito?' },
+    { contexto: M('Qual é o jeito mais fácil de andar pela cidade?'), palavras: ["What's", 'the', 'easiest', 'way', 'to', 'get', 'around', 'the', 'city'], isca: ['easyest'], fim: '?', traducao: 'Qual é o jeito mais fácil de andar pela cidade?' },
+    { contexto: M('Qual é o lugar mais barato para fazer compras?'), palavras: ["What's", 'the', 'cheapest', 'place', 'to', 'go', 'shopping'], isca: ['cheaper'], fim: '?', traducao: 'Qual é o lugar mais barato para fazer compras?' },
+    { contexto: M('Qual é o prédio mais antigo?'), palavras: ["What's", 'the', 'oldest', 'building'], isca: ['most'], fim: '?', traducao: 'Qual é o prédio mais antigo?' },
+    { contexto: M('A Grande Muralha é a parede mais longa do mundo.'), palavras: ['The', 'Great', 'Wall', 'is', 'the', 'longest', 'wall', 'in', 'the', 'world'], isca: ['longer'], fim: '.', traducao: 'A Grande Muralha é a muralha mais longa do mundo.' },
+    { contexto: M('O Louvre é o museu mais visitado do mundo.'), palavras: ['The', 'Louvre', 'is', 'the', 'most', 'visited', 'museum', 'in', 'the', 'world'], isca: ['visitedest'], fim: '.', traducao: 'O Louvre é o museu mais visitado do mundo.' },
+    { contexto: M('Eu esperava que fosse melhor.'), palavras: ['I', 'expected', 'it', 'to', 'be', 'better'], isca: ['best'], fim: '.', traducao: 'Eu esperava que fosse melhor.' }
+  ]
+});
+</script>
+</body>
+</html>

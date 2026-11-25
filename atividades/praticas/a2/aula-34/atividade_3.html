@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 34 · Tourist in my town</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 34 · Leitura (Can You Go on Top of the Burj Khalifa?)
+   Alinhado ao "Role-play" (um turista pergunta: What's the most beautiful park? What's the
+   easiest way to get around the city? What's the best restaurant to eat local food? What's the
+   cheapest place to go shopping? What's the oldest building?) e aos superlativos. Conteúdo
+   NOVO: o Mike visita Salvador e pergunta à Bia. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Mike', "Hi, Bia! It's my first time in Salvador. Can you help me?"],
+  ['Bia', 'Of course! What do you want to know?'],
+  ['Mike', "What's the most beautiful place in the city?"],
+  ['Bia', 'I think the Pelourinho is the most beautiful place. It has colorful old houses.'],
+  ['Mike', "What's the oldest building?"],
+  ['Bia', 'Some churches in the old town are the oldest buildings in the city.'],
+  ['Mike', "What's the easiest way to get around?"],
+  ['Bia', 'The bus is the cheapest, but a taxi is the easiest.'],
+  ['Mike', "What's the best restaurant to eat local food?"],
+  ['Bia', 'There is a small restaurant near the beach. It has the best moqueca in the city!'],
+  ['Mike', "And what's the cheapest place to go shopping?"],
+  ['Bia', 'The Mercado Modelo. It is cheaper than the shopping centers.'],
+  ['Mike', "What's the least interesting place to go?"],
+  ['Bia', 'Hmm... maybe the shopping centers. They are the same as in other cities.'],
+  ['Mike', 'Great tips! Which beach is the prettiest?'],
+  ['Bia', 'Porto da Barra. The sunset there is the most amazing view!'],
+  ['Mike', 'Thank you so much, Bia!']
+];
+const lado = q => q === 'Mike' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 34, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(2, ["What's the most beautiful place in the city?", "What's the beautifulest place in the city?", "What's the more beautiful place in the city?"], 0, 'Qual é o lugar mais bonito da cidade?'),
+    prox(3, ['I think the Pelourinho is the beautifulest place.', 'I think the Pelourinho is the most beautiful place. It has colorful old houses.', 'I think the Pelourinho is more beautiful place.'], 1, 'Acho que o Pelourinho é o lugar mais bonito. Tem casas antigas coloridas.'),
+    prox(4, ["What's the most old building?", "What's the older building?", "What's the oldest building?"], 2, 'Qual é o prédio mais antigo?'),
+    prox(6, ["What's the easiest way to get around?", "What's the easyest way to get around?", "What's the most easy way to get around?"], 0, 'Qual é o jeito mais fácil de se locomover?'),
+    prox(7, ['The bus is the cheaper, but a taxi is the easier.', 'The bus is the cheapest, but a taxi is the easiest.', 'The bus is the most cheap, but a taxi is the most easy.'], 1, 'O ônibus é o mais barato, mas o táxi é o mais fácil.'),
+    prox(8, ["What's the goodest restaurant to eat local food?", "What's the better restaurant to eat local food?", "What's the best restaurant to eat local food?"], 2, 'Qual é o melhor restaurante para comer comida local?'),
+    prox(9, ['There is a small restaurant near the beach. It has the best moqueca in the city!', 'There is a small restaurant near the beach. It has the best moqueca of the city in the world!', 'There are a small restaurant near the beach.'], 0, 'Tem um restaurante pequeno perto da praia. Tem a melhor moqueca da cidade!'),
+    prox(10, ["And what's the cheaper place to go shopping?", "And what's the cheapest place to go shopping?", "And what's the most cheap place to go shopping?"], 1, 'E qual é o lugar mais barato para fazer compras?'),
+    prox(11, ['The Mercado Modelo. It is the cheapest than the shopping centers.', 'The Mercado Modelo. It is more cheap than the shopping centers.', 'The Mercado Modelo. It is cheaper than the shopping centers.'], 2, 'O Mercado Modelo. É mais barato do que os shoppings.'),
+    prox(12, ["What's the least interesting place to go?", "What's the less interesting place to go?", "What's the most least interesting place to go?"], 0, 'Qual é o lugar menos interessante para ir?'),
+    prox(14, ['Great tips! Which beach is the prettyest?', 'Great tips! Which beach is the prettiest?', 'Great tips! Which beach is the most pretty?'], 1, 'Ótimas dicas! Qual praia é a mais bonita?'),
+    prox(15, ['Porto da Barra. The sunset there is the amazingest view!', 'Porto da Barra. The sunset there is more amazing view!', 'Porto da Barra. The sunset there is the most amazing view!'], 2, 'Porto da Barra. O pôr do sol lá é a vista mais incrível!'),
+    { instrucao: 'Where is Mike?', frase: 'In ___.', opcoes: ['Salvador', 'Recife', 'Dubai'], certa: 0, traducao: 'Em Salvador.' },
+    { instrucao: 'Why is the Pelourinho beautiful?', frase: 'It has colorful old ___.', opcoes: ['beaches', 'houses', 'markets'], certa: 1, traducao: 'Tem casas antigas coloridas.' },
+    { instrucao: 'What is the cheapest way to get around?', frase: 'The ___.', opcoes: ['taxi', 'car', 'bus'], certa: 2, traducao: 'O ônibus.' },
+    { instrucao: 'What is the easiest way to get around?', frase: 'A ___.', opcoes: ['taxi', 'bus', 'bike'], certa: 0, traducao: 'Um táxi.' },
+    { instrucao: 'Where is the restaurant with the best moqueca?', frase: 'Near the ___.', opcoes: ['market', 'beach', 'church'], certa: 1, traducao: 'Perto da praia.' },
+    { instrucao: 'What is the cheapest place to go shopping?', frase: 'The ___.', opcoes: ['shopping centers', 'Pelourinho', 'Mercado Modelo'], certa: 2, traducao: 'O Mercado Modelo.' },
+    { instrucao: 'Why are the shopping centers the least interesting?', frase: 'They are the ___ as in other cities.', opcoes: ['same', 'best', 'biggest'], certa: 0, traducao: 'São iguais aos de outras cidades.' },
+    { instrucao: 'Which beach is the prettiest, for Bia?', frase: '___.', opcoes: ['Copacabana', 'Porto da Barra', 'Ipanema'], certa: 1, traducao: 'Porto da Barra.' }
+  ]
+});
+</script>
+</body>
+</html>
