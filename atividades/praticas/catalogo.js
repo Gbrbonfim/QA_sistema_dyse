@@ -823,6 +823,22 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 39', titulo: 'Have you ever been there?', tipo: 'Escute e grave', treina: 'Fala · Experiências', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 39', titulo: 'Irregular past participles', tipo: 'Make a Choice', treina: 'Gramática · Particípios', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 40,
+        titulo: 'Class 40 and 41 · Grab and Go!',
+        atividades: [
+          { num: 1, parte: 'Class 40', titulo: 'At the store', tipo: 'Escute e escolha', treina: 'Escuta · Compras', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 40', titulo: 'Grab it and go', tipo: 'Monte a frase', treina: 'Escrita · Compras', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 40', titulo: 'A new way to shop', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 40', titulo: 'How do you shop?', tipo: 'Escute e grave', treina: 'Fala · Compras', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 40', titulo: 'Shopping words', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 41', titulo: 'Been, gone or when?', tipo: 'Escute e escolha', treina: 'Escuta · Been / gone', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 41', titulo: 'Have you or did you?', tipo: 'Monte a frase', treina: 'Escrita · Present perfect x past', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 41', titulo: 'Have you ever shopped online?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 41', titulo: 'My shopping experiences', tipo: 'Escute e grave', treina: 'Fala · Experiências', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 41', titulo: 'Present perfect or past simple?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

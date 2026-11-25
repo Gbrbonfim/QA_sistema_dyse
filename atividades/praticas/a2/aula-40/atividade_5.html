@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 40 · Shopping words</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 40 · Gramática (Grab and Go!)
+   Alinhado ao "Vocabulary: Shopping" (shop, grab, walk out, pick up, put in your bag, put
+   back; app, line, checkout, receipt, sales, basket, customers, shopping bag, fitting rooms,
+   shop assistant, virtual cart, price tag) e ao vídeo da Amazon Go. Conteúdo NOVO.
+   24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 40, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'To choose or take something from a shelf is to ___.', opcoes: ['pick up', 'walk out', 'put back'], certa: 0, traducao: 'Escolher ou pegar algo de uma prateleira é "pick up".' },
+    { frase: 'To take things quickly is to ___.', opcoes: ['shop', 'grab', 'walk out'], certa: 1, traducao: 'Pegar coisas rapidamente é "grab".' },
+    { frase: 'To return an item to a shelf is to ___.', opcoes: ['pick it up', 'grab it', 'put it back'], certa: 2, traducao: 'Devolver um item à prateleira é "put it back".' },
+    { frase: 'To leave a place is to ___.', opcoes: ['walk out', 'pick up', 'shop'], certa: 0, traducao: 'Sair de um lugar é "walk out".' },
+    { frase: 'In this shop, you can ___ what you want and go.', opcoes: ['put back', 'grab', 'walk out'], certa: 1, traducao: 'Nesta loja, você pode pegar o que quer e ir.' },
+    { frase: "Don't forget to ___ your wallet! It's on the table.", opcoes: ['walk out', 'put back', 'pick up'], certa: 2, traducao: 'Não esqueça de pegar a carteira! Está na mesa.' },
+    { frase: 'The chips were expensive, so I put them ___.', opcoes: ['back', 'out', 'up'], certa: 0, traducao: 'Os salgadinhos estavam caros, então coloquei de volta.' },
+    { frase: "They didn't find what they needed, so they just ___.", opcoes: ['picked up', 'walked out', 'put back'], certa: 1, traducao: 'Não acharam o que precisavam, então só saíram.' },
+    { frase: 'I always ___ on Saturdays, because the prices are better.', opcoes: ['grab', 'walk out', 'shop'], certa: 2, traducao: 'Sempre faço compras aos sábados, porque os preços são melhores.' },
+    { frase: 'You pay for your things at the ___.', opcoes: ['checkout', 'fitting rooms', 'basket'], certa: 0, traducao: 'Você paga as coisas no caixa.' },
+    { frase: 'You try on clothes in the ___.', opcoes: ['checkout', 'fitting rooms', 'line'], certa: 1, traducao: 'Você experimenta roupas nos provadores.' },
+    { frase: 'The paper that shows what you paid is the ___.', opcoes: ['price tag', 'app', 'receipt'], certa: 2, traducao: 'O papel que mostra o que você pagou é o recibo.' },
+    { frase: 'It shows how much a product costs. It is the ___.', opcoes: ['price tag', 'receipt', 'line'], certa: 0, traducao: 'Mostra quanto custa um produto. É a etiqueta de preço.' },
+    { frase: 'The person who works in a store and helps you is the ___.', opcoes: ['customer', 'shop assistant', 'cart'], certa: 1, traducao: 'A pessoa que trabalha numa loja e ajuda você é o vendedor.' },
+    { frase: 'The people who buy things are the ___.', opcoes: ['shop assistants', 'sales', 'customers'], certa: 2, traducao: 'As pessoas que compram são os clientes.' },
+    { frase: 'When things are cheaper for a short time, there are ___.', opcoes: ['sales', 'lines', 'receipts'], certa: 0, traducao: 'Quando as coisas ficam mais baratas por pouco tempo, há promoções.' },
+    { frase: 'When you shop online, your products go in your ___.', opcoes: ['basket', 'virtual cart', 'fitting room'], certa: 1, traducao: 'Quando você compra online, os produtos vão para o carrinho virtual.' },
+    { frase: 'People wait in a ___ to pay.', opcoes: ['basket', 'receipt', 'line'], certa: 2, traducao: 'As pessoas esperam numa fila para pagar.' },
+    { frase: 'At Amazon Go, you use the ___ to enter the store.', opcoes: ['app', 'receipt', 'basket'], certa: 0, traducao: 'Na Amazon Go, você usa o app para entrar na loja.' },
+    { frase: 'At Amazon Go, there are no lines and no ___.', opcoes: ['shelves', 'checkout', 'products'], certa: 1, traducao: 'Na Amazon Go, não tem fila nem caixa.' },
+    { frase: 'At Amazon Go, if you change your mind, you just ___.', opcoes: ['walk out', 'call the shop assistant', 'put it back'], certa: 2, traducao: 'Na Amazon Go, se mudar de ideia, é só colocar de volta.' },
+    { frase: 'The technology updates your ___ instantly.', opcoes: ['virtual cart', 'receipt', 'shopping bag'], certa: 0, traducao: 'A tecnologia atualiza o seu carrinho virtual na hora.' },
+    { frase: 'Amazon Go uses computer ___ to see what you take.', opcoes: ['games', 'vision', 'music'], certa: 1, traducao: 'A Amazon Go usa visão computacional para ver o que você pega.' },
+    { frase: 'At Amazon Go, you put your things in your ___ bag.', opcoes: ['plastic', 'store', 'own'], certa: 2, traducao: 'Na Amazon Go, você coloca as coisas na sua própria bolsa.' }
+  ]
+});
+</script>
+</body>
+</html>

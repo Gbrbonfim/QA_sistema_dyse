@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 41 · Have you or did you?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 41 · Escrita (Grab and Go!)
+   Alinhado ao "Grammar Point" — present perfect para perguntar se algo já aconteceu (sem dizer
+   quando) x past simple com expressões de tempo (yesterday, last week, on Monday, in 2023);
+   nunca present perfect com yesterday / last week; been x gone. Conteúdo NOVO sobre compras.
+   A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 40, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Você já foi a uma loja Amazon Go?'), palavras: ['Have', 'you', 'ever', 'been', 'to', 'an', 'Amazon', 'Go', 'store'], isca: ['Did'], fim: '?', traducao: 'Você já foi a uma loja Amazon Go?' },
+    { contexto: M('Quando foi?'), palavras: ['When', 'was', 'it'], isca: ['has'], fim: '?', traducao: 'Quando foi?' },
+    { contexto: M('Foi no fim de semana passado.'), palavras: ['It', 'was', 'last', 'weekend'], isca: ['has'], fim: '.', traducao: 'Foi no fim de semana passado.' },
+    { contexto: M('Eu fui no sábado passado.'), palavras: ['I', 'went', 'last', 'Saturday'], isca: ['gone'], fim: '.', traducao: 'Fui no sábado passado.' },
+    { contexto: M('Eu comprei um lanche ontem.'), palavras: ['I', 'bought', 'a', 'snack', 'yesterday'], isca: ["I've"], fim: '.', traducao: 'Comprei um lanche ontem.' },
+    { contexto: M('Você foi à Amazon Go semana passada?'), palavras: ['Did', 'you', 'go', 'to', 'Amazon', 'Go', 'last', 'week'], isca: ['Have'], fim: '?', traducao: 'Você foi à Amazon Go semana passada?' },
+    { contexto: M('Você já comprou algo pela internet?'), palavras: ['Have', 'you', 'ever', 'bought', 'something', 'online'], isca: ['buy'], fim: '?', traducao: 'Você já comprou algo pela internet?' },
+    { contexto: M('Sim, já. Eu pedi umas roupas no mês passado.'), palavras: ['Yes,', 'I', 'have.', 'I', 'ordered', 'some', 'clothes', 'last', 'month'], isca: ['did.'], fim: '.', traducao: 'Sim. Pedi umas roupas no mês passado.' },
+    { contexto: M('Eu nunca fui a uma loja sem caixa.'), palavras: ["I've", 'never', 'been', 'to', 'a', 'store', 'with', 'no', 'checkout'], isca: ['gone'], fim: '.', traducao: 'Nunca fui a uma loja sem caixa.' },
+    { contexto: M('O meu pai não está em casa. Ele foi ao supermercado.'), palavras: ['My', 'dad', "isn't", 'home.', "He's", 'gone', 'to', 'the', 'supermarket'], isca: ['been'], fim: '.', traducao: 'O meu pai não está em casa. Ele foi ao supermercado.' },
+    { contexto: M('A minha irmã saiu para fazer compras.'), palavras: ['My', 'sister', 'has', 'gone', 'shopping'], isca: ['been'], fim: '.', traducao: 'A minha irmã saiu para fazer compras.' },
+    { contexto: M('Eu não achei o que procurava no site.'), palavras: ['I', "didn't", 'find', 'what', 'I', 'was', 'looking', 'for', 'on', 'the', 'website'], isca: ['found'], fim: '.', traducao: 'Não achei o que procurava no site.' },
+    { contexto: M('Você já devolveu algo de que não gostou?'), palavras: ['Have', 'you', 'ever', 'returned', 'something', 'you', "didn't", 'like'], isca: ['return'], fim: '?', traducao: 'Você já devolveu algo de que não gostou?' },
+    { contexto: M('Você já teve um problema com uma entrega?'), palavras: ['Have', 'you', 'ever', 'had', 'a', 'problem', 'with', 'a', 'delivery'], isca: ['has'], fim: '?', traducao: 'Você já teve problema com uma entrega?' },
+    { contexto: M('Não, nunca.'), palavras: ['No,', 'I', "haven't"], isca: ["didn't"], fim: '.', traducao: 'Não, nunca.' },
+    { contexto: M('Um pacote chegou atrasado uma vez.'), palavras: ['A', 'package', 'arrived', 'late', 'once'], isca: ['arrive'], fim: '.', traducao: 'Um pacote chegou atrasado uma vez.' },
+    { contexto: M('A empresa me mandou a cor errada.'), palavras: ['The', 'company', 'sent', 'me', 'the', 'wrong', 'color'], isca: ['sended'], fim: '.', traducao: 'A empresa me mandou a cor errada.' },
+    { contexto: M('Eu devolvi e eles me deram o reembolso.'), palavras: ['I', 'sent', 'it', 'back', 'and', 'they', 'gave', 'me', 'a', 'refund'], isca: ['gived'], fim: '.', traducao: 'Devolvi e eles me deram o reembolso.' },
+    { contexto: M('Você já comprou na Amazon antes?'), palavras: ['Have', 'you', 'shopped', 'on', 'Amazon', 'before'], isca: ['shop'], fim: '?', traducao: 'Você já comprou na Amazon antes?' },
+    { contexto: M('Você já esperou muito tempo na fila para pagar?'), palavras: ['Have', 'you', 'ever', 'waited', 'a', 'long', 'time', 'in', 'line', 'to', 'pay'], isca: ['wait'], fim: '?', traducao: 'Você já esperou muito na fila para pagar?' }
+  ]
+});
+</script>
+</body>
+</html>

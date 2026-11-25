@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 41 · Have you ever shopped online?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 41 · Leitura (Grab and Go!)
+   Alinhado ao "Speaking" (Have you ever bought something online? had a problem with a
+   delivery? taken something back? bought the wrong size?) e ao homework (present perfect x
+   past simple numa conversa sobre compras online). Conteúdo NOVO: a Julia e o Leo conversam.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Julia', 'Leo, have you ever bought clothes online?'],
+  ['Leo', 'Yes, I have. I ordered a jacket last month.'],
+  ['Julia', 'Did it go well?'],
+  ['Leo', 'Not really. It was too small.'],
+  ['Julia', 'Oh no! Did you send it back?'],
+  ['Leo', 'Yes, I sent it back and they gave me a refund.'],
+  ['Julia', 'Have you ever had a problem with a delivery?'],
+  ['Leo', 'Just once. A package arrived two weeks late.'],
+  ['Julia', 'Have you ever been to a store with no checkout?'],
+  ['Leo', "No, I haven't. But my brother has been to Amazon Go."],
+  ['Julia', 'When did he go?'],
+  ['Leo', 'He went in 2023, on a trip to the USA. He loved it!'],
+  ['Julia', 'Where is your brother now?'],
+  ['Leo', "He's gone to the mall. He wants to buy a gift for my mom."],
+  ['Julia', 'Nice! Have you ever bought something you didn\'t need?'],
+  ['Leo', "Yes, many times! Yesterday I bought a third pair of sneakers."],
+  ['Julia', 'Ha ha! Me too!']
+];
+const lado = q => q === 'Julia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 40, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I have. I ordered a jacket last month.', "Yes, I have. I've ordered a jacket last month.", 'Yes, I did. I have order a jacket last month.'], 0, 'Sim. Pedi uma jaqueta no mês passado.'),
+    prox(2, ['Has it gone well last month?', 'Did it go well?', 'Did it went well?'], 1, 'Deu tudo certo?'),
+    prox(4, ['Oh no! Have you sent it back yesterday?', 'Oh no! Did you sent it back?', 'Oh no! Did you send it back?'], 2, 'Ah, não! Você devolveu?'),
+    prox(5, ['Yes, I sent it back and they gave me a refund.', "Yes, I've sent it back last week.", 'Yes, I sended it back and they gived me a refund.'], 0, 'Sim, devolvi e eles me deram o reembolso.'),
+    prox(6, ['Did you ever have a problem with a delivery yesterday?', 'Have you ever had a problem with a delivery?', 'Have you ever have a problem with a delivery?'], 1, 'Você já teve problema com uma entrega?'),
+    prox(7, ['Just once. A package has arrived two weeks late last year.', 'Just once. A package arrive two weeks late.', 'Just once. A package arrived two weeks late.'], 2, 'Só uma vez. Um pacote chegou duas semanas atrasado.'),
+    prox(8, ['Have you ever been to a store with no checkout?', 'Have you ever gone to a store with no checkout last week?', 'Did you ever been to a store with no checkout?'], 0, 'Você já foi a uma loja sem caixa?'),
+    prox(9, ["No, I didn't. But my brother has gone to Amazon Go.", "No, I haven't. But my brother has been to Amazon Go.", "No, I haven't. But my brother have been to Amazon Go."], 1, 'Não. Mas o meu irmão já foi à Amazon Go.'),
+    prox(10, ['When has he gone?', 'When did he went?', 'When did he go?'], 2, 'Quando ele foi?'),
+    prox(11, ['He went in 2023, on a trip to the USA. He loved it!', "He's been in 2023, on a trip to the USA.", 'He go in 2023, on a trip to the USA.'], 0, 'Ele foi em 2023, numa viagem aos EUA. Adorou!'),
+    prox(13, ["He's been to the mall. He wants to buy a gift for my mom.", "He's gone to the mall. He wants to buy a gift for my mom.", "He goes to the mall yesterday."], 1, 'Ele foi ao shopping. Quer comprar um presente para a minha mãe.'),
+    prox(15, ["Yes, many times! Yesterday I've bought a third pair of sneakers.", "Yes, many times! Yesterday I buy a third pair of sneakers.", "Yes, many times! Yesterday I bought a third pair of sneakers."], 2, 'Sim, muitas vezes! Ontem comprei o terceiro par de tênis.'),
+    { instrucao: 'What did Leo order online?', frase: 'A ___.', opcoes: ['jacket', 'T-shirt', 'pair of jeans'], certa: 0, traducao: 'Uma jaqueta.' },
+    { instrucao: 'What was the problem?', frase: 'It was too ___.', opcoes: ['big', 'small', 'expensive'], certa: 1, traducao: 'Era pequena demais.' },
+    { instrucao: 'What did the company give Leo?', frase: 'A ___.', opcoes: ['new jacket', 'gift', 'refund'], certa: 2, traducao: 'Um reembolso.' },
+    { instrucao: 'How late was the package?', frase: 'Two ___ late.', opcoes: ['weeks', 'days', 'months'], certa: 0, traducao: 'Duas semanas atrasado.' },
+    { instrucao: 'Has Leo been to a store with no checkout?', frase: "No, he ___.", opcoes: ["didn't", "hasn't", "isn't"], certa: 1, traducao: 'Não.' },
+    { instrucao: 'When did Leo\'s brother go to Amazon Go?', frase: 'In ___.', opcoes: ['2022', '2024', '2023'], certa: 2, traducao: 'Em 2023.' },
+    { instrucao: 'Where is Leo\'s brother now?', frase: 'At the ___.', opcoes: ['mall', 'supermarket', 'USA'], certa: 0, traducao: 'No shopping.' },
+    { instrucao: 'What did Leo buy yesterday?', frase: 'A third pair of ___.', opcoes: ['jeans', 'sneakers', 'socks'], certa: 1, traducao: 'O terceiro par de tênis.' }
+  ]
+});
+</script>
+</body>
+</html>

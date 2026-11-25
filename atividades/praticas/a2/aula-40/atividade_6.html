@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 41 · Been, gone or when?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 41 · Escuta (Grab and Go!)
+   Alinhado ao "Grammar Point" — present perfect sem dizer quando x past simple com tempo
+   específico (yesterday, last week, in 2023) e have been (foi e voltou) x have gone (está lá
+   agora). Conteúdo NOVO sobre compras: o aluno ouve e escolhe. 24 questões. */
+const IC = { 'Went and came back (been)': 'keyboard_return', 'Is still there now (gone)': 'directions_walk', 'Specific time in the past': 'event' };
+const T = Object.keys(IC);
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 40, num: 6, tipo: 'imagem',
+  instrucao: 'Listen: been, gone, or a specific time?',
+  itens: [
+    q("I've been to an Amazon Go store. It was cool!", 0),
+    q("My dad isn't home. He's gone to the supermarket.", 1),
+    q('I went to Amazon Go last Saturday.', 2),
+    q("She's been to many online stores.", 0),
+    q("My sister isn't in the house. She's gone shopping.", 1),
+    q('I bought a snack yesterday.', 2),
+    q("We've been to the new shopping center. It's big!", 0),
+    q("He's gone to the mall. He's buying shoes there now.", 1),
+    q('They ordered some clothes last month.', 2),
+    q("I've never been to a store with no checkout.", 0),
+    q("Mom has gone to the bakery. She can't answer the phone.", 1),
+    q('We used the app to enter the store that morning.', 2),
+    q('Have you ever been to the new market?', 0),
+    q("My friends have gone to Seattle. They're having fun there.", 1),
+    q('The package arrived on Monday.', 2),
+    q("Let's try Amazon Go. I've never been there.", 0),
+    q("Where's Tom? He's gone to buy some milk.", 1),
+    q('I went to a similar store in Chicago in 2023.', 2),
+    q("We have lots of snacks because we've been to the store.", 0),
+    q("They've gone to the department store. They aren't home.", 1),
+    q('She sent the jacket back last week.', 2),
+    q("I've been to that shop twice. I love it!", 0),
+    q("Paul isn't here. He's gone to the post office.", 1),
+    q('When did you go to Amazon Go? I went on Friday.', 2)
+  ]
+});
+</script>
+</body>
+</html>

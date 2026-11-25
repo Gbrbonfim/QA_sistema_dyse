@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 40 · A new way to shop</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 40 · Leitura (Grab and Go!)
+   Alinhado ao "Warm Up" (Do you buy things on Amazon? online x lojas físicas), ao vídeo da
+   Amazon Go (app para entrar, pegar e colocar na bolsa, carrinho virtual atualizado na hora,
+   sair sem passar no caixa) e ao vocabulário de compras. Conteúdo NOVO: o Mike conta à Sarah
+   como funciona. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Sarah', 'Mike, do you prefer shopping online or in physical stores?'],
+  ['Mike', 'Online. I buy a lot of things on Amazon. But yesterday I went to a different store.'],
+  ['Sarah', 'Really? Which store?'],
+  ['Mike', 'An Amazon Go store in Seattle. There is no checkout!'],
+  ['Sarah', 'No checkout? So how do you pay?'],
+  ['Mike', 'First, you use the Amazon Go app to enter the store.'],
+  ['Sarah', 'And then?'],
+  ['Mike', 'Then you grab what you want and put it in your bag.'],
+  ['Sarah', 'What if you change your mind?'],
+  ['Mike', 'You just put it back on the shelf. The app updates your virtual cart.'],
+  ['Sarah', 'Wow! And how does it know?'],
+  ['Mike', 'They use cameras and computer vision.'],
+  ['Sarah', 'Were there long lines?'],
+  ['Mike', 'No! There were no lines. I walked out in two minutes.'],
+  ['Sarah', 'Did you get a receipt?'],
+  ['Mike', 'Yes, on the app. I bought a sandwich and a drink.'],
+  ['Sarah', 'Cool! I want to try it.']
+];
+const lado = q => q === 'Sarah' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 40, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Online. I buy a lot of things on Amazon. But yesterday I went to a different store.', 'Online. I buy a lot of things on Amazon. But yesterday I have gone to a different store.', 'Online. I buy a lot of things on Amazon. But yesterday I go to a different store.'], 0, 'Pela internet. Compro muita coisa na Amazon. Mas ontem fui a uma loja diferente.'),
+    prox(3, ['An Amazon Go store in Seattle. There are a checkout!', 'An Amazon Go store in Seattle. There is no checkout!', 'An Amazon Go store in Seattle. There is no checkouts any!'], 1, 'Uma loja Amazon Go em Seattle. Não tem caixa!'),
+    prox(5, ['First, you walk out the store.', 'First, you pay at the checkout.', 'First, you use the Amazon Go app to enter the store.'], 2, 'Primeiro, você usa o app da Amazon Go para entrar na loja.'),
+    prox(7, ['Then you grab what you want and put it in your bag.', 'Then you grabbed what you want and put it on your bag.', 'Then you wait in a long line.'], 0, 'Depois você pega o que quer e coloca na bolsa.'),
+    prox(8, ['What if you change your mind?', 'What if you changed you mind?', 'What if you change you mind?'], 0, 'E se você mudar de ideia?'),
+    prox(9, ['You just put it out on the shelf.', 'You just put it back on the shelf. The app updates your virtual cart.', 'You just walk out with it.'], 1, 'É só colocar de volta na prateleira. O app atualiza o seu carrinho virtual.'),
+    prox(10, ['Wow! And how it knows?', 'Wow! And how do it know?', 'Wow! And how does it know?'], 2, 'Uau! E como ele sabe?'),
+    prox(11, ['They use cameras and computer vision.', 'They use shop assistants at the checkout.', 'They uses cameras and computer vision.'], 0, 'Eles usam câmeras e visão computacional.'),
+    prox(12, ['Was there long lines?', 'Were there long lines?', 'Did there long lines?'], 1, 'Tinha filas longas?'),
+    prox(13, ['No! There was no lines. I walked out in two minutes.', 'No! There were no lines. I walk out in two minutes.', 'No! There were no lines. I walked out in two minutes.'], 2, 'Não! Não tinha fila. Saí em dois minutos.'),
+    prox(14, ['Did you get a receipt?', 'Did you got a receipt?', 'Have you got a receipt yesterday?'], 0, 'Você recebeu um recibo?'),
+    prox(15, ['Yes, on the app. I buyed a sandwich and a drink.', 'Yes, on the app. I bought a sandwich and a drink.', 'Yes, on the app. I have bought a sandwich yesterday.'], 1, 'Sim, no app. Comprei um sanduíche e uma bebida.'),
+    { instrucao: 'How does Mike usually shop?', frase: '___.', opcoes: ['Online', 'In physical stores', 'At markets'], certa: 0, traducao: 'Pela internet.' },
+    { instrucao: 'Where was the Amazon Go store?', frase: 'In ___.', opcoes: ['Chicago', 'Seattle', 'New York'], certa: 1, traducao: 'Em Seattle.' },
+    { instrucao: 'What is special about the store?', frase: 'There is no ___.', opcoes: ['app', 'shelf', 'checkout'], certa: 2, traducao: 'Não tem caixa.' },
+    { instrucao: 'What do you use to enter the store?', frase: 'The ___.', opcoes: ['app', 'receipt', 'basket'], certa: 0, traducao: 'O app.' },
+    { instrucao: 'Where do you put the things you want?', frase: 'In your ___.', opcoes: ['basket', 'bag', 'cart'], certa: 1, traducao: 'Na sua bolsa.' },
+    { instrucao: 'What updates the virtual cart?', frase: 'The ___.', opcoes: ['shop assistant', 'checkout', 'app'], certa: 2, traducao: 'O app.' },
+    { instrucao: 'How long did it take Mike to walk out?', frase: 'Two ___.', opcoes: ['minutes', 'hours', 'seconds'], certa: 0, traducao: 'Dois minutos.' },
+    { instrucao: 'What did Mike buy?', frase: 'A sandwich and a ___.', opcoes: ['salad', 'drink', 'snack'], certa: 1, traducao: 'Um sanduíche e uma bebida.' }
+  ]
+});
+</script>
+</body>
+</html>

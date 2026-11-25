@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 40 · Grab it and go</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 40 · Escrita (Grab and Go!)
+   Alinhado ao "Vocabulary: Shopping" (shop, grab, walk out, pick up, put (sth) in your bag,
+   put (sth) back) e ao vídeo da Amazon Go (use o app para entrar, pegue o que quiser, coloque
+   na sua bolsa e saia; sem fila, sem caixa; se mudar de ideia, coloque de volta). Conteúdo
+   NOVO. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 40, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Use o app para entrar.'), palavras: ['Use', 'the', 'app', 'to', 'enter'], isca: ['entering'], fim: '.', traducao: 'Use o app para entrar.' },
+    { contexto: M('Pegue o que você quiser.'), palavras: ['Grab', 'what', 'you', 'want'], isca: ['wants'], fim: '.', traducao: 'Pegue o que quiser.' },
+    { contexto: M('Coloque na sua própria bolsa.'), palavras: ['Put', 'it', 'in', 'your', 'own', 'bag'], isca: ['on'], fim: '.', traducao: 'Coloque na sua própria bolsa.' },
+    { contexto: M('E simplesmente saia.'), palavras: ['And', 'just', 'walk', 'out'], isca: ['in'], fim: '.', traducao: 'E simplesmente saia.' },
+    { contexto: M('Se mudar de ideia, coloque de volta.'), palavras: ['If', 'you', 'change', 'your', 'mind,', 'just', 'put', 'it', 'back'], isca: ['out'], fim: '.', traducao: 'Se mudar de ideia, é só colocar de volta.' },
+    { contexto: M('Sem filas, sem caixa, sem problema.'), palavras: ['No', 'lines,', 'no', 'checkout,', 'no', 'problem'], isca: ['receipt,'], fim: '.', traducao: 'Sem filas, sem caixa, sem problema.' },
+    { contexto: M('A tecnologia atualiza o seu carrinho virtual.'), palavras: ['The', 'technology', 'updates', 'your', 'virtual', 'cart'], isca: ['basket'], fim: '.', traducao: 'A tecnologia atualiza o seu carrinho virtual.' },
+    { contexto: M('Eu sempre faço compras aos sábados.'), palavras: ['I', 'always', 'shop', 'on', 'Saturdays'], isca: ['shops'], fim: '.', traducao: 'Sempre faço compras aos sábados.' },
+    { contexto: M('Não esqueça de pegar a sua carteira!'), palavras: ["Don't", 'forget', 'to', 'pick', 'up', 'your', 'wallet'], isca: ['back'], fim: '!', traducao: 'Não esqueça de pegar a sua carteira!' },
+    { contexto: M('Coloque o sanduíche na mochila.'), palavras: ['Put', 'the', 'sandwich', 'in', 'your', 'school', 'bag'], isca: ['out'], fim: '.', traducao: 'Coloque o sanduíche na mochila.' },
+    { contexto: M('Os salgadinhos estavam caros, então eu os coloquei de volta.'), palavras: ['The', 'chips', 'were', 'expensive,', 'so', 'I', 'put', 'them', 'back'], isca: ['up'], fim: '.', traducao: 'Os salgadinhos estavam caros, então coloquei de volta.' },
+    { contexto: M('Eles não acharam o que precisavam, então só foram embora.'), palavras: ["They", "didn't", 'find', 'what', 'they', 'needed,', 'so', 'they', 'walked', 'out'], isca: ['back'], fim: '.', traducao: 'Eles não acharam o que precisavam, então só saíram.' },
+    { contexto: M('Ela pegou uma garrafa de água da prateleira.'), palavras: ['She', 'picked', 'up', 'a', 'bottle', 'of', 'water', 'from', 'the', 'shelf'], isca: ['out'], fim: '.', traducao: 'Ela pegou uma garrafa de água da prateleira.' },
+    { contexto: M('Nesta loja, você pode pegar o que quer e ir embora.'), palavras: ['In', 'this', 'shop,', 'you', 'can', 'grab', 'what', 'you', 'want', 'and', 'go'], isca: ['grabbing'], fim: '.', traducao: 'Nesta loja, você pode pegar o que quer e ir.' },
+    { contexto: M('Onde ficam os provadores?'), palavras: ['Where', 'are', 'the', 'fitting', 'rooms'], isca: ['is'], fim: '?', traducao: 'Onde ficam os provadores?' },
+    { contexto: M('Eu perdi o recibo.'), palavras: ['I', 'lost', 'the', 'receipt'], isca: ['price'], fim: '.', traducao: 'Perdi o recibo.' },
+    { contexto: M('Tinha uma fila enorme no caixa.'), palavras: ['There', 'was', 'a', 'long', 'line', 'at', 'the', 'checkout'], isca: ['were'], fim: '.', traducao: 'Tinha uma fila enorme no caixa.' },
+    { contexto: M('O vendedor me ajudou.'), palavras: ['The', 'shop', 'assistant', 'helped', 'me'], isca: ['customer'], fim: '.', traducao: 'O vendedor me ajudou.' },
+    { contexto: M('Os sapatos estão em promoção.'), palavras: ['The', 'shoes', 'are', 'on', 'sale'], isca: ['is'], fim: '.', traducao: 'Os sapatos estão em promoção.' },
+    { contexto: M('Você prefere comprar pela internet ou em lojas físicas?'), palavras: ['Do', 'you', 'prefer', 'buying', 'things', 'online', 'or', 'in', 'physical', 'stores'], isca: ['Are'], fim: '?', traducao: 'Você prefere comprar pela internet ou em lojas físicas?' }
+  ]
+});
+</script>
+</body>
+</html>
