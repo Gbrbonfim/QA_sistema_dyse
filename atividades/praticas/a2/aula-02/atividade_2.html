@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 2 · My profile</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 02 · Escrita (This is ME in a minute)
+   Alinhado ao slide "Grammar Point" — verbo be (afirmativa, negativa curta, pergunta) e
+   possessive adjectives (my, your, his, her, its, our, their) no perfil de uma pessoa (nome,
+   nacionalidade, o que estudou, profissão, paixão, hobbies, objeto). Conteúdo NOVO. A isca é a
+   forma que confunde (he's x his, they're x their...). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 2, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('O nome dele é Daniel.'), palavras: ['His', 'name', 'is', 'Daniel'], isca: ["He's"], fim: '.', traducao: 'O nome dele é Daniel.' },
+    { contexto: M('Ele é mexicano-americano.'), palavras: ["He's", 'Mexican-American'], isca: ['His'], fim: '.', traducao: 'Ele é mexicano-americano.' },
+    { contexto: M('Ela estudou design gráfico.'), palavras: ['She', 'studied', 'graphic', 'design'], isca: ['Her'], fim: '.', traducao: 'Ela estudou design gráfico.' },
+    { contexto: M('A paixão dela é ensinar.'), palavras: ['Her', 'passion', 'is', 'teaching'], isca: ['She'], fim: '.', traducao: 'A paixão dela é ensinar.' },
+    { contexto: M('Os hobbies deles são dançar e cozinhar.'), palavras: ['Their', 'hobbies', 'are', 'dancing', 'and', 'cooking'], isca: ["They're"], fim: '.', traducao: 'Os hobbies deles são dançar e cozinhar.' },
+    { contexto: M('Eles são irmãos.'), palavras: ["They're", 'brothers'], isca: ['Their'], fim: '.', traducao: 'Eles são irmãos.' },
+    { contexto: M('Você é o novo professor?'), palavras: ['Are', 'you', 'the', 'new', 'teacher'], isca: ['Do'], fim: '?', traducao: 'Você é o novo professor?' },
+    { contexto: M('Qual é o seu sobrenome?'), palavras: ["What's", 'your', 'last', 'name'], isca: ["you're"], fim: '?', traducao: 'Qual é o seu sobrenome?' },
+    { contexto: M('Ela é de Portugal?'), palavras: ['Is', 'she', 'from', 'Portugal'], isca: ['Does'], fim: '?', traducao: 'Ela é de Portugal?' },
+    { contexto: M('Eu não sou americano.'), palavras: ["I'm", 'not', 'American'], isca: ["isn't"], fim: '.', traducao: 'Eu não sou americano.' },
+    { contexto: M('Ele não está atrasado.'), palavras: ['He', "isn't", 'late'], isca: ["aren't"], fim: '.', traducao: 'Ele não está atrasado.' },
+    { contexto: M('Nós não somos britânicos.'), palavras: ['We', "aren't", 'British'], isca: ["isn't"], fim: '.', traducao: 'Nós não somos britânicos.' },
+    { contexto: M('O nosso professor é do Canadá.'), palavras: ['Our', 'teacher', 'is', 'from', 'Canada'], isca: ['We'], fim: '.', traducao: 'O nosso professor é do Canadá.' },
+    { contexto: M('O gato está feliz. O nome dele é Tiger.'), palavras: ['The', 'cat', 'is', 'happy.', 'Its', 'name', 'is', 'Tiger'], isca: ["It's"], fim: '.', traducao: 'O gato está feliz. O nome dele é Tiger.' },
+    { contexto: M('A minha câmera é muito importante para mim.'), palavras: ['My', 'camera', 'is', 'very', 'important', 'to', 'me'], isca: ['I'], fim: '.', traducao: 'A minha câmera é muito importante para mim.' },
+    { contexto: M('Você está no curso de inglês dela?'), palavras: ['Are', 'you', 'in', 'her', 'English', 'course'], isca: ['she'], fim: '?', traducao: 'Você está no curso de inglês dela?' },
+    { contexto: M('Os pais deles não são brasileiros.'), palavras: ['Their', 'parents', "aren't", 'Brazilian'], isca: ["isn't"], fim: '.', traducao: 'Os pais deles não são brasileiros.' },
+    { contexto: M('Ele é designer e a esposa dele é fotógrafa.'), palavras: ["He's", 'a', 'designer', 'and', 'his', 'wife', 'is', 'a', 'photographer'], isca: ['her'], fim: '.', traducao: 'Ele é designer e a esposa dele é fotógrafa.' },
+    { contexto: M('Ela não consegue funcionar sem um bom café de manhã.'), palavras: ['She', "can't", 'function', 'without', 'a', 'good', 'coffee', 'in', 'the', 'morning'], isca: ['her'], fim: '.', traducao: 'Ela não consegue funcionar sem um bom café de manhã.' },
+    { contexto: M('Eles estão na sua turma?'), palavras: ['Are', 'they', 'in', 'your', 'class'], isca: ["you're"], fim: '?', traducao: 'Eles estão na sua turma?' }
+  ]
+});
+</script>
+</body>
+</html>

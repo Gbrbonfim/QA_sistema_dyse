@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 2 · He's or his?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 02 · Escuta (This is ME in a minute)
+   Alinhado ao slide "Listen and circle a or b" — palavras que soam parecido: he's / his,
+   it's / its, you're / your, they're / their. Conteúdo NOVO: o aluno ouve a frase inteira e
+   escolhe a palavra certa pelo contexto. 24 questões. */
+const IC = { "he's": 'person', 'his': 'front_hand', "it's": 'info', 'its': 'pets', "you're": 'face', 'your': 'back_hand', "they're": 'groups', 'their': 'family_restroom' };
+const A = ["he's", 'his', "it's", 'its'];
+const B = ["you're", 'your', "they're", 'their'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 2, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which word is in the sentence?',
+  itens: [
+    qa("He's a graphic designer from Chicago.", 0),
+    qa('His favorite hobby is rock climbing.', 1),
+    qa("It's a small camera, but it's very good.", 2),
+    qa('The dog is happy. Its name is Max.', 3),
+    qa("He's not at home. He's at work.", 0),
+    qa("This is my brother and that's his car.", 1),
+    qa("It's cold today. Take a jacket.", 2),
+    qa('Italy is famous for its pizza.', 3),
+    qa("Is he your teacher? Yes, he's my teacher.", 0),
+    qa("What's his last name?", 1),
+    qa("It's eight o'clock. Let's go!", 2),
+    qa('The hotel is nice, but its rooms are small.', 3),
+    qb("You're late again!", 0),
+    qb("What's your favorite food?", 1),
+    qb("They're from Canada.", 2),
+    qb('My neighbors are nice. Their house is blue.', 3),
+    qb("You're a great cook!", 0),
+    qb('Is this your phone?', 1),
+    qb("They're my best friends.", 2),
+    qb('The students are here. Their teacher is Anna.', 3),
+    qb("You're not in my class.", 0),
+    qb('How do you spell your name?', 1),
+    qb("They're not British. They're Australian.", 2),
+    qb('Where is their office?', 3)
+  ]
+});
+</script>
+</body>
+</html>

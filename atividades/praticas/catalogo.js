@@ -463,6 +463,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'All about me', tipo: 'Escute e grave', treina: 'Fala · Entrevista', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'How much do you remember?', tipo: 'Make a Choice', treina: 'Gramática · Revisão do A1', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 2,
+        titulo: 'Class 02 · This is ME in a minute',
+        atividades: [
+          { num: 1, titulo: "He's or his?", tipo: 'Escute e escolha', treina: 'Escuta · Sons parecidos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'My profile', tipo: 'Monte a frase', treina: 'Escrita · Be e possessivos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Tom in a minute', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'This is me in a minute', tipo: 'Escute e grave', treina: 'Fala · Apresentação', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Possessive adjectives', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

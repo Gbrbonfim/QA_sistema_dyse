@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 2 · Tom in a minute</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 02 · Leitura (This is ME in a minute)
+   Alinhado ao slide "Listening" — perfil de uma pessoa (nome, nacionalidade, o que estudou,
+   profissão, paixão, hobbies, objeto favorito, sem o que não funciona) com be e possessive
+   adjectives. Conteúdo NOVO: a Ana entrevista o Tom, fotógrafo de viagem. 20 questões: 12 de
+   "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ana', "Hi! What's your name?"],
+  ['Tom', "My name's Tom Becker."],
+  ['Ana', 'Where are you from, Tom?'],
+  ['Tom', "I'm German-Brazilian. My father is from Berlin and my mother is from Recife."],
+  ['Ana', 'What do you do?'],
+  ['Tom', "I'm a travel photographer. I studied photography in São Paulo."],
+  ['Ana', "What's your passion?"],
+  ['Tom', 'My passion is sharing photos of nature.'],
+  ['Ana', 'What are your hobbies?'],
+  ['Tom', 'I surf, I cook and I spend time with my cat.'],
+  ['Ana', "What's your cat's name?"],
+  ['Tom', "Its name is Pepper. It's black and white."],
+  ['Ana', "What's your favorite object?"],
+  ['Tom', "My camera. It's old, but it's great."],
+  ['Ana', "What can't you function without?"],
+  ['Tom', 'A good breakfast in the morning!']
+];
+const lado = q => q === 'Ana' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 2, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["My name's Tom Becker.", "I name's Tom Becker.", "Me name is Tom Becker."], 0, 'O meu nome é Tom Becker.'),
+    prox(2, ['Where you are from, Tom?', 'Where are you from, Tom?', 'Where is you from, Tom?'], 1, 'De onde você é, Tom?'),
+    prox(3, ["I'm German-Brazilian. His father is from Berlin.", "I German-Brazilian. My father are from Berlin.", "I'm German-Brazilian. My father is from Berlin and my mother is from Recife."], 2, 'Sou alemão-brasileiro. O meu pai é de Berlim e a minha mãe é de Recife.'),
+    prox(5, ["I'm a travel photographer. I studied photography in São Paulo.", "I'm travel photographer. I study photography yesterday.", "I a travel photographer. I studied photography in São Paulo."], 0, 'Sou fotógrafo de viagem. Estudei fotografia em São Paulo.'),
+    prox(6, ["What's you're passion?", "What's your passion?", "What are your passion?"], 1, 'Qual é a sua paixão?'),
+    prox(7, ['Me passion is sharing photos of nature.', 'My passion are sharing photos of nature.', 'My passion is sharing photos of nature.'], 2, 'A minha paixão é compartilhar fotos da natureza.'),
+    prox(9, ['I surf, I cook and I spend time with my cat.', 'I surf, I cook and I spend time with me cat.', 'I surfs, I cooks and I spend time with my cat.'], 0, 'Eu surfo, cozinho e passo tempo com a minha gata.'),
+    prox(10, ["What's you cat's name?", "What's your cat's name?", "What's your cat name's?"], 1, 'Qual é o nome do seu gato?'),
+    prox(11, ["It's name is Pepper. Its black and white.", "Its name is Pepper. Its black and white.", "Its name is Pepper. It's black and white."], 2, 'O nome dela é Pepper. Ela é preta e branca.'),
+    prox(13, ["My camera. It's old, but it's great.", "My camera. Its old, but its great.", "Your camera. It's old, but it's great."], 0, 'A minha câmera. Ela é velha, mas é ótima.'),
+    prox(14, ["What can you function without?", "What can't you function without?", "What you can't function without?"], 1, 'Sem o que você não consegue funcionar?'),
+    prox(15, ['A good breakfast in the evening!', 'A good dinner in the morning!', 'A good breakfast in the morning!'], 2, 'Um bom café da manhã!'),
+    { instrucao: "What's Tom's last name?", frase: 'His last name is ___.', opcoes: ['Becker', 'Berlin', 'Pepper'], certa: 0, traducao: 'O sobrenome dele é Becker.' },
+    { instrucao: "Where is Tom's mother from?", frase: '___ mother is from Recife.', opcoes: ["He's", 'His', 'Her'], certa: 1, traducao: 'A mãe dele é de Recife.' },
+    { instrucao: "What's Tom's job?", frase: "___ a travel photographer.", opcoes: ['His', 'Its', "He's"], certa: 2, traducao: 'Ele é fotógrafo de viagem.' },
+    { instrucao: 'What did Tom study?', frase: 'He studied ___.', opcoes: ['photography', 'graphic design', 'cooking'], certa: 0, traducao: 'Ele estudou fotografia.' },
+    { instrucao: "What's Tom's passion?", frase: 'Sharing photos of ___.', opcoes: ['food', 'nature', 'cats'], certa: 1, traducao: 'Compartilhar fotos da natureza.' },
+    { instrucao: "What's the cat's name?", frase: '___ name is Pepper.', opcoes: ["It's", 'His', 'Its'], certa: 2, traducao: 'O nome dela é Pepper.' },
+    { instrucao: "What's Tom's favorite object?", frase: 'His ___.', opcoes: ['camera', 'phone', 'surfboard'], certa: 0, traducao: 'A câmera dele.' },
+    { instrucao: "What can't Tom function without?", frase: 'A good ___.', opcoes: ['coffee', 'breakfast', 'camera'], certa: 1, traducao: 'Um bom café da manhã.' }
+  ]
+});
+</script>
+</body>
+</html>
