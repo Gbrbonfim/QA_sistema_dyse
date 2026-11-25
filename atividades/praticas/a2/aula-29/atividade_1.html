@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 29 · A, an or some?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 29 · Escuta (Eat as an Athlete)
+   Alinhado ao "Grammar Point" — a / an com substantivos contáveis no singular (a banana, an
+   apple), some com contáveis no plural e incontáveis (some eggs, some rice). Conteúdo NOVO:
+   o aluno ouve o nome de uma comida/bebida e escolhe a palavra que vem antes. 24 questões. */
+const IC = { 'a': 'looks_one', 'an': 'abc', 'some': 'more_horiz' };
+const T = ['a', 'an', 'some'];
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 29, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the food or drink: a, an or some?',
+  itens: [
+    q('banana', 0),
+    q('apple', 1),
+    q('rice', 2),
+    q('sandwich', 0),
+    q('orange', 1),
+    q('strawberries', 2),
+    q('protein bar', 0),
+    q('egg', 1),
+    q('oatmeal', 2),
+    q('bagel', 0),
+    q('avocado', 1),
+    q('water', 2),
+    q('tomato', 0),
+    q('onion', 1),
+    q('milk', 2),
+    q('cookie', 0),
+    q('egg sandwich', 1),
+    q('nuts', 2),
+    q('carrot', 0),
+    q('avocado sandwich', 1),
+    q('sugar', 2),
+    q('potato', 0),
+    q('bread', 2),
+    q('pancakes', 2)
+  ]
+});
+</script>
+</body>
+</html>

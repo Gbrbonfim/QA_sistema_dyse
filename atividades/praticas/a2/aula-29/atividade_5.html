@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 29 · Countable and uncountable</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 29 · Gramática (Eat as an Athlete)
+   Alinhado ao "Grammar Point" (contáveis x incontáveis; a / an + singular; some em
+   afirmativas e para pedir/oferecer; any em negativas e perguntas) e ao "Reading" (dicas da
+   nutricionista). Conteúdo NOVO. 24 questões. */
+const CU = 'Countable or uncountable?';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 29, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: CU, frase: 'oatmeal → ___', opcoes: ['uncountable', 'countable', 'plural only'], certa: 0, traducao: 'aveia → incontável' },
+    { instrucao: CU, frase: 'strawberries → ___', opcoes: ['uncountable', 'countable', 'plural only'], certa: 1, traducao: 'morangos → contável' },
+    { instrucao: CU, frase: 'rice → ___', opcoes: ['countable', 'plural only', 'uncountable'], certa: 2, traducao: 'arroz → incontável' },
+    { instrucao: CU, frase: 'pancakes → ___', opcoes: ['countable', 'uncountable', 'plural only'], certa: 0, traducao: 'panquecas → contável' },
+    { instrucao: CU, frase: 'sugar → ___', opcoes: ['countable', 'uncountable', 'plural only'], certa: 1, traducao: 'açúcar → incontável' },
+    { frase: 'Athletes usually eat ___ banana before training.', opcoes: ['an', 'some', 'a'], certa: 2, traducao: 'Os atletas geralmente comem uma banana antes do treino.' },
+    { frase: 'I usually have ___ avocado toast.', opcoes: ['an', 'a', 'any'], certa: 0, traducao: 'Geralmente como uma torrada com abacate.' },
+    { frase: 'For lunch, I have ___ chicken with rice.', opcoes: ['a', 'some', 'an'], certa: 1, traducao: 'No almoço, como frango com arroz.' },
+    { frase: "I didn't drink ___ coffee this morning.", opcoes: ['some', 'a', 'any'], certa: 2, traducao: 'Não bebi café hoje de manhã.' },
+    { frase: 'Is there ___ orange juice in the fridge?', opcoes: ['any', 'an', 'a'], certa: 0, traducao: 'Tem suco de laranja na geladeira?' },
+    { frase: 'She likes to have ___ granola for breakfast.', opcoes: ['a', 'some', 'any'], certa: 1, traducao: 'Ela gosta de comer granola no café da manhã.' },
+    { frase: 'Would you like ___ protein shake after your workout?', opcoes: ['any', 'an', 'a'], certa: 2, traducao: 'Você gostaria de um shake de proteína depois do treino?' },
+    { frase: "There isn't ___ sugar in my tea.", opcoes: ['any', 'some', 'a'], certa: 0, traducao: 'Não tem açúcar no meu chá.' },
+    { frase: "We don't need any bread because we have ___.", opcoes: ['any', 'some', 'a'], certa: 1, traducao: 'Não precisamos de pão porque temos.' },
+    { frase: 'Can I have ___ water, please?', opcoes: ['a', 'an', 'some'], certa: 2, traducao: 'Pode me dar água, por favor?' },
+    { frase: 'We say "some rice", not "two ___".', opcoes: ['rices', 'rice', 'some rices'], certa: 0, traducao: 'Dizemos "some rice", não "two rices".' },
+    { frase: 'Athletes eat some ___ before competitions.', opcoes: ['orange', 'oranges', 'an orange'], certa: 1, traducao: 'Os atletas comem laranjas antes das competições.' },
+    { frase: "There aren't ___ waffles on the plate.", opcoes: ['some', 'a', 'any'], certa: 2, traducao: 'Não tem waffles no prato.' },
+    { frase: 'Breakfast is important because it gives you ___ for the day.', opcoes: ['energy', 'sweets', 'sleep'], certa: 0, traducao: 'O café da manhã é importante porque dá energia para o dia.' },
+    { frase: 'Healthy snacks are good because they are easy to ___.', opcoes: ['cook', 'carry', 'forget'], certa: 1, traducao: 'Lanches saudáveis são bons porque são fáceis de levar.' },
+    { frase: 'Lunch needs protein, carbohydrates, and ___.', opcoes: ['sugar', 'chips', 'vitamins'], certa: 2, traducao: 'O almoço precisa de proteína, carboidratos e vitaminas.' },
+    { frase: 'The nutritionist says athletes should avoid ___.', opcoes: ['fast food', 'water', 'vegetables'], certa: 0, traducao: 'A nutricionista diz que os atletas devem evitar fast food.' },
+    { frase: 'Countable: an ice cream. Uncountable: ___ ice cream.', opcoes: ['a', 'some', 'an'], certa: 1, traducao: 'Contável: um sorvete. Incontável: sorvete.' },
+    { frase: 'He cooked some chicken and ___ rice for dinner.', opcoes: ['a', 'an', 'some'], certa: 2, traducao: 'Ele fez frango e arroz no jantar.' }
+  ]
+});
+</script>
+</body>
+</html>

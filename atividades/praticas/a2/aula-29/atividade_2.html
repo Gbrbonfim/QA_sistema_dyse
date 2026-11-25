@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 29 · Some eggs and an apple</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 29 · Escrita (Eat as an Athlete)
+   Alinhado ao "Grammar Point" — contáveis x incontáveis; a / an + singular contável; some
+   em afirmativas (e para pedir/oferecer: Can I have some...? Would you like some...?); any em
+   negativas e perguntas. Conteúdo NOVO sobre a alimentação de atletas. A isca é a forma
+   errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 29, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('O jogador come uma maçã depois do treino.'), palavras: ['The', 'player', 'eats', 'an', 'apple', 'after', 'training'], isca: ['a'], fim: '.', traducao: 'O jogador come uma maçã depois do treino.' },
+    { contexto: M('Eu geralmente como uma banana no café da manhã.'), palavras: ['I', 'usually', 'eat', 'a', 'banana', 'for', 'breakfast'], isca: ['an'], fim: '.', traducao: 'Geralmente como uma banana no café da manhã.' },
+    { contexto: M('Ela come uns ovos de manhã.'), palavras: ['She', 'eats', 'some', 'eggs', 'in', 'the', 'morning'], isca: ['an'], fim: '.', traducao: 'Ela come ovos de manhã.' },
+    { contexto: M('Eu quero arroz e frango no almoço.'), palavras: ['I', 'want', 'some', 'rice', 'and', 'some', 'chicken', 'for', 'lunch'], isca: ['a'], fim: '.', traducao: 'Quero arroz e frango no almoço.' },
+    { contexto: M('Os jogadores não comem doces antes do jogo.'), palavras: ['The', 'players', "don't", 'eat', 'any', 'sweets', 'before', 'a', 'game'], isca: ['some'], fim: '.', traducao: 'Os jogadores não comem doces antes do jogo.' },
+    { contexto: M('Ela não bebe suco de manhã.'), palavras: ['She', "doesn't", 'drink', 'any', 'juice', 'in', 'the', 'morning'], isca: ['a'], fim: '.', traducao: 'Ela não bebe suco de manhã.' },
+    { contexto: M('Os atletas comem açúcar durante o treino?'), palavras: ['Do', 'athletes', 'eat', 'any', 'sugar', 'during', 'training'], isca: ['a'], fim: '?', traducao: 'Os atletas comem açúcar durante o treino?' },
+    { contexto: M('Posso tomar uma água, por favor?'), palavras: ['Can', 'I', 'have', 'some', 'water,', 'please'], isca: ['an'], fim: '?', traducao: 'Pode me dar água, por favor?' },
+    { contexto: M('Você gostaria de umas barrinhas de proteína?'), palavras: ['Would', 'you', 'like', 'some', 'protein', 'bars'], isca: ['a'], fim: '?', traducao: 'Você gostaria de barrinhas de proteína?' },
+    { contexto: M('Não tem waffles no prato.'), palavras: ['There', "aren't", 'any', 'waffles', 'on', 'the', 'plate'], isca: ['some'], fim: '.', traducao: 'Não tem waffles no prato.' },
+    { contexto: M('Eu comi um sanduíche e uma maçã no almoço.'), palavras: ['I', 'ate', 'a', 'sandwich', 'and', 'an', 'apple', 'for', 'lunch'], isca: ['some'], fim: '.', traducao: 'Comi um sanduíche e uma maçã no almoço.' },
+    { contexto: M('Eu não bebi café hoje de manhã.'), palavras: ['I', "didn't", 'drink', 'any', 'coffee', 'this', 'morning'], isca: ['some'], fim: '.', traducao: 'Não bebi café hoje de manhã.' },
+    { contexto: M('Tem suco de laranja na geladeira?'), palavras: ['Is', 'there', 'any', 'orange', 'juice', 'in', 'the', 'fridge'], isca: ['an'], fim: '?', traducao: 'Tem suco de laranja na geladeira?' },
+    { contexto: M('Não tem açúcar no meu chá.'), palavras: ['There', "isn't", 'any', 'sugar', 'in', 'my', 'tea'], isca: ["aren't"], fim: '.', traducao: 'Não tem açúcar no meu chá.' },
+    { contexto: M('Ela gosta de comer granola no café da manhã.'), palavras: ['She', 'likes', 'to', 'have', 'some', 'granola', 'for', 'breakfast'], isca: ['a'], fim: '.', traducao: 'Ela gosta de comer granola no café da manhã.' },
+    { contexto: M('Eu como um bagel com abacate.'), palavras: ['I', 'have', 'a', 'bagel', 'with', 'avocado'], isca: ['any'], fim: '.', traducao: 'Como um bagel com abacate.' },
+    { contexto: M('Os atletas precisam beber muita água.'), palavras: ['Athletes', 'need', 'to', 'drink', 'lots', 'of', 'water'], isca: ['waters'], fim: '.', traducao: 'Os atletas precisam beber muita água.' },
+    { contexto: M('Nós precisamos de alface, um tomate e um abacate.'), palavras: ['We', 'need', 'some', 'lettuce,', 'a', 'tomato,', 'and', 'an', 'avocado'], isca: ['any'], fim: '.', traducao: 'Precisamos de alface, um tomate e um abacate.' },
+    { contexto: M('Os lanches dão energia.'), palavras: ['Snacks', 'give', 'you', 'energy'], isca: ['energies'], fim: '.', traducao: 'Os lanches dão energia.' },
+    { contexto: M('Evite doces, batata chips e fast food.'), palavras: ['Avoid', 'sweets,', 'chips,', 'and', 'fast', 'food'], isca: ['a'], fim: '.', traducao: 'Evite doces, batata chips e fast food.' }
+  ]
+});
+</script>
+</body>
+</html>

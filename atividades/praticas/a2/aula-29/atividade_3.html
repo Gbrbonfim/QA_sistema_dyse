@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 29 · Talking to a nutritionist</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 29 · Leitura (Eat as an Athlete)
+   Alinhado ao "Reading" (Tips for a Healthy Diet for Athletes: café da manhã, lanches, água,
+   almoço equilibrado, jantar, evitar doces e fast food) e ao "Role-play" (atleta x
+   nutricionista: What do I have for breakfast? You need some...). a / an / some / any.
+   Conteúdo NOVO: o Lucas, nadador, conversa com a nutricionista Dra. Paula.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Lucas', 'Hi, Dr. Paula. I have a big competition next month.'],
+  ['Paula', 'Great! What do you usually eat for breakfast?'],
+  ['Lucas', 'I usually have a coffee and some cookies.'],
+  ['Paula', "That isn't a good breakfast. You need some eggs and some oatmeal."],
+  ['Lucas', 'OK. And what snacks can I have?'],
+  ['Paula', 'You can eat a banana or some nuts. They are easy to carry.'],
+  ['Lucas', 'Can I eat any chocolate?'],
+  ['Paula', "No, don't eat any sweets before a competition."],
+  ['Lucas', 'What do I eat for lunch?'],
+  ['Paula', 'Some chicken or fish, some rice, and a big salad.'],
+  ['Lucas', 'And what can I drink?'],
+  ['Paula', 'Drink lots of water. You can also have a smoothie.'],
+  ['Lucas', 'Is there anything good for dinner?'],
+  ['Paula', 'Yes. Some protein with vegetables, like grilled chicken or vegetable soup.'],
+  ['Lucas', 'Can I have a pizza after the competition?'],
+  ['Paula', 'Yes, you can! But not every day.'],
+  ['Lucas', 'Thank you, doctor!'],
+  ['Paula', "You're welcome. Good luck!"]
+];
+const lado = q => q === 'Paula' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 29, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Great! What do you usually eat for breakfast?', 'Great! What you usually eat for breakfast?', 'Great! What are you usually eat for breakfast?'], 0, 'Ótimo! O que você geralmente come no café da manhã?'),
+    prox(2, ['I usually have a coffee and a cookies.', 'I usually have a coffee and some cookies.', 'I usually have a coffee and any cookies.'], 1, 'Geralmente tomo um café e como uns biscoitos.'),
+    prox(3, ["That isn't a good breakfast. You need an eggs and an oatmeal.", "That is a great breakfast. Don't change it.", "That isn't a good breakfast. You need some eggs and some oatmeal."], 2, 'Esse não é um bom café da manhã. Você precisa de ovos e aveia.'),
+    prox(5, ['You can eat a banana or some nuts. They are easy to carry.', 'You can eat an banana or some nuts.', 'You can eat a banana or a nuts.'], 0, 'Você pode comer uma banana ou castanhas. São fáceis de levar.'),
+    prox(6, ['Can I eat a chocolates?', 'Can I eat any chocolate?', 'Can I eat some chocolates any?'], 1, 'Posso comer chocolate?'),
+    prox(7, ["No, don't eat some sweets before a competition.", "Yes, eat a lot of sweets before a competition.", "No, don't eat any sweets before a competition."], 2, 'Não, não coma doces antes de uma competição.'),
+    prox(9, ['Some chicken or fish, some rice, and a big salad.', 'A chicken or fish, a rice, and a big salad.', 'Any chicken or fish, any rice, and any salad.'], 0, 'Frango ou peixe, arroz e uma salada grande.'),
+    prox(10, ['And what can I drinks?', 'And what can I drink?', 'And what I can drink?'], 1, 'E o que posso beber?'),
+    prox(11, ['Drink lots of waters. You can also have a smoothie.', "Don't drink any water.", 'Drink lots of water. You can also have a smoothie.'], 2, 'Beba muita água. Você também pode tomar um smoothie.'),
+    prox(13, ['Yes. Some protein with vegetables, like grilled chicken or vegetable soup.', 'Yes. A protein with vegetables, like grilled chicken.', 'Yes. Some fast food and some chips.'], 0, 'Sim. Proteína com legumes, como frango grelhado ou sopa de legumes.'),
+    prox(14, ['Can I have an pizza after the competition?', 'Can I have a pizza after the competition?', 'Can I has a pizza after the competition?'], 1, 'Posso comer uma pizza depois da competição?'),
+    prox(15, ['Yes, you do! But not every day.', 'No, you can! But not every day.', 'Yes, you can! But not every day.'], 2, 'Pode, sim! Mas não todo dia.'),
+    { instrucao: 'Why is Lucas talking to the nutritionist?', frase: 'He has a big ___ next month.', opcoes: ['competition', 'party', 'trip'], certa: 0, traducao: 'Ele tem uma grande competição no mês que vem.' },
+    { instrucao: 'What does Lucas usually have for breakfast?', frase: 'A coffee and some ___.', opcoes: ['eggs', 'cookies', 'fruit'], certa: 1, traducao: 'Um café e uns biscoitos.' },
+    { instrucao: 'What does Lucas need for breakfast?', frase: 'Some eggs and some ___.', opcoes: ['cookies', 'chocolate', 'oatmeal'], certa: 2, traducao: 'Ovos e aveia.' },
+    { instrucao: 'Why are bananas and nuts good snacks?', frase: 'They are easy to ___.', opcoes: ['carry', 'cook', 'buy'], certa: 0, traducao: 'São fáceis de levar.' },
+    { instrucao: 'What can\'t Lucas eat before a competition?', frase: '___.', opcoes: ['Fish', 'Sweets', 'Salad'], certa: 1, traducao: 'Doces.' },
+    { instrucao: 'What can he drink?', frase: 'Water and ___.', opcoes: ['soda', 'coffee', 'smoothies'], certa: 2, traducao: 'Água e smoothies.' },
+    { instrucao: 'What is good for dinner?', frase: 'Protein with ___.', opcoes: ['vegetables', 'chips', 'cookies'], certa: 0, traducao: 'Proteína com legumes.' },
+    { instrucao: 'When can Lucas have a pizza?', frase: '___ the competition.', opcoes: ['Before', 'After', 'During'], certa: 1, traducao: 'Depois da competição.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -719,6 +719,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Then and now', tipo: 'Escute e grave', treina: 'Fala · Lugares da cidade', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'There was / there were', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 29,
+        titulo: 'Class 29 · Eat as an Athlete',
+        atividades: [
+          { num: 1, titulo: 'A, an or some?', tipo: 'Escute e escolha', treina: 'Escuta · Comidas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Some eggs and an apple', tipo: 'Monte a frase', treina: 'Escrita · A / an / some / any', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Talking to a nutritionist', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My food plan', tipo: 'Escute e grave', treina: 'Fala · Alimentação', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Countable and uncountable', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
