@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 31 · How do they do it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 31 · Escuta (Travelers' Culture Shocks)
+   Adverbs of manner do slide (quietly, slowly, carefully, well, hard, fast, perfectly, easily,
+   politely, dangerously, loudly...). Conteúdo NOVO: o aluno ouve uma situação e escolhe COMO
+   a pessoa faz a ação. As iscas contradizem a situação. 24 questões. */
+const IC = { loudly: 'volume_up', quietly: 'volume_mute', slowly: 'slow_motion_video', fast: 'bolt', dangerously: 'warning', carefully: 'back_hand', politely: 'handshake', hard: 'fitness_center', well: 'thumb_up', badly: 'thumb_down', easily: 'check_circle', happily: 'sentiment_very_satisfied', perfectly: 'stars' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const nomes = iscas.slice(0, 3);
+  nomes.splice(pos, 0, certa);
+  return { audioTexto, opcoes: nomes.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 31, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: how do they do it?',
+  itens: [
+    q("The baby is sleeping. We don't want to wake her up, so we talk...", 'quietly', ['loudly', 'dangerously', 'hard']),
+    q('Lucas drives at 150 kilometers per hour on a small street. He drives...', 'dangerously', ['carefully', 'slowly', 'politely']),
+    q('My grandma walks with a stick. It takes her twenty minutes to walk to the corner. She walks...', 'slowly', ['fast', 'dangerously', 'loudly']),
+    q("Ana always says 'please' and 'thank you'. She asks for things...", 'politely', ['badly', 'dangerously', 'loudly']),
+    q('Pedro studies ten hours a day and never stops. He studies...', 'hard', ['badly', 'slowly', 'quietly']),
+    q('Sofia speaks English, French and Spanish with no mistakes. She speaks languages...', 'well', ['badly', 'slowly', 'dangerously']),
+    q("My brother can't cook. His food is always terrible. He cooks...", 'badly', ['well', 'carefully', 'perfectly']),
+    q('Usain Bolt ran 100 meters in 9.58 seconds. He ran very...', 'fast', ['slowly', 'carefully', 'quietly']),
+    q('The test was really simple. I answered all the questions with no problems. I did the test...', 'easily', ['badly', 'slowly', 'dangerously']),
+    q('The kids are laughing and singing at the party. They are playing...', 'happily', ['badly', 'quietly', 'dangerously']),
+    q("These glasses can break! Please carry them...", 'carefully', ['fast', 'dangerously', 'badly']),
+    q("In the library, people read and nobody talks. They read...", 'quietly', ['loudly', 'dangerously', 'badly']),
+    q('At the stadium, the fans are shouting and singing. They sing...', 'loudly', ['quietly', 'slowly', 'politely']),
+    q('My mom types one hundred words per minute. She types...', 'fast', ['slowly', 'badly', 'quietly']),
+    q('Mia got ten out of ten on her English test. She did the test...', 'perfectly', ['badly', 'slowly', 'dangerously']),
+    q('The old man looks at both sides of the street three times. Then he crosses the street...', 'carefully', ['dangerously', 'fast', 'loudly']),
+    q('Tom is always late, and his work has a lot of mistakes. He works...', 'badly', ['perfectly', 'hard', 'well']),
+    q("The waiter smiled and said, 'Good evening, sir. How can I help you?' He spoke...", 'politely', ['badly', 'loudly', 'dangerously']),
+    q('The turtle needs one hour to cross the garden. It moves...', 'slowly', ['fast', 'dangerously', 'loudly']),
+    q('Lily is a professional singer. Everybody loves her voice. She sings...', 'well', ['badly', 'dangerously', 'slowly']),
+    q('A man is riding a motorcycle between the cars at high speed, with no helmet. He rides...', 'dangerously', ['carefully', 'slowly', 'politely']),
+    q('We finished the puzzle in two minutes. It was very simple! We did it...', 'easily', ['badly', 'slowly', 'dangerously']),
+    q('My dad starts work at 6 a.m. and finishes at 8 p.m. every day. He works...', 'hard', ['badly', 'slowly', 'quietly']),
+    q("She's telling her friend a secret. Nobody can hear her. She speaks...", 'quietly', ['loudly', 'dangerously', 'badly'])
+  ]
+});
+</script>
+</body>
+</html>

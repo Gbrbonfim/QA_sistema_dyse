@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 31 · Back from Buenos Aires</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 31 · Leitura (Travelers' Culture Shocks)
+   Alinhado ao tema do slide (choques culturais de viajantes, relatos pessoais) e aos adverbs
+   of manner + modifiers. Conteúdo NOVO: a Carla voltou de Buenos Aires e conta ao Ben o que a
+   surpreendeu (jantar tarde, beijo no rosto, mate compartilhado — costumes reais da
+   Argentina). 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ben', 'Hi, Carla! How was your trip to Buenos Aires?'],
+  ['Carla', 'It was amazing! But I had some culture shocks.'],
+  ['Ben', 'Really? What surprised you?'],
+  ['Carla', 'People have dinner really late. Restaurants are quite empty at eight!'],
+  ['Ben', 'Wow! What time do they eat?'],
+  ['Carla', 'At ten or eleven at night. On the first night, I waited very hungrily!'],
+  ['Ben', 'Ha ha! Were the people friendly?'],
+  ['Carla', 'Yes, very friendly. They greet everybody warmly, with a kiss on the cheek. Even men!'],
+  ['Ben', 'Interesting! Did you understand their Spanish?'],
+  ['Carla', 'Not very well. They speak really fast, and the accent is different.'],
+  ['Ben', 'And what about mate? Did you try it?'],
+  ['Carla', 'Yes! Friends share the same cup. They drink it slowly and talk for hours.'],
+  ['Ben', 'Did you like it?'],
+  ['Carla', "Yes! It's quite bitter, but I drank it happily."],
+  ['Ben', 'And the traffic?'],
+  ['Carla', 'People drive fast, but I crossed the streets carefully.'],
+  ['Ben', 'Good! I want to go there too!']
+];
+const lado = q => q === 'Ben' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 31, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(3, ['People have dinner really late. Restaurants are quite empty at eight!', 'People have dinner really lately. Restaurants are quite empty at eight!', 'People have dinner late really. Restaurants are empty quite at eight!'], 0, 'As pessoas jantam bem tarde. Os restaurantes ficam bem vazios às oito!'),
+    prox(4, ['Wow! What time they eat?', 'Wow! What time do they eat?', 'Wow! What time does they eat?'], 1, 'Uau! A que horas eles comem?'),
+    prox(5, ['At ten or eleven at night. On the first night, I waited very hungry way!', 'At ten or eleven at night. On the first night, I very waited hungrily!', 'At ten or eleven at night. On the first night, I waited very hungrily!'], 2, 'Às dez ou onze da noite. Na primeira noite, esperei morrendo de fome!'),
+    prox(6, ['Ha ha! Were the people friendly?', 'Ha ha! Were the people friendlily?', 'Ha ha! Was the people friendly?'], 0, 'Ha ha! As pessoas eram simpáticas?'),
+    prox(7, ['Yes, very friendly. They greet everybody warm, with a kiss on the cheek.', 'Yes, very friendly. They greet everybody warmly, with a kiss on the cheek. Even men!', 'Yes, very friendlily. They warmly greet everybody warmly.'], 1, 'Sim, muito simpáticas. Elas cumprimentam todo mundo calorosamente, com um beijo no rosto. Até os homens!'),
+    prox(8, ['Interesting! Did you understood their Spanish?', 'Interesting! Do you understood their Spanish?', 'Interesting! Did you understand their Spanish?'], 2, 'Interessante! Você entendeu o espanhol deles?'),
+    prox(9, ['Not very well. They speak really fast, and the accent is different.', 'Not very good. They speak really fastly, and the accent is different.', 'Not very well. They speak fast really, and the accent is differently.'], 0, 'Não muito bem. Eles falam muito rápido, e o sotaque é diferente.'),
+    prox(11, ['Yes! Friends share the same cup. They drink it slow and talk for hours.', 'Yes! Friends share the same cup. They drink it slowly and talk for hours.', 'Yes! Friends share the same cup. They slowly drink slowly it.'], 1, 'Sim! Os amigos dividem a mesma cuia. Eles tomam devagar e conversam por horas.'),
+    prox(12, ['Did you liked it?', 'Do you liked it?', 'Did you like it?'], 2, 'Você gostou?'),
+    prox(13, ["Yes! It's quite bitter, but I drank it happily.", "Yes! It's bitter quite, but I drank it happy.", "Yes! It's quite bitterly, but I drank it happily."], 0, 'Sim! É bem amargo, mas tomei com prazer.'),
+    prox(15, ['People drive fastly, but I crossed the streets careful.', 'People drive fast, but I crossed the streets carefully.', 'People drive fast, but I carefully crossed carefully the streets.'], 1, 'As pessoas dirigem rápido, mas atravessei as ruas com cuidado.'),
+    prox(16, ['Good! I want going there too!', 'Good! I want to going there too!', 'Good! I want to go there too!'], 2, 'Que bom! Quero ir lá também!'),
+    { instrucao: 'Where did Carla travel?', frase: 'To ___.', opcoes: ['Buenos Aires', 'Madrid', 'Mexico City'], certa: 0, traducao: 'Para Buenos Aires.' },
+    { instrucao: 'What time do people have dinner there?', frase: 'At ___ at night.', opcoes: ['seven or eight', 'ten or eleven', 'six or seven'], certa: 1, traducao: 'Às dez ou onze da noite.' },
+    { instrucao: 'How do people greet everybody?', frase: 'With a ___ on the cheek.', opcoes: ['hand', 'smile', 'kiss'], certa: 2, traducao: 'Com um beijo no rosto.' },
+    { instrucao: 'Did Carla understand their Spanish well?', frase: '___. They speak really fast.', opcoes: ['Not very well', 'Yes, perfectly', 'Yes, easily'], certa: 0, traducao: 'Não muito bem. Eles falam muito rápido.' },
+    { instrucao: 'How do friends drink mate?', frase: 'They share the same cup and drink it ___.', opcoes: ['quickly', 'slowly', 'alone'], certa: 1, traducao: 'Dividem a mesma cuia e tomam devagar.' },
+    { instrucao: 'How is mate?', frase: 'It is quite ___.', opcoes: ['sweet', 'spicy', 'bitter'], certa: 2, traducao: 'É bem amargo.' },
+    { instrucao: 'How did Carla cross the streets?', frase: 'She crossed them ___.', opcoes: ['carefully', 'fast', 'dangerously'], certa: 0, traducao: 'Ela atravessou com cuidado.' },
+    { instrucao: 'How do people drive there?', frase: 'They drive ___.', opcoes: ['slowly', 'fast', 'politely'], certa: 1, traducao: 'Eles dirigem rápido.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 31 · Surprising habits</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 31 · Escrita (Travelers' Culture Shocks)
+   Adverbs of manner depois do verbo ou do complemento, irregulares (fast, hard, well),
+   modifiers antes do adjetivo/advérbio (very, quite, really) e adjetivo x advérbio. Conteúdo
+   NOVO sobre costumes de outros lugares. A isca é a forma errada (adjetivo no lugar do
+   advérbio ou o contrário, "fastly", "goodly"). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 31, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('No Japão, as pessoas falam baixo no trem.'), palavras: ['In', 'Japan,', 'people', 'speak', 'quietly', 'on', 'the', 'train'], isca: ['quiet'], fim: '.', traducao: 'No Japão, as pessoas falam baixo no trem.' },
+    { contexto: M('Na Argentina, as pessoas jantam muito tarde.'), palavras: ['In', 'Argentina,', 'people', 'have', 'dinner', 'very', 'late'], isca: ['lately'], fim: '.', traducao: 'Na Argentina, as pessoas jantam muito tarde.' },
+    { contexto: M('A minha avó dirige com muito cuidado.'), palavras: ['My', 'grandmother', 'drives', 'very', 'carefully'], isca: ['careful'], fim: '.', traducao: 'A minha avó dirige com muito cuidado.' },
+    { contexto: M('Ela é uma motorista cuidadosa.'), palavras: ['She', 'is', 'a', 'careful', 'driver'], isca: ['carefully'], fim: '.', traducao: 'Ela é uma motorista cuidadosa.' },
+    { contexto: M('O meu irmão fala inglês bem.'), palavras: ['My', 'brother', 'speaks', 'English', 'well'], isca: ['good'], fim: '.', traducao: 'O meu irmão fala inglês bem.' },
+    { contexto: M('As pessoas trabalham muito durante a semana.'), palavras: ['People', 'work', 'hard', 'during', 'the', 'week'], isca: ['hardly'], fim: '.', traducao: 'As pessoas trabalham muito durante a semana.' },
+    { contexto: M('Os trens se movem muito rápido no Japão.'), palavras: ['Trains', 'move', 'really', 'fast', 'in', 'Japan'], isca: ['fastly'], fim: '.', traducao: 'Os trens andam muito rápido no Japão.' },
+    { contexto: M('Os turistas devem atravessar a rua com cuidado.'), palavras: ['Tourists', 'should', 'cross', 'the', 'street', 'carefully'], isca: ['careful'], fim: '.', traducao: 'Os turistas devem atravessar a rua com cuidado.' },
+    { contexto: M('Na Itália, as pessoas tomam espresso rapidamente.'), palavras: ['In', 'Italy,', 'people', 'drink', 'espresso', 'quickly'], isca: ['quicklly'], fim: '.', traducao: 'Na Itália, as pessoas tomam espresso rapidinho.' },
+    { contexto: M('A comida na Tailândia é bem apimentada.'), palavras: ['Food', 'in', 'Thailand', 'is', 'quite', 'spicy'], isca: ['spicily'], fim: '.', traducao: 'A comida na Tailândia é bem apimentada.' },
+    { contexto: M('O garçom falou com a gente educadamente.'), palavras: ['The', 'waiter', 'spoke', 'to', 'us', 'politely'], isca: ['polite'], fim: '.', traducao: 'O garçom falou com a gente educadamente.' },
+    { contexto: M('Ele é uma pessoa simpática.'), palavras: ['He', 'is', 'a', 'friendly', 'person'], isca: ['friendlily'], fim: '.', traducao: 'Ele é uma pessoa simpática.' },
+    { contexto: M('Eu cozinho muito mal.'), palavras: ['I', 'cook', 'really', 'badly'], isca: ['bad'], fim: '.', traducao: 'Cozinho muito mal.' },
+    { contexto: M('Na minha cidade, as pessoas dirigem perigosamente.'), palavras: ['In', 'my', 'city,', 'people', 'drive', 'dangerously'], isca: ['dangerous'], fim: '.', traducao: 'Na minha cidade, as pessoas dirigem de forma perigosa.' },
+    { contexto: M('As crianças são muito independentes na Alemanha.'), palavras: ['Children', 'are', 'very', 'independent', 'in', 'Germany'], isca: ['independently'], fim: '.', traducao: 'As crianças são muito independentes na Alemanha.' },
+    { contexto: M('Você pode comprar frutas facilmente no mercado.'), palavras: ['You', 'can', 'buy', 'fruit', 'easily', 'at', 'the', 'market'], isca: ['easy'], fim: '.', traducao: 'Dá para comprar frutas facilmente no mercado.' },
+    { contexto: M('No Brasil, as pessoas cumprimentam os amigos calorosamente.'), palavras: ['In', 'Brazil,', 'people', 'greet', 'their', 'friends', 'warmly'], isca: ['warm'], fim: '.', traducao: 'No Brasil, as pessoas cumprimentam os amigos calorosamente.' },
+    { contexto: M('Ela fala espanhol perfeitamente.'), palavras: ['She', 'speaks', 'Spanish', 'perfectly'], isca: ['perfect'], fim: '.', traducao: 'Ela fala espanhol perfeitamente.' },
+    { contexto: M('O meu vizinho fala alto ao telefone.'), palavras: ['My', 'neighbor', 'talks', 'loudly', 'on', 'the', 'phone'], isca: ['loudlly'], fim: '.', traducao: 'O meu vizinho fala alto ao telefone.' },
+    { contexto: M('As pessoas andam devagar aos domingos.'), palavras: ['People', 'walk', 'slowly', 'on', 'Sundays'], isca: ['slowlly'], fim: '.', traducao: 'As pessoas andam devagar aos domingos.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -754,6 +754,17 @@ window.DYSE_PRATICAS = {
         ]
       },
       {
+        aula: 31,
+        titulo: "Class 31 · Travelers' Culture Shocks",
+        atividades: [
+          { num: 1, titulo: 'How do they do it?', tipo: 'Escute e escolha', treina: 'Escuta · Adverbs of manner', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Surprising habits', tipo: 'Monte a frase', treina: 'Escrita · Adverbs of manner', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Back from Buenos Aires', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Surprises in my country', tipo: 'Escute e grave', treina: 'Fala · Adjetivos e advérbios', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Adjective or adverb?', tipo: 'Make a Choice', treina: 'Gramática · Adjetivo x advérbio', minutos: '10 - 12', questoes: 24 }
+        ]
+      },
+      {
         aula: 32,
         titulo: 'Class 32 · Get Fit',
         atividades: [
