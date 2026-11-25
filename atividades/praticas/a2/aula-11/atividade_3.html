@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 11 · Who does the housework?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 11 · Leitura (Housework and Exercise)
+   Alinhado ao artigo "Clean the house and exercise every day!" e ao "Speaking: how often do
+   you...?" — tarefas domésticas, advérbios e expressões de frequência e a ideia de que fazer
+   faxina gasta calorias. Conteúdo NOVO: os colegas de apartamento Diego e Nina dividem as
+   tarefas. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Nina', "Diego, the apartment is very dirty! Let's talk about the housework."],
+  ['Diego', 'OK. What do you usually do?'],
+  ['Nina', 'I always do the laundry. I do it twice a week.'],
+  ['Diego', 'And I vacuum the floor every Saturday.'],
+  ['Nina', 'Yes, but you hardly ever clean the bathroom.'],
+  ['Diego', "That's true. I hate cleaning the bathroom!"],
+  ['Nina', 'How often do you mop the kitchen floor?'],
+  ['Diego', 'Um... never. I never mop the floor.'],
+  ['Nina', "Diego! Mopping is good exercise. You can burn a lot of calories!"],
+  ['Diego', "Really? OK, I can mop the floor once a week."],
+  ['Nina', 'Great! And who irons the clothes?'],
+  ['Diego', "We don't iron clothes. We never have time!"],
+  ['Nina', 'Ha ha! And do you make your bed?'],
+  ['Diego', "I sometimes make it. I'm usually late in the morning."],
+  ['Nina', "Let's make a plan and put it on the fridge."],
+  ['Diego', 'Good idea! And after the housework, pizza!']
+];
+const lado = q => q === 'Nina' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 11, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['OK. What do you usually do?', 'OK. What you usually do?', 'OK. What do you do usually do?'], 0, 'OK. O que você normalmente faz?'),
+    prox(2, ['I do always the laundry. I do it two a week.', 'I always do the laundry. I do it twice a week.', 'I always does the laundry. I do it twice week.'], 1, 'Eu sempre lavo a roupa. Faço isso duas vezes por semana.'),
+    prox(3, ['And I vacuum every Saturday the floor.', 'And I vacuums the floor every Saturday.', 'And I vacuum the floor every Saturday.'], 2, 'E eu passo aspirador no chão todo sábado.'),
+    prox(4, ['Yes, but you hardly ever clean the bathroom.', 'Yes, but you clean hardly ever the bathroom.', 'Yes, but you hardly ever cleans the bathroom.'], 0, 'Sim, mas você quase nunca limpa o banheiro.'),
+    prox(6, ['How often you mop the kitchen floor?', 'How often do you mop the kitchen floor?', 'How often are you mop the kitchen floor?'], 1, 'Com que frequência você passa pano no chão da cozinha?'),
+    prox(7, ["Um... never. I don't never mop the floor.", 'Um... never. I mop never the floor.', 'Um... never. I never mop the floor.'], 2, 'Hum... nunca. Eu nunca passo pano no chão.'),
+    prox(9, ['Really? OK, I can mop the floor once a week.', 'Really? OK, I can mop the floor one a week.', 'Really? OK, I can once a week mop the floor.'], 0, 'Sério? OK, posso passar pano uma vez por semana.'),
+    prox(10, ['Great! And who iron the clothes?', 'Great! And who irons the clothes?', 'Great! And who does irons the clothes?'], 1, 'Ótimo! E quem passa a roupa?'),
+    prox(11, ["We don't iron clothes. We have never time!", "We doesn't iron clothes. We never have time!", "We don't iron clothes. We never have time!"], 2, 'Não passamos roupa. Nunca temos tempo!'),
+    prox(12, ['Ha ha! And do you make your bed?', 'Ha ha! And do you do your bed?', 'Ha ha! And are you make your bed?'], 0, 'Ha ha! E você arruma a sua cama?'),
+    prox(13, ["I make sometimes it. I'm late usually.", "I sometimes make it. I'm usually late in the morning.", "I sometimes makes it. I usually am late."], 1, 'Às vezes arrumo. Normalmente estou atrasado de manhã.'),
+    prox(15, ['Good idea! And after the housework, more housework!', 'Good idea! And before the housework, pizza!', 'Good idea! And after the housework, pizza!'], 2, 'Boa ideia! E depois da faxina, pizza!'),
+    { instrucao: 'How often does Nina do the laundry?', frase: '___ a week.', opcoes: ['Twice', 'Once', 'Three times'], certa: 0, traducao: 'Duas vezes por semana.' },
+    { instrucao: 'When does Diego vacuum the floor?', frase: 'Every ___.', opcoes: ['Sunday', 'Saturday', 'day'], certa: 1, traducao: 'Todo sábado.' },
+    { instrucao: 'How often does Diego clean the bathroom?', frase: 'He ___ cleans it.', opcoes: ['always', 'usually', 'hardly ever'], certa: 2, traducao: 'Ele quase nunca limpa.' },
+    { instrucao: 'Why is mopping good, according to Nina?', frase: 'You can burn a lot of ___.', opcoes: ['calories', 'clothes', 'time'], certa: 0, traducao: 'Dá para gastar muitas calorias.' },
+    { instrucao: 'How often can Diego mop the floor now?', frase: '___ a week.', opcoes: ['Twice', 'Once', 'Never'], certa: 1, traducao: 'Uma vez por semana.' },
+    { instrucao: 'Do they iron clothes?', frase: 'No, they ___.', opcoes: ["aren't", "doesn't", "don't"], certa: 2, traducao: 'Não.' },
+    { instrucao: 'Why does Diego only sometimes make his bed?', frase: "He's usually ___ in the morning.", opcoes: ['late', 'tired', 'hungry'], certa: 0, traducao: 'Ele normalmente está atrasado de manhã.' },
+    { instrucao: 'Where are they putting the plan?', frase: 'On the ___.', opcoes: ['door', 'fridge', 'table'], certa: 1, traducao: 'Na geladeira.' }
+  ]
+});
+</script>
+</body>
+</html>

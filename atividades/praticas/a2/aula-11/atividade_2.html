@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 11 · How often?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 11 · Escrita (Housework and Exercise)
+   Alinhado ao slide "Grammar Point" — advérbios de frequência antes do verbo, entre don't /
+   doesn't e o verbo, e depois do be; expressões de frequência (every day, once / twice / three
+   times a week) no fim da frase. Conteúdo NOVO. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 11, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu quase nunca passo roupa.'), palavras: ['I', 'hardly', 'ever', 'iron', 'clothes'], isca: ['irons'], fim: '.', traducao: 'Eu quase nunca passo roupa.' },
+    { contexto: M('Ela sempre arruma a cama.'), palavras: ['She', 'always', 'makes', 'her', 'bed'], isca: ['make'], fim: '.', traducao: 'Ela sempre arruma a cama.' },
+    { contexto: M('Ele às vezes lava o banheiro.'), palavras: ['He', 'sometimes', 'cleans', 'the', 'bathroom'], isca: ['clean'], fim: '.', traducao: 'Ele às vezes limpa o banheiro.' },
+    { contexto: M('Eu nunca me atraso para o trabalho.'), palavras: ["I'm", 'never', 'late', 'for', 'work'], isca: ["don't"], fim: '.', traducao: 'Eu nunca me atraso para o trabalho.' },
+    { contexto: M('Eles geralmente estão cansados à noite.'), palavras: ['They', 'are', 'usually', 'tired', 'at', 'night'], isca: ['do'], fim: '.', traducao: 'Eles geralmente estão cansados à noite.' },
+    { contexto: M('Ela não limpa a cozinha com frequência.'), palavras: ['She', "doesn't", 'often', 'clean', 'the', 'kitchen'], isca: ['cleans'], fim: '.', traducao: 'Ela não limpa a cozinha com frequência.' },
+    { contexto: M('Eu não varro o chão sempre.'), palavras: ['I', "don't", 'always', 'sweep', 'the', 'floor'], isca: ['sweeps'], fim: '.', traducao: 'Eu nem sempre varro o chão.' },
+    { contexto: M('Você normalmente lava a roupa?'), palavras: ['Do', 'you', 'usually', 'do', 'the', 'laundry'], isca: ['Are'], fim: '?', traducao: 'Você normalmente lava a roupa?' },
+    { contexto: M('Por que você está sempre bravo?'), palavras: ['Why', 'are', 'you', 'always', 'angry'], isca: ['do'], fim: '?', traducao: 'Por que você está sempre bravo?' },
+    { contexto: M('Eu passo pano no chão duas vezes por semana.'), palavras: ['I', 'mop', 'the', 'floor', 'twice', 'a', 'week'], isca: ['two'], fim: '.', traducao: 'Eu passo pano no chão duas vezes por semana.' },
+    { contexto: M('Ela passa aspirador no chão uma vez por semana.'), palavras: ['She', 'vacuums', 'the', 'floor', 'once', 'a', 'week'], isca: ['one'], fim: '.', traducao: 'Ela passa aspirador no chão uma vez por semana.' },
+    { contexto: M('Nós vamos à academia três vezes por semana.'), palavras: ['We', 'go', 'to', 'the', 'gym', 'three', 'times', 'a', 'week'], isca: ['third'], fim: '.', traducao: 'Nós vamos à academia três vezes por semana.' },
+    { contexto: M('Ele faz exercício todo dia.'), palavras: ['He', 'does', 'exercise', 'every', 'day'], isca: ['makes'], fim: '.', traducao: 'Ele faz exercício todo dia.' },
+    { contexto: M('Eu faço a lição de casa à noite.'), palavras: ['I', 'do', 'my', 'homework', 'in', 'the', 'evening'], isca: ['make'], fim: '.', traducao: 'Faço a lição de casa à noite.' },
+    { contexto: M('O meu pai frequentemente descarrega o carro.'), palavras: ['My', 'father', 'often', 'unloads', 'the', 'car'], isca: ['unload'], fim: '.', traducao: 'O meu pai frequentemente descarrega o carro.' },
+    { contexto: M('A minha irmã está normalmente em casa de manhã.'), palavras: ['My', 'sister', 'is', 'usually', 'at', 'home', 'in', 'the', 'morning'], isca: ['does'], fim: '.', traducao: 'A minha irmã normalmente está em casa de manhã.' },
+    { contexto: M('Ele nunca faz tarefas domésticas.'), palavras: ['He', 'never', 'does', 'housework'], isca: ["doesn't"], fim: '.', traducao: 'Ele nunca faz tarefas domésticas.' },
+    { contexto: M('Ela normalmente lava a roupa?'), palavras: ['Does', 'she', 'usually', 'do', 'the', 'laundry'], isca: ['does'], fim: '?', traducao: 'Ela normalmente lava a roupa?' },
+    { contexto: M('Eu visito os meus avós uma vez por mês.'), palavras: ['I', 'visit', 'my', 'grandparents', 'once', 'a', 'month'], isca: ['one'], fim: '.', traducao: 'Visito os meus avós uma vez por mês.' },
+    { contexto: M('Eu quase nunca estou estressado.'), palavras: ["I'm", 'hardly', 'ever', 'stressed'], isca: ['never'], fim: '.', traducao: 'Eu quase nunca estou estressado.' }
+  ]
+});
+</script>
+</body>
+</html>

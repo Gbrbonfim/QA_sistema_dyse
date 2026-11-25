@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 11 · What housework is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 11 · Escuta (Housework and Exercise)
+   Alinhado ao slide "Vocabulary" — vacuum the floor, mop the floor, do the laundry, iron
+   clothes, clean the bathroom, unload the car, load the washing machine, make the bed.
+   Conteúdo NOVO: o aluno ouve alguém falando da tarefa e escolhe qual é. 24 questões. */
+const IC = { 'vacuum the floor': 'cleaning_services', 'mop the floor': 'mop', 'do the laundry': 'local_laundry_service', 'iron clothes': 'iron', 'clean the bathroom': 'bathroom', 'unload the car': 'directions_car', 'load the washing machine': 'dishwasher_gen', 'make the bed': 'bed' };
+const A = ['vacuum the floor', 'mop the floor', 'do the laundry', 'iron clothes'];
+const B = ['clean the bathroom', 'unload the car', 'load the washing machine', 'make the bed'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 11, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what housework is it?',
+  itens: [
+    qa('I vacuum the floor in the living room every Saturday.', 0),
+    qa('After lunch, I always mop the kitchen floor.', 1),
+    qa('My mother does the laundry twice a week.', 2),
+    qa('I hate ironing my shirts on Sunday nights.', 3),
+    qa('He uses the vacuum cleaner in the bedrooms.', 0),
+    qa('The floor is wet because Dad is mopping it.', 1),
+    qa("We do the laundry on Mondays. There are so many clothes!", 2),
+    qa('She irons her clothes before work.', 3),
+    qa('I vacuum the floor in my bedroom every day.', 0),
+    qa("Don't walk on the floor! I'm mopping it.", 1),
+    qa('Our laundry day is Thursday.', 2),
+    qa('My grandmother irons everything, even the towels!', 3),
+    qb('I clean the bathroom every Friday.', 0),
+    qb('Can you help me unload the car? The bags are heavy.', 1),
+    qb('First, I load the washing machine with dirty clothes.', 2),
+    qb('I make my bed every morning.', 3),
+    qb('The shower and the toilet are clean now.', 0),
+    qb('We have ten bags from the supermarket in the car.', 1),
+    qb('Put the towels in the washing machine, please.', 2),
+    qb("My son never makes his bed. The blanket is always on the floor!", 3),
+    qb("She's cleaning the mirror and the sink in the bathroom.", 0),
+    qb('He takes the boxes out of the car and carries them to the house.', 1),
+    qb("The washing machine is full. Let's turn it on.", 2),
+    qb('Put the pillows on the bed and make it nice.', 3)
+  ]
+});
+</script>
+</body>
+</html>

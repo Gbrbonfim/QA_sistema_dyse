@@ -544,6 +544,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 10', titulo: 'Where are you now?', tipo: 'Escute e grave', treina: 'Fala · Lugares', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 10', titulo: 'Prepositions of place: in, on, at', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 11,
+        titulo: 'Class 11 · Housework and Exercise',
+        atividades: [
+          { num: 1, titulo: 'What housework is it?', tipo: 'Escute e escolha', treina: 'Escuta · Tarefas domésticas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'How often?', tipo: 'Monte a frase', treina: 'Escrita · Frequência', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Who does the housework?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My housework routine', tipo: 'Escute e grave', treina: 'Fala · Frequência', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Adverbs of frequency', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
