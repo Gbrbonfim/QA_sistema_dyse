@@ -808,6 +808,53 @@ body.dyse-modal-open{overflow:hidden;}
 .turma-links .tl-btn{padding:9px 18px; font-size:.82rem; white-space:nowrap;}
 .turma-links .tl-msg{display:block; margin-top:8px; font-size:.74rem; color:var(--seal-soft); opacity:.85;}
 @media (max-width:760px){ .turma-links .tl-grid{grid-template-columns:1fr;} }
+
+/* Turmas (chamada + Registro de Classe): cartões enxutos, rótulos curtos. */
+#panelTurmas .pt-topo{display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; margin-bottom:12px;}
+#panelTurmas .pt-campo{display:flex; flex-direction:column; gap:5px; min-width:0; flex:0 1 220px;}
+#panelTurmas .pt-campo.pt-cresce{flex:1 1 280px;}
+#panelTurmas .pt-campo > span{font-size:.72rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--seal-soft);}
+#panelTurmas .pt-campo select, #panelTurmas .pt-campo input{width:100%; min-height:42px; border:1px solid #eee0cf; border-radius:10px; padding:8px 12px; font-family:var(--font-body); font-size:.88rem; background:#fffdfa; color:var(--seal);}
+#panelTurmas .pt-campo select:focus, #panelTurmas .pt-campo input:focus{outline:none; border-color:var(--amaranth);}
+#panelTurmas .pt-msg{font-size:.8rem; color:var(--seal-soft); margin:0;}
+#panelTurmas .pt-msg:empty{display:none;}
+#panelTurmas .pt-card{background:#fff; border-radius:var(--radius-md); box-shadow:var(--shadow-card); padding:18px 20px; margin:0 0 18px;}
+#panelTurmas .pt-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px;}
+#panelTurmas .pt-head h3{display:flex; align-items:center; gap:8px; margin:0; font-family:var(--font-body); font-size:1.02rem; font-weight:700; color:var(--seal);}
+#panelTurmas .pt-head h3 .msr{font-size:22px; color:var(--amaranth);}
+#panelTurmas .pt-tabela{overflow-x:auto; margin:0 -4px;}
+#panelTurmas .pt-tabela .dash-table{margin:0;}
+#panelTurmas .pt-foot{display:flex; align-items:center; justify-content:flex-end; gap:14px; flex-wrap:wrap; margin-top:14px;}
+#panelTurmas .pt-foot .btn{margin:0;}
+#panelTurmas .pt-hint{display:flex; align-items:center; gap:6px; font-size:.76rem; color:var(--seal-soft); margin:10px 0 0;}
+#panelTurmas .pt-hint .msr{font-size:16px;}
+#panelTurmas details.pt-sub{margin-top:14px; border-top:1px solid #f3e7d8; padding-top:4px;}
+#panelTurmas details.pt-sub > summary, #panelTurmas details.pt-dobra > summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:10px 0; font-size:.85rem; font-weight:600; color:var(--seal);}
+#panelTurmas details.pt-sub > summary::-webkit-details-marker, #panelTurmas details.pt-dobra > summary::-webkit-details-marker{display:none;}
+#panelTurmas .pt-chev{margin-left:auto; font-size:20px; opacity:.55; transition:transform .2s;}
+#panelTurmas details[open] > summary .pt-chev{transform:rotate(180deg);}
+#panelTurmas details.pt-dobra{padding:4px 20px;}
+#panelTurmas details.pt-dobra[open]{padding-bottom:16px;}
+#panelTurmas details.pt-dobra > summary .msr:first-child{font-size:20px; color:var(--amaranth);}
+#panelTurmas details.pt-dobra > summary small{font-weight:400; color:var(--seal-soft); font-size:.78rem;}
+#panelTurmas .pt-dias{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:2px 0 4px;}
+#panelTurmas .pt-dias > span{font-size:.72rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--seal-soft);}
+#panelTurmas #registroClasseDiasBar{display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+#panelTurmas #registroClasseBlocoA{padding:0 0 8px;}
+#panelTurmas .pt-proxima{margin-top:18px; padding:16px; background:#fffaf4; border:1px solid #f3e7d8; border-radius:12px;}
+#panelTurmas .pt-proxima h4{margin:0 0 12px; font-family:var(--font-body); font-size:.88rem; font-weight:700; color:var(--seal);}
+#panelTurmas .pt-checks{display:flex; flex-wrap:wrap; gap:10px 22px; margin:4px 0 0;}
+#panelTurmas .pt-checks label{display:flex; align-items:center; gap:8px; min-height:40px; font-size:.86rem; font-weight:600; color:var(--seal); cursor:pointer;}
+#panelTurmas .pt-checks input{width:18px; height:18px; accent-color:var(--amaranth); margin:0;}
+#panelTurmas #registroClasseAlertaMotivoWrap{margin-top:10px;}
+#panelTurmas #registroClasseAlertaMotivoWrap .pt-campo{flex:1 1 auto; max-width:520px;}
+@media (max-width:600px){
+  #panelTurmas .pt-card{padding:14px;}
+  #panelTurmas details.pt-dobra{padding:2px 14px;}
+  #panelTurmas details.pt-dobra > summary small{display:none;}
+  #panelTurmas .pt-campo{flex:1 1 100%;}
+  #panelTurmas .pt-foot .btn{width:100%;}
+}
 .chamada-status{border:2px solid #e4d4c4; border-radius:10px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem; font-weight:700; background:#fff; color:var(--seal); cursor:pointer;}
 .chamada-status.st-presente{border-color:#bfe3cc; background:#eaf7ee; color:var(--ok);}
 .chamada-status.st-falta{border-color:#f3c9c6; background:#fbeceb; color:var(--bad);}
@@ -1137,105 +1184,102 @@ body.dyse-modal-open{overflow:hidden;}
   </div>
 
   <div id="panelTurmas" style="display:none;">
-    <p style="color:var(--seal-soft); font-size:.88rem; margin-bottom:16px;">
-      Escolha a turma e a data da aula pra marcar a presença de cada aluno. Ao reabrir uma data já registrada por você, a chamada salva é carregada de novo pra edição.
-    </p>
-    <div class="dash-filter">
-      <select id="chamadaTurmaSelect" onchange="onChamadaTurmaChange()"></select>
-      <input type="date" id="chamadaData" onchange="loadChamadaDoDia()">
+    <!-- Turma e data: o resto da tela segue essa escolha -->
+    <div class="pt-topo">
+      <label class="pt-campo"><span>Turma</span><select id="chamadaTurmaSelect" onchange="onChamadaTurmaChange()"></select></label>
+      <label class="pt-campo"><span>Data da aula</span><input type="date" id="chamadaData" onchange="loadChamadaDoDia()"></label>
     </div>
-    <p id="chamadaMsg" style="font-size:.82rem; margin:8px 0; color:var(--seal-soft);"></p>
+    <p id="chamadaMsg" class="pt-msg"></p>
 
-    <div id="turmaLinksWrap" class="turma-links" style="display:none;">
+    <details id="turmaLinksWrap" class="pt-card pt-dobra turma-links" style="display:none;">
+      <summary><span class="msr" aria-hidden="true">link</span><b>Links da turma</b><small>Aula ao vivo e gravações</small><span class="msr pt-chev" aria-hidden="true">expand_more</span></summary>
       <div class="tl-grid">
-        <label class="tl-campo"><span class="tl-lab"><span class="msr" aria-hidden="true">videocam</span> Link aula ao vivo</span>
+        <label class="tl-campo"><span class="tl-lab"><span class="msr" aria-hidden="true">videocam</span> Aula ao vivo</span>
           <input type="url" id="meetLinkInput" placeholder="https://meet.google.com/xxx-xxxx-xxx"></label>
-        <label class="tl-campo"><span class="tl-lab"><span class="msr" aria-hidden="true">smart_display</span> Links gravações</span>
+        <label class="tl-campo"><span class="tl-lab"><span class="msr" aria-hidden="true">smart_display</span> Gravações</span>
           <input type="url" id="driveLinkInput" placeholder="https://drive.google.com/drive/folders/..."></label>
         <button type="button" class="btn btn-primary tl-btn" onclick="salvarLinksTurma()">Salvar links</button>
       </div>
-      <span id="turmaLinksMsg" class="tl-msg">Os alunos da turma veem os dois links no painel deles. A pasta das gravações precisa estar como "Qualquer pessoa com o link".</span>
-    </div>
-    <div style="overflow-x:auto;">
-      <table class="dash-table" id="chamadaTable">
-        <thead><tr><th>Aluno</th><th>Presença</th></tr></thead>
-        <tbody id="chamadaBody"></tbody>
-      </table>
-    </div>
-    <div class="btn-row">
-      <button type="button" class="btn btn-primary" onclick="salvarChamada()">Salvar chamada</button>
-    </div>
-    <div style="overflow-x:auto; margin-top:24px;">
-      <p style="font-size:.85rem; font-weight:700; color:var(--seal); margin-bottom:10px;">Aulas registradas por você neste mês</p>
-      <table class="dash-table" id="chamadaHistoricoTable">
-        <thead><tr><th>Data</th><th>Presentes</th><th>Ações</th></tr></thead>
-        <tbody id="chamadaHistoricoBody"></tbody>
-      </table>
-    </div>
+      <span id="turmaLinksMsg" class="tl-msg"></span>
+    </details>
 
-    <div id="turmaMaterialExtraWrap" style="display:none;">
-      <hr style="border:none; border-top:2px solid #f0e3d2; margin:32px 0 24px;">
-      <p style="font-family:var(--font-body); font-weight:600; font-size:1.1rem; color:var(--amaranth); margin-bottom:14px;">Material extra</p>
-      <div id="turmaMaterialExtraBody"></div>
-    </div>
-
-    <hr style="border:none; border-top:2px solid #f0e3d2; margin:32px 0 24px;">
-    <p style="font-family:var(--font-body); font-weight:600; font-size:1.1rem; color:var(--amaranth); margin-bottom:6px;">Registro de Classe</p>
-    <p id="registroClasseSemNivel" style="color:var(--seal-soft); font-size:.85rem; display:none;">
-      Essa turma ainda não tem um nível acadêmico definido pela gestão — peça pra vincularem um nível a ela pra usar o Registro de Classe.
-    </p>
-    <div id="registroClasseNivelWrap" style="display:none; margin-bottom:14px;">
-      <label for="registroClasseNivelSelect" style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:6px;">Essa turma tem mais de um material ativo — de qual você quer ver o registro?</label>
-      <div class="dash-filter">
-        <select id="registroClasseNivelSelect" onchange="onRegistroClasseNivelChange()"></select>
-      </div>
-    </div>
-    <div id="registroClasseWrap" style="display:none;">
-      <p style="color:var(--seal-soft); font-size:.85rem; margin-bottom:14px;">Escolha a aula ministrada — o plano dela e a lista de alunos da turma carregam automaticamente.</p>
-      <div class="dash-filter">
-        <select id="registroClasseAulaSelect" onchange="onRegistroClasseAulaChange()"></select>
-      </div>
-      <div style="margin:10px 0 4px;">
-        <label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:6px;">Datas desta aula <span style="font-weight:400; color:var(--seal-soft);">— uma aula pode ser dada em mais de um dia; escolha a data, faça o registro e salve. Cada data tem sua avaliação e sua anotação, e não sobrescreve as outras.</span></label>
-        <div id="registroClasseDiasBar" style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;"></div>
-        <div style="margin-top:10px;">
-          <label style="font-weight:700; font-size:.82rem; color:var(--seal); display:block; margin-bottom:4px;">Data deste registro</label>
-          <input type="date" id="registroClasseDataInput" onchange="onRegistroClasseDataChange()" style="border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:7px 10px; font-family:var(--font-body); font-size:.85rem;">
-        </div>
-      </div>
-      <details class="dyse-collapsible">
-        <summary><span>Plano da aula (referência da coordenação)</span><span class="chevron">›</span></summary>
-        <div class="dyse-collapsible-body" id="registroClasseBlocoA"></div>
-      </details>
-      <div style="overflow-x:auto; margin-top:16px;">
-        <table class="dash-table" id="registroClasseTable">
-          <thead><tr id="registroClasseTheadRow"><th>Aluno</th></tr></thead>
-          <tbody id="registroClasseBody"></tbody>
+    <!-- Chamada -->
+    <section class="pt-card">
+      <div class="pt-head"><h3><span class="msr" aria-hidden="true">how_to_reg</span> Chamada</h3></div>
+      <div class="pt-tabela">
+        <table class="dash-table" id="chamadaTable">
+          <thead><tr><th>Aluno</th><th>Presença</th></tr></thead>
+          <tbody id="chamadaBody"></tbody>
         </table>
       </div>
-      <p style="font-size:.78rem; color:var(--seal-soft); margin:8px 0 0;">Nas <b>Observações</b>, se comentar que o aluno está indo (ou não) ao <b>Speaking Club</b> ou fazendo a <b>tarefa de casa</b>, isso entra no Report Card dele.</p>
-      <div style="margin-top:20px; display:flex; flex-direction:column; gap:12px; max-width:720px;">
-        <div style="display:flex; flex-wrap:wrap; gap:12px;">
-          <div style="flex:1 1 240px;"><label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:4px;">Pontos a retomar na próxima aula</label>
-            <input type="text" id="registroClassePontos" style="width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;"></div>
-          <div style="flex:1 1 240px;"><label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:4px;">Ajuste de ritmo necessário</label>
-            <input type="text" id="registroClasseRitmo" style="width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;"></div>
+      <div class="pt-foot">
+        <button type="button" class="btn btn-primary" onclick="salvarChamada()">Salvar chamada</button>
+      </div>
+      <details class="pt-sub">
+        <summary>Aulas registradas por você neste mês<span class="msr pt-chev" aria-hidden="true">expand_more</span></summary>
+        <div class="pt-tabela">
+          <table class="dash-table" id="chamadaHistoricoTable">
+            <thead><tr><th>Data</th><th>Presentes</th><th>Ações</th></tr></thead>
+            <tbody id="chamadaHistoricoBody"></tbody>
+          </table>
         </div>
-        <label style="display:flex; align-items:center; gap:8px; font-size:.85rem; cursor:pointer; color:var(--seal); font-weight:600;">
-          <input type="checkbox" id="registroClasseHomeworkPassado" style="width:auto;">
-          Passei homework nesta aula
-        </label>
-        <label style="display:flex; align-items:center; gap:8px; font-size:.85rem; cursor:pointer; color:var(--seal);">
-          <input type="checkbox" id="registroClasseAlerta" style="width:auto;" onchange="document.getElementById('registroClasseAlertaMotivoWrap').style.display = this.checked ? 'block' : 'none'">
-          Alerta para Report Card
-        </label>
-        <div id="registroClasseAlertaMotivoWrap" style="display:none;"><label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:4px;">Motivo do alerta</label>
-          <input type="text" id="registroClasseAlertaMotivo" style="width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;"></div>
+      </details>
+    </section>
+
+    <!-- Registro de Classe -->
+    <section class="pt-card">
+      <div class="pt-head"><h3><span class="msr" aria-hidden="true">assignment</span> Registro de Classe</h3></div>
+      <p id="registroClasseSemNivel" class="pt-hint" style="display:none;">
+        Essa turma ainda não tem um nível definido. Peça para a gestão vincular um nível a ela.
+      </p>
+      <div id="registroClasseNivelWrap" class="pt-topo" style="display:none;">
+        <label class="pt-campo"><span>Material</span><select id="registroClasseNivelSelect" onchange="onRegistroClasseNivelChange()"></select></label>
       </div>
-      <p id="registroClasseMsg" style="font-size:.82rem; margin:10px 0; color:var(--seal-soft);"></p>
-      <div class="btn-row">
-        <button type="button" class="btn btn-primary" onclick="salvarRegistroClasse()">Salvar registro de classe</button>
+      <div id="registroClasseWrap" style="display:none;">
+        <div class="pt-topo">
+          <label class="pt-campo pt-cresce"><span>Aula</span><select id="registroClasseAulaSelect" onchange="onRegistroClasseAulaChange()"></select></label>
+          <label class="pt-campo"><span>Data do registro</span><input type="date" id="registroClasseDataInput" onchange="onRegistroClasseDataChange()"></label>
+        </div>
+        <div class="pt-dias" title="Uma aula pode ser dada em mais de um dia. Cada data tem o seu próprio registro.">
+          <span>Dias desta aula</span>
+          <div id="registroClasseDiasBar"></div>
+        </div>
+        <details class="pt-sub">
+          <summary>Plano da aula<span class="msr pt-chev" aria-hidden="true">expand_more</span></summary>
+          <div id="registroClasseBlocoA"></div>
+        </details>
+        <div class="pt-tabela">
+          <table class="dash-table" id="registroClasseTable">
+            <thead><tr id="registroClasseTheadRow"><th>Aluno</th></tr></thead>
+            <tbody id="registroClasseBody"></tbody>
+          </table>
+        </div>
+        <p class="pt-hint"><span class="msr" aria-hidden="true">info</span> Comentários sobre o Speaking Club nas Observações entram no Report Card.</p>
+
+        <div class="pt-proxima">
+          <h4>Para a próxima aula</h4>
+          <div class="pt-topo">
+            <label class="pt-campo pt-cresce"><span>Pontos a retomar</span><input type="text" id="registroClassePontos"></label>
+            <label class="pt-campo pt-cresce"><span>Ajuste de ritmo</span><input type="text" id="registroClasseRitmo"></label>
+          </div>
+          <div class="pt-checks">
+            <label><input type="checkbox" id="registroClasseHomeworkPassado"> Passei homework nesta aula</label>
+            <label><input type="checkbox" id="registroClasseAlerta" onchange="document.getElementById('registroClasseAlertaMotivoWrap').style.display = this.checked ? 'block' : 'none'"> Alerta para o Report Card</label>
+          </div>
+          <div id="registroClasseAlertaMotivoWrap" style="display:none;">
+            <label class="pt-campo"><span>Motivo do alerta</span><input type="text" id="registroClasseAlertaMotivo"></label>
+          </div>
+        </div>
+        <div class="pt-foot">
+          <p id="registroClasseMsg" class="pt-msg"></p>
+          <button type="button" class="btn btn-primary" onclick="salvarRegistroClasse()">Salvar registro</button>
+        </div>
       </div>
+    </section>
+
+    <div id="turmaMaterialExtraWrap" style="display:none;">
+      <div class="pt-head"><h3><span class="msr" aria-hidden="true">folder_special</span> Material extra</h3></div>
+      <div id="turmaMaterialExtraBody"></div>
     </div>
   </div>
 
@@ -1851,7 +1895,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('meetLinkInput').value = (turma && turma.link_meet) || '';
     document.getElementById('driveLinkInput').value = (turma && turma.link_drive) || '';
     const msg = document.getElementById('turmaLinksMsg');
-    msg.style.color = ''; msg.textContent = 'Os alunos da turma veem os dois links no painel deles. A pasta das gravações precisa estar como "Qualquer pessoa com o link".';
+    msg.style.color = ''; msg.textContent = 'Os alunos veem os dois links. A pasta de gravações precisa estar aberta para "Qualquer pessoa com o link".';
     document.getElementById('turmaLinksWrap').style.display = 'block';
   }
 
@@ -2294,7 +2338,7 @@ body.dyse-modal-open{overflow:hidden;}
         niveisDaTurma.map(n => '<option value="' + escapeHtmlLocal(n.slug) + '">' + escapeHtmlLocal(n.name) + '</option>').join('');
       const escolhido = niveisDaTurma.find(n => n.slug === REGISTRO_NIVEL_ESCOLHIDO);
       sel.value = escolhido ? escolhido.slug : '';
-      nivelWrap.style.display = 'block';
+      nivelWrap.style.display = '';   // volta pro flex do .pt-topo
       if(!escolhido){ wrap.style.display = 'none'; return; }
       nivel = escolhido;
     }else{
