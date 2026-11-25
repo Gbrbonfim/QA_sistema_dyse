@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 18 · When is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 18 · Escrita (I Love Cooking on This Day!)
+   Alinhado aos slides "How to Say Dates" e "Remember" — in + mês, on + data e dia, ordinais,
+   anos e as celebrações (Christmas, Halloween, Thanksgiving, Chinese New Year) com o
+   vocabulário (give gifts, wear costumes, carve pumpkins, light fireworks, come together).
+   Conteúdo NOVO. A isca é a preposição ou a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 18, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('O Natal é no dia 25 de dezembro.'), palavras: ['Christmas', 'is', 'on', 'December', '25th'], isca: ['in'], fim: '.', traducao: 'O Natal é no dia 25 de dezembro.' },
+    { contexto: M('O meu aniversário é em maio.'), palavras: ['My', 'birthday', 'is', 'in', 'May'], isca: ['on'], fim: '.', traducao: 'O meu aniversário é em maio.' },
+    { contexto: M('O Halloween é no dia 31 de outubro.'), palavras: ['Halloween', 'is', 'on', 'the', 'thirty-first', 'of', 'October'], isca: ['thirty-one'], fim: '.', traducao: 'O Halloween é no dia 31 de outubro.' },
+    { contexto: M('A festa é na quinta, dia 27 de novembro.'), palavras: ['The', 'party', 'is', 'on', 'Thursday,', 'the', 'twenty-seventh', 'of', 'November'], isca: ['in'], fim: '.', traducao: 'A festa é na quinta, 27 de novembro.' },
+    { contexto: M('As pessoas dão presentes no Natal.'), palavras: ['People', 'give', 'gifts', 'at', 'Christmas'], isca: ['wear'], fim: '.', traducao: 'As pessoas dão presentes no Natal.' },
+    { contexto: M('As crianças usam fantasias no Halloween.'), palavras: ['Children', 'wear', 'costumes', 'on', 'Halloween'], isca: ['carve'], fim: '.', traducao: 'As crianças usam fantasias no Halloween.' },
+    { contexto: M('Nós esculpimos abóboras.'), palavras: ['We', 'carve', 'pumpkins'], isca: ['light'], fim: '.', traducao: 'Nós esculpimos abóboras.' },
+    { contexto: M('Eles soltam fogos no Ano-Novo.'), palavras: ['They', 'light', 'fireworks', 'on', "New", "Year's", 'Eve'], isca: ['carve'], fim: '.', traducao: 'Eles soltam fogos na véspera de Ano-Novo.' },
+    { contexto: M('As famílias se reúnem para um grande jantar.'), palavras: ['Families', 'come', 'together', 'for', 'a', 'big', 'dinner'], isca: ['comes'], fim: '.', traducao: 'As famílias se reúnem para um grande jantar.' },
+    { contexto: M('O vermelho é a cor da boa sorte.'), palavras: ['Red', 'is', 'the', 'color', 'of', 'good', 'luck'], isca: ['lucky'], fim: '.', traducao: 'O vermelho é a cor da boa sorte.' },
+    { contexto: M('Eu nasci em 1998.'), palavras: ['I', 'was', 'born', 'in', '1998'], isca: ['on'], fim: '.', traducao: 'Nasci em 1998.' },
+    { contexto: M('Ela nasceu no dia 3 de março de 2001.'), palavras: ['She', 'was', 'born', 'on', 'March', '3rd,', '2001'], isca: ['in'], fim: '.', traducao: 'Ela nasceu em 3 de março de 2001.' },
+    { contexto: M('Quando é o seu aniversário?'), palavras: ['When', 'is', 'your', 'birthday'], isca: ['What'], fim: '?', traducao: 'Quando é o seu aniversário?' },
+    { contexto: M('É no dia doze de junho.'), palavras: ["It's", 'on', 'the', 'twelfth', 'of', 'June'], isca: ['twelve'], fim: '.', traducao: 'É no dia doze de junho.' },
+    { contexto: M('Nós comemos peru no Dia de Ação de Graças.'), palavras: ['We', 'eat', 'turkey', 'on', 'Thanksgiving'], isca: ['in'], fim: '.', traducao: 'Comemos peru no Dia de Ação de Graças.' },
+    { contexto: M('O Ano-Novo chinês geralmente é em fevereiro.'), palavras: ['Chinese', 'New', 'Year', 'is', 'usually', 'in', 'February'], isca: ['on'], fim: '.', traducao: 'O Ano-Novo chinês geralmente é em fevereiro.' },
+    { contexto: M('O Dia da Independência do Brasil é em 7 de setembro.'), palavras: ['Brazilian', 'Independence', 'Day', 'is', 'on', 'September', '7th'], isca: ['in'], fim: '.', traducao: 'O Dia da Independência do Brasil é em 7 de setembro.' },
+    { contexto: M('Fantasmas e bruxas são assustadores.'), palavras: ['Ghosts', 'and', 'witches', 'are', 'spooky'], isca: ['is'], fim: '.', traducao: 'Fantasmas e bruxas são assustadores.' },
+    { contexto: M('Hoje é dia primeiro de abril.'), palavras: ["Today", 'is', 'the', 'first', 'of', 'April'], isca: ['one'], fim: '.', traducao: 'Hoje é primeiro de abril.' },
+    { contexto: M('A aula começa no dia 20 de fevereiro.'), palavras: ['Class', 'starts', 'on', 'February', '20th'], isca: ['in'], fim: '.', traducao: 'A aula começa em 20 de fevereiro.' }
+  ]
+});
+</script>
+</body>
+</html>

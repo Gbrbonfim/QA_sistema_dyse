@@ -610,6 +610,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: "Today I'm wearing...", tipo: 'Escute e grave', treina: 'Fala · Roupas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Object pronouns', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 18,
+        titulo: 'Class 18 and 19 · I Love Cooking on This Day!',
+        atividades: [
+          { num: 1, parte: 'Class 18', titulo: 'Which date do you hear?', tipo: 'Escute e escolha', treina: 'Escuta · Datas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 18', titulo: 'When is it?', tipo: 'Monte a frase', treina: 'Escrita · Datas', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 18', titulo: 'Holidays here and there', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 18', titulo: 'Say the date', tipo: 'Escute e grave', treina: 'Fala · Datas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 18', titulo: 'Ordinal numbers and dates', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 19', titulo: 'Love it or hate it?', tipo: 'Escute e escolha', treina: 'Escuta · Gostos', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 19', titulo: 'I love cooking!', tipo: 'Monte a frase', treina: 'Escrita · Verbo + ing', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 19', titulo: 'Christmas in Australia', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 19', titulo: 'What do you love doing?', tipo: 'Escute e grave', treina: 'Fala · Gostos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 19', titulo: 'Verbs + ing', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 19 · Christmas in Australia</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 19 · Leitura (I Love Cooking on This Day!)
+   Alinhado ao "Watching And Listening" (o Natal na Austrália: calor, crackers, chapeuzinhos,
+   presunto e camarão) e ao "Grammar Point" (love / like / don't mind / hate + -ing). Conteúdo
+   NOVO e com fatos verdadeiros: o Mike, de Sydney, conta à Laura como é o Natal lá.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Laura', 'Mike, is Christmas in Australia like Christmas in Canada?'],
+  ['Mike', "Not really! In Australia, it's summer in December."],
+  ['Laura', 'Summer? So, no snow?'],
+  ['Mike', 'No snow! It\'s usually hot. We love going to the beach on Christmas Day.'],
+  ['Laura', 'Wow! What do you eat?'],
+  ['Mike', 'We eat ham and prawns. I love eating prawns!'],
+  ['Laura', 'Do you wear Christmas sweaters?'],
+  ['Mike', "No way! It's too hot. We prefer wearing T-shirts and shorts."],
+  ['Laura', 'Do you have Christmas crackers?'],
+  ['Mike', 'Yes! And we wear funny little paper hats.'],
+  ['Laura', 'Do you like singing Christmas songs?'],
+  ['Mike', "I don't mind singing, but I hate dancing!"],
+  ['Laura', 'Ha ha! Who cooks in your family?'],
+  ['Mike', 'My dad. He enjoys cooking on the barbecue.'],
+  ['Laura', 'And what do you do after lunch?'],
+  ['Mike', 'We relax and play cricket in the garden.']
+];
+const lado = q => q === 'Laura' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 18, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Not really! In Australia, it's summer in December.", "Not really! In Australia, it's winter in December.", "Not really! In Australia, it's summer on December."], 0, 'Não muito! Na Austrália, dezembro é verão.'),
+    prox(3, ["No snow! It's usually hot. We love go to the beach.", "No snow! It's usually hot. We love going to the beach on Christmas Day.", "No snow! It's usually cold. We love going to the beach."], 1, 'Sem neve! Normalmente faz calor. Adoramos ir à praia no dia de Natal.'),
+    prox(5, ['We eat ham and prawns. I love eat prawns!', 'We eat ham and prawns. I loves eating prawns!', 'We eat ham and prawns. I love eating prawns!'], 2, 'Comemos presunto e camarão. Adoro comer camarão!'),
+    prox(6, ['Do you wear Christmas sweaters?', 'Are you wear Christmas sweaters?', 'Do you wearing Christmas sweaters?'], 0, 'Vocês usam suéteres de Natal?'),
+    prox(7, ["No way! It's too hot. We prefer wear T-shirts.", "No way! It's too hot. We prefer wearing T-shirts and shorts.", "No way! It's too cold. We prefer wearing sweaters."], 1, 'De jeito nenhum! Faz calor demais. Preferimos usar camiseta e bermuda.'),
+    prox(8, ['Do you have Christmas crackers?', 'Does you have Christmas crackers?', 'Are you have Christmas crackers?'], 0, 'Vocês têm "Christmas crackers"?'),
+    prox(9, ['Yes! And we wears funny little paper hats.', 'Yes! And we wear funny little paper hats.', 'Yes! And we wearing funny little paper hats.'], 1, 'Sim! E usamos chapeuzinhos de papel engraçados.'),
+    prox(10, ['Do you like sing Christmas songs?', 'Do you likes singing Christmas songs?', 'Do you like singing Christmas songs?'], 2, 'Você gosta de cantar músicas de Natal?'),
+    prox(11, ["I don't mind singing, but I hate dancing!", "I don't mind sing, but I hate dance!", "I doesn't mind singing, but I hate dancing!"], 0, 'Não me importo de cantar, mas odeio dançar!'),
+    prox(13, ['My dad. He enjoy cooking on the barbecue.', 'My dad. He enjoys cooking on the barbecue.', 'My dad. He enjoys cook on the barbecue.'], 1, 'O meu pai. Ele adora cozinhar na churrasqueira.'),
+    prox(14, ['And what do you do after lunch?', 'And what you do after lunch?', 'And what are you do after lunch?'], 0, 'E o que vocês fazem depois do almoço?'),
+    prox(15, ['We relax and plays cricket in the garden.', 'We relaxing and play cricket in the garden.', 'We relax and play cricket in the garden.'], 2, 'Relaxamos e jogamos críquete no jardim.'),
+    { instrucao: 'What season is it in Australia in December?', frase: "It's ___.", opcoes: ['summer', 'winter', 'autumn'], certa: 0, traducao: 'É verão.' },
+    { instrucao: 'Where do they love going on Christmas Day?', frase: 'To the ___.', opcoes: ['mountains', 'beach', 'mall'], certa: 1, traducao: 'À praia.' },
+    { instrucao: 'What does Mike love eating?', frase: '___.', opcoes: ['Turkey', 'Ham', 'Prawns'], certa: 2, traducao: 'Camarão.' },
+    { instrucao: 'What do they prefer wearing?', frase: 'T-shirts and ___.', opcoes: ['shorts', 'sweaters', 'boots'], certa: 0, traducao: 'Camiseta e bermuda.' },
+    { instrucao: 'What do they wear with the Christmas crackers?', frase: 'Funny little paper ___.', opcoes: ['shoes', 'hats', 'shirts'], certa: 1, traducao: 'Chapeuzinhos de papel.' },
+    { instrucao: 'What does Mike hate doing?', frase: '___.', opcoes: ['Singing', 'Eating', 'Dancing'], certa: 2, traducao: 'Dançar.' },
+    { instrucao: 'Who cooks in Mike\'s family?', frase: 'His ___.', opcoes: ['dad', 'mom', 'grandmother'], certa: 0, traducao: 'O pai dele.' },
+    { instrucao: 'What do they play after lunch?', frase: '___.', opcoes: ['Football', 'Cricket', 'Tennis'], certa: 1, traducao: 'Críquete.' }
+  ]
+});
+</script>
+</body>
+</html>

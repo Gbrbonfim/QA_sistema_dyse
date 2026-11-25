@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 18 · Holidays here and there</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 18 · Leitura (I Love Cooking on This Day!)
+   Alinhado ao texto "Celebrations and Traditions Around the World" e ao "Talking Point: what
+   days are holidays in your country? How do people celebrate?" — datas com on / in e o
+   vocabulário das celebrações. Conteúdo NOVO e com fatos verdadeiros: a Emily (americana) e o
+   Pedro (brasileiro) comparam feriados. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Emily', 'Pedro, what days are holidays in Brazil?'],
+  ['Pedro', 'We have a lot! Independence Day is on September seventh.'],
+  ['Emily', 'Oh! In the USA, Independence Day is on July fourth.'],
+  ['Pedro', 'How do people celebrate it?'],
+  ['Emily', 'People come together for barbecues and light fireworks.'],
+  ['Pedro', 'Cool! Do you celebrate Thanksgiving?'],
+  ['Emily', 'Yes, on the fourth Thursday of November. We eat turkey.'],
+  ['Pedro', 'And Halloween? Do you wear costumes?'],
+  ['Emily', 'Of course! Halloween is on October thirty-first. I love it!'],
+  ['Pedro', "Children ask for candy, right? 'Trick or treat!'"],
+  ['Emily', 'Yes! And we carve pumpkins. What about Brazil in June?'],
+  ['Pedro', 'In June we have Festa Junina. We eat corn and dance.'],
+  ['Emily', 'That sounds fun! When is Christmas in Brazil?'],
+  ['Pedro', "Christmas is on December twenty-fifth, like in the USA. But it's summer here!"],
+  ['Emily', 'Summer at Christmas? Amazing!'],
+  ['Pedro', 'Yes! Some people go to the beach on Christmas Day.']
+];
+const lado = q => q === 'Pedro' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 18, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['We have a lot! Independence Day is on September seventh.', 'We have a lot! Independence Day is in September seven.', 'We have a lot! Independence Day is at September seventh.'], 0, 'Temos muitos! O Dia da Independência é em 7 de setembro.'),
+    prox(2, ['Oh! In the USA, Independence Day is in July fourth.', 'Oh! In the USA, Independence Day is on July fourth.', 'Oh! In the USA, Independence Day is on July four.'], 1, 'Ah! Nos EUA, o Dia da Independência é em 4 de julho.'),
+    prox(3, ['How people celebrate it?', 'How do people celebrates it?', 'How do people celebrate it?'], 2, 'Como as pessoas comemoram?'),
+    prox(4, ['People come together for barbecues and light fireworks.', 'People comes together for barbecues and light fireworks.', 'People come together for barbecues and carve fireworks.'], 0, 'As pessoas se reúnem para churrascos e soltam fogos.'),
+    prox(6, ['Yes, on the four Thursday of November. We eat turkey.', 'Yes, on the fourth Thursday of November. We eat turkey.', 'Yes, in the fourth Thursday in November.'], 1, 'Sim, na quarta quinta-feira de novembro. Comemos peru.'),
+    prox(7, ['And Halloween? Do you wear costume?', 'And Halloween? Are you wear costumes?', 'And Halloween? Do you wear costumes?'], 2, 'E o Halloween? Vocês usam fantasias?'),
+    prox(8, ['Of course! Halloween is on October thirty-first. I love it!', 'Of course! Halloween is on October thirty-one. I love it!', 'Of course! Halloween is in October thirty-first.'], 0, 'Claro! O Halloween é em 31 de outubro. Eu amo!'),
+    prox(10, ['Yes! And we light pumpkins.', 'Yes! And we carve pumpkins. What about Brazil in June?', 'Yes! And we carve pumpkins. What about Brazil on June?'], 1, 'Sim! E esculpimos abóboras. E o Brasil em junho?'),
+    prox(11, ['On June we have Festa Junina.', 'In June we have Festa Junina. We eats corn and dance.', 'In June we have Festa Junina. We eat corn and dance.'], 2, 'Em junho temos a Festa Junina. Comemos milho e dançamos.'),
+    prox(12, ['That sounds fun! When is Christmas in Brazil?', 'That sounds fun! When does Christmas in Brazil?', 'That sounds fun! What is Christmas in Brazil?'], 0, 'Parece divertido! Quando é o Natal no Brasil?'),
+    prox(13, ["Christmas is in December twenty-fifth. It's winter here!", "Christmas is on December twenty-fifth, like in the USA. But it's summer here!", "Christmas is on December twenty-five. It's summer here!"], 1, 'O Natal é em 25 de dezembro, como nos EUA. Mas aqui é verão!'),
+    prox(15, ['Yes! Some people go to the beach in Christmas Day.', 'Yes! Some people goes to the beach on Christmas Day.', 'Yes! Some people go to the beach on Christmas Day.'], 2, 'Sim! Algumas pessoas vão à praia no dia de Natal.'),
+    { instrucao: 'When is Independence Day in Brazil?', frase: 'On September ___.', opcoes: ['seventh', 'fourth', 'twenty-fifth'], certa: 0, traducao: 'Em 7 de setembro.' },
+    { instrucao: 'When is Independence Day in the USA?', frase: 'On July ___.', opcoes: ['seventh', 'fourth', 'first'], certa: 1, traducao: 'Em 4 de julho.' },
+    { instrucao: 'What do Americans do on Independence Day?', frase: 'They have barbecues and light ___.', opcoes: ['pumpkins', 'candles', 'fireworks'], certa: 2, traducao: 'Fazem churrasco e soltam fogos.' },
+    { instrucao: 'What do Americans eat on Thanksgiving?', frase: '___.', opcoes: ['Turkey', 'Corn', 'Candy'], certa: 0, traducao: 'Peru.' },
+    { instrucao: 'When is Halloween?', frase: 'On October ___.', opcoes: ['thirtieth', 'thirty-first', 'thirteenth'], certa: 1, traducao: 'Em 31 de outubro.' },
+    { instrucao: 'When is Festa Junina?', frase: 'In ___.', opcoes: ['July', 'December', 'June'], certa: 2, traducao: 'Em junho.' },
+    { instrucao: 'What season is it in Brazil at Christmas?', frase: "It's ___.", opcoes: ['summer', 'winter', 'spring'], certa: 0, traducao: 'É verão.' },
+    { instrucao: 'Where do some Brazilians go on Christmas Day?', frase: 'To the ___.', opcoes: ['mountains', 'beach', 'park'], certa: 1, traducao: 'À praia.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 18 · Which date do you hear?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 18 · Escuta (I Love Cooking on This Day!)
+   Alinhado ao slide "Listen to four conversations. Circle the ordinal number you hear" —
+   ordinais e datas ditas dos dois jeitos (July fourth / the fourth of July). Conteúdo NOVO:
+   o aluno ouve a data e escolhe a forma escrita certa entre opções parecidas. 24 questões. */
+const d = (audioTexto, opcoes, certa) => ({ audioTexto, opcoes: opcoes.map(l => ({ label: l, icon: 'calendar_month' })), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 18, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which date do you hear?',
+  itens: [
+    d('My birthday is on the twenty-first of December.', ['Dec 21st', 'Dec 20th', 'Dec 31st', 'Dec 1st'], 0),
+    d('The party is on October thirtieth.', ['Oct 13th', 'Oct 30th', 'Oct 31st', 'Oct 3rd'], 1),
+    d('School starts on the second of February.', ['Feb 12th', 'Feb 20th', 'Feb 2nd', 'Feb 22nd'], 2),
+    d('The exam is on March fifteenth.', ['Mar 15th', 'Mar 5th', 'Mar 50th', 'Mar 25th'], 0),
+    d('We arrive on the twelfth of January.', ['Jan 2nd', 'Jan 12th', 'Jan 20th', 'Jan 13th'], 1),
+    d("Her wedding is on June ninth.", ['June 19th', 'June 29th', 'June 9th', 'June 5th'], 2),
+    d('The concert is on the fourteenth of August.', ['Aug 14th', 'Aug 4th', 'Aug 40th', 'Aug 24th'], 0),
+    d('My father was born on May third.', ['May 13th', 'May 3rd', 'May 30th', 'May 23rd'], 1),
+    d('The festival starts on the twenty-seventh of July.', ['July 17th', 'July 7th', 'July 27th', 'July 26th'], 2),
+    d('My English course ends on November twentieth.', ['Nov 20th', 'Nov 12th', 'Nov 2nd', 'Nov 22nd'], 0),
+    d('The meeting is on the first of September.', ['Sept 3rd', 'Sept 1st', 'Sept 11th', 'Sept 21st'], 1),
+    d("We're traveling on April eighteenth.", ['Apr 8th', 'Apr 28th', 'Apr 18th', 'Apr 80th'], 2),
+    d('Brazilian Independence Day is on September seventh.', ['Sept 7th', 'Sept 17th', 'Sept 27th', 'Sept 1st'], 0),
+    d("Valentine's Day in the USA is on the fourteenth of February.", ['Feb 4th', 'Feb 14th', 'Feb 24th', 'Feb 15th'], 1),
+    d('Saint Patrick\'s Day is on March seventeenth.', ['Mar 7th', 'Mar 27th', 'Mar 17th', 'Mar 16th'], 2),
+    d('American Independence Day is on the fourth of July.', ['July 4th', 'July 14th', 'July 24th', 'July 1st'], 0),
+    d('Labor Day in Brazil is on May first.', ['May 3rd', 'May 1st', 'May 11th', 'May 21st'], 1),
+    d('Halloween is on the thirty-first of October.', ['Oct 30th', 'Oct 13th', 'Oct 31st', 'Oct 21st'], 2),
+    d("Children's Day in Brazil is on October twelfth.", ['Oct 12th', 'Oct 2nd', 'Oct 20th', 'Oct 22nd'], 0),
+    d('Christmas Eve is on the twenty-fourth of December.', ['Dec 14th', 'Dec 24th', 'Dec 4th', 'Dec 25th'], 1),
+    d('My grandmother was born in nineteen fifty-two.', ['1925', '1962', '1952', '2052'], 2),
+    d('The building is from nineteen ninety-five.', ['1995', '1959', '1905', '2095'], 0),
+    d('I started school in twenty sixteen.', ['2006', '2016', '2060', '2026'], 1),
+    d('The first iPhone came out in two thousand seven.', ['2017', '2070', '2007', '1907'], 2)
+  ]
+});
+</script>
+</body>
+</html>

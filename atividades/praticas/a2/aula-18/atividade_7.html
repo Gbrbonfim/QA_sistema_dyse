@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 19 · I love cooking!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 19 · Escrita (I Love Cooking on This Day!)
+   Alinhado ao "Grammar Point" — love / like / don't mind / don't like / hate / enjoy / prefer +
+   verb + -ing (e a 3ª pessoa: She loves..., He doesn't mind...). Conteúdo NOVO sobre
+   celebrações. A isca é o verbo sem -ing. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 18, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu amo cozinhar no Natal.'), palavras: ['I', 'love', 'cooking', 'at', 'Christmas'], isca: ['cook'], fim: '.', traducao: 'Amo cozinhar no Natal.' },
+    { contexto: M('Ela gosta de decorar a árvore de Natal.'), palavras: ['She', 'likes', 'decorating', 'the', 'Christmas', 'tree'], isca: ['decorate'], fim: '.', traducao: 'Ela gosta de decorar a árvore de Natal.' },
+    { contexto: M('Eu não me importo de trabalhar no feriado.'), palavras: ['I', "don't", 'mind', 'working', 'on', 'the', 'holiday'], isca: ['work'], fim: '.', traducao: 'Não me importo de trabalhar no feriado.' },
+    { contexto: M('Ele odeia usar fantasias.'), palavras: ['He', 'hates', 'wearing', 'costumes'], isca: ['wear'], fim: '.', traducao: 'Ele odeia usar fantasias.' },
+    { contexto: M('Nós gostamos muito de ver fogos.'), palavras: ['We', 'enjoy', 'watching', 'fireworks'], isca: ['watch'], fim: '.', traducao: 'Adoramos ver fogos.' },
+    { contexto: M('Eles preferem comer peru.'), palavras: ['They', 'prefer', 'eating', 'turkey'], isca: ['prefers'], fim: '.', traducao: 'Eles preferem comer peru.' },
+    { contexto: M('A minha mãe não gosta de limpar depois das festas.'), palavras: ['My', 'mom', "doesn't", 'like', 'cleaning', 'up', 'after', 'parties'], isca: ["don't"], fim: '.', traducao: 'A minha mãe não gosta de arrumar depois das festas.' },
+    { contexto: M('Eu odeio ganhar meias de presente!'), palavras: ['I', 'hate', 'getting', 'socks', 'as', 'presents'], isca: ['get'], fim: '!', traducao: 'Odeio ganhar meias de presente!' },
+    { contexto: M('Ela não se importa de lavar a louça.'), palavras: ['She', "doesn't", 'mind', 'washing', 'the', 'dishes'], isca: ['minds'], fim: '.', traducao: 'Ela não se importa de lavar a louça.' },
+    { contexto: M('O Matt adora comemorar o Ano-Novo em casa.'), palavras: ['Matt', 'loves', 'celebrating', "New", "Year's", 'Eve', 'at', 'home'], isca: ['celebrate'], fim: '.', traducao: 'O Matt adora comemorar o Ano-Novo em casa.' },
+    { contexto: M('Você gosta de cantar músicas de Natal?'), palavras: ['Do', 'you', 'like', 'singing', 'Christmas', 'songs'], isca: ['Are'], fim: '?', traducao: 'Você gosta de cantar músicas de Natal?' },
+    { contexto: M('Eu prefiro dar presentes.'), palavras: ['I', 'prefer', 'giving', 'gifts'], isca: ['give'], fim: '.', traducao: 'Prefiro dar presentes.' },
+    { contexto: M('Os meus filhos amam abrir presentes.'), palavras: ['My', 'children', 'love', 'opening', 'presents'], isca: ['loves'], fim: '.', traducao: 'Os meus filhos amam abrir presentes.' },
+    { contexto: M('Ele gosta de esculpir abóboras.'), palavras: ['He', 'likes', 'carving', 'pumpkins'], isca: ['carve'], fim: '.', traducao: 'Ele gosta de esculpir abóboras.' },
+    { contexto: M('Nós não gostamos de dançar.'), palavras: ['We', "don't", 'like', 'dancing'], isca: ["doesn't"], fim: '.', traducao: 'Não gostamos de dançar.' },
+    { contexto: M('Eles adoram nadar no Natal na Austrália.'), palavras: ['They', 'love', 'swimming', 'at', 'Christmas', 'in', 'Australia'], isca: ['swim'], fim: '.', traducao: 'Eles adoram nadar no Natal na Austrália.' },
+    { contexto: M('A minha avó gosta muito de fazer bolos.'), palavras: ['My', 'grandmother', 'enjoys', 'making', 'cakes'], isca: ['make'], fim: '.', traducao: 'A minha avó gosta muito de fazer bolos.' },
+    { contexto: M('Eu não me importo de ficar em casa.'), palavras: ['I', "don't", 'mind', 'staying', 'at', 'home'], isca: ['stay'], fim: '.', traducao: 'Não me importo de ficar em casa.' },
+    { contexto: M('Ela odeia acordar cedo.'), palavras: ['She', 'hates', 'getting', 'up', 'early'], isca: ['get'], fim: '.', traducao: 'Ela odeia acordar cedo.' },
+    { contexto: M('Você prefere viajar ou ficar em casa?'), palavras: ['Do', 'you', 'prefer', 'traveling', 'or', 'staying', 'at', 'home'], isca: ['travel'], fim: '?', traducao: 'Você prefere viajar ou ficar em casa?' }
+  ]
+});
+</script>
+</body>
+</html>

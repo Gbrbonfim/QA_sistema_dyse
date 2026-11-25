@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 19 · Love it or hate it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 19 · Escuta (I Love Cooking on This Day!)
+   Alinhado ao "Grammar Point" — love, like, don't mind, don't like, hate, enjoy, prefer +
+   verbo com -ing, falando de festas e celebrações. Conteúdo NOVO: o aluno ouve a frase e
+   escolhe o verbo de gosto que ouviu. 24 questões. */
+const IC = { 'love': 'favorite', 'like': 'thumb_up', "don't mind": 'sentiment_neutral', 'hate': 'thumb_down', 'enjoy': 'mood', 'prefer': 'compare_arrows', "don't like": 'sentiment_dissatisfied' };
+const A = ['love', 'like', "don't mind", 'hate'];
+const B = ['enjoy', 'prefer', "don't like", 'love'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 18, num: 6, tipo: 'imagem',
+  instrucao: 'Listen: which verb do you hear?',
+  itens: [
+    qa('I love decorating the Christmas tree with my kids.', 0),
+    qa('We like having a big lunch on Sundays.', 1),
+    qa("I don't mind washing the dishes after the party.", 2),
+    qa('My brother hates wearing costumes.', 3),
+    qa('My grandmother loves cooking for the whole family.', 0),
+    qa('She likes watching fireworks on New Year\'s Eve.', 1),
+    qa("He doesn't mind working on holidays.", 2),
+    qa('I hate cleaning up after a party!', 3),
+    qa('Children love opening presents.', 0),
+    qa('My parents like dancing at weddings.', 1),
+    qa("We don't mind waiting for the bus.", 2),
+    qa('Cats hate taking baths.', 3),
+    qb('I really enjoy singing Christmas songs with friends.', 0),
+    qb('I prefer celebrating my birthday at home.', 1),
+    qb("I don't like getting socks as presents!", 2),
+    qb('We love eating turkey on Thanksgiving.', 3),
+    qb('My father enjoys cooking on the barbecue.', 0),
+    qb('They prefer staying at home on New Year\'s Eve.', 1),
+    qb("She doesn't like going to big parties.", 2),
+    qb('My kids love carving pumpkins for Halloween.', 3),
+    qb('We enjoy spending time with our cousins.', 0),
+    qb('I prefer giving gifts to getting gifts.', 1),
+    qb("Tom doesn't like dancing.", 2),
+    qb('I love listening to music at Christmas.', 3)
+  ]
+});
+</script>
+</body>
+</html>

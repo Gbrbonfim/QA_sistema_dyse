@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 18 · Ordinal numbers and dates</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 18 · Gramática (I Love Cooking on This Day!)
+   Alinhado aos slides "Ordinal Numbers And The Date", "How to Write Dates" (British x
+   American) e "Remember" (meses com maiúscula, in + mês, on + data) e ao vocabulário das
+   celebrações. Conteúdo NOVO. 24 questões. */
+const ORD = 'Choose the ordinal number';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 18, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: ORD, frase: '3rd = ___', opcoes: ['third', 'three', 'thirdth'], certa: 0, traducao: 'terceiro' },
+    { instrucao: ORD, frase: '5th = ___', opcoes: ['fiveth', 'fifth', 'fifeth'], certa: 1, traducao: 'quinto' },
+    { instrucao: ORD, frase: '9th = ___', opcoes: ['nineth', 'nine', 'ninth'], certa: 2, traducao: 'nono' },
+    { instrucao: ORD, frase: '12th = ___', opcoes: ['twelfth', 'twelveth', 'twelve'], certa: 0, traducao: 'décimo segundo' },
+    { instrucao: ORD, frase: '20th = ___', opcoes: ['twentyth', 'twentieth', 'twenty'], certa: 1, traducao: 'vigésimo' },
+    { instrucao: ORD, frase: '21st = ___', opcoes: ['twenty-oneth', 'twenty-firth', 'twenty-first'], certa: 2, traducao: 'vigésimo primeiro' },
+    { instrucao: ORD, frase: '22nd = ___', opcoes: ['twenty-second', 'twenty-twoth', 'twenty-two'], certa: 0, traducao: 'vigésimo segundo' },
+    { instrucao: ORD, frase: '30th = ___', opcoes: ['thirtyth', 'thirtieth', 'thirteenth'], certa: 1, traducao: 'trigésimo' },
+    { frase: 'My birthday is ___ March.', opcoes: ['on', 'at', 'in'], certa: 2, traducao: 'O meu aniversário é em março.' },
+    { frase: 'The celebration is ___ Thursday, 27th November.', opcoes: ['on', 'in', 'at'], certa: 0, traducao: 'A comemoração é na quinta, 27 de novembro.' },
+    { frase: 'We visit my grandparents ___ Christmas.', opcoes: ['in', 'at', 'of'], certa: 1, traducao: 'Visitamos os meus avós no Natal.' },
+    { instrucao: 'Which date is written in American English?', frase: '___', opcoes: ['22 October 2024', '22th October, 2024', 'October 22, 2024'], certa: 2, traducao: 'Formato americano: mês, dia, vírgula, ano.' },
+    { instrucao: 'Which date is written in British English?', frase: '___', opcoes: ['3 March 2024', 'March 3, 2024', 'march 3 2024'], certa: 0, traducao: 'Formato britânico: dia, mês, ano, sem vírgula.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['My birthday is in july.', 'My birthday is in July.', 'My birthday is on July.'], certa: 1, traducao: 'Meses sempre com letra maiúscula e com in.' },
+    { frase: '1995 = ___', opcoes: ['one nine nine five', 'one thousand ninety-five', 'nineteen ninety-five'], certa: 2, traducao: 'mil novecentos e noventa e cinco' },
+    { frase: '2024 = ___', opcoes: ['twenty twenty-four', 'two zero two four', 'twenty-four twenty'], certa: 0, traducao: 'dois mil e vinte e quatro' },
+    { frase: 'April 15th = ___', opcoes: ['April fifteen', 'the fifteenth of April', 'the fifteen April'], certa: 1, traducao: 'quinze de abril' },
+    { frase: 'At Christmas, people decorate their homes and give ___.', opcoes: ['costumes', 'pumpkins', 'gifts'], certa: 2, traducao: 'No Natal, as pessoas decoram a casa e dão presentes.' },
+    { frase: 'On Halloween, children wear ___ of ghosts and witches.', opcoes: ['costumes', 'fireworks', 'turkeys'], certa: 0, traducao: 'No Halloween, as crianças usam fantasias de fantasmas e bruxas.' },
+    { frase: 'Some people ___ pumpkins into funny or scary faces.', opcoes: ['light', 'carve', 'give'], certa: 1, traducao: 'Algumas pessoas esculpem abóboras em rostos engraçados ou assustadores.' },
+    { frase: 'On Thanksgiving, families usually eat ___.', opcoes: ['pumpkins', 'candy', 'turkey'], certa: 2, traducao: 'No Dia de Ação de Graças, as famílias normalmente comem peru.' },
+    { frase: 'On Chinese New Year, people light ___.', opcoes: ['fireworks', 'turkeys', 'costumes'], certa: 0, traducao: 'No Ano-Novo chinês, as pessoas soltam fogos.' },
+    { frase: 'In China, red is the color of good ___.', opcoes: ['night', 'luck', 'gifts'], certa: 1, traducao: 'Na China, o vermelho é a cor da boa sorte.' },
+    { frase: 'Ghosts and witches are ___.', opcoes: ['delicious', 'lucky', 'spooky'], certa: 2, traducao: 'Fantasmas e bruxas são assustadores.' }
+  ]
+});
+</script>
+</body>
+</html>
