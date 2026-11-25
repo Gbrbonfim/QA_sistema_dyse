@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 22 · What happened?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 22 · Escrita (My Holiday Disaster)
+   Alinhado ao "Grammar Point" — past simple de verbos regulares (afirmativa com -ed, negativa
+   com didn't + infinitivo, pergunta com Did + sujeito + infinitivo) e as regras de ortografia
+   (moved, tried, stopped, planned). Conteúdo NOVO sobre viagens. A isca é a forma errada.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 22, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Nós reservamos um hotel perto da praia.'), palavras: ['We', 'booked', 'a', 'hotel', 'near', 'the', 'beach'], isca: ['book'], fim: '.', traducao: 'Reservamos um hotel perto da praia.' },
+    { contexto: M('Nós chegamos ao aeroporto às três.'), palavras: ['We', 'arrived', 'at', 'the', 'airport', 'at', 'three'], isca: ['arriveed'], fim: '.', traducao: 'Chegamos ao aeroporto às três.' },
+    { contexto: M('Ela tentou alugar um carro.'), palavras: ['She', 'tried', 'to', 'rent', 'a', 'car'], isca: ['tryed'], fim: '.', traducao: 'Ela tentou alugar um carro.' },
+    { contexto: M('O ônibus parou no meio da estrada.'), palavras: ['The', 'bus', 'stopped', 'in', 'the', 'middle', 'of', 'the', 'road'], isca: ['stoped'], fim: '.', traducao: 'O ônibus parou no meio da estrada.' },
+    { contexto: M('Nós planejamos a viagem por três meses.'), palavras: ['We', 'planned', 'the', 'trip', 'for', 'three', 'months'], isca: ['planed'], fim: '.', traducao: 'Planejamos a viagem por três meses.' },
+    { contexto: M('Eu estudei inglês antes da viagem.'), palavras: ['I', 'studied', 'English', 'before', 'the', 'trip'], isca: ['studyed'], fim: '.', traducao: 'Estudei inglês antes da viagem.' },
+    { contexto: M('Nós não ficamos lá porque estava chovendo.'), palavras: ['We', "didn't", 'stay', 'there', 'because', 'it', 'was', 'rainy'], isca: ['stayed'], fim: '.', traducao: 'Não ficamos lá porque estava chuvoso.' },
+    { contexto: M('Ele não gostou do hotel.'), palavras: ['He', "didn't", 'like', 'the', 'hotel'], isca: ['liked'], fim: '.', traducao: 'Ele não gostou do hotel.' },
+    { contexto: M('Eles não esperavam tanto trânsito.'), palavras: ['They', "didn't", 'expect', 'so', 'much', 'traffic'], isca: ['expected'], fim: '.', traducao: 'Eles não esperavam tanto trânsito.' },
+    { contexto: M('Você reservou um hotel na praia?'), palavras: ['Did', 'you', 'book', 'a', 'hotel', 'at', 'the', 'beach'], isca: ['booked'], fim: '?', traducao: 'Você reservou um hotel na praia?' },
+    { contexto: M('Sim, reservei.'), palavras: ['Yes,', 'I', 'did'], isca: ['was'], fim: '.', traducao: 'Sim, reservei.' },
+    { contexto: M('Ela visitou a ilha?'), palavras: ['Did', 'she', 'visit', 'the', 'island'], isca: ['visited'], fim: '?', traducao: 'Ela visitou a ilha?' },
+    { contexto: M('Não, ela não visitou.'), palavras: ['No,', 'she', "didn't"], isca: ["wasn't"], fim: '.', traducao: 'Não, não visitou.' },
+    { contexto: M('A carteira de motorista dele estava vencida.'), palavras: ['His', "driver's", 'license', 'was', 'expired'], isca: ['were'], fim: '.', traducao: 'A carteira de motorista dele estava vencida.' },
+    { contexto: M('Os meus filhos ficaram enjoados no carro.'), palavras: ['My', 'kids', 'were', 'sick', 'in', 'the', 'car'], isca: ['was'], fim: '.', traducao: 'Os meus filhos passaram mal no carro.' },
+    { contexto: M('Nós mudamos para um Airbnb nas montanhas.'), palavras: ['We', 'moved', 'to', 'an', 'Airbnb', 'in', 'the', 'mountains'], isca: ['moveed'], fim: '.', traducao: 'Mudamos para um Airbnb nas montanhas.' },
+    { contexto: M('Uma amiga sugeriu ir de avião.'), palavras: ['A', 'friend', 'suggested', 'going', 'by', 'plane'], isca: ['suggest'], fim: '.', traducao: 'Uma amiga sugeriu ir de avião.' },
+    { contexto: M('Nós voltamos à ilha muitas vezes.'), palavras: ['We', 'returned', 'to', 'the', 'island', 'many', 'times'], isca: ['return'], fim: '.', traducao: 'Voltamos à ilha muitas vezes.' },
+    { contexto: M('Eu perdi o meu voo!'), palavras: ['I', 'missed', 'my', 'flight'], isca: ['miss'], fim: '!', traducao: 'Perdi o meu voo!' },
+    { contexto: M('Nos EUA, as pessoas dizem "vacation".'), palavras: ['In', 'the', 'USA,', 'people', 'say', '"vacation"'], isca: ['"holiday"'], fim: '.', traducao: 'Nos EUA, as pessoas dizem "vacation".' }
+  ]
+});
+</script>
+</body>
+</html>

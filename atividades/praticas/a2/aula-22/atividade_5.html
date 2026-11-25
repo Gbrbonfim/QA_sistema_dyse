@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 22 · Past simple: regular verbs</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 22 · Gramática (My Holiday Disaster)
+   Alinhado ao "Grammar Point" — past simple regular (ortografia: +ed, +d, -ied, consoante
+   dobrada), negativa com didn't + infinitivo, perguntas com Did, respostas curtas, holiday x
+   vacation e o vocabulário das histórias. Conteúdo NOVO. 24 questões. */
+const PAST = 'Choose the past simple';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 22, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: PAST, frase: 'need → ___', opcoes: ['needed', 'needd', 'neededed'], certa: 0, traducao: 'precisar → precisou' },
+    { instrucao: PAST, frase: 'move → ___', opcoes: ['moveed', 'moved', 'movd'], certa: 1, traducao: 'mudar → mudou' },
+    { instrucao: PAST, frase: 'try → ___', opcoes: ['tryed', 'tryied', 'tried'], certa: 2, traducao: 'tentar → tentou' },
+    { instrucao: PAST, frase: 'stop → ___', opcoes: ['stopped', 'stoped', 'stopt'], certa: 0, traducao: 'parar → parou' },
+    { instrucao: PAST, frase: 'study → ___', opcoes: ['studyed', 'studied', 'studed'], certa: 1, traducao: 'estudar → estudou' },
+    { instrucao: PAST, frase: 'plan → ___', opcoes: ['planed', 'planied', 'planned'], certa: 2, traducao: 'planejar → planejou' },
+    { instrucao: PAST, frase: 'arrive → ___', opcoes: ['arrived', 'arriveed', 'arrivd'], certa: 0, traducao: 'chegar → chegou' },
+    { instrucao: PAST, frase: 'stay → ___', opcoes: ['staied', 'stayed', 'stayd'], certa: 1, traducao: 'ficar → ficou' },
+    { frase: 'Last month, we ___ to go on a family holiday.', opcoes: ['decide', 'decides', 'decided'], certa: 2, traducao: 'No mês passado, decidimos fazer uma viagem em família.' },
+    { frase: "We ___ there because it was rainy.", opcoes: ["didn't stay", "didn't stayed", "don't stayed"], certa: 0, traducao: 'Não ficamos lá porque estava chuvoso.' },
+    { frase: '___ you book a hotel at the beach?', opcoes: ['Do', 'Did', 'Were'], certa: 1, traducao: 'Você reservou um hotel na praia?' },
+    { frase: 'Did she ___ the museum?', opcoes: ['visited', 'visits', 'visit'], certa: 2, traducao: 'Ela visitou o museu?' },
+    { frase: 'Did they enjoy the trip? Yes, they ___.', opcoes: ['did', 'were', 'enjoyed'], certa: 0, traducao: 'Eles curtiram a viagem? Sim.' },
+    { frase: "Did you like the hotel? No, I ___.", opcoes: ["wasn't", "didn't", "don't"], certa: 1, traducao: 'Você gostou do hotel? Não.' },
+    { frase: 'My parents ___ a boat trip last summer.', opcoes: ['book', 'books', 'booked'], certa: 2, traducao: 'Os meus pais reservaram um passeio de barco no verão passado.' },
+    { frase: 'The past simple is ___ for all persons (I, you, she...).', opcoes: ['the same', 'different', 'with -s'], certa: 0, traducao: 'O past simple é igual para todas as pessoas.' },
+    { frase: 'In British English, people say "holiday". In American English, they say "___".', opcoes: ['travel', 'vacation', 'weekend'], certa: 1, traducao: 'No inglês britânico se diz "holiday"; no americano, "vacation".' },
+    { frase: 'There were a lot of cars on the road. The ___ was terrible!', opcoes: ['island', 'robe', 'traffic'], certa: 2, traducao: 'Tinha muitos carros na estrada. O trânsito estava horrível!' },
+    { frase: 'You need a ___ to drive a car.', opcoes: ["driver's license", 'car rental', 'cocktail'], certa: 0, traducao: 'Você precisa de carteira de motorista para dirigir.' },
+    { frase: 'Ischia is a beautiful ___ in Italy.', opcoes: ['mountain', 'island', 'airport'], certa: 1, traducao: 'Ischia é uma ilha linda na Itália.' },
+    { frase: 'My kids were ___ in the car, so we stopped at a gas station.', opcoes: ['happy', 'excited', 'sick'], certa: 2, traducao: 'Os meus filhos passaram mal no carro, então paramos num posto.' },
+    { frase: 'We went to the ___ desk at the airport to get a car.', opcoes: ['car rental', 'landslide', 'sunbed'], certa: 0, traducao: 'Fomos ao balcão de aluguel de carros no aeroporto.' },
+    { frase: 'It was cold, so we used the hotel ___.', opcoes: ['cocktails', 'robes', 'licenses'], certa: 1, traducao: 'Estava frio, então usamos os roupões do hotel.' },
+    { frase: 'Yesterday, he ___ the problem to the hotel.', opcoes: ['explain', 'explaining', 'explained'], certa: 2, traducao: 'Ontem, ele explicou o problema ao hotel.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 22 · Ben's holiday disaster</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 22 · Leitura (My Holiday Disaster)
+   Alinhado às histórias de "If You Think Your Holiday Disaster Was Bad – Read On!" (problemas
+   de viagem, trânsito, chuva, carro, hotel) e ao past simple dos verbos regulares (afirmativa,
+   negativa, perguntas). Conteúdo NOVO: o Ben conta à Julia o desastre das férias dele.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Julia', 'Hi, Ben! How was your holiday in Chile?'],
+  ['Ben', 'It was a disaster! First, I missed my flight.'],
+  ['Julia', 'Oh no! What happened?'],
+  ['Ben', 'There was a lot of traffic and I arrived at the airport late.'],
+  ['Julia', 'Did you book another flight?'],
+  ['Ben', 'Yes, I did. I waited six hours for the next flight.'],
+  ['Julia', 'And did you like the hotel?'],
+  ['Ben', "No, I didn't. It was small and the shower didn't work."],
+  ['Julia', 'That\'s terrible! Did you rent a car?'],
+  ['Ben', 'I tried, but my driver\'s license was expired!'],
+  ['Julia', 'Ha ha! So what did you do?'],
+  ['Ben', 'I walked a lot and I traveled by bus.'],
+  ['Julia', 'Was the weather nice, at least?'],
+  ['Ben', 'No! It rained every day. I stayed in the hotel a lot.'],
+  ['Julia', "Wow. What's the moral of your story?"],
+  ['Ben', 'Always check your documents and leave home early!']
+];
+const lado = q => q === 'Julia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 22, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['It was a disaster! First, I missed my flight.', 'It were a disaster! First, I miss my flight.', 'It was great! I loved everything.'], 0, 'Foi um desastre! Primeiro, perdi o meu voo.'),
+    prox(3, ['There was a lot of traffic and I arrive at the airport late.', 'There was a lot of traffic and I arrived at the airport late.', 'There were a lot of traffic and I arrived late.'], 1, 'Tinha muito trânsito e cheguei atrasado ao aeroporto.'),
+    prox(4, ['Do you book another flight?', 'Did you booked another flight?', 'Did you book another flight?'], 2, 'Você reservou outro voo?'),
+    prox(5, ['Yes, I did. I waited six hours for the next flight.', 'Yes, I was. I waited six hours.', 'Yes, I did. I waitted six hours.'], 0, 'Sim. Esperei seis horas pelo próximo voo.'),
+    prox(6, ['And did you liked the hotel?', 'And did you like the hotel?', 'And you liked the hotel did?'], 1, 'E você gostou do hotel?'),
+    prox(7, ["No, I didn't. It was big and beautiful.", "No, I didn't liked. It was small.", "No, I didn't. It was small and the shower didn't work."], 2, 'Não. Era pequeno e o chuveiro não funcionava.'),
+    prox(8, ["That's terrible! Did you rent a car?", "That's terrible! Did you rented a car?", "That's terrible! You did rent a car?"], 0, 'Que horrível! Você alugou um carro?'),
+    prox(9, ["I tryed, but my driver's license was expired!", "I tried, but my driver's license was expired!", "I tried, but my driver's license were expired!"], 1, 'Tentei, mas a minha carteira de motorista estava vencida!'),
+    prox(11, ['I walk a lot and I travel by bus.', 'I walked a lot and I traveled by plane.', 'I walked a lot and I traveled by bus.'], 2, 'Andei muito e viajei de ônibus.'),
+    prox(12, ['Was the weather nice, at least?', 'Were the weather nice, at least?', 'Did the weather nice, at least?'], 0, 'Pelo menos o tempo estava bom?'),
+    prox(13, ['No! It rain every day. I stay in the hotel a lot.', 'No! It rained every day. I stayed in the hotel a lot.', 'Yes! It was sunny every day.'], 1, 'Não! Choveu todo dia. Fiquei muito no hotel.'),
+    prox(15, ['Never check your documents!', 'Always check your documents and leave home late!', 'Always check your documents and leave home early!'], 2, 'Sempre confira os seus documentos e saia de casa cedo!'),
+    { instrucao: 'Where did Ben go on holiday?', frase: 'To ___.', opcoes: ['Chile', 'Mexico', 'Peru'], certa: 0, traducao: 'Ao Chile.' },
+    { instrucao: 'Why did Ben miss his flight?', frase: 'Because there was a lot of ___.', opcoes: ['rain', 'traffic', 'people'], certa: 1, traducao: 'Porque tinha muito trânsito.' },
+    { instrucao: 'How long did he wait for the next flight?', frase: '___ hours.', opcoes: ['Two', 'Four', 'Six'], certa: 2, traducao: 'Seis horas.' },
+    { instrucao: 'Did Ben like the hotel?', frase: "No, he ___.", opcoes: ["didn't", "wasn't", "doesn't"], certa: 0, traducao: 'Não, não gostou.' },
+    { instrucao: "What didn't work in the hotel?", frase: 'The ___.', opcoes: ['TV', 'shower', 'lights'], certa: 1, traducao: 'O chuveiro.' },
+    { instrucao: "Why didn't Ben rent a car?", frase: "His driver's license was ___.", opcoes: ['lost', 'new', 'expired'], certa: 2, traducao: 'A carteira de motorista dele estava vencida.' },
+    { instrucao: 'How did he travel?', frase: 'By ___.', opcoes: ['bus', 'car', 'train'], certa: 0, traducao: 'De ônibus.' },
+    { instrucao: 'How was the weather?', frase: 'It ___ every day.', opcoes: ['snowed', 'rained', 'was sunny'], certa: 1, traducao: 'Choveu todo dia.' }
+  ]
+});
+</script>
+</body>
+</html>

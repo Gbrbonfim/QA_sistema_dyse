@@ -642,6 +642,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 21', titulo: 'Famous women', tipo: 'Escute e grave', treina: 'Fala · Biografias', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 21', titulo: 'Jobs: -er, -or, -ist, -ian', tipo: 'Make a Choice', treina: 'Gramática · Profissões', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 22,
+        titulo: 'Class 22 · My Holiday Disaster',
+        atividades: [
+          { num: 1, titulo: 'How do you say -ed?', tipo: 'Escute e escolha', treina: 'Escuta · Pronúncia do -ed', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'What happened?', tipo: 'Monte a frase', treina: 'Escrita · Past simple', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: "Ben's holiday disaster", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Tell your holiday story', tipo: 'Escute e grave', treina: 'Fala · Past simple', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Past simple: regular verbs', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

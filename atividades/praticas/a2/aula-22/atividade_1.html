@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 22 · How do you say -ed?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 22 · Escuta (My Holiday Disaster)
+   Alinhado ao "Pronunciation: how is the -ed pronounced?" — /t/ (looked, stopped, watched),
+   /d/ (played, loved, cleaned), /ɪd/ (wanted, ended: verbos terminados em t ou d). Conteúdo
+   NOVO: o aluno ouve uma frase com UM verbo regular no passado e escolhe o som do -ed.
+   24 questões. */
+const IC = { '/t/': 'music_note', '/d/': 'graphic_eq', '/ɪd/ (extra syllable)': 'add_circle' };
+const T = ['/t/', '/d/', '/ɪd/ (extra syllable)'];
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 22, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: how is the -ed pronounced?',
+  itens: [
+    q('We booked a cheap hotel.', 0),
+    q('They stayed at the beach all day.', 1),
+    q('I wanted a quiet holiday.', 2),
+    q('She walked to the old castle.', 0),
+    q('We arrived at the airport at night.', 1),
+    q('He needed a new passport.', 2),
+    q('I washed my clothes at the hotel.', 0),
+    q('My kids played in the pool.', 1),
+    q('We visited a beautiful island.', 2),
+    q('The bus stopped in the middle of the road.', 0),
+    q('I called the hotel from the airport.', 1),
+    q('They decided to go by car.', 2),
+    q('We watched the sunset from the boat.', 0),
+    q('She loved the local food.', 1),
+    q('Our holiday started in June.', 2),
+    q('I missed my flight to Lisbon!', 0),
+    q('It rained every day of our holiday.', 1),
+    q('My friend suggested a different hotel.', 2),
+    q('We danced at the hotel party.', 0),
+    q('They cleaned the car before the trip.', 1),
+    q('The trip ended at a beautiful beach.', 2),
+    q('We relaxed by the pool.', 0),
+    q('I enjoyed every minute of it.', 1),
+    q('The hotel recommended a great restaurant.', 2)
+  ]
+});
+</script>
+</body>
+</html>
