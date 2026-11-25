@@ -1431,6 +1431,9 @@ create index if not exists idx_registros_classe_aluno on public.registros_classe
 -- casa passada na aula anterior (desmarcado = não fez). null = registro de
 -- antes do campo existir — fica fora da conta do Report Card.
 alter table public.registros_classe add column if not exists homework boolean;
+-- "Passei homework nesta aula" (por turma + data): só depois de uma aula com
+-- homework_passado = true a coluna Homework aparece no registro seguinte.
+alter table public.registro_classe_sessao add column if not exists homework_passado boolean not null default false;
 
 alter table public.registros_classe enable row level security;
 

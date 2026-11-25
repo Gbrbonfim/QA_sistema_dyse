@@ -2805,7 +2805,8 @@ async function dyseUpsertRegistroClasse(alunoId, nivelAulaId, dataAula, campos){
     atualizado_por: userId,
     atualizado_em: new Date().toISOString()
   };
-  if(campos.homework !== undefined) linha.homework = !!campos.homework;
+  // null = a aula anterior não teve homework (não entra na conta do Report Card).
+  if(campos.homework !== undefined) linha.homework = campos.homework === null ? null : !!campos.homework;
   const gravar = l => sb.from('registros_classe')
     .upsert(l, { onConflict: 'aluno_id,nivel_aula_id,data_aula' })
     .select('*')
@@ -2902,12 +2903,25 @@ async function dyseUpsertRegistroClasseSessao(turmaId, nivelAulaId, dataAula, ca
       ajuste_de_ritmo: campos.ajuste_de_ritmo || null,
       alerta_report_card: !!campos.alerta_report_card,
       alerta_report_card_motivo: campos.alerta_report_card_motivo || null,
+      homework_passado: !!campos.homework_passado,
       criado_por: userId,
       atualizado_em: new Date().toISOString()
     }, { onConflict: 'turma_id,nivel_aula_id,data_aula' })
     .select('*')
     .maybeSingle();
   return { data, error };
+}
+
+/* Última aula da turma ANTES de dataAula (qualquer aula do nível): diz se a
+   professora passou homework nela. null = não há aula anterior registrada. */
+async function dyseAulaAnteriorDaTurma(turmaId, dataAula){
+  if(!turmaId || !dataAula) return null;
+  const { data, error } = await sb.from('registro_classe_sessao')
+    .select('data_aula, homework_passado')
+    .eq('turma_id', turmaId).lt('data_aula', dataAula)
+    .order('data_aula', { ascending: false }).limit(1);
+  if(error){ console.error('dyseAulaAnteriorDaTurma', error); return null; }
+  return (data && data[0]) || null;
 }
 
 async function dyseListRegistroClasseSessoesPorPares(turmaIds, nivelAulaIds){

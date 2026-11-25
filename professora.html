@@ -1221,6 +1221,10 @@ body.dyse-modal-open{overflow:hidden;}
           <div style="flex:1 1 240px;"><label style="font-weight:700; font-size:.85rem; color:var(--seal); display:block; margin-bottom:4px;">Ajuste de ritmo necessário</label>
             <input type="text" id="registroClasseRitmo" style="width:100%; border:2px solid #eee0cf; border-radius:var(--radius-sm); padding:9px 14px; font-family:var(--font-body); font-size:.85rem;"></div>
         </div>
+        <label style="display:flex; align-items:center; gap:8px; font-size:.85rem; cursor:pointer; color:var(--seal); font-weight:600;">
+          <input type="checkbox" id="registroClasseHomeworkPassado" style="width:auto;">
+          Passei homework nesta aula
+        </label>
         <label style="display:flex; align-items:center; gap:8px; font-size:.85rem; cursor:pointer; color:var(--seal);">
           <input type="checkbox" id="registroClasseAlerta" style="width:auto;" onchange="document.getElementById('registroClasseAlertaMotivoWrap').style.display = this.checked ? 'block' : 'none'">
           Alerta para Report Card
@@ -2102,7 +2106,7 @@ body.dyse-modal-open{overflow:hidden;}
     return '<tr><td colspan="20" style="padding:0; border:none;"><div class="ficha-ap">' +
       '<div class="ficha-ap-head"><small>ALUNO(A) ' + (i + 1) + ' DE ' + total + '</small><b>' + escapeHtmlLocal(s.full_name || s.email || '') + '</b> · ' + escapeHtmlLocal(ficha.titulo || "Apresentação Final de Nível — Aula 44") + '</div>' +
       '<div class="ficha-ap-body">' +
-        '<label style="display:flex; align-items:center; gap:8px; font-weight:600; margin-bottom:8px;"><input type="checkbox" data-homework="' + s.id + '"' + (reg && reg.homework ? ' checked' : '') + ' style="width:18px; height:18px;"> Homework: fez a tarefa de casa da aula anterior</label>' +
+        (REGISTRO_COBRA_HW ? '<label style="display:flex; align-items:center; gap:8px; font-weight:600; margin-bottom:8px;"><input type="checkbox" data-homework="' + s.id + '"' + (reg && reg.homework ? ' checked' : '') + ' style="width:18px; height:18px;"> Homework: fez a tarefa de casa da aula anterior</label>' : '') +
         (situacoes ? '<h4>Situação sorteada (Parte B)</h4><div class="linha-opcoes">' + situacoes + '</div>' : '') +
         '<h4>Parte A — desempenho por bloco (4-5 min)</h4>' + tabela('', ficha.blocos || [], true) +
         '<h4>Rubrica</h4>' + tabela(ficha.rubrica_titulo || "Eixo (rubrica)", ficha.rubrica || [], false) +
@@ -2115,6 +2119,7 @@ body.dyse-modal-open{overflow:hidden;}
 
   /* Homework: a professora marca se o aluno fez a tarefa de casa passada na aula
      anterior. Desmarcado = não fez (vai assim pro Report Card e pra IA). */
+  let REGISTRO_COBRA_HW = false;   // a aula anterior da turma teve homework?
   function celulaHomework(s, reg){
     return '<td data-label="Homework" style="text-align:center;"><input type="checkbox" data-homework="' + s.id + '"' +
       (reg && reg.homework ? ' checked' : '') + ' title="Fez a tarefa de casa da aula anterior" aria-label="Homework feito" style="width:20px; height:20px; accent-color:var(--terracotta, #c4622d); cursor:pointer;"></td>';
@@ -2147,12 +2152,18 @@ body.dyse-modal-open{overflow:hidden;}
         ? cache.linhas.filter(r => String(r.data_aula || '').slice(0, 10) === data)
         : await dyseListRegistrosClasseDaAula(alunoIds, aulaId, data);
     if(seq !== REGISTRO_SEQ) return;
+    // A coluna Homework só aparece se a professora marcou "Passei homework" na aula
+    // anterior da turma; sem tarefa, o registro grava homework = null (fora da conta).
+    const anterior = data ? await dyseAulaAnteriorDaTurma(turmaId, data) : null;
+    if(seq !== REGISTRO_SEQ) return;
+    REGISTRO_COBRA_HW = !!(anterior && anterior.homework_passado);
+    const cobraHw = REGISTRO_COBRA_HW;
     const existentePorAluno = {};
     existentes.forEach(r => { existentePorAluno[r.aluno_id] = r; });
 
     document.getElementById("registroClasseTheadRow").parentElement.style.display = usaFicha ? "none" : "";
     document.getElementById('registroClasseTheadRow').innerHTML =
-      '<th>Aluno</th><th title="Marque se o aluno fez a tarefa de casa passada na aula anterior. Desmarcado = não fez.">Homework</th>' +
+      '<th>Aluno</th>' + (cobraHw ? '<th title="Marque se o aluno fez a tarefa de casa passada na aula de ' + formatDateBR(String(anterior.data_aula).slice(0, 10)) + '. Desmarcado = não fez.">Homework</th>' : '') +
       eixos.map(eixo => '<th>' + escapeHtmlLocal(eixo) + '</th>').join('') + (temResultado ? '<th>Resultado</th>' : '') + '<th>Observações</th>';
 
     document.getElementById('registroClasseBody').innerHTML = CHAMADA_STUDENTS.length
@@ -2160,7 +2171,7 @@ body.dyse-modal-open{overflow:hidden;}
           const nome = escapeHtmlLocal(s.full_name || s.email || '');
           if(alunoPausado(s)){
             return '<tr class="linha-pausada" style="opacity:.6;"><td data-label="Aluno">' + nome + TAG_PAUSADO + '</td>' +
-              '<td colspan="' + (eixos.length + (temResultado ? 3 : 2)) + '" style="font-size:.78rem; color:var(--seal-soft);">registro bloqueado enquanto a situação financeira estiver pausada</td></tr>';
+              '<td colspan="' + (eixos.length + (temResultado ? 2 : 1) + (cobraHw ? 1 : 0)) + '" style="font-size:.78rem; color:var(--seal-soft);">registro bloqueado enquanto a situação financeira estiver pausada</td></tr>';
           }
           const reg = existentePorAluno[s.id];
           const avaliacoes = (reg && reg.avaliacoes) || {};
@@ -2173,14 +2184,15 @@ body.dyse-modal-open{overflow:hidden;}
             return '<td><select data-aluno="' + s.id + '" data-eixo="' + escapeHtmlLocal(eixo) + '" onchange="atualizarResultadoApresentacao(\x27' + s.id + '\x27)">' + opcoes + '</select></td>';
           }).join('');
           const celulaResultado = temResultado ? '<td data-resultado="' + s.id + '" style="font-weight:700; white-space:nowrap;">—</td>' : '';
-          return '<tr><td data-label="Aluno">' + nome + '</td>' + celulaHomework(s, reg) + selects + celulaResultado +
+          return '<tr><td data-label="Aluno">' + nome + '</td>' + (cobraHw ? celulaHomework(s, reg) : '') + selects + celulaResultado +
             '<td><textarea data-obs="' + s.id + '" rows="1" oninput="autoResizeObs(this)" style="display:block; width:100%; min-width:160px; resize:none; overflow:hidden; border:2px solid #eee0cf; border-radius:8px; padding:6px 10px; font-family:var(--font-body); font-size:.82rem; line-height:1.35;">' + escapeHtmlLocal(reg ? (reg.observacoes || '') : '') + '</textarea></td></tr>';
         }).join('')
-      : '<tr><td colspan="' + (eixos.length + (temResultado ? 4 : 3)) + '" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
+      : '<tr><td colspan="' + (eixos.length + (temResultado ? 3 : 2) + (cobraHw ? 1 : 0)) + '" style="text-align:center; opacity:.6;">Nenhum aluno nesta turma.</td></tr>';
 
     const sessao = branco ? null : REGISTRO_SESSOES_CACHE.find(x => String(x.data_aula || '').slice(0, 10) === data);
     document.getElementById('registroClassePontos').value = sessao ? (sessao.pontos_a_retomar || '') : '';
     document.getElementById('registroClasseRitmo').value = sessao ? (sessao.ajuste_de_ritmo || '') : '';
+    document.getElementById('registroClasseHomeworkPassado').checked = !!(sessao && sessao.homework_passado);
     document.getElementById('registroClasseAlerta').checked = !!(sessao && sessao.alerta_report_card);
     document.getElementById('registroClasseAlertaMotivo').value = sessao ? (sessao.alerta_report_card_motivo || '') : '';
     document.getElementById('registroClasseAlertaMotivoWrap').style.display = (sessao && sessao.alerta_report_card) ? 'block' : 'none';
@@ -2497,7 +2509,7 @@ body.dyse-modal-open{overflow:hidden;}
 
     const alunosRegistraveis = CHAMADA_STUDENTS.filter(s => !alunoPausado(s));
     const porAluno = {};
-    alunosRegistraveis.forEach(s => { porAluno[s.id] = { avaliacoes: {}, observacoes: '', homework: false }; });
+    alunosRegistraveis.forEach(s => { porAluno[s.id] = { avaliacoes: {}, observacoes: '', homework: REGISTRO_COBRA_HW ? false : null }; });
     document.querySelectorAll('#registroClasseBody input[data-homework]').forEach(el => {
       if(porAluno[el.dataset.homework]) porAluno[el.dataset.homework].homework = el.checked;
     });
@@ -2523,6 +2535,7 @@ body.dyse-modal-open{overflow:hidden;}
       pontos_a_retomar: document.getElementById('registroClassePontos').value.trim() || null,
       ajuste_de_ritmo: document.getElementById('registroClasseRitmo').value.trim() || null,
       alerta_report_card: document.getElementById('registroClasseAlerta').checked,
+      homework_passado: document.getElementById('registroClasseHomeworkPassado').checked,
       alerta_report_card_motivo: document.getElementById('registroClasseAlertaMotivo').value.trim() || null
     });
 
