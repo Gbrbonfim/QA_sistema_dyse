@@ -796,6 +796,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'My bucket list', tipo: 'Escute e grave', treina: 'Fala · Sonhos e planos', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Verb + to + infinitive', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 37,
+        titulo: 'Class 37 · The Internet of Things',
+        atividades: [
+          { num: 1, titulo: 'Smart gadgets', tipo: 'Escute e escolha', treina: 'Escuta · Gadgets', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'The, a or nothing?', tipo: 'Monte a frase', treina: 'Escrita · Artigos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'A smart home', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Technology in my life', tipo: 'Escute e grave', treina: 'Fala · Tecnologia', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Articles: the, a, an', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

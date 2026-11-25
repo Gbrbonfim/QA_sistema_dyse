@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 37 · A smart home</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 37 · Leitura (The Internet of Things)
+   Alinhado ao "Talking Point" (Which gadget do you have? would you like to buy? do you find
+   useful? is very expensive?), ao comercial da Bosch (o homem controla a casa pelo celular) e
+   aos artigos the / a / sem artigo. Conteúdo NOVO: o Sam mostra a casa inteligente à Mia.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Mia', 'Wow, Sam! Is this a smart home?'],
+  ['Sam', 'Yes, it is! All the gadgets are connected to the internet.'],
+  ['Mia', 'What gadgets do you have?'],
+  ['Sam', 'I have a voice assistant, a robot vacuum and smart curtains.'],
+  ['Mia', 'What does the voice assistant do?'],
+  ['Sam', 'I ask it to play music and turn off the lights.'],
+  ['Mia', 'And the robot vacuum?'],
+  ['Sam', 'It cleans the floor while I am at work. I never sweep the floor now!'],
+  ['Mia', 'Which gadget do you find the most useful?'],
+  ['Sam', 'The smart thermostat. The house is warm when I get home.'],
+  ['Mia', 'Is there a gadget you would like to buy?'],
+  ['Sam', 'Yes, a smart fridge. It tells you when you need to buy milk.'],
+  ['Mia', "Aren't these gadgets very expensive?"],
+  ['Sam', 'Some are. The smart fridge is the most expensive one.'],
+  ['Mia', 'Do you think smart homes are a good idea?'],
+  ['Sam', 'Yes, I do. They save time. But I still cook dinner myself!'],
+  ['Mia', 'Ha ha! I think I want a robot vacuum too.']
+];
+const lado = q => q === 'Mia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 37, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, it is! All the gadgets are connected to the internet.', 'Yes, it is! All the gadgets are connected to internet.', 'Yes, it is! All the gadgets are connected to an internet.'], 0, 'Sim! Todos os gadgets estão conectados à internet.'),
+    prox(3, ['I have the voice assistant, the robot vacuum and the smart curtains.', 'I have a voice assistant, a robot vacuum and smart curtains.', 'I have voice assistant, robot vacuum and a smart curtains.'], 1, 'Tenho um assistente de voz, um robô aspirador e cortinas inteligentes.'),
+    prox(4, ['What does a voice assistant do here?', 'What does voice assistant do?', 'What does the voice assistant do?'], 2, 'O que o assistente de voz faz?'),
+    prox(5, ['I ask it to play music and turn off the lights.', 'I ask it to play the music and turn off a lights.', 'I ask it playing music and turn off the lights.'], 0, 'Peço para ele tocar música e apagar as luzes.'),
+    prox(7, ['It cleans the floor while I am at the work.', 'It cleans the floor while I am at work. I never sweep the floor now!', 'It cleans a floor while I am at a work.'], 1, 'Ele limpa o chão enquanto estou no trabalho. Nunca mais varri o chão!'),
+    prox(8, ['Which gadget do you find most useful the?', 'Which gadget do you find a most useful?', 'Which gadget do you find the most useful?'], 2, 'Qual gadget você acha mais útil?'),
+    prox(9, ['The smart thermostat. The house is warm when I get home.', 'The smart thermostat. The house is warm when I get the home.', 'A smart thermostat. A house is warm when I get home.'], 0, 'O termostato inteligente. A casa está quente quando chego.'),
+    prox(10, ['Is there the gadget you would like to buy?', 'Is there a gadget you would like to buy?', 'Is there a gadget you would like buying?'], 1, 'Tem algum gadget que você gostaria de comprar?'),
+    prox(11, ['Yes, the smart fridge. It tells you when you need to buy the milk.', 'Yes, smart fridge. It tells you when you need to buy milk.', 'Yes, a smart fridge. It tells you when you need to buy milk.'], 2, 'Sim, uma geladeira inteligente. Ela avisa quando você precisa comprar leite.'),
+    prox(13, ['Some are. The smart fridge is the most expensive one.', 'Some are. Smart fridge is most expensive one.', 'Some are. The smart fridge is a most expensive one.'], 0, 'Alguns são. A geladeira inteligente é o mais caro.'),
+    prox(14, ['Do you think the smart homes are the good idea?', 'Do you think smart homes are a good idea?', 'Do you think smart homes are good an idea?'], 1, 'Você acha que casas inteligentes são uma boa ideia?'),
+    prox(15, ['Yes, I do. They save time. But I still cook the dinner myself!', 'Yes, I am. They save time.', 'Yes, I do. They save time. But I still cook dinner myself!'], 2, 'Acho. Economizam tempo. Mas ainda faço o jantar eu mesmo!'),
+    { instrucao: 'What are all the gadgets connected to?', frase: 'The ___.', opcoes: ['internet', 'TV', 'car'], certa: 0, traducao: 'A internet.' },
+    { instrucao: 'What does Sam ask the voice assistant to do?', frase: 'Play music and turn off the ___.', opcoes: ['TV', 'lights', 'oven'], certa: 1, traducao: 'Tocar música e apagar as luzes.' },
+    { instrucao: 'When does the robot vacuum clean the floor?', frase: 'While Sam is at ___.', opcoes: ['home', 'school', 'work'], certa: 2, traducao: 'Enquanto o Sam está no trabalho.' },
+    { instrucao: 'Which gadget does Sam find the most useful?', frase: 'The smart ___.', opcoes: ['thermostat', 'curtains', 'fridge'], certa: 0, traducao: 'O termostato inteligente.' },
+    { instrucao: 'Which gadget would Sam like to buy?', frase: 'A smart ___.', opcoes: ['watch', 'fridge', 'TV'], certa: 1, traducao: 'Uma geladeira inteligente.' },
+    { instrucao: 'Which gadget is the most expensive?', frase: 'The smart ___.', opcoes: ['curtains', 'thermostat', 'fridge'], certa: 2, traducao: 'A geladeira inteligente.' },
+    { instrucao: 'Why are smart homes a good idea, for Sam?', frase: 'They save ___.', opcoes: ['time', 'money', 'water'], certa: 0, traducao: 'Economizam tempo.' },
+    { instrucao: 'What does Mia want?', frase: 'A ___.', opcoes: ['smartwatch', 'robot vacuum', 'smart fridge'], certa: 1, traducao: 'Um robô aspirador.' }
+  ]
+});
+</script>
+</body>
+</html>

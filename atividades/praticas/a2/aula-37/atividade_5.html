@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 37 · Articles: the, a, an</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 37 · Gramática (The Internet of Things)
+   Alinhado ao "Grammar Point" (the / a / an / sem artigo), à pronúncia de "the" (/ðə/ antes
+   de consoante, /ðiː/ antes de vogal), ao homework (Complete with the or –) e aos gadgets.
+   Conteúdo NOVO. 24 questões. */
+const NONE = '– (no article)';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 37, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'We can use ___ internet with a lot of gadgets today.', opcoes: ['the', 'a', NONE], certa: 0, traducao: 'Podemos usar a internet com muitos gadgets hoje.' },
+    { frase: 'My sister is at ___ work now.', opcoes: ['the', NONE, 'a'], certa: 1, traducao: 'A minha irmã está no trabalho agora.' },
+    { frase: 'I prefer sending messages by ___ email.', opcoes: ['the', 'an', NONE], certa: 2, traducao: 'Prefiro mandar mensagens por e-mail.' },
+    { frase: 'I love nights when you can see ___ stars.', opcoes: ['the', 'a', 'an'], certa: 0, traducao: 'Amo as noites em que dá para ver as estrelas.' },
+    { frase: 'Mark is ___ best at coding in our team.', opcoes: ['a', 'the', NONE], certa: 1, traducao: 'O Mark é o melhor em programação do nosso time.' },
+    { frase: 'He had ___ lunch while working on his laptop.', opcoes: ['the', 'a', NONE], certa: 2, traducao: 'Ele almoçou enquanto trabalhava no notebook.' },
+    { frase: "I don't trust ___ websites that ask for too much information.", opcoes: [NONE, 'the', 'a'], certa: 0, traducao: 'Não confio em sites que pedem informação demais.' },
+    { frase: '___ Wi-Fi stopped working, so I restarted the router.', opcoes: ['A', 'The', NONE], certa: 1, traducao: 'O Wi-Fi parou de funcionar, então reiniciei o roteador.' },
+    { frase: 'My brother bought ___ most expensive computer in the shop.', opcoes: ['a', NONE, 'the'], certa: 2, traducao: 'O meu irmão comprou o computador mais caro da loja.' },
+    { frase: 'I bought a laptop. ___ laptop has a very powerful processor.', opcoes: ['The', 'A', NONE], certa: 0, traducao: 'Comprei um notebook. O notebook tem um processador muito potente.' },
+    { frase: 'This gadget uses energy from ___ Sun.', opcoes: ['a', 'the', NONE], certa: 1, traducao: 'Este gadget usa energia do Sol.' },
+    { frase: 'I go to work by ___ car.', opcoes: ['the', 'a', NONE], certa: 2, traducao: 'Vou trabalhar de carro.' },
+    { frase: '___ people spend hours using their phones. (people in general)', opcoes: [NONE, 'The', 'A'], certa: 0, traducao: 'As pessoas passam horas no celular. (pessoas em geral)' },
+    { frase: 'I have ___ idea for a new app!', opcoes: ['a', 'an', 'the'], certa: 1, traducao: 'Tenho uma ideia para um app novo!' },
+    { frase: 'Before a vowel sound, like in "the app", "the" sounds like ___.', opcoes: ['/ðə/', '/tə/', '/ðiː/'], certa: 2, traducao: 'Antes de som de vogal, como em "the app", "the" soa como /ðiː/.' },
+    { frase: 'Before a consonant sound, like in "the phone", "the" sounds like ___.', opcoes: ['/ðə/', '/ðiː/', '/diː/'], certa: 0, traducao: 'Antes de som de consoante, como em "the phone", "the" soa como /ðə/.' },
+    { frase: 'In "the update", "the" sounds like ___.', opcoes: ['/ðə/', '/ðiː/', '/tə/'], certa: 1, traducao: 'Em "the update", "the" soa como /ðiː/.' },
+    { frase: 'It tracks your health, steps and sleep. It is a ___.', opcoes: ['robot vacuum', 'smart fridge', 'smartwatch'], certa: 2, traducao: 'Ele monitora saúde, passos e sono. É um smartwatch.' },
+    { frase: 'Alexa and Siri are ___.', opcoes: ['voice assistants', 'smart curtains', 'traffic lights'], certa: 0, traducao: 'Alexa e Siri são assistentes de voz.' },
+    { frase: 'A small machine that cleans floors automatically is a ___.', opcoes: ['robot lawn mower', 'robot vacuum', 'smart thermostat'], certa: 1, traducao: 'Uma maquininha que limpa o chão sozinha é um robô aspirador.' },
+    { frase: 'It cuts the grass automatically. It is a ___.', opcoes: ['robot vacuum', 'smart fridge', 'robot lawn mower'], certa: 2, traducao: 'Ele corta a grama sozinho. É um robô cortador de grama.' },
+    { frase: 'A place with internet-connected devices is a smart ___.', opcoes: ['home', 'watch', 'light'], certa: 0, traducao: 'Um lugar com aparelhos conectados à internet é uma casa inteligente.' },
+    { frase: 'IoT means the Internet of ___.', opcoes: ['Technology', 'Things', 'Today'], certa: 1, traducao: 'IoT significa Internet das Coisas.' },
+    { frase: 'Is Alex in ___ IT department today? I need help.', opcoes: ['a', NONE, 'the'], certa: 2, traducao: 'O Alex está no departamento de TI hoje? Preciso de ajuda.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 37 · Smart gadgets</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 37 · Escuta (The Internet of Things)
+   Alinhado ao "Vocabulary" (smartwatch, voice assistant, smart fridge, smart traffic light,
+   robot vacuum, smart thermostat, smart home, smart curtains, robot lawn mower). Conteúdo
+   NOVO: o aluno ouve uma situação e escolhe o gadget. 24 questões. */
+const IC = {
+  smartwatch: 'watch', 'voice assistant': 'mic', 'smart fridge': 'kitchen', 'smart traffic light': 'traffic',
+  'robot vacuum': 'cleaning_services', 'smart thermostat': 'thermostat', 'smart home': 'home', 'smart curtains': 'curtains',
+  'robot lawn mower': 'grass'
+};
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: IC[label] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 37, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the gadget',
+  itens: [
+    q('I wear it on my wrist. It counts my steps and shows my messages.', 'smartwatch', 'smart thermostat', 'robot vacuum'),
+    q('I say "play some music", and it plays my favorite song.', 'voice assistant', 'smart curtains', 'smart fridge'),
+    q('It tells me on my phone that I need to buy milk.', 'smart fridge', 'smartwatch', 'robot lawn mower'),
+    q('It helps cars and people move safely in the city.', 'smart traffic light', 'voice assistant', 'smart home'),
+    q('It cleans the floor while I am at work.', 'robot vacuum', 'smart fridge', 'smart traffic light'),
+    q('It keeps my house warm in winter and cool in summer.', 'smart thermostat', 'robot vacuum', 'smartwatch'),
+    q('All the devices in this house are connected to the internet.', 'smart home', 'smart traffic light', 'robot vacuum'),
+    q('They open when the sun goes up and close when it goes down.', 'smart curtains', 'smart thermostat', 'voice assistant'),
+    q('My garden is always nice because it cuts the grass.', 'robot lawn mower', 'robot vacuum', 'smart curtains'),
+    q('It tracks my sleep and my heart.', 'smartwatch', 'smart home', 'smart fridge'),
+    q('I ask it to turn off the lights.', 'voice assistant', 'smartwatch', 'robot lawn mower'),
+    q('I can see the food inside it with my phone.', 'smart fridge', 'smart curtains', 'smart thermostat'),
+    q('It uses sensors to control the cars on the streets.', 'smart traffic light', 'robot lawn mower', 'smartwatch'),
+    q("I don't need to sweep the floor anymore.", 'robot vacuum', 'smart traffic light', 'voice assistant'),
+    q('It controls the temperature automatically.', 'smart thermostat', 'smart fridge', 'smart curtains'),
+    q('The lights, the TV and the door all work with my phone.', 'smart home', 'robot vacuum', 'smartwatch'),
+    q('I use a remote control to open them in the morning.', 'smart curtains', 'robot lawn mower', 'smart fridge'),
+    q("It works with a battery and sensors, so I don't need to push it.", 'robot lawn mower', 'smart thermostat', 'voice assistant'),
+    q('Alexa and Siri are examples of this.', 'voice assistant', 'smart traffic light', 'smart home'),
+    q('I looked at my wrist and saw a message from my boss.', 'smartwatch', 'robot vacuum', 'smart curtains'),
+    q('It keeps my food fresh.', 'smart fridge', 'smart traffic light', 'robot lawn mower'),
+    q('The house is warm when I get home, because it turned on the heating.', 'smart thermostat', 'smartwatch', 'robot vacuum'),
+    q('The light turns green when there are no cars on the other street.', 'smart traffic light', 'smart curtains', 'smart fridge'),
+    q('The grass in the garden is short and I did nothing!', 'robot lawn mower', 'smart home', 'voice assistant')
+  ]
+});
+</script>
+</body>
+</html>

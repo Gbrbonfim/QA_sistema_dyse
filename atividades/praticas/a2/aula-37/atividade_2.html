@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 37 · The, a or nothing?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 37 · Escrita (The Internet of Things)
+   Alinhado ao "Grammar Point" — the quando está claro do que falamos ou só existe um (the
+   internet, the Sun), the + superlativo; sem the para coisas em geral, refeições (breakfast,
+   lunch), alguns lugares (home, bed, school, work) e transporte (by car, by bus); a / an na
+   primeira menção e depois the. Conteúdo NOVO sobre tecnologia. A isca é o artigo errado.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 37, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('As pessoas usam a internet em todo lugar.'), palavras: ['People', 'use', 'the', 'internet', 'everywhere'], isca: ['a'], fim: '.', traducao: 'As pessoas usam a internet em todo lugar.' },
+    { contexto: M('Este gadget é carregado com energia do Sol.'), palavras: ['This', 'gadget', 'is', 'charged', 'with', 'energy', 'from', 'the', 'Sun'], isca: ['a'], fim: '.', traducao: 'Este gadget é carregado com energia do Sol.' },
+    { contexto: M('Este é o melhor dia da minha vida.'), palavras: ['This', 'is', 'the', 'best', 'day', 'of', 'my', 'life'], isca: ['a'], fim: '.', traducao: 'Este é o melhor dia da minha vida.' },
+    { contexto: M('As pessoas passam horas no celular.'), palavras: ['People', 'spend', 'hours', 'on', 'their', 'phones'], isca: ['The'], fim: '.', traducao: 'As pessoas passam horas no celular.' },
+    { contexto: M('As pessoas do meu escritório usam assistentes de voz.'), palavras: ['The', 'people', 'in', 'my', 'office', 'use', 'voice', 'assistants'], isca: ['a'], fim: '.', traducao: 'As pessoas do meu escritório usam assistentes de voz.' },
+    { contexto: M('Eu comprei um notebook. O notebook é muito rápido.'), palavras: ['I', 'bought', 'a', 'laptop.', 'The', 'laptop', 'is', 'very', 'fast'], isca: ['an'], fim: '.', traducao: 'Comprei um notebook. O notebook é muito rápido.' },
+    { contexto: M('Ela está no trabalho.'), palavras: ['She', 'is', 'at', 'work'], isca: ['the'], fim: '.', traducao: 'Ela está no trabalho.' },
+    { contexto: M('Vamos ficar em casa hoje.'), palavras: ["Let's", 'stay', 'home', 'today'], isca: ['the'], fim: '.', traducao: 'Vamos ficar em casa hoje.' },
+    { contexto: M('Eu vou para o trabalho de ônibus.'), palavras: ['I', 'go', 'to', 'work', 'by', 'bus'], isca: ['the'], fim: '.', traducao: 'Vou para o trabalho de ônibus.' },
+    { contexto: M('Ele almoçou enquanto trabalhava no notebook.'), palavras: ['He', 'had', 'lunch', 'while', 'working', 'on', 'his', 'laptop'], isca: ['the'], fim: '.', traducao: 'Ele almoçou enquanto trabalhava no notebook.' },
+    { contexto: M('Abra a porta, por favor.'), palavras: ['Open', 'the', 'door,', 'please'], isca: ['a'], fim: '.', traducao: 'Abra a porta, por favor.' },
+    { contexto: M('Eu prefiro mandar mensagens por e-mail.'), palavras: ['I', 'prefer', 'sending', 'messages', 'by', 'email'], isca: ['the'], fim: '.', traducao: 'Prefiro mandar mensagens por e-mail.' },
+    { contexto: M('Nós vamos ter uma reunião no Zoom hoje à tarde.'), palavras: ["We're", 'going', 'to', 'have', 'a', 'meeting', 'on', 'Zoom', 'this', 'afternoon'], isca: ['the'], fim: '.', traducao: 'Vamos ter uma reunião no Zoom hoje à tarde.' },
+    { contexto: M('O Mark é o melhor em programação do nosso time.'), palavras: ['Mark', 'is', 'the', 'best', 'at', 'coding', 'in', 'our', 'team'], isca: ['a'], fim: '.', traducao: 'O Mark é o melhor em programação do nosso time.' },
+    { contexto: M('Você pode abrir o arquivo que eu te mandei?'), palavras: ['Can', 'you', 'open', 'the', 'file', 'I', 'sent', 'you'], isca: ['a'], fim: '?', traducao: 'Você pode abrir o arquivo que eu te mandei?' },
+    { contexto: M('Eu adoro ver as estrelas à noite.'), palavras: ['I', 'love', 'seeing', 'the', 'stars', 'at', 'night'], isca: ['a'], fim: '.', traducao: 'Adoro ver as estrelas à noite.' },
+    { contexto: M('O Wi-Fi parou de funcionar.'), palavras: ['The', 'Wi-Fi', 'stopped', 'working'], isca: ['A'], fim: '.', traducao: 'O Wi-Fi parou de funcionar.' },
+    { contexto: M('Pode me passar o carregador, por favor?'), palavras: ['Can', 'you', 'pass', 'the', 'charger,', 'please'], isca: ['an'], fim: '?', traducao: 'Pode me passar o carregador, por favor?' },
+    { contexto: M('Eu peço para o meu assistente de voz tocar música.'), palavras: ['I', 'ask', 'my', 'voice', 'assistant', 'to', 'play', 'music'], isca: ['playing'], fim: '.', traducao: 'Peço para o assistente de voz tocar música.' },
+    { contexto: M('Eu uso um smartwatch para ver os meus passos.'), palavras: ['I', 'wear', 'a', 'smartwatch', 'to', 'check', 'my', 'steps'], isca: ['an'], fim: '.', traducao: 'Uso um smartwatch para ver os meus passos.' }
+  ]
+});
+</script>
+</body>
+</html>
