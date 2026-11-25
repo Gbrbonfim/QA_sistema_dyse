@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 36 · Our bucket lists</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 36 · Leitura (What Is Your Dream?)
+   Alinhado ao "Warm Up" (o que é uma bucket list), ao "Speaking And Writing" (um país que
+   espera visitar, um hobby que gostaria de experimentar, algo que precisa fazer em breve, um
+   esporte radical...) e ao verbo + to + infinitivo. Conteúdo NOVO: a Laura e o Paul comparam
+   as listas. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Laura', 'Paul, do you have a bucket list?'],
+  ['Paul', 'Yes! It is a list of things I want to do in my life.'],
+  ['Laura', 'What is the first thing on your list?'],
+  ['Paul', 'I would like to see the Northern Lights in Norway.'],
+  ['Laura', 'Wow! Why?'],
+  ['Paul', 'Because I saw some photos and they were amazing. And you?'],
+  ['Laura', 'I really want to visit Japan. I love Japanese culture.'],
+  ['Paul', 'Cool! Would you like to try an extreme sport?'],
+  ['Laura', 'Yes! I hope to go skydiving one day.'],
+  ['Paul', "Not me! I wouldn't like to jump from a plane!"],
+  ['Laura', 'Ha ha! Is there something you need to do soon?'],
+  ['Paul', 'I need to save money. I am planning to travel next year.'],
+  ['Laura', 'Where are you planning to go?'],
+  ['Paul', 'To Peru. I want to visit Machu Picchu.'],
+  ['Laura', 'Nice! I like traveling too, but I hate flying.'],
+  ['Paul', 'Me too! But I promised to visit my cousin in Lima.'],
+  ['Laura', 'Then you need to go!']
+];
+const lado = q => q === 'Laura' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 36, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes! It is a list of things I want to do in my life.', 'Yes! It is a list of things I want doing in my life.', 'Yes! It is a list of things I want do in my life.'], 0, 'Sim! É uma lista de coisas que quero fazer na vida.'),
+    prox(3, ['I would like seeing the Northern Lights in Norway.', 'I would like to see the Northern Lights in Norway.', 'I would like see the Northern Lights in Norway.'], 1, 'Eu gostaria de ver a aurora boreal na Noruega.'),
+    prox(5, ['Because I see some photos and they are amazing.', 'Because I saw some photos and they was amazing.', 'Because I saw some photos and they were amazing. And you?'], 2, 'Porque vi umas fotos e eram incríveis. E você?'),
+    prox(6, ['I really want to visit Japan. I love Japanese culture.', 'I really want visiting Japan. I love Japanese culture.', 'I really want visit Japan. I love Japanese culture.'], 0, 'Quero muito visitar o Japão. Amo a cultura japonesa.'),
+    prox(7, ['Cool! Would you like trying an extreme sport?', 'Cool! Would you like to try an extreme sport?', 'Cool! Do you would like to try an extreme sport?'], 1, 'Legal! Você gostaria de experimentar um esporte radical?'),
+    prox(8, ['Yes! I hope going skydiving one day.', 'Yes! I hope go skydiving one day.', 'Yes! I hope to go skydiving one day.'], 2, 'Sim! Espero saltar de paraquedas um dia.'),
+    prox(9, ["Not me! I wouldn't like to jump from a plane!", "Not me! I wouldn't like jumping from a plane to!", "Not me! I don't would like to jump from a plane!"], 0, 'Eu não! Não gostaria de pular de um avião!'),
+    prox(11, ['I need saving money. I am planning traveling next year.', 'I need to save money. I am planning to travel next year.', 'I need save money. I am planning travel next year.'], 1, 'Preciso economizar. Estou planejando viajar no ano que vem.'),
+    prox(12, ['Where are you planning going?', 'Where you are planning to go?', 'Where are you planning to go?'], 2, 'Para onde você está planejando ir?'),
+    prox(13, ['To Peru. I want to visit Machu Picchu.', 'To Peru. I want visiting Machu Picchu.', 'To Mexico. I want to visit Machu Picchu.'], 0, 'Para o Peru. Quero visitar Machu Picchu.'),
+    prox(14, ['Nice! I like to traveling too, but I hate flying.', 'Nice! I like traveling too, but I hate flying.', 'Nice! I would like traveling too, but I hate fly.'], 1, 'Legal! Também gosto de viajar, mas odeio voar.'),
+    prox(15, ['Me too! But I promised visiting my cousin in Lima.', 'Me too! But I promise visit my cousin in Lima.', 'Me too! But I promised to visit my cousin in Lima.'], 2, 'Eu também! Mas prometi visitar o meu primo em Lima.'),
+    { instrucao: 'What is a bucket list?', frase: 'A list of things you want to do in your ___.', opcoes: ['life', 'house', 'week'], certa: 0, traducao: 'Uma lista de coisas que você quer fazer na vida.' },
+    { instrucao: 'What would Paul like to see?', frase: 'The Northern Lights in ___.', opcoes: ['Japan', 'Norway', 'Peru'], certa: 1, traducao: 'A aurora boreal na Noruega.' },
+    { instrucao: 'Why does Laura want to visit Japan?', frase: 'She loves Japanese ___.', opcoes: ['food', 'music', 'culture'], certa: 2, traducao: 'Ela ama a cultura japonesa.' },
+    { instrucao: 'What extreme sport does Laura hope to try?', frase: '___.', opcoes: ['Skydiving', 'Surfing', 'Climbing'], certa: 0, traducao: 'Paraquedismo.' },
+    { instrucao: 'What does Paul need to do soon?', frase: 'Save ___.', opcoes: ['time', 'money', 'photos'], certa: 1, traducao: 'Economizar dinheiro.' },
+    { instrucao: 'Where is Paul planning to travel?', frase: 'To ___.', opcoes: ['Japan', 'Norway', 'Peru'], certa: 2, traducao: 'Para o Peru.' },
+    { instrucao: 'What do Laura and Paul hate?', frase: '___.', opcoes: ['Flying', 'Traveling', 'Swimming'], certa: 0, traducao: 'Voar.' },
+    { instrucao: 'Who did Paul promise to visit?', frase: 'His ___ in Lima.', opcoes: ['brother', 'cousin', 'friend'], certa: 1, traducao: 'O primo dele em Lima.' }
+  ]
+});
+</script>
+</body>
+</html>

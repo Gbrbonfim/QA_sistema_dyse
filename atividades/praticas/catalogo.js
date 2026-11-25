@@ -785,6 +785,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'My plans', tipo: 'Escute e grave', treina: 'Fala · Be going to', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Be going to', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 36,
+        titulo: 'Class 36 · What Is Your Dream?',
+        atividades: [
+          { num: 1, titulo: 'Dream, enjoy or need?', tipo: 'Escute e escolha', treina: 'Escuta · Sonhos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "I'd like to travel the world", tipo: 'Monte a frase', treina: 'Escrita · Verbo + to', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Our bucket lists', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My bucket list', tipo: 'Escute e grave', treina: 'Fala · Sonhos e planos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Verb + to + infinitive', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 36 · Dream, enjoy or need?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 36 · Escuta (What Is Your Dream?)
+   Alinhado ao "Grammar Point" — would like to / want to / hope to (desejo, sonho) x like +
+   -ing (gostar em geral) e need to (necessidade). Conteúdo NOVO sobre bucket lists: o aluno
+   ouve a frase e escolhe a ideia. 24 questões. */
+const IC = { 'A dream or wish': 'auto_awesome', 'Something they enjoy': 'favorite', 'Something they need to do': 'priority_high' };
+const T = Object.keys(IC);
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 36, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: is it a dream, something they enjoy, or something they need to do?',
+  itens: [
+    q("I'd like to visit Bora Bora one day.", 0),
+    q('I like traveling with my friends.', 1),
+    q('I need to save money for my trip.', 2),
+    q('She hopes to travel solo to Asia.', 0),
+    q('We love cooking paella on Sundays.', 1),
+    q('They need to buy their tickets this week.', 2),
+    q('Would you like to take a cruise to Antarctica?', 0),
+    q('He enjoys making scrapbooks.', 1),
+    q('I need to renew my passport before the trip.', 2),
+    q('I want to fly in a private jet before I turn forty.', 0),
+    q('My sister likes taking pictures of the sea.', 1),
+    q('You need to book the hotel early.', 2),
+    q("I'd love to see the Northern Lights in Norway.", 0),
+    q('I love dancing at parties.', 1),
+    q('We need to learn some Spanish before we go to Spain.', 2),
+    q('He would like to climb a mountain one day.', 0),
+    q('They like watching the sunset on the beach.', 1),
+    q('I need to finish my homework tonight.', 2),
+    q('She wants to become a famous singer.', 0),
+    q('I like reading in the park on weekends.', 1),
+    q('You need to pack your documents in your hand luggage.', 2),
+    q("I'd like to meet my favorite actor.", 0),
+    q('My dad loves playing soccer.', 1),
+    q('She needs to call her mother today.', 2)
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 36 · I'd like to travel the world</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 36 · Escrita (What Is Your Dream?)
+   Alinhado ao "Grammar Point" — verbo + to + infinitivo (would like, want, need, learn,
+   decide, plan, hope, promise, expect, forget, try), 'd = would, Would you like...?, e would
+   like to x like + -ing. Conteúdo NOVO. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 36, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu gostaria de conhecer o mundo.'), palavras: ["I'd", 'like', 'to', 'travel', 'the', 'world'], isca: ['traveling'], fim: '.', traducao: 'Eu gostaria de viajar pelo mundo.' },
+    { contexto: M('Eu quero visitar o Japão um dia.'), palavras: ['I', 'want', 'to', 'visit', 'Japan', 'one', 'day'], isca: ['visiting'], fim: '.', traducao: 'Quero visitar o Japão um dia.' },
+    { contexto: M('Ela decidiu aprender francês.'), palavras: ['She', 'decided', 'to', 'learn', 'French'], isca: ['learning'], fim: '.', traducao: 'Ela decidiu aprender francês.' },
+    { contexto: M('Eles precisam economizar dinheiro para as férias dos sonhos.'), palavras: ['They', 'need', 'to', 'save', 'money', 'for', 'their', 'dream', 'vacation'], isca: ['saving'], fim: '.', traducao: 'Eles precisam economizar para as férias dos sonhos.' },
+    { contexto: M('Ele espera ser médico no futuro.'), palavras: ['He', 'hopes', 'to', 'become', 'a', 'doctor', 'in', 'the', 'future'], isca: ['becoming'], fim: '.', traducao: 'Ele espera virar médico no futuro.' },
+    { contexto: M('Nós estamos planejando visitar Paris no próximo verão.'), palavras: ['We', 'are', 'planning', 'to', 'visit', 'Paris', 'next', 'summer'], isca: ['visited'], fim: '.', traducao: 'Estamos planejando visitar Paris no próximo verão.' },
+    { contexto: M('Ela prometeu me ajudar com a lição.'), palavras: ['She', 'promised', 'to', 'help', 'me', 'with', 'my', 'homework'], isca: ['helping'], fim: '.', traducao: 'Ela prometeu me ajudar com a lição.' },
+    { contexto: M('Eu não gostaria de morar longe da minha família.'), palavras: ['I', "wouldn't", 'like', 'to', 'live', 'far', 'from', 'my', 'family'], isca: ['living'], fim: '.', traducao: 'Eu não gostaria de morar longe da minha família.' },
+    { contexto: M('Você gostaria de escalar uma montanha um dia?'), palavras: ['Would', 'you', 'like', 'to', 'climb', 'a', 'mountain', 'one', 'day'], isca: ['Do'], fim: '?', traducao: 'Você gostaria de escalar uma montanha um dia?' },
+    { contexto: M('Eu espero ver lugares lindos na minha viagem.'), palavras: ['I', 'expect', 'to', 'see', 'beautiful', 'places', 'on', 'my', 'trip'], isca: ['seeing'], fim: '.', traducao: 'Espero ver lugares lindos na viagem.' },
+    { contexto: M('Eu gostaria de ter o meu próprio negócio.'), palavras: ['I', 'would', 'like', 'to', 'have', 'my', 'own', 'business'], isca: ['having'], fim: '.', traducao: 'Eu gostaria de ter o meu próprio negócio.' },
+    { contexto: M('Eu gosto de viajar.'), palavras: ['I', 'like', 'traveling'], isca: ["I'd"], fim: '.', traducao: 'Gosto de viajar.' },
+    { contexto: M('Eles prometeram me ligar quando chegarem.'), palavras: ['They', 'promised', 'to', 'call', 'me', 'when', 'they', 'arrive'], isca: ['calling'], fim: '.', traducao: 'Eles prometeram me ligar quando chegarem.' },
+    { contexto: M('Ele decidiu abrir o próprio negócio.'), palavras: ['He', 'decided', 'to', 'start', 'his', 'own', 'business'], isca: ['starting'], fim: '.', traducao: 'Ele decidiu abrir o próprio negócio.' },
+    { contexto: M('Eles decidiram se mudar para outro país.'), palavras: ['They', 'decided', 'to', 'move', 'to', 'another', 'country'], isca: ['moving'], fim: '.', traducao: 'Eles decidiram se mudar para outro país.' },
+    { contexto: M('Desde criança, eu queria viajar pelo mundo.'), palavras: ['Since', 'I', 'was', 'a', 'child,', 'I', 'wanted', 'to', 'travel', 'the', 'world'], isca: ['want'], fim: '.', traducao: 'Desde criança, eu queria viajar pelo mundo.' },
+    { contexto: M('Eu quase esqueci de tirar fotos.'), palavras: ['I', 'almost', 'forgot', 'to', 'take', 'pictures'], isca: ['forget'], fim: '.', traducao: 'Quase esqueci de tirar fotos.' },
+    { contexto: M('Ela aprendeu a falar espanhol.'), palavras: ['She', 'learned', 'to', 'speak', 'Spanish'], isca: ['speaking'], fim: '.', traducao: 'Ela aprendeu a falar espanhol.' },
+    { contexto: M('Eu espero visitar a Coreia do Sul.'), palavras: ['I', 'hope', 'to', 'visit', 'South', 'Korea'], isca: ['visiting'], fim: '.', traducao: 'Espero visitar a Coreia do Sul.' },
+    { contexto: M('Qual é o seu sonho?'), palavras: ['What', 'is', 'your', 'dream'], isca: ['dreams'], fim: '?', traducao: 'Qual é o seu sonho?' }
+  ]
+});
+</script>
+</body>
+</html>
