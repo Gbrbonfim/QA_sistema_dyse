@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 32 · Harder than walking</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 32 · Escrita (Get Fit)
+   Alinhado ao "Grammar Point" — comparativos: -er + than (harder), consoante dobrada
+   (bigger, hotter), -y → -ier (healthier), more / less + adjetivo longo (more exciting, less
+   efficient), irregulares (better, worse, farther) e advérbios (faster, harder, more quickly,
+   better). Conteúdo NOVO sobre exercícios. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 32, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Correr é mais difícil do que andar.'), palavras: ['Running', 'is', 'harder', 'than', 'walking'], isca: ['that'], fim: '.', traducao: 'Correr é mais difícil do que andar.' },
+    { contexto: M('Eu sou mais forte do que o meu irmão.'), palavras: ['I', 'am', 'stronger', 'than', 'my', 'brother'], isca: ['more'], fim: '.', traducao: 'Sou mais forte do que o meu irmão.' },
+    { contexto: M('Os músculos dele são maiores do que os meus!'), palavras: ['His', 'muscles', 'are', 'bigger', 'than', 'mine'], isca: ['biger'], fim: '!', traducao: 'Os músculos dele são maiores do que os meus!' },
+    { contexto: M('A academia hoje está mais quente do que ontem.'), palavras: ['The', 'gym', 'is', 'hotter', 'today', 'than', 'yesterday'], isca: ['hoter'], fim: '.', traducao: 'A academia está mais quente hoje do que ontem.' },
+    { contexto: M('O Bruno é mais saudável do que o amigo dele.'), palavras: ['Bruno', 'is', 'healthier', 'than', 'his', 'friend'], isca: ['healthyer'], fim: '.', traducao: 'O Bruno é mais saudável do que o amigo dele.' },
+    { contexto: M('Praticar um esporte é mais emocionante do que ir à academia.'), palavras: ['Playing', 'a', 'sport', 'is', 'more', 'exciting', 'than', 'going', 'to', 'the', 'gym'], isca: ['excitinger'], fim: '.', traducao: 'Praticar um esporte é mais emocionante do que ir à academia.' },
+    { contexto: M('Andar é menos eficiente do que correr.'), palavras: ['Walking', 'is', 'less', 'efficient', 'than', 'running'], isca: ['efficienter'], fim: '.', traducao: 'Andar é menos eficiente do que correr.' },
+    { contexto: M('Eu acho pilates mais chato do que academia.'), palavras: ['I', 'think', 'pilates', 'is', 'more', 'boring', 'than', 'the', 'gym'], isca: ['boringer'], fim: '.', traducao: 'Acho pilates mais chato do que academia.' },
+    { contexto: M('Dançar é melhor do que levantar peso para fazer cardio.'), palavras: ['Dancing', 'is', 'better', 'than', 'weight', 'lifting', 'for', 'cardio'], isca: ['gooder'], fim: '.', traducao: 'Dançar é melhor do que levantar peso para fazer cardio.' },
+    { contexto: M('Este exercício é pior para as minhas costas.'), palavras: ['This', 'exercise', 'is', 'worse', 'for', 'my', 'back'], isca: ['badder'], fim: '.', traducao: 'Este exercício é pior para as minhas costas.' },
+    { contexto: M('A academia agora fica mais longe da minha casa.'), palavras: ['The', 'gym', 'is', 'farther', 'from', 'my', 'house', 'now'], isca: ['farer'], fim: '.', traducao: 'A academia agora fica mais longe da minha casa.' },
+    { contexto: M('Ele pedala mais rápido do que o treinador dele.'), palavras: ['He', 'cycles', 'faster', 'than', 'his', 'coach'], isca: ['more'], fim: '.', traducao: 'Ele pedala mais rápido do que o treinador.' },
+    { contexto: M('Ela treina mais pesado do que as colegas de time.'), palavras: ['She', 'trains', 'harder', 'than', 'her', 'teammates'], isca: ['hardly'], fim: '.', traducao: 'Ela treina mais pesado do que as colegas de time.' },
+    { contexto: M('A Clara corre mais rápido do que eu.'), palavras: ['Clara', 'runs', 'more', 'quickly', 'than', 'I', 'do'], isca: ['quicklier'], fim: '.', traducao: 'A Clara corre mais rápido do que eu.' },
+    { contexto: M('Ele levanta peso melhor do que antes.'), palavras: ['He', 'lifts', 'weights', 'better', 'than', 'before'], isca: ['weller'], fim: '.', traducao: 'Ele levanta peso melhor do que antes.' },
+    { contexto: M('Eles se exercitam com menos frequência agora.'), palavras: ['They', 'exercise', 'less', 'frequently', 'now'], isca: ['frequentlier'], fim: '.', traducao: 'Eles se exercitam com menos frequência agora.' },
+    { contexto: M('O que é mais importante: cardio ou musculação?'), palavras: ["What's", 'more', 'important:', 'cardio', 'or', 'strength', 'training'], isca: ['importanter:'], fim: '?', traducao: 'O que é mais importante: cardio ou musculação?' },
+    { contexto: M('Nós usamos os pulmões para respirar.'), palavras: ['We', 'use', 'our', 'lungs', 'to', 'breathe'], isca: ['muscles'], fim: '.', traducao: 'Usamos os pulmões para respirar.' },
+    { contexto: M('Eu amo pedalar, mas odeio fazer agachamento.'), palavras: ['I', 'love', 'cycling,', 'but', 'I', 'hate', 'doing', 'squats'], isca: ['do'], fim: '.', traducao: 'Amo pedalar, mas odeio fazer agachamento.' },
+    { contexto: M('Eu não me importo de nadar.'), palavras: ['I', "don't", 'mind', 'swimming'], isca: ['swim'], fim: '.', traducao: 'Não me importo de nadar.' }
+  ]
+});
+</script>
+</body>
+</html>

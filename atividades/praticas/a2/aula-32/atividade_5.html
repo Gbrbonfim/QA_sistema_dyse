@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 32 · Comparatives</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 32 · Gramática (Get Fit)
+   Alinhado ao "Grammar Point" (comparativos de adjetivos e advérbios: -er, consoante dobrada,
+   -y → -ier, more / less, irregulares better / worse / farther; than), ao vídeo e ao
+   vocabulário do corpo e dos exercícios. Conteúdo NOVO. 24 questões. */
+const COMP = 'Choose the comparative';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 32, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { instrucao: COMP, frase: 'hard → ___', opcoes: ['harder', 'more hard', 'hardder'], certa: 0, traducao: 'difícil → mais difícil' },
+    { instrucao: COMP, frase: 'big → ___', opcoes: ['biger', 'bigger', 'more big'], certa: 1, traducao: 'grande → maior' },
+    { instrucao: COMP, frase: 'healthy → ___', opcoes: ['healthyer', 'more healthy', 'healthier'], certa: 2, traducao: 'saudável → mais saudável' },
+    { instrucao: COMP, frase: 'exciting → ___', opcoes: ['more exciting', 'excitinger', 'excitingger'], certa: 0, traducao: 'emocionante → mais emocionante' },
+    { instrucao: COMP, frase: 'good → ___', opcoes: ['gooder', 'better', 'more good'], certa: 1, traducao: 'bom → melhor' },
+    { instrucao: COMP, frase: 'bad → ___', opcoes: ['badder', 'more bad', 'worse'], certa: 2, traducao: 'ruim → pior' },
+    { instrucao: COMP, frase: 'far → ___', opcoes: ['farther', 'farer', 'more far'], certa: 0, traducao: 'longe → mais longe' },
+    { instrucao: COMP, frase: 'hot → ___', opcoes: ['hoter', 'hotter', 'more hot'], certa: 1, traducao: 'quente → mais quente' },
+    { frase: 'Cardio exercises are ___ than strength training for your heart.', opcoes: ['gooder', 'more good', 'better'], certa: 2, traducao: 'Os exercícios de cardio são melhores do que a musculação para o coração.' },
+    { frase: 'Lifting weights helps you build muscles ___ than running.', opcoes: ['more quickly', 'quicklier', 'more quick'], certa: 0, traducao: 'Levantar peso ajuda a construir músculos mais rápido do que correr.' },
+    { frase: 'A personal trainer explains exercises ___ than a video.', opcoes: ['clearlier', 'more clearly', 'more clear'], certa: 1, traducao: 'Um personal trainer explica os exercícios com mais clareza do que um vídeo.' },
+    { frase: 'Strength training is ___ than just stretching.', opcoes: ['effectiver', 'effective', 'more effective'], certa: 2, traducao: 'Musculação é mais eficaz do que só alongar.' },
+    { frase: 'Lifting heavy weights is ___ than lifting light weights.', opcoes: ['harder', 'more hard', 'hardly'], certa: 0, traducao: 'Levantar peso pesado é mais difícil do que levantar peso leve.' },
+    { frase: 'This yoga class is ___ than the one I did last week.', opcoes: ['relaxinger', 'more relaxing', 'relaxing'], certa: 1, traducao: 'Esta aula de ioga é mais relaxante do que a que fiz semana passada.' },
+    { frase: 'Running is harder ___ walking.', opcoes: ['that', 'then', 'than'], certa: 2, traducao: 'Correr é mais difícil do que andar.' },
+    { frase: 'Walking is ___ efficient than running if you want to burn calories.', opcoes: ['less', 'more', 'most'], certa: 0, traducao: 'Andar é menos eficiente do que correr se você quer queimar calorias.' },
+    { frase: 'They played this match ___ than the last one. They lost!', opcoes: ['better', 'worse', 'more good'], certa: 1, traducao: 'Eles jogaram esta partida pior do que a anterior. Perderam!' },
+    { frase: 'We use our ___ to breathe air.', opcoes: ['heart', 'muscles', 'lungs'], certa: 2, traducao: 'Usamos os pulmões para respirar.' },
+    { frase: 'My ___ beats fast when I run.', opcoes: ['heart', 'weight', 'metabolism'], certa: 0, traducao: 'O meu coração bate rápido quando corro.' },
+    { frase: 'Lifting weights is a type of ___.', opcoes: ['cardio', 'strength training', 'metabolism'], certa: 1, traducao: 'Levantar peso é um tipo de musculação.' },
+    { frase: 'Eating healthy food helps your ___ work well.', opcoes: ['weight', 'lungs', 'metabolism'], certa: 2, traducao: 'Comer bem ajuda o seu metabolismo a funcionar bem.' },
+    { frase: 'Jumping rope and dancing are ___ exercises.', opcoes: ['cardio', 'strength', 'weight'], certa: 0, traducao: 'Pular corda e dançar são exercícios de cardio.' },
+    { frase: 'Push ups and squats are ___ exercises.', opcoes: ['cardio', 'strength training', 'swimming'], certa: 1, traducao: 'Flexões e agachamentos são exercícios de musculação.' },
+    { frase: 'Experts say adults need about 150 minutes of moderate cardio a ___.', opcoes: ['day', 'month', 'week'], certa: 2, traducao: 'Especialistas dizem que adultos precisam de cerca de 150 minutos de cardio moderado por semana.' }
+  ]
+});
+</script>
+</body>
+</html>

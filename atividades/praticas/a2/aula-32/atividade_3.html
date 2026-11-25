@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 32 · Gym or park?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 32 · Leitura (Get Fit)
+   Alinhado ao "Speaking" (Which one do you prefer and why? Running vs. weight lifting, home
+   vs. gym workouts, morning vs. evening exercise), ao vídeo (cardio e musculação são os dois
+   importantes; musculação pelo menos duas vezes por semana; 150 minutos de cardio moderado por
+   semana) e aos comparativos. Conteúdo NOVO: a Clara e o Diego comparam os treinos.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Clara', 'Diego, do you prefer running or weight lifting?'],
+  ['Diego', 'Weight lifting. It makes my muscles stronger.'],
+  ['Clara', 'I prefer running. I think it is more exciting than the gym.'],
+  ['Diego', 'But running is harder than lifting weights!'],
+  ['Clara', 'Not for me. And I run faster than my brother now.'],
+  ['Diego', 'Nice! Do you exercise in the morning or in the evening?'],
+  ['Clara', 'In the morning. The park is quieter and cooler.'],
+  ['Diego', 'I train in the evening. I feel stronger after work.'],
+  ['Clara', "What's more important for your health: cardio or strength training?"],
+  ['Diego', 'Both! I watched a video about it.'],
+  ['Clara', 'Really? What did it say?'],
+  ['Diego', 'Do strength training at least twice a week.'],
+  ['Clara', 'And how much cardio?'],
+  ['Diego', 'About 150 minutes of moderate cardio a week.'],
+  ['Clara', 'OK. So I need to do more strength training!'],
+  ['Diego', 'And I need to do more cardio. Let\'s run together on Saturday?'],
+  ['Clara', 'Great idea! But I am faster than you!']
+];
+const lado = q => q === 'Clara' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 32, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Weight lifting. It makes my muscles stronger.', 'Weight lifting. It makes my muscles more strong.', 'Weight lifting. It makes my muscles stronger that.'], 0, 'Musculação. Deixa os meus músculos mais fortes.'),
+    prox(2, ['I prefer running. I think it is excitinger than the gym.', 'I prefer running. I think it is more exciting than the gym.', 'I prefer running. I think it is more exciting that the gym.'], 1, 'Prefiro correr. Acho mais emocionante do que a academia.'),
+    prox(3, ['But running is more hard than lifting weights!', 'But running is harder that lifting weights!', 'But running is harder than lifting weights!'], 2, 'Mas correr é mais difícil do que levantar peso!'),
+    prox(4, ['Not for me. And I run faster than my brother now.', 'Not for me. And I run more fast than my brother now.', 'Not for me. And I run fastly than my brother now.'], 0, 'Para mim, não. E agora corro mais rápido do que o meu irmão.'),
+    prox(6, ['In the morning. The park is more quiet and more cool.', 'In the morning. The park is quieter and cooler.', 'In the morning. The park is quieter and cooller.'], 1, 'De manhã. O parque é mais tranquilo e mais fresco.'),
+    prox(7, ['I train in the evening. I feel more strong after work.', 'I train in the evening. I feel strongger after work.', 'I train in the evening. I feel stronger after work.'], 2, 'Treino à noite. Eu me sinto mais forte depois do trabalho.'),
+    prox(8, ["What's more important for your health: cardio or strength training?", "What's importanter for your health: cardio or strength training?", "What's more importanter for your health?"], 0, 'O que é mais importante para a saúde: cardio ou musculação?'),
+    prox(9, ['Cardio! Strength training is not important.', 'Both! I watched a video about it.', 'Strength training! Cardio is bad for you.'], 1, 'Os dois! Vi um vídeo sobre isso.'),
+    prox(11, ['Do strength training once a month.', 'Never do strength training.', 'Do strength training at least twice a week.'], 2, 'Faça musculação pelo menos duas vezes por semana.'),
+    prox(13, ['About 150 minutes of moderate cardio a week.', 'About 150 hours of moderate cardio a week.', 'About 150 minutes of moderate cardio a year.'], 0, 'Cerca de 150 minutos de cardio moderado por semana.'),
+    prox(14, ['OK. So I need to do less strength training!', 'OK. So I need to do more strength training!', 'OK. So I need to do more cardio and no strength training!'], 1, 'Certo. Então preciso fazer mais musculação!'),
+    prox(16, ['Great idea! But I am more fast than you!', 'Great idea! But I am fastter than you!', 'Great idea! But I am faster than you!'], 2, 'Ótima ideia! Mas eu sou mais rápida do que você!'),
+    { instrucao: 'What does Diego prefer?', frase: '___.', opcoes: ['Weight lifting', 'Running', 'Swimming'], certa: 0, traducao: 'Musculação.' },
+    { instrucao: 'Why does Clara prefer running?', frase: "It's more ___ than the gym.", opcoes: ['relaxing', 'exciting', 'difficult'], certa: 1, traducao: 'É mais emocionante do que a academia.' },
+    { instrucao: 'Who does Clara run faster than?', frase: 'Her ___.', opcoes: ['coach', 'friend', 'brother'], certa: 2, traducao: 'O irmão dela.' },
+    { instrucao: 'When does Clara exercise?', frase: 'In the ___.', opcoes: ['morning', 'afternoon', 'evening'], certa: 0, traducao: 'De manhã.' },
+    { instrucao: 'Why does Clara like the park in the morning?', frase: "It's quieter and ___.", opcoes: ['hotter', 'cooler', 'bigger'], certa: 1, traducao: 'É mais tranquilo e mais fresco.' },
+    { instrucao: 'What is more important, according to the video?', frase: '___.', opcoes: ['Cardio', 'Strength training', 'Both'], certa: 2, traducao: 'Os dois.' },
+    { instrucao: 'How often should you do strength training?', frase: 'At least ___ a week.', opcoes: ['twice', 'once', 'five times'], certa: 0, traducao: 'Pelo menos duas vezes por semana.' },
+    { instrucao: 'What are they going to do on Saturday?', frase: 'Run ___.', opcoes: ['alone', 'together', 'at the gym'], certa: 1, traducao: 'Correr juntos.' }
+  ]
+});
+</script>
+</body>
+</html>

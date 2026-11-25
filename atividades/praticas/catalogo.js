@@ -741,6 +741,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'How much? How many?', tipo: 'Escute e grave', treina: 'Fala · Quantidades', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Much, many, a few, a little', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 32,
+        titulo: 'Class 32 · Get Fit',
+        atividades: [
+          { num: 1, titulo: 'Body and exercise', tipo: 'Escute e escolha', treina: 'Escuta · Corpo e exercícios', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Harder than walking', tipo: 'Monte a frase', treina: 'Escrita · Comparativos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Gym or park?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Which one do you prefer?', tipo: 'Escute e grave', treina: 'Fala · Comparativos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Comparatives', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

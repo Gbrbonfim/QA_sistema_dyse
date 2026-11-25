@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 32 · Body and exercise</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 32 · Escuta (Get Fit)
+   Alinhado ao "Vocabulary" (heart, cardio, strength training, lungs, muscles, metabolism,
+   weight) e ao "Talking point" (running, cycling, weight lifting, jumping rope, push ups,
+   squats, pilates, swimming, climbing stairs, dancing). Conteúdo NOVO: o aluno ouve uma
+   definição ou situação e escolhe a palavra. 24 questões. */
+const IC = {
+  heart: 'favorite', lungs: 'pulmonology', muscles: 'fitness_center', metabolism: 'bolt', weight: 'scale',
+  cardio: 'directions_run', 'strength training': 'exercise', cycling: 'directions_bike', swimming: 'pool',
+  'jumping rope': 'sports_gymnastics', squats: 'accessibility_new', pilates: 'self_improvement',
+  'climbing stairs': 'stairs', dancing: 'music_note', running: 'sprint'
+};
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: IC[label] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 32, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the right word',
+  itens: [
+    q('It pumps blood around your body.', 'heart', 'lungs', 'muscles'),
+    q('We use them to breathe air.', 'lungs', 'heart', 'weight'),
+    q('They help you move your arms and legs.', 'muscles', 'metabolism', 'lungs'),
+    q('It is how your body changes food into energy.', 'metabolism', 'weight', 'heart'),
+    q('It is how heavy you are.', 'weight', 'metabolism', 'muscles'),
+    q('Exercise that makes your heart beat fast, like running.', 'cardio', 'strength training', 'pilates'),
+    q('Exercise that makes your body stronger, like lifting weights.', 'strength training', 'cardio', 'dancing'),
+    q('My heart beats very fast when I run.', 'heart', 'weight', 'metabolism'),
+    q('The baby is ten kilos.', 'weight', 'heart', 'lungs'),
+    q('He lifts heavy bags every day, so they are very strong.', 'muscles', 'lungs', 'weight'),
+    q('They take air into your body when you breathe.', 'lungs', 'metabolism', 'muscles'),
+    q('Eating healthy food helps it work well.', 'metabolism', 'lungs', 'heart'),
+    q('I go to the gym and lift weights twice a week.', 'strength training', 'cardio', 'swimming'),
+    q('I ride my bike to work every day.', 'cycling', 'running', 'swimming'),
+    q('She does it in the pool three times a week.', 'swimming', 'cycling', 'pilates'),
+    q('I use the stairs, not the elevator.', 'climbing stairs', 'jumping rope', 'cycling'),
+    q('The kids love doing it with a long rope.', 'jumping rope', 'squats', 'dancing'),
+    q('Bend your legs, go down, and come up again. Do it twenty times.', 'squats', 'running', 'swimming'),
+    q('It is a quiet exercise on a mat that makes your body strong.', 'pilates', 'running', 'cycling'),
+    q('We do it to music at parties.', 'dancing', 'pilates', 'squats'),
+    q('He does it in the park every morning, very fast.', 'running', 'swimming', 'pilates'),
+    q('Running, cycling and dancing are types of this exercise.', 'cardio', 'strength training', 'metabolism'),
+    q('Weight lifting and push ups are types of this exercise.', 'strength training', 'cardio', 'weight'),
+    q('Doing cardio is good for it and for your lungs.', 'heart', 'weight', 'metabolism')
+  ]
+});
+</script>
+</body>
+</html>
