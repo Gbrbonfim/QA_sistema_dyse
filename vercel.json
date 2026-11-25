@@ -12,9 +12,13 @@
       "maxDuration": 30
     },
     "api/gerar-audio.js": {
-      "maxDuration": 60
+      "maxDuration": 60,
+      "includeFiles": "atividades/praticas/audio/fila.json"
     }
   },
+  "crons": [
+    { "path": "/api/gerar-audio?pendentes=20", "schedule": "0 7 * * *" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
