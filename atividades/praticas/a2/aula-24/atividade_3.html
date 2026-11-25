@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 24 · Catching up</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 24 · Leitura (Review Classes 14-23)
+   Revisão das aulas 14 a 23 numa conversa: present continuous (o que está fazendo agora /
+   esta semana), present simple (rotina), love/hate + -ing, was/were, past simple e can.
+   Conteúdo NOVO: a Laura e o Diego se reencontram depois das férias.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Laura', 'Diego! Long time no see! How are you?'],
+  ['Diego', "I'm great, thanks! I'm working at a new company this month."],
+  ['Laura', 'Nice! What do you do there?'],
+  ['Diego', "I'm a designer. I usually start work at nine."],
+  ['Laura', 'Can you work from home?'],
+  ['Diego', 'Yes, I can work from home on Fridays.'],
+  ['Laura', 'Cool! Where were you in January? I called you.'],
+  ['Diego', 'I was in Salvador with my family. We were on vacation.'],
+  ['Laura', 'How was it?'],
+  ['Diego', 'It was amazing! We visited the old town and ate a lot of acarajé.'],
+  ['Laura', 'Did you go to the beach?'],
+  ['Diego', 'Yes, we did. I love swimming in the sea!'],
+  ['Laura', 'Me too! But I hate sitting in the sun for hours.'],
+  ['Diego', 'And you? What are you doing these days?'],
+  ['Laura', "I'm studying English and I'm learning to play the guitar."],
+  ['Diego', 'Wow! Can you play a song?'],
+  ['Laura', "Not yet, but I practiced every day last week!"],
+  ['Diego', "That's great! Let's have coffee on Saturday?"]
+];
+const lado = q => q === 'Laura' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 24, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I'm great, thanks! I'm working at a new company this month.", "I'm great, thanks! I working at a new company this month.", "I'm great, thanks! I'm work at a new company this month."], 0, 'Estou ótimo, obrigado! Estou trabalhando numa empresa nova este mês.'),
+    prox(2, ['Nice! What are you do there?', 'Nice! What do you do there?', 'Nice! What you do there?'], 1, 'Legal! O que você faz lá?'),
+    prox(3, ["I'm a designer. I usually starting work at nine.", "I'm designer. I usually start work at nine.", "I'm a designer. I usually start work at nine."], 2, 'Sou designer. Geralmente começo a trabalhar às nove.'),
+    prox(4, ['Can you work from home?', 'Do you can work from home?', 'Can you to work from home?'], 0, 'Você pode trabalhar de casa?'),
+    prox(5, ['Yes, I can to work from home on Fridays.', 'Yes, I can work from home on Fridays.', 'Yes, I do. I can work from home on Fridays.'], 1, 'Sim, posso trabalhar de casa às sextas.'),
+    prox(7, ['I were in Salvador with my family.', 'I was in Salvador with my family. We was on vacation.', 'I was in Salvador with my family. We were on vacation.'], 2, 'Eu estava em Salvador com a minha família. Estávamos de férias.'),
+    prox(9, ['It was amazing! We visited the old town and ate a lot of acarajé.', 'It was amazing! We visit the old town and eated a lot of acarajé.', 'It were amazing! We visited the old town.'], 0, 'Foi incrível! Visitamos o centro histórico e comemos muito acarajé.'),
+    prox(10, ['Did you went to the beach?', 'Did you go to the beach?', 'Do you went to the beach?'], 1, 'Vocês foram à praia?'),
+    prox(11, ['Yes, we did. I love swim in the sea!', 'Yes, we were. I love swimming in the sea!', 'Yes, we did. I love swimming in the sea!'], 2, 'Sim. Eu amo nadar no mar!'),
+    prox(13, ['And you? What are you doing these days?', 'And you? What do you doing these days?', 'And you? What you are doing these days?'], 0, 'E você? O que anda fazendo?'),
+    prox(15, ['Wow! Do you can play a song?', 'Wow! Can you play a song?', 'Wow! Can you playing a song?'], 1, 'Uau! Você sabe tocar uma música?'),
+    prox(16, ['Not yet, but I practice every day last week!', 'Not yet, but I practiced every day next week!', 'Not yet, but I practiced every day last week!'], 2, 'Ainda não, mas pratiquei todos os dias semana passada!'),
+    { instrucao: 'Where is Diego working this month?', frase: 'At a ___ company.', opcoes: ['new', 'small', 'big'], certa: 0, traducao: 'Numa empresa nova.' },
+    { instrucao: "What is Diego's job?", frase: "He's a ___.", opcoes: ['teacher', 'designer', 'doctor'], certa: 1, traducao: 'Ele é designer.' },
+    { instrucao: 'When can Diego work from home?', frase: 'On ___.', opcoes: ['Mondays', 'Saturdays', 'Fridays'], certa: 2, traducao: 'Às sextas.' },
+    { instrucao: 'Where was Diego in January?', frase: 'In ___.', opcoes: ['Salvador', 'Recife', 'Fortaleza'], certa: 0, traducao: 'Em Salvador.' },
+    { instrucao: 'Who did Diego travel with?', frase: 'With his ___.', opcoes: ['friends', 'family', 'girlfriend'], certa: 1, traducao: 'Com a família.' },
+    { instrucao: 'What does Laura hate?', frase: 'Sitting in the ___ for hours.', opcoes: ['car', 'office', 'sun'], certa: 2, traducao: 'Ficar sentada no sol por horas.' },
+    { instrucao: 'What is Laura learning?', frase: 'To play the ___.', opcoes: ['guitar', 'piano', 'drums'], certa: 0, traducao: 'A tocar violão.' },
+    { instrucao: 'Can Laura play a song now?', frase: 'No, she ___.', opcoes: ["doesn't", "can't", "didn't"], certa: 1, traducao: 'Não, ela não sabe.' }
+  ]
+});
+</script>
+</body>
+</html>

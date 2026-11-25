@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 24 · Now, usually, past or can?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 24 · Escuta (Review Classes 14-23)
+   Alinhado ao "Talking Point" da revisão: can/can't (habilidades), present continuous (agora /
+   esta semana), present simple (rotina), was/were e past simple (pessoas famosas, festivais,
+   férias). Conteúdo NOVO: o aluno ouve a frase e diz de que tempo/ideia ela fala. 24 questões. */
+const IC = { 'Right now': 'schedule', 'Usually': 'repeat', 'In the past': 'history', 'Can / can\'t': 'star' };
+const T = Object.keys(IC);
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 24, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what is the sentence about?',
+  itens: [
+    q('My brother is cooking dinner at the moment.', 0),
+    q('I go to the gym three times a week.', 1),
+    q('We went to a music festival last year.', 2),
+    q('She can speak three languages.', 3),
+    q('Look! It is raining again.', 0),
+    q('My parents usually have lunch at one.', 1),
+    q('Frida Kahlo was a Mexican painter.', 2),
+    q("I can't swim very well.", 3),
+    q('Shh! The baby is sleeping.', 0),
+    q('He never works on Sundays.', 1),
+    q('They bought the tickets online.', 2),
+    q('Can you play the guitar?', 3),
+    q('I am wearing a blue jacket today.', 0),
+    q('We often eat pizza on Fridays.', 1),
+    q('Our flight was late, so we missed the bus.', 2),
+    q('My grandmother can make delicious cakes.', 3),
+    q('What are you doing right now?', 0),
+    q('Where do you usually spend your holidays?', 1),
+    q('Did you like the hotel?', 2),
+    q("Employees can't use their phones in the meeting room.", 3),
+    q('My friends are watching a movie now.', 0),
+    q('She always drinks coffee in the morning.', 1),
+    q('Santos Dumont was a Brazilian inventor.', 2),
+    q('Can I park here?', 3)
+  ]
+});
+</script>
+</body>
+</html>

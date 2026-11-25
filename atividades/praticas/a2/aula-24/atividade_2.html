@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 24 · Review: make the sentence</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 24 · Escrita (Review Classes 14-23)
+   Revisão das aulas 14 a 23: can/can't, present continuous, present simple x continuous,
+   object pronouns, datas, love/like/hate + -ing, was/were, past simple regular e irregular,
+   could. Conteúdo NOVO. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 24, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu não posso usar o celular na prova.'), palavras: ['I', "can't", 'use', 'my', 'phone', 'in', 'the', 'exam'], isca: ['to'], fim: '.', traducao: 'Não posso usar o celular na prova.' },
+    { contexto: M('Você sabe tocar piano?'), palavras: ['Can', 'you', 'play', 'the', 'piano'], isca: ['Do'], fim: '?', traducao: 'Você sabe tocar piano?' },
+    { contexto: M('Eu estou estudando para uma prova esta semana.'), palavras: ['I', 'am', 'studying', 'for', 'an', 'exam', 'this', 'week'], isca: ['study'], fim: '.', traducao: 'Estou estudando para uma prova esta semana.' },
+    { contexto: M('O que os seus pais estão fazendo agora?'), palavras: ['What', 'are', 'your', 'parents', 'doing', 'now'], isca: ['do'], fim: '?', traducao: 'O que os seus pais estão fazendo agora?' },
+    { contexto: M('Ela geralmente trabalha de casa.'), palavras: ['She', 'usually', 'works', 'from', 'home'], isca: ['working'], fim: '.', traducao: 'Ela geralmente trabalha de casa.' },
+    { contexto: M('Quando você vai à academia?'), palavras: ['When', 'do', 'you', 'go', 'to', 'the', 'gym'], isca: ['are'], fim: '?', traducao: 'Quando você vai à academia?' },
+    { contexto: M('Eu amo nadar nas férias de verão.'), palavras: ['I', 'love', 'swimming', 'on', 'my', 'summer', 'vacation'], isca: ['swim'], fim: '.', traducao: 'Amo nadar nas férias de verão.' },
+    { contexto: M('Eu não gosto de lavar a louça.'), palavras: ['I', "don't", 'like', 'washing', 'the', 'dishes'], isca: ['wash'], fim: '.', traducao: 'Não gosto de lavar a louça.' },
+    { contexto: M('O aniversário dela é no dia três de maio.'), palavras: ['Her', 'birthday', 'is', 'on', 'May', 'third'], isca: ['in'], fim: '.', traducao: 'O aniversário dela é em 3 de maio.' },
+    { contexto: M('Eu adoro a Anitta. Eu a escuto todo dia.'), palavras: ['I', 'love', 'Anitta.', 'I', 'listen', 'to', 'her', 'every', 'day'], isca: ['she'], fim: '.', traducao: 'Adoro a Anitta. Escuto ela todo dia.' },
+    { contexto: M('Ela era uma cientista famosa.'), palavras: ['She', 'was', 'a', 'famous', 'scientist'], isca: ['were'], fim: '.', traducao: 'Ela era uma cientista famosa.' },
+    { contexto: M('Eles não estavam em casa ontem.'), palavras: ['They', "weren't", 'at', 'home', 'yesterday'], isca: ["wasn't"], fim: '.', traducao: 'Eles não estavam em casa ontem.' },
+    { contexto: M('Onde você estava no sábado?'), palavras: ['Where', 'were', 'you', 'on', 'Saturday'], isca: ['was'], fim: '?', traducao: 'Onde você estava no sábado?' },
+    { contexto: M('Nós visitamos os nossos avós no domingo.'), palavras: ['We', 'visited', 'our', 'grandparents', 'on', 'Sunday'], isca: ['visit'], fim: '.', traducao: 'Visitamos os nossos avós no domingo.' },
+    { contexto: M('Eu não gostei do filme.'), palavras: ['I', "didn't", 'like', 'the', 'movie'], isca: ['liked'], fim: '.', traducao: 'Não gostei do filme.' },
+    { contexto: M('Ela foi à praia com as amigas.'), palavras: ['She', 'went', 'to', 'the', 'beach', 'with', 'her', 'friends'], isca: ['goed'], fim: '.', traducao: 'Ela foi à praia com as amigas.' },
+    { contexto: M('Você viu o show?'), palavras: ['Did', 'you', 'see', 'the', 'show'], isca: ['saw'], fim: '?', traducao: 'Você viu o show?' },
+    { contexto: M('Nós não conseguimos encontrar o hotel.'), palavras: ['We', "couldn't", 'find', 'the', 'hotel'], isca: ['found'], fim: '.', traducao: 'Não conseguimos encontrar o hotel.' },
+    { contexto: M('Eu comprei uma camiseta nova e a usei no festival.'), palavras: ['I', 'bought', 'a', 'new', 'T-shirt', 'and', 'wore', 'it', 'at', 'the', 'festival'], isca: ['weared'], fim: '.', traducao: 'Comprei uma camiseta nova e usei no festival.' },
+    { contexto: M('Com quem você foi?'), palavras: ['Who', 'did', 'you', 'go', 'with'], isca: ['went'], fim: '?', traducao: 'Com quem você foi?' }
+  ]
+});
+</script>
+</body>
+</html>
