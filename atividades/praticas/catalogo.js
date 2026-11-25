@@ -774,6 +774,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Famous landmarks', tipo: 'Escute e grave', treina: 'Fala · Superlativos', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Superlatives', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 35,
+        titulo: 'Class 35 · Study Abroad: How to Pack',
+        atividades: [
+          { num: 1, titulo: 'What are you going to pack?', tipo: 'Escute e escolha', treina: 'Escuta · Mala de viagem', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "I'm going to study abroad", tipo: 'Monte a frase', treina: 'Escrita · Be going to', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Packing for Canada', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My plans', tipo: 'Escute e grave', treina: 'Fala · Be going to', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Be going to', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 35 · What are you going to pack?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 35 · Escuta (Study Abroad: How to Pack)
+   Alinhado ao "Vocabulary" (hoodie, medication, swimsuit, long-sleeve tops, footwear,
+   valuables, jumper, jeans, toiletries, scarf, shorts, hat and gloves, a change of clothes,
+   jacket, documents, underwear and socks) e ao be going to. Conteúdo NOVO: o aluno ouve uma
+   situação e escolhe o item. 24 questões. */
+const IC = {
+  swimsuit: 'pool', medication: 'medication', valuables: 'diamond', toiletries: 'sanitizer', documents: 'description',
+  'hat and gloves': 'ac_unit', scarf: 'air', shorts: 'sunny', footwear: 'steps', jacket: 'checkroom',
+  'a change of clothes': 'dry_cleaning', 'underwear and socks': 'local_laundry_service', hoodie: 'checkroom', book: 'menu_book'
+};
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: IC[label] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 35, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the right item',
+  itens: [
+    q("I'm going to swim in the sea every day.", 'swimsuit', 'scarf', 'documents'),
+    q('I need to take my pills for my headache.', 'medication', 'footwear', 'shorts'),
+    q('My laptop, my money and my phone charger.', 'valuables', 'toiletries', 'swimsuit'),
+    q('My toothbrush, toothpaste and shampoo.', 'toiletries', 'valuables', 'book'),
+    q('My passport, tickets and university papers.', 'documents', 'medication', 'jacket'),
+    q("It's going to be very cold. I need to protect my head and hands.", 'hat and gloves', 'shorts', 'swimsuit'),
+    q('I wear it around my neck in winter.', 'scarf', 'shorts', 'book'),
+    q("It's going to be very hot, so I'm not going to wear long pants.", 'shorts', 'scarf', 'hat and gloves'),
+    q('Shoes, sneakers and sandals.', 'footwear', 'toiletries', 'documents'),
+    q("It's a little cold. I'm going to wear it over my T-shirt when I go out.", 'jacket', 'swimsuit', 'shorts'),
+    q('My bag is late! Good thing I have extra clothes in my hand luggage.', 'a change of clothes', 'valuables', 'medication'),
+    q('You need new ones every day, for your feet and under your clothes.', 'underwear and socks', 'footwear', 'documents'),
+    q("It's a warm top with a hood. I'm going to wear it on the plane.", 'hoodie', 'swimsuit', 'scarf'),
+    q("I'm going to read it on the long flight.", 'book', 'toiletries', 'medication'),
+    q("I'm going to visit the beach in Australia.", 'swimsuit', 'hat and gloves', 'scarf'),
+    q('Keep them in your hand luggage: your passport and tickets.', 'documents', 'shorts', 'footwear'),
+    q("Don't put them in the main suitcase. They are expensive things, like your laptop.", 'valuables', 'underwear and socks', 'book'),
+    q("It's winter in Canada. My fingers are going to be cold!", 'hat and gloves', 'swimsuit', 'shorts'),
+    q("I'm going to walk a lot, so I need comfortable shoes.", 'footwear', 'scarf', 'medication'),
+    q('Soap, deodorant and a hairbrush.', 'toiletries', 'documents', 'jacket'),
+    q('The doctor gave me some medicine. I need to take it every day.', 'medication', 'book', 'hoodie'),
+    q('In the summer in Brazil, I wear them every day.', 'shorts', 'hat and gloves', 'jacket'),
+    q('It keeps you warm and it has a zipper and pockets.', 'jacket', 'shorts', 'toiletries'),
+    q('I always pack a T-shirt and pants in my hand luggage, just in case.', 'a change of clothes', 'documents', 'footwear')
+  ]
+});
+</script>
+</body>
+</html>

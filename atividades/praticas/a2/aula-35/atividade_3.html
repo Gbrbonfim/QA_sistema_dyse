@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 35 · Packing for Canada</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 35 · Leitura (Study Abroad: How to Pack)
+   Alinhado ao vídeo (duas malas; documentos e objetos de valor na bagagem de mão; o que
+   esquecer dá para comprar no país de destino; trancar a mala e pôr etiqueta com o nome), ao
+   vocabulário de roupas e itens e ao be going to (planos e previsões). Conteúdo NOVO: a Ana
+   vai estudar no Canadá e conversa com o Leo. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Leo', 'Ana, I heard you are going to study abroad!'],
+  ['Ana', "Yes! I'm going to study business in Canada."],
+  ['Leo', 'Wow! When are you going to leave?'],
+  ['Ana', "I'm going to leave in January. My course is going to start in February."],
+  ['Leo', "January? It's going to be very cold there!"],
+  ['Ana', "I know! I'm going to pack a jacket, a scarf, and hat and gloves."],
+  ['Leo', 'How many suitcases are you going to take?'],
+  ['Ana', "Only two. I don't want to overpack."],
+  ['Leo', 'Good idea. What are you going to put in your hand luggage?'],
+  ['Ana', 'My documents, my laptop, my money, and a change of clothes.'],
+  ['Leo', 'Are you going to take an adapter?'],
+  ['Ana', "No, I'm not. I can buy one in Canada."],
+  ['Leo', 'Are you going to live with a family?'],
+  ['Ana', "Yes, I am. I think I'm going to learn a lot about Canadian culture."],
+  ['Leo', "You're going to love it! Are you going to miss Brazil?"],
+  ['Ana', "Of course! I'm going to miss my family and Brazilian food."],
+  ['Leo', "Don't forget to lock your suitcase and put a name tag on it!"],
+  ['Ana', 'Thanks, Leo!']
+];
+const lado = q => q === 'Leo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 35, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes! I'm going to study business in Canada.", "Yes! I going to study business in Canada.", "Yes! I'm going to studying business in Canada."], 0, 'Sim! Vou estudar administração no Canadá.'),
+    prox(2, ['Wow! When you are going to leave?', 'Wow! When are you going to leave?', 'Wow! When do you going to leave?'], 1, 'Uau! Quando você vai partir?'),
+    prox(3, ["I'm going leave in January.", "I'm go to leave in January. My course start in February.", "I'm going to leave in January. My course is going to start in February."], 2, 'Vou partir em janeiro. O meu curso vai começar em fevereiro.'),
+    prox(4, ["January? It's going to be very cold there!", "January? It's going to be very hot there!", "January? It going to be very cold there!"], 0, 'Janeiro? Vai estar muito frio lá!'),
+    prox(5, ["I know! I'm going to pack some swimsuits and shorts.", "I know! I'm going to pack a jacket, a scarf, and hat and gloves.", "I know! I'm going pack a jacket and a scarf."], 1, 'Eu sei! Vou levar uma jaqueta, um cachecol, gorro e luvas.'),
+    prox(6, ['How much suitcases are you going to take?', 'How many suitcases you are going to take?', 'How many suitcases are you going to take?'], 2, 'Quantas malas você vai levar?'),
+    prox(8, ['Good idea. What are you going to put in your hand luggage?', 'Good idea. What do you going to put in your hand luggage?', 'Good idea. What you are going to put in your hand luggage?'], 0, 'Boa ideia. O que você vai colocar na bagagem de mão?'),
+    prox(9, ['My swimsuit and my shampoo.', 'My documents, my laptop, my money, and a change of clothes.', 'Nothing. I am going to put everything in my main suitcase.'], 1, 'Os meus documentos, o notebook, o dinheiro e uma muda de roupa.'),
+    prox(11, ["No, I don't. I can buy one in Canada.", "No, I'm not going. I can buy one in Canada.", "No, I'm not. I can buy one in Canada."], 2, 'Não. Posso comprar um no Canadá.'),
+    prox(12, ['Are you going to live with a family?', 'Do you going to live with a family?', 'Are you going live with a family?'], 0, 'Você vai morar com uma família?'),
+    prox(13, ["Yes, I do. I think I'm going to learn a lot.", "Yes, I am. I think I'm going to learn a lot about Canadian culture.", "Yes, I am. I think I going to learn a lot about Canadian culture."], 1, 'Sim. Acho que vou aprender muito sobre a cultura canadense.'),
+    prox(15, ["Of course! I going to miss my family and Brazilian food.", "No! I'm not going to miss anything.", "Of course! I'm going to miss my family and Brazilian food."], 2, 'Claro! Vou sentir falta da família e da comida brasileira.'),
+    { instrucao: 'What is Ana going to study?', frase: '___.', opcoes: ['Business', 'English', 'Medicine'], certa: 0, traducao: 'Administração.' },
+    { instrucao: 'When is her course going to start?', frase: 'In ___.', opcoes: ['January', 'February', 'March'], certa: 1, traducao: 'Em fevereiro.' },
+    { instrucao: 'Why is she going to pack a jacket and gloves?', frase: "Because it's going to be very ___.", opcoes: ['hot', 'rainy', 'cold'], certa: 2, traducao: 'Porque vai estar muito frio.' },
+    { instrucao: 'How many suitcases is she going to take?', frase: '___.', opcoes: ['Two', 'One', 'Three'], certa: 0, traducao: 'Duas.' },
+    { instrucao: 'Why only two?', frase: "She doesn't want to ___.", opcoes: ['pay', 'overpack', 'travel'], certa: 1, traducao: 'Ela não quer levar coisas demais.' },
+    { instrucao: 'Why isn\'t she going to take an adapter?', frase: 'She can ___ one in Canada.', opcoes: ['find', 'rent', 'buy'], certa: 2, traducao: 'Ela pode comprar um no Canadá.' },
+    { instrucao: 'Who is she going to live with?', frase: 'A ___.', opcoes: ['family', 'friend', 'teacher'], certa: 0, traducao: 'Uma família.' },
+    { instrucao: 'What is she going to miss?', frase: 'Her family and Brazilian ___.', opcoes: ['music', 'food', 'beaches'], certa: 1, traducao: 'A família e a comida brasileira.' }
+  ]
+});
+</script>
+</body>
+</html>

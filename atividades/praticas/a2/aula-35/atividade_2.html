@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 35 · I'm going to study abroad</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 35 · Escrita (Study Abroad: How to Pack)
+   Alinhado ao "Grammar Point" — be going to para planos e previsões (sujeito + am / is / are
+   + going to + verbo; negativa; perguntas com inversão: When are you going to leave? Are you
+   going to speak French?) e às dicas de mala do vídeo. Conteúdo NOVO. A isca é a forma
+   errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 35, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu vou estudar na Itália no ano que vem.'), palavras: ['I', 'am', 'going', 'to', 'study', 'in', 'Italy', 'next', 'year'], isca: ['studying'], fim: '.', traducao: 'Vou estudar na Itália no ano que vem.' },
+    { contexto: M('O Paulo vai trabalhar no Japão em breve.'), palavras: ['Paulo', 'is', 'going', 'to', 'work', 'in', 'Japan', 'soon'], isca: ['are'], fim: '.', traducao: 'O Paulo vai trabalhar no Japão em breve.' },
+    { contexto: M('Eles vão morar no Canadá depois da formatura.'), palavras: ['They', 'are', 'going', 'to', 'live', 'in', 'Canada', 'after', 'graduation'], isca: ['is'], fim: '.', traducao: 'Eles vão morar no Canadá depois da formatura.' },
+    { contexto: M('Ela vai visitar a Austrália neste verão.'), palavras: ['She', 'is', 'going', 'to', 'visit', 'Australia', 'this', 'summer'], isca: ['visits'], fim: '.', traducao: 'Ela vai visitar a Austrália neste verão.' },
+    { contexto: M('Nós vamos aprender português no próximo semestre.'), palavras: ['We', 'are', 'going', 'to', 'learn', 'Portuguese', 'next', 'semester'], isca: ['learning'], fim: '.', traducao: 'Vamos aprender português no próximo semestre.' },
+    { contexto: M('Vai fazer calor lá nesta época do ano.'), palavras: ["It's", 'going', 'to', 'be', 'hot', 'there', 'at', 'this', 'time', 'of', 'the', 'year'], isca: ['is'], fim: '.', traducao: 'Vai fazer calor lá nesta época do ano.' },
+    { contexto: M('É inverno no Canadá. Nós vamos sentir frio.'), palavras: ["It's", 'winter', 'in', 'Canada.', "We're", 'going', 'to', 'feel', 'cold'], isca: ['felt'], fim: '.', traducao: 'É inverno no Canadá. Vamos sentir frio.' },
+    { contexto: M('Você vai aprender muito sobre a cultura japonesa.'), palavras: ["You're", 'going', 'to', 'learn', 'a', 'lot', 'about', 'Japanese', 'culture'], isca: ['learned'], fim: '.', traducao: 'Você vai aprender muito sobre a cultura japonesa.' },
+    { contexto: M('Eu não vou levar muitas roupas.'), palavras: ["I'm", 'not', 'going', 'to', 'take', 'a', 'lot', 'of', 'clothes'], isca: ["don't"], fim: '.', traducao: 'Não vou levar muitas roupas.' },
+    { contexto: M('Ela não vai morar com a família.'), palavras: ['She', "isn't", 'going', 'to', 'live', 'with', 'her', 'family'], isca: ["aren't"], fim: '.', traducao: 'Ela não vai morar com a família.' },
+    { contexto: M('Quando você vai partir para a França?'), palavras: ['When', 'are', 'you', 'going', 'to', 'leave', 'for', 'France'], isca: ['do'], fim: '?', traducao: 'Quando você vai partir para a França?' },
+    { contexto: M('Você vai falar francês?'), palavras: ['Are', 'you', 'going', 'to', 'speak', 'French'], isca: ['Do'], fim: '?', traducao: 'Você vai falar francês?' },
+    { contexto: M('O que você vai levar para a viagem?'), palavras: ['What', 'are', 'you', 'going', 'to', 'pack', 'for', 'the', 'trip'], isca: ['is'], fim: '?', traducao: 'O que você vai levar para a viagem?' },
+    { contexto: M('Eu vou levar uns maiôs.'), palavras: ["I'm", 'going', 'to', 'pack', 'some', 'swimsuits'], isca: ['packing'], fim: '.', traducao: 'Vou levar uns maiôs.' },
+    { contexto: M('Leve só duas malas.'), palavras: ['Take', 'only', 'two', 'suitcases'], isca: ['suitcase'], fim: '.', traducao: 'Leve só duas malas.' },
+    { contexto: M('Coloque os seus documentos na bagagem de mão.'), palavras: ['Put', 'your', 'documents', 'in', 'your', 'hand', 'luggage'], isca: ['main'], fim: '.', traducao: 'Coloque os seus documentos na bagagem de mão.' },
+    { contexto: M('Você pode comprar no país de destino.'), palavras: ['You', 'can', 'buy', 'it', 'in', 'your', 'host', 'country'], isca: ['bought'], fim: '.', traducao: 'Você pode comprar no país de destino.' },
+    { contexto: M('Tranque a mala e coloque uma etiqueta com o seu nome.'), palavras: ['Lock', 'your', 'suitcase', 'and', 'attach', 'a', 'name', 'tag'], isca: ['locked'], fim: '.', traducao: 'Tranque a mala e prenda uma etiqueta com o nome.' },
+    { contexto: M('Eles vão ter novas oportunidades.'), palavras: ["They're", 'going', 'to', 'have', 'new', 'opportunities'], isca: ['has'], fim: '.', traducao: 'Eles vão ter novas oportunidades.' },
+    { contexto: M('O meu curso vai começar em julho.'), palavras: ['My', 'course', 'is', 'going', 'to', 'start', 'in', 'July'], isca: ['on'], fim: '.', traducao: 'O meu curso vai começar em julho.' }
+  ]
+});
+</script>
+</body>
+</html>
