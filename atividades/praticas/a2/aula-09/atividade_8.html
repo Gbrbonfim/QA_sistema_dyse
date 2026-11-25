@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 10 · Are you a genius?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 10 · Leitura (What is the answer?)
+   Alinhado ao slide "Reading And Speaking: Quiz: Are you a Genius?" — perguntas de cultura geral
+   com question words (How many, What, Who, Where, Which, When). Conteúdo NOVO, só com fatos
+   verdadeiros e sem discussão. O aluno lê a pergunta e escolhe a resposta. 20 questões. */
+const q = (pergunta, opcoes, certa, traducao) => ({ instrucao: pergunta, frase: '___', opcoes, certa, traducao });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 9, num: 8, tipo: 'escolha',
+  instrucao: 'Quiz: are you a genius? Choose the right answer',
+  itens: [
+    q('How many legs does a spider have?', ['Eight', 'Six', 'Ten'], 0, 'Quantas pernas tem uma aranha? Oito.'),
+    q('What is the capital of Australia?', ['Sydney', 'Canberra', 'Melbourne'], 1, 'Qual é a capital da Austrália? Canberra.'),
+    q('How many players are there on a football team on the field?', ['Nine', 'Ten', 'Eleven'], 2, 'Quantos jogadores um time de futebol tem em campo? Onze.'),
+    q('Who painted the Mona Lisa?', ['Leonardo da Vinci', 'Pablo Picasso', 'Van Gogh'], 0, 'Quem pintou a Mona Lisa? Leonardo da Vinci.'),
+    q('Which planet is called "the Red Planet"?', ['Venus', 'Mars', 'Jupiter'], 1, 'Qual planeta é chamado de "planeta vermelho"? Marte.'),
+    q('What language do people speak in Brazil?', ['Spanish', 'English', 'Portuguese'], 2, 'Que língua se fala no Brasil? Português.'),
+    q('How many sides does a triangle have?', ['Three', 'Four', 'Five'], 0, 'Quantos lados tem um triângulo? Três.'),
+    q('Where is the Eiffel Tower?', ['In London', 'In Paris', 'In Rome'], 1, 'Onde fica a Torre Eiffel? Em Paris.'),
+    q('What do bees make?', ['Milk', 'Bread', 'Honey'], 2, 'O que as abelhas fazem? Mel.'),
+    q('Who wrote "Romeo and Juliet"?', ['William Shakespeare', 'Arthur Conan Doyle', 'Charles Dickens'], 0, 'Quem escreveu "Romeu e Julieta"? William Shakespeare.'),
+    q('When is Christmas?', ['On January 1st', 'On December 25th', 'On October 31st'], 1, 'Quando é o Natal? No dia 25 de dezembro.'),
+    q('How many minutes are there in an hour?', ['Thirty', 'One hundred', 'Sixty'], 2, 'Quantos minutos tem uma hora? Sessenta.'),
+    q('In which country is the Taj Mahal?', ['India', 'Egypt', 'China'], 0, 'Em que país fica o Taj Mahal? Na Índia.'),
+    q('What does "www" stand for?', ['World Web Work', 'World Wide Web', 'Wide World Web'], 1, 'O que significa "www"? World Wide Web.'),
+    q('How many strings does a normal guitar have?', ['Four', 'Five', 'Six'], 2, 'Quantas cordas tem um violão comum? Seis.'),
+    q('Which ocean is between Brazil and Africa?', ['The Atlantic', 'The Pacific', 'The Indian'], 0, 'Que oceano fica entre o Brasil e a África? O Atlântico.'),
+    q('What is water made of?', ['Oxygen and carbon', 'Hydrogen and oxygen', 'Nitrogen and oxygen'], 1, 'Do que a água é feita? Hidrogênio e oxigênio.'),
+    q('How many hours are there in a day?', ['Twelve', 'Twenty', 'Twenty-four'], 2, 'Quantas horas tem um dia? Vinte e quatro.'),
+    q('What color are the stars on the flag of the USA?', ['White', 'Red', 'Yellow'], 0, 'De que cor são as estrelas da bandeira dos EUA? Brancas.'),
+    q('Where do kangaroos live in the wild?', ['In Africa', 'In Australia', 'In Canada'], 1, 'Onde os cangurus vivem na natureza? Na Austrália.')
+  ]
+});
+</script>
+</body>
+</html>

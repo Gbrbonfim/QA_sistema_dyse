@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 9 · Make the question</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 09 · Escrita (What is the answer?)
+   Alinhado ao slide "Order the words to make questions" e às regras: com be → (question word)
+   + be + sujeito; no present simple → (question word) + do / does + sujeito + verbo; preposição
+   no fim (made of, listen to). Conteúdo NOVO. A isca é o auxiliar errado. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 9, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the question (one word is extra)',
+  itens: [
+    { contexto: M('Onde os pinguins vivem?'), palavras: ['Where', 'do', 'penguins', 'live'], isca: ['are'], fim: '?', traducao: 'Onde os pinguins vivem?' },
+    { contexto: M('Por que o mar é azul?'), palavras: ['Why', 'is', 'the', 'sea', 'blue'], isca: ['does'], fim: '?', traducao: 'Por que o mar é azul?' },
+    { contexto: M('Do que as nuvens são feitas?'), palavras: ['What', 'are', 'clouds', 'made', 'of'], isca: ['do'], fim: '?', traducao: 'Do que as nuvens são feitas?' },
+    { contexto: M('Os peixes dormem?'), palavras: ['Do', 'fish', 'sleep'], isca: ['Are'], fim: '?', traducao: 'Os peixes dormem?' },
+    { contexto: M('Quantas irmãs você tem?'), palavras: ['How', 'many', 'sisters', 'do', 'you', 'have'], isca: ['are'], fim: '?', traducao: 'Quantas irmãs você tem?' },
+    { contexto: M('O filme é bom?'), palavras: ['Is', 'the', 'movie', 'good'], isca: ['Does'], fim: '?', traducao: 'O filme é bom?' },
+    { contexto: M('De que cor é o carro dele?'), palavras: ['What', 'color', 'is', 'his', 'car'], isca: ['does'], fim: '?', traducao: 'De que cor é o carro dele?' },
+    { contexto: M('Onde o seu irmão trabalha?'), palavras: ['Where', 'does', 'your', 'brother', 'work'], isca: ['do'], fim: '?', traducao: 'Onde o seu irmão trabalha?' },
+    { contexto: M('Você estuda com a Paula?'), palavras: ['Do', 'you', 'study', 'with', 'Paula'], isca: ['Are'], fim: '?', traducao: 'Você estuda com a Paula?' },
+    { contexto: M('Que tipo de música ela ouve?'), palavras: ['What', 'kind', 'of', 'music', 'does', 'she', 'listen', 'to'], isca: ['is'], fim: '?', traducao: 'Que tipo de música ela ouve?' },
+    { contexto: M('O que ele faz no fim de semana?'), palavras: ['What', 'does', 'he', 'do', 'at', 'the', 'weekend'], isca: ['is'], fim: '?', traducao: 'O que ele faz no fim de semana?' },
+    { contexto: M('Você está com fome?'), palavras: ['Are', 'you', 'hungry'], isca: ['Do'], fim: '?', traducao: 'Você está com fome?' },
+    { contexto: M('De onde são os seus pais?'), palavras: ['Where', 'are', 'your', 'parents', 'from'], isca: ['do'], fim: '?', traducao: 'De onde são os seus pais?' },
+    { contexto: M('Quem é o seu cantor favorito?'), palavras: ['Who', 'is', 'your', 'favorite', 'singer'], isca: ['does'], fim: '?', traducao: 'Quem é o seu cantor favorito?' },
+    { contexto: M('Por que você gosta dele?'), palavras: ['Why', 'do', 'you', 'like', 'him'], isca: ['are'], fim: '?', traducao: 'Por que você gosta dele?' },
+    { contexto: M('Como os aviões voam?'), palavras: ['How', 'do', 'planes', 'fly'], isca: ['are'], fim: '?', traducao: 'Como os aviões voam?' },
+    { contexto: M('Que tipo de comida você gosta?'), palavras: ['What', 'kind', 'of', 'food', 'do', 'you', 'like'], isca: ['does'], fim: '?', traducao: 'Que tipo de comida você gosta?' },
+    { contexto: M('Quando é o seu aniversário?'), palavras: ['When', 'is', 'your', 'birthday'], isca: ['do'], fim: '?', traducao: 'Quando é o seu aniversário?' },
+    { contexto: M('A sua mãe fala inglês?'), palavras: ['Does', 'your', 'mother', 'speak', 'English'], isca: ['Is'], fim: '?', traducao: 'A sua mãe fala inglês?' },
+    { contexto: M('Com quem você mora?'), palavras: ['Who', 'do', 'you', 'live', 'with'], isca: ['are'], fim: '?', traducao: 'Com quem você mora?' }
+  ]
+});
+</script>
+</body>
+</html>

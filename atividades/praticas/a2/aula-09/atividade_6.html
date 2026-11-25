@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 10 · In, on or at?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 10 · Escuta (What is the answer?)
+   Alinhado ao slide "Grammar Point" (IN: países, cidades, cômodos, prédios, parque, carro; ON:
+   transporte e superfícies; AT: home, work, school, university, the airport, the bus station).
+   Conteúdo NOVO: o aluno ouve onde a pessoa ou a coisa está e escolhe a preposição. 24
+   questões. */
+const IC = { 'in': 'public', 'on': 'train', 'at': 'home_work' };
+const T = ['in', 'on', 'at'];
+const op = () => T.map(c => ({ label: c, icon: IC[c] }));
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: op(), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 9, num: 6, tipo: 'imagem',
+  instrucao: 'Listen: which preposition do you hear?',
+  itens: [
+    q('My cousin lives in Canada.', 0),
+    q("I'm on the bus right now.", 1),
+    q("She's at work until six.", 2),
+    q('Dad is in the kitchen.', 0),
+    q('Your keys are on the table.', 1),
+    q("We're at the airport. Our flight is late.", 2),
+    q("They're in a hotel near the beach.", 0),
+    q('I always read on the train.', 1),
+    q('The kids are at school today.', 2),
+    q("She's in her car. She's driving.", 0),
+    q('There are some photos on the wall.', 1),
+    q("Let's stay at home tonight.", 2),
+    q('My grandparents live in Lisbon.', 0),
+    q("I can't sleep on a plane.", 1),
+    q('My brother studies at university.', 2),
+    q('The children are playing in the park.', 0),
+    q('The cat is sleeping on the sofa.', 1),
+    q('Meet me at the bus station.', 2),
+    q('We sometimes have lunch in the garden.', 0),
+    q('There are pillows on the bed.', 1),
+    q("Mom isn't here. She's at the supermarket.", 2),
+    q('Is Lisa in the bathroom?', 0),
+    q('I sometimes work on the bus.', 1),
+    q('Are you at home now?', 2)
+  ]
+});
+</script>
+</body>
+</html>

@@ -528,6 +528,22 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 08', titulo: 'Talk about her day', tipo: 'Escute e grave', treina: 'Fala · 3ª pessoa', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 08', titulo: 'Simple present', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 9,
+        titulo: 'Class 09 and 10 · What is the answer?',
+        atividades: [
+          { num: 1, parte: 'Class 09', titulo: 'Question words', tipo: 'Escute e escolha', treina: 'Escuta · Perguntas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 09', titulo: 'Make the question', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 09', titulo: 'Kids ask, Aunt Sara answers', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 09', titulo: 'Ask your partner', tipo: 'Escute e grave', treina: 'Fala · Perguntas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 09', titulo: 'Question forms', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 10', titulo: 'In, on or at?', tipo: 'Escute e escolha', treina: 'Escuta · Preposições de lugar', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 10', titulo: 'Where are they?', tipo: 'Monte a frase', treina: 'Escrita · Preposições de lugar', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 10', titulo: 'Are you a genius?', tipo: 'Make a Choice', treina: 'Leitura · Cultura geral', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 10', titulo: 'Where are you now?', tipo: 'Escute e grave', treina: 'Fala · Lugares', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 10', titulo: 'Prepositions of place: in, on, at', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

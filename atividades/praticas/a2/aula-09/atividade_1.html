@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 9 · Question words</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 09 · Escuta (What is the answer?)
+   Alinhado ao slide "Grammar Point: we often begin questions with How, What, Why, Where, When"
+   e às perguntas do slide 4 (Who, What kind of, How many, What color). Conteúdo NOVO: o aluno
+   ouve a pergunta e escolhe a question word que ouviu. 24 questões. */
+const IC = { 'What': 'category', 'Where': 'location_on', 'Why': 'psychology', 'How': 'build', 'Who': 'person_search', 'When': 'event', 'How many': 'tag', 'What kind of': 'style' };
+const A = ['What', 'Where', 'Why', 'How'];
+const B = ['Who', 'When', 'How many', 'What kind of'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 9, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which question word do you hear?',
+  itens: [
+    qa('What do bees make?', 0),
+    qa('Where do penguins live?', 1),
+    qa('Why do cats sleep so much?', 2),
+    qa('How do you go to work?', 3),
+    qa('What is your favorite subject?', 0),
+    qa('Where does your sister work?', 1),
+    qa('Why are you tired today?', 2),
+    qa('How do you spell your name?', 3),
+    qa('What are clouds made of?', 0),
+    qa('Where are your friends from?', 1),
+    qa("Why is your brother so happy?", 2),
+    qa('How does a phone work?', 3),
+    qb('Who is your favorite singer?', 0),
+    qb('When does the movie start?', 1),
+    qb('How many brothers do you have?', 2),
+    qb('What kind of music do you listen to?', 3),
+    qb('Who lives in that big house?', 0),
+    qb('When is your English class?', 1),
+    qb('How many legs does a spider have?', 2),
+    qb('What kind of food do you like?', 3),
+    qb('Who is that man with the guitar?', 0),
+    qb('When do you go to the gym?', 1),
+    qb('How many people are in your family?', 2),
+    qb('What kind of books does she read?', 3)
+  ]
+});
+</script>
+</body>
+</html>

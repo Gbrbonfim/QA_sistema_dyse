@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 10 · Where are they?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 10 · Escrita (What is the answer?)
+   Alinhado ao slide "Grammar Point" — IN (países, cidades, cômodos, prédios, parque, jardim,
+   carro), ON (ônibus, trem, avião, mesa, parede, cama), AT (home, work, school, university, the
+   airport, the bus station). Conteúdo NOVO. A isca é a preposição errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 9, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('A minha família mora na Itália.'), palavras: ['My', 'family', 'lives', 'in', 'Italy'], isca: ['at'], fim: '.', traducao: 'A minha família mora na Itália.' },
+    { contexto: M('Eu estou no trem.'), palavras: ["I'm", 'on', 'the', 'train'], isca: ['in'], fim: '.', traducao: 'Estou no trem.' },
+    { contexto: M('Ela está no trabalho agora.'), palavras: ["She's", 'at', 'work', 'now'], isca: ['in'], fim: '.', traducao: 'Ela está no trabalho agora.' },
+    { contexto: M('Nós estamos num hotel em Roma.'), palavras: ["We're", 'in', 'a', 'hotel', 'in', 'Rome'], isca: ['on'], fim: '.', traducao: 'Estamos num hotel em Roma.' },
+    { contexto: M('Os livros estão na mesa.'), palavras: ['The', 'books', 'are', 'on', 'the', 'table'], isca: ['at'], fim: '.', traducao: 'Os livros estão na mesa.' },
+    { contexto: M('Vamos ficar em casa hoje.'), palavras: ["Let's", 'stay', 'at', 'home', 'today'], isca: ['in'], fim: '.', traducao: 'Vamos ficar em casa hoje.' },
+    { contexto: M('Ele está no carro dele.'), palavras: ["He's", 'in', 'his', 'car'], isca: ['on'], fim: '.', traducao: 'Ele está no carro dele.' },
+    { contexto: M('Você consegue dormir num avião?'), palavras: ['Can', 'you', 'sleep', 'on', 'a', 'plane'], isca: ['in'], fim: '?', traducao: 'Você consegue dormir num avião?' },
+    { contexto: M('Precisamos estar no aeroporto às duas.'), palavras: ['We', 'need', 'to', 'be', 'at', 'the', 'airport', 'at', 'two'], isca: ['on'], fim: '.', traducao: 'Precisamos estar no aeroporto às duas.' },
+    { contexto: M('A Lisa está na cozinha.'), palavras: ['Lisa', 'is', 'in', 'the', 'kitchen'], isca: ['at'], fim: '.', traducao: 'A Lisa está na cozinha.' },
+    { contexto: M('Tem prateleiras na parede.'), palavras: ['There', 'are', 'shelves', 'on', 'the', 'wall'], isca: ['in'], fim: '.', traducao: 'Tem prateleiras na parede.' },
+    { contexto: M('As crianças estão na escola.'), palavras: ['The', 'children', 'are', 'at', 'school'], isca: ['on'], fim: '.', traducao: 'As crianças estão na escola.' },
+    { contexto: M('Podemos almoçar no jardim?'), palavras: ['Can', 'we', 'have', 'lunch', 'in', 'the', 'garden'], isca: ['on'], fim: '?', traducao: 'Podemos almoçar no jardim?' },
+    { contexto: M('Eu chego em São Paulo às oito.'), palavras: ['I', 'arrive', 'in', 'São', 'Paulo', 'at', 'eight'], isca: ['on'], fim: '.', traducao: 'Chego em São Paulo às oito.' },
+    { contexto: M('O meu irmão estuda na universidade.'), palavras: ['My', 'brother', 'studies', 'at', 'university'], isca: ['on'], fim: '.', traducao: 'O meu irmão estuda na universidade.' },
+    { contexto: M('Eu leio no ônibus.'), palavras: ['I', 'read', 'on', 'the', 'bus'], isca: ['at'], fim: '.', traducao: 'Leio no ônibus.' },
+    { contexto: M('Encontre-me na rodoviária.'), palavras: ['Meet', 'me', 'at', 'the', 'bus', 'station'], isca: ['on'], fim: '.', traducao: 'Encontre-me na rodoviária.' },
+    { contexto: M('O cachorro está no parque.'), palavras: ['The', 'dog', 'is', 'in', 'the', 'park'], isca: ['on'], fim: '.', traducao: 'O cachorro está no parque.' },
+    { contexto: M('Tem travesseiros na cama.'), palavras: ['There', 'are', 'pillows', 'on', 'the', 'bed'], isca: ['at'], fim: '.', traducao: 'Tem travesseiros na cama.' },
+    { contexto: M('Você está em casa?'), palavras: ['Are', 'you', 'at', 'home'], isca: ['in'], fim: '?', traducao: 'Você está em casa?' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 9 · Question forms</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 09 · Gramática (What is the answer?)
+   Alinhado ao "Grammar Point" — be x do / does nas perguntas, a ordem (question word + be +
+   sujeito / question word + do / does + sujeito + verbo), a question word certa e a preposição
+   no fim. Conteúdo NOVO. 24 questões. */
+const QW = 'Choose the question word';
+const OK = 'Which question is correct?';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 9, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the question',
+  itens: [
+    { frase: 'Why ___ the sea salty?', opcoes: ['is', 'does', 'do'], certa: 0, traducao: 'Por que o mar é salgado?' },
+    { frase: 'How ___ birds fly?', opcoes: ['are', 'do', 'does'], certa: 1, traducao: 'Como os pássaros voam?' },
+    { frase: 'Where ___ your sister live?', opcoes: ['is', 'do', 'does'], certa: 2, traducao: 'Onde a sua irmã mora?' },
+    { frase: '___ you tired today?', opcoes: ['Are', 'Do', 'Does'], certa: 0, traducao: 'Você está cansado hoje?' },
+    { frase: 'What ___ you do at weekends?', opcoes: ['are', 'do', 'does'], certa: 1, traducao: 'O que você faz nos fins de semana?' },
+    { frase: 'Who ___ your favorite actor?', opcoes: ['do', 'does', 'is'], certa: 2, traducao: 'Quem é o seu ator favorito?' },
+    { frase: '___ the restaurant open on Mondays?', opcoes: ['Does', 'Is it', 'Do'], certa: 0, traducao: 'O restaurante abre às segundas?' },
+    { frase: 'What is a pizza made ___?', opcoes: ['to', 'of', 'at'], certa: 1, traducao: 'Do que é feita uma pizza?' },
+    { frase: 'What kind of music do you listen ___?', opcoes: ['of', 'at', 'to'], certa: 2, traducao: 'Que tipo de música você ouve?' },
+    { frase: 'Who do you live ___?', opcoes: ['with', 'of', 'to'], certa: 0, traducao: 'Com quem você mora?' },
+    { instrucao: QW, frase: '___ is your birthday? In May.', opcoes: ['Who', 'When', 'Where'], certa: 1, traducao: 'Quando é o seu aniversário? Em maio.' },
+    { instrucao: QW, frase: '___ do you live? In Recife.', opcoes: ['When', 'Why', 'Where'], certa: 2, traducao: 'Onde você mora? Em Recife.' },
+    { instrucao: QW, frase: '___ brothers do you have? Two.', opcoes: ['How many', 'How', 'What'], certa: 0, traducao: 'Quantos irmãos você tem? Dois.' },
+    { instrucao: QW, frase: '___ are you happy? Because it\'s Friday!', opcoes: ['What', 'Why', 'How'], certa: 1, traducao: 'Por que você está feliz? Porque é sexta!' },
+    { instrucao: QW, frase: '___ is that woman? She\'s my teacher.', opcoes: ['What', 'Where', 'Who'], certa: 2, traducao: 'Quem é aquela mulher? É a minha professora.' },
+    { instrucao: QW, frase: '___ color is her car? Red.', opcoes: ['What', 'How', 'Which of'], certa: 0, traducao: 'De que cor é o carro dela? Vermelho.' },
+    { instrucao: QW, frase: '___ do you spell your name? A-N-A.', opcoes: ['What', 'How', 'Why'], certa: 1, traducao: 'Como se soletra o seu nome? A-N-A.' },
+    { instrucao: QW, frase: '___ kind of food do you like? Italian food.', opcoes: ['Which of', 'How', 'What'], certa: 2, traducao: 'Que tipo de comida você gosta? Comida italiana.' },
+    { instrucao: OK, frase: '___', opcoes: ['How many brothers do you have?', 'How many brothers you have?', 'How many brothers are you have?'], certa: 0, traducao: 'Quantos irmãos você tem?' },
+    { instrucao: OK, frase: '___', opcoes: ['The film is great?', 'Is the film great?', 'Does the film great?'], certa: 1, traducao: 'O filme é ótimo?' },
+    { instrucao: OK, frase: '___', opcoes: ['Where your sister works?', 'Where does your sister works?', 'Where does your sister work?'], certa: 2, traducao: 'Onde a sua irmã trabalha?' },
+    { instrucao: OK, frase: '___', opcoes: ['Where are your friends from?', 'Where your friends are from?', 'From where your friends are?'], certa: 0, traducao: 'De onde são os seus amigos?' },
+    { instrucao: OK, frase: '___', opcoes: ['What he does at the weekend?', 'What does he do at the weekend?', 'What does he does at the weekend?'], certa: 1, traducao: 'O que ele faz no fim de semana?' },
+    { instrucao: OK, frase: '___', opcoes: ['What air is made of?', 'What is made air of?', 'What is air made of?'], certa: 2, traducao: 'Do que o ar é feito?' }
+  ]
+});
+</script>
+</body>
+</html>

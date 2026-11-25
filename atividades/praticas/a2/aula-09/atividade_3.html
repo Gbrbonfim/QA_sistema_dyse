@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 9 · Kids ask, Aunt Sara answers</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 09 · Leitura (What is the answer?)
+   Alinhado ao "Listening" (perguntas de crianças: How do planes fly? Do birds think? What is air
+   made of?) e às regras de formação de perguntas. Conteúdo NOVO, com fatos verdadeiros: o Tom
+   (8 anos) faz perguntas para a tia Sara, que é cientista. 20 questões: 12 de "próxima fala"
+   + 8 de compreensão. */
+const D = [
+  ['Tom', 'Aunt Sara, can I ask you some questions?'],
+  ['Sara', "Of course, Tom! I'm a scientist. Ask me anything!"],
+  ['Tom', 'How many legs does a spider have?'],
+  ['Sara', 'A spider has eight legs.'],
+  ['Tom', 'Do fish sleep?'],
+  ['Sara', "Yes, they do. But they don't close their eyes."],
+  ['Tom', 'Wow! What are clouds made of?'],
+  ['Sara', 'Clouds are made of very small drops of water.'],
+  ['Tom', 'Why do we have day and night?'],
+  ['Sara', 'Because the Earth turns all the time.'],
+  ['Tom', 'Where do penguins live?'],
+  ['Sara', 'Most penguins live in the south of the planet, not at the North Pole.'],
+  ['Tom', 'What do bees make?'],
+  ['Sara', 'Bees make honey.'],
+  ['Tom', 'Is a tomato a fruit?'],
+  ['Sara', 'Yes, it is! Scientists say a tomato is a fruit.']
+];
+const lado = q => q === 'Sara' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 9, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(2, ['How many legs does a spider have?', 'How many legs a spider has?', 'How many legs is a spider have?'], 0, 'Quantas pernas uma aranha tem?'),
+    prox(3, ['A spider have eight legs.', 'A spider has eight legs.', 'A spider has six legs.'], 1, 'Uma aranha tem oito pernas.'),
+    prox(4, ['Are fish sleep?', 'Does fish sleep?', 'Do fish sleep?'], 2, 'Os peixes dormem?'),
+    prox(5, ["Yes, they do. But they don't close their eyes.", "Yes, they are. But they don't close their eyes.", "Yes, they do. But they doesn't close their eyes."], 0, 'Sim. Mas não fecham os olhos.'),
+    prox(6, ['Wow! What clouds are made of?', 'Wow! What are clouds made of?', 'Wow! What do clouds made of?'], 1, 'Uau! Do que as nuvens são feitas?'),
+    prox(7, ['Clouds are made of very small rocks.', 'Clouds is made of very small drops of water.', 'Clouds are made of very small drops of water.'], 2, 'As nuvens são feitas de gotinhas de água.'),
+    prox(8, ['Why do we have day and night?', 'Why we have day and night?', 'Why are we have day and night?'], 0, 'Por que temos dia e noite?'),
+    prox(10, ['Where are penguins live?', 'Where do penguins live?', 'Where does penguins live?'], 1, 'Onde vivem os pinguins?'),
+    prox(11, ['Most penguins live at the North Pole.', 'Most penguins lives in the south of the planet.', 'Most penguins live in the south of the planet, not at the North Pole.'], 2, 'A maioria dos pinguins vive no sul do planeta, não no Polo Norte.'),
+    prox(12, ['What do bees make?', 'What does bees make?', 'What are bees make?'], 0, 'O que as abelhas fazem?'),
+    prox(14, ['Does a tomato a fruit?', 'Is a tomato a fruit?', 'A tomato is a fruit?'], 1, 'O tomate é uma fruta?'),
+    prox(15, ["No, it isn't. It's a vegetable.", "Yes, it does! Scientists say a tomato is a fruit.", "Yes, it is! Scientists say a tomato is a fruit."], 2, 'Sim! Os cientistas dizem que o tomate é uma fruta.'),
+    { instrucao: "What's Sara's job?", frase: "She's a ___.", opcoes: ['scientist', 'teacher', 'doctor'], certa: 0, traducao: 'Ela é cientista.' },
+    { instrucao: 'How many legs does a spider have?', frase: '___.', opcoes: ['Six', 'Eight', 'Ten'], certa: 1, traducao: 'Oito.' },
+    { instrucao: 'Do fish close their eyes when they sleep?', frase: 'No, they ___.', opcoes: ["aren't", "doesn't", "don't"], certa: 2, traducao: 'Não.' },
+    { instrucao: 'What are clouds made of?', frase: 'Small drops of ___.', opcoes: ['water', 'air', 'ice cream'], certa: 0, traducao: 'Gotinhas de água.' },
+    { instrucao: 'Why do we have day and night?', frase: 'Because the Earth ___.', opcoes: ['sleeps', 'turns', 'is blue'], certa: 1, traducao: 'Porque a Terra gira.' },
+    { instrucao: 'Where do most penguins live?', frase: 'In the ___ of the planet.', opcoes: ['north', 'middle', 'south'], certa: 2, traducao: 'No sul do planeta.' },
+    { instrucao: 'What do bees make?', frase: '___.', opcoes: ['Honey', 'Milk', 'Bread'], certa: 0, traducao: 'Mel.' },
+    { instrucao: 'Is a tomato a fruit?', frase: 'Yes, it ___.', opcoes: ['does', 'is', 'has'], certa: 1, traducao: 'Sim, é.' }
+  ]
+});
+</script>
+</body>
+</html>
