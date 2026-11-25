@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 23 · I went to a festival</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 23 · Escrita (Did You Like the Music?)
+   Alinhado ao "Grammar Point" — past simple de verbos IRREGULARES (went, bought, saw, wore,
+   drank, felt, said, took, got, ate, found), negativa com didn't + infinitivo, perguntas com
+   Did / Wh- + did, e could / couldn't. Conteúdo NOVO. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 23, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu fui ao Lollapalooza em março.'), palavras: ['I', 'went', 'to', 'Lollapalooza', 'in', 'March'], isca: ['goed'], fim: '.', traducao: 'Fui ao Lollapalooza em março.' },
+    { contexto: M('Nós compramos os ingressos pela internet.'), palavras: ['We', 'bought', 'the', 'tickets', 'online'], isca: ['buyed'], fim: '.', traducao: 'Compramos os ingressos pela internet.' },
+    { contexto: M('Ela viu a banda favorita dela.'), palavras: ['She', 'saw', 'her', 'favorite', 'band'], isca: ['seed'], fim: '.', traducao: 'Ela viu a banda favorita dela.' },
+    { contexto: M('Eu usei uma camiseta e calça jeans.'), palavras: ['I', 'wore', 'a', 'T-shirt', 'and', 'jeans'], isca: ['weared'], fim: '.', traducao: 'Usei uma camiseta e calça jeans.' },
+    { contexto: M('Eles beberam muita água.'), palavras: ['They', 'drank', 'a', 'lot', 'of', 'water'], isca: ['drinked'], fim: '.', traducao: 'Eles beberam muita água.' },
+    { contexto: M('Eu me senti muito cansado depois do show.'), palavras: ['I', 'felt', 'very', 'tired', 'after', 'the', 'show'], isca: ['feeled'], fim: '.', traducao: 'Eu me senti muito cansado depois do show.' },
+    { contexto: M('Nós chegamos em casa às duas da manhã.'), palavras: ['We', 'got', 'home', 'at', 'two', 'in', 'the', 'morning'], isca: ['getted'], fim: '.', traducao: 'Chegamos em casa às duas da manhã.' },
+    { contexto: M('Ele comeu um hambúrguer no festival.'), palavras: ['He', 'ate', 'a', 'burger', 'at', 'the', 'festival'], isca: ['eated'], fim: '.', traducao: 'Ele comeu um hambúrguer no festival.' },
+    { contexto: M('Eu tirei muitas fotos.'), palavras: ['I', 'took', 'a', 'lot', 'of', 'pictures'], isca: ['taked'], fim: '.', traducao: 'Tirei muitas fotos.' },
+    { contexto: M('Nós não encontramos os nossos amigos.'), palavras: ['We', "didn't", 'find', 'our', 'friends'], isca: ['found'], fim: '.', traducao: 'Não encontramos os nossos amigos.' },
+    { contexto: M('Ela não levou lanches.'), palavras: ['She', "didn't", 'take', 'snacks'], isca: ['took'], fim: '.', traducao: 'Ela não levou lanches.' },
+    { contexto: M('Eu não vi o Green Day.'), palavras: ['I', "didn't", 'see', 'Green', 'Day'], isca: ['saw'], fim: '.', traducao: 'Não vi o Green Day.' },
+    { contexto: M('Você comprou os ingressos pela internet?'), palavras: ['Did', 'you', 'buy', 'the', 'tickets', 'online'], isca: ['bought'], fim: '?', traducao: 'Você comprou os ingressos pela internet?' },
+    { contexto: M('Aonde você foi?'), palavras: ['Where', 'did', 'you', 'go'], isca: ['went'], fim: '?', traducao: 'Aonde você foi?' },
+    { contexto: M('Com quem você foi?'), palavras: ['Who', 'did', 'you', 'go', 'with'], isca: ['went'], fim: '?', traducao: 'Com quem você foi?' },
+    { contexto: M('O que você vestiu?'), palavras: ['What', 'did', 'you', 'wear'], isca: ['wore'], fim: '?', traducao: 'O que você vestiu?' },
+    { contexto: M('Eu conseguia ouvir a música da minha casa.'), palavras: ['I', 'could', 'hear', 'the', 'music', 'from', 'my', 'house'], isca: ['can'], fim: '.', traducao: 'Eu conseguia ouvir a música da minha casa.' },
+    { contexto: M('Nós não conseguimos ver o palco.'), palavras: ['We', "couldn't", 'see', 'the', 'stage'], isca: ['saw'], fim: '.', traducao: 'Não conseguimos ver o palco.' },
+    { contexto: M('Você conseguiu encontrar um bom lugar?'), palavras: ['Could', 'you', 'find', 'a', 'good', 'place'], isca: ['found'], fim: '?', traducao: 'Você conseguiu encontrar um bom lugar?' },
+    { contexto: M('O homem disse que a banda não podia vir.'), palavras: ['The', 'man', 'said', 'the', 'band', "couldn't", 'come'], isca: ['sayed'], fim: '.', traducao: 'O homem disse que a banda não podia vir.' }
+  ]
+});
+</script>
+</body>
+</html>

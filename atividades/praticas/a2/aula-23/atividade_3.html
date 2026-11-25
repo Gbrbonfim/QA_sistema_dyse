@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 23 · Back from the festival</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 23 · Leitura (Did You Like the Music?)
+   Alinhado ao "Speaking And Writing" (What festival did you go to? When did you buy the
+   tickets? Who did you go with? What did you eat? Did you have any problems?) e ao
+   vocabulário do festival. Conteúdo NOVO: a Sofia conta ao Pedro como foi o festival.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Pedro', 'Hi, Sofia! Where did you go last weekend?'],
+  ['Sofia', 'I went to a music festival in Curitiba!'],
+  ['Pedro', 'Cool! Who did you go with?'],
+  ['Sofia', 'I went with my sister and two friends.'],
+  ['Pedro', 'When did you buy the tickets?'],
+  ['Sofia', 'We bought them in May, because the festival was very popular.'],
+  ['Pedro', 'What bands did you see?'],
+  ['Sofia', 'We saw five bands. The last one was amazing!'],
+  ['Pedro', 'Did you find a good place to watch the shows?'],
+  ['Sofia', "Not always. It was very crowded, so we couldn't see the stage."],
+  ['Pedro', 'Oh no! What did you eat?'],
+  ['Sofia', 'I ate pizza and I drank a lot of water. It was very hot.'],
+  ['Pedro', 'Did you have any problems?'],
+  ['Sofia', 'Yes! I lost my phone, but I found it at the lost and found.'],
+  ['Pedro', 'Lucky you! Did you sleep in a tent?'],
+  ['Sofia', "No, we didn't. We stayed at a hotel near the entrance."],
+  ['Pedro', 'What time did you get home on Sunday?'],
+  ['Sofia', 'I got home at midnight. I felt very tired, but happy!']
+];
+const lado = q => q === 'Pedro' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 23, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I goed to a music festival in Curitiba!', 'I went to a music festival in Curitiba!', 'I go to a music festival in Curitiba last weekend!'], 1, 'Fui a um festival de música em Curitiba!'),
+    prox(2, ['Cool! Who did you go with?', 'Cool! Who did you went with?', 'Cool! Who you went with?'], 0, 'Legal! Com quem você foi?'),
+    prox(4, ['When you bought the tickets?', 'When did you bought the tickets?', 'When did you buy the tickets?'], 2, 'Quando você comprou os ingressos?'),
+    prox(5, ['We buyed them in May, because the festival was very popular.', 'We bought them in May, because the festival was very popular.', 'We buy them in May, because the festival is popular.'], 1, 'Compramos em maio, porque o festival era muito concorrido.'),
+    prox(7, ['We saw five bands. The last one was amazing!', 'We seed five bands. The last one was amazing!', 'We see five bands. The last one is amazing!'], 0, 'Vimos cinco bandas. A última foi incrível!'),
+    prox(9, ["Not always. It was very crowded, so we can't see the stage.", "Not always. It was very crowded, so we didn't could see the stage.", "Not always. It was very crowded, so we couldn't see the stage."], 2, 'Nem sempre. Estava muito cheio, então não conseguíamos ver o palco.'),
+    prox(10, ['Oh no! What did you eat?', 'Oh no! What did you ate?', 'Oh no! What you eat?'], 0, 'Ah, não! O que você comeu?'),
+    prox(11, ['I eated pizza and I drinked a lot of water. It was very hot.', 'I ate pizza and I drank a lot of water. It was very hot.', 'I eat pizza and I drink a lot of water. It is very hot.'], 1, 'Comi pizza e bebi muita água. Estava muito quente.'),
+    prox(13, ['Yes! I lose my phone, but I find it at the lost and found.', 'Yes! I losed my phone, but I finded it at the lost and found.', 'Yes! I lost my phone, but I found it at the lost and found.'], 2, 'Sim! Perdi o celular, mas achei no achados e perdidos.'),
+    prox(14, ['Lucky you! Did you sleep in a tent?', 'Lucky you! Did you slept in a tent?', 'Lucky you! You did sleep in a tent?'], 0, 'Que sorte! Vocês dormiram numa barraca?'),
+    prox(15, ["No, we wasn't. We stayed at a hotel near the entrance.", "No, we didn't. We stayed at a hotel near the entrance.", "No, we don't. We stay at a hotel near the entrance."], 1, 'Não. Ficamos num hotel perto da entrada.'),
+    prox(17, ['I get home at midnight. I feel very tired, but happy!', 'I got home at midnight. I feeled very tired, but happy!', 'I got home at midnight. I felt very tired, but happy!'], 2, 'Cheguei em casa à meia-noite. Estava muito cansada, mas feliz!'),
+    { instrucao: 'Where was the festival?', frase: 'In ___.', opcoes: ['Curitiba', 'São Paulo', 'Rio'], certa: 0, traducao: 'Em Curitiba.' },
+    { instrucao: 'Who did Sofia go with?', frase: 'Her sister and ___ friends.', opcoes: ['three', 'two', 'four'], certa: 1, traducao: 'A irmã e dois amigos.' },
+    { instrucao: 'When did they buy the tickets?', frase: 'In ___.', opcoes: ['March', 'June', 'May'], certa: 2, traducao: 'Em maio.' },
+    { instrucao: 'How many bands did they see?', frase: '___ bands.', opcoes: ['Five', 'Three', 'Ten'], certa: 0, traducao: 'Cinco bandas.' },
+    { instrucao: "Why couldn't they see the stage?", frase: 'Because it was very ___.', opcoes: ['hot', 'crowded', 'dark'], certa: 1, traducao: 'Porque estava muito cheio.' },
+    { instrucao: 'What did Sofia eat?', frase: 'She ate ___.', opcoes: ['a burger', 'candies', 'pizza'], certa: 2, traducao: 'Ela comeu pizza.' },
+    { instrucao: 'Where did she find her phone?', frase: 'At the ___.', opcoes: ['lost and found', 'restrooms', 'entrance'], certa: 0, traducao: 'No achados e perdidos.' },
+    { instrucao: 'Where did they sleep?', frase: 'In a ___.', opcoes: ['tent', 'hotel', 'friend\'s house'], certa: 1, traducao: 'Num hotel.' }
+  ]
+});
+</script>
+</body>
+</html>

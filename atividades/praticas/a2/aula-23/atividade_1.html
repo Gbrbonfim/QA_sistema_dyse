@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 23 · Where do you go?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 23 · Escuta (Did You Like the Music?)
+   Alinhado ao "Vocabulary: Music Festivals And Music" (restrooms, security, lost & found,
+   exit, tent, lineup, entrance). Conteúdo NOVO: o aluno ouve uma situação num festival
+   (com past simple) e escolhe o lugar/coisa certa. 24 questões. */
+const IC = { 'restrooms': 'wc', 'security': 'security', 'lost & found': 'search', 'exit': 'logout', 'tent': 'camping', 'lineup': 'queue_music', 'entrance': 'login' };
+const TODOS = Object.keys(IC);
+let n = 0;
+const q = (audioTexto, certo) => {
+  const i = TODOS.indexOf(certo);
+  const outros = [1, 2, 3].map(k => TODOS[(i + k * 2) % TODOS.length]);
+  const pos = n++ % 4;
+  outros.splice(pos, 0, certo);
+  return { audioTexto, opcoes: outros.map(label => ({ label, icon: IC[label] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 23, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the right place or thing',
+  itens: [
+    q('I lost my wallet near the stage. Where can I ask about it?', 'lost & found'),
+    q('I drank a lot of water and now I need a toilet.', 'restrooms'),
+    q('A man took my bag! Who can help me?', 'security'),
+    q('The festival is over. How do we go out?', 'exit'),
+    q('We slept in a small shelter made of cloth.', 'tent'),
+    q("Who is playing today? Let's check the list of bands.", 'lineup'),
+    q('We arrived at the festival. Where do we go in?', 'entrance'),
+    q('Someone found my keys and took them to a special place.', 'lost & found'),
+    q('There was a long line for the toilets.', 'restrooms'),
+    q('The people in yellow T-shirts kept the festival safe.', 'security'),
+    q("We couldn't get out because the way out was closed.", 'exit'),
+    q('It rained at night, but we were dry inside it.', 'tent'),
+    q('Green Day was on the list of artists this year!', 'lineup'),
+    q('They checked our tickets at the way in.', 'entrance'),
+    q('I left my jacket somewhere. Maybe someone found it.', 'lost & found'),
+    q('Where can I wash my hands?', 'restrooms'),
+    q('Two men had a fight, so we called them.', 'security'),
+    q('At midnight, thousands of people walked to the way out.', 'exit'),
+    q('We put it up next to our car and slept there.', 'tent'),
+    q("My favorite singer wasn't on it this year.", 'lineup'),
+    q('We waited one hour at the gate to get in.', 'entrance'),
+    q("My sunglasses weren't in my bag. Did anybody find them?", 'lost & found'),
+    q('I went to the toilet before the show.', 'restrooms'),
+    q('The guards said: "Open your bag, please."', 'security')
+  ]
+});
+</script>
+</body>
+</html>

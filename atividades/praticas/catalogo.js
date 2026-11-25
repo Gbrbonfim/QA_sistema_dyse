@@ -653,6 +653,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Tell your holiday story', tipo: 'Escute e grave', treina: 'Fala · Past simple', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Past simple: regular verbs', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 23,
+        titulo: 'Class 23 · Did You Like the Music?',
+        atividades: [
+          { num: 1, titulo: 'Where do you go?', tipo: 'Escute e escolha', treina: 'Escuta · Festivais', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'I went to a festival', tipo: 'Monte a frase', treina: 'Escrita · Past simple irregular', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Back from the festival', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My festival story', tipo: 'Escute e grave', treina: 'Fala · Past simple', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Irregular verbs and could', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
