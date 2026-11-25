@@ -566,6 +566,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Talk about your family', tipo: 'Escute e grave', treina: 'Fala · Família', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: "Possessive 's, who and whose", tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 13,
+        titulo: 'Class 13 · Review Classes 1-12',
+        atividades: [
+          { num: 1, titulo: 'What are they talking about?', tipo: 'Escute e escolha', treina: 'Escuta · Revisão', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Can you do it?', tipo: 'Monte a frase', treina: 'Escrita · Revisão', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'The new neighbor', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'I can do it!', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Review 1-12', tipo: 'Make a Choice', treina: 'Gramática · Revisão', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

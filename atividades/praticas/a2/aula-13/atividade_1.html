@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 13 · What are they talking about?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 13 · Escuta (Review Classes 1-12)
+   Alinhado ao slide "Tick the things you can do" — apresentação pessoal, o quarto e onde as
+   coisas estão, aparência, sentimentos e sugestões, rotina e horários, tarefas domésticas,
+   família. Conteúdo NOVO: o aluno ouve e escolhe o assunto. 24 questões. */
+const IC = { 'personal information': 'badge', 'a bedroom': 'bed', 'appearance': 'face', 'feelings': 'mood', 'routine and time': 'schedule', 'housework': 'cleaning_services', 'family': 'family_restroom', 'questions about you': 'help_outline' };
+const A = ['personal information', 'a bedroom', 'appearance', 'feelings'];
+const B = ['routine and time', 'housework', 'family', 'questions about you'];
+const op = T => T.map(c => ({ label: c, icon: IC[c] }));
+const qa = (audioTexto, certa) => ({ audioTexto, opcoes: op(A), certa });
+const qb = (audioTexto, certa) => ({ audioTexto, opcoes: op(B), certa });
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 13, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what is the person talking about?',
+  itens: [
+    qa("My name's Rafael. I'm Brazilian and I'm a nurse.", 0),
+    qa('The lamp is on the desk, between the bed and the window.', 1),
+    qa("He's really tall and he has short curly hair.", 2),
+    qa("I'm so stressed today! I have too much work.", 3),
+    qa("I'm from Peru. My passion is photography.", 0),
+    qa('My clothes are in the cupboard and my shoes are under the bed.', 1),
+    qa("She's quite short and slim, with long blond hair.", 2),
+    qa("I'm bored. Let's go to the movies!", 3),
+    qa("I'm a graphic designer and my hobbies are surfing and cooking.", 0),
+    qa('I have two pillows and a green blanket on my bed.', 1),
+    qa("My grandfather is bald and he has a white beard.", 2),
+    qa("Don't be worried. You're a great student!", 3),
+    qb('I get up at six and I go to work at half past seven.', 0),
+    qb('I do the laundry twice a week.', 1),
+    qb("Paula is my mother's sister. She's my aunt.", 2),
+    qb('Where do you live and what do you do?', 3),
+    qb('We have English class on Tuesdays at seven.', 0),
+    qb('I hardly ever iron clothes, but I always make my bed.', 1),
+    qb("These are my cousins, my uncle's children.", 2),
+    qb('How many brothers do you have?', 3),
+    qb('I usually have lunch at midday.', 0),
+    qb('My husband mops the floor and I vacuum.', 1),
+    qb("My parents' house is in a small town.", 2),
+    qb('What kind of music do you listen to?', 3)
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 13 · Can you do it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 13 · Escrita (Review Classes 1-12)
+   Alinhado ao slide "Tick the things you can do" — uma frase de cada assunto do bimestre:
+   possessivos, be, preposições de lugar e de tempo, adjetivos e modifiers, imperativos e Let's,
+   present simple, perguntas, frequência, genitivo 's. Conteúdo NOVO. A isca é a forma errada.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 13, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('O nome dele é Bruno e ele é chileno.'), palavras: ['His', 'name', 'is', 'Bruno', 'and', "he's", 'Chilean'], isca: ["He's"], fim: '.', traducao: 'O nome dele é Bruno e ele é chileno.' },
+    { contexto: M('O notebook está na escrivaninha.'), palavras: ['The', 'laptop', 'is', 'on', 'the', 'desk'], isca: ['at'], fim: '.', traducao: 'O notebook está na escrivaninha.' },
+    { contexto: M('O gato está embaixo da cama.'), palavras: ['The', 'cat', 'is', 'under', 'the', 'bed'], isca: ['over'], fim: '.', traducao: 'O gato está embaixo da cama.' },
+    { contexto: M('Ela é bem alta e tem cabelo cacheado.'), palavras: ["She's", 'quite', 'tall', 'and', 'has', 'curly', 'hair'], isca: ['have'], fim: '.', traducao: 'Ela é bem alta e tem cabelo cacheado.' },
+    { contexto: M('É um carro muito caro.'), palavras: ["It's", 'a', 'very', 'expensive', 'car'], isca: ['an'], fim: '.', traducao: 'É um carro muito caro.' },
+    { contexto: M('Não fique decepcionado. Vamos tentar de novo!'), palavras: ["Don't", 'be', 'disappointed.', "Let's", 'try', 'again'], isca: ['to'], fim: '!', traducao: 'Não fique decepcionado. Vamos tentar de novo!' },
+    { contexto: M('Estou com fome. Vamos pedir uma pizza.'), palavras: ["I'm", 'hungry.', "Let's", 'order', 'a', 'pizza'], isca: ['ordering'], fim: '.', traducao: 'Estou com fome. Vamos pedir uma pizza.' },
+    { contexto: M('O que você faz nos fins de semana?'), palavras: ['What', 'do', 'you', 'do', 'at', 'weekends'], isca: ['are'], fim: '?', traducao: 'O que você faz nos fins de semana?' },
+    { contexto: M('Você normalmente está em casa ao meio-dia?'), palavras: ['Are', 'you', 'usually', 'at', 'home', 'at', 'midday'], isca: ['Do'], fim: '?', traducao: 'Você normalmente está em casa ao meio-dia?' },
+    { contexto: M('A minha próxima prova é na sexta.'), palavras: ['My', 'next', 'exam', 'is', 'on', 'Friday'], isca: ['in'], fim: '.', traducao: 'A minha próxima prova é na sexta.' },
+    { contexto: M('Por que você está cansado?'), palavras: ['Why', 'are', 'you', 'tired'], isca: ['do'], fim: '?', traducao: 'Por que você está cansado?' },
+    { contexto: M('Onde a sua irmã trabalha?'), palavras: ['Where', 'does', 'your', 'sister', 'work'], isca: ['is'], fim: '?', traducao: 'Onde a sua irmã trabalha?' },
+    { contexto: M('Com que frequência você limpa a cozinha?'), palavras: ['How', 'often', 'do', 'you', 'clean', 'the', 'kitchen'], isca: ['many'], fim: '?', traducao: 'Com que frequência você limpa a cozinha?' },
+    { contexto: M('Eu passo pano no chão uma vez por semana.'), palavras: ['I', 'mop', 'the', 'floor', 'once', 'a', 'week'], isca: ['one'], fim: '.', traducao: 'Passo pano no chão uma vez por semana.' },
+    { contexto: M('Ele quase nunca lava a roupa.'), palavras: ['He', 'hardly', 'ever', 'does', 'the', 'laundry'], isca: ['do'], fim: '.', traducao: 'Ele quase nunca lava a roupa.' },
+    { contexto: M('O meu tio é o irmão do meu pai.'), palavras: ['My', 'uncle', 'is', 'my', "father's", 'brother'], isca: ['father'], fim: '.', traducao: 'O meu tio é o irmão do meu pai.' },
+    { contexto: M('Os meus avós moram em Minas.'), palavras: ['My', 'grandparents', 'live', 'in', 'Minas'], isca: ['at'], fim: '.', traducao: 'Os meus avós moram em Minas.' },
+    { contexto: M('Ela não estuda à noite.'), palavras: ['She', "doesn't", 'study', 'at', 'night'], isca: ['studies'], fim: '.', traducao: 'Ela não estuda à noite.' },
+    { contexto: M('De quem é esta bolsa?'), palavras: ['Whose', 'bag', 'is', 'this'], isca: ["Who's"], fim: '?', traducao: 'De quem é esta bolsa?' },
+    { contexto: M('Nós não somos irmãos. Somos primos.'), palavras: ['We', "aren't", 'brothers.', "We're", 'cousins'], isca: ["isn't"], fim: '.', traducao: 'Não somos irmãos. Somos primos.' }
+  ]
+});
+</script>
+</body>
+</html>

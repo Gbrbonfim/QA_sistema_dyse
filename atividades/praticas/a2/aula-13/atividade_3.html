@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 13 · The new neighbor</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 13 · Leitura (Review Classes 1-12)
+   Alinhado ao slide "Tick the things you can do" — apresentação, aparência, casa, rotina com at
+   / in / on, frequência de tarefas, família com 's, sentimentos e sugestões com Let's.
+   Conteúdo NOVO: a Clara conhece o vizinho novo, o Sam. 20 questões: 12 de "próxima fala" + 8
+   de compreensão. */
+const D = [
+  ['Clara', "Hi! I'm Clara. Are you the new neighbor?"],
+  ['Sam', "Yes, I am. My name's Sam. Nice to meet you!"],
+  ['Clara', 'Nice to meet you too! Where are you from?'],
+  ['Sam', "I'm from Toronto, in Canada. I'm a music teacher."],
+  ['Clara', 'Cool! Do you live alone?'],
+  ['Sam', 'No, I live with my sister. Her name is Kate.'],
+  ['Clara', 'What does she look like?'],
+  ['Sam', "She's quite short and she has long straight hair."],
+  ['Clara', 'How is the apartment?'],
+  ['Sam', "It's small, but comfortable. My piano is in the living room."],
+  ['Clara', 'What time do you go to work?'],
+  ['Sam', 'I go to work at eight on weekdays.'],
+  ['Clara', 'Who does the housework, you or Kate?'],
+  ['Sam', "Kate always cooks and I do the laundry twice a week."],
+  ['Clara', "I'm so happy to have new neighbors!"],
+  ['Sam', "Thanks! Let's have coffee on Saturday!"]
+];
+const lado = q => q === 'Clara' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 13, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes, I am. My name's Sam. Nice to meet you!", "Yes, I do. My name's Sam.", "Yes, I am. Me name's Sam."], 0, 'Sim. O meu nome é Sam. Prazer!'),
+    prox(2, ['Nice to meet you too! Where you are from?', 'Nice to meet you too! Where are you from?', 'Nice to meet you too! Where do you from?'], 1, 'Prazer também! De onde você é?'),
+    prox(3, ["I'm from Toronto, on Canada. I'm music teacher.", "I from Toronto, in Canada. I'm a music teacher.", "I'm from Toronto, in Canada. I'm a music teacher."], 2, 'Sou de Toronto, no Canadá. Sou professor de música.'),
+    prox(4, ['Cool! Do you live alone?', 'Cool! Are you live alone?', 'Cool! Does you live alone?'], 0, 'Legal! Você mora sozinho?'),
+    prox(5, ["No, I live with my sister. His name is Kate.", "No, I live with my sister. Her name is Kate.", "No, I live with my sister. She's name is Kate."], 1, 'Não, moro com a minha irmã. O nome dela é Kate.'),
+    prox(7, ["She's short quite and she has hair long.", "She's quite short and she have long straight hair.", "She's quite short and she has long straight hair."], 2, 'Ela é bem baixa e tem cabelo comprido e liso.'),
+    prox(8, ['How is the apartment?', 'How does the apartment?', 'How the apartment is?'], 0, 'Como é o apartamento?'),
+    prox(9, ["It's small, but comfortable. My piano is on the living room.", "It's small, but comfortable. My piano is in the living room.", "It's small, but comfortable. My piano are in the living room."], 1, 'É pequeno, mas confortável. O meu piano fica na sala.'),
+    prox(11, ['I go to work in eight on weekdays.', 'I go at work at eight on weekdays.', 'I go to work at eight on weekdays.'], 2, 'Vou para o trabalho às oito nos dias de semana.'),
+    prox(12, ['Who does the housework, you or Kate?', 'Who do the housework, you or Kate?', 'Whose does the housework, you or Kate?'], 0, 'Quem faz as tarefas da casa, você ou a Kate?'),
+    prox(13, ["Kate cooks always and I do the laundry two a week.", "Kate always cooks and I do the laundry twice a week.", "Kate always cook and I does the laundry twice a week."], 1, 'A Kate sempre cozinha e eu lavo a roupa duas vezes por semana.'),
+    prox(15, ["Thanks! Let's to have coffee on Saturday!", "Thanks! Let's have coffee in Saturday!", "Thanks! Let's have coffee on Saturday!"], 2, 'Obrigado! Vamos tomar um café no sábado!'),
+    { instrucao: 'Where is Sam from?', frase: 'From ___.', opcoes: ['Canada', 'the USA', 'Brazil'], certa: 0, traducao: 'Do Canadá.' },
+    { instrucao: "What's Sam's job?", frase: "He's a music ___.", opcoes: ['student', 'teacher', 'singer'], certa: 1, traducao: 'Ele é professor de música.' },
+    { instrucao: 'Who does Sam live with?', frase: 'With his ___.', opcoes: ['wife', 'cousin', 'sister'], certa: 2, traducao: 'Com a irmã.' },
+    { instrucao: "What's Kate's hair like?", frase: 'Long and ___.', opcoes: ['straight', 'curly', 'blond'], certa: 0, traducao: 'Comprido e liso.' },
+    { instrucao: 'Where is the piano?', frase: 'In the ___.', opcoes: ['bedroom', 'living room', 'kitchen'], certa: 1, traducao: 'Na sala.' },
+    { instrucao: 'What time does Sam go to work?', frase: 'At ___.', opcoes: ['seven', 'nine', 'eight'], certa: 2, traducao: 'Às oito.' },
+    { instrucao: 'How often does Sam do the laundry?', frase: '___ a week.', opcoes: ['Twice', 'Once', 'Three times'], certa: 0, traducao: 'Duas vezes por semana.' },
+    { instrucao: 'When are they having coffee?', frase: 'On ___.', opcoes: ['Friday', 'Saturday', 'Sunday'], certa: 1, traducao: 'No sábado.' }
+  ]
+});
+</script>
+</body>
+</html>
