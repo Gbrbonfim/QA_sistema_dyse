@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 27 · There is, there are</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 27 · Escrita (There's a Restaurant)
+   Alinhado ao "Grammar Point" — there is + singular / there are + plural, negativa (there
+   isn't / there aren't), perguntas (Is there...? Are there any...?), respostas curtas e
+   a / an, some (afirmativa) e any (negativa e pergunta). Conteúdo NOVO com o vocabulário do
+   restaurante. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 27, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Tem um chef na cozinha.'), palavras: ["There's", 'a', 'chef', 'in', 'the', 'kitchen'], isca: ['are'], fim: '.', traducao: 'Tem um chef na cozinha.' },
+    { contexto: M('Tem três garçons no salão.'), palavras: ['There', 'are', 'three', 'waiters', 'in', 'the', 'dining', 'room'], isca: ['is'], fim: '.', traducao: 'Tem três garçons no salão.' },
+    { contexto: M('Tem uma mesa perto da janela.'), palavras: ["There's", 'a', 'table', 'by', 'the', 'window'], isca: ['an'], fim: '.', traducao: 'Tem uma mesa perto da janela.' },
+    { contexto: M('Não tem cadeirinha para crianças.'), palavras: ['There', "isn't", 'a', 'high', 'chair', 'for', 'children'], isca: ["aren't"], fim: '.', traducao: 'Não tem cadeirinha para crianças.' },
+    { contexto: M('Não tem forno no café.'), palavras: ['There', "isn't", 'an', 'oven', 'in', 'the', 'café'], isca: ['a'], fim: '.', traducao: 'Não tem forno no café.' },
+    { contexto: M('Tem alguns cardápios na mesa.'), palavras: ['There', 'are', 'some', 'menus', 'on', 'the', 'table'], isca: ['any'], fim: '.', traducao: 'Tem alguns cardápios na mesa.' },
+    { contexto: M('Não tem nenhuma sobremesa hoje.'), palavras: ['There', "aren't", 'any', 'desserts', 'today'], isca: ['some'], fim: '.', traducao: 'Não tem sobremesa hoje.' },
+    { contexto: M('Tem algumas pessoas esperando lá fora.'), palavras: ['There', 'are', 'some', 'people', 'waiting', 'outside'], isca: ['is'], fim: '.', traducao: 'Tem algumas pessoas esperando lá fora.' },
+    { contexto: M('Tem mesas livres agora?'), palavras: ['Are', 'there', 'any', 'free', 'tables', 'now'], isca: ['Is'], fim: '?', traducao: 'Tem mesas livres agora?' },
+    { contexto: M('Tem uma faca no meu prato?'), palavras: ['Is', 'there', 'a', 'knife', 'on', 'my', 'plate'], isca: ['Are'], fim: '?', traducao: 'Tem uma faca no meu prato?' },
+    { contexto: M('Sim, tem.'), palavras: ['Yes,', 'there', 'is'], isca: ['it'], fim: '.', traducao: 'Sim, tem.' },
+    { contexto: 'Answer in English: "Are there any forks?" — "Não, não tem."', palavras: ['No,', 'there', "aren't"], isca: ["isn't"], fim: '.', traducao: 'Não, não tem. (plural)' },
+    { contexto: M('Não tem nenhum guardanapo nesta mesa.'), palavras: ['There', "aren't", 'any', 'napkins', 'on', 'this', 'table'], isca: ["isn't"], fim: '.', traducao: 'Não tem guardanapo nesta mesa.' },
+    { contexto: M('Tem um prato na bandeja do chef.'), palavras: ["There's", 'a', 'dish', 'on', 'the', "chef's", 'tray'], isca: ['some'], fim: '.', traducao: 'Tem um prato na bandeja do chef.' },
+    { contexto: M('Tem alguns doces na vitrine.'), palavras: ['There', 'are', 'some', 'pastries', 'in', 'the', 'display', 'case'], isca: ['a'], fim: '.', traducao: 'Tem alguns doces na vitrine.' },
+    { contexto: M('Tem entradas no cardápio?'), palavras: ['Are', 'there', 'any', 'starters', 'on', 'the', 'menu'], isca: ['some'], fim: '?', traducao: 'Tem entradas no cardápio?' },
+    { contexto: M('Tem um garfo na mesa?'), palavras: ['Is', 'there', 'a', 'fork', 'on', 'the', 'table'], isca: ['Are'], fim: '?', traducao: 'Tem um garfo na mesa?' },
+    { contexto: M('A conta, por favor.'), palavras: ['The', 'bill,', 'please'], isca: ['tip,'], fim: '.', traducao: 'A conta, por favor.' },
+    { contexto: M('Tem uma gorjeta na mesa.'), palavras: ["There's", 'a', 'tip', 'on', 'the', 'table'], isca: ['bill'], fim: '.', traducao: 'Tem uma gorjeta na mesa.' },
+    { contexto: M('Tem uma xícara na prateleira.'), palavras: ["There's", 'a', 'cup', 'on', 'the', 'shelf'], isca: ['glass'], fim: '.', traducao: 'Tem uma xícara na prateleira.' }
+  ]
+});
+</script>
+</body>
+</html>

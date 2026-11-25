@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 27 · What is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 27 · Escuta (There's a Restaurant)
+   Alinhado ao "Warm Up" e ao "Vocabulary" do restaurante (dining room, starters, plate,
+   glasses, napkin, sauce, knife, bill, seats, tray, salt and pepper, pastry, tip, cup, fork,
+   staff, meat, fish, dish, spoon, menu, waiter, chef, dessert, kitchen). Conteúdo NOVO: o aluno
+   ouve uma definição e escolhe a palavra. 24 questões. */
+const IC = {
+  knife: 'restaurant', fork: 'restaurant', spoon: 'soup_kitchen', cup: 'local_cafe', glasses: 'wine_bar',
+  bill: 'receipt_long', tip: 'payments', menu: 'menu_book', napkin: 'layers', tray: 'inventory_2',
+  dessert: 'icecream', pastry: 'bakery_dining', fish: 'set_meal', meat: 'kebab_dining', chef: 'skillet',
+  waiter: 'room_service', kitchen: 'kitchen', 'dining room': 'table_restaurant', seats: 'chair',
+  'salt and pepper': 'grain', sauce: 'water_drop', starters: 'tapas', plate: 'circle', staff: 'groups'
+};
+let n = 0;
+const q = (audioTexto, certo, d1, d2) => {
+  const pos = n++ % 3;
+  const labels = [d1, d2];
+  labels.splice(pos, 0, certo);
+  return { audioTexto, opcoes: labels.map(label => ({ label, icon: IC[label] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 27, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the right word',
+  itens: [
+    q('You use it to cut your meat.', 'knife', 'spoon', 'cup'),
+    q('You use it to eat soup.', 'spoon', 'knife', 'fork'),
+    q('You drink coffee or tea from it.', 'cup', 'plate', 'tray'),
+    q('You get it at the end of the meal, and then you pay.', 'bill', 'menu', 'tip'),
+    q('It is extra money for the waiter.', 'tip', 'bill', 'dessert'),
+    q('You read it to choose your food.', 'menu', 'bill', 'napkin'),
+    q('You use it to clean your mouth and hands.', 'napkin', 'tray', 'sauce'),
+    q('The waiter carries the drinks on it.', 'tray', 'plate', 'napkin'),
+    q('You eat it after the main dish. It is often sweet.', 'dessert', 'starters', 'fish'),
+    q('It is a small sweet food, like a croissant.', 'pastry', 'meat', 'sauce'),
+    q('It lives in the sea or in a river.', 'fish', 'meat', 'pastry'),
+    q('Beef and chicken are types of it.', 'meat', 'fish', 'dessert'),
+    q('This person cooks the food in a restaurant.', 'chef', 'waiter', 'staff'),
+    q('This person brings the food to your table.', 'waiter', 'chef', 'tip'),
+    q('The cooks work in this room.', 'kitchen', 'dining room', 'menu'),
+    q('The customers eat in this room.', 'dining room', 'kitchen', 'tray'),
+    q('There are forty of them in the restaurant. You sit on them.', 'seats', 'glasses', 'plate'),
+    q('You put them on your food to give it more flavor. One is white and one is black.', 'salt and pepper', 'sauce', 'starters'),
+    q('It is a liquid you put on pasta or meat, like ketchup.', 'sauce', 'salt and pepper', 'dessert'),
+    q('You eat them before the main dish.', 'starters', 'dessert', 'pastry'),
+    q('You put your food on it.', 'plate', 'cup', 'menu'),
+    q('All the people who work in the restaurant.', 'staff', 'chef', 'seats'),
+    q('You drink water or juice from them.', 'glasses', 'plate', 'seats'),
+    q('You use it to eat spaghetti.', 'fork', 'spoon', 'cup')
+  ]
+});
+</script>
+</body>
+</html>

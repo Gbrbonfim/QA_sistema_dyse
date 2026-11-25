@@ -697,6 +697,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Describe your favorite photo', tipo: 'Escute e grave', treina: 'Fala · Descrever uma foto', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Past simple or past continuous?', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 27,
+        titulo: "Class 27 · There's a Restaurant",
+        atividades: [
+          { num: 1, titulo: 'What is it?', tipo: 'Escute e escolha', treina: 'Escuta · Restaurante', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'There is, there are', tipo: 'Monte a frase', treina: 'Escrita · There is / there are', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Calling a restaurant', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My favorite restaurant', tipo: 'Escute e grave', treina: 'Fala · There is / there are', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'There is / there are + some / any', tipo: 'Make a Choice', treina: 'Gramática', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

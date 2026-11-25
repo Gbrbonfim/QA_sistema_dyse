@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 · Aula 27 · Calling a restaurant</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 · Class 27 · Leitura (There's a Restaurant)
+   Alinhado ao "Role-Play" (um cliente liga para o gerente de um restaurante e pergunta: Is
+   there a large dining room? Are there any vegetarian options? How much is it?) e a there
+   is / there are + a / some / any. Conteúdo NOVO: a Mariana liga para o restaurante Casa Verde.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Manager', 'Good evening, Casa Verde. How can I help you?'],
+  ['Mariana', "Hello. I'm phoning about your restaurant. Can you tell me about it, please?"],
+  ['Manager', 'Of course. We are open for lunch and dinner.'],
+  ['Mariana', 'Is there a large dining room?'],
+  ['Manager', 'Yes, there is. There are thirty tables and a hundred and twenty seats.'],
+  ['Mariana', 'Great! Are there any private rooms for parties?'],
+  ['Manager', 'Yes, there are two private rooms.'],
+  ['Mariana', 'Are there any vegetarian options on the menu?'],
+  ['Manager', 'Yes, there are some vegetarian and vegan dishes.'],
+  ['Mariana', 'Is there a view of the kitchen?'],
+  ['Manager', 'Yes! The kitchen is open, so customers can see the chefs.'],
+  ['Mariana', 'Are there any tables outside?'],
+  ['Manager', "No, there aren't, sorry. But there's free Wi-Fi."],
+  ['Mariana', 'OK. How much is it?'],
+  ['Manager', "It's about eighty reais per person."],
+  ['Mariana', 'Perfect. Is there a table for eight on Saturday?'],
+  ['Manager', 'Yes, there is. What time?'],
+  ['Mariana', 'At eight, please. Thank you!']
+];
+const lado = q => q === 'Manager' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2', aula: 27, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(3, ['Is there a large dining room?', 'Are there a large dining room?', 'There is a large dining room?'], 0, 'Tem um salão grande?'),
+    prox(4, ['Yes, there is. There is thirty tables and a hundred and twenty seats.', 'Yes, there is. There are thirty tables and a hundred and twenty seats.', 'Yes, it is. There are thirty tables.'], 1, 'Sim, tem. São trinta mesas e cento e vinte lugares.'),
+    prox(5, ['Great! Is there any private rooms for parties?', 'Great! Are there some private rooms for parties?', 'Great! Are there any private rooms for parties?'], 2, 'Ótimo! Tem salas privativas para festas?'),
+    prox(6, ['Yes, there are two private rooms.', 'Yes, there is two private rooms.', 'Yes, they are two private rooms.'], 0, 'Sim, há duas salas privativas.'),
+    prox(7, ['Are there some vegetarian options on the menu?', 'Are there any vegetarian options on the menu?', 'Is there any vegetarian options on the menu?'], 1, 'Tem opções vegetarianas no cardápio?'),
+    prox(8, ['Yes, there are any vegetarian and vegan dishes.', 'Yes, there is some vegetarian and vegan dishes.', 'Yes, there are some vegetarian and vegan dishes.'], 2, 'Sim, temos alguns pratos vegetarianos e veganos.'),
+    prox(9, ['Is there a view of the kitchen?', 'Are there a view of the kitchen?', 'Is there any view of the kitchen?'], 0, 'Dá para ver a cozinha?'),
+    prox(11, ['Is there any tables outside?', 'Are there any tables outside?', 'Are there some tables outside?'], 1, 'Tem mesas do lado de fora?'),
+    prox(12, ["No, there isn't, sorry. But there are free Wi-Fi.", "No, they aren't, sorry. But there's free Wi-Fi.", "No, there aren't, sorry. But there's free Wi-Fi."], 2, 'Não, desculpe. Mas tem Wi-Fi grátis.'),
+    prox(13, ['OK. How much is it?', 'OK. How much are there?', 'OK. How many is it?'], 0, 'Certo. Quanto custa?'),
+    prox(15, ['Perfect. Are there a table for eight on Saturday?', 'Perfect. Is there a table for eight on Saturday?', 'Perfect. Is there any table for eight on Saturday?'], 1, 'Perfeito. Tem mesa para oito no sábado?'),
+    prox(16, ['Yes, there are. What time?', 'Yes, it is. What time?', 'Yes, there is. What time?'], 2, 'Sim, tem. Que horas?'),
+    { instrucao: 'What is the name of the restaurant?', frase: '___.', opcoes: ['Casa Verde', 'Gourmet Bites', 'Casa Azul'], certa: 0, traducao: 'Casa Verde.' },
+    { instrucao: 'How many tables are there?', frase: 'There are ___ tables.', opcoes: ['twenty', 'thirty', 'forty'], certa: 1, traducao: 'Há trinta mesas.' },
+    { instrucao: 'How many private rooms are there?', frase: 'There are ___.', opcoes: ['three', 'four', 'two'], certa: 2, traducao: 'Há duas.' },
+    { instrucao: 'Are there any vegan dishes?', frase: 'Yes, there ___.', opcoes: ['are', 'is', 'were'], certa: 0, traducao: 'Sim, tem.' },
+    { instrucao: 'Why can customers see the chefs?', frase: 'Because the kitchen is ___.', opcoes: ['small', 'open', 'new'], certa: 1, traducao: 'Porque a cozinha é aberta.' },
+    { instrucao: 'Are there any tables outside?', frase: "No, there ___.", opcoes: ["isn't", "don't", "aren't"], certa: 2, traducao: 'Não, não tem.' },
+    { instrucao: 'How much is it per person?', frase: 'About ___ reais.', opcoes: ['eighty', 'eighteen', 'eight'], certa: 0, traducao: 'Cerca de oitenta reais.' },
+    { instrucao: 'When does Mariana want a table?', frase: 'On ___ at eight.', opcoes: ['Friday', 'Saturday', 'Sunday'], certa: 1, traducao: 'No sábado às oito.' }
+  ]
+});
+</script>
+</body>
+</html>
