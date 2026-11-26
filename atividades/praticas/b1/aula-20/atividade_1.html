@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 20 · Review: listen and choose</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 20 · Escuta (Review Classes 10-19)
+   Revisão: clima (10), will para previsão, oferta e promessa / Shall I (10-11), falsos
+   cognatos (12), conselhos de saúde com should (15), regras com must / have to (16),
+   responder a sugestões (17), may / might (18) e do / make (19). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const W = "Listen. What's the weather like?", F = 'Listen. Is it an offer, a promise or a prediction?',
+  H = 'Listen and choose the best advice', R = 'Listen to the rule. What does it mean?',
+  S = 'Listen to the answer. The person...', P = 'Listen. Is it possible or certain?',
+  FF = 'Listen. What does it mean?', V = 'Listen. Which verb do you hear?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 20, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the right answer',
+  itens: [
+    { instrucao: W, ...q('Take your sunglasses and sunscreen.', 'sunny', ['snowy', 'cloudy'], 'partly_cloudy_day') },
+    { instrucao: W, ...q("Don't forget your umbrella!", 'rainy', ['sunny', 'windy'], 'umbrella') },
+    { instrucao: W, ...q('Hold your hat! The trees are moving a lot.', 'windy', ['snowy', 'sunny'], 'air') },
+    { instrucao: W, ...q("You don't need a jacket, but it isn't hot.", 'warm', ['snowy', 'windy'], 'thermostat') },
+    { instrucao: W, ...q('Everything outside is white, and the kids are making a snowman.', 'snowy', ['rainy', 'warm'], 'cloud') },
+    { instrucao: F, ...q('I think it will rain tomorrow.', 'a prediction', ['an offer', 'a promise'], 'forum') },
+    { instrucao: F, ...q("Your bags look heavy. I'll carry them for you.", 'an offer', ['a prediction', 'a promise'], 'forum') },
+    { instrucao: F, ...q("I won't tell anyone. I promise.", 'a promise', ['an offer', 'a prediction'], 'forum') },
+    { instrucao: F, ...q("It's hot in here. Shall I open the window?", 'an offer', ['a promise', 'a prediction'], 'forum') },
+    { instrucao: H, ...q('I have a sore throat.', 'You should drink hot tea with honey.', ["You shouldn't drink any water.", 'You should shout a lot.'], 'medication') },
+    { instrucao: H, ...q('I have a terrible headache.', 'You should take a painkiller and rest.', ['You should listen to loud music.', 'You should take an antacid.'], 'medication') },
+    { instrucao: H, ...q('I think I have the flu.', 'You should stay in bed and drink fluids.', ['You should take antibiotics.', 'You should go running.'], 'medication') },
+    { instrucao: R, ...q("Visitors mustn't take photos in the museum.", "It's not allowed.", ["It's necessary.", "It's not necessary."], 'rule') },
+    { instrucao: R, ...q("You don't have to bring lunch. It's free.", "It's not necessary.", ["It's not allowed.", "It's necessary."], 'rule') },
+    { instrucao: R, ...q('All staff have to wear a badge.', "It's necessary.", ["It's not necessary.", "It's not allowed."], 'rule') },
+    { instrucao: S, ...q("I'm on the fence about that.", 'has doubts', ['accepts', 'refuses'], 'forum') },
+    { instrucao: S, ...q("I'd rather not. I'm not in the mood.", 'refuses', ['has doubts', 'accepts'], 'forum') },
+    { instrucao: S, ...q("I'm in! Let's go!", 'accepts', ['refuses', 'has doubts'], 'forum') },
+    { instrucao: P, ...q('We might go camping, but it depends on the weather.', "It's possible.", ["It's certain.", "It's a rule."], 'help') },
+    { instrucao: P, ...q('Today is Thursday, the twenty-sixth.', "It's certain.", ["It's possible.", "It's a rule."], 'help') },
+    { instrucao: FF, ...q("Sorry, I can't talk. I'm busy at the moment.", 'now', ['in fact', 'never'], 'lightbulb') },
+    { instrucao: FF, ...q('I intend to study abroad next year.', 'I plan to', ['I pretend to', 'I refuse to'], 'lightbulb') },
+    { instrucao: FF, ...q('Saving some money every month was a sensible decision.', 'a decision with good judgment', ['an emotional decision', 'a bad decision'], 'lightbulb') },
+    { instrucao: V, ...q('I need to do some research for my project.', 'do', ['make', 'have'], 'hearing') }
+  ]
+});
+</script>
+</body>
+</html>

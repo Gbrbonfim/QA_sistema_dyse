@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 20 · Weekend plans</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 20 · Leitura (Review Classes 10-19)
+   Revisão em diálogo: previsão do tempo com will / might, sugestões e respostas, regras com
+   have to / mustn't / don't have to, ofertas e promessas com will, saúde e should, gírias de
+   comida e do your best. Conteúdo NOVO: Julia e Marcos planejam o sábado.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Julia', 'Hey, Marcos! Shall we go to the beach on Saturday?'],
+  ['Marcos', "I'm on the fence about that. The forecast says it might rain."],
+  ['Julia', 'Really? I think it will be sunny in the morning.'],
+  ['Marcos', 'Maybe. But it will be very windy in the afternoon.'],
+  ['Julia', "OK. Why don't we go to the new museum instead?"],
+  ['Marcos', 'That sounds great! But you have to buy the tickets online.'],
+  ['Julia', "No problem. I'll buy them tonight."],
+  ['Marcos', "Thanks! Oh, and you mustn't take photos inside."],
+  ['Julia', "That's fine. Do we have to pay for the coffee at the café?"],
+  ['Marcos', "No, we don't have to. The coffee is free for visitors."],
+  ['Julia', 'Perfect! By the way, how are you feeling? You had the flu last week.'],
+  ['Marcos', 'Much better, thanks. I stayed in bed and drank lots of fluids.'],
+  ['Julia', "Good. You shouldn't stay up late on Friday, then."],
+  ['Marcos', "I know. I promise I'll go to bed early."],
+  ['Julia', 'And after the museum, how about eating at that Mexican place?'],
+  ['Marcos', "I'd rather not. I'm not in the mood for spicy food."],
+  ['Julia', "OK, let's grab a pizza, then."],
+  ['Marcos', "I'm in! I'll probably be starving after walking all day."],
+  ['Julia', 'Ha ha! Me too. So, what time shall we meet?'],
+  ['Marcos', "Let's meet at ten. I'll do my best to be on time!"]
+];
+const lado = q => q === 'Julia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 20, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I'm on the fence about that. The forecast says it might rain.", "I'm on the fence about that. The forecast says it might to rain.", "I'm in the fence about that. The forecast says it might rain."], 0, 'Estou em dúvida. A previsão diz que pode chover.'),
+    prox(2, ['Really? I think it is be sunny in the morning.', 'Really? I think it will be sunny in the morning.', 'Really? I think it will sunny in the morning.'], 1, 'Sério? Acho que vai fazer sol de manhã.'),
+    prox(4, ["OK. Why we don't go to the new museum instead?", "OK. Why don't we going to the new museum instead?", "OK. Why don't we go to the new museum instead?"], 2, 'Tá. Por que não vamos ao museu novo, então?'),
+    prox(5, ['That sounds great! But you have to buy the tickets online.', 'That sounds great! But you have to buying the tickets online.', 'That sounds great! But you has to buy the tickets online.'], 0, 'Parece ótimo! Mas você tem que comprar os ingressos pela internet.'),
+    prox(6, ['No problem. I buy them tonight.', "No problem. I'll buy them tonight.", "No problem. I'll buying them tonight."], 1, 'Sem problema. Eu compro hoje à noite.'),
+    prox(9, ["No, we mustn't. The coffee is free for visitors.", "No, we don't have to. The coffee is very expensive.", "No, we don't have to. The coffee is free for visitors."], 2, 'Não, não precisamos. O café é grátis para visitantes.'),
+    prox(11, ['Much better, thanks. I stayed in bed and drank lots of fluids.', 'Much better, thanks. I stayed in bed and drink lots of fluids.', 'Much better, thanks. I took antibiotics to kill the flu virus.'], 0, 'Bem melhor, obrigado. Fiquei de cama e bebi muito líquido.'),
+    prox(12, ['Good. You should to stay up late on Friday, then.', "Good. You shouldn't stay up late on Friday, then.", 'Good. You should stay up very late on Friday, then.'], 1, 'Que bom. Então você não deveria ficar acordado até tarde na sexta.'),
+    prox(13, ['I know. I promise I go to bed early.', "I know. I promise I'll going to bed early.", "I know. I promise I'll go to bed early."], 2, 'Eu sei. Prometo que vou dormir cedo.'),
+    prox(15, ["I'd rather not. I'm not in the mood for spicy food.", "I'd rather not. I'm not in the mood of spicy food.", "I'd rather not to. I'm not in the mood for spicy food."], 0, 'Prefiro não. Não estou no clima para comida apimentada.'),
+    prox(17, ["I'm in! I'll probably be stuffed after walking all day.", "I'm in! I'll probably be starving after walking all day.", "I'm in! I'll probably be starving after walk all day."], 1, 'Estou dentro! Provavelmente vou estar morrendo de fome depois de andar o dia todo.'),
+    prox(19, ["Let's meet at ten. I'll make my best to be on time!", "Let's to meet at ten. I'll do my best to be on time!", "Let's meet at ten. I'll do my best to be on time!"], 2, 'Vamos nos encontrar às dez. Vou fazer o meu melhor para chegar na hora!'),
+    { instrucao: 'Why is Marcos on the fence about the beach?', frase: '___', opcoes: ['The forecast says it might rain.', "He doesn't like the sea.", 'He has to work.'], certa: 0, traducao: 'A previsão diz que pode chover.' },
+    { instrucao: 'Where do they decide to go instead?', frase: '___', opcoes: ['To the beach.', 'To the new museum.', 'To the cinema.'], certa: 1, traducao: 'Ao museu novo.' },
+    { instrucao: 'Who will buy the tickets?', frase: '___', opcoes: ['Marcos.', "Nobody. They're free.", 'Julia.'], certa: 2, traducao: 'A Julia.' },
+    { instrucao: "What mustn't they do inside the museum?", frase: '___', opcoes: ['Take photos.', 'Drink coffee.', 'Buy tickets.'], certa: 0, traducao: 'Tirar fotos.' },
+    { instrucao: 'What was Marcos’s health problem last week?', frase: '___', opcoes: ['A headache.', 'The flu.', 'A bad stomach.'], certa: 1, traducao: 'Gripe.' },
+    { instrucao: 'What does Marcos promise?', frase: '___', opcoes: ['To buy the tickets.', 'To pay for the pizza.', 'To go to bed early.'], certa: 2, traducao: 'Dormir cedo.' },
+    { instrucao: "Why doesn't Marcos want Mexican food?", frase: '___', opcoes: ["He's not in the mood for spicy food.", "He's stuffed.", "It's too far."], certa: 0, traducao: 'Ele não está no clima para comida apimentada.' },
+    { instrucao: 'What time are they going to meet?', frase: '___', opcoes: ['At nine.', 'At ten.', 'At noon.'], certa: 1, traducao: 'Às dez.' }
+  ]
+});
+</script>
+</body>
+</html>

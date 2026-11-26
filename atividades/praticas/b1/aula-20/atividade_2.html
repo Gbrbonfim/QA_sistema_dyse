@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 20 · Review: build it</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 20 · Escrita (Review Classes 10-19)
+   Revisão: will / won't (10-11), verb phrases (11), falsos cognatos (12), gerúndio e
+   infinitivo (14), should (15), must / have to (16), sugestões e gírias (17), may / might
+   (18), do / make (19) e clima. Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 20, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Acho que vai chover amanhã.'), palavras: ['I', 'think', 'it', 'will', 'rain', 'tomorrow'], isca: ['rains'], fim: '.', traducao: 'Acho que vai chover amanhã.' },
+    { contexto: M('Eu te ajudo com as suas malas.'), palavras: ["I'll", 'help', 'you', 'with', 'your', 'bags'], isca: ['helping'], fim: '.', traducao: 'Eu te ajudo com as suas malas.' },
+    { contexto: M('Prometo que não vou me atrasar.'), palavras: ['I', 'promise', 'I', "won't", 'be', 'late'], isca: ["don't"], fim: '.', traducao: 'Prometo que não vou me atrasar.' },
+    { contexto: M('Ela gosta de ler romances.'), palavras: ['She', 'enjoys', 'reading', 'novels'], isca: ['read'], fim: '.', traducao: 'Ela gosta de ler romances.' },
+    { contexto: M('Ela passa horas lendo.'), palavras: ['She', 'spends', 'hours', 'reading'], isca: ['read'], fim: '.', traducao: 'Ela passa horas lendo.' },
+    { contexto: M('Você deveria beber mais água.'), palavras: ['You', 'should', 'drink', 'more', 'water'], isca: ['to'], fim: '.', traducao: 'Você deveria beber mais água.' },
+    { contexto: M('Você não pode usar o celular na prova.'), palavras: ['You', "mustn't", 'use', 'your', 'phone', 'in', 'the', 'test'], isca: ['using'], fim: '.', traducao: 'Você não pode usar o celular na prova.' },
+    { contexto: M('Não precisamos usar uniforme.'), palavras: ['We', "don't", 'have', 'to', 'wear', 'a', 'uniform'], isca: ["doesn't"], fim: '.', traducao: 'Não precisamos usar uniforme.' },
+    { contexto: M('A que horas você tem que chegar?'), palavras: ['What', 'time', 'do', 'you', 'have', 'to', 'arrive'], isca: ['does'], fim: '?', traducao: 'A que horas você tem que chegar?' },
+    { contexto: M('Que tal comer fora hoje à noite?'), palavras: ['How', 'about', 'eating', 'out', 'tonight'], isca: ['eat'], fim: '?', traducao: 'Que tal comer fora hoje à noite?' },
+    { contexto: M('Por que não vamos à praia?'), palavras: ['Why', "don't", 'we', 'go', 'to', 'the', 'beach'], isca: ["doesn't"], fim: '?', traducao: 'Por que não vamos à praia?' },
+    { contexto: M('Estou morrendo de fome depois da aula.'), palavras: ["I'm", 'starving', 'after', 'class'], isca: ['starve'], fim: '.', traducao: 'Estou morrendo de fome depois da aula.' },
+    { contexto: M('Talvez ela não goste do presente.'), palavras: ['She', 'might', 'not', 'like', 'the', 'present'], isca: ['likes'], fim: '.', traducao: 'Talvez ela não goste do presente.' },
+    { contexto: M('Preciso tomar uma decisão hoje.'), palavras: ['I', 'need', 'to', 'make', 'a', 'decision', 'today'], isca: ['do'], fim: '.', traducao: 'Preciso tomar uma decisão hoje.' },
+    { contexto: M('Faça o seu melhor na prova.'), palavras: ['Do', 'your', 'best', 'in', 'the', 'test'], isca: ['Make'], fim: '.', traducao: 'Faça o seu melhor na prova.' },
+    { contexto: M('Estou ocupado no momento.'), palavras: ["I'm", 'busy', 'at', 'the', 'moment'], isca: ['actually'], fim: '.', traducao: 'Estou ocupado no momento.' },
+    { contexto: M('Eu pretendo visitar a minha avó.'), palavras: ['I', 'intend', 'to', 'visit', 'my', 'grandmother'], isca: ['pretend'], fim: '.', traducao: 'Pretendo visitar a minha avó.' },
+    { contexto: M('Está ventando muito hoje.'), palavras: ["It's", 'very', 'windy', 'today'], isca: ['wind'], fim: '.', traducao: 'Está ventando muito hoje.' },
+    { contexto: M('Eu pago os ingressos.'), palavras: ["I'll", 'pay', 'for', 'the', 'tickets'], isca: ['to'], fim: '.', traducao: 'Eu pago os ingressos.' },
+    { contexto: M('Você consegue resolver esse problema?'), palavras: ['Can', 'you', 'solve', 'this', 'problem'], isca: ['solving'], fim: '?', traducao: 'Você consegue resolver esse problema?' }
+  ]
+});
+</script>
+</body>
+</html>

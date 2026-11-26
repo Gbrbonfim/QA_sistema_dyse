@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 20 · Review: choose the right one</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 20 · Gramática (Review Classes 10-19)
+   Revisão cumulativa: will / Shall I / won't (10-11), verb phrases (11), falsos cognatos
+   (12), gerúndio e infinitivo (14), should (15), must / have to (16), sugestões (17),
+   may / might (18), do / make (19) e clima. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 20, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'I think it ___ snow tonight. The sky is very grey.', opcoes: ['will', 'is', 'does'], certa: 0, traducao: 'Acho que vai nevar hoje à noite. O céu está muito cinza.' },
+    { frase: "It's cold in here. — ___ I close the window?", opcoes: ['Do', 'Shall', 'Am'], certa: 1, traducao: 'Está frio aqui. — Quer que eu feche a janela?' },
+    { frase: 'I promise I ___ forget your birthday this year.', opcoes: ["don't", "didn't", "won't"], certa: 2, traducao: 'Prometo que não vou esquecer o seu aniversário este ano.' },
+    { frase: 'My brother enjoys ___ video games.', opcoes: ['playing', 'to play', 'play'], certa: 0, traducao: 'O meu irmão gosta de jogar videogame.' },
+    { frase: 'She decided ___ a new job.', opcoes: ['looking for', 'to look for', 'look for'], certa: 1, traducao: 'Ela decidiu procurar um emprego novo.' },
+    { frase: "You've had a fever for a week. You ___ see a doctor.", opcoes: ["shouldn't", "mustn't", 'should'], certa: 2, traducao: 'Você está com febre há uma semana. Deveria ir ao médico.' },
+    { frase: 'You ___ smoke in the hospital.', opcoes: ["mustn't", "don't have to", 'should'], certa: 0, traducao: 'Você não pode fumar no hospital.' },
+    { frase: "It's Sunday. We ___ get up early.", opcoes: ["mustn't", "don't have to", 'have to'], certa: 1, traducao: 'É domingo. Não precisamos acordar cedo.' },
+    { frase: 'How about ___ a movie tonight?', opcoes: ['watch', 'to watch', 'watching'], certa: 2, traducao: 'Que tal assistir a um filme hoje à noite?' },
+    { frase: "Why don't we ___ a taxi?", opcoes: ['take', 'taking', 'to take'], certa: 0, traducao: 'Por que não pegamos um táxi?' },
+    { frase: "I'm not sure. I ___ go to the gym later.", opcoes: ['must', 'might', 'have'], certa: 1, traducao: 'Não tenho certeza. Talvez eu vá à academia mais tarde.' },
+    { frase: "Don't worry if you ___ a mistake.", opcoes: ['do', 'have', 'make'], certa: 2, traducao: 'Não se preocupe se cometer um erro.' },
+    { frase: 'She always ___ her best.', opcoes: ['does', 'makes', 'gets'], certa: 0, traducao: 'Ela sempre faz o melhor dela.' },
+    { frase: "I can't talk ___. I'm in a meeting.", opcoes: ['actually', 'at the moment', 'eventually'], certa: 1, traducao: 'Não posso falar no momento. Estou numa reunião.' },
+    { frase: 'The child ___ to be a lion. It was a fun game.', opcoes: ['intended', 'attended', 'pretended'], certa: 2, traducao: 'A criança fingiu ser um leão. Era uma brincadeira divertida.' },
+    { frase: 'Using online ads is a ___ idea. Many people use the internet.', opcoes: ['sensible', 'sensitive', 'nervous'], certa: 0, traducao: 'Usar anúncios online é uma ideia sensata. Muita gente usa a internet.' },
+    { frase: "I want to borrow some books. Let's go to the ___.", opcoes: ['bookshop', 'library', 'bakery'], certa: 1, traducao: 'Quero pegar uns livros emprestados. Vamos à biblioteca.' },
+    { frase: "You need sunglasses. It's very ___ today.", opcoes: ['snowy', 'cloudy', 'sunny'], certa: 2, traducao: 'Você precisa de óculos de sol. Está muito ensolarado hoje.' },
+    { frase: 'Can you ___ this problem?', opcoes: ['solve', 'pay', 'make'], certa: 0, traducao: 'Você consegue resolver esse problema?' },
+    { frase: "Let's ___ for the tickets online.", opcoes: ['buy', 'pay', 'spend'], certa: 1, traducao: 'Vamos pagar os ingressos pela internet.' },
+    { instrucao: 'Which response refuses an invitation politely?', frase: '___', opcoes: ["I'm in!", "Yes, let's!", "I'm going to pass on that, thanks."], certa: 2, traducao: 'Vou passar essa, obrigado.' },
+    { instrucao: 'Which sentence gives health advice?', frase: '___', opcoes: ['You should rest and drink water.', "You mustn't rest.", "I'll rest tomorrow."], certa: 0, traducao: 'Você deveria descansar e beber água.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["She don't have to work today.", "She doesn't have to work today.", "She doesn't has to work today."], certa: 1, traducao: 'Ela não precisa trabalhar hoje.' },
+    { frase: 'Every time you ___ a decision, your brain uses energy.', opcoes: ['do', 'get', 'make'], certa: 2, traducao: 'Toda vez que você toma uma decisão, o cérebro gasta energia.' }
+  ]
+});
+</script>
+</body>
+</html>

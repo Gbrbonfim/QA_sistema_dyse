@@ -1361,6 +1361,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 19', titulo: 'Make a difference', tipo: 'Escute e grave', treina: 'Fala · Do x make', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 19', titulo: 'Do or make?', tipo: 'Make a Choice', treina: 'Gramática · Do x make', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 20,
+        titulo: 'Class 20 · Review Classes 10-19',
+        atividades: [
+          { num: 1, titulo: 'Review: listen and choose', tipo: 'Escute e escolha', treina: 'Escuta · Revisão 10-19', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Review: build it', tipo: 'Monte a frase', treina: 'Escrita · Revisão 10-19', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Weekend plans', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Can you do it?', tipo: 'Escute e grave', treina: 'Fala · Revisão 10-19', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Review: choose the right one', tipo: 'Make a Choice', treina: 'Gramática · Revisão 10-19', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
