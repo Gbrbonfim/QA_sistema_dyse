@@ -1871,12 +1871,17 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     const idxsLiberados = TRILHA.map((s, i) => nivelPorSlug[s] ? i : -1).filter(i => i >= 0);
     const idxNivelAtual = idxsLiberados.length ? Math.min(...idxsLiberados) : -1;
     const nivelConcluido = (slug) => !nivelPorSlug[slug] && TRILHA.indexOf(slug) < idxNivelAtual;
+    // Ordem dos cartões: primeiro TUDO que está liberado pra turma (níveis da
+    // trilha e materiais extras como o Black), depois o resto da trilha
+    // (concluídos e travados) na ordem A1 → C1.
     for(const slug of TRILHA){
-      cards.push(nivelPorSlug[slug] ? await cardDoNivel(nivelPorSlug[slug])
-        : (nivelConcluido(slug) ? cardConcluido(slug) : cardBloqueado(slug)));
+      if(nivelPorSlug[slug]) cards.push(await cardDoNivel(nivelPorSlug[slug]));
     }
     for(const nivel of AREA_CTX.niveis){
       if(!TRILHA.includes(nivel.slug)) cards.push(await cardDoNivel(nivel));
+    }
+    for(const slug of TRILHA){
+      if(!nivelPorSlug[slug]) cards.push(nivelConcluido(slug) ? cardConcluido(slug) : cardBloqueado(slug));
     }
 
     // Barra geral da trilha: cada nível conta 44 aulas (A1..C1 = 220). Enche conforme
