@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 34 · Sleep Talk</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 34 · Leitura (The 5 a.m. Club)
+   Alinhado ao Listening (especialista do sono num podcast: dormir o suficiente, pessoas que
+   pensam melhor mais tarde, seguir o próprio ritmo, tempo sem interrupções) e aos phrasal
+   verbs da aula. Conteúdo NOVO: entrevista do podcast "Sleep Talk" com a Dr. Rivers.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Host', "Welcome back to Sleep Talk. Today we're talking about the 5 a.m. club."],
+  ['Dr. Rivers', "Thanks for having me. It's a very popular topic."],
+  ['Host', 'So, should everyone get up at five?'],
+  ['Dr. Rivers', 'Not really. Waking up early only helps if you sleep enough.'],
+  ['Host', "What happens if people don't sleep enough?"],
+  ['Dr. Rivers', "They run out of energy and can't get on with their day."],
+  ['Host', 'Why do some people prefer the evening?'],
+  ['Dr. Rivers', 'Everyone has a body clock. Some people think better later in the day.'],
+  ['Host', "So night owls aren't lazy?"],
+  ['Dr. Rivers', 'Not at all. They just have a different rhythm.'],
+  ['Host', 'Many listeners stay up late on their phones. Any advice?'],
+  ['Dr. Rivers', 'Turn it off an hour before bed and put it away in another room.'],
+  ['Host', "What about people who can't fall asleep?"],
+  ['Dr. Rivers', "Don't look at the clock. Get up, read a book and go back to bed later."],
+  ['Host', 'When is waking up early a good idea?'],
+  ['Dr. Rivers', 'When it gives you quiet time to work without interruptions.'],
+  ['Host', 'Should we copy the routines of successful people?'],
+  ['Dr. Rivers', 'No. Find out what works for you and follow your natural rhythm.'],
+  ['Host', 'Great advice. Thank you, Dr. Rivers.'],
+  ['Dr. Rivers', 'My pleasure. Sleep well, everyone!']
+];
+const lado = q => q === 'Host' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 33, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Thanks for having me. It's a very popular topic.", "Thanks for have me. It's a very popular topic.", "Thanks for having me. It's a very popular topics."], 0, 'Obrigada pelo convite. É um tema muito popular.'),
+    prox(2, ['So, should everyone gets up at five?', 'So, should everyone get up at five?', 'So, should everyone get at five up?'], 1, 'Então, todo mundo deveria levantar às cinco?'),
+    prox(3, ['Not really. Waking early up only helps if you sleep enough.', 'Not really. Wake up early only helps if you sleep enough.', 'Not really. Waking up early only helps if you sleep enough.'], 2, 'Não exatamente. Acordar cedo só ajuda se você dorme o suficiente.'),
+    prox(5, ["They run out of energy and can't get on with their day.", "They run out energy and can't get on with their day.", "They run out of energy and can't get with on their day."], 0, 'Elas ficam sem energia e não conseguem seguir com o dia.'),
+    prox(7, ['Everyone have a body clock. Some people think better later in the day.', 'Everyone has a body clock. Some people think better later in the day.', 'Everyone has a body clock. Some people thinks better later in the day.'], 1, 'Todo mundo tem um relógio biológico. Algumas pessoas pensam melhor mais tarde.'),
+    prox(9, ['Not at all. They just has a different rhythm.', 'Not at all. They just have a different rhythms.', 'Not at all. They just have a different rhythm.'], 2, 'De jeito nenhum. Elas só têm um ritmo diferente.'),
+    prox(10, ['Many listeners stay up late on their phones. Any advice?', 'Many listeners stay late up on their phones. Any advice?', 'Many listeners stays up late on their phones. Any advice?'], 0, 'Muitos ouvintes ficam acordados até tarde no celular. Algum conselho?'),
+    prox(11, ['Turn off it an hour before bed and put it away in another room.', 'Turn it off an hour before bed and put it away in another room.', 'Turn it off an hour before bed and put away it in another room.'], 1, 'Desligue uma hora antes de dormir e guarde em outro cômodo.'),
+    prox(13, ["Don't look the clock at. Get up, read a book and go back to bed later.", "Don't look at the clock. Get it up, read a book and go back to bed later.", "Don't look at the clock. Get up, read a book and go back to bed later."], 2, 'Não olhe o relógio. Levante, leia um livro e volte para a cama depois.'),
+    prox(15, ['When it gives you quiet time to work without interruptions.', 'When it give you quiet time to work without interruptions.', 'When it gives you quiet time to work with interruptions.'], 0, 'Quando isso te dá um tempo tranquilo para trabalhar sem interrupções.'),
+    prox(16, ['Should we copying the routines of successful people?', 'Should we copy the routines of successful people?', 'Should we to copy the routines of successful people?'], 1, 'Devemos copiar a rotina de pessoas de sucesso?'),
+    prox(17, ['No. Find what out works for you and follow your natural rhythm.', 'No. Find out what work for you and follow your natural rhythm.', 'No. Find out what works for you and follow your natural rhythm.'], 2, 'Não. Descubra o que funciona para você e siga o seu ritmo natural.'),
+    { instrucao: 'What is the podcast episode about?', frase: '___', opcoes: ['The 5 a.m. club.', 'Healthy food.', 'Night jobs.'], certa: 0, traducao: 'O clube das 5 da manhã.' },
+    { instrucao: 'When does waking up early help?', frase: '___', opcoes: ['Always.', 'Only if you sleep enough.', 'Never.'], certa: 1, traducao: 'Só se você dorme o suficiente.' },
+    { instrucao: "What happens when people don't sleep enough?", frase: '___', opcoes: ['They become more productive.', 'They find out more.', 'They run out of energy.'], certa: 2, traducao: 'Ficam sem energia.' },
+    { instrucao: 'Are night owls lazy?', frase: '___', opcoes: ['No, they have a different rhythm.', 'Yes, always.', 'Only in summer.'], certa: 0, traducao: 'Não, elas têm um ritmo diferente.' },
+    { instrucao: "What is Dr. Rivers' advice about phones?", frase: '___', opcoes: ['Turn them up before bed.', 'Turn them off an hour before bed.', 'Keep them next to the bed.'], certa: 1, traducao: 'Desligar uma hora antes de dormir.' },
+    { instrucao: "What should you do if you can't fall asleep?", frase: '___', opcoes: ['Look at the clock.', 'Turn on the TV.', 'Get up and read a book.'], certa: 2, traducao: 'Levantar e ler um livro.' },
+    { instrucao: 'When is waking up early a good idea?', frase: '___', opcoes: ['When it gives quiet time to work.', 'When you feel tired.', 'When your friends go out.'], certa: 0, traducao: 'Quando dá um tempo tranquilo para trabalhar.' },
+    { instrucao: "What is Dr. Rivers' final advice?", frase: '___', opcoes: ["Copy successful people's routines.", 'Follow your natural rhythm.', 'Wake up at four.'], certa: 1, traducao: 'Seguir o seu ritmo natural.' }
+  ]
+});
+</script>
+</body>
+</html>

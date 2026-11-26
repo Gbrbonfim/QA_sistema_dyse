@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 33 · Joining the club</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 33 · Leitura (The 5 a.m. Club)
+   Alinhado ao Reading (acordar cedo: alarme, manhãs produtivas, convites recusados,
+   isolamento) e ao Talking Point (hábitos são ferramentas, não regras).
+   Conteúdo NOVO: Ben tenta entrar no "5 a.m. club" e conversa com a amiga Lia.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Lia', 'You look tired, Ben. What time did you get up today?'],
+  ['Ben', "At five. I'm trying to join the 5 a.m. club."],
+  ['Lia', 'Really? Why did you decide to do that?'],
+  ['Ben', 'I found out that many successful people wake up early.'],
+  ['Lia', 'And how is it going?'],
+  ['Ben', 'The first days were hard. When my alarm went off, I wanted to cry!'],
+  ['Lia', 'What do you do so early in the morning?'],
+  ['Ben', 'I read, I go for a run, and I get on with my work before anyone calls me.'],
+  ['Lia', 'That sounds great. Do you still go out at night?'],
+  ['Ben', 'Not really. I turned down your birthday invitation, remember?'],
+  ['Lia', 'Oh, yes! You missed out on a great party.'],
+  ['Ben', 'I know. Sometimes I feel a bit isolated.'],
+  ['Lia', 'What time do you go to bed now?'],
+  ['Ben', 'At nine thirty. I turn off my phone at nine and put it away.'],
+  ['Lia', 'Wow. I usually stay up until midnight.'],
+  ['Ben', "That's OK. Some people think better at night."],
+  ['Lia', "True. I can't give up my late-night series!"],
+  ['Ben', "Maybe I'll try six o'clock next month. It's a good balance."],
+  ['Lia', 'Good idea. Then you can come to my next party!'],
+  ['Ben', "Deal! I'm looking forward to it."]
+];
+const lado = q => q === 'Lia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 33, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["At five. I'm trying to join the 5 a.m. club.", "At five. I'm try to join the 5 a.m. club.", "At five. I'm trying to join up the 5 a.m. club up."], 0, 'Às cinco. Estou tentando entrar no clube das 5 da manhã.'),
+    prox(2, ['Really? Why you decided to do that?', 'Really? Why did you decide to do that?', 'Really? Why did you decided to do that?'], 1, 'Sério? Por que você decidiu fazer isso?'),
+    prox(3, ['I found about that many successful people wake up early.', 'I found out that many successful people wake early up.', 'I found out that many successful people wake up early.'], 2, 'Descobri que muitas pessoas de sucesso acordam cedo.'),
+    prox(5, ['The first days were hard. When my alarm went off, I wanted to cry!', 'The first days were hard. When went my alarm off, I wanted to cry!', 'The first days were hard. When my alarm went out, I wanted to cry!'], 0, 'Os primeiros dias foram difíceis. Quando o alarme tocava, eu queria chorar!'),
+    prox(7, ['I read, I go for a run, and I get with on my work before anyone calls me.', 'I read, I go for a run, and I get on with my work before anyone calls me.', 'I read, I go for a run, and I get on my work with before anyone calls me.'], 1, 'Eu leio, corro e sigo com o meu trabalho antes de alguém me ligar.'),
+    prox(9, ['Not really. I turned off your birthday invitation, remember?', 'Not really. I turned up your birthday invitation, remember?', 'Not really. I turned down your birthday invitation, remember?'], 2, 'Não muito. Recusei o convite do seu aniversário, lembra?'),
+    prox(10, ['Oh, yes! You missed out on a great party.', 'Oh, yes! You missed out of a great party.', 'Oh, yes! You missed on out a great party.'], 0, 'Ah, é! Você perdeu uma festa ótima.'),
+    prox(13, ['At nine thirty. I turn off my phone at nine and put away it.', 'At nine thirty. I turn off my phone at nine and put it away.', 'At nine thirty. I turns off my phone at nine and put it away.'], 1, 'Às nove e meia. Desligo o celular às nove e guardo.'),
+    prox(14, ['Wow. I usually stays up until midnight.', 'Wow. I usually stay until midnight up.', 'Wow. I usually stay up until midnight.'], 2, 'Nossa. Eu normalmente fico acordada até meia-noite.'),
+    prox(16, ["True. I can't give up my late-night series!", "True. I can't give my late-night series out!", "True. I can't gave up my late-night series!"], 0, 'Verdade. Não consigo largar minhas séries da madrugada!'),
+    prox(17, ["Maybe I try six o'clock last month. It's a good balance.", "Maybe I'll try six o'clock next month. It's a good balance.", "Maybe I'll tried six o'clock next month. It's a good balance."], 1, 'Talvez eu tente seis horas no mês que vem. É um bom equilíbrio.'),
+    prox(19, ["Deal! I'm looking forward it.", "Deal! I'm looking for to it.", "Deal! I'm looking forward to it."], 2, 'Fechado! Estou ansioso por isso.'),
+    { instrucao: 'What time did Ben get up today?', frase: '___', opcoes: ['At five.', 'At six.', 'At nine thirty.'], certa: 0, traducao: 'Às cinco.' },
+    { instrucao: 'Why did Ben start the challenge?', frase: '___', opcoes: ['A doctor said so.', 'Many successful people wake up early.', 'Lia asked Ben to do it.'], certa: 1, traducao: 'Muitas pessoas de sucesso acordam cedo.' },
+    { instrucao: 'What does Ben do in the early morning?', frase: '___', opcoes: ['Watches series.', 'Goes out with friends.', 'Reads, runs and works.'], certa: 2, traducao: 'Lê, corre e trabalha.' },
+    { instrucao: 'What did Ben miss?', frase: '___', opcoes: ["Lia's birthday party.", 'A morning run.', 'A work meeting.'], certa: 0, traducao: 'A festa de aniversário da Lia.' },
+    { instrucao: 'How does Ben feel sometimes?', frase: '___', opcoes: ['Very bored.', 'A bit isolated.', 'Angry with Lia.'], certa: 1, traducao: 'Um pouco isolado.' },
+    { instrucao: 'When does Ben turn off the phone?', frase: '___', opcoes: ['At nine thirty.', 'At midnight.', 'At nine.'], certa: 2, traducao: 'Às nove.' },
+    { instrucao: 'Until what time does Lia usually stay up?', frase: '___', opcoes: ['Until midnight.', 'Until nine.', 'Until five.'], certa: 0, traducao: 'Até meia-noite.' },
+    { instrucao: "What is Ben's new plan?", frase: '___', opcoes: ["To try four o'clock.", "To try six o'clock.", 'To stop using an alarm.'], certa: 1, traducao: 'Tentar seis horas.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 34 · Put it away</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 34 · Escrita (The 5 a.m. Club)
+   Alinhado aos tipos de phrasal verbs: Type 1 (sem objeto: go out, stay up, go off),
+   Type 2 (separável; pronome sempre no meio: turn it off, wake me up) e Type 3
+   (inseparável: look for, run out of, miss out on). Conteúdo NOVO. Frases com pronome
+   ou verbos inseparáveis para ter uma só ordem certa. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 33, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Por favor, abaixe (o volume).'), palavras: ['Please', 'turn', 'it', 'down'], isca: ['turns'], fim: '.', traducao: 'Por favor, abaixe (o volume).' },
+    { contexto: M('Eu larguei isso no ano passado.'), palavras: ['I', 'gave', 'it', 'up', 'last', 'year'], isca: ['give'], fim: '.', traducao: 'Eu larguei isso no ano passado.' },
+    { contexto: M('Você pode me buscar às oito?'), palavras: ['Can', 'you', 'pick', 'me', 'up', 'at', 'eight'], isca: ['picks'], fim: '?', traducao: 'Você pode me buscar às oito?' },
+    { contexto: M('Guardem-nos depois da aula.'), palavras: ['Put', 'them', 'away', 'after', 'class'], isca: ['puts'], fim: '.', traducao: 'Guardem-nos depois da aula.' },
+    { contexto: M('Eu os recusei educadamente.'), palavras: ['I', 'turned', 'them', 'down', 'politely'], isca: ['turning'], fim: '.', traducao: 'Eu os recusei educadamente.' },
+    { contexto: M('Por favor, me acorde às cinco.'), palavras: ['Please', 'wake', 'me', 'up', 'at', 'five'], isca: ['woke'], fim: '.', traducao: 'Por favor, me acorde às cinco.' },
+    { contexto: M('Eles a acordaram às cinco.'), palavras: ['They', 'woke', 'her', 'up', 'at', 'five'], isca: ['waking'], fim: '.', traducao: 'Eles a acordaram às cinco.' },
+    { contexto: M('Estou procurando as minhas chaves.'), palavras: ["I'm", 'looking', 'for', 'my', 'keys'], isca: ['forward'], fim: '.', traducao: 'Estou procurando as minhas chaves.' },
+    { contexto: M('Ficamos sem leite.'), palavras: ['We', 'ran', 'out', 'of', 'milk'], isca: ['on'], fim: '.', traducao: 'Ficamos sem leite.' },
+    { contexto: M('Não perca a diversão.'), palavras: ["Don't", 'miss', 'out', 'on', 'the', 'fun'], isca: ['of'], fim: '.', traducao: 'Não perca a diversão.' },
+    { contexto: M('Estou ansioso pelas férias.'), palavras: ["I'm", 'looking', 'forward', 'to', 'the', 'holidays'], isca: ['at'], fim: '.', traducao: 'Estou ansioso pelas férias.' },
+    { contexto: M('Vamos seguir com a reunião.'), palavras: ["Let's", 'get', 'on', 'with', 'the', 'meeting'], isca: ['up'], fim: '.', traducao: 'Vamos seguir com a reunião.' },
+    { contexto: M('Nós saímos no sábado à noite.'), palavras: ['We', 'go', 'out', 'on', 'Saturday', 'night'], isca: ['goes'], fim: '.', traducao: 'Nós saímos no sábado à noite.' },
+    { contexto: M('Eu fiquei acordado até as duas.'), palavras: ['I', 'stayed', 'up', 'until', 'two'], isca: ['staying'], fim: '.', traducao: 'Eu fiquei acordado até as duas.' },
+    { contexto: M('Aumente para a gente ouvir.'), palavras: ['Turn', 'it', 'up', 'so', 'we', 'can', 'hear'], isca: ['turns'], fim: '.', traducao: 'Aumente para a gente ouvir.' },
+    { contexto: M('Como você descobriu?'), palavras: ['How', 'did', 'you', 'find', 'out'], isca: ['found'], fim: '?', traducao: 'Como você descobriu?' },
+    { contexto: M('Por que o alarme tocou?'), palavras: ['Why', 'did', 'the', 'alarm', 'go', 'off'], isca: ['went'], fim: '?', traducao: 'Por que o alarme tocou?' },
+    { contexto: M('Por favor, continue a sua história.'), palavras: ['Please', 'go', 'on', 'with', 'your', 'story'], isca: ['goes'], fim: '.', traducao: 'Por favor, continue a sua história.' },
+    { contexto: M('Pegue-o do chão.'), palavras: ['Pick', 'it', 'up', 'from', 'the', 'floor'], isca: ['picks'], fim: '.', traducao: 'Pegue-o do chão.' },
+    { contexto: M('Desligue-os quando sair.'), palavras: ['Turn', 'them', 'off', 'when', 'you', 'leave'], isca: ['turns'], fim: '.', traducao: 'Desligue-os quando sair.' }
+  ]
+});
+</script>
+</body>
+</html>

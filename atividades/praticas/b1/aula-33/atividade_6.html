@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 34 · Turn it down, please</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 34 · Escuta (The 5 a.m. Club)
+   Alinhado ao Listening (especialista do sono num podcast: acordar às 5h nem sempre ajuda,
+   pessoas diferentes, ritmo natural, tempo sem interrupções) e aos tipos de phrasal verbs
+   (pronome no meio: turn it down, NOT turn down it; tipo 3 inseparável). Conteúdo NOVO.
+   24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const R = 'Listen and choose the best reply';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 33, num: 6, tipo: 'imagem',
+  instrucao: 'Listen to the podcast and answer',
+  itens: [
+    { instrucao: 'Listen. What is the podcast about?', ...q("Hi, I'm a sleep researcher, and today we're talking about the 5 a.m. club.", 'waking up at 5 a.m.', ['eating a healthy breakfast', 'working at night'], 'hearing') },
+    { instrucao: 'Listen. Why is waking up at five not always helpful?', ...q("Waking up at five isn't always helpful. If you don't sleep enough, you just get tired.", 'It can make people tired.', ['People hate mornings.', 'It is bad for exercise.'], 'hearing') },
+    { instrucao: 'Listen. How much sleep do adults need?', ...q('Most adults need around seven to nine hours of sleep a night.', 'seven to nine hours', ['four to five hours', 'ten to twelve hours'], 'hearing') },
+    { instrucao: 'Listen. What are these people called?', ...q('Some people think better later in the day. We call them night owls.', 'night owls', ['early birds', 'morning people'], 'hearing') },
+    { instrucao: 'Listen. What does the speaker say about night owls?', ...q("Night owls aren't lazy. They just have a different body clock.", 'They have a different body clock.', ['They are lazy.', 'They sleep too much.'], 'hearing') },
+    { instrucao: 'Listen. What is the advice?', ...q("Don't copy someone else's routine. Follow your own natural rhythm.", 'Follow your own natural rhythm.', ["Copy successful people's routines.", 'Wake up as early as possible.'], 'hearing') },
+    { instrucao: 'Listen. When can early mornings be useful?', ...q('Early mornings can be useful when they give you quiet time to work without interruptions.', 'when they give quiet time to work', ['when you feel tired all day', 'when your friends go out'], 'hearing') },
+    { instrucao: 'Listen. Why do teenagers often fall asleep late?', ...q('Teenagers often fall asleep late because their body clock changes.', 'Their body clock changes.', ['They drink too much water.', 'They do too much exercise.'], 'hearing') },
+    { instrucao: 'Listen. What should you do with your phone?', ...q('The light from screens can keep you awake, so put your phone away an hour before bed.', 'Put it away an hour before bed.', ['Turn it up before bed.', 'Keep it next to your pillow.'], 'hearing') },
+    { instrucao: 'Listen. What should you do if you go on feeling tired?', ...q('If you go on feeling tired every day, talk to a doctor.', 'Talk to a doctor.', ['Wake up earlier.', 'Drink more coffee at night.'], 'hearing') },
+    { instrucao: R, ...q('This music is too loud!', "Sorry, I'll turn it down.", ["Sorry, I'll turn down it.", "Sorry, I'll turn it up."], 'forum') },
+    { instrucao: R, ...q("I can't hear the TV.", "OK, I'll turn it up.", ["OK, I'll turn up it.", "OK, I'll turn it down."], 'forum') },
+    { instrucao: R, ...q("You're still on your phone? It's time for bed.", "OK, I'll put it away.", ["OK, I'll put away it.", "OK, I'll turn it up."], 'forum') },
+    { instrucao: R, ...q('Your alarm is ringing!', "Sorry! I'll turn it off.", ["Sorry! I'll turn off it.", "Sorry! I'll turn it on."], 'forum') },
+    { instrucao: R, ...q('Do you still smoke?', 'No, I gave it up last year.', ['No, I gave up it last year.', 'No, I gave it on last year.'], 'forum') },
+    { instrucao: R, ...q('Can you get your sister from school today?', "Sure, I'll pick her up at four.", ["Sure, I'll pick up her at four.", "Sure, I'll pick her on at four."], 'forum') },
+    { instrucao: R, ...q('Did Sam invite you to the party?', 'Yes, but I turned the invitation down.', ['Yes, but I turned down it.', 'Yes, but I turned the invitation up.'], 'forum') },
+    { instrucao: R, ...q('What time should I wake you tomorrow?', 'Please wake me up at six.', ['Please wake up me at six.', 'Please wake me at six up.'], 'forum') },
+    { instrucao: R, ...q("It's so dark in here.", 'Let me turn the light on.', ['Let me turn on it.', 'Let me turn the light off.'], 'forum') },
+    { instrucao: R, ...q("Do you know the new teacher's name?", "No, but I'll find out.", ["No, but I'll find out it.", "No, but I'll give up."], 'forum') },
+    { instrucao: R, ...q('Why are you looking under the sofa?', "I'm looking for my keys.", ["I'm looking my keys for.", "I'm looking forward to my keys."], 'forum') },
+    { instrucao: R, ...q('Are you excited about the trip?', "Yes, I'm really looking forward to it.", ["Yes, I'm really looking forward it.", "Yes, I'm really looking it forward to."], 'forum') },
+    { instrucao: R, ...q("Why didn't you answer my call?", 'My phone ran out of battery.', ['My phone ran out battery.', 'My phone ran of out battery.'], 'forum') },
+    { instrucao: R, ...q('Do you go out on weeknights?', 'Not often. I go out on Saturdays.', ['Not often. I go on Saturdays out.', 'Not often. I out go on Saturdays.'], 'forum') }
+  ]
+});
+</script>
+</body>
+</html>

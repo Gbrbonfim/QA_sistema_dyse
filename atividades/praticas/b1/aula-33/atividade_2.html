@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 33 · Wake up and get up</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 33 · Escrita (The 5 a.m. Club)
+   Alinhado ao Reading e ao Vocabulary (phrasal verbs de rotina e hábitos: wake up, get up,
+   stay up, give up, go off, look forward to, miss out on, run out of, get on with...).
+   Conteúdo NOVO. Frases com pronome ou verbos inseparáveis para ter uma só ordem certa.
+   20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 33, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu normalmente acordo às seis.'), palavras: ['I', 'usually', 'wake', 'up', 'at', 'six'], isca: ['wakes'], fim: '.', traducao: 'Eu normalmente acordo às seis.' },
+    { contexto: M('Eu costumava ficar acordado até tarde todas as noites.'), palavras: ['I', 'used', 'to', 'stay', 'up', 'late', 'every', 'night'], isca: ['stayed'], fim: '.', traducao: 'Eu costumava ficar acordado até tarde todas as noites.' },
+    { contexto: M('Meu alarme toca às cinco.'), palavras: ['My', 'alarm', 'goes', 'off', 'at', 'five'], isca: ['out'], fim: '.', traducao: 'Meu alarme toca às cinco.' },
+    { contexto: M('Eu tive que largar o café.'), palavras: ['I', 'had', 'to', 'give', 'up', 'coffee'], isca: ['gave'], fim: '.', traducao: 'Eu tive que largar o café.' },
+    { contexto: M('Por favor, desligue-o antes de dormir.'), palavras: ['Please', 'turn', 'it', 'off', 'before', 'bed'], isca: ['turns'], fim: '.', traducao: 'Por favor, desligue-o antes de dormir.' },
+    { contexto: M('Estou ansioso pelo fim de semana.'), palavras: ["I'm", 'looking', 'forward', 'to', 'the', 'weekend'], isca: ['for'], fim: '.', traducao: 'Estou ansioso pelo fim de semana.' },
+    { contexto: M('Eu muitas vezes perco momentos divertidos.'), palavras: ['I', 'often', 'miss', 'out', 'on', 'fun', 'moments'], isca: ['of'], fim: '.', traducao: 'Eu muitas vezes perco momentos divertidos.' },
+    { contexto: M('Nós ficamos sem energia à tarde.'), palavras: ['We', 'ran', 'out', 'of', 'energy', 'in', 'the', 'afternoon'], isca: ['on'], fim: '.', traducao: 'Nós ficamos sem energia à tarde.' },
+    { contexto: M('Eu recusei porque estava cansado.'), palavras: ['I', 'turned', 'it', 'down', 'because', 'I', 'was', 'tired'], isca: ['turning'], fim: '.', traducao: 'Eu recusei porque estava cansado.' },
+    { contexto: M('Eu me levanto assim que meu alarme toca.'), palavras: ['I', 'get', 'up', 'as', 'soon', 'as', 'my', 'alarm', 'goes', 'off'], isca: ['gets'], fim: '.', traducao: 'Eu me levanto assim que meu alarme toca.' },
+    { contexto: M('Vamos seguir com o nosso dia.'), palavras: ["Let's", 'get', 'on', 'with', 'our', 'day'], isca: ['in'], fim: '.', traducao: 'Vamos seguir com o nosso dia.' },
+    { contexto: M('Estou procurando uma rotina melhor.'), palavras: ["I'm", 'looking', 'for', 'a', 'better', 'routine'], isca: ['forward'], fim: '.', traducao: 'Estou procurando uma rotina melhor.' },
+    { contexto: M('Você sai durante a semana?'), palavras: ['Do', 'you', 'go', 'out', 'during', 'the', 'week'], isca: ['goes'], fim: '?', traducao: 'Você sai durante a semana?' },
+    { contexto: M('Guarde-o e vá dormir.'), palavras: ['Put', 'it', 'away', 'and', 'go', 'to', 'sleep'], isca: ['puts'], fim: '.', traducao: 'Guarde-o e vá dormir.' },
+    { contexto: M('Eu descobri esse hábito na internet.'), palavras: ['I', 'found', 'out', 'about', 'this', 'habit', 'online'], isca: ['founded'], fim: '.', traducao: 'Eu descobri esse hábito na internet.' },
+    { contexto: M('Não desista tão fácil.'), palavras: ["Don't", 'give', 'up', 'so', 'easily'], isca: ['gives'], fim: '.', traducao: 'Não desista tão fácil.' },
+    { contexto: M('Você pode me acordar às seis?'), palavras: ['Can', 'you', 'wake', 'me', 'up', 'at', 'six'], isca: ['woke'], fim: '?', traducao: 'Você pode me acordar às seis?' },
+    { contexto: M('Meu celular ficou sem bateria.'), palavras: ['My', 'phone', 'ran', 'out', 'of', 'battery'], isca: ['on'], fim: '.', traducao: 'Meu celular ficou sem bateria.' },
+    { contexto: M('Por favor, aumente um pouco.'), palavras: ['Please', 'turn', 'it', 'up', 'a', 'little'], isca: ['turns'], fim: '.', traducao: 'Por favor, aumente um pouco (o volume).' },
+    { contexto: M('Eu continuei acordando cedo por um ano.'), palavras: ['I', 'went', 'on', 'waking', 'up', 'early', 'for', 'a', 'year'], isca: ['wake'], fim: '.', traducao: 'Eu continuei acordando cedo por um ano.' }
+  ]
+});
+</script>
+</body>
+</html>

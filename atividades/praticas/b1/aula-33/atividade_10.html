@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 34 · Turn it off, not off it</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 34 · Gramática (The 5 a.m. Club)
+   Alinhado aos três tipos de phrasal verbs (Type 1 sem objeto, inseparável; Type 2 com
+   objeto, separável e pronome sempre no meio; Type 3 com objeto, inseparável), ao "wake up"
+   nos dois tipos e aos exercícios 5, 6 e 7. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 33, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'This music is too loud. Turn ___!', opcoes: ['it down', 'down it', 'it up'], certa: 0, traducao: 'Essa música está alta demais. Abaixe!' },
+    { frase: "I can't hear the TV. Can you turn ___?", opcoes: ['up it', 'it up', 'it off'], certa: 1, traducao: 'Não consigo ouvir a TV. Pode aumentar?' },
+    { frase: 'My phone is distracting me. I will put ___.', opcoes: ['away it', 'it on', 'it away'], certa: 2, traducao: 'Meu celular está me distraindo. Vou guardá-lo.' },
+    { frase: 'I loved coffee, but I gave ___ last month.', opcoes: ['it up', 'up it', 'it on'], certa: 0, traducao: 'Eu amava café, mas larguei no mês passado.' },
+    { frase: 'Can you ___ at six tomorrow?', opcoes: ['wake up me', 'wake me up', 'wake me on'], certa: 1, traducao: 'Você pode me acordar às seis amanhã?' },
+    { frase: 'I usually ___ at 7 a.m. on weekdays.', opcoes: ['wakes up', 'wake on', 'wake up'], certa: 2, traducao: 'Eu normalmente acordo às 7h nos dias de semana.' },
+    { frase: 'When my alarm ___, I feel very tired.', opcoes: ['goes off', 'gets off', 'turns down'], certa: 0, traducao: 'Quando meu alarme toca, me sinto muito cansado.' },
+    { frase: 'On weekends, we often ___ with friends.', opcoes: ['go with out', 'go out', 'get up'], certa: 1, traducao: 'Nos fins de semana, muitas vezes saímos com amigos.' },
+    { frase: "I'm really looking ___ the weekend.", opcoes: ['for to', 'forward on', 'forward to'], certa: 2, traducao: 'Estou muito ansioso pelo fim de semana.' },
+    { frase: "I'm looking ___ my glasses. Have you seen them?", opcoes: ['for', 'forward to', 'out of'], certa: 0, traducao: 'Estou procurando os meus óculos. Você viu?' },
+    { frase: 'We ran ___ milk, so I had black coffee.', opcoes: ['out on', 'out of', 'off of'], certa: 1, traducao: 'Ficamos sem leite, então tomei café preto.' },
+    { frase: "I don't want to miss ___ the party.", opcoes: ['out for', 'on out', 'out on'], certa: 2, traducao: 'Não quero perder a festa.' },
+    { frase: 'I was too tired, so I ___ the invitation.', opcoes: ['turned down', 'turned up', 'turned on'], certa: 0, traducao: 'Eu estava cansado demais, então recusei o convite.' },
+    { frase: 'We need to pick ___ at school at three.', opcoes: ['up her', 'Sarah up', 'her on'], certa: 1, traducao: 'Precisamos buscar a Sarah na escola às três.' },
+    { frase: 'I stayed ___ late to finish the series.', opcoes: ['off', 'away', 'up'], certa: 2, traducao: 'Fiquei acordado até tarde para terminar a série.' },
+    { frase: "Let's get ___ with our work.", opcoes: ['on', 'in', 'off'], certa: 0, traducao: 'Vamos seguir com o nosso trabalho.' },
+    { frase: "Did you find ___ why the alarm didn't go off?", opcoes: ['on', 'out', 'up'], certa: 1, traducao: 'Você descobriu por que o alarme não tocou?' },
+    { frase: 'They woke the kids ___ at 5 a.m. for school.', opcoes: ['on', 'out', 'up'], certa: 2, traducao: 'Eles acordaram as crianças às 5h para a escola.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['Turn it off.', 'Turn off it.', 'Turn it of.'], certa: 0, traducao: 'Desligue isso.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["I'm looking a new hobby for.", "I'm looking for a new hobby.", "I'm looking for to a new hobby."], certa: 1, traducao: 'Estou procurando um novo hobby.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['We go Saturday night out.', 'We out go on Saturday night.', 'We go out on Saturday night.'], certa: 2, traducao: 'Nós saímos no sábado à noite.' },
+    { instrucao: 'In which pair are BOTH sentences correct?', frase: '___', opcoes: ['Put your phone away. / Put away your phone.', 'Put it away. / Put away it.', 'Wake up me. / Wake me up.'], certa: 0, traducao: 'Put your phone away / Put away your phone: as duas estão certas (Type 2, objeto substantivo).' },
+    { frase: 'If the object is a pronoun (it, me, them), it goes ___ the verb and the particle.', opcoes: ['after', 'between', 'before'], certa: 1, traducao: 'Se o objeto é um pronome, ele fica entre o verbo e a partícula.' },
+    { frase: 'With Type 3 phrasal verbs (look for, run out of), the verb and the particle ___ separated.', opcoes: ['can be', 'must be', "can't be"], certa: 2, traducao: 'Nos phrasal verbs do Type 3, o verbo e a partícula não podem ser separados.' }
+  ]
+});
+</script>
+</body>
+</html>

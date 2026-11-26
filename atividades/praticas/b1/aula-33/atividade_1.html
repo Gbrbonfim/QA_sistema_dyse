@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 33 · A year of early mornings</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 33 · Escuta (The 5 a.m. Club)
+   Alinhado ao Reading (Keltie acorda às 5h por um ano: hábitos antes, noites mais calmas,
+   alarme, manhãs produtivas, convites recusados, cansaço, conclusão "é só uma ferramenta")
+   e ao Vocabulary (phrasal verbs da história). Conteúdo NOVO: o desafio das 6h de outra
+   pessoa, contado em primeira pessoa. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const W = 'Listen to the definition. Which phrasal verb is it?', T = 'Listen. Is it true or false?';
+const V = 'True.', F = 'False.', O = "It's an opinion.";
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 33, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the story and answer',
+  itens: [
+    { instrucao: 'Listen. What did the speaker decide to do?', ...q('Last January, I decided to wake up at six every day for three months.', 'wake up at six for three months', ['go to bed at six for three months', 'work at six every evening'], 'schedule') },
+    { instrucao: 'Listen. Why did the speaker start the challenge?', ...q('I read a book that said successful people get up before everyone else.', 'A book said successful people get up early.', ['A doctor asked the speaker to do it.', 'The speaker started a new job.'], 'schedule') },
+    { instrucao: 'Listen. What was the old habit?', ...q('Before the challenge, I used to stay up until two in the morning playing video games.', 'staying up late playing video games', ['getting up early to run', 'going out every night'], 'schedule') },
+    { instrucao: 'Listen. What did the speaker give up?', ...q('I gave up coffee after four p.m. because it kept me awake.', 'coffee in the afternoon', ['video games', 'breakfast'], 'schedule') },
+    { instrucao: 'Listen. What did the speaker do with the phone at night?', ...q("At ten o'clock, I turned off my phone and put it away in the kitchen.", 'turned it off and left it in the kitchen', ['turned it up and kept it in bed', 'gave it to a friend'], 'schedule') },
+    { instrucao: 'Listen. How was the first week?', ...q('The first week was terrible. When my alarm went off, I just wanted to stay in bed.', 'It was very hard.', ['It was easy.', 'It was fun.'], 'schedule') },
+    { instrucao: 'Listen. What changed after a month?', ...q("After a month, I didn't need an alarm. I woke up by myself.", 'The speaker woke up without an alarm.', ['The speaker bought a louder alarm.', 'The speaker stopped the challenge.'], 'schedule') },
+    { instrucao: 'Listen. What did the speaker do in the mornings?', ...q('In the quiet mornings, I studied Spanish and went for a walk.', 'studied Spanish and went for a walk', ['watched series in bed', 'played video games'], 'schedule') },
+    { instrucao: 'Listen. What was the problem?', ...q("But I turned down a lot of invitations, and I missed out on my friends' birthday parties.", 'missing parties with friends', ['feeling bored in the morning', 'spending too much money'], 'schedule') },
+    { instrucao: "Listen. What is the speaker's conclusion?", ...q("Now I get up at seven. It's not as early, but it works for my life.", 'Find a time that works for you.', ['Always wake up at five.', 'Never use an alarm.'], 'schedule') },
+    { instrucao: W, ...q('To stop sleeping and open your eyes.', 'wake up', ['give up', 'go on'], 'help') },
+    { instrucao: W, ...q('To leave your bed in the morning.', 'get up', ['turn up', 'give up'], 'help') },
+    { instrucao: W, ...q('To stop doing something, like a bad habit.', 'give up', ['pick up', 'look for'], 'help') },
+    { instrucao: W, ...q('To put something in its place, so you are not using it.', 'put away', ['turn on', 'find out'], 'help') },
+    { instrucao: W, ...q('To feel happy and excited about something in the future.', 'look forward to', ['run out of', 'get on with'], 'help') },
+    { instrucao: W, ...q('To go to bed later than usual.', 'stay up', ['wake up', 'set off'], 'help') },
+    { instrucao: W, ...q('To use all of something, so you have nothing left.', 'run out of', ['miss out on', 'look for'], 'help') },
+    { instrucao: W, ...q('To say no to an invitation.', 'turn down', ['turn up', 'go out'], 'help') },
+    { instrucao: W, ...q('To not have a fun experience that other people have.', 'miss out on', ['look forward to', 'pick up'], 'help') },
+    { instrucao: W, ...q('To discover information about something.', 'find out', ['put away', 'stay up'], 'help') },
+    { instrucao: T, ...q('The book The 5 AM Club was written by Robin Sharma.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Some people are night owls. They think better later in the day.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Sleep experts say adults only need about three hours of sleep a night.', F, [V, O], 'fact_check') },
+    { instrucao: T, ...q('The light from phone screens can make it harder to fall asleep.', V, [F, O], 'fact_check') }
+  ]
+});
+</script>
+</body>
+</html>

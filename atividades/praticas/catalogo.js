@@ -1492,6 +1492,22 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 32', titulo: 'Ask the right questions', tipo: 'Escute e grave', treina: 'Fala · Perguntas sujeito x objeto', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 32', titulo: 'With or without did?', tipo: 'Make a Choice', treina: 'Gramática · Perguntas sujeito x objeto', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 33,
+        titulo: 'Class 33 and 34 · The 5 a.m. Club',
+        atividades: [
+          { num: 1, parte: 'Class 33', titulo: 'A year of early mornings', tipo: 'Escute e escolha', treina: 'Escuta · Hábitos e phrasal verbs', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 33', titulo: 'Wake up and get up', tipo: 'Monte a frase', treina: 'Escrita · Phrasal verbs de rotina', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 33', titulo: 'Joining the club', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 33', titulo: 'My morning routine', tipo: 'Escute e grave', treina: 'Fala · Phrasal verbs de rotina', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 33', titulo: 'Habits and phrasal verbs', tipo: 'Make a Choice', treina: 'Gramática · Significado dos phrasal verbs', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 34', titulo: 'Turn it down, please', tipo: 'Escute e escolha', treina: 'Escuta · Podcast e phrasal verbs', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 34', titulo: 'Put it away', tipo: 'Monte a frase', treina: 'Escrita · Phrasal verbs separáveis', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 34', titulo: 'Sleep Talk', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 34', titulo: 'Can you join the 5 a.m. club?', tipo: 'Escute e grave', treina: 'Fala · Phrasal verbs separáveis', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 34', titulo: 'Turn it off, not off it', tipo: 'Make a Choice', treina: 'Gramática · Tipos de phrasal verbs', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
