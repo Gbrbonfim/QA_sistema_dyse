@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 32 · With or without did?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 32 · Gramática (The Case of the Missing Contract)
+   Alinhado ao "Grammar Point" (quando who / what / which é quem faz a ação, não usamos
+   auxiliar: Who entered? What happened?; quando não é, usamos did / does: What did you
+   do? Where does Sherlock live?) e às perguntas do exercício 5. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 31, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'Who ___ the office first?', opcoes: ['entered', 'did enter', 'enters did'], certa: 0, traducao: 'Quem entrou no escritório primeiro?' },
+    { frase: 'What ___ you do between nine and eleven?', opcoes: ['do', 'did', 'were'], certa: 1, traducao: 'O que você fez entre nove e onze?' },
+    { frase: 'Who ___ this coffee?', opcoes: ['did make', 'makes did', 'made'], certa: 2, traducao: 'Quem fez este café?' },
+    { frase: 'What ___ at the crime scene last night?', opcoes: ['happened', 'did happen', 'happen'], certa: 0, traducao: 'O que aconteceu na cena do crime ontem à noite?' },
+    { frase: 'Who ___ the broken window first?', opcoes: ['did notice', 'noticed', 'notice'], certa: 1, traducao: 'Quem notou a janela quebrada primeiro?' },
+    { frase: 'What did the detective ___ under the desk?', opcoes: ['found', 'finding', 'find'], certa: 2, traducao: 'O que o detetive encontrou debaixo da mesa?' },
+    { frase: 'Which suspect ___ a clear motive to lie?', opcoes: ['had', 'did have', 'have'], certa: 0, traducao: 'Qual suspeito tinha um motivo claro para mentir?' },
+    { frase: 'What ___ the alarm to go off?', opcoes: ['did cause', 'caused', 'causing'], certa: 1, traducao: 'O que fez o alarme disparar?' },
+    { frase: 'What did the witness ___ during the interview?', opcoes: ['said', 'saying', 'say'], certa: 2, traducao: 'O que a testemunha disse durante a entrevista?' },
+    { frase: 'When who / what is the person or thing doing the action, we ___ use did.', opcoes: ["don't", 'always', 'must'], certa: 0, traducao: 'Quando who / what faz a ação, não usamos did.' },
+    { frase: "When who / what is NOT doing the action, we ___ an auxiliary verb.", opcoes: ["don't use", 'use', 'never use'], certa: 1, traducao: 'Quando who / what não faz a ação, usamos um auxiliar.' },
+    { instrucao: 'Which question is correct?', frase: '___', opcoes: ['Who did enter the office?', 'Who entered did the office?', 'Who entered the office?'], certa: 2, traducao: 'Quem entrou no escritório?' },
+    { instrucao: 'Which question is correct?', frase: '___', opcoes: ['What did you see?', 'What you saw?', 'What did you saw?'], certa: 0, traducao: 'O que você viu?' },
+    { frase: 'Who ___ you yesterday? — My mum called me.', opcoes: ['did call', 'called', 'call'], certa: 1, traducao: 'Quem te ligou ontem? — A minha mãe.' },
+    { frase: 'Who ___ you call yesterday? — I called my mum.', opcoes: ['do', 'was', 'did'], certa: 2, traducao: 'Para quem você ligou ontem? — Para a minha mãe.' },
+    { frase: 'How many people ___ in the building at the time?', opcoes: ['were', 'did be', 'did'], certa: 0, traducao: 'Quantas pessoas estavam no prédio naquela hora?' },
+    { frase: 'Where ___ the witness see the suspect yesterday?', opcoes: ['was', 'did', 'has'], certa: 1, traducao: 'Onde a testemunha viu o suspeito ontem?' },
+    { frase: 'Who ___ the strange noise last night?', opcoes: ['did hear', 'hear', 'heard'], certa: 2, traducao: 'Quem ouviu o barulho estranho ontem à noite?' },
+    { frase: 'Who ___ Sherlock in the BBC series?', opcoes: ['plays', 'does play', 'play'], certa: 0, traducao: 'Quem interpreta o Sherlock na série da BBC?' },
+    { frase: 'Where ___ Sherlock Holmes live?', opcoes: ['do', 'does', 'is'], certa: 1, traducao: 'Onde o Sherlock Holmes mora?' },
+    { frase: 'What usually ___ at the beginning of a mystery story?', opcoes: ['happen', 'does happen', 'happens'], certa: 2, traducao: 'O que normalmente acontece no começo de uma história de mistério?' },
+    { frase: 'Which detective ___ crimes using logic and observation?', opcoes: ['solved', 'did solve', 'solve'], certa: 0, traducao: 'Qual detetive resolvia crimes usando lógica e observação?' },
+    { frase: 'Who ___ the novel Murder on the Orient Express?', opcoes: ['did write', 'wrote', 'writes did'], certa: 1, traducao: 'Quem escreveu o romance Assassinato no Expresso do Oriente?' },
+    { frase: 'Who ___ the truth in the end?', opcoes: ['did reveal', 'reveal', 'revealed'], certa: 2, traducao: 'Quem revelou a verdade no final?' }
+  ]
+});
+</script>
+</body>
+</html>

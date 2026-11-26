@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 31 · Nothing looked broken</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 31 · Escrita (The Case of the Missing Contract)
+   Alinhado ao Reading (narração no passado: disappeared, was locked, looked broken, had
+   access, was under financial pressure, disagreed, noticed fingerprints, questioned) e ao
+   Warm Up (Sherlock, Agatha Christie). Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 31, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Um contrato confidencial desapareceu.'), palavras: ['A', 'confidential', 'contract', 'disappeared'], isca: ['disappear'], fim: '.', traducao: 'Um contrato confidencial desapareceu.' },
+    { contexto: M('A porta estava trancada.'), palavras: ['The', 'door', 'was', 'locked'], isca: ['were'], fim: '.', traducao: 'A porta estava trancada.' },
+    { contexto: M('Nada parecia quebrado.'), palavras: ['Nothing', 'looked', 'broken'], isca: ['break'], fim: '.', traducao: 'Nada parecia quebrado.' },
+    { contexto: M('Três pessoas tinham acesso ao escritório.'), palavras: ['Three', 'people', 'had', 'access', 'to', 'the', 'office'], isca: ['has'], fim: '.', traducao: 'Três pessoas tinham acesso ao escritório.' },
+    { contexto: M('Ele estava com problemas financeiros.'), palavras: ['He', 'was', 'under', 'financial', 'pressure'], isca: ['finance'], fim: '.', traducao: 'Ele estava sob pressão financeira.' },
+    { contexto: M('Ela discordava do gerente.'), palavras: ['She', 'disagreed', 'with', 'the', 'manager'], isca: ['to'], fim: '.', traducao: 'Ela discordava do gerente.' },
+    { contexto: M('O detetive notou impressões digitais perto da gaveta.'), palavras: ['The', 'detective', 'noticed', 'fingerprints', 'near', 'the', 'drawer'], isca: ['notice'], fim: '.', traducao: 'O detetive notou impressões digitais perto da gaveta.' },
+    { contexto: M('O café ainda estava quente.'), palavras: ['The', 'coffee', 'was', 'still', 'warm'], isca: ['yet'], fim: '.', traducao: 'O café ainda estava quente.' },
+    { contexto: M('Alguém esteve aqui recentemente.'), palavras: ['Someone', 'was', 'here', 'recently'], isca: ['recent'], fim: '.', traducao: 'Alguém esteve aqui recentemente.' },
+    { contexto: M('O Sherlock interrogou os suspeitos um por um.'), palavras: ['Sherlock', 'questioned', 'the', 'suspects', 'one', 'by', 'one'], isca: ['question'], fim: '.', traducao: 'O Sherlock interrogou os suspeitos um por um.' },
+    { contexto: M('A testemunha viu um homem perto da porta.'), palavras: ['The', 'witness', 'saw', 'a', 'man', 'near', 'the', 'door'], isca: ['seen'], fim: '.', traducao: 'A testemunha viu um homem perto da porta.' },
+    { contexto: M('Ele resolve casos fazendo as perguntas certas.'), palavras: ['He', 'solves', 'cases', 'by', 'asking', 'the', 'right', 'questions'], isca: ['ask'], fim: '.', traducao: 'Ele resolve casos fazendo as perguntas certas.' },
+    { contexto: M('O Sherlock é famoso pela observação aguçada.'), palavras: ['Sherlock', 'is', 'famous', 'for', 'his', 'sharp', 'observation'], isca: ['of'], fim: '.', traducao: 'O Sherlock é famoso pela observação aguçada.' },
+    { contexto: M('Agatha Christie escreveu muitos romances policiais.'), palavras: ['Agatha', 'Christie', 'wrote', 'many', 'detective', 'novels'], isca: ['written'], fim: '.', traducao: 'Agatha Christie escreveu muitos romances policiais.' },
+    { contexto: M('Você já leu alguma história de detetive?'), palavras: ['Have', 'you', 'ever', 'read', 'a', 'detective', 'story'], isca: ['readed'], fim: '?', traducao: 'Você já leu alguma história de detetive?' },
+    { contexto: M('O que faz uma boa história de detetive?'), palavras: ['What', 'makes', 'a', 'good', 'detective', 'story'], isca: ['does'], fim: '?', traducao: 'O que faz uma boa história de detetive?' },
+    { contexto: M('O gerente levou o contrato para uma reunião por engano.'), palavras: ['The', 'manager', 'took', 'the', 'contract', 'to', 'a', 'meeting', 'by', 'mistake'], isca: ['take'], fim: '.', traducao: 'O gerente levou o contrato para uma reunião por engano.' },
+    { contexto: M('Ninguém quebrou a janela.'), palavras: ['Nobody', 'broke', 'the', 'window'], isca: ['broken'], fim: '.', traducao: 'Ninguém quebrou a janela.' },
+    { contexto: M('A investigação começou de manhã cedo.'), palavras: ['The', 'investigation', 'started', 'early', 'in', 'the', 'morning'], isca: ['start'], fim: '.', traducao: 'A investigação começou de manhã cedo.' },
+    { contexto: M('Todos os suspeitos tinham um motivo.'), palavras: ['All', 'the', 'suspects', 'had', 'a', 'motive'], isca: ['has'], fim: '.', traducao: 'Todos os suspeitos tinham um motivo.' }
+  ]
+});
+</script>
+</body>
+</html>

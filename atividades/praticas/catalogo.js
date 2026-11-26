@@ -1476,6 +1476,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Can you do it?', tipo: 'Escute e grave', treina: 'Fala · Revisão 21-29', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Review: choose the right one', tipo: 'Make a Choice', treina: 'Gramática · Revisão 21-29', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 31,
+        titulo: 'Class 31 and 32 · The Case of the Missing Contract',
+        atividades: [
+          { num: 1, parte: 'Class 31', titulo: 'The missing necklace', tipo: 'Escute e escolha', treina: 'Escuta · História de detetive', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 31', titulo: 'Nothing looked broken', tipo: 'Monte a frase', treina: 'Escrita · Passado e vocabulário', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 31', titulo: 'Inspector Ray', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 31', titulo: 'A good detective story', tipo: 'Escute e grave', treina: 'Fala · História de detetive', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 31', titulo: 'Suspects and clues', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário de investigação', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 32', titulo: 'Who called you?', tipo: 'Escute e escolha', treina: 'Escuta · Perguntas sujeito x objeto', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 32', titulo: 'Who entered the office?', tipo: 'Monte a frase', treina: 'Escrita · Perguntas sujeito x objeto', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 32', titulo: 'The missing phone', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 32', titulo: 'Ask the right questions', tipo: 'Escute e grave', treina: 'Fala · Perguntas sujeito x objeto', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 32', titulo: 'With or without did?', tipo: 'Make a Choice', treina: 'Gramática · Perguntas sujeito x objeto', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 31 · Suspects and clues</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 31 · Gramática (The Case of the Missing Contract)
+   Alinhado ao vocabulário de investigação do Reading (suspect, witness, clue, motive,
+   fingerprints, confidential, broken, locked), ao passado simples da narração e aos fatos
+   do Warm Up / Grammar Point 5 (Sherlock, Conan Doyle, Agatha Christie, BBC). Conteúdo
+   NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 31, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'A person who may be guilty of a crime is a ___.', opcoes: ['suspect', 'witness', 'judge'], certa: 0, traducao: 'Uma pessoa que pode ser culpada é um suspeito.' },
+    { frase: 'A person who saw the crime happen is a ___.', opcoes: ['suspect', 'witness', 'cleaner'], certa: 1, traducao: 'Uma pessoa que viu o crime é uma testemunha.' },
+    { frase: 'A piece of information that helps solve a case is a ___.', opcoes: ['motive', 'drawer', 'clue'], certa: 2, traducao: 'Uma informação que ajuda a resolver um caso é uma pista.' },
+    { frase: 'A reason to do something wrong is a ___.', opcoes: ['motive', 'clue', 'witness'], certa: 0, traducao: 'Uma razão para fazer algo errado é um motivo.' },
+    { frase: 'The detective found ___ on the glass.', opcoes: ['contracts', 'fingerprints', 'suspects'], certa: 1, traducao: 'O detetive encontrou impressões digitais no copo.' },
+    { frase: 'The document was ___, so only the manager could read it.', opcoes: ['famous', 'public', 'confidential'], certa: 2, traducao: 'O documento era confidencial, então só o gerente podia ler.' },
+    { frase: 'Nothing looked ___.', opcoes: ['broken', 'break', 'broke'], certa: 0, traducao: 'Nada parecia quebrado.' },
+    { frase: 'The door ___ locked.', opcoes: ['were', 'was', 'did'], certa: 1, traducao: 'A porta estava trancada.' },
+    { frase: 'Sherlock ___ slowly around the room.', opcoes: ['walk', 'walking', 'walked'], certa: 2, traducao: 'O Sherlock andou devagar pela sala.' },
+    { frase: 'The assistant ___ with the manager about his salary last week.', opcoes: ['argued', 'argues', 'arguing'], certa: 0, traducao: 'O assistente discutiu com o gerente sobre o salário semana passada.' },
+    { frase: 'She strongly ___ with the manager.', opcoes: ['disagree', 'disagreed', 'disagreeing'], certa: 1, traducao: 'Ela discordou fortemente do gerente.' },
+    { frase: 'The cleaner noticed small ___.', opcoes: ['detail', 'detailing', 'details'], certa: 2, traducao: 'O faxineiro notava pequenos detalhes.' },
+    { frase: 'Sherlock Holmes was created by ___.', opcoes: ['Arthur Conan Doyle', 'Agatha Christie', 'J.K. Rowling'], certa: 0, traducao: 'Sherlock Holmes foi criado por Arthur Conan Doyle.' },
+    { frase: 'Sherlock lives at 221B ___ Street.', opcoes: ['Oxford', 'Baker', 'Abbey'], certa: 1, traducao: 'O Sherlock mora na Baker Street, 221B.' },
+    { frase: '___ wrote Murder on the Orient Express.', opcoes: ['J.K. Rowling', 'Arthur Conan Doyle', 'Agatha Christie'], certa: 2, traducao: 'Agatha Christie escreveu Assassinato no Expresso do Oriente.' },
+    { frase: 'In the BBC series, Sherlock is played by ___.', opcoes: ['Benedict Cumberbatch', 'Daniel Radcliffe', 'Tom Holland'], certa: 0, traducao: 'Na série da BBC, o Sherlock é interpretado por Benedict Cumberbatch.' },
+    { frase: "Sherlock's friend and partner is Doctor ___.", opcoes: ['Strange', 'Watson', 'House'], certa: 1, traducao: 'O amigo e parceiro do Sherlock é o Doutor Watson.' },
+    { frase: 'Sherlock solves cases by asking the right ___.', opcoes: ['answers', 'suspects', 'questions'], certa: 2, traducao: 'O Sherlock resolve casos fazendo as perguntas certas.' },
+    { frase: 'The coffee was still ___, so someone was there recently.', opcoes: ['warm', 'cold', 'broken'], certa: 0, traducao: 'O café ainda estava quente, então alguém esteve lá há pouco.' },
+    { frase: 'In the end, the manager took the contract to a meeting by ___.', opcoes: ['purpose', 'mistake', 'money'], certa: 1, traducao: 'No final, o gerente levou o contrato para uma reunião por engano.' },
+    { frase: 'The police ___ the case for weeks.', opcoes: ['investigate', 'investigation', 'investigated'], certa: 2, traducao: 'A polícia investigou o caso por semanas.' },
+    { frase: 'The thief ___ the window to get in.', opcoes: ['broke', 'broken', 'break'], certa: 0, traducao: 'O ladrão quebrou a janela para entrar.' },
+    { frase: 'Only three people ___ access to the office that morning.', opcoes: ['has', 'had', 'have had'], certa: 1, traducao: 'Só três pessoas tinham acesso ao escritório naquela manhã.' },
+    { frase: 'Detectives notice small ___ that other people miss.', opcoes: ['suspects', 'witness', 'details'], certa: 2, traducao: 'Os detetives notam pequenos detalhes que os outros não percebem.' }
+  ]
+});
+</script>
+</body>
+</html>

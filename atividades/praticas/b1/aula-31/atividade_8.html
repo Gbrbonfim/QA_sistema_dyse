@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 32 · The missing phone</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 32 · Leitura (The Case of the Missing Contract)
+   Alinhado ao Role-Play (Case 3 – Party: o celular some numa festa) e ao "Grammar Point"
+   (Who saw? Who was near? Who put? x What time did you see? What did you do?).
+   Conteúdo NOVO: a detetive Kim resolve o caso do celular numa festa de aniversário.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Kim', 'OK, everyone. Who saw the phone last?'],
+  ['Alex', 'I did. It was on the table next to the cake.'],
+  ['Kim', 'What time did you see it?'],
+  ['Alex', 'At about nine. Then the music got really loud.'],
+  ['Kim', 'Who was near the table after nine?'],
+  ['Alex', 'Jordan was. Jordan arrived late, at half past nine.'],
+  ['Kim', 'Jordan, what did you do when you arrived?'],
+  ['Jordan', 'I said hello to everyone and took a piece of cake.'],
+  ['Kim', 'Did you see the phone?'],
+  ['Jordan', 'Yes, I did. Someone put a plate on top of it.'],
+  ['Kim', 'Who put the plate there?'],
+  ['Alex', 'I think Sam did. Sam cleaned the table at ten.'],
+  ['Kim', 'Sam, what happened to the plates?'],
+  ['Sam', 'I took them all to the kitchen.'],
+  ['Kim', 'Interesting. Which plate did you take last?'],
+  ['Sam', 'The big one with the cake on it.'],
+  ['Kim', "Let's go to the kitchen... Look! The phone is under the cake plate!"],
+  ['Alex', 'So nobody stole it. It just went to the kitchen with the plates!'],
+  ['Kim', 'Exactly. Small details solve big mysteries.'],
+  ['Jordan', 'Great job! Who wants more cake?']
+];
+const lado = q => q === 'Kim' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 31, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I did. It was on the table next to the cake.', 'I saw. It was on the table next to the cake.', 'I did. It were on the table next to the cake.'], 0, 'Eu. Estava na mesa ao lado do bolo.'),
+    prox(2, ['What time you saw it?', 'What time did you see it?', 'What time did you saw it?'], 1, 'A que horas você viu?'),
+    prox(4, ['Who did be near the table after nine?', 'Who did was near the table after nine?', 'Who was near the table after nine?'], 2, 'Quem estava perto da mesa depois das nove?'),
+    prox(5, ['Jordan was. Jordan arrived late, at half past nine.', 'Jordan did. Jordan arrived late, at half past nine.', 'Jordan was. Jordan arrive late, at half past nine.'], 0, 'O Jordan. O Jordan chegou atrasado, às nove e meia.'),
+    prox(6, ['Jordan, what you did when you arrived?', 'Jordan, what did you do when you arrived?', 'Jordan, what did you did when you arrived?'], 1, 'Jordan, o que você fez quando chegou?'),
+    prox(7, ['I say hello to everyone and took a piece of cake.', 'I said hello to everyone and take a piece of cake.', 'I said hello to everyone and took a piece of cake.'], 2, 'Cumprimentei todo mundo e peguei um pedaço de bolo.'),
+    prox(9, ['Yes, I did. Someone put a plate on top of it.', 'Yes, I saw. Someone put a plate on top of it.', "No, I didn't. Someone put a plate on top of it."], 0, 'Vi, sim. Alguém colocou um prato em cima dele.'),
+    prox(10, ['Who did put the plate there?', 'Who put the plate there?', 'Who putted the plate there?'], 1, 'Quem colocou o prato lá?'),
+    prox(13, ['I took them all to the garden.', 'I take them all to the kitchen yesterday.', 'I took them all to the kitchen.'], 2, 'Levei todos para a cozinha.'),
+    prox(15, ['The big one with the cake on it.', 'The big one who had the cake on it.', 'The small one with nothing on it.'], 0, 'O grande, com o bolo em cima.'),
+    prox(17, ['So Jordan stole it! It just went to the kitchen with the plates!', 'So nobody stole it. It just went to the kitchen with the plates!', 'So nobody stealed it. It just went to the kitchen with the plates!'], 1, 'Então ninguém roubou. Ele só foi para a cozinha com os pratos!'),
+    prox(19, ['Great job! Who does want more cake?', 'Great job! Who want more cake?', 'Great job! Who wants more cake?'], 2, 'Muito bem! Quem quer mais bolo?'),
+    { instrucao: 'Who saw the phone last before the music got loud?', frase: '___', opcoes: ['Alex.', 'Jordan.', 'Sam.'], certa: 0, traducao: 'O Alex.' },
+    { instrucao: 'What time did Jordan arrive?', frase: '___', opcoes: ['At nine.', 'At half past nine.', 'At ten.'], certa: 1, traducao: 'Às nove e meia.' },
+    { instrucao: 'What did Jordan do on arrival?', frase: '___', opcoes: ['Cleaned the table.', 'Took the plates to the kitchen.', 'Said hello and took some cake.'], certa: 2, traducao: 'Cumprimentou todos e pegou bolo.' },
+    { instrucao: 'What was on top of the phone?', frase: '___', opcoes: ['A plate.', 'A bag.', 'A coat.'], certa: 0, traducao: 'Um prato.' },
+    { instrucao: 'Who cleaned the table at ten?', frase: '___', opcoes: ['Alex.', 'Sam.', 'Kim.'], certa: 1, traducao: 'O Sam.' },
+    { instrucao: 'Where did Sam take the plates?', frase: '___', opcoes: ['To the garden.', 'To the car.', 'To the kitchen.'], certa: 2, traducao: 'Para a cozinha.' },
+    { instrucao: 'Where was the phone in the end?', frase: '___', opcoes: ['Under the cake plate in the kitchen.', "In Jordan's bag.", 'Under the table.'], certa: 0, traducao: 'Debaixo do prato do bolo, na cozinha.' },
+    { instrucao: 'What does Kim say solves big mysteries?', frase: '___', opcoes: ['Big clues.', 'Small details.', 'Loud music.'], certa: 1, traducao: 'Pequenos detalhes.' }
+  ]
+});
+</script>
+</body>
+</html>

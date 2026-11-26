@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 31 · Inspector Ray</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 31 · Leitura (The Case of the Missing Contract)
+   Alinhado ao Reading / Listening (objeto desaparecido, porta trancada, nada quebrado,
+   quem tinha acesso, pistas, final em que ninguém roubou) e às perguntas no passado.
+   Conteúdo NOVO: o inspetor Ray investiga o colar da Mrs. Wood.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Inspector Ray', "Good morning. I'm Inspector Ray. What happened here?"],
+  ['Mrs. Wood', 'My diamond necklace disappeared from my room!'],
+  ['Inspector Ray', 'When did you last see it?'],
+  ['Mrs. Wood', 'Last night, before dinner. It was on the table next to the bed.'],
+  ['Inspector Ray', 'And when did you notice it was gone?'],
+  ['Mrs. Wood', 'This morning at nine, when I woke up.'],
+  ['Inspector Ray', 'Was the door locked?'],
+  ['Mrs. Wood', 'Yes, it was. And the window was closed. Nothing was broken.'],
+  ['Inspector Ray', 'Who had a key to your room?'],
+  ['Mrs. Wood', 'The receptionist, Mr. Hall. He has keys to every room.'],
+  ['Inspector Ray', 'Did anyone else come in this morning?'],
+  ['Mrs. Wood', 'Yes. The waiter brought my breakfast at eight. And my sister visited me.'],
+  ['Inspector Ray', 'Hmm. I see wet footprints near the bed. Did anyone come in from outside?'],
+  ['Mrs. Wood', 'My sister did. It was raining when she arrived.'],
+  ['Inspector Ray', 'Interesting. What were you wearing at dinner last night?'],
+  ['Mrs. Wood', 'My blue coat. Why?'],
+  ['Inspector Ray', 'Can you check the pockets, please?'],
+  ['Mrs. Wood', 'Oh no! The necklace is here! I put it in my pocket after dinner last night.'],
+  ['Inspector Ray', 'So nobody took it. You just forgot.'],
+  ['Mrs. Wood', "I'm so sorry, Inspector! I feel terrible."]
+];
+const lado = q => q === 'Inspector Ray' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 31, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['My diamond necklace disappeared from my room!', 'My diamond necklace was disappeared from my room!', 'Nothing happened. Everything is fine.'], 0, 'O meu colar de diamantes desapareceu do meu quarto!'),
+    prox(2, ['When you last saw it?', 'When did you last see it?', 'When did you last saw it?'], 1, 'Quando a senhora o viu pela última vez?'),
+    prox(3, ['Last night, before dinner. It were on the table next to the bed.', 'Next week. It was on the table next to the bed.', 'Last night, before dinner. It was on the table next to the bed.'], 2, 'Ontem à noite, antes do jantar. Estava na mesa ao lado da cama.'),
+    prox(5, ['This morning at nine, when I woke up.', 'Tomorrow at nine, when I wake up.', 'This morning at nine, when I wake up yesterday.'], 0, 'Hoje às nove da manhã, quando acordei.'),
+    prox(7, ['Yes, it did. And the window was closed. Nothing was broken.', 'Yes, it was. And the window was closed. Nothing was broken.', 'Yes, it was. And the window was closed. Everything was broken.'], 1, 'Sim. E a janela estava fechada. Nada estava quebrado.'),
+    prox(9, ['The receptionist, Mr. Hall. He have keys to every room.', 'Nobody. Mr. Hall has keys to every room.', 'The receptionist, Mr. Hall. He has keys to every room.'], 2, 'O recepcionista, o Sr. Hall. Ele tem a chave de todos os quartos.'),
+    prox(10, ['Did anyone else come in this morning?', 'Did anyone else came in this morning?', 'Did anyone else comes in this morning?'], 0, 'Mais alguém entrou hoje de manhã?'),
+    prox(11, ['Yes. The waiter bring my breakfast at eight. And my sister visited me.', 'Yes. The waiter brought my breakfast at eight. And my sister visited me.', 'No. Nobody came in. And my sister visited me.'], 1, 'Sim. O garçom trouxe o meu café da manhã às oito. E a minha irmã me visitou.'),
+    prox(13, ['My sister did. It was sunny when she arrived.', 'My sister does. It was raining when she arrived.', 'My sister did. It was raining when she arrived.'], 2, 'A minha irmã. Estava chovendo quando ela chegou.'),
+    prox(15, ['My blue coat. Why?', 'My blue coat. Why you ask?', 'My blue coat. Why did you asked?'], 0, 'O meu casaco azul. Por quê?'),
+    prox(17, ['Oh no! The necklace is here! I putted it in my pocket after dinner last night.', 'Oh no! The necklace is here! I put it in my pocket after dinner last night.', "Oh no! The necklace isn't here! I put it in my pocket after dinner last night."], 1, 'Ah, não! O colar está aqui! Coloquei no bolso depois do jantar ontem.'),
+    prox(19, ["I'm so sorry, Inspector! I feel terribly.", "I'm so sorry, Inspector! I feeling terrible.", "I'm so sorry, Inspector! I feel terrible."], 2, 'Me desculpe, inspetor! Estou me sentindo péssima.'),
+    { instrucao: 'What disappeared?', frase: '___', opcoes: ['A diamond necklace.', 'A contract.', 'A laptop.'], certa: 0, traducao: 'Um colar de diamantes.' },
+    { instrucao: 'When did Mrs. Wood notice it was gone?', frase: '___', opcoes: ['Last night.', 'This morning at nine.', 'At eight.'], certa: 1, traducao: 'Hoje às nove da manhã.' },
+    { instrucao: 'Who has keys to every room?', frase: '___', opcoes: ['The waiter.', 'Her sister.', 'The receptionist.'], certa: 2, traducao: 'O recepcionista.' },
+    { instrucao: 'When did the waiter bring breakfast?', frase: '___', opcoes: ['At eight.', 'At seven.', 'At nine.'], certa: 0, traducao: 'Às oito.' },
+    { instrucao: 'Why were there wet footprints?', frase: '___', opcoes: ['The waiter dropped some water.', 'It was raining when the sister arrived.', 'The window was open.'], certa: 1, traducao: 'Estava chovendo quando a irmã chegou.' },
+    { instrucao: 'Where was the necklace?', frase: '___', opcoes: ['Under the bed.', "In the sister's bag.", "In Mrs. Wood's coat pocket."], certa: 2, traducao: 'No bolso do casaco da Mrs. Wood.' },
+    { instrucao: 'Who took the necklace?', frase: '___', opcoes: ['Nobody. She forgot where she put it.', 'The receptionist.', 'The waiter.'], certa: 0, traducao: 'Ninguém. Ela esqueceu onde colocou.' },
+    { instrucao: 'How does Mrs. Wood feel at the end?', frase: '___', opcoes: ['Happy and proud.', 'Terrible.', 'Angry with her sister.'], certa: 1, traducao: 'Péssima.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 32 · Who called you?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 32 · Escuta (The Case of the Missing Contract)
+   Alinhado ao "Grammar Point" (perguntas de sujeito sem did: Who entered? What happened? x
+   perguntas de objeto com auxiliar: What did you do? Who did you call?) e ao Role-Play
+   (resolver um caso perguntando). Conteúdo NOVO: o notebook sumido na biblioteca.
+   24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const K = 'Listen. Is "who / what" the subject or the object?';
+const SU = 'the subject (doing the action)', OB = 'the object (receiving the action)', NQ = 'it is not a question';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 31, num: 6, tipo: 'imagem',
+  instrucao: 'Listen to the question and choose the best answer',
+  itens: [
+    q('Who called you last night?', 'My sister called me.', ['I called my sister.', 'At ten o’clock.'], 'forum'),
+    q('Who did you call last night?', 'I called my sister.', ['My sister called me.', 'Yes, I did.'], 'forum'),
+    q('What happened at the party?', 'Someone took a phone.', ['Yes, it did.', 'At the party.'], 'forum'),
+    q('What did the detective find?', 'Fingerprints on the door.', ['The detective.', 'Yes, he found.'], 'forum'),
+    q('Who saw the thief?', 'The cleaner saw him.', ['He saw the cleaner.', 'Last night.'], 'forum'),
+    q('Who did the thief see?', 'He saw the cleaner.', ['The cleaner saw him.', 'At midnight.'], 'forum'),
+    q('Which suspect lied?', 'The assistant lied.', ['Yes, he did.', 'To the police.'], 'forum'),
+    q('What caused the alarm to go off?', 'A cat in the kitchen.', ['At three in the morning.', 'Yes, it did.'], 'forum'),
+    q('Where did the witness see the suspect?', 'Near the station.', ['The witness.', 'Yesterday.'], 'forum'),
+    q('Who left the room first?', 'The colleague left first.', ['Because she was tired.', 'She left at five.'], 'forum'),
+    { instrucao: K, ...q('Who broke the vase?', SU, [OB, NQ], 'help') },
+    { instrucao: K, ...q('Who did you invite to the party?', OB, [SU, NQ], 'help') },
+    { instrucao: K, ...q('What fell off the table?', SU, [NQ, OB], 'help') },
+    { instrucao: K, ...q('What did she buy yesterday?', OB, [NQ, SU], 'help') },
+    { instrucao: K, ...q('Who told you the secret?', SU, [OB, NQ], 'help') },
+    { instrucao: K, ...q('Who did he help?', OB, [SU, NQ], 'help') },
+    { instrucao: 'Listen. What disappeared?', ...q("A student's laptop disappeared from a table at the library.", 'a laptop', ['a phone', 'a necklace'], 'fact_check') },
+    { instrucao: 'Listen. Why did the student leave the table?', ...q('The student left the table for ten minutes to buy a coffee.', 'to buy a coffee', ['to call a friend', 'to go home'], 'fact_check') },
+    { instrucao: 'Listen. Who was near the table?', ...q('Two people were near the table: a librarian and another student.', 'a librarian and a student', ['a cleaner and a waiter', 'nobody'], 'fact_check') },
+    { instrucao: 'Listen. Who took the laptop?', ...q('The camera showed that the librarian took the laptop to the lost and found desk.', 'the librarian', ['the other student', 'a thief from outside'], 'fact_check') },
+    { instrucao: 'Listen. Why did the librarian take it?', ...q('She wanted to keep it safe until the student came back.', 'to keep it safe', ['to sell it', 'to use it'], 'fact_check') },
+    { instrucao: 'Listen. What does the question ask about?', ...q('Who did Sherlock question first?', 'the person Sherlock questioned', ['the person who questioned Sherlock', 'the time of the questions'], 'help') },
+    { instrucao: 'Listen. What does the question ask about?', ...q('Who questioned Sherlock?', 'the person who questioned Sherlock', ['the person Sherlock questioned', 'the place of the questions'], 'help') },
+    { instrucao: 'Listen to the question and choose the best answer', ...q('Who plays Sherlock in the BBC series?', 'Benedict Cumberbatch.', ['Arthur Conan Doyle.', 'Agatha Christie.'], 'person') }
+  ]
+});
+</script>
+</body>
+</html>

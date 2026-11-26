@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 31 · The missing necklace</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 31 · Escuta (The Case of the Missing Contract)
+   Alinhado ao Warm Up (Sherlock Holmes, Arthur Conan Doyle, histórias de detetive) e ao
+   Reading / Listening (caso misterioso: o objeto some, porta trancada, nada quebrado,
+   suspeitos e motivos, pistas, final surpresa). Conteúdo NOVO: o colar desaparecido da
+   Mrs. Wood. Fatos verdadeiros sobre Sherlock e Agatha Christie. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const W = 'Listen to the definition. What is it?', T = 'Listen. Is it true or false?';
+const V = 'True.', F = 'False.', O = "It's an opinion.";
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 31, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the story and answer',
+  itens: [
+    { instrucao: 'Listen. What disappeared?', ...q("Mrs. Wood's diamond necklace disappeared from her hotel room on Sunday morning.", 'a necklace', ['a contract', 'a laptop'], 'fact_check') },
+    { instrucao: 'Listen. When did it disappear?', ...q('The necklace was in the room last night. This morning, it was gone.', 'between last night and this morning', ['last week', 'yesterday afternoon'], 'fact_check') },
+    { instrucao: 'Listen. Was anything broken?', ...q("The door wasn't broken, and the window was closed.", 'Nothing was broken.', ['The door was broken.', 'The window was broken.'], 'fact_check') },
+    { instrucao: "Listen. What was the receptionist's possible motive?", ...q('The receptionist had a key to every room, and he needed money.', 'He needed money.', ['He was jealous.', 'He wanted the project.'], 'fact_check') },
+    { instrucao: 'Listen. Why might the sister take it?', ...q("Mrs. Wood's sister was jealous of her expensive jewellery.", 'She was jealous.', ['She needed a key.', 'She was the cleaner.'], 'fact_check') },
+    { instrucao: 'Listen. When was the waiter in the room?', ...q('The waiter brought breakfast at eight and left after five minutes.', 'at eight', ['at nine', 'at seven'], 'fact_check') },
+    { instrucao: 'Listen. What clue did the inspector find?', ...q('The inspector noticed wet footprints near the bed.', 'wet footprints', ['a warm cup of coffee', 'a broken window'], 'fact_check') },
+    { instrucao: 'Listen. Who took the necklace?', ...q('In the end, the necklace was in her coat pocket. She forgot she put it there.', 'Nobody. She forgot where she put it.', ['The receptionist.', 'Her sister.'], 'fact_check') },
+    { instrucao: W, ...q('A person who may be guilty of a crime.', 'a suspect', ['a witness', 'a detective'], 'help') },
+    { instrucao: W, ...q('A person who sees a crime or an accident happen.', 'a witness', ['a suspect', 'a cleaner'], 'help') },
+    { instrucao: W, ...q('A piece of information that helps you solve a mystery.', 'a clue', ['a motive', 'a drawer'], 'help') },
+    { instrucao: W, ...q('A reason for doing something, like a crime.', 'a motive', ['a clue', 'a contract'], 'help') },
+    { instrucao: W, ...q('Marks that your fingers leave on things.', 'fingerprints', ['footprints', 'clues'], 'help') },
+    { instrucao: W, ...q('Secret, and not for everybody to see.', 'confidential', ['valuable', 'broken'], 'help') },
+    { instrucao: W, ...q('The place where a crime happened.', 'the crime scene', ['the police station', 'the office party'], 'help') },
+    { instrucao: W, ...q('A person whose job is to solve crimes.', 'a detective', ['a suspect', 'a witness'], 'help') },
+    { instrucao: T, ...q('Sherlock Holmes was created by Arthur Conan Doyle.', V, [F, O], 'person') },
+    { instrucao: T, ...q('Sherlock Holmes is a real British police officer.', F, [V, O], 'person') },
+    { instrucao: T, ...q('Agatha Christie wrote Murder on the Orient Express.', V, [O, F], 'person') },
+    { instrucao: T, ...q('Benedict Cumberbatch played Sherlock in the BBC series.', V, [F, O], 'person') },
+    { instrucao: T, ...q("Doctor Watson is Sherlock's friend and partner.", V, [O, F], 'person') },
+    { instrucao: T, ...q('Hercule Poirot is a detective created by Arthur Conan Doyle.', F, [V, O], 'person') },
+    { instrucao: T, ...q('Sherlock solves cases with observation and logic.', V, [F, O], 'person') },
+    { instrucao: T, ...q('Detective stories are the best kind of story.', O, [V, F], 'person') }
+  ]
+});
+</script>
+</body>
+</html>
