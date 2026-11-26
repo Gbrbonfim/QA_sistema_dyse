@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 7 · Far better, by far the best</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 07 · Gramática (Fast Cities, Slow Islands)
+   Alinhado ao Grammar Point (comparativos fortes: considerably / significantly / far /
+   a great deal + comparativo; by far + superlativo; nowhere near as... as; the more...,
+   the more...) e ao Listening / Reading. Conteúdo NOVO. 24 questões. */
+const MN = 'What does the sentence express?';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 7, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'São Paulo has become ___ bigger than I expected.', opcoes: ['considerably', 'considerable', 'consider'], certa: 0, traducao: 'São Paulo ficou consideravelmente maior do que eu esperava.' },
+    { frase: 'Restaurants stay open far ___ than in Europe.', opcoes: ['latest', 'later', 'late'], certa: 1, traducao: 'Os restaurantes ficam abertos até muito mais tarde do que na Europa.' },
+    { frase: 'The nightlife is by far ___ in South America.', opcoes: ['better', 'good', 'the best'], certa: 2, traducao: 'A vida noturna é de longe a melhor da América do Sul.' },
+    { frase: 'The city is nowhere near ___ simple as it looks.', opcoes: ['as', 'so', 'than'], certa: 0, traducao: 'A cidade não é nem de longe tão simples quanto parece.' },
+    { frase: 'The more time I spend here, ___ more I love it.', opcoes: ['a', 'the', 'than'], certa: 1, traducao: 'Quanto mais tempo passo aqui, mais eu amo.' },
+    { frase: 'Parties go on ___ longer than you would expect.', opcoes: ['significant', 'significance', 'significantly'], certa: 2, traducao: 'As festas duram bem mais do que você imaginaria.' },
+    { frase: 'The slower you live, the ___ you feel.', opcoes: ['happier', 'happiest', 'more happy than'], certa: 0, traducao: 'Quanto mais devagar você vive, mais feliz se sente.' },
+    { frase: 'Island life is a great ___ calmer than city life.', opcoes: ['lot of', 'deal', 'many'], certa: 1, traducao: 'A vida na ilha é muito mais tranquila do que a vida na cidade.' },
+    { frase: 'New York is far ___ expensive than Ikaria.', opcoes: ['most', 'much', 'more'], certa: 2, traducao: 'Nova York é muito mais cara do que Ikaria.' },
+    { frase: 'This is by far the ___ beautiful beach on the island.', opcoes: ['most', 'more', 'much'], certa: 0, traducao: 'Esta é de longe a praia mais bonita da ilha.' },
+    { frase: 'My town is nowhere near as noisy ___ São Paulo.', opcoes: ['than', 'as', 'that'], certa: 1, traducao: 'Minha cidade não é nem de longe tão barulhenta quanto São Paulo.' },
+    { frase: 'The faster the pace, the ___ alive I feel.', opcoes: ['most', 'much', 'more'], certa: 2, traducao: 'Quanto mais rápido o ritmo, mais vivo eu me sinto.' },
+    { instrucao: MN + ' "Restaurants stay open far later than in Europe."', frase: '___', opcoes: ['a stronger comparison', 'two things changing together', 'something less than expected'], certa: 0, traducao: 'Uma comparação mais forte.' },
+    { instrucao: MN + ' "The more I travel, the more I learn."', frase: '___', opcoes: ['a strong superlative', 'two things changing together', 'something less than expected'], certa: 1, traducao: 'Duas coisas mudando juntas.' },
+    { instrucao: MN + ' "It is nowhere near as easy as it looks."', frase: '___', opcoes: ['a strong superlative', 'a stronger comparison', 'something less than expected'], certa: 2, traducao: 'Algo menos do que o esperado.' },
+    { instrucao: MN + ' "It is by far the best city in the world."', frase: '___', opcoes: ['a strong superlative', 'something less than expected', 'two things changing together'], certa: 0, traducao: 'Um superlativo forte.' },
+    { frase: 'A blue zone is a place where people live ___ longer and happier lives.', opcoes: ['exception', 'exceptionally', 'exceptional'], certa: 1, traducao: 'Uma blue zone é um lugar onde as pessoas vivem vidas excepcionalmente mais longas e felizes.' },
+    { frase: 'Ikaria is an island in ___.', opcoes: ['Italy', 'Spain', 'Greece'], certa: 2, traducao: 'Ikaria é uma ilha na Grécia.' },
+    { frase: 'In Ikaria, the traditional diet is mostly ___.', opcoes: ['plant-based', 'meat-based', 'fast food'], certa: 0, traducao: 'Em Ikaria, a dieta tradicional é principalmente à base de plantas.' },
+    { frase: 'The island got its name from the legend of ___.', opcoes: ['Hercules', 'Icarus', 'Zeus'], certa: 1, traducao: 'A ilha ganhou o nome por causa da lenda de Ícaro.' },
+    { frase: 'In Ikaria, the hills and mountains make people more ___.', opcoes: ['tired', 'lazy', 'active'], certa: 2, traducao: 'Em Ikaria, os morros deixam as pessoas mais ativas.' },
+    { frase: 'In São Paulo, "Work hard, play hard" is the unwritten ___.', opcoes: ['rule', 'road', 'role'], certa: 0, traducao: 'Em São Paulo, "trabalhe muito, divirta-se muito" é a regra não escrita.' },
+    { frase: 'Going out in São Paulo means staying out. Nobody ___ home early.', opcoes: ['rush', 'rushes', 'rushing'], certa: 1, traducao: 'Sair em São Paulo significa ficar na rua. Ninguém volta cedo para casa.' },
+    { frase: 'If you need space, nature and adventure, you belong in ___.', opcoes: ['São Paulo', 'New York', 'Queenstown'], certa: 2, traducao: 'Se você precisa de espaço, natureza e aventura, seu lugar é Queenstown.' }
+  ]
+});
+</script>
+</body>
+</html>

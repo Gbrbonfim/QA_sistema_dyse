@@ -1633,6 +1633,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 06', titulo: 'Would you have a robot at home?', tipo: 'Escute e grave', treina: 'Fala · Opinião e previsões', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 06', titulo: 'Describing trends', tipo: 'Make a Choice', treina: 'Gramática · Tendências e leitura', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 7,
+        titulo: 'Class 07 · Fast Cities, Slow Islands',
+        atividades: [
+          { num: 1, titulo: 'Life on a slow island', tipo: 'Escute e escolha', treina: 'Escuta · Estilos de vida e comparativos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'The more, the more', tipo: 'Monte a frase', treina: 'Escrita · Comparativos fortes', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'São Paulo or Ikaria?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Where do you really belong?', tipo: 'Escute e grave', treina: 'Fala · Justificar escolhas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Far better, by far the best', tipo: 'Make a Choice', treina: 'Gramática · Comparativos fortes', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

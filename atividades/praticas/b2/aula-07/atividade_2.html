@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 7 · The more, the more</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 07 · Escrita (Fast Cities, Slow Islands)
+   Alinhado ao Grammar Point (comparativos fortes: considerably / significantly / far /
+   a great deal + comparativo; by far + superlativo; nowhere near as... as; the more...,
+   the more...) e ao Speaking (quiz "Where do you really belong?"). Conteúdo NOVO.
+   A palavra extra nunca forma outra frase certa. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 7, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('São Paulo é consideravelmente maior do que eu esperava.'), palavras: ['São', 'Paulo', 'is', 'considerably', 'bigger', 'than', 'I', 'expected'], isca: ['biggest'], fim: '.', traducao: 'São Paulo é consideravelmente maior do que eu esperava.' },
+    { contexto: M('Os restaurantes ficam abertos até muito mais tarde do que na Europa.'), palavras: ['Restaurants', 'stay', 'open', 'far', 'later', 'than', 'in', 'Europe'], isca: ['latest'], fim: '.', traducao: 'Os restaurantes ficam abertos até muito mais tarde do que na Europa.' },
+    { contexto: M('A vida noturna é de longe a melhor do país.'), palavras: ['The', 'nightlife', 'is', 'by', 'far', 'the', 'best', 'in', 'the', 'country'], isca: ['better'], fim: '.', traducao: 'A vida noturna é de longe a melhor do país.' },
+    { contexto: M('A cidade não é nem de longe tão simples quanto parece.'), palavras: ['The', 'city', 'is', 'nowhere', 'near', 'as', 'simple', 'as', 'it', 'looks'], isca: ['than'], fim: '.', traducao: 'A cidade não é nem de longe tão simples quanto parece.' },
+    { contexto: M('Quanto mais tempo passo aqui, mais eu percebo.'), palavras: ['The', 'more', 'time', 'I', 'spend', 'here,', 'the', 'more', 'I', 'realise'], isca: ['most'], fim: '.', traducao: 'Quanto mais tempo passo aqui, mais eu percebo.' },
+    { contexto: M('As festas duram bem mais do que você imaginaria.'), palavras: ['Parties', 'go', 'on', 'significantly', 'longer', 'than', 'you', 'would', 'expect'], isca: ['longest'], fim: '.', traducao: 'As festas duram bem mais do que você imaginaria.' },
+    { contexto: M('Quanto mais devagar você vive, mais feliz você se sente.'), palavras: ['The', 'slower', 'you', 'live,', 'the', 'happier', 'you', 'feel'], isca: ['happiest'], fim: '.', traducao: 'Quanto mais devagar você vive, mais feliz você se sente.' },
+    { contexto: M('A vida na ilha é muito mais tranquila.'), palavras: ['Island', 'life', 'is', 'a', 'great', 'deal', 'calmer'], isca: ['calmest'], fim: '.', traducao: 'A vida na ilha é muito mais tranquila.' },
+    { contexto: M('Nova York é muito mais cara do que Ikaria.'), palavras: ['New', 'York', 'is', 'far', 'more', 'expensive', 'than', 'Ikaria'], isca: ['most'], fim: '.', traducao: 'Nova York é muito mais cara do que Ikaria.' },
+    { contexto: M('Quanto mais rápido o ritmo, mais vivo eu me sinto.'), palavras: ['The', 'faster', 'the', 'pace,', 'the', 'more', 'alive', 'I', 'feel'], isca: ['fastest'], fim: '.', traducao: 'Quanto mais rápido o ritmo, mais vivo eu me sinto.' },
+    { contexto: M('Minha cidade não é nem de longe tão barulhenta quanto São Paulo.'), palavras: ['My', 'city', 'is', 'nowhere', 'near', 'as', 'noisy', 'as', 'São', 'Paulo'], isca: ['noisier'], fim: '.', traducao: 'Minha cidade não é nem de longe tão barulhenta quanto São Paulo.' },
+    { contexto: M('Esta é de longe a praia mais bonita da ilha.'), palavras: ['This', 'is', 'by', 'far', 'the', 'most', 'beautiful', 'beach', 'on', 'the', 'island'], isca: ['more'], fim: '.', traducao: 'Esta é de longe a praia mais bonita da ilha.' },
+    { contexto: M('A avó dela tem noventa e um anos e ainda caminha todo dia.'), palavras: ['Her', 'grandmother', 'is', 'ninety-one', 'and', 'still', 'walks', 'every', 'day'], isca: ['walk'], fim: '.', traducao: 'A avó dela tem noventa e um anos e ainda caminha todo dia.' },
+    { contexto: M('As pessoas de Ikaria vivem muito mais do que a média.'), palavras: ['People', 'in', 'Ikaria', 'live', 'considerably', 'longer', 'than', 'average'], isca: ['long'], fim: '.', traducao: 'As pessoas de Ikaria vivem muito mais do que a média.' },
+    { contexto: M('Eles só comem carne aos domingos.'), palavras: ['They', 'only', 'eat', 'meat', 'on', 'Sundays'], isca: ['eats'], fim: '.', traducao: 'Eles só comem carne aos domingos.' },
+    { contexto: M('Ninguém volta cedo para casa aqui.'), palavras: ['Nobody', 'rushes', 'home', 'early', 'here'], isca: ['rush'], fim: '.', traducao: 'Ninguém volta cedo para casa aqui.' },
+    { contexto: M('Trabalhe muito, divirta-se muito.'), palavras: ['Work', 'hard,', 'play', 'hard'], isca: ['hardly'], fim: '.', traducao: 'Trabalhe muito, divirta-se muito.' },
+    { contexto: M('Quanto mais conectado você está, mais feliz você fica.'), palavras: ['The', 'more', 'connected', 'you', 'are,', 'the', 'happier', 'you', 'become'], isca: ['happy'], fim: '.', traducao: 'Quanto mais conectado você está, mais feliz você fica.' },
+    { contexto: M('Devagar não é chato. Devagar é rico.'), palavras: ['Slow', 'is', 'not', 'boring.', 'Slow', 'is', 'rich'], isca: ['bored'], fim: '.', traducao: 'Devagar não é chato. Devagar é rico.' },
+    { contexto: M('A vida é muito melhor quando dá para ver montanhas.'), palavras: ['Life', 'is', 'considerably', 'better', 'when', 'you', 'can', 'see', 'mountains'], isca: ['best'], fim: '.', traducao: 'A vida é muito melhor quando dá para ver montanhas.' }
+  ]
+});
+</script>
+</body>
+</html>

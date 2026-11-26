@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 7 · São Paulo or Ikaria?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 07 · Leitura (Fast Cities, Slow Islands)
+   Alinhado ao Warm Up (um dia típico em dois estilos de vida), ao Listening (Ikaria), ao
+   Reading (São Paulo) e ao Grammar Point (comparativos fortes). Conteúdo NOVO: Clara, que
+   mora em São Paulo, conversa com o primo Nikos, que mora em Ikaria.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Clara', 'Nikos! How is life on the island?'],
+  ['Nikos', 'Slow and peaceful, as always. And São Paulo?'],
+  ['Clara', "Crazy! The city never slows down. I'm working far longer hours than last year."],
+  ['Nikos', 'That sounds stressful. What time do you usually get home?'],
+  ['Clara', 'Around nine. And then my friends call me to go out!'],
+  ['Nikos', 'Here, people go to bed early. Well, except during the panigiri.'],
+  ['Clara', "The panigiri? What's that?"],
+  ['Nikos', "It's a summer festival. The village cooks for everyone, and we dance until morning."],
+  ['Clara', "That sounds amazing! It's nowhere near as boring as I imagined."],
+  ['Nikos', 'Ha! Island life is considerably more fun than people think.'],
+  ['Clara', 'And what about food? Do you eat a lot of meat?'],
+  ['Nikos', 'Not really. We eat vegetables from the garden and only have meat on Sundays.'],
+  ['Clara', "Wow. Here, the food options are by far the best I've ever seen."],
+  ['Nikos', "I believe you! But here, people live much longer. My grandma is ninety-one."],
+  ['Clara', "Ninety-one? And she's still active?"],
+  ['Nikos', 'Very! She walks up the hills every day to visit her friends.'],
+  ['Clara', 'The more you tell me, the more I want to visit.'],
+  ['Nikos', 'Then come in August! The slower you live, the happier you feel.'],
+  ['Clara', "I'll check my calendar. I really need a break."],
+  ['Nikos', 'Perfect. Grandma will cook for you!']
+];
+const lado = q => q === 'Clara' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 7, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Slow and peaceful, as always. And São Paulo?', 'Slowly and peaceful, as always. And São Paulo?', 'Slow and peaceful, as always. And São Paulo is?'], 0, 'Tranquila e calma, como sempre. E São Paulo?'),
+    prox(2, ["Crazy! The city never slows down. I'm working far long hours than last year.", "Crazy! The city never slows down. I'm working far longer hours than last year.", "Crazy! The city never slow down. I'm working far longer hours than last year."], 1, 'Uma loucura! A cidade nunca desacelera. Estou trabalhando muito mais horas do que no ano passado.'),
+    prox(3, ['That sounds stressful. What time do you usually gets home?', 'That sound stressful. What time do you usually get home?', 'That sounds stressful. What time do you usually get home?'], 2, 'Parece estressante. A que horas você costuma chegar em casa?'),
+    prox(5, ['Here, people go to bed early. Well, except during the panigiri.', 'Here, people goes to bed early. Well, except during the panigiri.', 'Here, people go to bed earlier. Well, except while the panigiri.'], 0, 'Aqui, as pessoas dormem cedo. Bom, menos durante o panigiri.'),
+    prox(7, ["It's a summer festival. The village cook for everyone, and we dance until morning.", "It's a summer festival. The village cooks for everyone, and we dance until morning.", "It's a summer festival. The village cooks for everyone, and we dancing until morning."], 1, 'É uma festa de verão. A vila cozinha para todo mundo, e a gente dança até de manhã.'),
+    prox(8, ["That sounds amazing! It's nowhere near as boring than I imagined.", "That sounds amazing! It's nowhere near so boring as I imagined.", "That sounds amazing! It's nowhere near as boring as I imagined."], 2, 'Parece incrível! Não é nem de longe tão chato quanto eu imaginava.'),
+    prox(9, ['Ha! Island life is considerably more fun than people think.', 'Ha! Island life is considerably most fun than people think.', 'Ha! Island life is considerable more fun than people think.'], 0, 'Ha! A vida na ilha é bem mais divertida do que as pessoas pensam.'),
+    prox(11, ['Not really. We eat vegetables from the garden and only have meat on Sunday days.', 'Not really. We eat vegetables from the garden and only have meat on Sundays.', 'Not really. We eats vegetables from the garden and only have meat on Sundays.'], 1, 'Não muito. Comemos verduras da horta e só comemos carne aos domingos.'),
+    prox(12, ["Wow. Here, the food options are by far the better I've ever seen.", "Wow. Here, the food options are far by the best I've ever seen.", "Wow. Here, the food options are by far the best I've ever seen."], 2, 'Nossa. Aqui, as opções de comida são de longe as melhores que já vi.'),
+    prox(15, ['Very! She walks up the hills every day to visit her friends.', 'Very! She walk up the hills every day to visit her friends.', 'Very! She walks up the hills every day for visit her friends.'], 0, 'Muito! Ela sobe os morros todo dia para visitar as amigas.'),
+    prox(16, ['The more you tell me, the most I want to visit.', 'The more you tell me, the more I want to visit.', 'More you tell me, more I want to visit.'], 1, 'Quanto mais você me conta, mais eu quero visitar.'),
+    prox(17, ['Then come in August! The slower you live, the happiest you feel.', 'Then come in August! The more slow you live, the happier you feel.', 'Then come in August! The slower you live, the happier you feel.'], 2, 'Então venha em agosto! Quanto mais devagar você vive, mais feliz se sente.'),
+    { instrucao: 'Where does Clara live?', frase: '___', opcoes: ['In São Paulo.', 'In Ikaria.', 'In New York.'], certa: 0, traducao: 'Em São Paulo.' },
+    { instrucao: 'How are Clara\'s working hours this year?', frase: '___', opcoes: ['Much shorter.', 'Far longer than last year.', 'The same as before.'], certa: 1, traducao: 'Muito mais longas do que no ano passado.' },
+    { instrucao: 'What is the panigiri?', frase: '___', opcoes: ['A hot spring.', 'A mountain.', 'A summer village festival.'], certa: 2, traducao: 'Uma festa de verão da vila.' },
+    { instrucao: 'When do people in Ikaria eat meat?', frase: '___', opcoes: ['Only on Sundays.', 'Every day.', 'Never.'], certa: 0, traducao: 'Só aos domingos.' },
+    { instrucao: 'What does Clara say about the food in São Paulo?', frase: '___', opcoes: ["It's too expensive.", "It's by far the best she's seen.", "It's boring."], certa: 1, traducao: 'É de longe a melhor que ela já viu.' },
+    { instrucao: "How old is Nikos's grandmother?", frase: '___', opcoes: ['Seventy-one.', 'Eighty-one.', 'Ninety-one.'], certa: 2, traducao: 'Noventa e um.' },
+    { instrucao: 'What does the grandmother do every day?', frase: '___', opcoes: ['Walks up the hills to visit friends.', 'Works in the garden only.', 'Swims in the sea.'], certa: 0, traducao: 'Sobe os morros para visitar as amigas.' },
+    { instrucao: 'When does Nikos invite Clara?', frase: '___', opcoes: ['At Christmas.', 'In August.', 'Next weekend.'], certa: 1, traducao: 'Em agosto.' }
+  ]
+});
+</script>
+</body>
+</html>

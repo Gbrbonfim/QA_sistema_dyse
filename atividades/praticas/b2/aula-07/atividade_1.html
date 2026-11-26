@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 7 · Life on a slow island</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 07 · Escuta (Fast Cities, Slow Islands)
+   Alinhado ao Listening (Anna em Ikaria, Grécia: blue zone, vida sem pressa, dieta à base
+   de plantas, termas, morros, a avó de 91 anos, o panigiri, a lenda de Ícaro), ao Reading
+   (blog sobre São Paulo: ritmo, trabalho, vida social, comida) e ao Grammar Point
+   (comparativos fortes). Conteúdo NOVO: narrado em primeira pessoa. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const G = 'Listen. What does the sentence express?';
+const ST = 'a stronger comparison', TO = 'two things changing together', LE = 'something less than expected', SU = 'a strong superlative';
+const S = 'Listen. Which topic is the speaker talking about?';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 7, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: 'Listen. What is a blue zone?', ...q('A blue zone is a place where people live exceptionally longer and happier lives.', 'a place where people live longer', ['a very rich city', 'a beach with blue water'], 'eco') },
+    { instrucao: 'Listen. What is life like on the island?', ...q('Life here is slow and unhurried. Nobody is ever in a rush.', 'slow and relaxed', ['fast and stressful', 'busy and noisy'], 'eco') },
+    { instrucao: 'Listen. What do people eat during the week?', ...q('Our diet is mostly plant-based, with herbs and vegetables from the garden. We only cook meat on Sundays.', 'mostly plants and vegetables', ['meat every day', 'only fast food'], 'eco') },
+    { instrucao: 'Listen. Why are people so active?', ...q('The island is one big mountain, with hills everywhere, so you walk up and down all day.', 'There are hills everywhere.', ['They all go to the gym.', 'They work in factories.'], 'eco') },
+    { instrucao: 'Listen. What does the grandmother do?', ...q('My grandmother is ninety-one, and she still walks to visit her friends every day.', 'walks to visit friends', ['stays at home all day', 'works at a hotel'], 'eco') },
+    { instrucao: 'Listen. What is a panigiri?', ...q('In summer, villages hold a panigiri: a festival with food for everyone, music and dancing.', 'a village festival with food and dancing', ['a kind of hot spring', 'a traditional boat'], 'eco') },
+    { instrucao: 'Listen. Which legend gave the island its name?', ...q('The legend says Icarus flew too close to the sun, his wax wings melted and he fell into the sea here.', 'the legend of Icarus', ['the legend of a sea monster', 'the legend of a lost king'], 'eco') },
+    { instrucao: 'Listen. What helps people live longer, according to the speaker?', ...q('Good sleep, low stress, a simple diet and daily exercise all help people live longer here.', 'sleep, low stress, diet and exercise', ['money and big houses', 'medicine and hospitals'], 'eco') },
+    { instrucao: S, ...q('The city never really slows down, and neither do the people in it.', 'pace of life', ['food and diet', 'social life'], 'location_city') },
+    { instrucao: S, ...q('Going out here means staying out. Nobody rushes home early.', 'social life', ['work culture', 'food and diet'], 'location_city') },
+    { instrucao: S, ...q('Everyone seems to be chasing something: a promotion, a deal, the next big thing.', 'work culture', ['pace of life', 'food and diet'], 'location_city') },
+    { instrucao: S, ...q('You can eat really well here, and the options have exploded in recent years.', 'food and diet', ['social life', 'work culture'], 'location_city') },
+    { instrucao: S, ...q('Work hard, play hard. That seems to be the unwritten rule.', 'overall philosophy of life', ['food and diet', 'pace of life'], 'location_city') },
+    { instrucao: G, ...q('The city has become considerably bigger than I expected.', ST, [TO, LE], 'rule') },
+    { instrucao: G, ...q('Restaurants stay open far later than in Europe.', ST, [SU, TO], 'rule') },
+    { instrucao: G, ...q('The nightlife is by far the best in the country.', SU, [LE, TO], 'rule') },
+    { instrucao: G, ...q('Island life is nowhere near as simple as it looks.', LE, [SU, TO], 'rule') },
+    { instrucao: G, ...q('The more time I spend here, the more I love it.', TO, [LE, SU], 'rule') },
+    { instrucao: G, ...q('Parties go on significantly longer than you would expect.', ST, [LE, SU], 'rule') },
+    { instrucao: G, ...q("The city isn't nearly as dangerous as people say.", LE, [ST, TO], 'rule') },
+    { instrucao: G, ...q('The slower you live, the happier you feel.', TO, [SU, ST], 'rule') },
+    { instrucao: G, ...q('This is easily the most beautiful beach on the island.', SU, [TO, LE], 'rule') },
+    { instrucao: 'Listen. Where does a person who loves mountains and adventure belong?', ...q('You need space, nature and adventure, and you want to see mountains from your window.', 'Queenstown', ['São Paulo', 'New York'], 'travel_explore') },
+    { instrucao: 'Listen. Where does a person who values community belong?', ...q('You value people over productivity. For you, slow is not boring; slow is rich.', 'Ikaria', ['New York', 'São Paulo'], 'travel_explore') }
+  ]
+});
+</script>
+</body>
+</html>
