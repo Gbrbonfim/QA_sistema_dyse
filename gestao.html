@@ -681,7 +681,9 @@ details.dyse-collapsible > .dyse-collapsible-body > .turma-group-body{margin:2px
   font-size:.9rem; font-weight:700; cursor:help; flex:none; line-height:1;
 }
 .info-tip-bubble{
-  position:absolute; top:calc(100% + 8px); left:0; width:min(360px, 80vw);
+  /* Abre para a ESQUERDA (o ícone fica no canto direito da tela): aberto para a
+     direita ele passava da borda, criava rolagem lateral e deslocava a página. */
+  position:absolute; top:calc(100% + 8px); right:0; left:auto; width:min(360px, 80vw);
   background:var(--seal); color:#fff; font-weight:400; font-size:.78rem; line-height:1.55;
   text-align:left; padding:12px 14px; border-radius:var(--radius-sm); box-shadow:var(--shadow-card);
   opacity:0; visibility:hidden; transform:translateY(4px); transition:opacity .15s, transform .15s;
