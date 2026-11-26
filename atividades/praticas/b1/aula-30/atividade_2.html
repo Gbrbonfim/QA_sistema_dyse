@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 30 · Review: build it</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 30 · Escrita (Review Classes 21-29)
+   Revisão: condicionais (21-23), present perfect + for / since (24), comparativos,
+   superlativos e preposições (25), relative clauses e personalidade (26), used to (27),
+   so / neither e semelhanças (28-29) e sustentabilidade (22). Conteúdo NOVO. 20 questões. */
+const A = (frase, pt) => 'Someone says: "' + frase + '" Answer in English: "' + pt + '"';
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 30, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Se você esquenta chocolate, ele derrete.'), palavras: ['If', 'you', 'heat', 'chocolate,', 'it', 'melts'], isca: ['melted'], fim: '.', traducao: 'Se você esquenta chocolate, ele derrete.' },
+    { contexto: M('Se fizer sol, vamos fazer um churrasco.'), palavras: ['If', "it's", 'sunny,', "we'll", 'have', 'a', 'barbecue'], isca: ['had'], fim: '.', traducao: 'Se fizer sol, vamos fazer um churrasco.' },
+    { contexto: M('Se eu morasse no Japão, comeria sushi todo dia.'), palavras: ['If', 'I', 'lived', 'in', 'Japan,', "I'd", 'eat', 'sushi', 'every', 'day'], isca: ['live'], fim: '.', traducao: 'Se eu morasse no Japão, comeria sushi todo dia.' },
+    { contexto: M('Se eu ganhasse muito dinheiro, abriria um brechó.'), palavras: ['If', 'I', 'earned', 'a', 'lot', 'of', 'money,', "I'd", 'open', 'a', 'second-hand', 'shop'], isca: ['earn'], fim: '.', traducao: 'Se eu ganhasse muito dinheiro, abriria um brechó.' },
+    { contexto: M('Há quanto tempo você conhece a sua melhor amiga?'), palavras: ['How', 'long', 'have', 'you', 'known', 'your', 'best', 'friend'], isca: ['know'], fim: '?', traducao: 'Há quanto tempo você conhece a sua melhor amiga?' },
+    { contexto: M('Eu a conheço desde a escola.'), palavras: ["I've", 'known', 'her', 'since', 'school'], isca: ['for'], fim: '.', traducao: 'Eu a conheço desde a escola.' },
+    { contexto: M('Lisboa é mais tranquila que Londres.'), palavras: ['Lisbon', 'is', 'more', 'peaceful', 'than', 'London'], isca: ['most'], fim: '.', traducao: 'Lisboa é mais tranquila que Londres.' },
+    { contexto: M('É a cidade mais movimentada do país.'), palavras: ["It's", 'the', 'busiest', 'city', 'in', 'the', 'country'], isca: ['busier'], fim: '.', traducao: 'É a cidade mais movimentada do país.' },
+    { contexto: M('Ela tem medo de viajar sozinha.'), palavras: ["She's", 'afraid', 'of', 'travelling', 'alone'], isca: ['travel'], fim: '.', traducao: 'Ela tem medo de viajar sozinha.' },
+    { contexto: M('A cidade é famosa pelos prédios coloridos.'), palavras: ['The', 'city', 'is', 'famous', 'for', 'its', 'colourful', 'buildings'], isca: ['of'], fim: '.', traducao: 'A cidade é famosa pelos prédios coloridos.' },
+    { contexto: M('Ele é o vizinho que sempre nos ajuda.'), palavras: ["He's", 'the', 'neighbour', 'who', 'always', 'helps', 'us'], isca: ['which'], fim: '.', traducao: 'Ele é o vizinho que sempre nos ajuda.' },
+    { contexto: M('Este é o café onde nos conhecemos.'), palavras: ['This', 'is', 'the', 'café', 'where', 'we', 'met'], isca: ['who'], fim: '.', traducao: 'Este é o café onde nos conhecemos.' },
+    { contexto: M('Ela é muito confiável e independente.'), palavras: ["She's", 'very', 'reliable', 'and', 'independent'], isca: ['independence'], fim: '.', traducao: 'Ela é muito confiável e independente.' },
+    { contexto: M('Eu tinha corte tigela quando era criança.'), palavras: ['I', 'used', 'to', 'have', 'a', 'bowl', 'cut'], isca: ['use'], fim: '.', traducao: 'Eu tinha corte tigela.' },
+    { contexto: M('A gente não tinha celular.'), palavras: ['We', "didn't", 'use', 'to', 'have', 'phones'], isca: ['used'], fim: '.', traducao: 'A gente não tinha celular.' },
+    { contexto: A('I love old films.', 'Eu também. Eles são incríveis.'), palavras: ['So', 'do', 'I.', 'They', 'are', 'amazing'], isca: ['am'], fim: '.', traducao: 'Eu também. Eles são incríveis.' },
+    { contexto: A("I didn't go out last night.", 'Eu também não. Fiquei em casa.'), palavras: ['Neither', 'did', 'I.', 'I', 'stayed', 'at', 'home'], isca: ['do'], fim: '.', traducao: 'Eu também não. Fiquei em casa.' },
+    { contexto: M('Somos parecidos, mas não idênticos.'), palavras: ["We're", 'similar,', 'but', 'not', 'identical'], isca: ['same'], fim: '.', traducao: 'Somos parecidos, mas não idênticos.' },
+    { contexto: M('Não jogue fora a sua calça jeans velha.'), palavras: ["Don't", 'throw', 'away', 'your', 'old', 'jeans'], isca: ['throws'], fim: '.', traducao: 'Não jogue fora a sua calça jeans velha.' },
+    { contexto: M('Comprar produtos sustentáveis ajuda o planeta.'), palavras: ['Buying', 'sustainable', 'products', 'helps', 'the', 'planet'], isca: ['help'], fim: '.', traducao: 'Comprar produtos sustentáveis ajuda o planeta.' }
+  ]
+});
+</script>
+</body>
+</html>

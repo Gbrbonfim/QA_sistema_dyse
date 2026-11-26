@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 30 · Old school friends</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 30 · Leitura (Review Classes 21-29)
+   Revisão em diálogo: used to e aparência, present perfect + for / since, comparativos e
+   superlativos, first e second conditional, relative clauses, so / neither, moda
+   sustentável e personalidade. Conteúdo NOVO: Tina e Marco se reencontram depois da
+   escola. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Tina', "Marco? Is that you? I haven't seen you since school!"],
+  ['Marco', 'Tina! Wow, you look different. You used to have a fringe!'],
+  ['Tina', "Ha ha! Yes, and you used to have long hair. Now it's short."],
+  ['Marco', 'True. So, where do you live now?'],
+  ['Tina', "I've lived in Lisbon for five years. It's more peaceful than London."],
+  ['Marco', "Really? I've lived in Berlin since 2020. It's one of the most exciting cities in Europe."],
+  ['Tina', "I'd love to visit Berlin. If I had more holidays, I'd go there next month."],
+  ['Marco', "Come in the summer! If you come in July, you'll love the parks."],
+  ['Tina', 'Great idea. What do you do now?'],
+  ['Marco', 'I work for a company that makes sustainable clothes.'],
+  ['Tina', "No way! I don't buy fast fashion any more."],
+  ['Marco', 'Neither do I. Fast fashion creates a lot of waste.'],
+  ['Tina', 'I went to a clothes swap last month.'],
+  ['Marco', 'So did I! It was a great way to meet people.'],
+  ['Tina', "You were always so extroverted. I'm still a bit introverted."],
+  ['Marco', "But you're more confident now. You used to be very shy!"],
+  ['Tina', "Ha ha, that's true. Hey, shall we have a coffee?"],
+  ['Marco', "Yes! There's a café near here where they make the best cakes in town."],
+  ['Tina', "Perfect. I'm starving!"],
+  ['Marco', "So am I. Let's go!"]
+];
+const lado = q => q === 'Tina' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 30, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Tina! Wow, you look different. You used to have a fringe!', 'Tina! Wow, you look different. You use to have a fringe!', 'Tina! Wow, you look different. You used to having a fringe!'], 0, 'Tina! Nossa, você está diferente. Você tinha franja!'),
+    prox(2, ["Ha ha! Yes, and you used to have short hair. Now it's short.", "Ha ha! Yes, and you used to have long hair. Now it's short.", "Ha ha! Yes, and you use to have long hair. Now it's short."], 1, 'Ha ha! Sim, e você tinha cabelo comprido. Agora está curto.'),
+    prox(4, ["I've lived in Lisbon since five years. It's more peaceful than London.", "I live in Lisbon for five years. It's more peaceful than London.", "I've lived in Lisbon for five years. It's more peaceful than London."], 2, 'Moro em Lisboa há cinco anos. É mais tranquila que Londres.'),
+    prox(5, ["Really? I've lived in Berlin since 2020. It's one of the most exciting cities in Europe.", "Really? I've lived in Berlin for 2020. It's one of the most exciting cities in Europe.", "Really? I've lived in Berlin since 2020. It's one of the excitingest cities in Europe."], 0, 'Sério? Moro em Berlim desde 2020. É uma das cidades mais animadas da Europa.'),
+    prox(6, ["I'd love to visit Berlin. If I have more holidays, I'd go there next month.", "I'd love to visit Berlin. If I had more holidays, I'd go there next month.", "I'd love to visit Berlin. If I had more holidays, I'll go there next month."], 1, 'Eu adoraria visitar Berlim. Se eu tivesse mais férias, iria no mês que vem.'),
+    prox(7, ["Come in the summer! If you will come in July, you'll love the parks.", 'Come in the summer! If you come in July, you loved the parks.', "Come in the summer! If you come in July, you'll love the parks."], 2, 'Vem no verão! Se você vier em julho, vai adorar os parques.'),
+    prox(9, ['I work for a company that makes sustainable clothes.', 'I work for a company who makes sustainable clothes.', 'I work for a company where makes sustainable clothes.'], 0, 'Trabalho numa empresa que faz roupas sustentáveis.'),
+    prox(11, ['So do I. Fast fashion creates a lot of waste.', 'Neither do I. Fast fashion creates a lot of waste.', 'Neither am I. Fast fashion creates a lot of waste.'], 1, 'Eu também não. A fast fashion gera muito lixo.'),
+    prox(13, ['So was I! It was a great way to meet people.', 'Neither did I! It was a great way to meet people.', 'So did I! It was a great way to meet people.'], 2, 'Eu também! Foi um ótimo jeito de conhecer gente.'),
+    prox(15, ["But you're more confident now. You used to be very shy!", "But you're confidenter now. You used to be very shy!", "But you're more confident now. You used to being very shy!"], 0, 'Mas você está mais confiante agora. Você era muito tímida!'),
+    prox(17, ["Yes! There's a café near here which they make the best cakes in town.", "Yes! There's a café near here where they make the best cakes in town.", "Yes! There's a café near here where they make the better cakes in town."], 1, 'Sim! Tem um café aqui perto onde fazem os melhores bolos da cidade.'),
+    prox(19, ["So do I. Let's go!", "Neither am I. Let's go!", "So am I. Let's go!"], 2, 'Eu também. Vamos!'),
+    { instrucao: 'When did Tina and Marco last see each other?', frase: '___', opcoes: ['At school.', 'Last month.', 'In Berlin.'], certa: 0, traducao: 'Na escola.' },
+    { instrucao: 'What did Tina use to have?', frase: '___', opcoes: ['Long hair.', 'A fringe.', 'A beard.'], certa: 1, traducao: 'Franja.' },
+    { instrucao: 'How long has Tina lived in Lisbon?', frase: '___', opcoes: ['Since 2020.', 'For ten years.', 'For five years.'], certa: 2, traducao: 'Há cinco anos.' },
+    { instrucao: 'How does Marco describe Berlin?', frase: '___', opcoes: ['One of the most exciting cities in Europe.', 'The most peaceful city in Europe.', 'More boring than Lisbon.'], certa: 0, traducao: 'Uma das cidades mais animadas da Europa.' },
+    { instrucao: "What does Marco's company make?", frase: '___', opcoes: ['Fast fashion.', 'Sustainable clothes.', 'Cakes.'], certa: 1, traducao: 'Roupas sustentáveis.' },
+    { instrucao: 'What did they both do last month?', frase: '___', opcoes: ['They visited Berlin.', 'They bought fast fashion.', 'They went to a clothes swap.'], certa: 2, traducao: 'Foram a uma troca de roupas.' },
+    { instrucao: 'How has Tina changed?', frase: '___', opcoes: ["She's more confident now.", "She's more extroverted than Marco.", "She's less independent."], certa: 0, traducao: 'Está mais confiante agora.' },
+    { instrucao: 'Why does Marco want to go to that café?', frase: '___', opcoes: ["He's tired.", 'They make the best cakes in town.', "It's very cheap."], certa: 1, traducao: 'Fazem os melhores bolos da cidade.' }
+  ]
+});
+</script>
+</body>
+</html>

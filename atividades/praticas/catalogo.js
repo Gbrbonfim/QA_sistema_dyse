@@ -1465,6 +1465,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 29', titulo: 'Same here!', tipo: 'Escute e grave', treina: 'Fala · So / neither e semelhanças', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 29', titulo: 'Did, have, would or will?', tipo: 'Make a Choice', treina: 'Gramática · So / neither e semelhanças', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 30,
+        titulo: 'Class 30 · Review Classes 21-29',
+        atividades: [
+          { num: 1, titulo: 'Review: listen and choose', tipo: 'Escute e escolha', treina: 'Escuta · Revisão 21-29', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Review: build it', tipo: 'Monte a frase', treina: 'Escrita · Revisão 21-29', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Old school friends', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Can you do it?', tipo: 'Escute e grave', treina: 'Fala · Revisão 21-29', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Review: choose the right one', tipo: 'Make a Choice', treina: 'Gramática · Revisão 21-29', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
