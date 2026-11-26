@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 25 · Cheaper than London</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 25 · Escrita (City Battles)
+   Alinhado ao "Grammar Point" (comparativos -er / more ... than; y → ier; as ... as;
+   superlativos the -est / the most; better, worst) e ao vocabulário de verbos / adjetivos
+   + preposição (interested in, depend on, afraid of, arrive in, famous for, spend on,
+   agree with, nice to, pay for, worry about, different from). Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 25, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Lisboa é mais barata que Londres.'), palavras: ['Lisbon', 'is', 'cheaper', 'than', 'London'], isca: ['more'], fim: '.', traducao: 'Lisboa é mais barata que Londres.' },
+    { contexto: M('Tóquio é mais moderna que Roma.'), palavras: ['Tokyo', 'is', 'more', 'modern', 'than', 'Rome'], isca: ['moderner'], fim: '.', traducao: 'Tóquio é mais moderna que Roma.' },
+    { contexto: M('Esta é a cidade mais tranquila que eu já visitei.'), palavras: ['This', 'is', 'the', 'most', 'peaceful', 'city', "I've", 'ever', 'visited'], isca: ['more'], fim: '.', traducao: 'Esta é a cidade mais tranquila que já visitei.' },
+    { contexto: M('O metrô é tão rápido quanto o ônibus.'), palavras: ['The', 'metro', 'is', 'as', 'fast', 'as', 'the', 'bus'], isca: ['than'], fim: '.', traducao: 'O metrô é tão rápido quanto o ônibus.' },
+    { contexto: M('Hoje está mais quente que ontem.'), palavras: ["It's", 'hotter', 'than', 'yesterday'], isca: ['hoter'], fim: '.', traducao: 'Hoje está mais quente que ontem.' },
+    { contexto: M('A comida aqui é melhor do que em casa.'), palavras: ['The', 'food', 'here', 'is', 'better', 'than', 'at', 'home'], isca: ['gooder'], fim: '.', traducao: 'A comida aqui é melhor do que em casa.' },
+    { contexto: M('Foi a pior viagem da minha vida.'), palavras: ['It', 'was', 'the', 'worst', 'trip', 'of', 'my', 'life'], isca: ['baddest'], fim: '.', traducao: 'Foi a pior viagem da minha vida.' },
+    { contexto: M('O Rio é mais movimentado que Curitiba.'), palavras: ['Rio', 'is', 'busier', 'than', 'Curitiba'], isca: ['busyer'], fim: '.', traducao: 'O Rio é mais movimentado que Curitiba.' },
+    { contexto: M('Qual é a cidade mais barata da Europa?'), palavras: ['What', 'is', 'the', 'cheapest', 'city', 'in', 'Europe'], isca: ['cheaper'], fim: '?', traducao: 'Qual é a cidade mais barata da Europa?' },
+    { contexto: M('Bangkok é muito diferente de Berlim.'), palavras: ['Bangkok', 'is', 'very', 'different', 'from', 'Berlin'], isca: ['of'], fim: '.', traducao: 'Bangkok é muito diferente de Berlim.' },
+    { contexto: M('Estou interessado em arte de rua.'), palavras: ["I'm", 'interested', 'in', 'street', 'art'], isca: ['on'], fim: '.', traducao: 'Tenho interesse em arte de rua.' },
+    { contexto: M('Os meus planos dependem do meu orçamento.'), palavras: ['My', 'plans', 'depend', 'on', 'my', 'budget'], isca: ['of'], fim: '.', traducao: 'Os meus planos dependem do meu orçamento.' },
+    { contexto: M('Ela tem medo de altura.'), palavras: ["She's", 'afraid', 'of', 'heights'], isca: ['from'], fim: '.', traducao: 'Ela tem medo de altura.' },
+    { contexto: M('Chegamos a Paris de manhã.'), palavras: ['We', 'arrived', 'in', 'Paris', 'in', 'the', 'morning'], isca: ['to'], fim: '.', traducao: 'Chegamos a Paris de manhã.' },
+    { contexto: M('A cidade é famosa pela comida de rua.'), palavras: ['The', 'city', 'is', 'famous', 'for', 'its', 'street', 'food'], isca: ['of'], fim: '.', traducao: 'A cidade é famosa pela comida de rua.' },
+    { contexto: M('Gastei muito dinheiro em lembrancinhas.'), palavras: ['I', 'spent', 'a', 'lot', 'of', 'money', 'on', 'souvenirs'], isca: ['in'], fim: '.', traducao: 'Gastei muito dinheiro em lembrancinhas.' },
+    { contexto: M('Concordo totalmente com você.'), palavras: ['I', 'completely', 'agree', 'with', 'you'], isca: ['to'], fim: '.', traducao: 'Concordo totalmente com você.' },
+    { contexto: M('As pessoas aqui são muito simpáticas com os turistas.'), palavras: ['People', 'here', 'are', 'very', 'nice', 'to', 'tourists'], isca: ['for'], fim: '.', traducao: 'As pessoas aqui são muito simpáticas com os turistas.' },
+    { contexto: M('Quem vai pagar o táxi?'), palavras: ['Who', 'will', 'pay', 'for', 'the', 'taxi'], isca: ['to'], fim: '?', traducao: 'Quem vai pagar o táxi?' },
+    { contexto: M('Ela se preocupa com o trânsito.'), palavras: ['She', 'worries', 'about', 'the', 'traffic'], isca: ['worry'], fim: '.', traducao: 'Ela se preocupa com o trânsito.' }
+  ]
+});
+</script>
+</body>
+</html>

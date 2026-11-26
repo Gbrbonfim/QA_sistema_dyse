@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 25 · Rome or Amsterdam?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 25 · Leitura (City Battles)
+   Alinhado ao Talking Point (escolher entre duas cidades), ao "Grammar Point" (comparativos,
+   superlativos, as ... as) e às preposições (depend on, interested in, worried about,
+   afraid of, famous for, agree with, spend on, arrive at / in, pay for). Revisão de first
+   conditional. Conteúdo NOVO: Mei e Paulo escolhem o destino das férias.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Mei', 'So, where shall we go in July: Rome or Amsterdam?'],
+  ['Paulo', 'Hmm. It depends on our budget. Which one is cheaper?'],
+  ['Mei', 'Amsterdam is more expensive than Rome, especially the hotels.'],
+  ['Paulo', 'OK. And which one is more interesting?'],
+  ['Mei', "I'm really interested in history, so for me, Rome is the most interesting city in Europe."],
+  ['Paulo', "But Rome is hotter than Amsterdam in July. I'm worried about the heat."],
+  ['Mei', "That's true. July is one of the hottest months there."],
+  ['Paulo', 'And Amsterdam is famous for its canals and bikes.'],
+  ['Mei', "Yes, but I'm a bit afraid of riding a bike in a busy city."],
+  ['Paulo', "Don't worry. You can take the tram. It's as easy as the metro."],
+  ['Mei', 'Good. Is Amsterdam more crowded than Rome?'],
+  ['Paulo', 'I think both are crowded in summer. Rome is one of the busiest cities in Europe.'],
+  ['Mei', 'Hmm. Which city has better food?'],
+  ['Paulo', "Rome, of course! It makes the best pasta I've ever eaten."],
+  ['Mei', 'I agree with you! Italian food is the best.'],
+  ['Paulo', 'So, Rome? We can spend less money on hotels and more on food.'],
+  ['Mei', 'Perfect. But we have to arrive at the hotel early. I hate carrying bags in the heat.'],
+  ['Paulo', "No problem. If we take the first flight, we'll arrive in Rome before ten."],
+  ['Mei', "Great! Who's going to pay for the tickets?"],
+  ['Paulo', "Ha ha! Let's pay for them together."]
+];
+const lado = q => q === 'Mei' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 25, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Hmm. It depends on our budget. Which one is cheaper?', 'Hmm. It depends of our budget. Which one is cheaper?', 'Hmm. It depends on our budget. Which one is more cheap?'], 0, 'Hmm. Depende do nosso orçamento. Qual é mais barata?'),
+    prox(3, ['OK. And which one is interestinger?', 'OK. And which one is more interesting?', 'OK. And which one is the more interesting than?'], 1, 'Tá. E qual é mais interessante?'),
+    prox(4, ["I'm really interested on history, so for me, Rome is the most interesting city in Europe.", "I'm really interested in history, so for me, Rome is the more interesting city in Europe.", "I'm really interested in history, so for me, Rome is the most interesting city in Europe."], 2, 'Tenho muito interesse em história, então, para mim, Roma é a cidade mais interessante da Europa.'),
+    prox(5, ["But Rome is hotter than Amsterdam in July. I'm worried about the heat.", "But Rome is more hot than Amsterdam in July. I'm worried about the heat.", "But Rome is hotter than Amsterdam in July. I'm worried of the heat."], 0, 'Mas Roma é mais quente que Amsterdã em julho. Estou preocupado com o calor.'),
+    prox(8, ["Yes, but I'm a bit afraid about riding a bike in a busy city.", "Yes, but I'm a bit afraid of riding a bike in a busy city.", 'Yes, and I love riding a bike in a busy city.'], 1, 'Sim, mas tenho um pouco de medo de andar de bicicleta numa cidade movimentada.'),
+    prox(10, ['Good. Is Amsterdam crowdeder than Rome?', 'Good. Is Amsterdam more crowded that Rome?', 'Good. Is Amsterdam more crowded than Rome?'], 2, 'Ótimo. Amsterdã é mais cheia que Roma?'),
+    prox(11, ['I think both are crowded in summer. Rome is one of the busiest cities in Europe.', 'I think both are crowded in summer. Rome is one of the busyest cities in Europe.', 'I think both are crowded in summer. Rome is one of the most busy cities in Europe.'], 0, 'Acho que as duas ficam cheias no verão. Roma é uma das cidades mais movimentadas da Europa.'),
+    prox(13, ["Rome, of course! It makes the better pasta I've ever eaten.", "Rome, of course! It makes the best pasta I've ever eaten.", "Rome, of course! It makes the worst pasta I've ever eaten."], 1, 'Roma, claro! Faz a melhor massa que eu já comi.'),
+    prox(14, ['I agree to you! Italian food is the best.', 'I agree with you! Italian food is the better.', 'I agree with you! Italian food is the best.'], 2, 'Concordo com você! A comida italiana é a melhor.'),
+    prox(15, ['So, Rome? We can spend less money on hotels and more on food.', 'So, Rome? We can spend less money in hotels and more in food.', 'So, Amsterdam? We can spend less money on hotels and more on food.'], 0, 'Então, Roma? Podemos gastar menos com hotel e mais com comida.'),
+    prox(17, ["No problem. If we take the first flight, we'll arrive to Rome before ten.", "No problem. If we take the first flight, we'll arrive in Rome before ten.", "No problem. If we will take the first flight, we'll arrive in Rome before ten."], 1, 'Sem problema. Se pegarmos o primeiro voo, chegamos a Roma antes das dez.'),
+    prox(19, ["Ha ha! Let's pay to them together.", "Ha ha! Let's paying for them together.", "Ha ha! Let's pay for them together."], 2, 'Ha ha! Vamos pagar juntos.'),
+    { instrucao: 'What do their plans depend on?', frase: '___', opcoes: ['Their budget.', 'The weather.', 'Their boss.'], certa: 0, traducao: 'Do orçamento.' },
+    { instrucao: 'Which city is more expensive?', frase: '___', opcoes: ['Rome.', 'Amsterdam.', 'They cost the same.'], certa: 1, traducao: 'Amsterdã.' },
+    { instrucao: 'Why does Mei think Rome is the most interesting city?', frase: '___', opcoes: ['She loves bikes.', 'She speaks Italian.', "She's interested in history."], certa: 2, traducao: 'Ela tem interesse em história.' },
+    { instrucao: 'What is Paulo worried about?', frase: '___', opcoes: ['The heat in Rome.', 'The canals.', 'The food.'], certa: 0, traducao: 'O calor em Roma.' },
+    { instrucao: 'What is Mei afraid of?', frase: '___', opcoes: ['Flying.', 'Riding a bike in a busy city.', 'Big museums.'], certa: 1, traducao: 'Andar de bicicleta numa cidade movimentada.' },
+    { instrucao: 'What is Amsterdam famous for?', frase: '___', opcoes: ['Pasta.', 'Hot summers.', 'Its canals and bikes.'], certa: 2, traducao: 'Os canais e as bicicletas.' },
+    { instrucao: 'Which city do they choose?', frase: '___', opcoes: ['Rome.', 'Amsterdam.', 'Neither.'], certa: 0, traducao: 'Roma.' },
+    { instrucao: 'How will they pay for the tickets?', frase: '___', opcoes: ['Mei will pay.', 'Together.', 'Paulo will pay.'], certa: 1, traducao: 'Juntos.' }
+  ]
+});
+</script>
+</body>
+</html>

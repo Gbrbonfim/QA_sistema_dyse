@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 25 · Crowded or peaceful?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 25 · Escuta (City Battles)
+   Alinhado ao Warm Up (crowded, cheap, expensive, historic, modern, polluted, clean,
+   peaceful, exciting, boring), ao "Grammar Point" (comparativos, as...as, superlativos,
+   irregulares) e ao vocabulário de verbos / adjetivos + preposição. Cidades e fatos NOVOS
+   e verdadeiros. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const M = 'Listen. What does it mean?', P = 'Listen. Which preposition do you hear?', C = 'Listen. Which city is it?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 25, num: 1, tipo: 'imagem',
+  instrucao: 'Listen. How is the city?',
+  itens: [
+    q("There are too many people everywhere. You can't walk on the pavement.", 'crowded', ['peaceful', 'boring'], 'location_city'),
+    q("The air is dirty and there's a lot of smoke from the traffic.", 'polluted', ['clean', 'historic'], 'location_city'),
+    q('It is very quiet. You can hear the birds and relax.', 'peaceful', ['crowded', 'exciting'], 'location_city'),
+    q('Everything costs a lot: hotels, taxis, even a coffee.', 'expensive', ['cheap', 'peaceful'], 'location_city'),
+    q('There are old buildings, castles and museums from hundreds of years ago.', 'historic', ['modern', 'polluted'], 'location_city'),
+    q("There's nothing to do there. Everything closes at eight.", 'boring', ['exciting', 'crowded'], 'location_city'),
+    q('You can eat a great meal there for three dollars.', 'cheap', ['expensive', 'polluted'], 'location_city'),
+    { instrucao: M, ...q('Lisbon is cheaper than London.', 'London is more expensive.', ['Lisbon is more expensive.', 'They cost the same.'], 'help') },
+    { instrucao: M, ...q('Here, the metro is as fast as the bus.', 'They are equally fast.', ['The metro is faster.', 'The bus is faster.'], 'help') },
+    { instrucao: M, ...q('Rome is older than Paris.', 'Paris is newer than Rome.', ['Paris is older.', 'They are the same age.'], 'help') },
+    { instrucao: M, ...q('This is the most crowded beach in the city.', 'No other beach there is more crowded.', ["It's an empty beach.", 'Other beaches are more crowded.'], 'help') },
+    { instrucao: M, ...q("Berlin isn't as hot as Bangkok.", 'Bangkok is hotter.', ['Berlin is hotter.', "They're equally hot."], 'help') },
+    { instrucao: M, ...q('Our hotel was worse than the photos.', 'The photos looked better.', ['The hotel was better.', 'The hotel was the same.'], 'help') },
+    { instrucao: P, ...q("I'm really interested in street art.", 'in', ['on', 'at'], 'hearing') },
+    { instrucao: P, ...q('My plans depend on the weather.', 'on', ['of', 'in'], 'hearing') },
+    { instrucao: P, ...q("She's afraid of flying.", 'of', ['about', 'from'], 'hearing') },
+    { instrucao: P, ...q('We arrived at the station very late.', 'at', ['to', 'in'], 'hearing') },
+    { instrucao: P, ...q('This city is famous for its pizza.', 'for', ['of', 'by'], 'hearing') },
+    { instrucao: P, ...q('Tokyo is very different from Rio.', 'from', ['of', 'with'], 'hearing') },
+    { instrucao: P, ...q('I always worry about getting lost.', 'about', ['of', 'on'], 'hearing') },
+    { instrucao: C, ...q('There are no cars in its historic centre. People travel by boat on the canals.', 'Venice', ['Dubai', 'Berlin'], 'travel_explore') },
+    { instrucao: C, ...q('It has the tallest building in the world, the Burj Khalifa.', 'Dubai', ['Venice', 'Lisbon'], 'travel_explore') },
+    { instrucao: C, ...q('It is the capital of Iceland and the northernmost capital city of a country in the world.', 'Reykjavik', ['Berlin', 'Dubai'], 'travel_explore') },
+    { instrucao: C, ...q("It's a hilly city with old yellow trams and delicious custard tarts.", 'Lisbon', ['Reykjavik', 'Venice'], 'travel_explore') }
+  ]
+});
+</script>
+</body>
+</html>

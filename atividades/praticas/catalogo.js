@@ -1416,6 +1416,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Fame for good causes', tipo: 'Escute e grave', treina: 'Fala · Present perfect', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'For or since?', tipo: 'Make a Choice', treina: 'Gramática · Present perfect', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 25,
+        titulo: 'Class 25 · City Battles',
+        atividades: [
+          { num: 1, titulo: 'Crowded or peaceful?', tipo: 'Escute e escolha', treina: 'Escuta · Cidades e comparações', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Cheaper than London', tipo: 'Monte a frase', treina: 'Escrita · Comparativos e preposições', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Rome or Amsterdam?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My favourite city', tipo: 'Escute e grave', treina: 'Fala · Cidades e viagens', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'The best, the worst', tipo: 'Make a Choice', treina: 'Gramática · Comparativos e superlativos', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
