@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 22 · If you swap, you'll save</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 22 · Escrita (The Green Wardrobe)
+   Alinhado ao "Grammar Point" (first conditional: If + present simple, will / won't / can /
+   imperativo; if no começo com vírgula ou no meio sem vírgula) e ao vocabulário de moda
+   sustentável (swap, donate, tailor, fit, suit, clear-out, second-hand, landfill).
+   Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 22, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Se você trocar as suas roupas, vai economizar dinheiro.'), palavras: ['If', 'you', 'swap', 'your', 'clothes,', "you'll", 'save', 'money'], isca: ['saved'], fim: '.', traducao: 'Se você trocar as suas roupas, vai economizar dinheiro.' },
+    { contexto: M('Se chover amanhã, vamos ficar em casa.'), palavras: ['If', 'it', 'rains', 'tomorrow,', "we'll", 'stay', 'at', 'home'], isca: ['rain'], fim: '.', traducao: 'Se chover amanhã, vamos ficar em casa.' },
+    { contexto: M('Você vai ajudar o meio ambiente se doar as suas roupas.'), palavras: ["You'll", 'help', 'the', 'environment', 'if', 'you', 'donate', 'your', 'clothes'], isca: ['donated'], fim: '.', traducao: 'Você vai ajudar o meio ambiente se doar as suas roupas.' },
+    { contexto: M('Se ela não estudar, não vai passar.'), palavras: ['If', 'she', "doesn't", 'study,', 'she', "won't", 'pass'], isca: ["don't"], fim: '.', traducao: 'Se ela não estudar, não vai passar.' },
+    { contexto: M('Se a calça não servir, leve a um alfaiate.'), palavras: ['If', 'the', 'trousers', "don't", 'fit,', 'take', 'them', 'to', 'a', 'tailor'], isca: ['fits'], fim: '.', traducao: 'Se a calça não servir, leve a um alfaiate.' },
+    { contexto: M('Se você for à troca de roupas, pode encontrar algo novo.'), palavras: ['If', 'you', 'go', 'to', 'the', 'clothes', 'swap,', 'you', 'can', 'find', 'something', 'new'], isca: ['goes'], fim: '.', traducao: 'Se você for à troca de roupas, pode encontrar algo novo.' },
+    { contexto: M('O que vai acontecer se as pessoas pararem de comprar fast fashion?'), palavras: ['What', 'will', 'happen', 'if', 'people', 'stop', 'buying', 'fast', 'fashion'], isca: ['buy'], fim: '?', traducao: 'O que vai acontecer se as pessoas pararem de comprar fast fashion?' },
+    { contexto: M('Se eu tiver dinheiro extra, vou comprar uma jaqueta de segunda mão.'), palavras: ['If', 'I', 'have', 'extra', 'money,', "I'll", 'buy', 'a', 'second-hand', 'jacket'], isca: ['had'], fim: '.', traducao: 'Se eu tiver dinheiro extra, vou comprar uma jaqueta de segunda mão.' },
+    { contexto: M('Vamos perder o ônibus se não sairmos agora.'), palavras: ["We'll", 'miss', 'the', 'bus', 'if', 'we', "don't", 'leave', 'now'], isca: ["won't"], fim: '.', traducao: 'Vamos perder o ônibus se não sairmos agora.' },
+    { contexto: M('Se você jogar as suas roupas no lixo, elas vão para o aterro.'), palavras: ['If', 'you', 'throw', 'your', 'clothes', 'in', 'the', 'bin,', "they'll", 'go', 'to', 'the', 'landfill'], isca: ['throws'], fim: '.', traducao: 'Se você jogar as suas roupas no lixo, elas vão para o aterro.' },
+    { contexto: M('Se mais pessoas trocarem roupas, vamos produzir menos lixo.'), palavras: ['If', 'more', 'people', 'swap', 'clothes,', "we'll", 'produce', 'less', 'waste'], isca: ['fewer'], fim: '.', traducao: 'Se mais pessoas trocarem roupas, vamos produzir menos lixo.' },
+    { contexto: M('Não vou sair hoje à noite se estiver chovendo.'), palavras: ['I', "won't", 'go', 'out', 'tonight', 'if', "it's", 'raining'], isca: ['rained'], fim: '.', traducao: 'Não vou sair hoje à noite se estiver chovendo.' },
+    { contexto: M('A fast fashion causa muita poluição.'), palavras: ['Fast', 'fashion', 'causes', 'a', 'lot', 'of', 'pollution'], isca: ['cause'], fim: '.', traducao: 'A fast fashion causa muita poluição.' },
+    { contexto: M('Esse vestido não combina com você.'), palavras: ['That', 'dress', "doesn't", 'suit', 'you'], isca: ['suits'], fim: '.', traducao: 'Esse vestido não combina com você.' },
+    { contexto: M('Esses sapatos não servem em mim.'), palavras: ['These', 'shoes', "don't", 'fit', 'me'], isca: ['fits'], fim: '.', traducao: 'Esses sapatos não servem em mim.' },
+    { contexto: M('Estou fazendo uma limpa no meu guarda-roupa.'), palavras: ["I'm", 'doing', 'a', 'clear-out', 'of', 'my', 'wardrobe'], isca: ['make'], fim: '.', traducao: 'Estou fazendo uma limpa no meu guarda-roupa.' },
+    { contexto: M('Roupas de segunda mão são mais sustentáveis.'), palavras: ['Second-hand', 'clothes', 'are', 'more', 'sustainable'], isca: ['most'], fim: '.', traducao: 'Roupas de segunda mão são mais sustentáveis.' },
+    { contexto: M('Não jogue fora as suas roupas velhas.'), palavras: ["Don't", 'throw', 'away', 'your', 'old', 'clothes'], isca: ['throws'], fim: '.', traducao: 'Não jogue fora as suas roupas velhas.' },
+    { contexto: M('Se você lavar as suas roupas em água fria, vai economizar energia.'), palavras: ['If', 'you', 'wash', 'your', 'clothes', 'in', 'cold', 'water,', "you'll", 'save', 'energy'], isca: ['washes'], fim: '.', traducao: 'Se você lavar as suas roupas em água fria, vai economizar energia.' },
+    { contexto: M('Vou ficar orgulhoso se terminar o curso.'), palavras: ["I'll", 'feel', 'proud', 'if', 'I', 'finish', 'the', 'course'], isca: ['finished'], fim: '.', traducao: 'Vou ficar orgulhoso se terminar o curso.' }
+  ]
+});
+</script>
+</body>
+</html>

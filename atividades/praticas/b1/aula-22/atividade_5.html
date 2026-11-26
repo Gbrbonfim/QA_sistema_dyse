@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 22 · If it rains, we will...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 22 · Gramática (The Green Wardrobe)
+   Alinhado ao "Grammar Point" (first conditional: If + present simple, will / won't +
+   infinitivo; can e imperativo no lugar de will; nunca will depois de if), ao contraste
+   com o zero conditional (aula 21) e ao vocabulário de moda sustentável. Conteúdo NOVO.
+   24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 22, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'If you swap your clothes, you ___ money.', opcoes: ['will save', 'saving', 'saved'], certa: 0, traducao: 'Se você trocar as suas roupas, vai economizar dinheiro.' },
+    { frase: "If it ___ tomorrow, we'll stay at home.", opcoes: ['will rain', 'rains', 'rain'], certa: 1, traducao: 'Se chover amanhã, vamos ficar em casa.' },
+    { frase: "If she ___ study, she won't pass.", opcoes: ["won't", "don't", "doesn't"], certa: 2, traducao: 'Se ela não estudar, não vai passar.' },
+    { frase: "You'll help the planet if you ___ your old clothes.", opcoes: ['donate', 'will donate', 'donated'], certa: 0, traducao: 'Você vai ajudar o planeta se doar as suas roupas velhas.' },
+    { frase: "If your jeans don't fit, ___ them to a tailor.", opcoes: ['taking', 'take', 'will taking'], certa: 1, traducao: 'Se o seu jeans não servir, leve a um alfaiate.' },
+    { frase: 'If you go to a clothes swap, you ___ find something new.', opcoes: ['can to', 'cans', 'can'], certa: 2, traducao: 'Se você for a uma troca de roupas, pode encontrar algo novo.' },
+    { frase: 'What ___ happen if people stop buying fast fashion?', opcoes: ['will', 'are', 'do'], certa: 0, traducao: 'O que vai acontecer se as pessoas pararem de comprar fast fashion?' },
+    { frase: 'We use the first conditional for ___.', opcoes: ['facts that are always true', 'possible future situations', 'past events'], certa: 1, traducao: 'Usamos o first conditional para situações futuras possíveis.' },
+    { frase: 'Form: If + present simple, ___ + infinitive.', opcoes: ['was', 'did', 'will / won’t'], certa: 2, traducao: 'Forma: If + presente simples, will / won’t + infinitivo.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["If it rains, we'll stay at home.", "If it will rain, we'll stay at home.", 'If it rains, we stay will at home.'], certa: 0, traducao: 'Se chover, vamos ficar em casa.' },
+    { instrucao: 'Which sentence is a first conditional?', frase: '___', opcoes: ['If you heat ice, it melts.', "If you heat the soup now, it'll be ready in five minutes.", 'I might heat the soup.'], certa: 1, traducao: 'Se você esquentar a sopa agora, vai ficar pronta em cinco minutos.' },
+    { frase: "If you throw your clothes in the bin, they'll go to the ___.", opcoes: ['tailor', 'swap', 'landfill'], certa: 2, traducao: 'Se você jogar as suas roupas no lixo, elas vão para o aterro.' },
+    { frase: 'Cheap clothes made quickly by big companies are called ___.', opcoes: ['fast fashion', 'designer clothes', 'second-hand clothes'], certa: 0, traducao: 'Roupas baratas feitas rapidamente por grandes empresas se chamam fast fashion.' },
+    { frase: "When the air, water or land becomes dirty, it's called ___.", opcoes: ['waste', 'pollution', 'environment'], certa: 1, traducao: 'Quando o ar, a água ou a terra ficam sujos, chama-se poluição.' },
+    { frase: "Something that doesn't harm the environment is ___.", opcoes: ['wasteful', 'cheap', 'sustainable'], certa: 2, traducao: 'Algo que não prejudica o meio ambiente é sustentável.' },
+    { frase: "This shirt is too small. It doesn't ___ me.", opcoes: ['fit', 'suit', 'wear'], certa: 0, traducao: 'Essa camisa é pequena demais. Não serve em mim.' },
+    { frase: "The size is perfect, but the style isn't for me. It doesn't ___ me.", opcoes: ['fit', 'suit', 'wear'], certa: 1, traducao: 'O tamanho está perfeito, mas o estilo não é para mim. Não combina comigo.' },
+    { frase: "If you bring clothes to the swap, you'll get ___ to choose new ones.", opcoes: ['money', 'a stylist', 'tokens'], certa: 2, traducao: 'Se você levar roupas para a troca, vai ganhar fichas para escolher outras.' },
+    { frase: "I'm doing a ___. I'm giving away the clothes I don't wear.", opcoes: ['clear-out', 'landfill', 'tailor'], certa: 0, traducao: 'Estou fazendo uma limpa. Estou doando as roupas que não uso.' },
+    { frase: 'A ___ can help you choose clothes and find your style.', opcoes: ['tailor', 'stylist', 'cashier'], certa: 1, traducao: 'Uma stylist pode te ajudar a escolher roupas e encontrar o seu estilo.' },
+    { frase: 'If we wear our clothes longer, we ___ the environment.', opcoes: ['helping', 'helped', 'will help'], certa: 2, traducao: 'Se usarmos as nossas roupas por mais tempo, vamos ajudar o meio ambiente.' },
+    { frase: "If Mia ___ second-hand clothes, she'll spend less money.", opcoes: ['buys', 'buy', 'will buy'], certa: 0, traducao: 'Se a Mia comprar roupas de segunda mão, vai gastar menos dinheiro.' },
+    { frase: "I won't go out tonight if it ___.", opcoes: ['will rain', 'rains', 'raining'], certa: 1, traducao: 'Não vou sair hoje à noite se chover.' },
+    { frase: "If my friend doesn't answer my message, I ___ her.", opcoes: ['call will', 'calling', 'will call'], certa: 2, traducao: 'Se a minha amiga não responder a mensagem, vou ligar para ela.' }
+  ]
+});
+</script>
+</body>
+</html>

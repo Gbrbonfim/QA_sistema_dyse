@@ -1383,6 +1383,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Science facts', tipo: 'Escute e grave', treina: 'Fala · Zero conditional', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Facts that are always true', tipo: 'Make a Choice', treina: 'Gramática · Zero conditional', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 22,
+        titulo: 'Class 22 · The Green Wardrobe',
+        atividades: [
+          { num: 1, titulo: 'Swap, donate, reuse', tipo: 'Escute e escolha', treina: 'Escuta · Moda sustentável', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "If you swap, you'll save", tipo: 'Monte a frase', treina: 'Escrita · First conditional', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'The clothes swap', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'A greener wardrobe', tipo: 'Escute e grave', treina: 'Fala · First conditional', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'If it rains, we will...', tipo: 'Make a Choice', treina: 'Gramática · First conditional', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 22 · Swap, donate, reuse</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 22 · Escuta (The Green Wardrobe)
+   Alinhado ao vocabulário (environment, pollution, waste, fast fashion, throw away,
+   sustainable), ao documentário (clothes swap, tokens, stylist, tailor, fit x suit) e ao
+   "Grammar Point" (first conditional: If + present simple, will / can / imperativo).
+   Contraste com o zero conditional (aula 21). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const P = "Listen. What's the problem?", R = 'Listen and choose the answer',
+  K = 'Listen. What kind of sentence is it?', M = 'Listen. What does the speaker mean?';
+const AT = 'always true', FU = 'a possible future situation';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 22, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the definition and choose the word',
+  itens: [
+    q('The natural world around us: the air, water, land, plants and animals.', 'environment', ['pollution', 'waste'], 'eco'),
+    q('When the air, water or land becomes dirty.', 'pollution', ['environment', 'fast fashion'], 'eco'),
+    q('Cheap clothes that big companies make very quickly.', 'fast fashion', ['designer clothes', 'second-hand clothes'], 'checkroom'),
+    q("To put something in the bin because you don't want it any more.", 'throw away', ['swap', 'donate'], 'recycling'),
+    q('Something that can continue for a long time without harming the planet.', 'sustainable', ['wasteful', 'cheap'], 'eco'),
+    q("An event where people exchange clothes they don't wear any more.", 'a clothes swap', ['a fashion show', 'a sale'], 'checkroom'),
+    q('A person whose job is to help people choose clothes and look good.', 'a stylist', ['a tailor', 'a cashier'], 'checkroom'),
+    q('A person who changes clothes so that they fit you perfectly.', 'a tailor', ['a stylist', 'a designer'], 'checkroom'),
+    { instrucao: P, ...q('These trousers are too long and too big for me.', "They don't fit.", ["They don't suit me.", "They're too cheap."], 'checkroom') },
+    { instrucao: P, ...q("The size is perfect, but the colour isn't my style at all.", "It doesn't suit me.", ["It doesn't fit.", "It's too small."], 'checkroom') },
+    { instrucao: P, ...q("This jacket is too small. I can't close it.", "It doesn't fit.", ["It doesn't suit me.", "It's too expensive."], 'checkroom') },
+    { instrucao: R, ...q('If you donate your old coat, what will happen?', 'Someone will wear it.', ['It will go to the landfill.', 'You will lose money.'], 'recycling') },
+    { instrucao: R, ...q('If you throw your clothes in the bin, where will they go?', 'to the landfill', ['to a clothes swap', 'to a tailor'], 'recycling') },
+    { instrucao: R, ...q('If you buy fewer clothes, what will you save?', 'money', ['waste', 'pollution'], 'recycling') },
+    { instrucao: R, ...q('If you bring clothes to the swap, what will you get?', 'tokens', ['money', 'a new job'], 'recycling') },
+    { instrucao: R, ...q('If your new jeans are too long, what can you do?', 'take them to a tailor', ['throw them away', 'buy more jeans'], 'checkroom') },
+    { instrucao: K, ...q('If you heat ice, it melts.', AT, [FU, 'a promise'], 'help') },
+    { instrucao: K, ...q("If it's sunny on Saturday, we'll go to the park.", FU, [AT, 'a promise'], 'help') },
+    { instrucao: K, ...q('If water reaches one hundred degrees, it boils.', AT, ['a promise', FU], 'help') },
+    { instrucao: K, ...q("If I have extra money this month, I'll buy a second-hand guitar.", FU, ['a promise', AT], 'help') },
+    { instrucao: M, ...q("If I don't study for the test, I won't pass.", 'The speaker needs to study.', ['The speaker passed the test.', "The speaker doesn't have a test."], 'forum') },
+    { instrucao: M, ...q("We'll miss the bus if we don't leave now.", 'They need to leave now.', ['The bus is late.', 'They missed the bus yesterday.'], 'forum') },
+    { instrucao: M, ...q("If more people swap clothes, we'll produce less waste.", 'There will be less waste.', ['There will be more pollution.', 'Fast fashion will grow.'], 'forum') },
+    { instrucao: M, ...q("I'll feel proud if I finish the marathon.", 'The speaker will feel proud.', ['The speaker will feel angry.', 'The speaker will feel bored.'], 'forum') }
+  ]
+});
+</script>
+</body>
+</html>
