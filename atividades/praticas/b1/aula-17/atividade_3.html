@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 17 · Where shall we eat?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 17 · Leitura (Shall We Eat Out?)
+   Alinhado ao "Functional Language" (sugerir, aceitar, recusar, expressar dúvida), às gírias
+   (starving, grab a bite, mouth is watering, stuffed) e às comidas do quiz. Conteúdo NOVO:
+   Nina e Ben escolhem onde jantar. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Nina', "I'm starving! I didn't have time for lunch today."],
+  ['Ben', 'Me too. Shall we grab a bite after work?'],
+  ['Nina', "Yes, let's! What are you in the mood for?"],
+  ['Ben', "How about burgers? There's a new place near the station."],
+  ['Nina', "I'd rather not. I had a burger yesterday."],
+  ['Ben', "OK. Why don't we try the Thai restaurant on Main Street?"],
+  ['Nina', "I'm on the fence about that. I heard it's really spicy."],
+  ['Ben', 'They have mild dishes too. And their noodles are amazing.'],
+  ['Nina', "Hmm... I'll have to think about it. What about pizza?"],
+  ['Ben', "Sorry, I'm not really up for pizza. I want something healthier."],
+  ['Nina', "Let's go to Green Bowl, then. They have salads and pizza."],
+  ['Ben', "That's a great idea! I'm in."],
+  ['Nina', 'Should we invite Carla too?'],
+  ['Ben', 'Sure! She loves their spinach and strawberry salad.'],
+  ['Nina', 'Just thinking about it, my mouth is watering.'],
+  ['Ben', 'Ha ha! Shall we meet at six?'],
+  ['Nina', "I'm not sure about six. I have a meeting until half past six."],
+  ['Ben', 'No problem. How about seven?'],
+  ['Nina', "Perfect. But I'm not going to eat dessert this time."],
+  ['Ben', 'Why not?'],
+  ['Nina', "Last time I was so stuffed I couldn't walk!"]
+];
+const lado = q => q === 'Nina' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 17, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Me too. Shall we grab a bite after work?', 'Me too. Shall we grabbing a bite after work?', 'Me too. Shall we to grab a bite after work?'], 0, 'Eu também. Vamos comer alguma coisa depois do trabalho?'),
+    prox(2, ["Yes, let! What are you in the mood for?", "Yes, let's! What are you in the mood for?", "Yes, let's! What are you in the mood of?"], 1, 'Sim, vamos! Você está a fim de quê?'),
+    prox(4, ["I'd rather not. I have a burger yesterday.", "I'd rather to not. I had a burger yesterday.", "I'd rather not. I had a burger yesterday."], 2, 'Prefiro não. Comi hambúrguer ontem.'),
+    prox(5, ["OK. Why don't we try the Thai restaurant on Main Street?", "OK. Why we don't try the Thai restaurant on Main Street?", "OK. Why don't we trying the Thai restaurant on Main Street?"], 0, 'Tá. Por que não experimentamos o restaurante tailandês da Main Street?'),
+    prox(6, ["I'm in the fence about that. I heard it's really spicy.", "I'm on the fence about that. I heard it's really spicy.", "I'm on the fence about that. I heard it's cheap and delicious."], 1, 'Estou em dúvida. Ouvi dizer que é muito apimentado.'),
+    prox(8, ["Hmm... I'll have to thinking about it. What about pizza?", "Hmm... I'll have think about it. What about pizza?", "Hmm... I'll have to think about it. What about pizza?"], 2, 'Hmm... vou ter que pensar. E pizza?'),
+    prox(10, ["Let's go to Green Bowl, then. They have salads and pizza.", "Let's to go to Green Bowl, then. They have salads and pizza.", "Let's go to Green Bowl, then. They only have burgers."], 0, 'Então vamos ao Green Bowl. Eles têm saladas e pizza.'),
+    prox(11, ["That's a great idea! I'm out.", "That's a great idea! I'm in.", "That's a terrible idea! I'm in."], 1, 'Ótima ideia! Estou dentro.'),
+    prox(15, ['Ha ha! Shall we meeting at six?', 'Ha ha! Shall we met at six?', 'Ha ha! Shall we meet at six?'], 2, 'Ha ha! Vamos nos encontrar às seis?'),
+    prox(16, ["I'm not sure about six. I have a meeting until half past six.", 'Six is perfect. I have a meeting until half past six.', 'I not sure about six. I have a meeting until half past six.'], 0, 'Não sei se dá às seis. Tenho reunião até as seis e meia.'),
+    prox(17, ['No problem. How about we meets at seven?', 'No problem. How about seven?', "No problem. How about six o'clock?"], 1, 'Sem problema. Que tal às sete?'),
+    prox(20, ["Last time I was so starving I couldn't walk!", "Last time I was so stuffing I couldn't walk!", "Last time I was so stuffed I couldn't walk!"], 2, 'Da última vez eu fiquei tão empanturrada que não conseguia andar!'),
+    { instrucao: 'Why is Nina starving?', frase: '___', opcoes: ["She didn't have time for lunch.", 'She went running.', 'She only had a salad.'], certa: 0, traducao: 'Ela não teve tempo de almoçar.' },
+    { instrucao: "Why doesn't Nina want burgers?", frase: '___', opcoes: ["She doesn't eat meat.", 'She had a burger yesterday.', 'The place is too far.'], certa: 1, traducao: 'Ela comeu hambúrguer ontem.' },
+    { instrucao: "Why is Nina on the fence about the Thai restaurant?", frase: '___', opcoes: ["It's too expensive.", "It's closed on Fridays.", "She heard it's really spicy."], certa: 2, traducao: 'Ela ouviu dizer que é muito apimentado.' },
+    { instrucao: "Why isn't Ben up for pizza?", frase: '___', opcoes: ['He wants something healthier.', "He's stuffed.", 'He hates cheese.'], certa: 0, traducao: 'Ele quer algo mais saudável.' },
+    { instrucao: 'Where do they decide to go?', frase: '___', opcoes: ['To the Thai restaurant.', 'To Green Bowl.', 'To the burger place.'], certa: 1, traducao: 'Ao Green Bowl.' },
+    { instrucao: 'Who do they want to invite?', frase: '___', opcoes: ['Tom.', 'Their boss.', 'Carla.'], certa: 2, traducao: 'A Carla.' },
+    { instrucao: 'What time are they going to meet?', frase: '___', opcoes: ['At seven.', 'At six.', 'At half past six.'], certa: 0, traducao: 'Às sete.' },
+    { instrucao: "Why won't Nina eat dessert this time?", frase: '___', opcoes: ["She doesn't like sweets.", 'Last time she was too stuffed.', 'The dessert is too expensive.'], certa: 1, traducao: 'Da última vez ela ficou empanturrada demais.' }
+  ]
+});
+</script>
+</body>
+</html>

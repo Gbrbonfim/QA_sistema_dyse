@@ -1334,6 +1334,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Generations at work', tipo: 'Escute e grave', treina: 'Fala · Regras e obrigações', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: "Mustn't or don't have to?", tipo: 'Make a Choice', treina: 'Gramática · Must / have to', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 17,
+        titulo: 'Class 17 · Shall We Eat Out?',
+        atividades: [
+          { num: 1, titulo: "Yes, let's!", tipo: 'Escute e escolha', treina: 'Escuta · Sugestões e respostas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'How about pizza?', tipo: 'Monte a frase', treina: 'Escrita · Fazer sugestões', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Where shall we eat?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: "I'm starving!", tipo: 'Escute e grave', treina: 'Fala · Sugestões e gírias', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Shall we or how about?', tipo: 'Make a Choice', treina: 'Gramática · Sugestões', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

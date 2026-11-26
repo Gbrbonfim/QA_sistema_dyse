@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 17 · How about pizza?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 17 · Escrita (Shall We Eat Out?)
+   Alinhado ao "Functional Language" (Shall we / Should we / Why don't we / Let's / How about
+   + -ing / How about we; I'd rather not, I'm not in the mood for, I'm not really up for,
+   I'm going to pass on, I'm on the fence about, I'll have to think about it) e às gírias
+   (starving, stuffed, grab a bite, craving, mouth is watering). Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 17, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Vamos pedir pizza?'), palavras: ['Shall', 'we', 'order', 'pizza'], isca: ['to'], fim: '?', traducao: 'Vamos pedir pizza?' },
+    { contexto: M('Por que não vamos ao restaurante novo?'), palavras: ['Why', "don't", 'we', 'go', 'to', 'the', 'new', 'restaurant'], isca: ["doesn't"], fim: '?', traducao: 'Por que não vamos ao restaurante novo?' },
+    { contexto: M('Que tal comer comida mexicana?'), palavras: ['How', 'about', 'eating', 'Mexican', 'food'], isca: ['eat'], fim: '?', traducao: 'Que tal comer comida mexicana?' },
+    { contexto: M('Vamos tomar um café depois do almoço!'), palavras: ["Let's", 'grab', 'a', 'coffee', 'after', 'lunch'], isca: ['grabbing'], fim: '!', traducao: 'Vamos tomar um café depois do almoço!' },
+    { contexto: M('Devemos experimentar o café novo da esquina?'), palavras: ['Should', 'we', 'try', 'the', 'new', 'café', 'on', 'the', 'corner'], isca: ['trying'], fim: '?', traducao: 'Devemos experimentar o café novo da esquina?' },
+    { contexto: M('Estou morrendo de vontade de comer sushi agora.'), palavras: ["I'm", 'craving', 'sushi', 'right', 'now'], isca: ['crave'], fim: '.', traducao: 'Estou morrendo de vontade de comer sushi agora.' },
+    { contexto: M('Prefiro não sair hoje à noite.'), palavras: ["I'd", 'rather', 'not', 'go', 'out', 'tonight'], isca: ['to'], fim: '.', traducao: 'Prefiro não sair hoje à noite.' },
+    { contexto: M('Não estou no clima para comida apimentada.'), palavras: ["I'm", 'not', 'in', 'the', 'mood', 'for', 'spicy', 'food'], isca: ['on'], fim: '.', traducao: 'Não estou no clima para comida apimentada.' },
+    { contexto: M('Não estou muito a fim de correr hoje.'), palavras: ["I'm", 'not', 'really', 'up', 'for', 'running', 'today'], isca: ['run'], fim: '.', traducao: 'Não estou muito a fim de correr hoje.' },
+    { contexto: M('Vou dispensar a sobremesa.'), palavras: ["I'm", 'going', 'to', 'pass', 'on', 'dessert'], isca: ['passing'], fim: '.', traducao: 'Vou dispensar a sobremesa.' },
+    { contexto: M('Estou em dúvida sobre a viagem.'), palavras: ["I'm", 'on', 'the', 'fence', 'about', 'the', 'trip'], isca: ['wall'], fim: '.', traducao: 'Estou em dúvida sobre a viagem.' },
+    { contexto: M('Vou ter que pensar sobre isso.'), palavras: ["I'll", 'have', 'to', 'think', 'about', 'it'], isca: ['thinking'], fim: '.', traducao: 'Vou ter que pensar sobre isso.' },
+    { contexto: M('Não sei se é uma boa ideia.'), palavras: ['I', "don't", 'know', 'if', "that's", 'a', 'good', 'idea'], isca: ['is'], fim: '.', traducao: 'Não sei se é uma boa ideia.' },
+    { contexto: M('Isso parece ótimo!'), palavras: ['That', 'sounds', 'great'], isca: ['sound'], fim: '!', traducao: 'Isso parece ótimo!' },
+    { contexto: M('Estou morrendo de fome depois da academia.'), palavras: ["I'm", 'starving', 'after', 'the', 'gym'], isca: ['starve'], fim: '.', traducao: 'Estou morrendo de fome depois da academia.' },
+    { contexto: M('Comi demais e agora estou empanturrado.'), palavras: ['I', 'ate', 'too', 'much', 'and', 'now', "I'm", 'stuffed'], isca: ['eat'], fim: '.', traducao: 'Comi demais e agora estou empanturrado.' },
+    { contexto: M('Vamos comer alguma coisa rapidinho antes da aula.'), palavras: ["Let's", 'grab', 'a', 'bite', 'before', 'class'], isca: ['bit'], fim: '.', traducao: 'Vamos comer alguma coisa rapidinho antes da aula.' },
+    { contexto: M('Minha boca está enchendo de água.'), palavras: ['My', 'mouth', 'is', 'watering'], isca: ['waters'], fim: '.', traducao: 'Estou com água na boca.' },
+    { contexto: M('Que tal a gente ir ao parque hoje à tarde?'), palavras: ['How', 'about', 'we', 'go', 'to', 'the', 'park', 'this', 'afternoon'], isca: ['goes'], fim: '?', traducao: 'Que tal a gente ir ao parque hoje à tarde?' },
+    { contexto: M('Eu prefiro pizza com cogumelos e azeitonas.'), palavras: ['I', 'prefer', 'pizza', 'with', 'mushrooms', 'and', 'olives'], isca: ['prefers'], fim: '.', traducao: 'Prefiro pizza com cogumelos e azeitonas.' }
+  ]
+});
+</script>
+</body>
+</html>

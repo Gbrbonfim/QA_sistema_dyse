@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 17 · Yes, let's!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 17 · Escuta (Shall We Eat Out?)
+   Alinhado ao "Functional Language" (aceitar: Yes, let's / I'm in / That sounds great;
+   recusar: I'd rather not / I'm not in the mood / I'm going to pass on that / That's not
+   really my thing; dúvida: I'm on the fence / I'll have to think about it), às gírias
+   (starving, stuffed, grab a bite, mouth is watering, craving) e ao quiz de comida
+   (toppings, molhos, comidas saudáveis). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const AC = 'accepts', RE = 'refuses', DU = 'has doubts';
+const S = 'Listen. What does it mean?', F = 'Listen. Is it a suggestion or a response?', W = 'Listen. What food is it?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 17, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the answer. The person...',
+  itens: [
+    q("Yes, let's! I'm craving tacos.", AC, [RE, DU], 'forum'),
+    q("I'd rather not. I had pizza yesterday.", RE, [AC, DU], 'forum'),
+    q("I'm on the fence about that. It's a long drive.", DU, [RE, AC], 'forum'),
+    q("I'm in! What time?", AC, [DU, RE], 'forum'),
+    q("I'm going to pass on that. I'm on a diet.", RE, [DU, AC], 'forum'),
+    q("Hmm, I'll have to think about it.", DU, [AC, RE], 'forum'),
+    q("That sounds great, let's do it!", AC, [RE, DU], 'forum'),
+    q("Sorry, I'm not really up for sushi tonight.", RE, [AC, DU], 'forum'),
+    q("I don't know if that's a good idea. It's very expensive.", DU, [RE, AC], 'forum'),
+    q("That's not really my thing. I'm okay with something else.", RE, [DU, AC], 'forum'),
+    { instrucao: S, ...q("I'm starving! I didn't have breakfast.", 'very hungry', ['full', 'tired'], 'restaurant') },
+    { instrucao: S, ...q("No dessert for me, thanks. I'm stuffed.", 'full', ['very hungry', 'thirsty'], 'restaurant') },
+    { instrucao: S, ...q("Let's grab a bite before the movie.", 'eat something', ['buy a ticket', 'take a photo'], 'restaurant') },
+    { instrucao: S, ...q('Look at that chocolate cake! My mouth is watering.', 'I really want to eat it.', ["I'm very thirsty.", "I don't like it."], 'restaurant') },
+    { instrucao: S, ...q("I'm craving ice cream right now.", 'I really want ice cream.', ['I hate ice cream.', 'I just ate ice cream.'], 'restaurant') },
+    { instrucao: F, ...q("Why don't we order Chinese food?", 'a suggestion', ['a response', 'a complaint'], 'forum') },
+    { instrucao: F, ...q('How about going to the beach on Sunday?', 'a suggestion', ['a complaint', 'a response'], 'forum') },
+    { instrucao: F, ...q("Sorry, I'm not in the mood for it.", 'a response', ['a suggestion', 'a complaint'], 'forum') },
+    { instrucao: F, ...q('Shall we share a large pizza?', 'a suggestion', ['a response', 'a complaint'], 'forum') },
+    { instrucao: F, ...q('That would be great!', 'a response', ['a complaint', 'a suggestion'], 'forum') },
+    { instrucao: W, ...q("It's a long green vegetable. You put it in salads, and it has a lot of water.", 'cucumber', ['spinach', 'mushroom'], 'restaurant') },
+    { instrucao: W, ...q("It's a small red fruit with tiny seeds on the outside.", 'strawberry', ['pineapple', 'olive'], 'restaurant') },
+    { instrucao: W, ...q("It's a sweet yellow fruit. Some people love it on pizza, and some people hate it!", 'pineapple', ['pepperoni', 'strawberry'], 'local_pizza') },
+    { instrucao: W, ...q('This sweet, smoky brown sauce is perfect for ribs and burgers.', 'barbecue sauce', ['ranch', 'honey mustard'], 'fastfood') }
+  ]
+});
+</script>
+</body>
+</html>
