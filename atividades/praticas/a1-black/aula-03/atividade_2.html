@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 3 · Hair words</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 03 · Escuta (At the Hair Salon / Barber Shop)
+   Alinhado ao vocabulário do slide: mustache, beard, straight, wavy, curly, bangs, short,
+   long. Conteúdo NOVO: o aluno ouve uma frase curta e escolhe a palavra que descreve o
+   cabelo. 24 questões. */
+const IC = { mustache: 'face_6', beard: 'face_4', straight: 'straighten', wavy: 'waves', curly: 'cyclone', bangs: 'face_3', short: 'short_text', long: 'notes' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 3, num: 2, tipo: 'imagem',
+  instrucao: 'Listen and choose the word you hear',
+  itens: [
+    q('My hair is curly.', 'curly', ['straight', 'wavy', 'long']),
+    q('His beard is very long.', 'beard', ['mustache', 'bangs', 'curly']),
+    q('I like my hair short.', 'short', ['long', 'wavy', 'beard']),
+    q('Her hair is long and straight.', 'straight', ['curly', 'wavy', 'mustache']),
+    q('My grandpa has a white mustache.', 'mustache', ['beard', 'bangs', 'short']),
+    q("I'd like bangs, please.", 'bangs', ['beard', 'mustache', 'curly']),
+    q('Her hair is wavy.', 'wavy', ['straight', 'curly', 'short']),
+    q('I like it long.', 'long', ['short', 'straight', 'bangs']),
+    q('No beard, please.', 'beard', ['bangs', 'wavy', 'long']),
+    q('His hair is short and curly.', 'curly', ['wavy', 'straight', 'mustache']),
+    q('Not too short, please.', 'short', ['long', 'curly', 'beard']),
+    q('No mustache today.', 'mustache', ['bangs', 'straight', 'long']),
+    q('My sister has short bangs.', 'bangs', ['mustache', 'beard', 'wavy']),
+    q('My hair is very straight.', 'straight', ['wavy', 'curly', 'beard']),
+    q('Her hair is long and wavy.', 'wavy', ['curly', 'straight', 'mustache']),
+    q('My hair is very long!', 'long', ['short', 'curly', 'beard']),
+    q('He has a black beard.', 'beard', ['mustache', 'bangs', 'straight']),
+    q('Curly hair is beautiful!', 'curly', ['wavy', 'straight', 'bangs']),
+    q('A short haircut, please.', 'short', ['long', 'wavy', 'mustache']),
+    q('His mustache is big.', 'mustache', ['beard', 'curly', 'long']),
+    q('Bangs look good on you!', 'bangs', ['beard', 'mustache', 'short']),
+    q('I like wavy hair.', 'wavy', ['curly', 'straight', 'beard']),
+    q('Her hair is straight and black.', 'straight', ['curly', 'wavy', 'bangs']),
+    q('Long hair, short bangs.', 'long', ['curly', 'beard', 'mustache'])
+  ]
+});
+</script>
+</body>
+</html>

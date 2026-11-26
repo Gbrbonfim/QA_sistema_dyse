@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 3 · At the barber shop</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 03 · Leitura (At the Hair Salon / Barber Shop)
+   Alinhado aos diálogos do slide na barbearia (Hello. Please sit down. What would you like? /
+   I'd like a shave. / Would you like a clean shave? / No beard and no mustache. / Got it.).
+   Conteúdo NOVO: o Rafael vai à barbearia. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Barber', 'Good morning! Please sit down. What would you like?'],
+  ['Rafael', "Good morning! I'd like a haircut, please."],
+  ['Barber', 'OK. Short?'],
+  ['Rafael', 'Yes, short, please. My hair is curly and very long now.'],
+  ['Barber', 'Got it. Would you like a shave, too?'],
+  ['Rafael', 'Yes, please. But just a trim on my beard.'],
+  ['Barber', 'And the mustache? Would you like a clean shave?'],
+  ['Rafael', 'No, thank you. I like my mustache.'],
+  ['Barber', 'OK! A short haircut and a beard trim.'],
+  ['Rafael', 'Perfect! How often do people here have a haircut?'],
+  ['Barber', 'A lot of people come every two months. Some come once a month.'],
+  ['Rafael', 'I have a haircut twice a year!'],
+  ['Barber', 'Ha ha! Well, your hair is very long! OK, all done. Do you like it?'],
+  ['Rafael', 'Yes! It looks great. Thank you!'],
+  ['Barber', "You're welcome! Have a good day!"]
+];
+const lado = q => q === 'Barber' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 3, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Good morning! I'd like a haircut, please.", "Good morning! I'd like a haircut, thank you.", "Good morning! I would likes a haircut, please."], 0, 'Bom dia! Eu gostaria de um corte, por favor.'),
+    prox(2, ['OK. Shorter long?', 'OK. Short?', 'OK. Clean bangs?'], 1, 'Certo. Curto?'),
+    prox(3, ['Yes, short, please. My hair are curly and very long now.', 'Yes, long, please. My hair is curly and very short now.', 'Yes, short, please. My hair is curly and very long now.'], 2, 'Sim, curto, por favor. O meu cabelo está cacheado e muito comprido agora.'),
+    prox(4, ['Got it. Would you like a shave, too?', 'Got it. Would you like a shaves, too?', 'Got it. Do you would like a shave, too?'], 0, 'Entendi. Você gostaria de fazer a barba também?'),
+    prox(5, ['Yes, please. But just a trim on my bangs.', 'Yes, please. But just a trim on my beard.', 'Yes, thank you. But just trim a on my beard.'], 1, 'Sim, por favor. Mas só aparar a barba.'),
+    prox(6, ['And the mustache? Would you like a clean trim, please?', 'And the mustache? Would you like a clean bangs?', 'And the mustache? Would you like a clean shave?'], 2, 'E o bigode? Você gostaria de tirar tudo?'),
+    prox(7, ['No, thank you. I like my mustache.', 'No, please. I like my mustache.', 'Yes, please. I like my mustache.'], 0, 'Não, obrigado. Gosto do meu bigode.'),
+    prox(8, ['OK! A long haircut and a beard trim.', 'OK! A short haircut and a beard trim.', 'OK! A short haircut and a clean shave.'], 1, 'Certo! Um corte curto e aparar a barba.'),
+    prox(10, ['A lot of people come every two month.', 'A lot of people come two every months.', 'A lot of people come every two months. Some come once a month.'], 2, 'Muita gente vem a cada dois meses. Alguns vêm uma vez por mês.'),
+    prox(11, ['I have a haircut twice a year!', 'I have a haircut two times year!', 'I has a haircut twice a year!'], 0, 'Eu corto o cabelo duas vezes por ano!'),
+    prox(13, ['Yes! It look great. Thank you!', 'Yes! It looks great. Thank you!', "Yes! It looks great. You're welcome!"], 1, 'Sim! Ficou ótimo. Obrigado!'),
+    prox(14, ['Thank you! Have a good day!', "You're welcome! Please sit down!", "You're welcome! Have a good day!"], 2, 'De nada! Tenha um bom dia!'),
+    { instrucao: 'What would Rafael like first?', frase: 'A ___.', opcoes: ['haircut', 'wash and blow-dry', 'bangs'], certa: 0, traducao: 'Um corte.' },
+    { instrucao: "How is Rafael's hair?", frase: '___ and very long.', opcoes: ['Straight', 'Curly', 'Wavy'], certa: 1, traducao: 'Cacheado e muito comprido.' },
+    { instrucao: 'How would he like the haircut?', frase: '___.', opcoes: ['Long', 'Not too short', 'Short'], certa: 2, traducao: 'Curto.' },
+    { instrucao: 'What would he like for his beard?', frase: 'Just a ___.', opcoes: ['trim', 'clean shave', 'wash'], certa: 0, traducao: 'Só aparar.' },
+    { instrucao: 'Would he like a clean shave on the mustache?', frase: '___. He likes his mustache.', opcoes: ['Yes, please', 'No, thank you', 'Got it'], certa: 1, traducao: 'Não, obrigado. Ele gosta do bigode.' },
+    { instrucao: 'How often do a lot of people come?', frase: 'Every ___ months.', opcoes: ['three', 'six', 'two'], certa: 2, traducao: 'A cada dois meses.' },
+    { instrucao: 'How often does Rafael have a haircut?', frase: '___ a year.', opcoes: ['Twice', 'Once', 'Three times'], certa: 0, traducao: 'Duas vezes por ano.' },
+    { instrucao: 'Does Rafael like the haircut?', frase: '___. It looks great.', opcoes: ['No', 'Yes', 'Not too short'], certa: 1, traducao: 'Sim. Ficou ótimo.' }
+  ]
+});
+</script>
+</body>
+</html>

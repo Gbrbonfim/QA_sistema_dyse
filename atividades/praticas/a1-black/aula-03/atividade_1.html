@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 3 · What would you like?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 03 · Escuta (At the Hair Salon / Barber Shop)
+   Alinhado ao Listening do slide (o cliente diz o que quer: haircut, trim, shave, bangs, wash
+   and blow-dry) e ao vocabulário (wash, blow-dry, trim, shave). Conteúdo NOVO: o aluno ouve o
+   pedido e escolhe o serviço. 24 questões. */
+const IC = { haircut: 'content_cut', trim: 'cut', shave: 'face', 'wash and blow-dry': 'air', bangs: 'face_3' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 3, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what does the customer want?',
+  itens: [
+    q("I'd like a shave, please. No beard and no mustache.", 'shave', ['haircut', 'bangs', 'wash and blow-dry']),
+    q("I'd like a wash and blow-dry, please. I have a party tonight!", 'wash and blow-dry', ['shave', 'trim', 'bangs']),
+    q("I'd like a change! I'd like bangs!", 'bangs', ['shave', 'trim', 'wash and blow-dry']),
+    q("Just a trim, please. Not too short.", 'trim', ['shave', 'bangs', 'wash and blow-dry']),
+    q("I'd like a haircut, please. Very short!", 'haircut', ['shave', 'wash and blow-dry', 'bangs']),
+    q("No haircut today. Just a wash and blow-dry, please.", 'wash and blow-dry', ['haircut', 'shave', 'trim']),
+    q("A clean shave, please.", 'shave', ['trim', 'bangs', 'wash and blow-dry']),
+    q("My hair is long. I'd like it short. A haircut, please!", 'haircut', ['wash and blow-dry', 'shave', 'bangs']),
+    q("I like my hair long. Just a trim.", 'trim', ['haircut', 'shave', 'bangs']),
+    q("I'd like bangs, please. Short bangs.", 'bangs', ['shave', 'trim', 'wash and blow-dry']),
+    q("No mustache, please. I'd like a shave.", 'shave', ['bangs', 'haircut', 'wash and blow-dry']),
+    q("Wash my hair and blow-dry it, please.", 'wash and blow-dry', ['bangs', 'shave', 'haircut']),
+    q("A haircut, please. A little shorter.", 'haircut', ['shave', 'bangs', 'wash and blow-dry']),
+    q("I'd like a trim. Just a little.", 'trim', ['wash and blow-dry', 'shave', 'bangs']),
+    q("Yes, bangs! I'd like a new look.", 'bangs', ['trim', 'shave', 'wash and blow-dry']),
+    q("No beard today. A shave, please.", 'shave', ['haircut', 'trim', 'wash and blow-dry']),
+    q("I'd like a wash and blow-dry. No haircut, thank you.", 'wash and blow-dry', ['shave', 'trim', 'haircut']),
+    q("A short haircut, please.", 'haircut', ['bangs', 'shave', 'wash and blow-dry']),
+    q("Just a trim, please. I like it long.", 'trim', ['shave', 'bangs', 'haircut']),
+    q("I'd like bangs. Do they look good on me?", 'bangs', ['wash and blow-dry', 'shave', 'trim']),
+    q("Good morning! I'd like a shave, please.", 'shave', ['trim', 'wash and blow-dry', 'bangs']),
+    q("Hi! A wash and blow-dry, please.", 'wash and blow-dry', ['bangs', 'haircut', 'shave']),
+    q("Hello! I'd like a haircut, please.", 'haircut', ['wash and blow-dry', 'shave', 'bangs']),
+    q("A trim, please. Not too short!", 'trim', ['bangs', 'shave', 'wash and blow-dry'])
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 3 · Would you like...?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 03 · Gramática (At the Hair Salon / Barber Shop)
+   Would like: What would you like? / I'd like (= I would like) + substantivo / Would you
+   like...? / Yes, please. / No, thank you. — e o "Complete the conversation" do slide (trim,
+   haircut, blow-dry). Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 3, num: 9, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'What ___ you like?', opcoes: ['would', 'do', 'are'], certa: 0, traducao: 'O que você gostaria?' },
+    { frase: "I___ like a haircut, please.", opcoes: ["'m", "'d", "'s"], certa: 1, traducao: 'Eu gostaria de um corte, por favor.' },
+    { frase: '___ you like a clean shave?', opcoes: ['Do', 'Are', 'Would'], certa: 2, traducao: 'Você gostaria de fazer a barba bem rente?' },
+    { frase: 'Would you like a wash and blow-dry? — Yes, ___.', opcoes: ['please', 'thank you', "you're welcome"], certa: 0, traducao: 'Você gostaria de lavar e escovar? — Sim, por favor.' },
+    { frase: 'Would you like bangs? — No, ___.', opcoes: ['please', 'thank you', 'too short'], certa: 1, traducao: 'Você gostaria de franja? — Não, obrigada.' },
+    { frase: '"I\'d like" = I ___ like.', opcoes: ['do', 'had', 'would'], certa: 2, traducao: '"I\'d like" = I would like (eu gostaria).' },
+    { frase: "Stylist: Hello! What would you like? Customer: I'd like a ___, please.", opcoes: ['haircut', 'blow-dry long', 'trims'], certa: 0, traducao: 'Olá! O que você gostaria? — Eu gostaria de um corte, por favor.' },
+    { frase: 'Stylist: Great! Just a ___? Customer: Yes, not too short.', opcoes: ['shave', 'trim', 'beard'], certa: 1, traducao: 'Ótimo! Só aparar? — Sim, não muito curto.' },
+    { frase: 'Stylist: Would you like a wash and ___? Customer: Yes, please.', opcoes: ['trim', 'shave', 'blow-dry'], certa: 2, traducao: 'Você gostaria de lavar e escovar? — Sim, por favor.' },
+    { frase: 'Not too ___. (curto)', opcoes: ['short', 'shorter', 'long'], certa: 0, traducao: 'Não muito curto.' },
+    { frase: 'A little ___? (mais curto)', opcoes: ['short', 'shorter', 'more short'], certa: 1, traducao: 'Um pouco mais curto?' },
+    { frase: 'No beard and no ___. (bigode)', opcoes: ['bangs', 'beard', 'mustache'], certa: 2, traducao: 'Sem barba e sem bigode.' },
+    { frase: 'Bangs would ___ very good on you.', opcoes: ['look', 'looks', 'looking'], certa: 0, traducao: 'A franja ficaria muito bem em você.' },
+    { frase: 'Please sit ___.', opcoes: ['up', 'down', 'on'], certa: 1, traducao: 'Sente-se, por favor.' },
+    { frase: 'Got ___. Clean shave.', opcoes: ['this', 'that', 'it'], certa: 2, traducao: 'Entendi. Barba bem rente.' },
+    { frase: "I have a haircut ___ a month. (uma vez)", opcoes: ['once', 'one', 'twice'], certa: 0, traducao: 'Corto o cabelo uma vez por mês.' },
+    { frase: "I have a haircut ___ a year. (duas vezes)", opcoes: ['two', 'twice', 'once'], certa: 1, traducao: 'Corto o cabelo duas vezes por ano.' },
+    { frase: 'I have a haircut every two ___.', opcoes: ['month', 'monthes', 'months'], certa: 2, traducao: 'Corto o cabelo a cada dois meses.' },
+    { frase: 'I like ___ hair long.', opcoes: ['my', 'I', 'me'], certa: 0, traducao: 'Gosto do meu cabelo comprido.' },
+    { frase: 'My hair ___ curly.', opcoes: ['are', 'is', 'am'], certa: 1, traducao: 'O meu cabelo é cacheado.' },
+    { instrucao: 'Which question is correct?', frase: '___', opcoes: ['What do you would like?', 'What would you likes?', 'What would you like?'], certa: 2, traducao: 'O que você gostaria?' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["I'd like a shave, please.", "I'd likes a shave, please.", 'I would to like a shave, please.'], certa: 0, traducao: 'Eu gostaria de fazer a barba, por favor.' },
+    { instrucao: 'Which question is correct?', frase: '___', opcoes: ['You would like bangs?', 'Would you like bangs?', 'Would like you bangs?'], certa: 1, traducao: 'Você gostaria de franja?' },
+    { instrucao: 'Which answer is polite?', frase: '___', opcoes: ['No.', 'No bangs!', 'No, thank you.'], certa: 2, traducao: 'Não, obrigado.' }
+  ]
+});
+</script>
+</body>
+</html>

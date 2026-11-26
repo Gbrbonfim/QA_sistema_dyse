@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 3 · At the hair salon</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 03 · Leitura (At the Hair Salon / Barber Shop)
+   Alinhado aos diálogos do slide no salão (Welcome! What would you like? / I'd like... / Would
+   you like...? / Bangs would look very good on you. / wash and blow-dry). Conteúdo NOVO: a
+   Clara vai ao salão antes de um casamento. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Stylist', 'Hi! Welcome. Please sit down.'],
+  ['Clara', 'Thank you!'],
+  ['Stylist', 'What would you like?'],
+  ['Clara', "I'd like a haircut, please."],
+  ['Stylist', 'Great! Just a trim?'],
+  ['Clara', "No, I'd like a change! My hair is very long."],
+  ['Stylist', 'A little shorter?'],
+  ['Clara', 'Yes, please. But not too short.'],
+  ['Stylist', 'OK! Would you like bangs? Bangs would look very good on you.'],
+  ['Clara', 'Hmm... No, thank you. No bangs.'],
+  ['Stylist', 'Got it. Would you like a wash and blow-dry, too?'],
+  ['Clara', 'Yes, please! I have a wedding tonight!'],
+  ['Stylist', 'Wow! Your hair is wavy and beautiful.'],
+  ['Clara', 'Thank you! I have a haircut every three months.'],
+  ['Stylist', "Perfect. Let's start!"]
+];
+const lado = q => q === 'Stylist' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 3, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Thank you!', 'Please!', "You're welcome!"], 0, 'Obrigada!'),
+    prox(2, ['What do you like?', 'What would you like?', 'What would you likes?'], 1, 'O que você gostaria?'),
+    prox(3, ["I like a haircut, please.", "I'd likes a haircut, please.", "I'd like a haircut, please."], 2, 'Eu gostaria de um corte, por favor.'),
+    prox(4, ['Great! Just a trim?', 'Great! Just trim a?', 'Great! Only a shave?'], 0, 'Ótimo! Só aparar?'),
+    prox(5, ["No, I like a change! My hair is very long.", "No, I'd like a change! My hair is very long.", "No, I'd like a change! My hair are very long."], 1, 'Não, eu gostaria de uma mudança! O meu cabelo está muito comprido.'),
+    prox(6, ['A little short?', 'A little longer?', 'A little shorter?'], 2, 'Um pouco mais curto?'),
+    prox(7, ['Yes, please. But not too short.', 'Yes, please. But not too long.', 'Yes, thank you. But not short too.'], 0, 'Sim, por favor. Mas não muito curto.'),
+    prox(8, ['OK! Do you like bangs? Bangs would looks good.', 'OK! Would you like bangs? Bangs would look very good on you.', 'OK! Would you like a beard? Bangs would look very good on you.'], 1, 'Certo! Você gostaria de franja? A franja ficaria muito bem em você.'),
+    prox(9, ['Hmm... No, please. No bangs.', 'Hmm... Yes, thank you. No bangs.', 'Hmm... No, thank you. No bangs.'], 2, 'Hmm... Não, obrigada. Sem franja.'),
+    prox(10, ['Got it. Would you like a wash and blow-dry, too?', 'Got it. Would you like a shave, too?', 'Got it. You would like a wash and blow-dry, too?'], 0, 'Entendi. Você gostaria de lavar e escovar também?'),
+    prox(11, ['Yes, please! I has a wedding tonight!', 'Yes, please! I have a wedding tonight!', 'No, thank you! I have a wedding tonight!'], 1, 'Sim, por favor! Tenho um casamento hoje à noite!'),
+    prox(13, ['Thank you! I have a haircut every three month.', 'Thank you! I have a haircut three every months.', 'Thank you! I have a haircut every three months.'], 2, 'Obrigada! Corto o cabelo a cada três meses.'),
+    { instrucao: 'What would Clara like?', frase: 'A ___.', opcoes: ['haircut', 'shave', 'trim'], certa: 0, traducao: 'Um corte.' },
+    { instrucao: 'Is her hair short?', frase: "No, it isn't. It's very ___.", opcoes: ['curly', 'long', 'straight'], certa: 1, traducao: 'Não. Está muito comprido.' },
+    { instrucao: 'How short?', frase: 'A little shorter, but not ___.', opcoes: ['too long', 'very long', 'too short'], certa: 2, traducao: 'Um pouco mais curto, mas não muito curto.' },
+    { instrucao: 'Would Clara like bangs?', frase: '___', opcoes: ['No, thank you.', 'Yes, please.', 'A little shorter.'], certa: 0, traducao: 'Não, obrigada.' },
+    { instrucao: 'What else would Clara like?', frase: 'A wash and ___.', opcoes: ['shave', 'blow-dry', 'trim'], certa: 1, traducao: 'Lavar e escovar.' },
+    { instrucao: 'What does Clara have tonight?', frase: 'A ___.', opcoes: ['party', 'meeting', 'wedding'], certa: 2, traducao: 'Um casamento.' },
+    { instrucao: "How is Clara's hair?", frase: '___ and beautiful.', opcoes: ['Wavy', 'Curly', 'Straight'], certa: 0, traducao: 'Ondulado e lindo.' },
+    { instrucao: 'How often does Clara have a haircut?', frase: 'Every ___ months.', opcoes: ['two', 'three', 'six'], certa: 1, traducao: 'A cada três meses.' }
+  ]
+});
+</script>
+</body>
+</html>

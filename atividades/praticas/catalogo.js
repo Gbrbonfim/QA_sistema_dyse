@@ -1009,6 +1009,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Complete the small talk', tipo: 'Make a Choice', treina: 'Gramática · Small talk', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Questions and reactions', tipo: 'Make a Choice', treina: 'Gramática · Perguntas e reações', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 3,
+        titulo: 'Class 03 · Functional Plus: At the Hair Salon / Barber Shop',
+        atividades: [
+          { num: 1, titulo: 'What would you like?', tipo: 'Escute e escolha', treina: 'Escuta · Serviços', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Hair words', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: "I'd like a haircut", tipo: 'Monte a frase', treina: 'Escrita · Falas do cliente', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: "The stylist's questions", tipo: 'Monte a frase', treina: 'Escrita · Falas do cabeleireiro', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'At the hair salon', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'At the barber shop', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: "I'm the customer", tipo: 'Escute e grave', treina: 'Fala · Cliente', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: "I'm the stylist", tipo: 'Escute e grave', treina: 'Fala · Cabeleireiro', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Would you like...?', tipo: 'Make a Choice', treina: 'Gramática · Would like', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Salon vocabulary', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

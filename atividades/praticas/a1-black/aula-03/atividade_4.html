@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 3 · The stylist's questions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 03 · Escrita (At the Hair Salon / Barber Shop)
+   Alinhado às falas do barbeiro/cabeleireiro no slide (Hello. Please sit down. / What would
+   you like? / Just a trim? / Would you like a clean shave? / Would you like a haircut? / Got
+   it. / Bangs would look very good on you. / A little shorter?). Conteúdo NOVO. A isca é a
+   palavra errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 3, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Olá. Sente-se, por favor.'), palavras: ['Hello.', 'Please', 'sit', 'down'], isca: ['up'], fim: '.', traducao: 'Olá. Sente-se, por favor.' },
+    { contexto: M('O que você gostaria?'), palavras: ['What', 'would', 'you', 'like'], isca: ['do'], fim: '?', traducao: 'O que você gostaria?' },
+    { contexto: M('Só aparar?'), palavras: ['Just', 'a', 'trim'], isca: ['shave'], fim: '?', traducao: 'Só aparar?' },
+    { contexto: M('Você gostaria de fazer a barba bem rente?'), palavras: ['Would', 'you', 'like', 'a', 'clean', 'shave'], isca: ['Do'], fim: '?', traducao: 'Você gostaria de fazer a barba bem rente?' },
+    { contexto: M('Você gostaria de um corte?'), palavras: ['Would', 'you', 'like', 'a', 'haircut'], isca: ['likes'], fim: '?', traducao: 'Você gostaria de um corte?' },
+    { contexto: M('Entendi. Barba rente.'), palavras: ['Got', 'it.', 'Clean', 'shave'], isca: ['trim'], fim: '.', traducao: 'Entendi. Barba rente.' },
+    { contexto: M('A franja ficaria muito bem em você.'), palavras: ['Bangs', 'would', 'look', 'very', 'good', 'on', 'you'], isca: ['in'], fim: '.', traducao: 'A franja ficaria muito bem em você.' },
+    { contexto: M('Um pouco mais curto?'), palavras: ['A', 'little', 'shorter'], isca: ['long'], fim: '?', traducao: 'Um pouco mais curto?' },
+    { contexto: M('Bem-vinda! O que você gostaria?'), palavras: ['Welcome!', 'What', 'would', 'you', 'like'], isca: ['are'], fim: '?', traducao: 'Bem-vinda! O que você gostaria?' },
+    { contexto: M('Você gostaria de lavar e escovar?'), palavras: ['Would', 'you', 'like', 'a', 'wash', 'and', 'blow-dry'], isca: ['shave'], fim: '?', traducao: 'Você gostaria de lavar e escovar?' },
+    { contexto: M('Ótimo! Só aparar?'), palavras: ['Great!', 'Just', 'a', 'trim'], isca: ['haircut'], fim: '?', traducao: 'Ótimo! Só aparar?' },
+    { contexto: M('Bom dia. O que você gostaria?'), palavras: ['Good', 'morning.', 'What', 'would', 'you', 'like'], isca: ['do'], fim: '?', traducao: 'Bom dia. O que você gostaria?' },
+    { contexto: M('Você gostaria de franja?'), palavras: ['Would', 'you', 'like', 'bangs'], isca: ['beard'], fim: '?', traducao: 'Você gostaria de franja?' },
+    { contexto: M('Não muito curto?'), palavras: ['Not', 'too', 'short'], isca: ['long'], fim: '?', traducao: 'Não muito curto?' },
+    { contexto: M('Claro! Você gostaria de um corte?'), palavras: ['Sure!', 'Would', 'you', 'like', 'a', 'haircut'], isca: ['shave'], fim: '?', traducao: 'Claro! Você gostaria de um corte?' },
+    { contexto: M('Oi, querida! Bem-vinda.'), palavras: ['Hi,', 'dear!', 'Welcome'], isca: ['Bye'], fim: '.', traducao: 'Oi, querida! Bem-vinda.' },
+    { contexto: M('Você gostaria de um corte curto?'), palavras: ['Would', 'you', 'like', 'a', 'short', 'haircut'], isca: ['long'], fim: '?', traducao: 'Você gostaria de um corte curto?' },
+    { contexto: M('O seu cabelo é ondulado.'), palavras: ['Your', 'hair', 'is', 'wavy'], isca: ['curly'], fim: '.', traducao: 'O seu cabelo é ondulado.' },
+    { contexto: M('Lavar e escovar?'), palavras: ['Wash', 'and', 'blow-dry'], isca: ['trim'], fim: '?', traducao: 'Lavar e escovar?' },
+    { contexto: M('Ficou lindo!'), palavras: ['It', 'looks', 'beautiful'], isca: ['look'], fim: '!', traducao: 'Ficou lindo!' }
+  ]
+});
+</script>
+</body>
+</html>

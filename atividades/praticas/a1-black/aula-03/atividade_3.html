@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 3 · I'd like a haircut</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 03 · Escrita (At the Hair Salon / Barber Shop)
+   Alinhado às falas do cliente no slide (I'd like a haircut, please. / Not too short. / Yes,
+   please. / No, thank you. / I'd like a change! / just a wash and blow-dry). Conteúdo NOVO. A
+   isca é a palavra errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 3, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu gostaria de um corte de cabelo, por favor.'), palavras: ["I'd", 'like', 'a', 'haircut,', 'please'], isca: ['likes'], fim: '.', traducao: 'Eu gostaria de um corte de cabelo, por favor.' },
+    { contexto: M('Não muito curto.'), palavras: ['Not', 'too', 'short'], isca: ['long'], fim: '.', traducao: 'Não muito curto.' },
+    { contexto: M('Sim, por favor.'), palavras: ['Yes,', 'please'], isca: ['thank'], fim: '.', traducao: 'Sim, por favor.' },
+    { contexto: M('Não, obrigado.'), palavras: ['No,', 'thank', 'you'], isca: ['please'], fim: '.', traducao: 'Não, obrigado.' },
+    { contexto: M('Eu gostaria de fazer a barba, por favor.'), palavras: ["I'd", 'like', 'a', 'shave,', 'please'], isca: ['trim'], fim: '.', traducao: 'Eu gostaria de fazer a barba, por favor.' },
+    { contexto: M('Sem barba e sem bigode.'), palavras: ['No', 'beard', 'and', 'no', 'mustache'], isca: ['bangs'], fim: '.', traducao: 'Sem barba e sem bigode.' },
+    { contexto: M('Eu gostaria de uma mudança!'), palavras: ["I'd", 'like', 'a', 'change'], isca: ['would'], fim: '!', traducao: 'Eu gostaria de uma mudança!' },
+    { contexto: M('Eu gostaria de franja!'), palavras: ["I'd", 'like', 'bangs'], isca: ['beard'], fim: '!', traducao: 'Eu gostaria de franja!' },
+    { contexto: M('Só lavar e escovar, por favor.'), palavras: ['Just', 'a', 'wash', 'and', 'blow-dry,', 'please'], isca: ['shave'], fim: '.', traducao: 'Só lavar e escovar, por favor.' },
+    { contexto: M('Eu tenho uma festa hoje à noite!'), palavras: ['I', 'have', 'a', 'party', 'tonight'], isca: ['has'], fim: '!', traducao: 'Tenho uma festa hoje à noite!' },
+    { contexto: M('Só aparar, por favor.'), palavras: ['Just', 'a', 'trim,', 'please'], isca: ['haircut'], fim: '.', traducao: 'Só aparar, por favor.' },
+    { contexto: M('Eu gosto do meu cabelo comprido.'), palavras: ['I', 'like', 'my', 'hair', 'long'], isca: ['short'], fim: '.', traducao: 'Gosto do meu cabelo comprido.' },
+    { contexto: M('Eu gosto do meu cabelo curto.'), palavras: ['I', 'like', 'my', 'hair', 'short'], isca: ['long'], fim: '.', traducao: 'Gosto do meu cabelo curto.' },
+    { contexto: M('Um pouco mais curto, por favor.'), palavras: ['A', 'little', 'shorter,', 'please'], isca: ['short'], fim: '.', traducao: 'Um pouco mais curto, por favor.' },
+    { contexto: M('O meu cabelo é cacheado.'), palavras: ['My', 'hair', 'is', 'curly'], isca: ['are'], fim: '.', traducao: 'O meu cabelo é cacheado.' },
+    { contexto: M('O meu cabelo é liso.'), palavras: ['My', 'hair', 'is', 'straight'], isca: ['wavy'], fim: '.', traducao: 'O meu cabelo é liso.' },
+    { contexto: M('Eu corto o cabelo uma vez por mês.'), palavras: ['I', 'have', 'a', 'haircut', 'once', 'a', 'month'], isca: ['twice'], fim: '.', traducao: 'Corto o cabelo uma vez por mês.' },
+    { contexto: M('Eu corto o cabelo duas vezes por ano.'), palavras: ['I', 'have', 'a', 'haircut', 'twice', 'a', 'year'], isca: ['once'], fim: '.', traducao: 'Corto o cabelo duas vezes por ano.' },
+    { contexto: M('Eu corto o cabelo a cada dois meses.'), palavras: ['I', 'have', 'a', 'haircut', 'every', 'two', 'months'], isca: ['month'], fim: '.', traducao: 'Corto o cabelo a cada dois meses.' },
+    { contexto: M('Obrigada!'), palavras: ['Thank', 'you'], isca: ['please'], fim: '!', traducao: 'Obrigada!' }
+  ]
+});
+</script>
+</body>
+</html>
