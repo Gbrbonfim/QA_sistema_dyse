@@ -1225,6 +1225,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 05', titulo: 'Have you ever...?', tipo: 'Escute e grave', treina: 'Fala · Experiências', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 05', titulo: 'Present perfect for experiences', tipo: 'Make a Choice', treina: 'Gramática · Present perfect', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 6,
+        titulo: 'Class 06 · Unlock your cleaning motivation',
+        atividades: [
+          { num: 1, titulo: 'Which chore is it?', tipo: 'Escute e escolha', treina: 'Escuta · Tarefas domésticas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Just, already, yet', tipo: 'Monte a frase', treina: 'Escrita · Present perfect', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Saturday cleaning', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'What have you done today?', tipo: 'Escute e grave', treina: 'Fala · Tarefas e present perfect', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Housework and the present perfect', tipo: 'Make a Choice', treina: 'Gramática · Just, already, yet', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

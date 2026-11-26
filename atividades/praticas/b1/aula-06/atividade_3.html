@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 6 · Saturday cleaning</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 06 · Leitura (Unlock your cleaning motivation)
+   Alinhado ao "Grammar Point" (a lista de limpeza da Julia; just / already / yet), ao vídeo do
+   Brandon (começar por um cômodo fácil como a sala, usar um timer, listas curtas de 2 ou 3
+   tarefas, música ou podcast, limpeza é hábito) e ao vocabulário de tarefas domésticas.
+   Conteúdo NOVO: o Max chega em casa e conversa com a Lara, que divide o apartamento com ele.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Max', "Hi, Lara! Wow, the living room looks great!"],
+  ['Lara', "Thanks! I've just vacuumed it. I started there because it's easy."],
+  ['Max', 'Have you cleaned the bathroom yet?'],
+  ['Lara', "Yes, I've already cleaned it. I did it this morning."],
+  ['Max', 'And the dishes?'],
+  ['Lara', "I haven't done the washing up yet. Can you help me?"],
+  ['Max', 'Sure. Have you taken out the rubbish?'],
+  ['Lara', "No, not yet. It's on my list for later."],
+  ['Max', 'How do you stay motivated? I hate cleaning!'],
+  ['Lara', 'I use a timer. I clean for fifteen minutes and then I stop.'],
+  ['Max', "That's a good idea. Do you write a list?"],
+  ['Lara', 'Yes, but a short one. Only two or three important things.'],
+  ['Max', 'I always make long lists and never finish them.'],
+  ['Lara', 'That is the problem! Also, I listen to podcasts while I clean.'],
+  ['Max', 'OK. I\'m going to do the washing up now with some music.'],
+  ['Lara', 'Great! And then you can take out the rubbish.'],
+  ['Max', 'Wait, did you just give me two jobs?'],
+  ['Lara', 'Yes, I did! Cleaning is a habit, remember?']
+];
+const lado = q => q === 'Max' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 6, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Thanks! I've just vacuumed it. I started there because it's easy.", "Thanks! I've yet vacuumed it. I started there because it's easy.", "Thanks! I just have vacuumed it yet."], 0, 'Obrigada! Acabei de passar o aspirador. Comecei por ali porque é fácil.'),
+    prox(2, ['Have you cleaned the bathroom already yet?', 'Have you cleaned the bathroom yet?', 'Has you cleaned the bathroom yet?'], 1, 'Você já limpou o banheiro?'),
+    prox(3, ["Yes, I've cleaned it yet. I did it this morning.", "Yes, I've already clean it. I did it this morning.", "Yes, I've already cleaned it. I did it this morning."], 2, 'Sim, já limpei. Fiz isso hoje de manhã.'),
+    prox(5, ["I haven't done the washing up yet. Can you help me?", "I haven't did the washing up yet. Can you help me?", "I've done yet the washing up. Can you help me?"], 0, 'Ainda não lavei a louça. Você pode me ajudar?'),
+    prox(6, ['Sure. Have you took out the rubbish?', 'Sure. Have you taken out the rubbish?', 'Sure. Did you taken out the rubbish?'], 1, 'Claro. Você já tirou o lixo?'),
+    prox(7, ["Yes, I've just taken it out. Look, the bin is full!", "No, already. It's on my list for later.", "No, not yet. It's on my list for later."], 2, 'Não, ainda não. Está na minha lista para mais tarde.'),
+    prox(9, ['I use a timer. I clean for fifteen minutes and then I stop.', 'I use a timer. I cleaning for fifteen minutes and then I stop.', 'I never clean. My mom does everything.'], 0, 'Uso um timer. Limpo por quinze minutos e depois paro.'),
+    prox(10, ["That's a good idea. Does you write a list?", "That's a good idea. Do you write a list?", "That's a good idea. You write a list?"], 1, 'Boa ideia. Você escreve uma lista?'),
+    prox(11, ['Yes, a very long one. Fifteen things every day.', 'Yes, but a short one. Only two or three important thing.', 'Yes, but a short one. Only two or three important things.'], 2, 'Sim, mas uma curta. Só duas ou três coisas importantes.'),
+    prox(13, ['That is the problem! Also, I listen to podcasts while I clean.', 'That is the problem! Also, I listening to podcasts while I clean.', 'That is the problem! Also, I listen podcasts while I clean.'], 0, 'Esse é o problema! E também ouço podcasts enquanto limpo.'),
+    prox(15, ['Great! And then you can took out the rubbish.', 'Great! And then you can take out the rubbish.', 'Great! And then you can takes out the rubbish.'], 1, 'Ótimo! E depois você pode tirar o lixo.'),
+    prox(17, ['Yes, I have! Cleaning is a habit, remember?', 'No, I gave you ten jobs.', 'Yes, I did! Cleaning is a habit, remember?'], 2, 'Sim! Limpeza é um hábito, lembra?'),
+    { instrucao: 'What has Lara just done?', frase: 'She has just ___.', opcoes: ['vacuumed the living room', 'cleaned the bathroom', 'done the washing up'], certa: 0, traducao: 'Ela acabou de passar o aspirador na sala.' },
+    { instrucao: 'When did Lara clean the bathroom?', frase: '___', opcoes: ['Last week.', 'This morning.', 'She hasn\'t cleaned it yet.'], certa: 1, traducao: 'Hoje de manhã.' },
+    { instrucao: 'What hasn\'t Lara done yet?', frase: '___', opcoes: ['Vacuumed the living room.', 'Cleaned the bathroom.', 'The washing up.'], certa: 2, traducao: 'A louça.' },
+    { instrucao: 'Why did Lara start with the living room?', frase: '___', opcoes: ["Because it's easy.", "Because it's the biggest room.", 'Because Max asked her.'], certa: 0, traducao: 'Porque é fácil.' },
+    { instrucao: 'How long does Lara clean with her timer?', frase: '___', opcoes: ['Five minutes.', 'Fifteen minutes.', 'One hour.'], certa: 1, traducao: 'Quinze minutos.' },
+    { instrucao: 'How many things are on Lara\'s list?', frase: '___', opcoes: ['Ten or fifteen.', 'Only one.', 'Two or three.'], certa: 2, traducao: 'Duas ou três.' },
+    { instrucao: 'What does Lara listen to while she cleans?', frase: '___', opcoes: ['Podcasts.', 'The news.', 'Nothing.'], certa: 0, traducao: 'Podcasts.' },
+    { instrucao: 'What are Max\'s two jobs?', frase: '___', opcoes: ['Clean the bathroom and iron clothes.', 'Do the washing up and take out the rubbish.', 'Vacuum and mop the floor.'], certa: 1, traducao: 'Lavar a louça e tirar o lixo.' }
+  ]
+});
+</script>
+</body>
+</html>

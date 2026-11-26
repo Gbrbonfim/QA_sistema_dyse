@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 6 · Just, already, yet</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 06 · Escrita (Unlock your cleaning motivation)
+   Alinhado ao "Grammar Point": present perfect para algo recente / novidades ligadas ao agora;
+   just e already antes do verbo principal; yet no fim de perguntas e negativas. Conteúdo
+   NOVO. A isca é a palavra que não cabe na frase (yet na afirmativa, already na negativa...).
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 6, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Acabei de lavar a louça.'), palavras: ["I've", 'just', 'done', 'the', 'washing', 'up'], isca: ['did'], fim: '.', traducao: 'Acabei de lavar a louça.' },
+    { contexto: M('Eu já limpei o banheiro.'), palavras: ["I've", 'already', 'cleaned', 'the', 'bathroom'], isca: ['yet'], fim: '.', traducao: 'Já limpei o banheiro.' },
+    { contexto: M('Eu ainda não tirei o lixo.'), palavras: ['I', "haven't", 'taken', 'out', 'the', 'rubbish', 'yet'], isca: ['already'], fim: '.', traducao: 'Ainda não tirei o lixo.' },
+    { contexto: M('Você já lavou a louça?'), palavras: ['Have', 'you', 'done', 'the', 'dishes', 'yet'], isca: ['did'], fim: '?', traducao: 'Você já lavou a louça?' },
+    { contexto: M('Ele acabou de terminar a roupa.'), palavras: ["He's", 'just', 'finished', 'the', 'laundry'], isca: ['yet'], fim: '.', traducao: 'Ele acabou de terminar a roupa.' },
+    { contexto: M('Ela já dobrou as roupas.'), palavras: ["She's", 'already', 'folded', 'the', 'clothes'], isca: ['fold'], fim: '.', traducao: 'Ela já dobrou as roupas.' },
+    { contexto: M('Nós ainda não passamos aspirador no chão.'), palavras: ['We', "haven't", 'vacuumed', 'the', 'floor', 'yet'], isca: ['vacuum'], fim: '.', traducao: 'Ainda não passamos aspirador no chão.' },
+    { contexto: M('Você já terminou a limpeza?'), palavras: ['Have', 'you', 'finished', 'the', 'cleaning', 'yet'], isca: ['Has'], fim: '?', traducao: 'Você já terminou a limpeza?' },
+    { contexto: M('Acabei de passar pano no chão. Não pise!'), palavras: ["I've", 'just', 'mopped', 'the', 'floor'], isca: ['yet'], fim: '.', traducao: 'Acabei de passar pano no chão.' },
+    { contexto: M('A Julia já limpou o banheiro.'), palavras: ['Julia', 'has', 'already', 'cleaned', 'the', 'bathroom'], isca: ['have'], fim: '.', traducao: 'A Julia já limpou o banheiro.' },
+    { contexto: M('Eu ainda não fiz a minha lista de limpeza.'), palavras: ['I', "haven't", 'made', 'my', 'cleaning', 'list', 'yet'], isca: ['maked'], fim: '.', traducao: 'Ainda não fiz a minha lista de limpeza.' },
+    { contexto: M('O Luca já colocou a roupa na máquina.'), palavras: ['Luca', 'has', 'already', 'loaded', 'the', 'washing', 'machine'], isca: ['yet'], fim: '.', traducao: 'O Luca já colocou a roupa na máquina.' },
+    { contexto: M('Você já passou pano na cozinha?'), palavras: ['Have', 'you', 'mopped', 'the', 'kitchen', 'yet'], isca: ['Has'], fim: '?', traducao: 'Você já passou pano na cozinha?' },
+    { contexto: M('Nós acabamos de almoçar.'), palavras: ["We've", 'just', 'had', 'lunch'], isca: ['haved'], fim: '.', traducao: 'Acabamos de almoçar.' },
+    { contexto: M('Ele acabou de cair da bicicleta.'), palavras: ["He's", 'just', 'fallen', 'off', 'his', 'bike'], isca: ['fell'], fim: '.', traducao: 'Ele acabou de cair da bicicleta.' },
+    { contexto: M('Ela acabou de ganhar a corrida.'), palavras: ["She's", 'just', 'won', 'the', 'race'], isca: ['winned'], fim: '.', traducao: 'Ela acabou de ganhar a corrida.' },
+    { contexto: M('Desculpe, acabei de derramar água na mesa.'), palavras: ['Sorry,', "I've", 'just', 'spilled', 'water', 'on', 'the', 'table'], isca: ['yet'], fim: '.', traducao: 'Desculpe, acabei de derramar água na mesa.' },
+    { contexto: M('Ainda não terminei nada.'), palavras: ['I', "haven't", 'finished', 'anything', 'yet'], isca: ['already'], fim: '.', traducao: 'Ainda não terminei nada.' },
+    { contexto: M('Ela ainda não estendeu as roupas.'), palavras: ['She', "hasn't", 'hung', 'the', 'clothes', 'yet'], isca: ["haven't"], fim: '.', traducao: 'Ela ainda não estendeu as roupas.' },
+    { contexto: M('Eu já comecei a lavar a roupa.'), palavras: ["I've", 'already', 'started', 'the', 'laundry'], isca: ['yet'], fim: '.', traducao: 'Já comecei a lavar a roupa.' }
+  ]
+});
+</script>
+</body>
+</html>

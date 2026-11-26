@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 6 · Which chore is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 06 · Escuta (Unlock your cleaning motivation)
+   Alinhado ao slide "Vocabulary: housework" (clean the bathroom, tidy up, vacuum / sweep / mop
+   the floor, do the laundry, fold blankets, iron clothes, load the washing machine, hang
+   clothes, do the washing up, take out the rubbish). Conteúdo NOVO: o aluno ouve a situação e
+   escolhe a tarefa doméstica. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'cleaning_services' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 6, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which chore is it?',
+  itens: [
+    q('The kitchen bin is full and it smells terrible.', 'take out the rubbish', ['iron clothes', 'fold blankets']),
+    q('There are dirty plates and glasses in the sink.', 'do the washing up', ['hang clothes', 'vacuum the floor']),
+    q('My shirt is clean, but it is very wrinkled.', 'iron clothes', ['take out the rubbish', 'mop the floor']),
+    q('There is a lot of dust on the carpet. I need the machine.', 'vacuum the floor', ['do the washing up', 'fold blankets']),
+    q('The clothes are wet. I need to put them outside to dry.', 'hang clothes', ['clean the bathroom', 'take out the rubbish']),
+    q('There are toys, books and shoes everywhere in the bedroom.', 'tidy up', ['iron clothes', 'do the washing up']),
+    q('The toilet and the shower are dirty.', 'clean the bathroom', ['hang clothes', 'vacuum the floor']),
+    q('I put the dirty clothes and the soap in the machine.', 'load the washing machine', ['mop the floor', 'tidy up']),
+    q('I use a broom to clean the dust and leaves from the floor.', 'sweep the floor', ['iron clothes', 'load the washing machine']),
+    q('I use water and soap to clean the kitchen floor. Now it is wet.', 'mop the floor', ['fold blankets', 'hang clothes']),
+    q('The blankets are on the sofa. I make them small and neat.', 'fold blankets', ['clean the bathroom', 'sweep the floor']),
+    q('I wash all the dirty clothes on Saturday mornings.', 'do the laundry', ['tidy up', 'take out the rubbish']),
+    q('After dinner, somebody needs to wash the pots and pans.', 'do the washing up', ['fold blankets', 'sweep the floor']),
+    q('The rubbish bag is in the kitchen. Please put it outside.', 'take out the rubbish', ['load the washing machine', 'iron clothes']),
+    q('I need my hot iron for this dress.', 'iron clothes', ['tidy up', 'do the washing up']),
+    q('The living room carpet is dirty. Where is the vacuum cleaner?', 'vacuum the floor', ['hang clothes', 'clean the bathroom']),
+    q('My desk is a mess. I need to put everything in its place.', 'tidy up', ['mop the floor', 'do the laundry']),
+    q('The bathroom mirror and the sink are dirty.', 'clean the bathroom', ['fold blankets', 'sweep the floor']),
+    q('The washing machine has finished. The clothes need to dry in the sun.', 'hang clothes', ['vacuum the floor', 'do the washing up']),
+    q('Leaves are all over the backyard. Give me the broom.', 'sweep the floor', ['iron clothes', 'clean the bathroom']),
+    q('We have no clean clothes for the week!', 'do the laundry', ['take out the rubbish', 'sweep the floor']),
+    q('After sweeping, I clean the floor with a wet mop.', 'mop the floor', ['iron clothes', 'tidy up']),
+    q('Guests are sleeping here tonight. Please put the blankets in neat piles.', 'fold blankets', ['do the washing up', 'take out the rubbish']),
+    q('Put the dirty towels in the machine, please.', 'load the washing machine', ['sweep the floor', 'clean the bathroom'])
+  ]
+});
+</script>
+</body>
+</html>
