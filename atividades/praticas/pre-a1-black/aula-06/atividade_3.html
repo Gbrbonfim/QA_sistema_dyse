@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 6 · Registration form</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 06 and 07 · Escrita (In a Hotel)
+   Alinhado ao "Reading and Writing" do slide (perguntas da ficha do hotel: first name, last
+   name, Where are you from?, Where in your country?, address, phone number, email) e ao
+   Speaking (How do you spell...? / Could you repeat, please?). Conteúdo NOVO. A isca é a
+   palavra errada da pergunta. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 6, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the question (one word is extra)',
+  itens: [
+    { contexto: M('Qual é o seu primeiro nome?'), palavras: ["What's", 'your', 'first', 'name'], isca: ['last'], fim: '?', traducao: 'Qual é o seu primeiro nome?' },
+    { contexto: M('Qual é o seu sobrenome?'), palavras: ["What's", 'your', 'last', 'name'], isca: ['first'], fim: '?', traducao: 'Qual é o seu sobrenome?' },
+    { contexto: M('De onde você é?'), palavras: ['Where', 'are', 'you', 'from'], isca: ["What's"], fim: '?', traducao: 'De onde você é?' },
+    { contexto: M('De onde no seu país?'), palavras: ['Where', 'in', 'your', 'country'], isca: ['from'], fim: '?', traducao: 'De onde no seu país?' },
+    { contexto: M('Qual é o seu endereço?'), palavras: ["What's", 'your', 'address'], isca: ['Where'], fim: '?', traducao: 'Qual é o seu endereço?' },
+    { contexto: M('Qual é o seu número de telefone?'), palavras: ["What's", 'your', 'phone', 'number'], isca: ['How'], fim: '?', traducao: 'Qual é o seu número de telefone?' },
+    { contexto: M('Qual é o seu e-mail?'), palavras: ["What's", 'your', 'email'], isca: ['are'], fim: '?', traducao: 'Qual é o seu e-mail?' },
+    { contexto: M('Como se soletra o seu sobrenome?'), palavras: ['How', 'do', 'you', 'spell', 'your', 'last', 'name'], isca: ['What'], fim: '?', traducao: 'Como se soletra o seu sobrenome?' },
+    { contexto: M('Pode repetir, por favor?'), palavras: ['Could', 'you', 'repeat,', 'please'], isca: ['spell'], fim: '?', traducao: 'Pode repetir, por favor?' },
+    { contexto: M('Como se soletra o seu primeiro nome?'), palavras: ['How', 'do', 'you', 'spell', 'your', 'first', 'name'], isca: ['are'], fim: '?', traducao: 'Como se soletra o seu primeiro nome?' },
+    { contexto: M('Quantos anos você tem?'), palavras: ['How', 'old', 'are', 'you'], isca: ['What'], fim: '?', traducao: 'Quantos anos você tem?' },
+    { contexto: M('Qual é o seu nome?'), palavras: ["What's", 'your', 'name'], isca: ['Where'], fim: '?', traducao: 'Qual é o seu nome?' },
+    { contexto: M('Você é do Canadá?'), palavras: ['Are', 'you', 'from', 'Canada'], isca: ['Is'], fim: '?', traducao: 'Você é do Canadá?' },
+    { contexto: M('Você é de Nova Jersey?'), palavras: ['Are', 'you', 'from', 'New', 'Jersey'], isca: ['Is'], fim: '?', traducao: 'Você é de Nova Jersey?' },
+    { contexto: M('O café da manhã é no quarto?'), palavras: ['Is', 'breakfast', 'in', 'the', 'room'], isca: ['Are'], fim: '?', traducao: 'O café da manhã é no quarto?' },
+    { contexto: M('A academia está aberta?'), palavras: ['Is', 'the', 'gym', 'open'], isca: ['Are'], fim: '?', traducao: 'A academia está aberta?' },
+    { contexto: M('As toalhas estão no quarto?'), palavras: ['Are', 'the', 'towels', 'in', 'the', 'room'], isca: ['Is'], fim: '?', traducao: 'As toalhas estão no quarto?' },
+    { contexto: M('Onde é a recepção?'), palavras: ['Where', 'is', 'the', 'reception'], isca: ['are'], fim: '?', traducao: 'Onde é a recepção?' },
+    { contexto: M('Onde é a piscina?'), palavras: ['Where', 'is', 'the', 'swimming', 'pool'], isca: ['are'], fim: '?', traducao: 'Onde é a piscina?' },
+    { contexto: M('Onde está o controle remoto?'), palavras: ['Where', 'is', 'the', 'remote', 'control'], isca: ['are'], fim: '?', traducao: 'Onde está o controle remoto?' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -954,6 +954,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Review: positive, negative, question', tipo: 'Make a Choice', treina: 'Gramática · To be (revisão)', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Review: countries, numbers and colors', tipo: 'Make a Choice', treina: 'Gramática · Revisão', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 6,
+        titulo: 'Class 06 and 07 · In a Hotel',
+        atividades: [
+          { num: 1, titulo: 'At the hotel', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário do hotel', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'How do you spell it?', tipo: 'Escute e escolha', treina: 'Escuta · Alfabeto', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Registration form', tipo: 'Monte a frase', treina: 'Escrita · Perguntas da ficha', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My hotel room', tipo: 'Monte a frase', treina: 'Escrita · Vocabulário do hotel', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'Check-in', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'Calling reception', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'Hotel words', tipo: 'Escute e grave', treina: 'Fala · Vocabulário do hotel', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'At the reception desk', tipo: 'Escute e grave', treina: 'Fala · Check-in', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'The registration form', tipo: 'Make a Choice', treina: 'Gramática · Perguntas e respostas', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Is or are?', tipo: 'Make a Choice', treina: 'Gramática · To be (singular e plural)', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

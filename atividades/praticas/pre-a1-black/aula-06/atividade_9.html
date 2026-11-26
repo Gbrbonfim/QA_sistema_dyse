@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 6 · The registration form</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 06 and 07 · Gramática (In a Hotel)
+   Alinhado ao "Reading and Writing" do slide: associar a pergunta da ficha à resposta certa
+   (first name, last name, Where are you from?, Where in your country?, address, phone number,
+   email) e as respostas do Speaking. Conteúdo NOVO: a ficha da Sofia Martínez, do México.
+   24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 6, num: 9, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: "What's your first name? — ___", opcoes: ['Sofia', 'Martínez', 'Mexico'], certa: 0, traducao: 'Qual é o seu primeiro nome? — Sofia.' },
+    { frase: "What's your last name? — ___", opcoes: ['Sofia', 'Martínez', 'Guadalajara'], certa: 1, traducao: 'Qual é o seu sobrenome? — Martínez.' },
+    { frase: 'Where are you from? — ___', opcoes: ['Guadalajara', 'sofia.m@email.com', 'Mexico'], certa: 2, traducao: 'De onde você é? — México.' },
+    { frase: 'Where in your country? — ___', opcoes: ['Guadalajara', 'Mexico', 'Martínez'], certa: 0, traducao: 'De onde no seu país? — Guadalajara.' },
+    { frase: "What's your phone number? — ___", opcoes: ['sofia.m@email.com', '33 1234 5678', '15 Juárez Street'], certa: 1, traducao: 'Qual é o seu número de telefone? — 33 1234 5678.' },
+    { frase: "What's your email? — ___", opcoes: ['33 1234 5678', '15 Juárez Street', 'sofia.m@email.com'], certa: 2, traducao: 'Qual é o seu e-mail? — sofia.m@email.com.' },
+    { frase: "What's your address? — ___", opcoes: ['15 Juárez Street', 'sofia.m@email.com', 'Mexico'], certa: 0, traducao: 'Qual é o seu endereço? — Rua Juárez, 15.' },
+    { frase: 'How do you spell your last name? — ___', opcoes: ["It's Martínez.", 'M, A, R, T, Í, N, E, Z.', 'Thank you.'], certa: 1, traducao: 'Como se soletra o seu sobrenome? — M, A, R, T, Í, N, E, Z.' },
+    { frase: 'Could you repeat, please? — ___', opcoes: ["You're welcome.", 'Thank you.', 'Sure.'], certa: 2, traducao: 'Pode repetir, por favor? — Claro.' },
+    { frase: "Thank you! — ___", opcoes: ["You're welcome.", 'Sure.', 'Please.'], certa: 0, traducao: 'Obrigada! — De nada.' },
+    { frase: '___ your first name? — Sofia.', opcoes: ['Where', "What's", 'How'], certa: 1, traducao: 'Qual é o seu primeiro nome? — Sofia.' },
+    { frase: '___ are you from? — Mexico.', opcoes: ['What', 'How', 'Where'], certa: 2, traducao: 'De onde você é? — México.' },
+    { frase: '___ do you spell your name? — S, O, F, I, A.', opcoes: ['How', 'What', 'Where'], certa: 0, traducao: 'Como se soletra o seu nome? — S, O, F, I, A.' },
+    { frase: '___ in your country? — Guadalajara.', opcoes: ['What', 'Where', 'How'], certa: 1, traducao: 'De onde no seu país? — Guadalajara.' },
+    { frase: "What's your ___? — 33 1234 5678.", opcoes: ['email', 'address', 'phone number'], certa: 2, traducao: 'Qual é o seu número de telefone? — 33 1234 5678.' },
+    { frase: "What's your ___? — sofia.m@email.com", opcoes: ['email', 'phone number', 'last name'], certa: 0, traducao: 'Qual é o seu e-mail? — sofia.m@email.com.' },
+    { frase: "What's your ___? — 15 Juárez Street.", opcoes: ['email', 'address', 'first name'], certa: 1, traducao: 'Qual é o seu endereço? — Rua Juárez, 15.' },
+    { frase: "What's your ___ name? — Martínez.", opcoes: ['first', 'phone', 'last'], certa: 2, traducao: 'Qual é o seu sobrenome? — Martínez.' },
+    { frase: "What's your ___ name? — Sofia.", opcoes: ['first', 'last', 'email'], certa: 0, traducao: 'Qual é o seu primeiro nome? — Sofia.' },
+    { frase: 'Could you ___, please?', opcoes: ['repeating', 'repeat', 'repeats'], certa: 1, traducao: 'Pode repetir, por favor?' },
+    { frase: 'How do you ___ your last name?', opcoes: ['spelling', 'spells', 'spell'], certa: 2, traducao: 'Como se soletra o seu sobrenome?' },
+    { frase: 'Thank you! — You___ welcome.', opcoes: ["'re", "'s", "'m"], certa: 0, traducao: 'Obrigada! — De nada.' },
+    { frase: 'Sofia is from Mexico. She is ___.', opcoes: ['Mexico', 'Mexican', 'Mexicans'], certa: 1, traducao: 'A Sofia é do México. Ela é mexicana.' },
+    { frase: 'Her room ___ number seventeen.', opcoes: ['are', 'am', 'is'], certa: 2, traducao: 'O quarto dela é o número dezessete.' }
+  ]
+});
+</script>
+</body>
+</html>

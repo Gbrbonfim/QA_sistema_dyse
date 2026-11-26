@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 6 · At the hotel</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 06 and 07 · Escuta (In a Hotel)
+   Alinhado ao "Vocabulary" do slide (pillows, breakfast, shower, air conditioning, remote
+   control, single bed, double bed, toiletries, towels) e às partes do hotel (room, reception,
+   parking, gym, the bar, swimming pool). Conteúdo NOVO: o aluno ouve uma frase curta e escolhe
+   a figura. 24 questões. */
+const IC = { pillows: 'bed', breakfast: 'free_breakfast', shower: 'shower', 'air conditioning': 'ac_unit', 'remote control': 'settings_remote', 'single bed': 'single_bed', 'double bed': 'king_bed', toiletries: 'soap', towels: 'dry_cleaning', room: 'meeting_room', reception: 'concierge', parking: 'local_parking', gym: 'fitness_center', 'the bar': 'local_bar', 'swimming pool': 'pool' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 6, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the right picture',
+  itens: [
+    q('The towels are white.', 'towels', ['pillows', 'shower', 'gym']),
+    q('Breakfast, please!', 'breakfast', ['parking', 'towels', 'the bar']),
+    q('The shower is in the bathroom.', 'shower', ['swimming pool', 'reception', 'breakfast']),
+    q('The air conditioning is great.', 'air conditioning', ['remote control', 'single bed', 'toiletries']),
+    q('Where is the remote control?', 'remote control', ['air conditioning', 'pillows', 'parking']),
+    q('A single bed, please.', 'single bed', ['double bed', 'shower', 'the bar']),
+    q('A double bed, please.', 'double bed', ['single bed', 'towels', 'gym']),
+    q('The toiletries are in the bathroom.', 'toiletries', ['towels', 'breakfast', 'reception']),
+    q('The pillows are white and blue.', 'pillows', ['towels', 'remote control', 'parking']),
+    q('The reception is open.', 'reception', ['room', 'gym', 'pillows']),
+    q('My car is in the parking.', 'parking', ['swimming pool', 'the bar', 'shower']),
+    q('The gym is big.', 'gym', ['reception', 'room', 'toiletries']),
+    q("Let's go to the bar!", 'the bar', ['gym', 'parking', 'single bed']),
+    q('The swimming pool is blue.', 'swimming pool', ['shower', 'the bar', 'towels']),
+    q('My room is number fifteen.', 'room', ['reception', 'parking', 'breakfast']),
+    q('Two towels, please.', 'towels', ['pillows', 'toiletries', 'reception']),
+    q('Is breakfast in the room?', 'breakfast', ['shower', 'pillows', 'gym']),
+    q("The remote control isn't in the room.", 'remote control', ['towels', 'single bed', 'swimming pool']),
+    q('Two pillows, please.', 'pillows', ['towels', 'breakfast', 'the bar']),
+    q('Is the swimming pool open?', 'swimming pool', ['gym', 'reception', 'remote control']),
+    q("The air conditioning isn't good.", 'air conditioning', ['shower', 'double bed', 'parking']),
+    q('Is the gym open?', 'gym', ['the bar', 'swimming pool', 'toiletries']),
+    q('Excuse me, where is the reception?', 'reception', ['parking', 'room', 'shower']),
+    q('The double bed is big.', 'double bed', ['single bed', 'pillows', 'gym'])
+  ]
+});
+</script>
+</body>
+</html>

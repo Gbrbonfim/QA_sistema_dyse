@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 6 · My hotel room</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 06 and 07 · Escrita (In a Hotel)
+   Alinhado ao vocabulário do quarto e das partes do hotel, com o to be (is/are, isn't/aren't)
+   no singular e no plural (the towels ARE / the shower IS). Conteúdo NOVO. A isca é o be
+   errado. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 6, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('As toalhas são brancas.'), palavras: ['The', 'towels', 'are', 'white'], isca: ['is'], fim: '.', traducao: 'As toalhas são brancas.' },
+    { contexto: M('O chuveiro é ótimo.'), palavras: ['The', 'shower', 'is', 'great'], isca: ['are'], fim: '.', traducao: 'O chuveiro é ótimo.' },
+    { contexto: M('Os travesseiros não estão no quarto.'), palavras: ['The', 'pillows', "aren't", 'in', 'the', 'room'], isca: ["isn't"], fim: '.', traducao: 'Os travesseiros não estão no quarto.' },
+    { contexto: M('O controle remoto não está no quarto.'), palavras: ['The', 'remote', 'control', "isn't", 'in', 'the', 'room'], isca: ["aren't"], fim: '.', traducao: 'O controle remoto não está no quarto.' },
+    { contexto: M('Uma cama de casal, por favor.'), palavras: ['A', 'double', 'bed,', 'please'], isca: ['single'], fim: '.', traducao: 'Uma cama de casal, por favor.' },
+    { contexto: M('Uma cama de solteiro, por favor.'), palavras: ['A', 'single', 'bed,', 'please'], isca: ['double'], fim: '.', traducao: 'Uma cama de solteiro, por favor.' },
+    { contexto: M('O meu quarto é o número 12.'), palavras: ['My', 'room', 'is', 'number', 'twelve'], isca: ['are'], fim: '.', traducao: 'O meu quarto é o número 12.' },
+    { contexto: M('A piscina é azul.'), palavras: ['The', 'swimming', 'pool', 'is', 'blue'], isca: ['are'], fim: '.', traducao: 'A piscina é azul.' },
+    { contexto: M('O ar-condicionado não é bom.'), palavras: ['The', 'air', 'conditioning', "isn't", 'good'], isca: ["aren't"], fim: '.', traducao: 'O ar-condicionado não é bom.' },
+    { contexto: M('Os produtos de higiene estão no banheiro.'), palavras: ['The', 'toiletries', 'are', 'in', 'the', 'bathroom'], isca: ['is'], fim: '.', traducao: 'Os produtos de higiene estão no banheiro.' },
+    { contexto: M('Duas toalhas, por favor.'), palavras: ['Two', 'towels,', 'please'], isca: ['towel'], fim: '.', traducao: 'Duas toalhas, por favor.' },
+    { contexto: M('O café da manhã é no bar.'), palavras: ['Breakfast', 'is', 'in', 'the', 'bar'], isca: ['are'], fim: '.', traducao: 'O café da manhã é no bar.' },
+    { contexto: M('O meu carro está no estacionamento.'), palavras: ['My', 'car', 'is', 'in', 'the', 'parking'], isca: ['are'], fim: '.', traducao: 'O meu carro está no estacionamento.' },
+    { contexto: M('A academia é grande.'), palavras: ['The', 'gym', 'is', 'big'], isca: ['are'], fim: '.', traducao: 'A academia é grande.' },
+    { contexto: M('Os travesseiros são brancos e azuis.'), palavras: ['The', 'pillows', 'are', 'white', 'and', 'blue'], isca: ['is'], fim: '.', traducao: 'Os travesseiros são brancos e azuis.' },
+    { contexto: M('Obrigado! — De nada.'), palavras: ['Thank', 'you!', "You're", 'welcome'], isca: ['please'], fim: '.', traducao: 'Obrigado! — De nada.' },
+    { contexto: M('Esta é a recepção.'), palavras: ['This', 'is', 'the', 'reception'], isca: ['are'], fim: '.', traducao: 'Esta é a recepção.' },
+    { contexto: M('As toalhas não estão no banheiro.'), palavras: ['The', 'towels', "aren't", 'in', 'the', 'bathroom'], isca: ["isn't"], fim: '.', traducao: 'As toalhas não estão no banheiro.' },
+    { contexto: M('O meu sobrenome é Thorpe.'), palavras: ['My', 'last', 'name', 'is', 'Thorpe'], isca: ['first'], fim: '.', traducao: 'O meu sobrenome é Thorpe.' },
+    { contexto: M('O meu primeiro nome é Mary.'), palavras: ['My', 'first', 'name', 'is', 'Mary'], isca: ['last'], fim: '.', traducao: 'O meu primeiro nome é Mary.' }
+  ]
+});
+</script>
+</body>
+</html>

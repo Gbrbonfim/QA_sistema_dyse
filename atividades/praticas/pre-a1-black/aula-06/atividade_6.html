@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 6 · Calling reception</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 06 and 07 · Leitura (In a Hotel)
+   Alinhado ao vocabulário do quarto (towels, pillows, remote control, air conditioning,
+   toiletries, breakfast) e das partes do hotel, com o to be no singular e no plural e as
+   frases do Speaking (Could you repeat, please? / Thank you / You're welcome). Conteúdo NOVO:
+   a hóspede Anna liga para a recepção. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Reception', 'Hello, reception!'],
+  ['Anna', "Hi! I'm Anna Becker, from room number eleven."],
+  ['Reception', 'Hi, Ms. Becker! How can I help you?'],
+  ['Anna', "The remote control isn't in my room."],
+  ['Reception', 'Oh, sorry! And the air conditioning? Is it OK?'],
+  ['Anna', "Yes, it is. But the towels aren't in the bathroom."],
+  ['Reception', 'Sorry! Two towels?'],
+  ['Anna', 'Yes, two towels and two pillows, please.'],
+  ['Reception', 'Could you repeat, please?'],
+  ['Anna', 'Sure. Two towels and two pillows.'],
+  ['Reception', 'OK! Are the toiletries in the bathroom?'],
+  ['Anna', 'Yes, they are. Thank you! And is breakfast in the room?'],
+  ['Reception', "No, it isn't. Breakfast is at the bar."],
+  ['Anna', 'OK. And is the swimming pool open?'],
+  ['Reception', 'Yes, it is. The gym is open too.'],
+  ['Anna', 'Great! Thank you!'],
+  ['Reception', "You're welcome!"]
+];
+const lado = q => q === 'Reception' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 6, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi! I'm Anna Becker, from room number eleven.", "Hi! I'm Anna Becker, from room number eleventh.", "Hi! I Anna Becker, from room number eleven."], 0, 'Oi! Sou a Anna Becker, do quarto número onze.'),
+    prox(3, ["The remote control aren't in my room.", "The remote control isn't in my room.", "The remote control isn't my room in."], 1, 'O controle remoto não está no meu quarto.'),
+    prox(4, ['Oh, sorry! And the air conditioning? Are it OK?', 'Oh, sorry! And the air conditioning? It is OK?', 'Oh, sorry! And the air conditioning? Is it OK?'], 2, 'Ah, desculpe! E o ar-condicionado? Está tudo bem?'),
+    prox(5, ["Yes, it is. But the towels aren't in the bathroom.", "Yes, it is. But the towels isn't in the bathroom.", "Yes, it's. But the towels aren't in the bathroom."], 0, 'Sim. Mas as toalhas não estão no banheiro.'),
+    prox(7, ['Yes, two towel and two pillow, please.', 'Yes, two towels and two pillows, please.', "Yes, two towels and two pillows, you're welcome."], 1, 'Sim, duas toalhas e dois travesseiros, por favor.'),
+    prox(8, ['Could you repeat, thank you?', 'You could repeat, please?', 'Could you repeat, please?'], 2, 'Pode repetir, por favor?'),
+    prox(9, ['Sure. Two towels and two pillows.', 'Sure. T, O, W, E, L, S.', "You're welcome. Two towels."], 0, 'Claro. Duas toalhas e dois travesseiros.'),
+    prox(10, ['OK! Is the toiletries in the bathroom?', 'OK! Are the toiletries in the bathroom?', 'OK! Are the toiletries the bathroom in?'], 1, 'Certo! Os produtos de higiene estão no banheiro?'),
+    prox(11, ['Yes, they is. Thank you! And is breakfast in the room?', 'Yes, they are. Thank you! And are breakfast in the room?', 'Yes, they are. Thank you! And is breakfast in the room?'], 2, 'Sim. Obrigada! E o café da manhã é no quarto?'),
+    prox(12, ["No, it isn't. Breakfast is at the bar.", "No, it aren't. Breakfast is at the bar.", "No, it isn't. Breakfast are at the bar."], 0, 'Não. O café da manhã é no bar.'),
+    prox(13, ['OK. And are the swimming pool open?', 'OK. And is the swimming pool open?', 'OK. And is open the swimming pool?'], 1, 'Certo. E a piscina está aberta?'),
+    prox(16, ['Thank you!', 'Please!', "You're welcome!"], 2, 'De nada!'),
+    { instrucao: "What's Anna's room number?", frase: '___', opcoes: ['Eleven', 'Seven', 'Twelve'], certa: 0, traducao: 'Onze.' },
+    { instrucao: "What's Anna's last name?", frase: '___', opcoes: ['Baker', 'Becker', 'Booker'], certa: 1, traducao: 'Becker.' },
+    { instrucao: "What isn't in Anna's room?", frase: 'The ___.', opcoes: ['air conditioning', 'toiletries', 'remote control'], certa: 2, traducao: 'O controle remoto.' },
+    { instrucao: 'Is the air conditioning OK?', frase: '___', opcoes: ['Yes, it is.', "No, it isn't.", 'Yes, they are.'], certa: 0, traducao: 'Sim.' },
+    { instrucao: 'How many towels and pillows?', frase: 'Two towels and ___ pillows.', opcoes: ['three', 'two', 'four'], certa: 1, traducao: 'Duas toalhas e dois travesseiros.' },
+    { instrucao: 'Are the toiletries in the bathroom?', frase: '___', opcoes: ["No, they aren't.", 'Yes, it is.', 'Yes, they are.'], certa: 2, traducao: 'Sim.' },
+    { instrucao: 'Where is breakfast?', frase: 'At the ___.', opcoes: ['bar', 'room', 'gym'], certa: 0, traducao: 'No bar.' },
+    { instrucao: 'Is the gym open?', frase: '___', opcoes: ["No, it isn't.", 'Yes, it is.', "Yes, it's."], certa: 1, traducao: 'Sim.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 6 · How do you spell it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 06 and 07 · Escuta (In a Hotel)
+   Alinhado ao "Vocabulary: Saying the Alphabet" e ao Speaking do slide ("How do you spell
+   your last name?" — F-I-N-K-L-E-R). Conteúdo NOVO: o aluno ouve a palavra soletrada e
+   escolhe a escrita certa. As iscas mudam uma letra de som parecido (E/I, G/J, B/V, M/N...).
+   24 questões. */
+let n = 0;
+const q = (letras, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto: letras.split('').join(', ') + '.', opcoes: ns.map(c => ({ label: c, icon: 'abc' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 6, num: 2, tipo: 'imagem',
+  instrucao: 'Listen to the spelling and choose the word',
+  itens: [
+    q('GYM', 'GYM', ['JYM', 'GIM', 'GUM']),
+    q('ROOM', 'ROOM', ['RUM', 'ROOMS', 'ROM']),
+    q('BAR', 'BAR', ['VAR', 'BAH', 'PAR']),
+    q('POOL', 'POOL', ['BOOL', 'POLL', 'PULL']),
+    q('SHOWER', 'SHOWER', ['SHAWER', 'CHOWER', 'SHOWAR']),
+    q('TOWELS', 'TOWELS', ['TOWILS', 'TOWELLS', 'TAWELS']),
+    q('PILLOWS', 'PILLOWS', ['PELLOWS', 'PILOWS', 'BILLOWS']),
+    q('BREAKFAST', 'BREAKFAST', ['BRIKFAST', 'BREAKFEST', 'BREKFAST']),
+    q('RECEPTION', 'RECEPTION', ['RESEPTION', 'RECEPCION', 'RICEPTION']),
+    q('PARKING', 'PARKING', ['BARKING', 'PARQING', 'PARKIN']),
+    q('SINGLE', 'SINGLE', ['SINGEL', 'CINGLE', 'SINGLI']),
+    q('DOUBLE', 'DOUBLE', ['DUBLE', 'DOUBEL', 'DOUPLE']),
+    q('MARY', 'MARY', ['MERY', 'NARY', 'MARI']),
+    q('THORPE', 'THORPE', ['TORPE', 'THORBE', 'THORP']),
+    q('FINKLER', 'FINKLER', ['FINCLER', 'VINKLER', 'FINKLAR']),
+    q('JULIA', 'JULIA', ['GULIA', 'JULIE', 'YULIA']),
+    q('KENJI', 'KENJI', ['KENGI', 'KANJI', 'CENJI']),
+    q('PRIYA', 'PRIYA', ['BRIYA', 'PRIA', 'PREYA']),
+    q('SILVA', 'SILVA', ['SILBA', 'CILVA', 'SELVA']),
+    q('OLIVEIRA', 'OLIVEIRA', ['OLIBEIRA', 'OLIVERA', 'OLEVEIRA']),
+    q('HOTEL', 'HOTEL', ['HOTIL', 'OTEL', 'HOTELL']),
+    q('EMAIL', 'EMAIL', ['IMAIL', 'EMEIL', 'EMAILL']),
+    q('BRAZIL', 'BRAZIL', ['BRASIL', 'BRAZEL', 'VRAZIL']),
+    q('CANADA', 'CANADA', ['KANADA', 'CANEDA', 'CANNADA'])
+  ]
+});
+</script>
+</body>
+</html>
