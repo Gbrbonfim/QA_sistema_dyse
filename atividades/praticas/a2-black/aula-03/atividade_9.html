@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 3 · Third person spelling</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 03 · Gramática (No foundation/concealer Makeup look for summers)
+   "Grammar Point - Present Simple" do slide: he / she / it + -s; verbos terminados em -y
+   (consoante + y → -ies: apply → applies; vogal + y → -s: buy → buys), em -sh / -ch / -x / -o
+   (+ -es) e o irregular have → has; I / you / we / they sem -s. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 3, num: 9, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'I ___ foundation to even out my skin tone. (apply)', opcoes: ['apply', 'applies', 'applys'], certa: 0, traducao: 'Passo base para uniformizar o tom da pele.' },
+    { frase: 'She ___ mascara every day. (wear)', opcoes: ['wear', 'wears', 'wearies'], certa: 1, traducao: 'Ela usa rímel todo dia.' },
+    { frase: 'He ___ lip balm. (use)', opcoes: ['use', 'usies', 'uses'], certa: 2, traducao: 'Ele usa lip balm.' },
+    { frase: 'My sister ___ eyeliner. (apply)', opcoes: ['applies', 'applys', 'apply'], certa: 0, traducao: 'A minha irmã passa delineador.' },
+    { frase: 'She ___ new lipstick colors. (try)', opcoes: ['trys', 'tries', 'try'], certa: 1, traducao: 'Ela experimenta cores novas de batom.' },
+    { frase: 'He ___ his makeup online. (buy)', opcoes: ['buies', 'buy', 'buys'], certa: 2, traducao: 'Ele compra a maquiagem online.' },
+    { frase: 'She ___ her face at night. (wash)', opcoes: ['washes', 'washs', 'wash'], certa: 0, traducao: 'Ela lava o rosto à noite.' },
+    { frase: 'My mom ___ beauty videos. (watch)', opcoes: ['watchs', 'watches', 'watch'], certa: 1, traducao: 'A minha mãe assiste a vídeos de beleza.' },
+    { frase: 'The fixing mist ___ the makeup. (fix)', opcoes: ['fixs', 'fix', 'fixes'], certa: 2, traducao: 'O spray fixador fixa a maquiagem.' },
+    { frase: 'She ___ to the beauty shop. (go)', opcoes: ['goes', 'gos', 'go'], certa: 0, traducao: 'Ela vai à loja de cosméticos.' },
+    { frase: 'He ___ a simple routine. (have)', opcoes: ['haves', 'has', 'have'], certa: 1, traducao: 'Ele tem uma rotina simples.' },
+    { frase: 'Sunscreen ___ my skin look glowy. (make)', opcoes: ['make', 'makies', 'makes'], certa: 2, traducao: 'O protetor solar deixa a minha pele brilhante.' },
+    { frase: 'They ___ waterproof mascara. (prefer)', opcoes: ['prefer', 'prefers', 'preferies'], certa: 0, traducao: 'Elas preferem rímel à prova d’água.' },
+    { frase: 'We ___ sunscreen at the beach. (use)', opcoes: ['uses', 'use', 'usies'], certa: 1, traducao: 'Usamos protetor solar na praia.' },
+    { frase: 'You ___ a lot of skincare products. (have)', opcoes: ['has', 'haves', 'have'], certa: 2, traducao: 'Você tem muitos produtos de skincare.' },
+    { frase: 'She ___ makeup at a school in Seoul. (study)', opcoes: ['studies', 'studys', 'study'], certa: 0, traducao: 'Ela estuda maquiagem numa escola em Seul.' },
+    { frase: 'He ___ in São Paulo. (live)', opcoes: ['live', 'lives', 'livies'], certa: 1, traducao: 'Ele mora em São Paulo.' },
+    { frase: 'She ___ friends easily. (make)', opcoes: ['make', 'makies', 'makes'], certa: 2, traducao: 'Ela faz amigos com facilidade.' },
+    { frase: 'The corrector ___ dark circles. (neutralize)', opcoes: ['neutralizes', 'neutralize', 'neutralizies'], certa: 0, traducao: 'O corretivo neutraliza as olheiras.' },
+    { instrucao: 'Why does "makes" have an S in "Sunscreen makes my skin glowy"?', frase: '___', opcoes: ['Because sunscreen = they', 'Because sunscreen = it (third-person singular)', 'Because it is the first person'], certa: 1, traducao: 'Porque sunscreen = it (terceira pessoa do singular).' },
+    { frase: 'We use S in the present simple with ___.', opcoes: ['I, you, we', 'they', 'he, she, it'], certa: 2, traducao: 'Usamos S no present simple com he, she, it.' },
+    { frase: 'apply → applies, try → tries. Verbs with consonant + Y change Y to ___.', opcoes: ['-ies', '-s', '-es'], certa: 0, traducao: 'Verbos com consoante + Y trocam o Y por -ies.' },
+    { frase: 'wash → washes, watch → watches. Verbs ending in -sh / -ch take ___.', opcoes: ['-s', '-es', '-ies'], certa: 1, traducao: 'Verbos terminados em -sh / -ch recebem -es.' },
+    { frase: 'buy → buys. Vowel + Y takes only ___.', opcoes: ['-ies', '-es', '-s'], certa: 2, traducao: 'Vogal + Y recebe só -s.' }
+  ]
+});
+</script>
+</body>
+</html>

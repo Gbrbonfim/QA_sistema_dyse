@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 3 · Apply or applies?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 03 · Escuta (No foundation/concealer Makeup look for summers)
+   Alinhado ao "Grammar Point - Present Simple" do slide (he/she/it + -s: makes, speaks, lives,
+   applies, wears, uses). Conteúdo NOVO: o aluno ouve a frase e escolhe a forma do verbo que
+   ouviu. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'record_voice_over' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 3, num: 2, tipo: 'imagem',
+  instrucao: 'Listen: which verb form do you hear?',
+  itens: [
+    q('She applies blush every morning.', 'applies', ['apply', 'applied', 'applying']),
+    q('I apply sunscreen before anything.', 'apply', ['applies', 'applied', 'applying']),
+    q('He uses lip balm in the winter.', 'uses', ['use', 'used', 'using']),
+    q('We use the same mascara.', 'use', ['uses', 'used', 'using']),
+    q('My mom wears red lipstick.', 'wears', ['wear', 'wore', 'wearing']),
+    q('They wear sunscreen at the beach.', 'wear', ['wears', 'wore', 'wearing']),
+    q('Sunscreen makes my skin look glowy.', 'makes', ['make', 'made', 'making']),
+    q('These products make my skin soft.', 'make', ['makes', 'made', 'making']),
+    q('She buys her makeup online.', 'buys', ['buy', 'bought', 'buying']),
+    q('I buy my makeup at the pharmacy.', 'buy', ['buys', 'bought', 'buying']),
+    q('My sister watches makeup videos every day.', 'watches', ['watch', 'watched', 'watching']),
+    q('I watch beauty videos on social media.', 'watch', ['watches', 'watched', 'watching']),
+    q('He washes his face twice a day.', 'washes', ['wash', 'washed', 'washing']),
+    q('I wash my face with cold water.', 'wash', ['washes', 'washed', 'washing']),
+    q('The corrector neutralizes dark circles.', 'neutralizes', ['neutralize', 'neutralized', 'neutralizing']),
+    q('She tries new products every month.', 'tries', ['try', 'tried', 'trying']),
+    q('I try a new lipstick color every summer.', 'try', ['tries', 'tried', 'trying']),
+    q('Waterproof mascara lifts the lashes.', 'lifts', ['lift', 'lifted', 'lifting']),
+    q('He has a simple skincare routine.', 'has', ['have', 'had', 'having']),
+    q('I have dry skin.', 'have', ['has', 'had', 'having']),
+    q('The fixing mist fixes everything.', 'fixes', ['fix', 'fixed', 'fixing']),
+    q('She goes to the beauty shop on Saturdays.', 'goes', ['go', 'went', 'going']),
+    q('My friends love this blush.', 'love', ['loves', 'loved', 'loving']),
+    q('My brother loves this sunscreen.', 'loves', ['love', 'loved', 'loving'])
+  ]
+});
+</script>
+</body>
+</html>

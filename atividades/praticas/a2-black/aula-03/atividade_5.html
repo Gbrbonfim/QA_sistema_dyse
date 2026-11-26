@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 3 · A natural look</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 03 · Leitura (No foundation/concealer Makeup look for summers)
+   Alinhado ao Talking Point do slide (rotina de maquiagem, olheiras, cor de batom favorita,
+   onde compra maquiagem, rímel à prova d'água) e ao vocabulário do vídeo. Conteúdo NOVO: a
+   Laura e a Paty conversam antes de uma festa na praia. 20 questões: 12 de "próxima fala" + 8
+   de compreensão. */
+const D = [
+  ['Laura', 'Paty, your makeup looks so natural! What do you use?'],
+  ['Paty', 'Thanks! First, I apply sunscreen to protect my skin.'],
+  ['Laura', 'Do you use foundation?'],
+  ['Paty', "No, I don't. I use a powder foundation. It acts as a concealer."],
+  ['Laura', 'And what about dark circles? I have dark circles!'],
+  ['Paty', 'I use a peach corrector. It neutralizes them.'],
+  ['Laura', 'Cool! Do you use blush?'],
+  ['Paty', 'Yes, I love a pink-toned blush for a natural flush.'],
+  ['Laura', 'And your lips? What color is your lipstick?'],
+  ['Paty', "It's not lipstick. It's a tint. I use it for my lips and eyelids."],
+  ['Laura', 'Do you wear mascara at the beach?'],
+  ['Paty', 'Yes, I wear waterproof mascara. It lifts the lashes.'],
+  ['Laura', 'Where do you buy your makeup?'],
+  ['Paty', 'I buy it online. It is cheaper.'],
+  ['Laura', 'Great! Can you do my makeup for the party?'],
+  ['Paty', 'Of course!']
+];
+const lado = q => q === 'Laura' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 3, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Thanks! First, I apply sunscreen to protect my skin.', 'Thanks! First, I applies sunscreen to protect my skin.', 'Thanks! First, I apply sunscreen for protect my skin.'], 0, 'Obrigada! Primeiro, passo protetor solar para proteger a pele.'),
+    prox(2, ['Does you use foundation?', 'Do you use foundation?', 'Do you uses foundation?'], 1, 'Você usa base?'),
+    prox(3, ["No, I doesn't. I use a powder foundation.", "No, I don't. I uses a powder foundation.", "No, I don't. I use a powder foundation. It acts as a concealer."], 2, 'Não. Uso base em pó. Ela funciona como corretivo.'),
+    prox(4, ['And what about dark circles? I have dark circles!', 'And what about dark circles? I has dark circles!', 'And what about dark circle? I have dark circle!'], 0, 'E as olheiras? Eu tenho olheiras!'),
+    prox(5, ['I use a peach corrector. It neutralize them.', 'I use a peach corrector. It neutralizes them.', 'I uses a peach corrector. It neutralizes them.'], 1, 'Uso um corretivo pêssego. Ele neutraliza as olheiras.'),
+    prox(6, ['Cool! Does you use blush?', 'Cool! You use blush do?', 'Cool! Do you use blush?'], 2, 'Legal! Você usa blush?'),
+    prox(7, ['Yes, I love a pink-toned blush for a natural flush.', 'Yes, I loves a pink-toned blush for a natural flush.', 'Yes, I love a pink-toned mascara for a natural flush.'], 0, 'Sim, adoro um blush rosado para um rubor natural.'),
+    prox(8, ['And your lips? What color are your lipstick?', 'And your lips? What color is your lipstick?', 'And your lips? What color your lipstick is?'], 1, 'E os lábios? De que cor é o seu batom?'),
+    prox(9, ["It's not lipstick. It's a tint. I uses it for my lips.", "It's not lipstick. It's a mascara. I use it for my lips.", "It's not lipstick. It's a tint. I use it for my lips and eyelids."], 2, 'Não é batom. É um tint. Uso nos lábios e nas pálpebras.'),
+    prox(11, ['Yes, I wear waterproof mascara. It lifts the lashes.', 'Yes, I wears waterproof mascara. It lifts the lashes.', 'Yes, I wear waterproof mascara. It lift the lashes.'], 0, 'Sim, uso rímel à prova d’água. Ele levanta os cílios.'),
+    prox(12, ['Where does you buy your makeup?', 'Where do you buy your makeup?', 'Where you buy your makeup?'], 1, 'Onde você compra a sua maquiagem?'),
+    prox(13, ['I buys it online. It is cheaper.', 'I buy it online. It are cheaper.', 'I buy it online. It is cheaper.'], 2, 'Compro online. É mais barato.'),
+    { instrucao: 'What does Paty apply first?', frase: '___.', opcoes: ['Sunscreen', 'Blush', 'Mascara'], certa: 0, traducao: 'Protetor solar.' },
+    { instrucao: 'Why does she use sunscreen?', frase: 'To ___ her skin.', opcoes: ['color', 'protect', 'dry'], certa: 1, traducao: 'Para proteger a pele.' },
+    { instrucao: 'What acts as a concealer?', frase: 'The powder ___.', opcoes: ['blush', 'tint', 'foundation'], certa: 2, traducao: 'A base em pó.' },
+    { instrucao: 'Who has dark circles?', frase: '___.', opcoes: ['Laura', 'Paty', 'Both'], certa: 0, traducao: 'A Laura.' },
+    { instrucao: 'What neutralizes dark circles?', frase: 'A peach ___.', opcoes: ['blush', 'corrector', 'tint'], certa: 1, traducao: 'Um corretivo pêssego.' },
+    { instrucao: 'Where does Paty use the tint?', frase: 'On her lips and ___.', opcoes: ['nails', 'cheeks', 'eyelids'], certa: 2, traducao: 'Nos lábios e nas pálpebras.' },
+    { instrucao: 'What mascara does Paty wear at the beach?', frase: '___ mascara.', opcoes: ['Waterproof', 'Washable', 'Pink'], certa: 0, traducao: 'Rímel à prova d’água.' },
+    { instrucao: 'Where does Paty buy her makeup?', frase: '___.', opcoes: ['At the pharmacy', 'Online', 'At the mall'], certa: 1, traducao: 'Online.' }
+  ]
+});
+</script>
+</body>
+</html>

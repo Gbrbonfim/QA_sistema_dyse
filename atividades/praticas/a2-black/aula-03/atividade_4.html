@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 3 · She applies, he uses</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 03 · Escrita (No foundation/concealer Makeup look for summers)
+   Alinhado ao "Grammar Point - Present Simple" e ao exercício 4 do slide (She wears mascara... /
+   He uses lip balm... / My sister applies eyeliner...): he/she/it + -s, -es, -ies. Conteúdo
+   NOVO. A isca é o verbo sem -s ou com a ortografia errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 3, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ela usa rímel para deixar os cílios mais longos.'), palavras: ['She', 'wears', 'mascara', 'to', 'make', 'her', 'lashes', 'look', 'longer'], isca: ['wear'], fim: '.', traducao: 'Ela usa rímel para os cílios parecerem mais longos.' },
+    { contexto: M('Ele usa lip balm para hidratar os lábios.'), palavras: ['He', 'uses', 'lip', 'balm', 'to', 'keep', 'his', 'lips', 'moisturized'], isca: ['use'], fim: '.', traducao: 'Ele usa lip balm para manter os lábios hidratados.' },
+    { contexto: M('A minha irmã passa delineador.'), palavras: ['My', 'sister', 'applies', 'eyeliner'], isca: ['applys'], fim: '.', traducao: 'A minha irmã passa delineador.' },
+    { contexto: M('Ela passa esmalte nas unhas.'), palavras: ['She', 'applies', 'nail', 'polish', 'on', 'her', 'nails'], isca: ['apply'], fim: '.', traducao: 'Ela passa esmalte nas unhas.' },
+    { contexto: M('A minha mãe assiste a vídeos de maquiagem.'), palavras: ['My', 'mom', 'watches', 'makeup', 'videos'], isca: ['watchs'], fim: '.', traducao: 'A minha mãe assiste a vídeos de maquiagem.' },
+    { contexto: M('Ele lava o rosto todas as noites.'), palavras: ['He', 'washes', 'his', 'face', 'every', 'night'], isca: ['washs'], fim: '.', traducao: 'Ele lava o rosto todas as noites.' },
+    { contexto: M('Ela experimenta produtos novos.'), palavras: ['She', 'tries', 'new', 'products'], isca: ['trys'], fim: '.', traducao: 'Ela experimenta produtos novos.' },
+    { contexto: M('O meu irmão usa protetor solar.'), palavras: ['My', 'brother', 'uses', 'sunscreen'], isca: ['use'], fim: '.', traducao: 'O meu irmão usa protetor solar.' },
+    { contexto: M('Ela tem uma rotina de skincare.'), palavras: ['She', 'has', 'a', 'skincare', 'routine'], isca: ['haves'], fim: '.', traducao: 'Ela tem uma rotina de skincare.' },
+    { contexto: M('Ela compra maquiagem online.'), palavras: ['She', 'buys', 'makeup', 'online'], isca: ['buies'], fim: '.', traducao: 'Ela compra maquiagem online.' },
+    { contexto: M('O corretivo disfarça as olheiras.'), palavras: ['The', 'corrector', 'neutralizes', 'dark', 'circles'], isca: ['neutralize'], fim: '.', traducao: 'O corretivo neutraliza as olheiras.' },
+    { contexto: M('Ela não usa base.'), palavras: ['She', "doesn't", 'use', 'foundation'], isca: ['uses'], fim: '.', traducao: 'Ela não usa base.' },
+    { contexto: M('Ele vai à loja de cosméticos aos sábados.'), palavras: ['He', 'goes', 'to', 'the', 'beauty', 'shop', 'on', 'Saturdays'], isca: ['gos'], fim: '.', traducao: 'Ele vai à loja de cosméticos aos sábados.' },
+    { contexto: M('A influencer faz vídeos de maquiagem.'), palavras: ['The', 'influencer', 'makes', 'makeup', 'videos'], isca: ['make'], fim: '.', traducao: 'A influencer faz vídeos de maquiagem.' },
+    { contexto: M('Ela fala sobre skincare nos vídeos.'), palavras: ['She', 'speaks', 'about', 'skincare', 'in', 'her', 'videos'], isca: ['speak'], fim: '.', traducao: 'Ela fala sobre skincare nos vídeos.' },
+    { contexto: M('O spray fixador fixa tudo.'), palavras: ['The', 'fixing', 'mist', 'fixes', 'everything'], isca: ['fixs'], fim: '.', traducao: 'O spray fixador fixa tudo.' },
+    { contexto: M('Ela mora em Seul.'), palavras: ['She', 'lives', 'in', 'Seoul'], isca: ['live'], fim: '.', traducao: 'Ela mora em Seul.' },
+    { contexto: M('Ela usa um blush rosado.'), palavras: ['She', 'uses', 'a', 'pink-toned', 'blush'], isca: ['use'], fim: '.', traducao: 'Ela usa um blush rosado.' },
+    { contexto: M('Ela estuda maquiagem.'), palavras: ['She', 'studies', 'makeup'], isca: ['studys'], fim: '.', traducao: 'Ela estuda maquiagem.' },
+    { contexto: M('Ela usa protetor solar? Sim, usa.'), palavras: ['Does', 'she', 'use', 'sunscreen?', 'Yes,', 'she', 'does'], isca: ['uses'], fim: '.', traducao: 'Ela usa protetor solar? Sim.' }
+  ]
+});
+</script>
+</body>
+</html>

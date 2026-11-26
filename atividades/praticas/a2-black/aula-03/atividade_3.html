@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 3 · My makeup routine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 03 · Escrita (No foundation/concealer Makeup look for summers)
+   Alinhado ao vídeo do slide (para que serve cada produto: to protect your skin, to neutralize
+   dark circles, to fill in eyebrows, to lift the lashes...) e ao present simple com I. Conteúdo
+   NOVO. A isca é a forma errada (uses com I, for + verbo...). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 3, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu uso protetor solar para proteger a minha pele.'), palavras: ['I', 'use', 'sunscreen', 'to', 'protect', 'my', 'skin'], isca: ['uses'], fim: '.', traducao: 'Uso protetor solar para proteger a minha pele.' },
+    { contexto: M('Eu passo blush nas bochechas.'), palavras: ['I', 'apply', 'blush', 'on', 'my', 'cheeks'], isca: ['applies'], fim: '.', traducao: 'Passo blush nas bochechas.' },
+    { contexto: M('Eu uso um lápis para preencher as sobrancelhas.'), palavras: ['I', 'use', 'a', 'pencil', 'to', 'fill', 'in', 'my', 'eyebrows'], isca: ['for'], fim: '.', traducao: 'Uso um lápis para preencher as sobrancelhas.' },
+    { contexto: M('Eu uso rímel à prova d’água.'), palavras: ['I', 'wear', 'waterproof', 'mascara'], isca: ['wears'], fim: '.', traducao: 'Uso rímel à prova d’água.' },
+    { contexto: M('O rímel levanta os cílios.'), palavras: ['Mascara', 'lifts', 'the', 'lashes'], isca: ['lift'], fim: '.', traducao: 'O rímel levanta os cílios.' },
+    { contexto: M('O meu batom favorito é rosa.'), palavras: ['My', 'favorite', 'lipstick', 'is', 'pink'], isca: ['are'], fim: '.', traducao: 'O meu batom favorito é rosa.' },
+    { contexto: M('Eu tenho uma rotina de skincare simples.'), palavras: ['I', 'have', 'a', 'simple', 'skincare', 'routine'], isca: ['has'], fim: '.', traducao: 'Tenho uma rotina de skincare simples.' },
+    { contexto: M('Eu compro a minha maquiagem na farmácia.'), palavras: ['I', 'buy', 'my', 'makeup', 'at', 'the', 'pharmacy'], isca: ['buys'], fim: '.', traducao: 'Compro a minha maquiagem na farmácia.' },
+    { contexto: M('Eu uso corretivo para disfarçar as olheiras.'), palavras: ['I', 'use', 'corrector', 'to', 'neutralize', 'my', 'dark', 'circles'], isca: ['for'], fim: '.', traducao: 'Uso corretivo para neutralizar as olheiras.' },
+    { contexto: M('Eu não uso base.'), palavras: ['I', "don't", 'use', 'foundation'], isca: ["doesn't"], fim: '.', traducao: 'Não uso base.' },
+    { contexto: M('Você gosta de assistir a vídeos de maquiagem?'), palavras: ['Do', 'you', 'like', 'watching', 'makeup', 'videos'], isca: ['Does'], fim: '?', traducao: 'Você gosta de assistir a vídeos de maquiagem?' },
+    { contexto: M('Eu passo protetor solar antes de tudo.'), palavras: ['I', 'apply', 'sunscreen', 'before', 'anything'], isca: ['after'], fim: '.', traducao: 'Passo protetor solar antes de tudo.' },
+    { contexto: M('Eu uso um spray fixador no final.'), palavras: ['I', 'use', 'a', 'fixing', 'mist', 'at', 'the', 'end'], isca: ['uses'], fim: '.', traducao: 'Uso um spray fixador no final.' },
+    { contexto: M('O protetor solar deixa a minha pele brilhante.'), palavras: ['Sunscreen', 'makes', 'my', 'skin', 'glowy'], isca: ['make'], fim: '.', traducao: 'O protetor solar deixa a minha pele brilhante.' },
+    { contexto: M('Eu uso um lip tint nos lábios e nas pálpebras.'), palavras: ['I', 'use', 'a', 'tint', 'for', 'my', 'lips', 'and', 'eyelids'], isca: ['uses'], fim: '.', traducao: 'Uso um tint nos lábios e nas pálpebras.' },
+    { contexto: M('Eu prefiro uma maquiagem natural.'), palavras: ['I', 'prefer', 'a', 'natural', 'makeup', 'look'], isca: ['prefers'], fim: '.', traducao: 'Prefiro uma maquiagem natural.' },
+    { contexto: M('Os meus produtos favoritos são o protetor solar e o lip balm.'), palavras: ['My', 'favorite', 'products', 'are', 'sunscreen', 'and', 'lip', 'balm'], isca: ['is'], fim: '.', traducao: 'Os meus produtos favoritos são o protetor solar e o lip balm.' },
+    { contexto: M('Eu uso gel de sobrancelha depois do lápis.'), palavras: ['I', 'use', 'eyebrow', 'gel', 'after', 'the', 'pencil'], isca: ['before'], fim: '.', traducao: 'Uso gel de sobrancelha depois do lápis.' },
+    { contexto: M('Eu lavo o rosto todas as manhãs.'), palavras: ['I', 'wash', 'my', 'face', 'every', 'morning'], isca: ['washes'], fim: '.', traducao: 'Lavo o rosto todas as manhãs.' },
+    { contexto: M('Eu tenho olheiras.'), palavras: ['I', 'have', 'dark', 'circles'], isca: ['has'], fim: '.', traducao: 'Tenho olheiras.' }
+  ]
+});
+</script>
+</body>
+</html>

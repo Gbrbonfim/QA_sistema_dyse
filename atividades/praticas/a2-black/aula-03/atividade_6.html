@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 3 · My brother's skincare routine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 03 · Leitura (No foundation/concealer Makeup look for summers)
+   Alinhado ao Warm Up do slide (skincare routine, produtos favoritos, vídeos de beleza) e ao
+   present simple na terceira pessoa (he uses / she applies / he washes). Conteúdo NOVO: a Ana
+   conta para o Rafa a rotina de skincare do irmão. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Rafa', 'Do you have a skincare routine, Ana?'],
+  ['Ana', "Yes, but my brother's routine is bigger than mine!"],
+  ['Rafa', 'Really? What does he do?'],
+  ['Ana', 'He washes his face every morning with cold water.'],
+  ['Rafa', 'And then?'],
+  ['Ana', 'He applies moisturizer and sunscreen. He never forgets the sunscreen.'],
+  ['Rafa', 'Does he use lip balm?'],
+  ['Ana', 'Yes, he does. He uses it to keep his lips moisturized.'],
+  ['Rafa', 'Wow! Does he wear makeup?'],
+  ['Ana', "No, he doesn't. But he uses an eyebrow gel."],
+  ['Rafa', 'Where does he learn about skincare?'],
+  ['Ana', 'He watches beauty videos on social media every day.'],
+  ['Rafa', 'Ha ha! And what about you?'],
+  ['Ana', 'I only use sunscreen and a tint for my lips.'],
+  ['Rafa', 'Simple and natural!']
+];
+const lado = q => q === 'Rafa' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 3, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes, but my brother's routine is bigger than mine!", "Yes, but my brother's routine are bigger than mine!", "Yes, but my brother routine is bigger than mine!"], 0, 'Sim, mas a rotina do meu irmão é maior que a minha!'),
+    prox(2, ['Really? What do he do?', 'Really? What does he do?', 'Really? What does he does?'], 1, 'Sério? O que ele faz?'),
+    prox(3, ['He wash his face every morning with cold water.', 'He washs his face every morning with cold water.', 'He washes his face every morning with cold water.'], 2, 'Ele lava o rosto todas as manhãs com água fria.'),
+    prox(5, ['He applies moisturizer and sunscreen. He never forgets the sunscreen.', 'He applys moisturizer and sunscreen. He never forgets the sunscreen.', 'He apply moisturizer and sunscreen. He never forget the sunscreen.'], 0, 'Ele passa hidratante e protetor solar. Nunca esquece o protetor.'),
+    prox(6, ['Do he use lip balm?', 'Does he use lip balm?', 'Does he uses lip balm?'], 1, 'Ele usa lip balm?'),
+    prox(7, ['Yes, he do. He uses it to keep his lips moisturized.', 'Yes, he does. He use it to keep his lips moisturized.', 'Yes, he does. He uses it to keep his lips moisturized.'], 2, 'Sim. Ele usa para manter os lábios hidratados.'),
+    prox(8, ['Wow! Does he wear makeup?', 'Wow! Does he wears makeup?', 'Wow! Do he wear makeup?'], 0, 'Uau! Ele usa maquiagem?'),
+    prox(9, ["No, he don't. But he uses an eyebrow gel.", "No, he doesn't. But he uses an eyebrow gel.", "No, he doesn't. But he use an eyebrow gel."], 1, 'Não. Mas ele usa gel de sobrancelha.'),
+    prox(10, ['Where do he learn about skincare?', 'Where does he learns about skincare?', 'Where does he learn about skincare?'], 2, 'Onde ele aprende sobre skincare?'),
+    prox(11, ['He watches beauty videos on social media every day.', 'He watchs beauty videos on social media every day.', 'He watch beauty videos on social media every day.'], 0, 'Ele assiste a vídeos de beleza nas redes sociais todo dia.'),
+    prox(13, ['I only uses sunscreen and a tint for my lips.', 'I only use sunscreen and a tint for my lips.', 'I only use sunscreen and a tint for my nails.'], 1, 'Só uso protetor solar e um tint nos lábios.'),
+    prox(14, ['Simple and naturals!', 'Simples and natural!', 'Simple and natural!'], 2, 'Simples e natural!'),
+    { instrucao: "Whose routine is bigger?", frase: "Ana's ___.", opcoes: ['brother', 'mom', 'friend'], certa: 0, traducao: 'A do irmão da Ana.' },
+    { instrucao: 'How does he wash his face?', frase: 'With ___ water.', opcoes: ['hot', 'cold', 'warm'], certa: 1, traducao: 'Com água fria.' },
+    { instrucao: 'What does he never forget?', frase: 'The ___.', opcoes: ['mascara', 'blush', 'sunscreen'], certa: 2, traducao: 'O protetor solar.' },
+    { instrucao: 'Why does he use lip balm?', frase: 'To keep his lips ___.', opcoes: ['moisturized', 'red', 'dry'], certa: 0, traducao: 'Para manter os lábios hidratados.' },
+    { instrucao: 'Does he wear makeup?', frase: '___', opcoes: ['Yes, he does.', "No, he doesn't.", "No, he don't."], certa: 1, traducao: 'Não.' },
+    { instrucao: 'What does he use on his eyebrows?', frase: 'An eyebrow ___.', opcoes: ['pencil', 'tint', 'gel'], certa: 2, traducao: 'Um gel de sobrancelha.' },
+    { instrucao: 'Where does he learn about skincare?', frase: 'On ___.', opcoes: ['social media', 'TV', 'the radio'], certa: 0, traducao: 'Nas redes sociais.' },
+    { instrucao: 'What does Ana use?', frase: 'Sunscreen and a ___ for her lips.', opcoes: ['lipstick', 'tint', 'balm'], certa: 1, traducao: 'Protetor solar e um tint nos lábios.' }
+  ]
+});
+</script>
+</body>
+</html>

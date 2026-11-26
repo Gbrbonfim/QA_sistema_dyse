@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 3 · Where do you apply it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 03 · Escuta (No foundation/concealer Makeup look for summers)
+   Alinhado ao Vocabulary do slide ("Where can you apply these products?": blush, mascara,
+   eyebrow gel, lipstick/tint) e aos produtos do vídeo (sunscreen, corrector, powder
+   foundation, brow pencil, lip balm, eyeliner, nail polish). Conteúdo NOVO: o aluno ouve o
+   produto e escolhe onde se aplica. 24 questões. */
+const IC = { cheeks: 'face', lashes: 'visibility', eyebrows: 'face_retouching_natural', lips: 'sentiment_satisfied', skin: 'spa', nails: 'back_hand', 'dark circles': 'bedtime', eyelids: 'remove_red_eye' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 3, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: where do you apply this product?',
+  itens: [
+    q('I use a pink blush for a natural flush.', 'cheeks', ['lips', 'nails', 'lashes']),
+    q('She uses waterproof mascara.', 'lashes', ['cheeks', 'nails', 'lips']),
+    q('I fill them in with a brow pencil.', 'eyebrows', ['nails', 'lips', 'cheeks']),
+    q('My favorite lipstick is red.', 'lips', ['lashes', 'eyebrows', 'nails']),
+    q('Always use sunscreen to protect it.', 'skin', ['lashes', 'nails', 'eyebrows']),
+    q('She uses nail polish to decorate them.', 'nails', ['lips', 'eyebrows', 'lashes']),
+    q('A peach corrector neutralizes them.', 'dark circles', ['nails', 'lips', 'eyebrows']),
+    q('I put a little tint on them, like eyeshadow.', 'eyelids', ['nails', 'eyebrows', 'lashes']),
+    q('He uses lip balm every day.', 'lips', ['eyebrows', 'nails', 'lashes']),
+    q('I use eyebrow gel after the pencil.', 'eyebrows', ['lips', 'cheeks', 'nails']),
+    q('Mascara lifts them and makes them look longer.', 'lashes', ['lips', 'nails', 'cheeks']),
+    q('Blush gives them a pink color.', 'cheeks', ['nails', 'eyebrows', 'lashes']),
+    q('Powder foundation gives it coverage.', 'skin', ['nails', 'lashes', 'lips']),
+    q('My sister uses blue nail polish.', 'nails', ['cheeks', 'lips', 'eyebrows']),
+    q('This tint is for your lips and cheeks. Apply it on your mouth.', 'lips', ['nails', 'eyebrows', 'lashes']),
+    q('I put sunscreen on before anything.', 'skin', ['nails', 'lashes', 'eyebrows']),
+    q('A micro brow pencil is perfect for them.', 'eyebrows', ['lips', 'nails', 'cheeks']),
+    q("I don't sleep well, so I use a corrector under my eyes.", 'dark circles', ['nails', 'lips', 'eyebrows']),
+    q('She wears black mascara.', 'lashes', ['lips', 'cheeks', 'nails']),
+    q('A pink-toned blush looks very natural on them.', 'cheeks', ['lashes', 'nails', 'eyebrows']),
+    q('I love a nude lipstick.', 'lips', ['cheeks', 'lashes', 'eyebrows']),
+    q('I paint them red every week.', 'nails', ['lips', 'eyebrows', 'lashes']),
+    q('Moisturizer keeps it soft.', 'skin', ['nails', 'eyebrows', 'lashes']),
+    q('She applies eyeliner to define her eyes, on the eyelids.', 'eyelids', ['nails', 'lips', 'cheeks'])
+  ]
+});
+</script>
+</body>
+</html>

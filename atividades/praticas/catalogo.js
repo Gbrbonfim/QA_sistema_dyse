@@ -1112,6 +1112,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Am, is or are?', tipo: 'Make a Choice', treina: 'Gramática · To be', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Song vocabulary', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário e perguntas', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 3,
+        titulo: 'Class 03 · No Foundation/Concealer Makeup Look for Summers',
+        atividades: [
+          { num: 1, titulo: 'Where do you apply it?', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário de maquiagem', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Apply or applies?', tipo: 'Escute e escolha', treina: 'Escuta · Present simple', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'My makeup routine', tipo: 'Monte a frase', treina: 'Escrita · Rotina', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'She applies, he uses', tipo: 'Monte a frase', treina: 'Escrita · Terceira pessoa', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'A natural look', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: "My brother's skincare routine", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'Describe your routine', tipo: 'Escute e grave', treina: 'Fala · Rotina', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Her routine, his routine', tipo: 'Escute e grave', treina: 'Fala · Terceira pessoa', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Third person spelling', tipo: 'Make a Choice', treina: 'Gramática · -s, -es, -ies', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'What is it for?', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

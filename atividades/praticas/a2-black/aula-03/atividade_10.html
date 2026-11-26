@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 3 · What is it for?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 03 · Gramática (No foundation/concealer Makeup look for summers)
+   Alinhado ao "Watching and Understanding" do slide (por que ela usa cada produto: to lift the
+   lashes / to neutralize dark circles / to fill in eyebrows / for lips and eyelids / to act as
+   a concealer / to protect your skin / to have a natural flush) e ao vocabulário. Conteúdo
+   NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 3, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'We use sunscreen ___.', opcoes: ['to protect the skin', 'to lift the lashes', 'to fill in eyebrows'], certa: 0, traducao: 'Usamos protetor solar para proteger a pele.' },
+    { frase: 'We use a peach corrector ___.', opcoes: ['to protect the lips', 'to neutralize dark circles', 'to color the nails'], certa: 1, traducao: 'Usamos corretivo pêssego para neutralizar olheiras.' },
+    { frase: 'We use a brow pencil ___.', opcoes: ['to lift the lashes', 'to protect the skin', 'to fill in eyebrows'], certa: 2, traducao: 'Usamos lápis de sobrancelha para preencher as sobrancelhas.' },
+    { frase: 'We use waterproof mascara ___.', opcoes: ['to lift the lashes', 'to have a natural flush', 'to neutralize dark circles'], certa: 0, traducao: 'Usamos rímel à prova d’água para levantar os cílios.' },
+    { frase: 'We use a pink-toned blush ___.', opcoes: ['to fill in eyebrows', 'to have a natural flush', 'to protect the skin'], certa: 1, traducao: 'Usamos blush rosado para ter um rubor natural.' },
+    { frase: 'We use a fixing mist ___.', opcoes: ['to lift the lashes', 'to color the lips', 'to fix everything'], certa: 2, traducao: 'Usamos spray fixador para fixar tudo.' },
+    { frase: 'We use lip balm ___.', opcoes: ['to keep the lips moisturized', 'to define the eyes', 'to fill in eyebrows'], certa: 0, traducao: 'Usamos lip balm para manter os lábios hidratados.' },
+    { frase: 'We use eyeliner ___.', opcoes: ['to protect the skin', 'to define the eyes', 'to have a natural flush'], certa: 1, traducao: 'Usamos delineador para definir os olhos.' },
+    { frase: 'We use nail polish ___.', opcoes: ['to lift the lashes', 'to protect the lips', 'to decorate the nails'], certa: 2, traducao: 'Usamos esmalte para decorar as unhas.' },
+    { frase: 'Blush is for the ___.', opcoes: ['cheeks', 'lashes', 'nails'], certa: 0, traducao: 'Blush é para as bochechas.' },
+    { frase: 'Mascara is for the ___.', opcoes: ['lips', 'lashes', 'cheeks'], certa: 1, traducao: 'Rímel é para os cílios.' },
+    { frase: 'Lipstick is for the ___.', opcoes: ['eyebrows', 'nails', 'lips'], certa: 2, traducao: 'Batom é para os lábios.' },
+    { frase: 'Eyebrow gel is for the ___.', opcoes: ['eyebrows', 'lips', 'cheeks'], certa: 0, traducao: 'Gel de sobrancelha é para as sobrancelhas.' },
+    { frase: 'Dark areas under the eyes are ___.', opcoes: ['lashes', 'dark circles', 'eyelids'], certa: 1, traducao: 'Áreas escuras embaixo dos olhos são olheiras.' },
+    { frase: 'Mascara that you can use in the pool is ___.', opcoes: ['washable', 'pink-toned', 'waterproof'], certa: 2, traducao: 'Rímel que pode ser usado na piscina é à prova d’água.' },
+    { frase: 'A makeup that looks like you are not wearing makeup is ___.', opcoes: ['a natural look', 'a party look', 'a red look'], certa: 0, traducao: 'Uma maquiagem que parece que você não está maquiada é um look natural.' },
+    { frase: 'Products you use every day to take care of your skin are your ___.', opcoes: ['makeup party', 'skincare routine', 'nail polish'], certa: 1, traducao: 'Produtos que você usa todo dia para cuidar da pele são a sua rotina de skincare.' },
+    { frase: 'Do you have a skincare routine? — Yes, I ___.', opcoes: ['am', 'have', 'do'], certa: 2, traducao: 'Você tem uma rotina de skincare? — Sim.' },
+    { frase: 'Does she wear makeup? — No, she ___.', opcoes: ["doesn't", "don't", "isn't"], certa: 0, traducao: 'Ela usa maquiagem? — Não.' },
+    { frase: '___ he use sunscreen?', opcoes: ['Do', 'Does', 'Is'], certa: 1, traducao: 'Ele usa protetor solar?' },
+    { frase: '___ you like watching makeup videos?', opcoes: ['Does', 'Are', 'Do'], certa: 2, traducao: 'Você gosta de assistir a vídeos de maquiagem?' },
+    { frase: 'What is your favorite lipstick ___?', opcoes: ['color', 'routine', 'flush'], certa: 0, traducao: 'Qual é a sua cor de batom favorita?' },
+    { frase: 'Where ___ you usually buy your makeup?', opcoes: ['does', 'do', 'are'], certa: 1, traducao: 'Onde você costuma comprar maquiagem?' },
+    { frase: 'She ___ use foundation in the summer.', opcoes: ["don't", "isn't", "doesn't"], certa: 2, traducao: 'Ela não usa base no verão.' }
+  ]
+});
+</script>
+</body>
+</html>
