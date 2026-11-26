@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 15 · Should or shouldn't?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 15 · Gramática (A Dose of Good Advice)
+   Alinhado ao "Grammar Point" (should / shouldn't + verbo sem to; I think / I don't think you
+   should), ao vocabulário de saúde, às palavras da sinopse (skepticism, prestigious, unable,
+   troubled) e aos mitos do Dr. Carter. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 15, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: "He's been coughing for two weeks. He ___ see a doctor.", opcoes: ['should', "shouldn't", 'should to'], certa: 0, traducao: 'Ele está tossindo há duas semanas. Deveria ir ao médico.' },
+    { frase: "You ___ eat so much sugar. It's bad for your teeth.", opcoes: ['should', "shouldn't", 'should not to'], certa: 1, traducao: 'Você não deveria comer tanto açúcar. Faz mal para os dentes.' },
+    { frase: 'You should ___ more water.', opcoes: ['to drink', 'drinking', 'drink'], certa: 2, traducao: 'Você deveria beber mais água.' },
+    { frase: "She's having trouble sleeping. She ___ drink coffee at night.", opcoes: ["shouldn't", 'should', 'should to'], certa: 0, traducao: 'Ela está com dificuldade para dormir. Não deveria tomar café à noite.' },
+    { frase: "It's a dangerous street. You ___ walk there alone at night.", opcoes: ['should', "shouldn't", 'should to'], certa: 1, traducao: 'É uma rua perigosa. Você não deveria andar lá sozinho à noite.' },
+    { frase: 'If you want to save money, you ___ eat out less.', opcoes: ["shouldn't", 'should to', 'should'], certa: 2, traducao: 'Se quer economizar, você deveria comer fora menos vezes.' },
+    { frase: '___ I take a painkiller?', opcoes: ['Should', 'Do should', 'Should to'], certa: 0, traducao: 'Eu deveria tomar um analgésico?' },
+    { instrucao: 'Which sentence is a softer, gentle suggestion?', frase: '___', opcoes: ["You shouldn't take any medicine.", "I don't think you should take any medicine.", "Don't take any medicine!"], certa: 1, traducao: 'Não acho que você deveria tomar remédio.' },
+    { frase: 'Should means ___.', opcoes: ['you have to do it', "you don't need to do it", 'it is important to do it'], certa: 2, traducao: 'Should significa que é importante fazer.' },
+    { frase: 'Runny nose, sore throat and mild symptoms: it is probably ___.', opcoes: ['a cold', 'the flu', 'an allergy'], certa: 0, traducao: 'Coriza, dor de garganta e sintomas leves: provavelmente é um resfriado.' },
+    { frase: 'High fever, body aches and stronger symptoms: it is probably ___.', opcoes: ['a cold', 'the flu', 'a cough'], certa: 1, traducao: 'Febre alta, dor no corpo e sintomas mais fortes: provavelmente é gripe.' },
+    { frase: 'For a bad stomach, you should take an ___.', opcoes: ['antibiotic', 'antihistamine', 'antacid'], certa: 2, traducao: 'Para dor de estômago, você deveria tomar um antiácido.' },
+    { frase: 'For an allergy, you can take an ___.', opcoes: ['antihistamine', 'antacid', 'antibiotic'], certa: 0, traducao: 'Para alergia, você pode tomar um anti-histamínico.' },
+    { frase: 'For a cough, you can take ___.', opcoes: ['an antacid', 'syrup', 'an ointment'], certa: 1, traducao: 'Para tosse, você pode tomar xarope.' },
+    { frase: 'For a high temperature, you should take a ___.', opcoes: ['syrup for the skin', 'antacid', 'fever reducer'], certa: 2, traducao: 'Para temperatura alta, você deveria tomar um antitérmico.' },
+    { frase: 'Antibiotics are for ___, not for the flu.', opcoes: ['some infections', 'every headache', 'a cold'], certa: 0, traducao: 'Antibióticos são para algumas infecções, não para gripe.' },
+    { instrucao: 'Myth or fact? "Take painkillers for every headache, even a mild one."', frase: '___', opcoes: ['Fact.', 'Myth. Rest and water also help.', 'Fact, but only at night.'], certa: 1, traducao: 'Mito. Descanso e água também ajudam.' },
+    { instrucao: 'Myth or fact? "Drink soda to settle your stomach."', frase: '___', opcoes: ['Fact.', 'Fact, but only cold soda.', 'Myth. Water or herbal tea is better.'], certa: 2, traducao: 'Mito. Água ou chá de ervas é melhor.' },
+    { frase: 'Hot tea with lemon and honey can help your throat, but it ___ cure a cold.', opcoes: ["doesn't", 'does', 'always'], certa: 0, traducao: 'Chá quente com limão e mel ajuda a garganta, mas não cura o resfriado.' },
+    { frase: 'Dr. Shaun Murphy is a young ___.', opcoes: ['teacher', 'surgeon', 'pilot'], certa: 1, traducao: 'O Dr. Shaun Murphy é um jovem cirurgião.' },
+    { frase: 'Shaun moves to San Jose to work at a ___ hospital.', opcoes: ['troubled', 'unable', 'prestigious'], certa: 2, traducao: 'O Shaun se muda para San Jose para trabalhar num hospital de prestígio.' },
+    { frase: 'Shaun had a ___ childhood. It was difficult.', opcoes: ['troubled', 'prestigious', 'skepticism'], certa: 0, traducao: 'O Shaun teve uma infância difícil.' },
+    { frase: 'His colleagues have ___ — they doubt he can be a good surgeon.', opcoes: ['prestigious', 'skepticism', 'unable'], certa: 1, traducao: 'Os colegas têm ceticismo — duvidam que ele possa ser um bom cirurgião.' },
+    { frase: 'At first, he is ___ to connect easily with his colleagues.', opcoes: ['troubled', 'prestigious', 'unable'], certa: 2, traducao: 'No começo, ele não consegue se conectar facilmente com os colegas.' }
+  ]
+});
+</script>
+</body>
+</html>

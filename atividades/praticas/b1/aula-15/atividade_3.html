@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 15 · At the doctor's</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 15 · Leitura (A Dose of Good Advice)
+   Alinhado ao "What's the matter?", aos conselhos com should / shouldn't e aos mitos do
+   Dr. Carter (antibióticos não funcionam para gripe; banho muito quente piora a febre).
+   Conteúdo NOVO: uma consulta com a Dra. Silva. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Dr. Silva', "Good morning, Mateo. What's the matter?"],
+  ['Mateo', "I don't feel well. I have a fever and a sore throat."],
+  ['Dr. Silva', 'When did it start?'],
+  ['Mateo', 'Two days ago. My whole body aches too.'],
+  ['Dr. Silva', 'Let me check your temperature. Hmm, it is 38.5 degrees.'],
+  ['Mateo', 'Is it a cold?'],
+  ['Dr. Silva', "No, I think it's the flu. A cold is usually milder."],
+  ['Mateo', 'Should I take antibiotics?'],
+  ['Dr. Silva', "No, you shouldn't. Antibiotics don't work for the flu."],
+  ['Mateo', 'Why not?'],
+  ['Dr. Silva', 'Because the flu is caused by a virus.'],
+  ['Mateo', 'OK. So what should I do?'],
+  ['Dr. Silva', 'You should stay in bed and drink plenty of fluids.'],
+  ['Mateo', 'Can I take a hot bath? My grandmother says it helps.'],
+  ['Dr. Silva', "That's a myth. A very hot bath can make a fever worse."],
+  ['Mateo', 'Really? I didn\'t know that.'],
+  ['Dr. Silva', 'You can take a fever reducer to bring the temperature down.'],
+  ['Mateo', 'Should I go to work tomorrow?'],
+  ['Dr. Silva', "I don't think you should. Rest for a few days."],
+  ['Mateo', 'Thank you, doctor.']
+];
+const lado = q => q === 'Dr. Silva' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 15, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I don't feel well. I have a fever and a sore throat.", "I don't feel well. I am a fever and a sore throat.", "I feel great. I have a fever and a sore throat."], 0, 'Não estou bem. Estou com febre e dor de garganta.'),
+    prox(3, ['Two days ago. My whole body ache too.', 'Two days ago. My whole body aches too.', 'In two days. My whole body aches too.'], 1, 'Há dois dias. O meu corpo todo dói também.'),
+    prox(6, ["No, I think it's the flu. A cold is usually stronger.", "No, I think it's flu the. A cold is usually milder.", "No, I think it's the flu. A cold is usually milder."], 2, 'Não, acho que é gripe. O resfriado costuma ser mais leve.'),
+    prox(7, ['Should I take antibiotics?', 'Should I to take antibiotics?', 'Do I should take antibiotics?'], 0, 'Eu deveria tomar antibióticos?'),
+    prox(8, ["Yes, you should. Antibiotics are perfect for the flu.", "No, you shouldn't. Antibiotics don't work for the flu.", "No, you shouldn't to take. Antibiotics don't work for the flu."], 1, 'Não, não deveria. Antibióticos não funcionam para gripe.'),
+    prox(10, ['Because the flu is caused by cold weather only.', 'Because the flu causes by a virus.', 'Because the flu is caused by a virus.'], 2, 'Porque a gripe é causada por um vírus.'),
+    prox(11, ['OK. So what should I do?', 'OK. So what I should do?', 'OK. So what should I doing?'], 0, 'Tá. Então o que eu deveria fazer?'),
+    prox(12, ['You should staying in bed and drink plenty of fluids.', 'You should stay in bed and drink plenty of fluids.', "You shouldn't stay in bed. Go running!"], 1, 'Você deveria ficar na cama e beber bastante líquido.'),
+    prox(14, ["That's a fact. A very hot bath is the best treatment.", "That's a myth. A very hot bath can makes a fever worse.", "That's a myth. A very hot bath can make a fever worse."], 2, 'Isso é mito. Um banho muito quente pode piorar a febre.'),
+    prox(16, ['You can take a fever reducer to bring the temperature down.', 'You can take an antacid to bring the temperature down.', 'You can taking a fever reducer to bring the temperature down.'], 0, 'Você pode tomar um antitérmico para baixar a temperatura.'),
+    prox(17, ['Should I going to work tomorrow?', 'Should I go to work tomorrow?', 'I should go to work tomorrow yesterday?'], 1, 'Eu deveria ir trabalhar amanhã?'),
+    prox(18, ["I think you shouldn't to go. Rest for a few days.", "Yes, you should. Go to work and run a marathon.", "I don't think you should. Rest for a few days."], 2, 'Acho que não. Descanse por alguns dias.'),
+    { instrucao: 'What are Mateo\'s symptoms?', frase: '___', opcoes: ['A fever, a sore throat and body aches.', 'A rash and a cough.', 'A bad stomach and diarrhoea.'], certa: 0, traducao: 'Febre, dor de garganta e dor no corpo.' },
+    { instrucao: 'When did it start?', frase: '___', opcoes: ['Yesterday.', 'Two days ago.', 'Last month.'], certa: 1, traducao: 'Há dois dias.' },
+    { instrucao: 'What does the doctor think Mateo has?', frase: '___', opcoes: ['A cold.', 'An allergy.', 'The flu.'], certa: 2, traducao: 'Gripe.' },
+    { instrucao: 'Why shouldn\'t Mateo take antibiotics?', frase: '___', opcoes: ['The flu is caused by a virus.', 'They are too expensive.', 'He has an allergy to them.'], certa: 0, traducao: 'A gripe é causada por um vírus.' },
+    { instrucao: 'What should Mateo do?', frase: '___', opcoes: ['Take a very hot bath.', 'Stay in bed and drink plenty of fluids.', 'Go to work.'], certa: 1, traducao: 'Ficar na cama e beber bastante líquido.' },
+    { instrucao: 'What does the doctor say about very hot baths?', frase: '___', opcoes: ['They cure the flu.', 'They are good for a cough.', 'They can make a fever worse.'], certa: 2, traducao: 'Podem piorar a febre.' },
+    { instrucao: 'What can Mateo take for the temperature?', frase: '___', opcoes: ['A fever reducer.', 'An antacid.', 'An ointment.'], certa: 0, traducao: 'Um antitérmico.' },
+    { instrucao: 'Should Mateo go to work tomorrow?', frase: '___', opcoes: ['Yes, in the morning.', 'No. He should rest for a few days.', 'Yes, but only for two hours.'], certa: 1, traducao: 'Não. Ele deveria descansar alguns dias.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 15 · What's the matter?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 15 · Escuta (A Dose of Good Advice)
+   Alinhado ao "What's the matter?" (a cold, the flu, a headache, a cough, a fever, a bad
+   stomach, diarrhoea, an allergy, a sore throat), aos conselhos (painkillers, fever reducer,
+   antihistamine, ointment, antibiotics, syrup, antacid, fluids, rest), a should / shouldn't e
+   aos mitos do Dr. Carter. Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 15, num: 1, tipo: 'imagem',
+  instrucao: "Listen: what's the matter?",
+  itens: [
+    q('My head hurts a lot. I can\'t look at the screen.', 'a headache', ['a cough', 'an allergy'], 'sick'),
+    q('My temperature is thirty-nine degrees.', 'a fever', ['a sore throat', 'a bad stomach'], 'sick'),
+    q('It hurts when I swallow food or talk.', 'a sore throat', ['a headache', 'diarrhoea'], 'sick'),
+    q('I cough all day and all night.', 'a cough', ['a fever', 'an allergy'], 'sick'),
+    q('My nose is runny and my throat is a little sore. It\'s mild.', 'a cold', ['the flu', 'a bad stomach'], 'sick'),
+    q('I have a high fever and my whole body aches. I feel terrible.', 'the flu', ['a cold', 'a sore throat'], 'sick'),
+    q('I ate some bad fish and now my stomach hurts.', 'a bad stomach', ['a cough', 'a headache'], 'sick'),
+    q('I have red spots on my skin after I touched the cat.', 'an allergy', ['a fever', 'a cough'], 'sick'),
+    q('I have to go to the toilet every twenty minutes.', 'diarrhoea', ['a sore throat', 'a headache'], 'sick'),
+    q('I have a terrible headache.', 'You should take a painkiller.', ['You should take an antacid.', 'You should apply an ointment.'], 'medication'),
+    q('My temperature is very high.', 'You should take a fever reducer.', ['You should take syrup for your eyes.', 'You should eat a big pizza.'], 'medication'),
+    q("I can't stop coughing.", 'You should take some syrup.', ['You should take an antacid.', 'You should go running.'], 'medication'),
+    q('My skin is red because of an allergy.', 'You should take an antihistamine.', ['You should take a fever reducer.', 'You should drink soda.'], 'medication'),
+    q('I ate too much and my stomach burns.', 'You should take an antacid.', ['You should take an antihistamine.', 'You should eat more.'], 'medication'),
+    q('I have diarrhoea.', 'You should drink water to hydrate.', ["You shouldn't drink any water.", 'You should eat spicy food.'], 'medication'),
+    q('I have the flu.', 'You should stay in bed and drink fluids.', ['You should take antibiotics.', 'You should take a hot bath.'], 'medication'),
+    q('Antibiotics do not work for the flu, because the flu is caused by a virus.', 'fact', ['myth', 'joke'], 'fact_check'),
+    q('A very hot bath is the best way to reduce a fever.', 'myth', ['fact', 'joke'], 'fact_check'),
+    q('Soda always settles your stomach.', 'myth', ['fact', 'joke'], 'fact_check'),
+    q('Rest and fluids are the best treatment for a cold.', 'fact', ['myth', 'joke'], 'fact_check'),
+    q("You shouldn't use your phone in class.", "It isn't a good thing to do.", ['You have to do it.', 'It is a good thing to do.'], 'help'),
+    q('You should see a doctor.', 'It is a good thing to do.', ["It isn't a good thing to do.", "You don't need to do it."], 'help'),
+    q("I don't think you should take any medicine.", 'a soft, gentle suggestion', ['an order', 'a joke'], 'help'),
+    q('Dr. Shaun Murphy is a young surgeon with autism.', 'The Good Doctor', ['Titanic', 'The Lion King'], 'tv')
+  ]
+});
+</script>
+</body>
+</html>

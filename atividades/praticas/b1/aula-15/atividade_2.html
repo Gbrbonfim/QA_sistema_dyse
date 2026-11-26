@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 15 · You should rest</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 15 · Escrita (A Dose of Good Advice)
+   Alinhado ao "Grammar Point" (should / shouldn't + verbo sem to; I think you should / I don't
+   think you should) e ao vocabulário de saúde. Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 15, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Estou com dor de cabeça.'), palavras: ['I', 'have', 'a', 'headache'], isca: ['am'], fim: '.', traducao: 'Estou com dor de cabeça.' },
+    { contexto: M('Ela está com dor de garganta.'), palavras: ['She', 'has', 'a', 'sore', 'throat'], isca: ['have'], fim: '.', traducao: 'Ela está com dor de garganta.' },
+    { contexto: M('Ele está gripado.'), palavras: ['He', 'has', 'the', 'flu'], isca: ['is'], fim: '.', traducao: 'Ele está gripado.' },
+    { contexto: M('Você deveria descansar.'), palavras: ['You', 'should', 'rest'], isca: ['to'], fim: '.', traducao: 'Você deveria descansar.' },
+    { contexto: M('Você deveria ir ao médico.'), palavras: ['You', 'should', 'see', 'a', 'doctor'], isca: ['seeing'], fim: '.', traducao: 'Você deveria ir ao médico.' },
+    { contexto: M('Você não deveria tomar tanto café.'), palavras: ['You', "shouldn't", 'drink', 'so', 'much', 'coffee'], isca: ['many'], fim: '.', traducao: 'Você não deveria tomar tanto café.' },
+    { contexto: M('Ela deveria beber bastante líquido.'), palavras: ['She', 'should', 'drink', 'plenty', 'of', 'fluids'], isca: ['drinks'], fim: '.', traducao: 'Ela deveria beber bastante líquido.' },
+    { contexto: M('Acho que você deveria tomar um analgésico.'), palavras: ['I', 'think', 'you', 'should', 'take', 'a', 'painkiller'], isca: ['to'], fim: '.', traducao: 'Acho que você deveria tomar um analgésico.' },
+    { contexto: M('Não acho que você deveria tomar antibióticos.'), palavras: ['I', "don't", 'think', 'you', 'should', 'take', 'antibiotics'], isca: ["shouldn't"], fim: '.', traducao: 'Não acho que você deveria tomar antibióticos.' },
+    { contexto: M('Ele deveria ficar na cama hoje.'), palavras: ['He', 'should', 'stay', 'in', 'bed', 'today'], isca: ['stays'], fim: '.', traducao: 'Ele deveria ficar na cama hoje.' },
+    { contexto: M('Você não deveria andar sozinho lá à noite.'), palavras: ['You', "shouldn't", 'walk', 'alone', 'there', 'at', 'night'], isca: ['walking'], fim: '.', traducao: 'Você não deveria andar sozinho lá à noite.' },
+    { contexto: M('Eu deveria comer comida leve, como sopa.'), palavras: ['I', 'should', 'eat', 'light', 'food', 'like', 'soup'], isca: ['ate'], fim: '.', traducao: 'Eu deveria comer comida leve, como sopa.' },
+    { contexto: M('O que eu deveria fazer?'), palavras: ['What', 'should', 'I', 'do'], isca: ['does'], fim: '?', traducao: 'O que eu deveria fazer?' },
+    { contexto: M('Eu deveria tomar um anti-histamínico?'), palavras: ['Should', 'I', 'take', 'an', 'antihistamine'], isca: ['a'], fim: '?', traducao: 'Eu deveria tomar um anti-histamínico?' },
+    { contexto: M('Nós deveríamos sair agora para pegar o trem.'), palavras: ['We', 'should', 'leave', 'now', 'to', 'catch', 'the', 'train'], isca: ['left'], fim: '.', traducao: 'Deveríamos sair agora para pegar o trem.' },
+    { contexto: M('Você não deveria usar o celular na aula.'), palavras: ['You', "shouldn't", 'use', 'your', 'phone', 'in', 'class'], isca: ['uses'], fim: '.', traducao: 'Você não deveria usar o celular na aula.' },
+    { contexto: M('Antibióticos não funcionam para gripe.'), palavras: ['Antibiotics', "don't", 'work', 'for', 'the', 'flu'], isca: ["doesn't"], fim: '.', traducao: 'Antibióticos não funcionam para gripe.' },
+    { contexto: M('A gripe é causada por um vírus.'), palavras: ['The', 'flu', 'is', 'caused', 'by', 'a', 'virus'], isca: ['causes'], fim: '.', traducao: 'A gripe é causada por um vírus.' },
+    { contexto: M('Ele é um jovem cirurgião com autismo.'), palavras: ['He', 'is', 'a', 'young', 'surgeon', 'with', 'autism'], isca: ['an'], fim: '.', traducao: 'Ele é um jovem cirurgião com autismo.' },
+    { contexto: M('Um bom médico ouve os pacientes.'), palavras: ['A', 'good', 'doctor', 'listens', 'to', 'patients'], isca: ['listen'], fim: '.', traducao: 'Um bom médico ouve os pacientes.' }
+  ]
+});
+</script>
+</body>
+</html>

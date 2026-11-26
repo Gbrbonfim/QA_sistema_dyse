@@ -1312,6 +1312,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Do you enjoy reading?', tipo: 'Escute e grave', treina: 'Fala · Gerúndio', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Gerund or infinitive?', tipo: 'Make a Choice', treina: 'Gramática · Gerúndio e infinitivo', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 15,
+        titulo: 'Class 15 · A Dose of Good Advice',
+        atividades: [
+          { num: 1, titulo: "What's the matter?", tipo: 'Escute e escolha', treina: 'Escuta · Saúde e conselhos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'You should rest', tipo: 'Monte a frase', treina: "Escrita · Should / shouldn't", minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: "At the doctor's", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Give good advice', tipo: 'Escute e grave', treina: 'Fala · Saúde e conselhos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: "Should or shouldn't?", tipo: 'Make a Choice', treina: "Gramática · Should / shouldn't", minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
