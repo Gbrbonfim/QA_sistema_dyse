@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 16 · First day at work</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 16 · Leitura (From TikTok to Time Clock)
+   Alinhado ao "Grammar Point" (conversa do primeiro dia: have to, don't have to, must,
+   mustn't) e ao artigo sobre a Gen Z (pontualidade, celular, home office, mentoring).
+   Conteúdo NOVO: o primeiro dia do Leo com a Ms. Patel. 20 questões: 12 de "próxima fala"
+   + 8 de compreensão. */
+const D = [
+  ['Ms. Patel', 'Hi, Leo. Welcome to your first day at Brightline!'],
+  ['Leo', "Thanks! I'm really excited. Is there anything I have to know?"],
+  ['Ms. Patel', 'Yes, a few rules. First, you have to wear your badge all the time.'],
+  ['Leo', 'OK. Do I have to wear a tie?'],
+  ['Ms. Patel', "No, you don't have to wear a tie. Smart casual is fine."],
+  ['Leo', 'Great! Can I work from home some days?'],
+  ['Ms. Patel', 'Yes, on Fridays. But you must be online from ten to four.'],
+  ['Leo', 'No problem. And what about lunch?'],
+  ['Ms. Patel', "You can eat in the kitchen, but you mustn't eat at your desk."],
+  ['Leo', 'Why not?'],
+  ['Ms. Patel', 'Because the computers are new and very expensive.'],
+  ['Leo', 'Makes sense. Do I have to use my own laptop?'],
+  ['Ms. Patel', "No, you don't. We'll give you one this morning."],
+  ['Leo', 'Cool! Can I post photos of the office on TikTok?'],
+  ['Ms. Patel', "Please don't. You mustn't share photos of client documents online."],
+  ['Leo', "Oh, OK. I'll be careful."],
+  ['Ms. Patel', "Also, you'll have a mentor. Her name is Rosa, and she has a lot of experience."],
+  ['Leo', "That's great. What time do I have to arrive tomorrow?"],
+  ['Ms. Patel', 'At nine. Punctuality is very important here.'],
+  ['Leo', "Got it. I'll be here at nine sharp."]
+];
+const lado = q => q === 'Ms. Patel' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 16, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Thanks! I'm really excited. Is there anything I have to know?", "Thanks! I'm really excited. Is there anything I have know?", "Thanks! I'm really excited. Is there anything I must to know?"], 0, 'Obrigado! Estou muito animado. Tem alguma coisa que eu preciso saber?'),
+    prox(3, ['OK. Do I have to wearing a tie?', 'OK. Do I have to wear a tie?', 'OK. Does I have to wear a tie?'], 1, 'Tá. Eu tenho que usar gravata?'),
+    prox(4, ["No, you don't have to wears a tie. Smart casual is fine.", "No, you don't have to wear a tie. Smart casual is forbidden.", "No, you don't have to wear a tie. Smart casual is fine."], 2, 'Não, você não precisa usar gravata. Esporte fino está ótimo.'),
+    prox(6, ['Yes, on Fridays. But you must be online from ten to four.', 'Yes, on Fridays. But you must to be online from ten to four.', "Yes, on Fridays. But you mustn't be online from ten to four."], 0, 'Sim, às sextas. Mas você tem que estar online das dez às quatro.'),
+    prox(8, ['You can eat in the kitchen, but you must eat at your desk.', "You can eat in the kitchen, but you mustn't eat at your desk.", "You can eat in the kitchen, but you don't have eat at your desk."], 1, 'Pode comer na cozinha, mas não pode comer na sua mesa.'),
+    prox(11, ['Makes sense. Do I must use my own laptop?', 'Makes sense. I have to use my own laptop do?', 'Makes sense. Do I have to use my own laptop?'], 2, 'Faz sentido. Eu tenho que usar o meu próprio notebook?'),
+    prox(12, ["No, you don't. We'll give you one this morning.", "Yes, you do. We'll give you one this morning.", "No, you doesn't. We'll give you one this morning."], 0, 'Não precisa. Vamos te dar um hoje de manhã.'),
+    prox(14, ['Sure! You have to post a lot of photos.', "Please don't. You mustn't share photos of client documents online.", "Please don't. You don't have to sharing photos online."], 1, 'Por favor, não. Você não pode compartilhar fotos de documentos de clientes na internet.'),
+    prox(16, ["Also, you'll have a mentor. Her name is Rosa, and she have a lot of experience.", "Also, you'll have a mentor. Her name is Rosa, and she doesn't have any experience.", "Also, you'll have a mentor. Her name is Rosa, and she has a lot of experience."], 2, 'Além disso, você vai ter uma mentora. O nome dela é Rosa e ela tem muita experiência.'),
+    prox(17, ["That's great. What time do I have to arrive tomorrow?", "That's great. What time I have to arrive tomorrow?", "That's great. What time do I has to arrive tomorrow?"], 0, 'Que ótimo. A que horas eu tenho que chegar amanhã?'),
+    prox(18, ["At nine. Punctuality isn't important here.", 'At nine. Punctuality is very important here.', "At nine. You don't have to be punctual."], 1, 'Às nove. Pontualidade é muito importante aqui.'),
+    prox(19, ["Got it. I'll be here at ten sharp.", "Got it. I'll being here at nine sharp.", "Got it. I'll be here at nine sharp."], 2, 'Entendi. Estarei aqui às nove em ponto.'),
+    { instrucao: 'What does Leo have to wear all the time?', frase: '___', opcoes: ['His badge.', 'A tie.', 'A suit.'], certa: 0, traducao: 'O crachá.' },
+    { instrucao: 'Does Leo have to wear a tie?', frase: '___', opcoes: ['Yes, every day.', 'No. Smart casual is fine.', 'Only on Fridays.'], certa: 1, traducao: 'Não. Esporte fino está ótimo.' },
+    { instrucao: 'When can Leo work from home?', frase: '___', opcoes: ['Every day.', 'Never.', 'On Fridays.'], certa: 2, traducao: 'Às sextas.' },
+    { instrucao: "Where mustn't Leo eat?", frase: '___', opcoes: ['At his desk.', 'In the kitchen.', 'At a restaurant.'], certa: 0, traducao: 'Na mesa dele.' },
+    { instrucao: "Why doesn't Leo have to bring his own laptop?", frase: '___', opcoes: ["He doesn't need a computer.", 'The company will give him one.', 'He can use his phone.'], certa: 1, traducao: 'A empresa vai dar um para ele.' },
+    { instrucao: "What mustn't Leo share online?", frase: '___', opcoes: ['Photos of his lunch.', "His mentor's name.", 'Photos of client documents.'], certa: 2, traducao: 'Fotos de documentos de clientes.' },
+    { instrucao: 'Who is Rosa?', frase: '___', opcoes: ["Leo's mentor.", "Leo's sister.", 'A new intern.'], certa: 0, traducao: 'A mentora do Leo.' },
+    { instrucao: 'What is very important at Brightline?', frase: '___', opcoes: ['Free coffee.', 'Punctuality.', 'TikTok.'], certa: 1, traducao: 'Pontualidade.' }
+  ]
+});
+</script>
+</body>
+</html>

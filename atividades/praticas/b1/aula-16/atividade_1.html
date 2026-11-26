@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 16 · Office rules</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 16 · Escuta (From TikTok to Time Clock)
+   Alinhado ao "Grammar Point" (must, have to = necessário; don't have to = não é necessário;
+   mustn't = proibido) e ao artigo sobre a Gen Z no trabalho (etiquette x character, empregos
+   remotos e flexíveis, mentoring). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const OK = "It's necessary.", NO = "It's not necessary.", PROIB = "It's not allowed.";
+const R = 'Listen. What is the right rule?', E = 'Listen. Is the problem about etiquette or character?', B = 'Listen and choose the best answer';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 16, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the rule. What does it mean?',
+  itens: [
+    q('You have to wear a badge in the building.', OK, [NO, PROIB], 'rule'),
+    q("You don't have to come in on Fridays. You can work from home.", NO, [PROIB, OK], 'rule'),
+    q("You mustn't smoke in the office.", PROIB, [OK, NO], 'rule'),
+    q('Everyone must sign in at the front desk.', OK, [PROIB, NO], 'rule'),
+    q("Interns don't have to bring a laptop. We give them one.", NO, [OK, PROIB], 'rule'),
+    q("You mustn't share the client's password with anyone.", PROIB, [NO, OK], 'rule'),
+    q('New employees have to complete the training in their first week.', OK, [NO, PROIB], 'rule'),
+    q("You don't have to answer emails after six p.m.", NO, [PROIB, OK], 'rule'),
+    q("Staff mustn't eat at their desks in the lab.", PROIB, [OK, NO], 'rule'),
+    { instrucao: R, ...q('The meeting starts at nine and the boss hates it when people are late.', 'You have to be on time.', ["You don't have to be on time.", "You mustn't be on time."], 'work') },
+    { instrucao: R, ...q("It's casual Friday! Jeans are fine today.", "You don't have to wear a suit.", ['You have to wear a suit.', "You mustn't wear jeans."], 'work') },
+    { instrucao: R, ...q('The CEO is presenting now. Phones off, please.', "You mustn't use your phone.", ['You have to answer your messages.', "You don't have to turn off your phone."], 'work') },
+    { instrucao: R, ...q('The deadline is next month, not this week.', "We don't have to finish it today.", ['We must finish it today.', "We mustn't finish it."], 'work') },
+    { instrucao: R, ...q('This document is confidential.', "You mustn't show it to anyone.", ['You have to post it online.', "You don't have to keep it secret."], 'work') },
+    { instrucao: R, ...q("The coffee here is free. It's on the house.", "You don't have to pay for coffee.", ['You must pay for coffee.', "You mustn't drink coffee."], 'work') },
+    { instrucao: E, ...q("The candidate didn't look at the interviewer's eyes.", 'etiquette', ['character', 'salary'], 'badge') },
+    { instrucao: E, ...q('The candidate lied about her experience.', 'character', ['etiquette', 'salary'], 'badge') },
+    { instrucao: E, ...q('The candidate wore shorts and flip-flops to the interview.', 'etiquette', ['salary', 'character'], 'badge') },
+    { instrucao: E, ...q('He never helps his team and he always works alone.', 'character', ['salary', 'etiquette'], 'badge') },
+    { instrucao: E, ...q("The candidate didn't read anything about the company before the interview.", 'etiquette', ['character', 'salary'], 'badge') },
+    { instrucao: B, ...q('Many Gen Z workers choose remote, flexible jobs.', 'They can work from home.', ['They have to go to the office every day.', "They mustn't use computers."], 'groups') },
+    { instrucao: B, ...q('For many young people, success means personal freedom and balance.', 'freedom and balance', ['only a high salary', 'working every weekend'], 'groups') },
+    { instrucao: B, ...q('The solution is mentoring, training and learning programs.', 'teach and help young workers', ['never hire young workers', 'fire young workers'], 'groups') },
+    { instrucao: B, ...q('My new colleague always arrives on time, never late.', 'punctual', ['bored', 'lazy'], 'schedule') }
+  ]
+});
+</script>
+</body>
+</html>

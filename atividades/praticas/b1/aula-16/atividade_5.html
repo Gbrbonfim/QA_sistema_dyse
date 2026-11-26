@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 16 · Mustn't or don't have to?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 16 · Gramática (From TikTok to Time Clock)
+   Alinhado ao "Grammar Point" (have to / has to / don't have to / mustn't / must + verbo
+   sem to; do / does ... have to; don't have to ≠ mustn't), ao vocabulário do artigo
+   (eye contact, punctuality, etiquette, character, remote, mentor) e aos advérbios do
+   Speaking. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 16, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: "It's a hospital. You ___ smoke here.", opcoes: ["mustn't", "don't have to", 'have to'], certa: 0, traducao: 'É um hospital. Você não pode fumar aqui.' },
+    { frase: 'The museum is free today. You ___ pay.', opcoes: ['have to', "don't have to", 'must'], certa: 1, traducao: 'O museu é grátis hoje. Você não precisa pagar.' },
+    { frase: 'He ___ wear a uniform at work. It is the rule.', opcoes: ["don't have to", 'have to', 'has to'], certa: 2, traducao: 'Ele tem que usar uniforme no trabalho. É a regra.' },
+    { frase: 'You ___ wear a suit. Jeans are fine here.', opcoes: ["don't have to", "mustn't", 'must'], certa: 0, traducao: 'Você não precisa usar terno. Jeans está ótimo aqui.' },
+    { frase: '___ she have to work on Saturdays?', opcoes: ['Do', 'Does', 'Has'], certa: 1, traducao: 'Ela tem que trabalhar aos sábados?' },
+    { frase: "Students ___ cheat on the test. It's forbidden.", opcoes: ["don't have to", 'have to', "mustn't"], certa: 2, traducao: 'Os alunos não podem colar na prova. É proibido.' },
+    { frase: 'I ___ finish this report today. The deadline is tomorrow morning.', opcoes: ['have to', "don't have to", "mustn't"], certa: 0, traducao: 'Tenho que terminar este relatório hoje. O prazo é amanhã de manhã.' },
+    { frase: "We ___ cook tonight. We're eating at a restaurant.", opcoes: ["mustn't", "don't have to", 'must'], certa: 1, traducao: 'Não precisamos cozinhar hoje. Vamos comer num restaurante.' },
+    { frase: 'Pilots ___ drink alcohol before they fly.', opcoes: ['have to', "don't have to", "mustn't"], certa: 2, traducao: 'Pilotos não podem beber álcool antes de voar.' },
+    { frase: 'You must ___ your password secret.', opcoes: ['keep', 'to keep', 'keeping'], certa: 0, traducao: 'Você deve manter a sua senha em segredo.' },
+    { frase: "Mark ___ go to the meeting. His manager said it's optional.", opcoes: ["mustn't", "doesn't have to", 'has to'], certa: 1, traducao: 'O Mark não precisa ir à reunião. O gerente disse que é opcional.' },
+    { instrucao: 'Which sentence means "it\'s forbidden"?', frase: '___', opcoes: ["You don't have to park here.", 'You have to park here.', "You mustn't park here."], certa: 2, traducao: 'Você não pode estacionar aqui.' },
+    { instrucao: 'Which sentence means "it\'s not necessary"?', frase: '___', opcoes: ["You don't have to bring food.", "You mustn't bring food.", 'You must bring food.'], certa: 0, traducao: 'Você não precisa trazer comida.' },
+    { frase: 'How often ___ you have to attend team meetings?', opcoes: ['does', 'do', 'are'], certa: 1, traducao: 'Com que frequência você tem que participar das reuniões da equipe?' },
+    { frase: 'What time ___ the store have to open?', opcoes: ['do', 'is', 'does'], certa: 2, traducao: 'A que horas a loja tem que abrir?' },
+    { frase: 'In the UK, you ___ drive on the left. It is the law.', opcoes: ['have to', "don't have to", "mustn't"], certa: 0, traducao: 'No Reino Unido, você tem que dirigir pela esquerda. É a lei.' },
+    { frase: 'Children ___ go to school on Sundays.', opcoes: ['have to', "don't have to", 'must'], certa: 1, traducao: 'As crianças não precisam ir à escola aos domingos.' },
+    { frase: "Many managers say Gen Z candidates don't make eye ___.", opcoes: ['touch', 'contract', 'contact'], certa: 2, traducao: 'Muitos gerentes dizem que os candidatos da Geração Z não fazem contato visual.' },
+    { frase: 'Arriving on time is called ___.', opcoes: ['punctuality', 'work ethic', 'salary'], certa: 0, traducao: 'Chegar no horário se chama pontualidade.' },
+    { frase: 'Eye contact and the right clothes are about ___. They are easier to teach.', opcoes: ['character', 'etiquette', 'teamwork'], certa: 1, traducao: 'Contato visual e as roupas certas são questão de etiqueta. São mais fáceis de ensinar.' },
+    { frase: 'Honesty, hard work and teamwork are about ___.', opcoes: ['etiquette', 'clothes', 'character'], certa: 2, traducao: 'Honestidade, trabalho duro e trabalho em equipe são questão de caráter.' },
+    { frase: 'Many Gen Z workers prefer ___ jobs, so they can work from home.', opcoes: ['remote', 'punctual', 'bored'], certa: 0, traducao: 'Muitos jovens da Geração Z preferem empregos remotos, para poder trabalhar de casa.' },
+    { frase: 'An experienced worker who helps and teaches a young employee is a ___.', opcoes: ['candidate', 'mentor', 'intern'], certa: 1, traducao: 'Um profissional experiente que ajuda e ensina um funcionário jovem é um mentor.' },
+    { frase: 'In an interview, you should answer questions ___.', opcoes: ['confident', 'confidence', 'confidently'], certa: 2, traducao: 'Numa entrevista, você deveria responder às perguntas com confiança.' }
+  ]
+});
+</script>
+</body>
+</html>

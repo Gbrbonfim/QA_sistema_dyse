@@ -1323,6 +1323,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Give good advice', tipo: 'Escute e grave', treina: 'Fala · Saúde e conselhos', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: "Should or shouldn't?", tipo: 'Make a Choice', treina: "Gramática · Should / shouldn't", minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 16,
+        titulo: 'Class 16 · From TikTok to Time Clock',
+        atividades: [
+          { num: 1, titulo: 'Office rules', tipo: 'Escute e escolha', treina: 'Escuta · Regras e obrigações', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'You have to arrive at nine', tipo: 'Monte a frase', treina: 'Escrita · Have to / must', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'First day at work', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Generations at work', tipo: 'Escute e grave', treina: 'Fala · Regras e obrigações', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: "Mustn't or don't have to?", tipo: 'Make a Choice', treina: 'Gramática · Must / have to', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

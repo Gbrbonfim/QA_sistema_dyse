@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 16 · You have to arrive at nine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 16 · Escrita (From TikTok to Time Clock)
+   Alinhado ao "Grammar Point" (have to / has to / don't have to / doesn't have to, must,
+   mustn't, perguntas com do / does ... have to) e ao vocabulário do artigo sobre a Gen Z
+   (eye contact, remote, flexible, pandemic, training). Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 16, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Você tem que chegar às nove.'), palavras: ['You', 'have', 'to', 'arrive', 'at', 'nine'], isca: ['has'], fim: '.', traducao: 'Você tem que chegar às nove.' },
+    { contexto: M('Você não precisa usar terno.'), palavras: ['You', "don't", 'have', 'to', 'wear', 'a', 'suit'], isca: ["doesn't"], fim: '.', traducao: 'Você não precisa usar terno.' },
+    { contexto: M('Você não pode usar o celular nas reuniões.'), palavras: ['You', "mustn't", 'use', 'your', 'phone', 'in', 'meetings'], isca: ['to'], fim: '.', traducao: 'Você não pode usar o celular nas reuniões.' },
+    { contexto: M('Ela tem que responder os e-mails do cliente.'), palavras: ['She', 'has', 'to', 'answer', 'the', "client's", 'emails'], isca: ['have'], fim: '.', traducao: 'Ela tem que responder os e-mails do cliente.' },
+    { contexto: M('Ele não precisa trabalhar aos sábados.'), palavras: ['He', "doesn't", 'have', 'to', 'work', 'on', 'Saturdays'], isca: ['has'], fim: '.', traducao: 'Ele não precisa trabalhar aos sábados.' },
+    { contexto: M('Nós devemos ser educados com os clientes.'), palavras: ['We', 'must', 'be', 'polite', 'to', 'customers'], isca: ['are'], fim: '.', traducao: 'Devemos ser educados com os clientes.' },
+    { contexto: M('Você tem que usar crachá?'), palavras: ['Do', 'you', 'have', 'to', 'wear', 'a', 'badge'], isca: ['Does'], fim: '?', traducao: 'Você tem que usar crachá?' },
+    { contexto: M('A que horas o novo funcionário tem que começar?'), palavras: ['What', 'time', 'does', 'the', 'new', 'employee', 'have', 'to', 'start'], isca: ['has'], fim: '?', traducao: 'A que horas o novo funcionário tem que começar?' },
+    { contexto: M('Com que frequência vocês têm que participar de reuniões?'), palavras: ['How', 'often', 'do', 'you', 'have', 'to', 'attend', 'meetings'], isca: ['does'], fim: '?', traducao: 'Com que frequência vocês têm que participar de reuniões?' },
+    { contexto: M('Os gerentes têm que explicar as regras claramente.'), palavras: ['Managers', 'have', 'to', 'explain', 'the', 'rules', 'clearly'], isca: ['clear'], fim: '.', traducao: 'Os gerentes têm que explicar as regras claramente.' },
+    { contexto: M('Os candidatos não podem chegar atrasados à entrevista.'), palavras: ['Candidates', "mustn't", 'arrive', 'late', 'for', 'the', 'interview'], isca: ['lately'], fim: '.', traducao: 'Os candidatos não podem chegar atrasados à entrevista.' },
+    { contexto: M('Você deve fazer contato visual com o entrevistador.'), palavras: ['You', 'must', 'make', 'eye', 'contact', 'with', 'the', 'interviewer'], isca: ['do'], fim: '.', traducao: 'Você deve fazer contato visual com o entrevistador.' },
+    { contexto: M('Não precisamos terminar o relatório hoje.'), palavras: ['We', "don't", 'have', 'to', 'finish', 'the', 'report', 'today'], isca: ['finished'], fim: '.', traducao: 'Não precisamos terminar o relatório hoje.' },
+    { contexto: M('Eu tenho que ligar para o meu chefe rapidinho.'), palavras: ['I', 'have', 'to', 'call', 'my', 'boss', 'quickly'], isca: ['quick'], fim: '.', traducao: 'Tenho que ligar para o meu chefe rapidinho.' },
+    { contexto: M('Você tem que se vestir de forma profissional.'), palavras: ['You', 'have', 'to', 'dress', 'professionally'], isca: ['professional'], fim: '.', traducao: 'Você tem que se vestir de forma profissional.' },
+    { contexto: M('Os estagiários não precisam trazer notebook.'), palavras: ['Interns', "don't", 'have', 'to', 'bring', 'a', 'laptop'], isca: ["doesn't"], fim: '.', traducao: 'Os estagiários não precisam trazer notebook.' },
+    { contexto: M('Você não pode compartilhar esta senha.'), palavras: ['You', "mustn't", 'share', 'this', 'password'], isca: ['sharing'], fim: '.', traducao: 'Você não pode compartilhar esta senha.' },
+    { contexto: M('Muitos jovens escolhem empregos remotos e flexíveis.'), palavras: ['Many', 'young', 'people', 'choose', 'remote', 'and', 'flexible', 'jobs'], isca: ['chooses'], fim: '.', traducao: 'Muitos jovens escolhem empregos remotos e flexíveis.' },
+    { contexto: M('Eles começaram a trabalhar durante a pandemia.'), palavras: ['They', 'started', 'working', 'during', 'the', 'pandemic'], isca: ['while'], fim: '.', traducao: 'Eles começaram a trabalhar durante a pandemia.' },
+    { contexto: M('As empresas deveriam investir em treinamento.'), palavras: ['Companies', 'should', 'invest', 'in', 'training'], isca: ['to'], fim: '.', traducao: 'As empresas deveriam investir em treinamento.' }
+  ]
+});
+</script>
+</body>
+</html>
