@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 39 · The song from the street</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 39 · Escuta (The Story Behind the Lyrics)
+   Alinhado ao Reading (histórias reais por trás de Smoke on the Water, Someone Like You e
+   Shake It Off) e às expressões de tempo (at first, suddenly, immediately, meanwhile, by the
+   time, later, eventually). Conteúdo NOVO: a história de um artista de rua contada em
+   primeira pessoa + fatos reais de outras músicas famosas. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const W = 'Listen to the meaning. Which time expression is it?', T = 'Listen. Is it true or false?';
+const V = 'True.', F = 'False.', O = "It's an opinion.";
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 39, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the story and answer',
+  itens: [
+    { instrucao: 'Listen. Where was the speaker playing music?', ...q('Five years ago, I was playing my guitar on the streets of Lisbon every weekend.', 'on the streets of Lisbon', ['in a big theatre', 'at a school'], 'history') },
+    { instrucao: 'Listen. How did people react at first?', ...q('At first, most people just walked past. Nobody stopped to listen.', 'Nobody stopped to listen.', ['Everybody danced.', 'People asked for more songs.'], 'history') },
+    { instrucao: 'Listen. What happened suddenly?', ...q('Suddenly, one rainy afternoon, a guitar string broke in the middle of a song.', 'A guitar string broke.', ['It started to snow.', 'The police arrived.'], 'history') },
+    { instrucao: 'Listen. What did a stranger do immediately?', ...q('Immediately, an old man gave me his umbrella and asked me to sing without the guitar.', 'gave the speaker an umbrella', ['took the guitar away', 'called a taxi'], 'history') },
+    { instrucao: 'Listen. What was happening meanwhile?', ...q('Meanwhile, a girl was filming everything on her phone.', 'A girl was filming.', ['A dog was barking.', 'A bus was stopping.'], 'history') },
+    { instrucao: 'Listen. What had happened by the time the speaker got home?', ...q('By the time I got home, the video had already gone viral.', 'The video had gone viral.', ['The guitar was fixed.', 'The old man had called.'], 'history') },
+    { instrucao: 'Listen. What did the speaker do later?', ...q('Later, I wrote a song about the old man and the rain.', 'wrote a song about that day', ['sold the guitar', 'stopped singing'], 'history') },
+    { instrucao: 'Listen. What happened eventually?', ...q('Eventually, the song was played on the radio all over the country.', 'The song was played on the radio.', ['The speaker moved abroad.', 'The video was deleted.'], 'history') },
+    { instrucao: W, ...q('At the beginning of a situation.', 'at first', ['eventually', 'meanwhile'], 'help') },
+    { instrucao: W, ...q('Instantly, with no delay.', 'immediately', ['later', 'at first'], 'help') },
+    { instrucao: W, ...q('While something else was happening.', 'meanwhile', ['suddenly', 'by the time'], 'help') },
+    { instrucao: W, ...q('After a long time.', 'eventually', ['immediately', 'at first'], 'help') },
+    { instrucao: W, ...q('Something unexpected happened.', 'suddenly', ['eventually', 'meanwhile'], 'help') },
+    { instrucao: W, ...q('One action was completed before another one.', 'by the time', ['at first', 'suddenly'], 'help') },
+    { instrucao: W, ...q('Something happened after some time passed.', 'later', ['immediately', 'at first'], 'help') },
+    { instrucao: T, ...q('Smoke on the Water is about a fire in a casino in Switzerland.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Paul McCartney dreamed the melody of Yesterday.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Adele wrote Someone Like You after winning the lottery.', F, [V, O], 'fact_check') },
+    { instrucao: T, ...q("Shake It Off was Taylor Swift's answer to negative headlines about her.", V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('The first name of the song Yesterday was Scrambled Eggs.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('The Girl from Ipanema was written by Tom Jobim and Vinicius de Moraes.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('We Are the World was written to raise money for people in Africa.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Smoke on the Water was written in 2015.', F, [V, O], 'fact_check') },
+    { instrucao: T, ...q('Sad songs are always better than happy songs.', O, [V, F], 'fact_check') }
+  ]
+});
+</script>
+</body>
+</html>

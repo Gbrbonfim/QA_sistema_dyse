@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 40 · It had already burned down</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 40 · Escrita (The Story Behind the Lyrics)
+   Alinhado ao Grammar Point (past perfect: had + particípio, igual para todas as pessoas;
+   negativa hadn't; contração 'd) e aos exercícios 1 e 5. Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 39, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Quando os bombeiros chegaram, o cassino já tinha queimado.'), palavras: ['By', 'the', 'time', 'the', 'firefighters', 'arrived,', 'the', 'casino', 'had', 'already', 'burned', 'down'], isca: ['has'], fim: '.', traducao: 'Quando os bombeiros chegaram, o cassino já tinha queimado.' },
+    { contexto: M('Ela já tinha decidido mudar o seu estilo.'), palavras: ['She', 'had', 'already', 'decided', 'to', 'change', 'her', 'style'], isca: ['decide'], fim: '.', traducao: 'Ela já tinha decidido mudar o seu estilo.' },
+    { contexto: M('No início, a Adele não tinha aceitado o término.'), palavras: ['At', 'first,', 'Adele', "hadn't", 'accepted', 'the', 'breakup'], isca: ['accept'], fim: '.', traducao: 'No início, a Adele não tinha aceitado o término.' },
+    { contexto: M('Quando eu cheguei, o show já tinha começado.'), palavras: ['When', 'I', 'arrived,', 'the', 'show', 'had', 'already', 'started'], isca: ['start'], fim: '.', traducao: 'Quando eu cheguei, o show já tinha começado.' },
+    { contexto: M('Eles tinham preparado tudo com cuidado.'), palavras: ['They', 'had', 'prepared', 'everything', 'carefully'], isca: ['prepare'], fim: '.', traducao: 'Eles tinham preparado tudo com cuidado.' },
+    { contexto: M('Eu nunca os tinha visto ao vivo antes.'), palavras: ['I', 'had', 'never', 'seen', 'them', 'live', 'before'], isca: ['saw'], fim: '.', traducao: 'Eu nunca os tinha visto ao vivo antes.' },
+    { contexto: M('A banda tinha deixado o equipamento lá dentro.'), palavras: ['The', 'band', 'had', 'left', 'their', 'equipment', 'inside'], isca: ['leaved'], fim: '.', traducao: 'A banda tinha deixado o equipamento lá dentro.' },
+    { contexto: M('Ela ficou nervosa porque nunca tinha cantado na TV.'), palavras: ['She', 'felt', 'nervous', 'because', 'she', 'had', 'never', 'sung', 'on', 'TV'], isca: ['sang'], fim: '.', traducao: 'Ela ficou nervosa porque nunca tinha cantado na TV.' },
+    { contexto: M('Você já tinha ouvido a música antes do show?'), palavras: ['Had', 'you', 'heard', 'the', 'song', 'before', 'the', 'concert'], isca: ['Did'], fim: '?', traducao: 'Você já tinha ouvido a música antes do show?' },
+    { contexto: M('Perdemos o trem porque tínhamos acordado tarde.'), palavras: ['We', 'missed', 'the', 'train', 'because', 'we', 'had', 'woken', 'up', 'late'], isca: ['woke'], fim: '.', traducao: 'Perdemos o trem porque tínhamos acordado tarde.' },
+    { contexto: M('Ele não tinha terminado a letra quando o produtor ligou.'), palavras: ['He', "hadn't", 'finished', 'the', 'lyrics', 'when', 'the', 'producer', 'called'], isca: ['finish'], fim: '.', traducao: 'Ele não tinha terminado a letra quando o produtor ligou.' },
+    { contexto: M('Quando chegamos lá, os fãs já tinham ido para casa.'), palavras: ['By', 'the', 'time', 'we', 'got', 'there,', 'the', 'fans', 'had', 'gone', 'home'], isca: ['went'], fim: '.', traducao: 'Quando chegamos lá, os fãs já tinham ido para casa.' },
+    { contexto: M('Ela me contou que tinha perdido a voz.'), palavras: ['She', 'told', 'me', 'she', 'had', 'lost', 'her', 'voice'], isca: ['lose'], fim: '.', traducao: 'Ela me contou que tinha perdido a voz.' },
+    { contexto: M('Depois que os críticos avaliaram o álbum, ele vendeu milhões.'), palavras: ['After', 'the', 'critics', 'had', 'reviewed', 'the', 'album,', 'it', 'sold', 'millions'], isca: ['review'], fim: '.', traducao: 'Depois que os críticos avaliaram o álbum, ele vendeu milhões.' },
+    { contexto: M('Ela já tinha escrito três músicas naquele dia.'), palavras: ["She'd", 'already', 'written', 'three', 'songs', 'that', 'day'], isca: ['wrote'], fim: '.', traducao: 'Ela já tinha escrito três músicas naquele dia.' },
+    { contexto: M('Eles tinham escolhido um cassino como estúdio.'), palavras: ['They', 'had', 'chosen', 'a', 'casino', 'as', 'their', 'studio'], isca: ['chose'], fim: '.', traducao: 'Eles tinham escolhido um cassino como estúdio.' },
+    { contexto: M('A Taylor tinha lido muitas manchetes negativas.'), palavras: ['Taylor', 'had', 'read', 'many', 'negative', 'headlines'], isca: ['readed'], fim: '.', traducao: 'A Taylor tinha lido muitas manchetes negativas.' },
+    { contexto: M('Nós nunca tínhamos ouvido essa história antes.'), palavras: ["We'd", 'never', 'heard', 'that', 'story', 'before'], isca: ['hear'], fim: '.', traducao: 'Nós nunca tínhamos ouvido essa história antes.' },
+    { contexto: M('O show tinha sido cancelado, então fomos para casa.'), palavras: ['The', 'concert', 'had', 'been', 'cancelled,', 'so', 'we', 'went', 'home'], isca: ['be'], fim: '.', traducao: 'O show tinha sido cancelado, então fomos para casa.' },
+    { contexto: M('O Ed tinha trabalhado como voluntário num abrigo.'), palavras: ['Ed', 'had', 'volunteered', 'at', 'a', 'homeless', 'shelter'], isca: ['volunteer'], fim: '.', traducao: 'O Ed tinha trabalhado como voluntário num abrigo para pessoas em situação de rua.' }
+  ]
+});
+</script>
+</body>
+</html>

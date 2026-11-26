@@ -1546,6 +1546,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: "Lessons I've learned", tipo: 'Escute e grave', treina: 'Fala · Memórias da escola', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Have you ever or did you?', tipo: 'Make a Choice', treina: 'Gramática · Present perfect x past simple', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 39,
+        titulo: 'Class 39 and 40 · The Story Behind the Lyrics',
+        atividades: [
+          { num: 1, parte: 'Class 39', titulo: 'The song from the street', tipo: 'Escute e escolha', treina: 'Escuta · Histórias e expressões de tempo', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 39', titulo: 'At first, suddenly, eventually', tipo: 'Monte a frase', treina: 'Escrita · Expressões de tempo', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 39', titulo: 'The last train home', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 39', titulo: 'Tell the story', tipo: 'Escute e grave', treina: 'Fala · Contar uma história', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 39', titulo: 'Time expressions', tipo: 'Make a Choice', treina: 'Gramática · Expressões de tempo e música', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 40', titulo: 'What had happened first?', tipo: 'Escute e escolha', treina: 'Escuta · Past perfect', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 40', titulo: 'It had already burned down', tipo: 'Monte a frase', treina: 'Escrita · Past perfect', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 40', titulo: 'What a night!', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 40', titulo: 'What had happened before?', tipo: 'Escute e grave', treina: 'Fala · Past perfect', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 40', titulo: 'Had or did?', tipo: 'Make a Choice', treina: 'Gramática · Past perfect x past simple', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

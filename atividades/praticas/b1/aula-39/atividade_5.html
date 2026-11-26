@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 39 · Time expressions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 39 · Gramática (The Story Behind the Lyrics)
+   Alinhado ao Reading (ordem dos eventos nas três histórias) e às expressões de tempo dos
+   exercícios 4 e 5, com vocabulário de música (album, lyrics, audience, release, breakup,
+   reinvent, criticism). Conteúdo NOVO. 24 questões. */
+const FI = 'Which event happened first?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 39, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: '___, a man in the audience fired a flare gun. Nobody expected it.', opcoes: ['Suddenly', 'Eventually', 'Meanwhile'], certa: 0, traducao: 'De repente, um homem na plateia disparou um sinalizador. Ninguém esperava.' },
+    { frase: 'He fired the gun and the ceiling ___ caught fire. There was no delay.', opcoes: ['eventually', 'immediately', 'at first'], certa: 1, traducao: 'Ele disparou e o teto imediatamente pegou fogo. Não houve demora.' },
+    { frase: '___ the firefighters arrived, the casino had already burned down.', opcoes: ['Meanwhile', 'Suddenly', 'By the time'], certa: 2, traducao: 'Quando os bombeiros chegaram, o cassino já tinha queimado.' },
+    { frase: '___, she felt angry. Later, she accepted the breakup.', opcoes: ['At first', 'Eventually', 'By the time'], certa: 0, traducao: 'No início, ela sentiu raiva. Mais tarde, aceitou o término.' },
+    { frase: 'She was writing sad songs. ___, she was working on her album, too.', opcoes: ['At first', 'Meanwhile', 'By the time'], certa: 1, traducao: 'Ela escrevia músicas tristes. Enquanto isso, também trabalhava no álbum.' },
+    { frase: 'After many years of hard work, the band ___ became famous.', opcoes: ['immediately', 'suddenly', 'eventually'], certa: 2, traducao: 'Depois de muitos anos de trabalho, a banda finalmente ficou famosa.' },
+    { frase: 'They lost their studio. ___, they found another place to record.', opcoes: ['Later', 'At first', 'Meanwhile'], certa: 0, traducao: 'Eles perderam o estúdio. Mais tarde, encontraram outro lugar para gravar.' },
+    { frase: 'An ___ is a collection of songs.', opcoes: ['lyric', 'album', 'audience'], certa: 1, traducao: 'Um álbum é uma coleção de músicas.' },
+    { frase: 'The words of a song are the ___.', opcoes: ['album', 'melody', 'lyrics'], certa: 2, traducao: 'As palavras de uma música são a letra.' },
+    { frase: 'The people watching a concert are the ___.', opcoes: ['audience', 'band', 'studio'], certa: 0, traducao: 'As pessoas que assistem a um show são a plateia.' },
+    { frase: 'When a relationship ends, it is a ___.', opcoes: ['concert', 'breakup', 'headline'], certa: 1, traducao: 'Quando um relacionamento termina, é um término.' },
+    { frase: 'To make a new album available to the public is to ___ it.', opcoes: ['record', 'cancel', 'release'], certa: 2, traducao: 'Disponibilizar um álbum ao público é lançá-lo.' },
+    { frase: 'To ___ your style means to change it completely.', opcoes: ['reinvent', 'remember', 'repeat'], certa: 0, traducao: 'Reinventar o seu estilo é mudá-lo completamente.' },
+    { frase: "Negative comments about someone's work are ___.", opcoes: ['compliments', 'criticism', 'lyrics'], certa: 1, traducao: 'Comentários negativos sobre o trabalho de alguém são críticas.' },
+    { frase: 'In 1971, Deep Purple traveled to ___ to record a new album.', opcoes: ['Brazil', 'London', 'Switzerland'], certa: 2, traducao: 'Em 1971, o Deep Purple foi à Suíça gravar um álbum novo.' },
+    { frase: 'Smoke on the Water is about a ___.', opcoes: ['fire', 'breakup', 'dance'], certa: 0, traducao: 'Smoke on the Water fala de um incêndio.' },
+    { frase: 'Adele wrote Someone Like You after a painful ___.', opcoes: ['concert', 'breakup', 'fire'], certa: 1, traducao: 'A Adele escreveu Someone Like You depois de um término doloroso.' },
+    { frase: 'Taylor Swift answered the criticism with humour and ___.', opcoes: ['anger', 'silence', 'confidence'], certa: 2, traducao: 'A Taylor Swift respondeu às críticas com humor e confiança.' },
+    { frase: 'Paul McCartney first called the song Yesterday "___".', opcoes: ['Scrambled Eggs', 'Fried Rice', 'Hot Coffee'], certa: 0, traducao: 'O Paul McCartney chamou Yesterday primeiro de "Scrambled Eggs" (ovos mexidos).' },
+    { frase: 'We Are the World was written by Michael Jackson and Lionel ___.', opcoes: ['Messi', 'Richie', 'Swift'], certa: 1, traducao: 'We Are the World foi escrita por Michael Jackson e Lionel Richie.' },
+    { frase: 'The Girl from Ipanema is a famous song from ___.', opcoes: ['Spain', 'Mexico', 'Brazil'], certa: 2, traducao: 'Garota de Ipanema é uma música famosa do Brasil.' },
+    { instrucao: FI + ' (Deep Purple)', frase: '___', opcoes: ['The band chose the casino as their studio.', 'The casino burned down.', 'The band wrote the song.'], certa: 0, traducao: 'A banda escolheu o cassino como estúdio.' },
+    { instrucao: FI + ' (Adele)', frase: '___', opcoes: ['The song became a worldwide success.', 'She went through a painful breakup.', 'She accepted the end of the relationship.'], certa: 1, traducao: 'Ela passou por um término doloroso.' },
+    { instrucao: FI + ' (Taylor Swift)', frase: '___', opcoes: ['She planned a new album.', 'The song changed how people saw her.', 'Journalists created a public image of her.'], certa: 2, traducao: 'Os jornalistas criaram uma imagem pública dela.' }
+  ]
+});
+</script>
+</body>
+</html>

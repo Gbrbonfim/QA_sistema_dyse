@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 40 · What a night!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 40 · Leitura (The Story Behind the Lyrics)
+   Alinhado ao Grammar Point (past perfect para o que aconteceu antes; past simple para a
+   sequência; 'd = had ou would). Conteúdo NOVO: Kai conta para a Bea a noite atrapalhada do
+   show. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Bea', 'How was the concert last night?'],
+  ['Kai', 'Terrible! By the time we got there, the band had already started.'],
+  ['Bea', 'Oh no! Why were you late?'],
+  ['Kai', 'We had taken the wrong bus, so we had to walk for half an hour.'],
+  ['Bea', 'Did you have your tickets?'],
+  ['Kai', 'Well, I had left them at home, but they were on my phone too.'],
+  ['Bea', 'Lucky! Had you seen the band live before?'],
+  ['Kai', "No, I hadn't. It was my first time."],
+  ['Bea', 'And did you like the show?'],
+  ['Kai', 'Yes, but by then they had played my favourite song.'],
+  ['Bea', 'What a shame! Did you buy a T-shirt?'],
+  ['Kai', 'No. When we got to the shop, they had sold all the T-shirts.'],
+  ['Bea', 'What a night! Did anything good happen?'],
+  ['Kai', 'Yes! After the show, we met the singer outside.'],
+  ['Bea', 'No way! What did the singer say?'],
+  ['Kai', "The singer said they'd play my favourite song again at the next concert."],
+  ['Bea', "That's amazing. Had you ever met a famous person before?"],
+  ['Kai', "Never! I'd only seen famous people on TV."],
+  ['Bea', 'So it was a good night in the end.'],
+  ['Kai', "Eventually, yes! I'd go through it all again."]
+];
+const lado = q => q === 'Bea' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 39, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Terrible! By the time we got there, the band had already started.', 'Terrible! By the time we got there, the band has already started.', 'Terrible! By the time we got there, the band had already start.'], 0, 'Péssimo! Quando chegamos, a banda já tinha começado.'),
+    prox(3, ['We had take the wrong bus, so we had to walk for half an hour.', 'We had taken the wrong bus, so we had to walk for half an hour.', 'We had taken the wrong bus, so we have to walk for half an hour yesterday.'], 1, 'Tínhamos pegado o ônibus errado, então tivemos que andar meia hora.'),
+    prox(5, ['Well, I had leave them at home, but they were on my phone too.', 'Well, I have left them at home last night, but they were on my phone too.', 'Well, I had left them at home, but they were on my phone too.'], 2, 'Bom, eu tinha deixado em casa, mas também estavam no celular.'),
+    prox(6, ['Lucky! Had you seen the band live before?', 'Lucky! Had you saw the band live before?', 'Lucky! Did you had seen the band live before?'], 0, 'Sorte! Você já tinha visto a banda ao vivo?'),
+    prox(7, ["No, I didn't had. It was my first time.", "No, I hadn't. It was my first time.", "No, I hadn't. It were my first time."], 1, 'Não. Era a minha primeira vez.'),
+    prox(9, ['Yes, but by then they have played my favourite song.', 'Yes, but by then they had play my favourite song.', 'Yes, but by then they had played my favourite song.'], 2, 'Sim, mas a essa altura eles já tinham tocado a minha música favorita.'),
+    prox(11, ['No. When we got to the shop, they had sold all the T-shirts.', 'No. When we got to the shop, they had sell all the T-shirts.', 'No. When we got to the shop, they has sold all the T-shirts.'], 0, 'Não. Quando chegamos à loja, eles tinham vendido todas as camisetas.'),
+    prox(13, ['Yes! After the show, we meet the singer outside yesterday.', 'Yes! After the show, we met the singer outside.', 'Yes! After the show, we had meet the singer outside.'], 1, 'Sim! Depois do show, encontramos o cantor lá fora.'),
+    prox(15, ["The singer said they'll played my favourite song again at the next concert.", "The singer said they'd playing my favourite song again at the next concert.", "The singer said they'd play my favourite song again at the next concert."], 2, 'O cantor disse que ia tocar a minha música favorita de novo no próximo show.'),
+    prox(16, ["That's amazing. Had you ever met a famous person before?", "That's amazing. Had you ever meet a famous person before?", "That's amazing. Did you ever had met a famous person before?"], 0, 'Que incrível. Você já tinha conhecido alguém famoso?'),
+    prox(17, ["Never! I'd only see famous people on TV.", "Never! I'd only seen famous people on TV.", "Never! I'd only saw famous people on TV."], 1, 'Nunca! Eu só tinha visto famosos na TV.'),
+    prox(19, ["Eventually, yes! I'd went through it all again.", "Eventually, yes! I'd going through it all again.", "Eventually, yes! I'd go through it all again."], 2, 'No fim, foi! Eu passaria por tudo de novo.'),
+    { instrucao: 'When was the concert?', frase: '___', opcoes: ['Last night.', 'Last week.', 'Tomorrow.'], certa: 0, traducao: 'Ontem à noite.' },
+    { instrucao: 'Why was Kai late?', frase: '___', opcoes: ['The concert had started early.', 'They had taken the wrong bus.', 'Kai had lost the tickets.'], certa: 1, traducao: 'Eles tinham pegado o ônibus errado.' },
+    { instrucao: 'Where were the tickets?', frase: '___', opcoes: ['In a bag.', 'Only at home.', 'At home and on the phone.'], certa: 2, traducao: 'Em casa e no celular.' },
+    { instrucao: 'Had Kai seen the band live before?', frase: '___', opcoes: ['No, it was the first time.', 'Yes, many times.', 'Yes, once.'], certa: 0, traducao: 'Não, era a primeira vez.' },
+    { instrucao: 'What had the band played before Kai arrived?', frase: '___', opcoes: ['Their new song.', "Kai's favourite song.", 'All their songs.'], certa: 1, traducao: 'A música favorita do Kai.' },
+    { instrucao: "Why couldn't Kai buy a T-shirt?", frase: '___', opcoes: ['The shop was closed.', 'Kai had no money.', 'They had sold all of them.'], certa: 2, traducao: 'Tinham vendido todas.' },
+    { instrucao: 'Who did Kai meet after the show?', frase: '___', opcoes: ['The singer.', 'A famous actor.', 'Bea.'], certa: 0, traducao: 'O cantor.' },
+    { instrucao: 'What does "I\'d go through it all again" mean?', frase: '___', opcoes: ['I had done it all again.', 'I would do it all again.', 'I did it all again.'], certa: 1, traducao: 'Eu faria tudo de novo.' }
+  ]
+});
+</script>
+</body>
+</html>

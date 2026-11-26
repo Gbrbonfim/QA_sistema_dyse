@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 39 · The last train home</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 39 · Leitura (The Story Behind the Lyrics)
+   Alinhado ao Reading (a história por trás de uma música) e às expressões de tempo (at
+   first, suddenly, immediately, meanwhile, by the time, later, eventually). Conteúdo NOVO:
+   a cantora Jo conta no rádio a história de "Last Train Home".
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Host', 'Welcome, Jo! Your song "Last Train Home" is everywhere. What\'s the story behind it?'],
+  ['Jo', 'Thanks! It started three years ago, after my first concert in London.'],
+  ['Host', 'Was the concert a success?'],
+  ['Jo', 'Not really. At first, only ten people came to see me.'],
+  ['Host', 'Oh no. How did you feel?'],
+  ['Jo', 'Sad, but I played every song anyway. Then something strange happened.'],
+  ['Host', 'What happened?'],
+  ['Jo', 'Suddenly, the lights went out, and everyone used their phones as torches.'],
+  ['Host', 'That sounds beautiful!'],
+  ['Jo', 'It was. Meanwhile, I kept singing without a microphone.'],
+  ['Host', 'And the train?'],
+  ['Jo', 'By the time I got to the station, the last train had already left.'],
+  ['Host', 'So what did you do?'],
+  ['Jo', 'I sat on a bench and immediately started writing the lyrics.'],
+  ['Host', 'How long did it take to finish the song?'],
+  ['Jo', 'Later that week, I finished it in my kitchen.'],
+  ['Host', 'And it became a hit!'],
+  ['Jo', 'Yes! Eventually, it was played on the radio around the world.'],
+  ['Host', 'Do you still remember those ten people?'],
+  ['Jo', 'Of course! I invited all of them to my next concert.']
+];
+const lado = q => q === 'Host' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 39, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Thanks! It started three years ago, after my first concert in London.', 'Thanks! It has started three years ago, after my first concert in London.', 'Thanks! It start three years ago, after my first concert in London.'], 0, 'Obrigada! Começou três anos atrás, depois do meu primeiro show em Londres.'),
+    prox(3, ['Not really. At first, only ten people come to see me yesterday.', 'Not really. At first, only ten people came to see me.', 'Not really. At first, only ten people came to saw me.'], 1, 'Não muito. No início, só dez pessoas foram me ver.'),
+    prox(4, ['Oh no. How you felt?', 'Oh no. How did you felt?', 'Oh no. How did you feel?'], 2, 'Ah, não. Como você se sentiu?'),
+    prox(5, ['Sad, but I played every song anyway. Then something strange happened.', 'Sad, but I played every song anyway. Then something strange happen.', 'Sad, but I plays every song anyway. Then something strange happened.'], 0, 'Triste, mas toquei todas as músicas mesmo assim. Aí aconteceu uma coisa estranha.'),
+    prox(7, ['Suddenly, the lights goes out, and everyone used their phones as torches.', 'Suddenly, the lights went out, and everyone used their phones as torches.', 'Suddenly, the lights went out, and everyone using their phones as torches.'], 1, 'De repente, as luzes apagaram e todo mundo usou o celular como lanterna.'),
+    prox(9, ['It was. Meanwhile, I keep singing without a microphone yesterday.', 'It was. Meanwhile, I kept sing without a microphone.', 'It was. Meanwhile, I kept singing without a microphone.'], 2, 'Foi. Enquanto isso, continuei cantando sem microfone.'),
+    prox(11, ['By the time I got to the station, the last train had already left.', 'By the time I got to the station, the last train has already left.', 'By the time I got to the station, the last train had already leave.'], 0, 'Quando cheguei à estação, o último trem já tinha saído.'),
+    prox(12, ['So what did you did?', 'So what did you do?', 'So what you did do?'], 1, 'E o que você fez?'),
+    prox(13, ['I sat on a bench and immediately start writing the lyrics yesterday.', 'I sat on a bench and immediately started write the lyrics.', 'I sat on a bench and immediately started writing the lyrics.'], 2, 'Sentei num banco e imediatamente comecei a escrever a letra.'),
+    prox(15, ['Later that week, I finished it in my kitchen.', 'Later that week, I finish it in my kitchen yesterday.', 'Later that week, I have finished it in my kitchen.'], 0, 'Mais tarde naquela semana, terminei na minha cozinha.'),
+    prox(17, ['Yes! Eventually, it was play on the radio around the world.', 'Yes! Eventually, it was played on the radio around the world.', 'Yes! Eventually, it were played on the radio around the world.'], 1, 'Sim! Por fim, ela tocou nas rádios do mundo todo.'),
+    prox(19, ['Of course! I invite all of them to my next concert yesterday.', 'Of course! I invited all of they to my next concert.', 'Of course! I invited all of them to my next concert.'], 2, 'Claro! Convidei todas elas para o meu show seguinte.'),
+    { instrucao: "Where was Jo's first concert?", frase: '___', opcoes: ['In London.', 'In Lisbon.', 'In New York.'], certa: 0, traducao: 'Em Londres.' },
+    { instrucao: 'How many people came to the first concert?', frase: '___', opcoes: ['A hundred.', 'Ten.', 'Nobody.'], certa: 1, traducao: 'Dez.' },
+    { instrucao: 'What happened suddenly?', frase: '___', opcoes: ['It started to rain.', 'Jo forgot the lyrics.', 'The lights went out.'], certa: 2, traducao: 'As luzes apagaram.' },
+    { instrucao: 'What did people use as torches?', frase: '___', opcoes: ['Their phones.', 'Candles.', 'Lighters.'], certa: 0, traducao: 'Os celulares.' },
+    { instrucao: "Why couldn't Jo take the train?", frase: '___', opcoes: ['There was a strike.', 'It had already left.', 'Jo had lost the ticket.'], certa: 1, traducao: 'Ele já tinha saído.' },
+    { instrucao: 'Where did Jo start writing the lyrics?', frase: '___', opcoes: ['In the kitchen.', 'On the stage.', 'On a bench at the station.'], certa: 2, traducao: 'Num banco da estação.' },
+    { instrucao: 'Where did Jo finish the song?', frase: '___', opcoes: ['In the kitchen.', 'On the train.', 'At the radio station.'], certa: 0, traducao: 'Na cozinha.' },
+    { instrucao: 'Who did Jo invite to the next concert?', frase: '___', opcoes: ['The radio host.', 'The ten people from the first concert.', 'Some famous singers.'], certa: 1, traducao: 'As dez pessoas do primeiro show.' }
+  ]
+});
+</script>
+</body>
+</html>

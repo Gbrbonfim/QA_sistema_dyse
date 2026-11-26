@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 39 · At first, suddenly, eventually</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 39 · Escrita (The Story Behind the Lyrics)
+   Alinhado ao Reading (histórias de Deep Purple, Adele e Taylor Swift no passado) e às
+   expressões de tempo do exercício 4. Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 39, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('No início, ela se sentiu com raiva e confusa.'), palavras: ['At', 'first,', 'she', 'felt', 'angry', 'and', 'confused'], isca: ['feel'], fim: '.', traducao: 'No início, ela se sentiu com raiva e confusa.' },
+    { contexto: M('De repente, um homem disparou um sinalizador.'), palavras: ['Suddenly,', 'a', 'man', 'fired', 'a', 'flare', 'gun'], isca: ['fire'], fim: '.', traducao: 'De repente, um homem disparou um sinalizador.' },
+    { contexto: M('Imediatamente, o teto pegou fogo.'), palavras: ['Immediately,', 'the', 'ceiling', 'caught', 'fire'], isca: ['catched'], fim: '.', traducao: 'Imediatamente, o teto pegou fogo.' },
+    { contexto: M('Mais tarde, eles encontraram outro lugar para gravar.'), palavras: ['Later,', 'they', 'found', 'another', 'place', 'to', 'record'], isca: ['find'], fim: '.', traducao: 'Mais tarde, eles encontraram outro lugar para gravar.' },
+    { contexto: M('Por fim, a música virou um sucesso mundial.'), palavras: ['Eventually,', 'the', 'song', 'became', 'a', 'worldwide', 'success'], isca: ['become'], fim: '.', traducao: 'Por fim, a música virou um sucesso mundial.' },
+    { contexto: M('Enquanto isso, ela continuou trabalhando no álbum.'), palavras: ['Meanwhile,', 'she', 'continued', 'working', 'on', 'her', 'album'], isca: ['continue'], fim: '.', traducao: 'Enquanto isso, ela continuou trabalhando no álbum.' },
+    { contexto: M('A banda viajou para a Suíça em 1971.'), palavras: ['The', 'band', 'traveled', 'to', 'Switzerland', 'in', '1971'], isca: ['travel'], fim: '.', traducao: 'A banda viajou para a Suíça em 1971.' },
+    { contexto: M('Eles assistiram ao incêndio em choque.'), palavras: ['They', 'watched', 'the', 'fire', 'in', 'shock'], isca: ['watch'], fim: '.', traducao: 'Eles assistiram ao incêndio em choque.' },
+    { contexto: M('Ela tentou salvar o relacionamento.'), palavras: ['She', 'tried', 'to', 'save', 'the', 'relationship'], isca: ['try'], fim: '.', traducao: 'Ela tentou salvar o relacionamento.' },
+    { contexto: M('Jornalistas escreveram manchetes negativas sobre ela.'), palavras: ['Journalists', 'wrote', 'negative', 'headlines', 'about', 'her'], isca: ['writed'], fim: '.', traducao: 'Jornalistas escreveram manchetes negativas sobre ela.' },
+    { contexto: M('Ela decidiu reinventar o seu estilo.'), palavras: ['She', 'decided', 'to', 'reinvent', 'her', 'style'], isca: ['decide'], fim: '.', traducao: 'Ela decidiu reinventar o seu estilo.' },
+    { contexto: M('A música mudou como as pessoas a viam.'), palavras: ['The', 'song', 'changed', 'how', 'people', 'saw', 'her'], isca: ['seen'], fim: '.', traducao: 'A música mudou como as pessoas a viam.' },
+    { contexto: M('Eu escrevi esta música depois de um ano difícil.'), palavras: ['I', 'wrote', 'this', 'song', 'after', 'a', 'difficult', 'year'], isca: ['written'], fim: '.', traducao: 'Eu escrevi esta música depois de um ano difícil.' },
+    { contexto: M('No início, ninguém ouvia a minha música.'), palavras: ['At', 'first,', 'nobody', 'listened', 'to', 'my', 'music'], isca: ['listen'], fim: '.', traducao: 'No início, ninguém ouvia a minha música.' },
+    { contexto: M('Por que os artistas escrevem músicas?'), palavras: ['Why', 'do', 'artists', 'write', 'songs'], isca: ['writes'], fim: '?', traducao: 'Por que os artistas escrevem músicas?' },
+    { contexto: M('Experiências tristes muitas vezes rendem ótimas músicas.'), palavras: ['Sad', 'experiences', 'often', 'make', 'great', 'songs'], isca: ['makes'], fim: '.', traducao: 'Experiências tristes muitas vezes rendem ótimas músicas.' },
+    { contexto: M('O álbum foi lançado em 2011.'), palavras: ['The', 'album', 'was', 'released', 'in', '2011'], isca: ['release'], fim: '.', traducao: 'O álbum foi lançado em 2011.' },
+    { contexto: M('De repente, a música parou.'), palavras: ['Suddenly,', 'the', 'music', 'stopped'], isca: ['stop'], fim: '.', traducao: 'De repente, a música parou.' },
+    { contexto: M('Por fim, eles gravaram o álbum num hotel.'), palavras: ['Eventually,', 'they', 'recorded', 'the', 'album', 'in', 'a', 'hotel'], isca: ['record'], fim: '.', traducao: 'Por fim, eles gravaram o álbum num hotel.' },
+    { contexto: M('Enquanto isso, os fãs estavam esperando lá fora.'), palavras: ['Meanwhile,', 'the', 'fans', 'were', 'waiting', 'outside'], isca: ['was'], fim: '.', traducao: 'Enquanto isso, os fãs estavam esperando lá fora.' }
+  ]
+});
+</script>
+</body>
+</html>

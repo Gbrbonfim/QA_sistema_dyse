@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 40 · Had or did?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 40 · Gramática (The Story Behind the Lyrics)
+   Alinhado ao Grammar Point (past perfect x past simple; had + particípio; hadn't; 'd = had
+   ou would) e aos exercícios 1 e 5, com as histórias de Dance Monkey e The A Team.
+   Conteúdo NOVO. Pistas de tempo deixam só uma resposta certa. 24 questões. */
+const D = "What does 'd mean in this sentence?";
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 39, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'When the firefighters arrived, the casino ___ already burned down.', opcoes: ['had', 'has', 'was'], certa: 0, traducao: 'Quando os bombeiros chegaram, o cassino já tinha queimado.' },
+    { frase: 'Before she wrote the song, Adele ___ through a painful breakup.', opcoes: ['has gone', 'had gone', 'goes'], certa: 1, traducao: 'Antes de escrever a música, a Adele tinha passado por um término doloroso.' },
+    { frase: 'Taylor ___ many negative headlines before she wrote Shake It Off.', opcoes: ['has read', 'reads', 'had read'], certa: 2, traducao: 'A Taylor tinha lido muitas manchetes negativas antes de escrever Shake It Off.' },
+    { frase: 'She felt nervous because she ___ never performed on TV before.', opcoes: ['had', 'has', 'did'], certa: 0, traducao: 'Ela ficou nervosa porque nunca tinha se apresentado na TV.' },
+    { frase: "The band ___ the tour last month because they hadn't had time to practise.", opcoes: ['has cancelled', 'cancelled', 'cancel'], certa: 1, traducao: 'A banda cancelou a turnê no mês passado porque não tinha tido tempo de ensaiar.' },
+    { frase: 'By the time we arrived, the fans ___ home.', opcoes: ['go', 'have gone', 'had gone'], certa: 2, traducao: 'Quando chegamos, os fãs já tinham ido para casa.' },
+    { frase: "The producer didn't release the track because the band ___ it.", opcoes: ["hadn't approved", "haven't approved", "don't approve"], certa: 0, traducao: 'O produtor não lançou a faixa porque a banda não tinha aprovado.' },
+    { frase: 'After the critics ___ the album, it received more attention.', opcoes: ['have reviewed', 'had reviewed', 'review'], certa: 1, traducao: 'Depois que os críticos avaliaram o álbum, ele recebeu mais atenção.' },
+    { frase: "I ___ my ticket, so I couldn't go in.", opcoes: ['have lost', 'lose', 'had lost'], certa: 2, traducao: 'Eu tinha perdido o ingresso, então não pude entrar.' },
+    { frase: 'We form the past perfect with had + ___.', opcoes: ['past participle', 'infinitive', 'verb + -ing'], certa: 0, traducao: 'Formamos o past perfect com had + particípio passado.' },
+    { frase: 'The past perfect shows an action that happened ___ another moment in the past.', opcoes: ['after', 'before', 'during'], certa: 1, traducao: 'O past perfect mostra uma ação que aconteceu antes de outro momento no passado.' },
+    { frase: 'The negative of "had decided" is ___.', opcoes: ["didn't decided", "hasn't decided", "hadn't decided"], certa: 2, traducao: 'A negativa de "had decided" é "hadn\'t decided".' },
+    { instrucao: D + ' "She\'d already left when I called."', frase: '___', opcoes: ['had', 'would', 'did'], certa: 0, traducao: 'She\'d already left = she had already left (ela já tinha saído).' },
+    { instrucao: D + ' "My friend said they\'d help me tomorrow."', frase: '___', opcoes: ['had', 'would', 'did'], certa: 1, traducao: 'they\'d help = they would help (ajudariam).' },
+    { instrucao: D + ' "They\'d never been to Brazil before that trip."', frase: '___', opcoes: ['would', 'did', 'had'], certa: 2, traducao: 'They\'d never been = they had never been (nunca tinham ido).' },
+    { instrucao: D + ' "I\'d love to go to that concert."', frase: '___', opcoes: ['would', 'had', 'did'], certa: 0, traducao: 'I\'d love = I would love (eu adoraria).' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['When I got home, my sister has already eaten dinner.', 'When I got home, my sister had already eaten dinner.', 'When I got home, my sister had already eat dinner.'], certa: 1, traducao: 'Quando cheguei em casa, minha irmã já tinha jantado.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['Had you ever saw them live?', 'Did you had seen them live?', 'Had you ever seen them live before that night?'], certa: 2, traducao: 'Você já tinha visto eles ao vivo antes daquela noite?' },
+    { instrucao: 'Which action happened first? "When Taylor started planning the album, she had already decided to change her style."', frase: '___', opcoes: ['She decided to change her style.', 'She started planning the album.', 'Both happened at the same time.'], certa: 0, traducao: 'Ela decidiu mudar o estilo.' },
+    { frase: 'Before Ed Sheeran wrote The A Team, he ___ at a homeless shelter.', opcoes: ['volunteers', 'had volunteered', 'has volunteered'], certa: 1, traducao: 'Antes de escrever The A Team, o Ed Sheeran tinha sido voluntário num abrigo.' },
+    { frase: 'Tones and I ___ on the streets of Australia before she became famous.', opcoes: ['has played', 'plays', 'had played'], certa: 2, traducao: 'A Tones and I tinha tocado nas ruas da Austrália antes de ficar famosa.' },
+    { frase: 'The success of Dance Monkey is ironic: a song about feeling ___ made her famous.', opcoes: ['uncomfortable', 'rich', 'sleepy'], certa: 0, traducao: 'É irônico: uma música sobre se sentir desconfortável a deixou famosa.' },
+    { frase: 'By the time the concert ___, many fans had come closer to the stage.', opcoes: ['has begun', 'began', 'begin'], certa: 1, traducao: 'Quando o show começou, muitos fãs já tinham chegado mais perto do palco.' },
+    { frase: 'She ___ never sung live on TV before that night.', opcoes: ['has', 'did', 'had'], certa: 2, traducao: 'Ela nunca tinha cantado ao vivo na TV antes daquela noite.' }
+  ]
+});
+</script>
+</body>
+</html>

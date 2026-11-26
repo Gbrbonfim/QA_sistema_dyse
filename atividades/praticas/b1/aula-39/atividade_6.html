@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 40 · What had happened first?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 40 · Escuta (The Story Behind the Lyrics)
+   Alinhado ao Grammar Point (past perfect: had + particípio para o que aconteceu antes de
+   outro momento no passado; 'd = had ou would) e ao Speaking And Listening (as histórias de
+   Dance Monkey e The A Team). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const P = 'Listen. Which action happened first?', S = 'Both at the same time.';
+const D = "Listen. What does 'd mean in this sentence?";
+const E = 'Listen and choose the best ending';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 39, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: P, ...q('When we arrived at the concert, the band had already started.', 'The band started playing.', ['We arrived at the concert.', S], 'history') },
+    { instrucao: P, ...q('By the time the police came, the thief had run away.', 'The thief ran away.', ['The police came.', S], 'history') },
+    { instrucao: P, ...q('I had already bought the tickets when the concert was cancelled.', 'The tickets were bought.', ['The concert was cancelled.', S], 'history') },
+    { instrucao: P, ...q('After the critics had reviewed the album, it sold millions of copies.', 'The critics reviewed the album.', ['The album sold millions.', S], 'history') },
+    { instrucao: P, ...q('The singer went on stage after she had warmed up her voice.', 'The singer warmed up.', ['The singer went on stage.', S], 'history') },
+    { instrucao: P, ...q('When I woke up, my parents had already gone to work.', 'The parents went to work.', ['The speaker woke up.', S], 'history') },
+    { instrucao: P, ...q('The film had started when we got to the cinema.', 'The film started.', ['We got to the cinema.', S], 'history') },
+    { instrucao: P, ...q("She'd finished the song before the producer called.", 'The song was finished.', ['The producer called.', S], 'history') },
+    { instrucao: D, ...q("She'd already decided to change her style.", 'had', ['would', 'did'], 'rule') },
+    { instrucao: D, ...q("She said she'd call me after the show.", 'would', ['had', 'did'], 'rule') },
+    { instrucao: D, ...q("They'd prepared everything carefully.", 'had', ['would', 'did'], 'rule') },
+    { instrucao: D, ...q("My friend told me they'd buy the tickets tomorrow.", 'would', ['had', 'did'], 'rule') },
+    { instrucao: D, ...q("We'd never heard that song before.", 'had', ['would', 'did'], 'rule') },
+    { instrucao: D, ...q("I'd love to see that band live one day.", 'would', ['had', 'did'], 'rule') },
+    { instrucao: 'Listen. Where had Tones and I played music?', ...q('Before she became famous, Tones and I had played music on the streets of Australia.', 'on the streets of Australia', ['in big stadiums', 'on TV shows'], 'hearing') },
+    { instrucao: 'Listen. Why did she feel frustrated?', ...q('People had asked her to repeat songs again and again, and she felt frustrated.', 'People had asked her to repeat songs.', ['Nobody had listened to her.', 'She had lost her voice.'], 'hearing') },
+    { instrucao: 'Listen. Where had Ed Sheeran volunteered?', ...q('Ed Sheeran had volunteered at a homeless shelter in London.', 'at a homeless shelter', ['at a hospital', 'at a school'], 'hearing') },
+    { instrucao: 'Listen. What inspired the song The A Team?', ...q('He had met a young woman there, and her story inspired The A Team.', "a young woman's story", ['a film', 'a holiday'], 'hearing') },
+    { instrucao: E, ...q("I couldn't get into the concert because...", 'I had lost my ticket.', ['I have lost my ticket tomorrow.', 'I lose my ticket yesterday.'], 'forum') },
+    { instrucao: E, ...q('The singer felt nervous because...', 'she had never performed live before.', ['she never performs live before.', 'she has never performed live tomorrow.'], 'forum') },
+    { instrucao: E, ...q('The band cancelled the tour because...', "they hadn't had time to practise.", ["they don't have time yesterday.", "they hadn't have time to practise."], 'forum') },
+    { instrucao: E, ...q('When the singer finally arrived...', 'the fans had already left.', ['the fans have already leave.', 'the fans had already leaving.'], 'forum') },
+    { instrucao: E, ...q("The producer didn't release the track because...", "the band hadn't approved it.", ["the band hasn't approve it.", "the band don't approved it."], 'forum') },
+    { instrucao: E, ...q('By the time the show started...', 'the stadium had filled up.', ['the stadium has filled up yesterday.', 'the stadium had fill up.'], 'forum') }
+  ]
+});
+</script>
+</body>
+</html>
