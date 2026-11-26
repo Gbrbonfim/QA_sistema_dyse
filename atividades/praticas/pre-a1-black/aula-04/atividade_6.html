@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 4 · Are you from Mexico?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 04 · Leitura (Changing nationalities?)
+   Alinhado ao "Speaking and Writing" (perguntas com Is...? / Are...? e short answers) e às
+   perguntas com e sem "from". Conteúdo NOVO: a Julia e o Tom se conhecem num curso de verão
+   e tentam adivinhar de onde o outro é. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Tom', "Hi! I'm Tom. Are you from Mexico?"],
+  ['Julia', "No, I'm not. I'm Brazilian. I'm Julia."],
+  ['Tom', 'Oh! Are you from São Paulo?'],
+  ['Julia', "Yes, I am! And you? Are you English?"],
+  ['Tom', "No, I'm not. I'm American."],
+  ['Julia', 'Are you from New York?'],
+  ['Tom', "No, I'm not. I'm from Chicago."],
+  ['Julia', 'Cool! Is your teacher American too?'],
+  ['Tom', "No, she isn't. She's Canadian. She's from Toronto."],
+  ['Julia', 'And the two students over there? Are they Chinese?'],
+  ['Tom', "No, they aren't. They're Japanese."],
+  ['Julia', 'Are they from Tokyo?'],
+  ['Tom', 'Yes, they are.'],
+  ['Julia', 'Am I late for class?'],
+  ['Tom', "No, you aren't. The class is at ten."],
+  ['Julia', 'Great! Are we in class one?'],
+  ['Tom', 'Yes, we are!']
+];
+const lado = q => q === 'Tom' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 4, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["No, I'm not. I'm Brazilian. I'm Julia.", "No, I amn't. I'm Brazilian. I'm Julia.", "No, I'm not. I'm from Brazilian. I'm Julia."], 0, 'Não. Sou brasileira. Sou a Julia.'),
+    prox(2, ['Oh! Is you from São Paulo?', 'Oh! Are you from São Paulo?', 'Oh! Are you São Paulo?'], 1, 'Ah! Você é de São Paulo?'),
+    prox(3, ["Yes, I'm! And you? Are you English?", "Yes, I am! And you? Is you English?", 'Yes, I am! And you? Are you English?'], 2, 'Sim! E você? Você é inglês?'),
+    prox(4, ["No, I'm not. I'm American.", "No, I'm not. I'm from American.", "No, I isn't. I'm American."], 0, 'Não. Sou americano.'),
+    prox(5, ['Is you from New York?', 'Are you from New York?', 'Are you New York?'], 1, 'Você é de Nova York?'),
+    prox(6, ["No, I aren't. I'm from Chicago.", "No, I'm not. I'm Chicago.", "No, I'm not. I'm from Chicago."], 2, 'Não. Sou de Chicago.'),
+    prox(8, ["No, she isn't. She's Canadian. She's from Toronto.", "No, she aren't. She's Canadian. She's from Toronto.", "No, she isn't. She's Canada. She's from Toronto."], 0, 'Não. Ela é canadense. É de Toronto.'),
+    prox(10, ["No, they isn't. They're Japanese.", "No, they aren't. They're Japanese.", "No, they aren't. They're Japan."], 1, 'Não. Eles são japoneses.'),
+    prox(11, ['Is they from Tokyo?', 'Are they Tokyo?', 'Are they from Tokyo?'], 2, 'Eles são de Tóquio?'),
+    prox(13, ['Am I late for class?', 'Is I late for class?', 'Are I late for class?'], 0, 'Estou atrasada para a aula?'),
+    prox(14, ["No, you isn't. The class is at ten.", "No, you aren't. The class is at ten.", "No, you amn't. The class is at ten."], 1, 'Não. A aula é às dez.'),
+    prox(15, ['Great! Is we in class one?', 'Great! Am we in class one?', 'Great! Are we in class one?'], 2, 'Ótimo! Estamos na turma 1?'),
+    { instrucao: 'What nationality is Julia?', frase: "She's ___.", opcoes: ['Brazilian', 'Mexican', 'American'], certa: 0, traducao: 'Ela é brasileira.' },
+    { instrucao: 'Where is Julia from?', frase: "She's from ___.", opcoes: ['Rio de Janeiro', 'São Paulo', 'Brasília'], certa: 1, traducao: 'Ela é de São Paulo.' },
+    { instrucao: 'Is Tom English?', frase: "No, he isn't. He's ___.", opcoes: ['Canadian', 'Brazilian', 'American'], certa: 2, traducao: 'Não. Ele é americano.' },
+    { instrucao: 'Where is Tom from?', frase: "He's from ___.", opcoes: ['Chicago', 'New York', 'Toronto'], certa: 0, traducao: 'Ele é de Chicago.' },
+    { instrucao: 'What nationality is the teacher?', frase: "She's ___.", opcoes: ['American', 'Canadian', 'English'], certa: 1, traducao: 'Ela é canadense.' },
+    { instrucao: 'Are the two students Chinese?', frase: '___', opcoes: ['Yes, they are.', "No, he isn't.", "No, they aren't."], certa: 2, traducao: 'Não.' },
+    { instrucao: 'Where are the two students from?', frase: "They're from ___.", opcoes: ['Tokyo', 'Toronto', 'Chicago'], certa: 0, traducao: 'Eles são de Tóquio.' },
+    { instrucao: 'Is Julia late for class?', frase: '___', opcoes: ['Yes, she is.', "No, she isn't.", "No, she aren't."], certa: 1, traducao: 'Não.' }
+  ]
+});
+</script>
+</body>
+</html>

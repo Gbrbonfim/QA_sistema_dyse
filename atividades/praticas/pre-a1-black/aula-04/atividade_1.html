@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 4 · Yes, he is!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 04 · Escuta (Changing nationalities?)
+   Alinhado ao "Grammar Point: To Be - Interrogative Form" e às short answers (Yes, he is. /
+   No, she isn't. / Yes, they are...). Conteúdo NOVO: o aluno ouve a pergunta sobre um famoso
+   e escolhe a resposta curta verdadeira e gramaticalmente certa. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: /^Yes/.test(c) ? 'check_circle' : 'cancel' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 4, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the question and choose the true short answer',
+  itens: [
+    q('Is Neymar Brazilian?', 'Yes, he is.', ["No, he isn't.", 'Yes, she is.', 'Yes, they are.']),
+    q('Is Taylor Swift Canadian?', "No, she isn't.", ['Yes, she is.', "No, he isn't.", "No, they aren't."]),
+    q('Are BTS South Korean?', 'Yes, they are.', ["No, they aren't.", 'Yes, he is.', 'Yes, we are.']),
+    q('Is sushi Chinese?', "No, it isn't.", ['Yes, it is.', "No, she isn't.", "No, they aren't."]),
+    q('Is Lionel Messi Argentinian?', 'Yes, he is.', ["No, he isn't.", 'Yes, it is.', 'Yes, they are.']),
+    q('Are tacos Japanese?', "No, they aren't.", ['Yes, they are.', "No, it isn't.", "No, he isn't."]),
+    q('Is Cristiano Ronaldo Spanish?', "No, he isn't.", ['Yes, he is.', "No, she isn't.", "No, they aren't."]),
+    q('Is Jackie Chan Chinese?', 'Yes, he is.', ["No, he isn't.", 'Yes, she is.', 'Yes, it is.']),
+    q('Are Justin Bieber and Drake American?', "No, they aren't.", ['Yes, they are.', "No, he isn't.", "No, we aren't."]),
+    q('Is pizza Italian?', 'Yes, it is.', ["No, it isn't.", 'Yes, he is.', 'Yes, they are.']),
+    q('Is Salma Hayek Mexican?', 'Yes, she is.', ["No, she isn't.", 'Yes, he is.', 'Yes, it is.']),
+    q('Is Heidi Klum Russian?', "No, she isn't.", ['Yes, she is.', "No, he isn't.", "No, it isn't."]),
+    q('Are Neymar and Anitta Brazilian?', 'Yes, they are.', ["No, they aren't.", 'Yes, she is.', 'Yes, it is.']),
+    q('Is Shohei Ohtani Japanese?', 'Yes, he is.', ["No, he isn't.", 'Yes, she is.', 'Yes, we are.']),
+    q('Is Priyanka Chopra Filipino?', "No, she isn't.", ['Yes, she is.', "No, he isn't.", "No, they aren't."]),
+    q('Are Lady Gaga and Beyoncé American?', 'Yes, they are.', ["No, they aren't.", 'Yes, he is.', 'Yes, it is.']),
+    q('Is Toyota South Korean?', "No, it isn't.", ['Yes, it is.', "No, he isn't.", "No, they aren't."]),
+    q('Is Celine Dion Canadian?', 'Yes, she is.', ["No, she isn't.", 'Yes, he is.', 'Yes, they are.']),
+    q('Is Maria Sharapova German?', "No, she isn't.", ['Yes, she is.', "No, it isn't.", "No, he isn't."]),
+    q('Is Anitta from Rio de Janeiro?', 'Yes, she is.', ["No, she isn't.", 'Yes, it is.', 'Yes, he is.']),
+    q('Is Lionel Messi from Brazil?', "No, he isn't.", ['Yes, he is.', "No, she isn't.", "No, it isn't."]),
+    q('Is Drake from Toronto?', 'Yes, he is.', ["No, he isn't.", 'Yes, she is.', 'Yes, they are.']),
+    q('Is Jackie Chan from Hong Kong?', 'Yes, he is.', ["No, he isn't.", 'Yes, it is.', 'Yes, we are.']),
+    q('Is Lady Gaga from Mexico?', "No, she isn't.", ['Yes, she is.', "No, he isn't.", "No, they aren't."])
+  ]
+});
+</script>
+</body>
+</html>

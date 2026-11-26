@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 4 · Make the question</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 04 · Escrita (Changing nationalities?)
+   Alinhado ao "Grammar Point: To Be - Interrogative Form" e ao exercício 5 (Is Julia Mexican?
+   / Are you from Canada?), com atenção a quando usar "from". Conteúdo NOVO. A isca é o
+   auxiliar errado ou um "from" a mais. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 4, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the question (one word is extra)',
+  itens: [
+    { contexto: M('A Anitta é brasileira?'), palavras: ['Is', 'Anitta', 'Brazilian'], isca: ['Are'], fim: '?', traducao: 'A Anitta é brasileira?' },
+    { contexto: M('Você é do Canadá?'), palavras: ['Are', 'you', 'from', 'Canada'], isca: ['Is'], fim: '?', traducao: 'Você é do Canadá?' },
+    { contexto: M('Ele é espanhol?'), palavras: ['Is', 'he', 'Spanish'], isca: ['from'], fim: '?', traducao: 'Ele é espanhol?' },
+    { contexto: M('Eles são de Londres?'), palavras: ['Are', 'they', 'from', 'London'], isca: ['Is'], fim: '?', traducao: 'Eles são de Londres?' },
+    { contexto: M('Eu estou atrasado?'), palavras: ['Am', 'I', 'late'], isca: ['Is'], fim: '?', traducao: 'Estou atrasado?' },
+    { contexto: M('Ela é argentina?'), palavras: ['Is', 'she', 'Argentinian'], isca: ['Are'], fim: '?', traducao: 'Ela é argentina?' },
+    { contexto: M('Nós estamos na turma 2?'), palavras: ['Are', 'we', 'in', 'class', 'two'], isca: ['Am'], fim: '?', traducao: 'Estamos na turma 2?' },
+    { contexto: M('A pizza é italiana?'), palavras: ['Is', 'pizza', 'Italian'], isca: ['from'], fim: '?', traducao: 'A pizza é italiana?' },
+    { contexto: M('O Cristiano Ronaldo é português?'), palavras: ['Is', 'Cristiano', 'Ronaldo', 'Portuguese'], isca: ['Are'], fim: '?', traducao: 'O Cristiano Ronaldo é português?' },
+    { contexto: M('O Drake é de Toronto?'), palavras: ['Is', 'Drake', 'from', 'Toronto'], isca: ['Are'], fim: '?', traducao: 'O Drake é de Toronto?' },
+    { contexto: M('Os tacos são mexicanos?'), palavras: ['Are', 'tacos', 'Mexican'], isca: ['Is'], fim: '?', traducao: 'Os tacos são mexicanos?' },
+    { contexto: M('Vocês são alemães?'), palavras: ['Are', 'you', 'German'], isca: ['from'], fim: '?', traducao: 'Vocês são alemães?' },
+    { contexto: M('É da China?'), palavras: ['Is', 'it', 'from', 'China'], isca: ['Are'], fim: '?', traducao: 'É da China?' },
+    { contexto: M('O Messi e o Di María são argentinos?'), palavras: ['Are', 'Messi', 'and', 'Di', 'María', 'Argentinian'], isca: ['Is'], fim: '?', traducao: 'O Messi e o Di María são argentinos?' },
+    { contexto: M('Ela é de Mumbai?'), palavras: ['Is', 'she', 'from', 'Mumbai'], isca: ['Are'], fim: '?', traducao: 'Ela é de Mumbai?' },
+    { contexto: M('Ele é inglês?'), palavras: ['Is', 'he', 'English'], isca: ['from'], fim: '?', traducao: 'Ele é inglês?' },
+    { contexto: M('Você é do Rio de Janeiro?'), palavras: ['Are', 'you', 'from', 'Rio', 'de', 'Janeiro'], isca: ['Is'], fim: '?', traducao: 'Você é do Rio de Janeiro?' },
+    { contexto: M('Elas são canadenses?'), palavras: ['Are', 'they', 'Canadian'], isca: ['from'], fim: '?', traducao: 'Elas são canadenses?' },
+    { contexto: M('O sushi é japonês?'), palavras: ['Is', 'sushi', 'Japanese'], isca: ['Are'], fim: '?', traducao: 'O sushi é japonês?' },
+    { contexto: M('A Beyoncé é de Houston?'), palavras: ['Is', 'Beyoncé', 'from', 'Houston'], isca: ['Are'], fim: '?', traducao: 'A Beyoncé é de Houston?' }
+  ]
+});
+</script>
+</body>
+</html>

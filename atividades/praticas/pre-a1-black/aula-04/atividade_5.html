@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 4 · From Brazil, but Italian!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 04 · Leitura (Changing nationalities?)
+   Alinhado ao Reading do slide (jogadores que nasceram num país e jogam por outra seleção:
+   "He is from Brazil but he is Spanish") e às perguntas com Is...? / Are...?. Conteúdo NOVO
+   com OUTROS jogadores (fatos verdadeiros: Jorginho e Emerson Palmieri nasceram no Brasil e
+   jogam pela Itália; Pepe e Deco nasceram no Brasil e jogaram por Portugal). 20 questões:
+   12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Leo', 'Look! This is Jorginho. Is he Italian?'],
+  ['Clara', "Yes, he is. But he's from Brazil!"],
+  ['Leo', 'Really? Is he from Rio de Janeiro?'],
+  ['Clara', "No, he isn't. He's from Santa Catarina."],
+  ['Leo', 'Cool! And Emerson Palmieri? Is he Brazilian?'],
+  ['Clara', "He's from Brazil too, but he's Italian."],
+  ['Leo', 'Wow! Are Jorginho and Emerson Italian players?'],
+  ['Clara', 'Yes, they are. They play for Italy.'],
+  ['Leo', 'And Pepe and Deco? Are they Spanish?'],
+  ['Clara', "No, they aren't. They're Portuguese."],
+  ['Leo', 'Are they from Portugal?'],
+  ['Clara', "No, they aren't! They're from Brazil."],
+  ['Leo', 'Ha ha! Brazilian players are everywhere!'],
+  ['Clara', 'Yes! Are you a football fan?'],
+  ['Leo', "Yes, I am! I'm a big fan."]
+];
+const lado = q => q === 'Leo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 4, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes, he is. But he's from Brazil!", "Yes, he's. But he's from Brazil!", "Yes, he is. But he's from Brazilian!"], 0, 'Sim. Mas ele é do Brasil!'),
+    prox(2, ['Really? Are he from Rio de Janeiro?', 'Really? Is he from Rio de Janeiro?', 'Really? Is he Rio de Janeiro?'], 1, 'Sério? Ele é do Rio de Janeiro?'),
+    prox(3, ["No, he aren't. He's from Santa Catarina.", "No, he isn't. He's Santa Catarina.", "No, he isn't. He's from Santa Catarina."], 2, 'Não. Ele é de Santa Catarina.'),
+    prox(4, ['Cool! And Emerson Palmieri? Is he Brazilian?', 'Cool! And Emerson Palmieri? Is he from Brazilian?', 'Cool! And Emerson Palmieri? Are he Brazilian?'], 0, 'Legal! E o Emerson Palmieri? Ele é brasileiro?'),
+    prox(5, ["He's from Brazil too, but he's Italy.", "He's from Brazil too, but he's Italian.", "He's Brazil too, but he's Italian."], 1, 'Ele também é do Brasil, mas é italiano.'),
+    prox(6, ['Wow! Is Jorginho and Emerson Italian players?', 'Wow! Are Jorginho and Emerson Italy players?', 'Wow! Are Jorginho and Emerson Italian players?'], 2, 'Uau! O Jorginho e o Emerson são jogadores italianos?'),
+    prox(7, ['Yes, they are. They play for Italy.', "Yes, they're. They play for Italy.", 'Yes, they is. They play for Italy.'], 0, 'Sim. Eles jogam pela Itália.'),
+    prox(8, ['And Pepe and Deco? Is they Spanish?', 'And Pepe and Deco? Are they Spanish?', 'And Pepe and Deco? Are they Spain?'], 1, 'E o Pepe e o Deco? Eles são espanhóis?'),
+    prox(9, ["No, they isn't. They're Portuguese.", "No, they aren't. They're Portugal.", "No, they aren't. They're Portuguese."], 2, 'Não. Eles são portugueses.'),
+    prox(10, ['Are they from Portugal?', 'Is they from Portugal?', 'Are they Portugal?'], 0, 'Eles são de Portugal?'),
+    prox(11, ["No, they isn't! They're from Brazil.", "No, they aren't! They're from Brazil.", "No, they aren't! They're from Brazilian."], 1, 'Não! Eles são do Brasil.'),
+    prox(14, ["Yes, I'm! I'm a big fan.", "Yes, I is! I'm a big fan.", "Yes, I am! I'm a big fan."], 2, 'Sim! Sou muito fã.'),
+    { instrucao: 'Where is Jorginho from?', frase: "He's from ___.", opcoes: ['Brazil', 'Italy', 'Portugal'], certa: 0, traducao: 'Ele é do Brasil.' },
+    { instrucao: 'What nationality is Jorginho as a player?', frase: "He's ___.", opcoes: ['Brazilian', 'Italian', 'Spanish'], certa: 1, traducao: 'Ele é italiano.' },
+    { instrucao: 'Is Jorginho from Rio de Janeiro?', frase: "No, he isn't. He's from ___.", opcoes: ['São Paulo', 'Minas Gerais', 'Santa Catarina'], certa: 2, traducao: 'Não. Ele é de Santa Catarina.' },
+    { instrucao: 'Is Emerson Palmieri from Brazil?', frase: '___', opcoes: ['Yes, he is.', "No, he isn't.", 'Yes, they are.'], certa: 0, traducao: 'Sim.' },
+    { instrucao: 'What team do Jorginho and Emerson play for?', frase: 'They play for ___.', opcoes: ['Brazil', 'Italy', 'Spain'], certa: 1, traducao: 'Eles jogam pela Itália.' },
+    { instrucao: 'Are Pepe and Deco Spanish?', frase: "No, they aren't. They're ___.", opcoes: ['Italian', 'Brazilian', 'Portuguese'], certa: 2, traducao: 'Não. Eles são portugueses.' },
+    { instrucao: 'Where are Pepe and Deco from?', frase: "They're from ___.", opcoes: ['Brazil', 'Portugal', 'Spain'], certa: 0, traducao: 'Eles são do Brasil.' },
+    { instrucao: 'Is Leo a football fan?', frase: '___', opcoes: ["No, he isn't.", 'Yes, he is.', 'Yes, she is.'], certa: 1, traducao: 'Sim.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -922,6 +922,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Country or nationality?', tipo: 'Make a Choice', treina: 'Gramática · País x nacionalidade', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Negative form', tipo: 'Make a Choice', treina: 'Gramática · To be negativo', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 4,
+        titulo: 'Class 04 · Changing Nationalities?',
+        atividades: [
+          { num: 1, titulo: 'Yes, he is!', tipo: 'Escute e escolha', treina: 'Escuta · Short answers', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Which question?', tipo: 'Escute e escolha', treina: 'Escuta · Perguntas com to be', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Make the question', tipo: 'Monte a frase', treina: 'Escrita · Perguntas com to be', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Short answers', tipo: 'Monte a frase', treina: 'Escrita · Short answers', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'From Brazil, but Italian!', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'Are you from Mexico?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'Ask the question', tipo: 'Escute e grave', treina: 'Fala · Perguntas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Answer the question', tipo: 'Escute e grave', treina: 'Fala · Short answers', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Am, is or are?', tipo: 'Make a Choice', treina: 'Gramática · Perguntas com to be', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Choose the short answer', tipo: 'Make a Choice', treina: 'Gramática · Short answers', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

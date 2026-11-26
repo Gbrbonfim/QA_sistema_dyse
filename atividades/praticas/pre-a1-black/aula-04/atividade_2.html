@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 4 · Which question?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 04 · Escuta (Changing nationalities?)
+   Alinhado ao "Grammar Point: To Be - Interrogative Form" (Am I...? / Are you...? / Is he...?
+   / Is she...? / Is it...? / Are we...? / Are they...?). Conteúdo NOVO: o aluno ouve a
+   pergunta e escolhe exatamente a que ouviu (atenção ao auxiliar e ao pronome). 24 questões. */
+let n = 0;
+const q = (audioTexto, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, audioTexto);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'help' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 4, num: 2, tipo: 'imagem',
+  instrucao: 'Listen and choose the question you hear',
+  itens: [
+    q('Are they from Chicago?', ['Is he from Chicago?', 'Are you from Chicago?', 'Is she from Chicago?']),
+    q('Is she Mexican?', ['Is he Mexican?', 'Are they Mexican?', 'Are you Mexican?']),
+    q('Am I late?', ['Are you late?', 'Is he late?', 'Are we late?']),
+    q('Are you Spanish?', ['Is she Spanish?', 'Are they Spanish?', 'Am I Spanish?']),
+    q('Is he from Brazil?', ['Is she from Brazil?', 'Are we from Brazil?', 'Is it from Brazil?']),
+    q('Is it from China?', ['Is he from China?', 'Are they from China?', 'Is she from China?']),
+    q('Are we in class one?', ['Are you in class one?', 'Are they in class one?', 'Am I in class one?']),
+    q('Is she Argentinian?', ['Is he Argentinian?', 'Are you Argentinian?', 'Are they Argentinian?']),
+    q('Are they Italian?', ['Is it Italian?', 'Are you Italian?', 'Is she Italian?']),
+    q('Is he Portuguese?', ['Is she Portuguese?', 'Are they Portuguese?', 'Are we Portuguese?']),
+    q('Are you from London?', ['Is he from London?', 'Are they from London?', 'Am I from London?']),
+    q('Is she from Mumbai?', ['Is he from Mumbai?', 'Are you from Mumbai?', 'Are they from Mumbai?']),
+    q('Are we German?', ['Are you German?', 'Is he German?', 'Are they German?']),
+    q('Is it Japanese?', ['Is she Japanese?', 'Are they Japanese?', 'Is he Japanese?']),
+    q('Am I in class two?', ['Are we in class two?', 'Is he in class two?', 'Are you in class two?']),
+    q('Is he Canadian?', ['Is she Canadian?', 'Are we Canadian?', 'Are they Canadian?']),
+    q('Are they from Toronto?', ['Is she from Toronto?', 'Are you from Toronto?', 'Is he from Toronto?']),
+    q('Is she English?', ['Is he English?', 'Are they English?', 'Are you English?']),
+    q('Are you from Rio de Janeiro?', ['Is she from Rio de Janeiro?', 'Are they from Rio de Janeiro?', 'Is he from Rio de Janeiro?']),
+    q('Is he American?', ['Is she American?', 'Are you American?', 'Are we American?']),
+    q('Are we from Finland?', ['Are they from Finland?', 'Is he from Finland?', 'Are you from Finland?']),
+    q('Is it Brazilian?', ['Is he Brazilian?', 'Are they Brazilian?', 'Is she Brazilian?']),
+    q('Are they Filipino?', ['Is he Filipino?', 'Are we Filipino?', 'Is she Filipino?']),
+    q('Is she from Houston?', ['Is he from Houston?', 'Are you from Houston?', 'Are they from Houston?'])
+  ]
+});
+</script>
+</body>
+</html>

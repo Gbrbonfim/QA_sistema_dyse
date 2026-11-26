@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 4 · Short answers</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 04 · Escrita (Changing nationalities?)
+   Short answers do slide (Yes, I am. / No, I'm not. / Yes, he is. / No, they aren't...) e a
+   correção com a informação certa (No, she isn't. She's Brazilian.). Conteúdo NOVO com fatos
+   verdadeiros. A isca é a short answer errada. 20 questões. */
+const M = (perg, pt) => perg + ' → Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 4, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the answer (one word is extra)',
+  itens: [
+    { contexto: M('Is Neymar Brazilian?', 'Sim, ele é.'), palavras: ['Yes,', 'he', 'is'], isca: ["he's"], fim: '.', traducao: 'Sim.' },
+    { contexto: M('Are you Spanish?', 'Não, não sou.'), palavras: ['No,', "I'm", 'not'], isca: ["isn't"], fim: '.', traducao: 'Não.' },
+    { contexto: M('Are they from Chicago?', 'Sim, eles são.'), palavras: ['Yes,', 'they', 'are'], isca: ["they're"], fim: '.', traducao: 'Sim.' },
+    { contexto: M('Is sushi Chinese?', 'Não. É japonês.'), palavras: ['No,', 'it', "isn't.", "It's", 'Japanese'], isca: ["aren't."], fim: '.', traducao: 'Não. É japonês.' },
+    { contexto: M('Is Taylor Swift Canadian?', 'Não. Ela é americana.'), palavras: ['No,', 'she', "isn't.", "She's", 'American'], isca: ["aren't."], fim: '.', traducao: 'Não. Ela é americana.' },
+    { contexto: M('Are you German?', 'Sim, nós somos.'), palavras: ['Yes,', 'we', 'are'], isca: ["we're"], fim: '.', traducao: 'Sim.' },
+    { contexto: M('Am I late?', 'Não, você não está.'), palavras: ['No,', 'you', "aren't"], isca: ["isn't"], fim: '.', traducao: 'Não.' },
+    { contexto: M('Is Lionel Messi Italian?', 'Não. Ele é argentino.'), palavras: ['No,', 'he', "isn't.", "He's", 'Argentinian'], isca: ["aren't."], fim: '.', traducao: 'Não. Ele é argentino.' },
+    { contexto: M('Is Salma Hayek Mexican?', 'Sim, ela é.'), palavras: ['Yes,', 'she', 'is'], isca: ["she's"], fim: '.', traducao: 'Sim.' },
+    { contexto: M('Are Justin Bieber and Drake American?', 'Não. Eles são canadenses.'), palavras: ['No,', 'they', "aren't.", "They're", 'Canadian'], isca: ["isn't."], fim: '.', traducao: 'Não. São canadenses.' },
+    { contexto: M('Are you from Canada?', 'Não. Sou dos Estados Unidos.'), palavras: ['No,', "I'm", 'not.', "I'm", 'from', 'the', 'USA'], isca: ['American'], fim: '.', traducao: 'Não. Sou dos Estados Unidos.' },
+    { contexto: M('Is Cristiano Ronaldo Spanish?', 'Não. Ele é português.'), palavras: ['No,', 'he', "isn't.", "He's", 'Portuguese'], isca: ['Portugal'], fim: '.', traducao: 'Não. Ele é português.' },
+    { contexto: M('Is pizza Italian?', 'Sim, é.'), palavras: ['Yes,', 'it', 'is'], isca: ["it's"], fim: '.', traducao: 'Sim.' },
+    { contexto: M('Are we in class two?', 'Não. Estamos na turma 1.'), palavras: ['No,', 'we', "aren't.", "We're", 'in', 'class', 'one'], isca: ["isn't."], fim: '.', traducao: 'Não. Estamos na turma 1.' },
+    { contexto: M('Is Drake from Toronto?', 'Sim, ele é.'), palavras: ['Yes,', 'he', 'is'], isca: ['are'], fim: '.', traducao: 'Sim.' },
+    { contexto: M('Are you from Rio de Janeiro?', 'Não. Sou de Brasília.'), palavras: ['No,', "I'm", 'not.', "I'm", 'from', 'Brasília'], isca: ["isn't."], fim: '.', traducao: 'Não. Sou de Brasília.' },
+    { contexto: M('Is Heidi Klum German?', 'Sim, ela é.'), palavras: ['Yes,', 'she', 'is'], isca: ['are'], fim: '.', traducao: 'Sim.' },
+    { contexto: M('Are BTS Japanese?', 'Não. Eles são sul-coreanos.'), palavras: ['No,', 'they', "aren't.", "They're", 'South', 'Korean'], isca: ["isn't."], fim: '.', traducao: 'Não. São sul-coreanos.' },
+    { contexto: M('Is Jackie Chan from Hong Kong?', 'Sim, ele é.'), palavras: ['Yes,', 'he', 'is'], isca: ['am'], fim: '.', traducao: 'Sim.' },
+    { contexto: M('Are Lady Gaga and Beyoncé American?', 'Sim, elas são.'), palavras: ['Yes,', 'they', 'are'], isca: ['is'], fim: '.', traducao: 'Sim.' }
+  ]
+});
+</script>
+</body>
+</html>
