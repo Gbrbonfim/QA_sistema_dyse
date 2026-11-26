@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 43 · Review: build the sentence</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 43 · Escrita (Review Classes 31-42)
+   Revisão das aulas 31 a 42: perguntas de detetive, voz passiva, question tags, phrasal
+   verbs, present perfect, past perfect, reported speech e perguntas indiretas (Could you
+   tell me where...?). Conteúdo NOVO. A palavra extra nunca forma outra frase certa.
+   20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 43, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Quem roubou o quadro?'), palavras: ['Who', 'stole', 'the', 'painting'], isca: ['did'], fim: '?', traducao: 'Quem roubou o quadro?' },
+    { contexto: M('Quem o segurança viu?'), palavras: ['Who', 'did', 'the', 'guard', 'see'], isca: ['saw'], fim: '?', traducao: 'Quem o segurança viu?' },
+    { contexto: M('O segurança ouviu alguma coisa?'), palavras: ['Did', 'the', 'guard', 'hear', 'anything'], isca: ['heard'], fim: '?', traducao: 'O segurança ouviu alguma coisa?' },
+    { contexto: M('O suspeito foi preso ontem.'), palavras: ['The', 'suspect', 'was', 'arrested', 'yesterday'], isca: ['arrest'], fim: '.', traducao: 'O suspeito foi preso ontem.' },
+    { contexto: M('O inglês é falado em muitos países.'), palavras: ['English', 'is', 'spoken', 'in', 'many', 'countries'], isca: ['speaks'], fim: '.', traducao: 'O inglês é falado em muitos países.' },
+    { contexto: M('Este prédio foi construído em 1920.'), palavras: ['This', 'building', 'was', 'built', 'in', '1920'], isca: ['build'], fim: '.', traducao: 'Este prédio foi construído em 1920.' },
+    { contexto: M('Tempo bom hoje, não é?'), palavras: ['Nice', 'weather', 'today,', "isn't", 'it'], isca: ["doesn't"], fim: '?', traducao: 'Tempo bom hoje, não é?' },
+    { contexto: M('Você já conheceu o novo professor, não conheceu?'), palavras: ["You've", 'met', 'the', 'new', 'teacher,', "haven't", 'you'], isca: ["didn't"], fim: '?', traducao: 'Você já conheceu o novo professor, não conheceu?' },
+    { contexto: M('Estou ansioso para ver meus amigos.'), palavras: ['I', 'look', 'forward', 'to', 'seeing', 'my', 'friends'], isca: ['for'], fim: '.', traducao: 'Estou ansioso para ver meus amigos.' },
+    { contexto: M('Por favor, guarde-o.'), palavras: ['Please', 'put', 'it', 'away'], isca: ['puts'], fim: '.', traducao: 'Por favor, guarde-o.' },
+    { contexto: M('Ficamos sem leite hoje de manhã.'), palavras: ['We', 'ran', 'out', 'of', 'milk', 'this', 'morning'], isca: ['on'], fim: '.', traducao: 'Ficamos sem leite hoje de manhã.' },
+    { contexto: M('Você já reprovou numa prova?'), palavras: ['Have', 'you', 'ever', 'failed', 'a', 'test'], isca: ['Did'], fim: '?', traducao: 'Você já reprovou numa prova?' },
+    { contexto: M('Aconteceu na aula de matemática.'), palavras: ['It', 'happened', 'in', 'math', 'class'], isca: ['happen'], fim: '.', traducao: 'Aconteceu na aula de matemática.' },
+    { contexto: M('O filme já tinha começado quando chegamos.'), palavras: ['The', 'movie', 'had', 'started', 'when', 'we', 'got', 'there'], isca: ['start'], fim: '.', traducao: 'O filme já tinha começado quando chegamos.' },
+    { contexto: M('A Anna disse que estava muito cansada.'), palavras: ['Anna', 'said', 'she', 'was', 'very', 'tired'], isca: ['told'], fim: '.', traducao: 'A Anna disse que estava muito cansada.' },
+    { contexto: M('O Mark me disse que tinha terminado o relatório.'), palavras: ['Mark', 'told', 'me', 'he', 'had', 'finished', 'the', 'report'], isca: ['said'], fim: '.', traducao: 'O Mark me disse que tinha terminado o relatório.' },
+    { contexto: M('O Lucas disse que me ligaria mais tarde.'), palavras: ['Lucas', 'said', 'he', 'would', 'call', 'me', 'later'], isca: ['told'], fim: '.', traducao: 'O Lucas disse que me ligaria mais tarde.' },
+    { contexto: M('A Maria me disse que podia me ajudar.'), palavras: ['Maria', 'told', 'me', 'she', 'could', 'help', 'me'], isca: ['said'], fim: '.', traducao: 'A Maria me disse que podia me ajudar.' },
+    { contexto: M('A professora nos mandou ficar em silêncio.'), palavras: ['The', 'teacher', 'told', 'us', 'to', 'be', 'quiet'], isca: ['said'], fim: '.', traducao: 'A professora nos mandou ficar em silêncio.' },
+    { contexto: M('Você poderia me dizer onde fica a estação de trem?'), palavras: ['Could', 'you', 'tell', 'me', 'where', 'the', 'train', 'station', 'is'], isca: ['does'], fim: '?', traducao: 'Você poderia me dizer onde fica a estação de trem?' }
+  ]
+});
+</script>
+</body>
+</html>

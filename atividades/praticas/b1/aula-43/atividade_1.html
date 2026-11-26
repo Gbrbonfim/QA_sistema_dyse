@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 43 · Review: listen and choose</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 43 · Escuta (Review Classes 31-42)
+   Revisão: perguntas de sujeito x objeto (31-32), phrasal verbs (33-34), voz passiva
+   (35-36), question tags (37), present perfect x past simple (38), past perfect (39-40) e
+   reported speech / BrE x AmE (41-42). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const Q = 'Listen to the question. Choose the best answer.', K = 'Listen. Which question tag completes the sentence?';
+const P = 'Listen. What does the speaker mean?', F = 'Listen. Which action happened first?', S = 'Both at the same time.';
+const R = 'Listen to the exact words. Choose the reported sentence.', T = 'Listen. Is it true or false?';
+const V = 'True.', FA = 'False.', O = "It's an opinion.";
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 43, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: Q, ...q('Who called you last night?', 'My brother called me.', ['I called my brother.', 'Yes, I did.'], 'forum') },
+    { instrucao: Q, ...q('Who did you call last night?', 'I called my brother.', ['My brother called me.', "No, I didn't."], 'forum') },
+    { instrucao: Q, ...q('What happened at the museum?', 'A painting disappeared.', ['Yes, it did.', 'At the museum.'], 'forum') },
+    { instrucao: K, ...q("You've met the new teacher...", "haven't you?", ["don't you?", "didn't you?"], 'rule') },
+    { instrucao: K, ...q('This is your first time here...', "isn't it?", ["don't you?", "wasn't it?"], 'rule') },
+    { instrucao: K, ...q('We should start the meeting now...', "shouldn't we?", ["don't we?", "aren't we?"], 'rule') },
+    { instrucao: P, ...q('I really look forward to the weekend.', "I'm excited about the weekend.", ["I'm looking for the weekend.", 'I forgot about the weekend.'], 'help') },
+    { instrucao: P, ...q('We ran out of milk this morning.', 'There was no more milk.', ['We bought more milk.', 'We ran to buy milk.'], 'help') },
+    { instrucao: P, ...q('Please put your phone away.', 'Put it in its place and stop using it.', ['Turn it on.', 'Give it to me.'], 'help') },
+    { instrucao: P, ...q('I get on with my colleagues very well.', 'I have a good relationship with them.', ['I work far from them.', 'I always argue with them.'], 'help') },
+    { instrucao: P, ...q('I gave up coffee last year.', 'I stopped drinking coffee.', ['I started drinking coffee.', 'I gave coffee to a friend.'], 'help') },
+    { instrucao: F, ...q('When we got to the cinema, the movie had started.', 'The movie started.', ['We got to the cinema.', S], 'history') },
+    { instrucao: F, ...q('By the time I called, my friend had left the office.', 'The friend left the office.', ['The speaker called.', S], 'history') },
+    { instrucao: R, ...q("I'm very tired today.", 'They said they were very tired that day.', ['They said they very tired that day.', 'They told they were very tired that day.'], 'forum') },
+    { instrucao: R, ...q('I finished the report yesterday.', 'They said they had finished the report the day before.', ['They said they had finish the report the day before.', 'They said me they had finished the report the day before.'], 'forum') },
+    { instrucao: R, ...q('I will call you later.', 'They said they would call me later.', ['They said they would called me later.', 'They told they would call me later.'], 'forum') },
+    { instrucao: R, ...q('I can help you with this project.', 'They said they could help me with the project.', ['They said they could helped me with the project.', 'They told they could help me with the project.'], 'forum') },
+    { instrucao: T, ...q('English is spoken in many countries around the world.', V, [FA, O], 'fact_check') },
+    { instrucao: T, ...q('The Mona Lisa was painted by Picasso.', FA, [V, O], 'fact_check') },
+    { instrucao: T, ...q('Smoke on the Water was written after a fire in Switzerland.', V, [FA, O], 'fact_check') },
+    { instrucao: T, ...q('Night owls are people who love waking up at five in the morning.', FA, [V, O], 'fact_check') },
+    { instrucao: T, ...q('In British English, a flat is an apartment.', V, [FA, O], 'fact_check') },
+    { instrucao: T, ...q('Sherlock Holmes was created by Agatha Christie.', FA, [V, O], 'fact_check') },
+    { instrucao: Q, ...q('Have you ever tried sushi?', 'Yes, I have. I tried it last year.', ['Yes, I did. I have tried it last year.', 'Yes, I have. I have tried it last year.'], 'forum') }
+  ]
+});
+</script>
+</body>
+</html>

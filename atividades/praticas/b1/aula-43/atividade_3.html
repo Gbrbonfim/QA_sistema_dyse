@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 43 · The museum mystery</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 43 · Leitura (Review Classes 31-42)
+   Alinhado ao Talking Point (perguntas de detetive sobre o quadro que sumiu do museu) e à
+   revisão de question tags, past perfect, phrasal verbs, voz passiva, present perfect e
+   reported speech. Conteúdo NOVO: a detetive Kim interroga o segurança do museu.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Kim', "Good morning. You're the night guard, aren't you?"],
+  ['Guard', "Yes, I am. I've worked here for ten years."],
+  ['Kim', 'A painting was stolen last night. What happened?'],
+  ['Guard', "I don't know. When I checked the room at two, the painting had already disappeared."],
+  ['Kim', 'Who saw the painting last?'],
+  ['Guard', 'The cleaner did. The cleaner said it was on the wall at midnight.'],
+  ['Kim', 'Did you hear anything strange?'],
+  ['Guard', 'Yes, I did. Suddenly, the alarm went off at one thirty.'],
+  ['Kim', 'What did you do?'],
+  ['Guard', 'I turned it off. I thought it was a mistake.'],
+  ['Kim', 'Has the alarm ever gone off by mistake before?'],
+  ['Guard', 'Yes, it has. It happened twice last month.'],
+  ['Kim', 'Interesting. Who knew about those mistakes?'],
+  ['Guard', 'Only the staff. The director told us not to worry about it.'],
+  ['Kim', 'Could you tell me where the cameras are?'],
+  ['Guard', "Of course. They're above the door, but they were turned off."],
+  ['Kim', 'Who turned them off?'],
+  ['Guard', "I don't know. They're usually checked every evening."],
+  ['Kim', "So the thief knew the museum very well, didn't they?"],
+  ['Guard', 'I think so. Eventually, the truth will come out.']
+];
+const lado = q => q === 'Kim' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 43, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes, I am. I've worked here for ten years.", "Yes, I do. I've worked here for ten years.", "Yes, I am. I've worked here since ten years."], 0, 'Sim, sou. Trabalho aqui há dez anos.'),
+    prox(3, ["I don't know. When I checked the room at two, the painting has already disappeared.", "I don't know. When I checked the room at two, the painting had already disappeared.", "I don't know. When I checked the room at two, the painting had already disappear."], 1, 'Não sei. Quando verifiquei a sala às duas, o quadro já tinha sumido.'),
+    prox(5, ['The cleaner did. The cleaner told it was on the wall at midnight.', 'The cleaner saw. The cleaner said it was on the wall at midnight.', 'The cleaner did. The cleaner said it was on the wall at midnight.'], 2, 'A pessoa da limpeza. Disse que ele estava na parede à meia-noite.'),
+    prox(7, ['Yes, I did. Suddenly, the alarm went off at one thirty.', 'Yes, I did. Suddenly, the alarm went out at one thirty.', 'Yes, I heard. Suddenly, the alarm went off at one thirty.'], 0, 'Ouvi, sim. De repente, o alarme tocou à uma e meia.'),
+    prox(9, ['I turned off it. I thought it was a mistake.', 'I turned it off. I thought it was a mistake.', 'I turned it on. I thought it was a mistake.'], 1, 'Desliguei. Achei que era um engano.'),
+    prox(10, ['Did the alarm ever gone off by mistake before?', 'Has the alarm ever go off by mistake before?', 'Has the alarm ever gone off by mistake before?'], 2, 'O alarme já tinha tocado por engano antes?'),
+    prox(11, ['Yes, it has. It happened twice last month.', 'Yes, it has. It has happened twice last month.', 'Yes, it did. It happen twice last month.'], 0, 'Sim. Aconteceu duas vezes no mês passado.'),
+    prox(13, ['Only the staff. The director said us not to worry about it.', 'Only the staff. The director told us not to worry about it.', 'Only the staff. The director told us not worry about it.'], 1, 'Só os funcionários. O diretor nos disse para não nos preocuparmos.'),
+    prox(14, ['Could you tell me where are the cameras?', 'Could you tell me where the cameras is?', 'Could you tell me where the cameras are?'], 2, 'Você poderia me dizer onde ficam as câmeras?'),
+    prox(15, ["Of course. They're above the door, but they were turned off.", "Of course. They're above the door, but they was turned off.", "Of course. They're above the door, but they were turn off."], 0, 'Claro. Ficam em cima da porta, mas estavam desligadas.'),
+    prox(17, ["I don't know. They're usually check every evening.", "I don't know. They're usually checked every evening.", "I don't know. They usually checked every evening is."], 1, 'Não sei. Normalmente elas são verificadas toda noite.'),
+    prox(19, ['I think so. Eventually, the truth will comes out.', 'I think so. Eventually, the truth will came out.', 'I think so. Eventually, the truth will come out.'], 2, 'Acho que sim. No fim, a verdade vai aparecer.'),
+    { instrucao: 'How long has the guard worked at the museum?', frase: '___', opcoes: ['For ten years.', 'Since last month.', 'For two years.'], certa: 0, traducao: 'Há dez anos.' },
+    { instrucao: 'What was stolen?', frase: '___', opcoes: ['A camera.', 'A painting.', 'An alarm.'], certa: 1, traducao: 'Um quadro.' },
+    { instrucao: 'Who saw the painting last?', frase: '___', opcoes: ['The director.', 'Kim.', 'The cleaner.'], certa: 2, traducao: 'A pessoa da limpeza.' },
+    { instrucao: 'When did the alarm go off?', frase: '___', opcoes: ['At one thirty.', 'At midnight.', 'At two.'], certa: 0, traducao: 'À uma e meia.' },
+    { instrucao: 'Why did the guard turn the alarm off?', frase: '___', opcoes: ['The director said so.', 'The guard thought it was a mistake.', 'It was too loud.'], certa: 1, traducao: 'Achou que era um engano.' },
+    { instrucao: 'How many times did the alarm go off by mistake last month?', frase: '___', opcoes: ['Never.', 'Ten times.', 'Twice.'], certa: 2, traducao: 'Duas vezes.' },
+    { instrucao: 'Where are the cameras?', frase: '___', opcoes: ['Above the door.', 'Behind the painting.', 'In the office.'], certa: 0, traducao: 'Em cima da porta.' },
+    { instrucao: 'What does Kim think about the thief?', frase: '___', opcoes: ['The thief was a tourist.', 'The thief knew the museum well.', 'The thief was the cleaner.'], certa: 1, traducao: 'Que o ladrão conhecia bem o museu.' }
+  ]
+});
+</script>
+</body>
+</html>

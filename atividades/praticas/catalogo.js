@@ -1578,6 +1578,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 42', titulo: 'London or New York?', tipo: 'Escute e grave', treina: 'Fala · Inglês britânico x americano', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 42', titulo: 'Bill or check?', tipo: 'Make a Choice', treina: 'Gramática · Say x tell e BrE x AmE', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 43,
+        titulo: 'Class 43 · Review Classes 31-42',
+        atividades: [
+          { num: 1, titulo: 'Review: listen and choose', tipo: 'Escute e escolha', treina: 'Escuta · Revisão 31-42', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Review: build the sentence', tipo: 'Monte a frase', treina: 'Escrita · Revisão 31-42', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'The museum mystery', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Review: what I can do', tipo: 'Escute e grave', treina: 'Fala · Revisão 31-42', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Review: make a choice', tipo: 'Make a Choice', treina: 'Gramática · Revisão 31-42', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
