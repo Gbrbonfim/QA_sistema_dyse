@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 2 · The sunglasses thief</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 02 · Escuta (Why are these monkeys stealing from tourists?)
+   Alinhado ao vídeo (macacos de Bali roubam óculos, celulares e chapéus e trocam por comida),
+   ao Vocabulary (brazen, hitman, undercover, nick, robbery, ransom, barter, thief) e ao
+   Grammar Point (past continuous = ação em andamento / fundo; past simple = evento
+   principal). Conteúdo NOVO: um turista conta o que aconteceu num templo em Bali.
+   24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const W = 'Listen to the definition. Which word is it?', P = 'Listen. Which action was in progress (the background)?', B = 'both actions';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 2, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: 'Listen. Where was the speaker?', ...q('Last year, I was visiting a temple on a cliff in Bali.', 'at a temple in Bali', ['at a beach in Thailand', 'at a zoo in Brazil'], 'travel_explore') },
+    { instrucao: 'Listen. What was the speaker doing?', ...q('I was taking photos of the sunset when a monkey jumped on my shoulder.', 'taking photos of the sunset', ['buying food', 'sleeping on a bench'], 'travel_explore') },
+    { instrucao: 'Listen. What did the monkey steal?', ...q('In two seconds, it stole my sunglasses and ran up a tree.', 'sunglasses', ['a phone', 'a hat'], 'travel_explore') },
+    { instrucao: 'Listen. What were the other tourists doing?', ...q('Meanwhile, the other tourists were laughing and filming everything.', 'laughing and filming', ['running away', 'calling the police'], 'travel_explore') },
+    { instrucao: 'Listen. What did a local worker do?', ...q('A local worker came and offered the monkey an egg.', 'offered the monkey an egg', ['shouted at the monkey', 'called a vet'], 'travel_explore') },
+    { instrucao: 'Listen. What happened next?', ...q('The monkey dropped my sunglasses and took the egg.', 'The monkey traded the glasses for food.', ['The monkey kept the glasses.', 'The monkey broke the glasses.'], 'travel_explore') },
+    { instrucao: 'Listen. What did the speaker learn?', ...q('I learned that these monkeys barter: they steal things and trade them for food.', 'They trade stolen things for food.', ['They sell things for money.', 'They only steal phones.'], 'travel_explore') },
+    { instrucao: "Listen. What is the speaker's advice?", ...q('My advice? Put your sunglasses and phone away when you visit the temple.', 'Put your things away.', ['Bring food for the monkeys.', 'Wear two pairs of sunglasses.'], 'travel_explore') },
+    { instrucao: W, ...q('Bold and without shame.', 'brazen', ['undercover', 'ransom'], 'help') },
+    { instrucao: W, ...q('A man who is paid to kill someone.', 'hitman', ['thief', 'barter'], 'help') },
+    { instrucao: W, ...q('Working secretly, using a false appearance.', 'undercover', ['brazen', 'robbery'], 'help') },
+    { instrucao: W, ...q('An informal verb that means "to steal".', 'nick', ['barter', 'ransom'], 'help') },
+    { instrucao: W, ...q('The crime of stealing, often by force or threat.', 'robbery', ['ransom', 'hitman'], 'help') },
+    { instrucao: W, ...q('Money paid for the release of a prisoner.', 'ransom', ['robbery', 'barter'], 'help') },
+    { instrucao: W, ...q('To exchange goods for other things, without using money.', 'barter', ['nick', 'thief'], 'help') },
+    { instrucao: W, ...q('A person who steals.', 'thief', ['hitman', 'undercover'], 'help') },
+    { instrucao: P, ...q('I was walking when a monkey stole my glasses.', 'walking', ['stealing the glasses', B], 'rule') },
+    { instrucao: P, ...q('Steve was watching TV when the lights went out.', 'watching TV', ['the lights going out', B], 'rule') },
+    { instrucao: P, ...q('When the guests arrived, we were cooking.', 'cooking', ['the guests arriving', B], 'rule') },
+    { instrucao: P, ...q('The phone rang while we were having dinner.', 'having dinner', ['the phone ringing', B], 'rule') },
+    { instrucao: P, ...q('It was raining when we left the hotel.', 'raining', ['leaving the hotel', B], 'rule') },
+    { instrucao: P, ...q('I was listening to music when my friend called.', 'listening to music', ['the friend calling', B], 'rule') },
+    { instrucao: P, ...q('The children were playing in the garden when it started to rain.', 'playing in the garden', ['starting to rain', B], 'rule') },
+    { instrucao: P, ...q('When I saw him, he was drinking some milk.', 'drinking milk', ['seeing him', B], 'rule') }
+  ]
+});
+</script>
+</body>
+</html>

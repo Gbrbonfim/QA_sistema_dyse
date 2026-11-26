@@ -1606,6 +1606,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'My goals for B2', tipo: 'Escute e grave', treina: 'Fala · Rotina, experiências e metas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Ready for B2?', tipo: 'Make a Choice', treina: 'Gramática · Collocations e tempos verbais', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 2,
+        titulo: 'Class 02 · Why Are These Monkeys Stealing from Tourists?',
+        atividades: [
+          { num: 1, titulo: 'The sunglasses thief', tipo: 'Escute e escolha', treina: 'Escuta · Crime e past continuous', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'I was walking when...', tipo: 'Monte a frase', treina: 'Escrita · Past continuous x past simple', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Robbed by a monkey!', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Tell the story', tipo: 'Escute e grave', treina: 'Fala · Contar uma história', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Was walking, stole', tipo: 'Make a Choice', treina: 'Gramática · Past continuous e vocabulário de crime', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

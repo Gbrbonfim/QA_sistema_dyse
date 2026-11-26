@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 2 · Was walking, stole</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 02 · Gramática (Why are these monkeys stealing from tourists?)
+   Alinhado ao Grammar Point (past continuous: was / were + -ing; ação de fundo x evento
+   principal no past simple; exercício B), ao Vocabulary (crime) e ao vídeo. Conteúdo NOVO.
+   Uma só opção certa por item. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 2, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'When I saw him, he ___ some milk.', opcoes: ['was drinking', 'were drinking', 'drinking'], certa: 0, traducao: 'Quando eu o vi, ele estava bebendo leite.' },
+    { frase: 'You ___ football when you broke your leg.', opcoes: ['was playing', 'were playing', 'playing'], certa: 1, traducao: 'Você estava jogando futebol quando quebrou a perna.' },
+    { frase: 'Steve was watching TV when the lights ___ out.', opcoes: ['were going', 'go', 'went'], certa: 2, traducao: 'O Steve estava vendo TV quando as luzes apagaram.' },
+    { frase: 'We ___ when the guests arrived.', opcoes: ['were cooking', 'was cooking', 'cooking'], certa: 0, traducao: 'Estávamos cozinhando quando os convidados chegaram.' },
+    { frase: 'Mum was washing up when someone ___ at the door.', opcoes: ['knocking', 'knocked', 'were knocking'], certa: 1, traducao: 'A mamãe estava lavando a louça quando alguém bateu à porta.' },
+    { frase: 'While we ___ dinner, the phone rang.', opcoes: ['was having', 'have', 'were having'], certa: 2, traducao: 'Enquanto jantávamos, o telefone tocou.' },
+    { frase: 'The children were playing in the garden when it ___ to rain.', opcoes: ['started', 'starting', 'were starting'], certa: 0, traducao: 'As crianças estavam brincando no jardim quando começou a chover.' },
+    { frase: 'I ___ to music when my friend called me.', opcoes: ['were listening', 'was listening', 'listening'], certa: 1, traducao: 'Eu estava ouvindo música quando meu amigo me ligou.' },
+    { frase: 'It ___ when we left the hotel.', opcoes: ['were raining', 'rain', 'was raining'], certa: 2, traducao: 'Estava chovendo quando saímos do hotel.' },
+    { frase: 'The past continuous is formed with was / were + ___.', opcoes: ['verb + -ing', 'past participle', 'infinitive'], certa: 0, traducao: 'O past continuous é formado com was / were + verbo com -ing.' },
+    { frase: 'In "I was walking when a monkey stole my glasses", the main event is ___.', opcoes: ['the walking', 'the monkey stealing the glasses', 'both actions'], certa: 1, traducao: 'O evento principal é o macaco roubando os óculos.' },
+    { frase: 'The past continuous usually gives the ___ information in a story.', opcoes: ['main', 'final', 'background'], certa: 2, traducao: 'O past continuous normalmente dá a informação de fundo.' },
+    { frase: 'He talked about his crimes with ___ confidence, without any shame.', opcoes: ['brazen', 'undercover', 'ransom'], certa: 0, traducao: 'Ele falou dos crimes com uma confiança descarada, sem vergonha.' },
+    { frase: 'In the film, a ___ was paid to kill the boss.', opcoes: ['thief', 'hitman', 'ransom'], certa: 1, traducao: 'No filme, um matador de aluguel foi pago para matar o chefe.' },
+    { frase: 'The police caught the gang with the help of an ___ agent.', opcoes: ['brazen', 'robbery', 'undercover'], certa: 2, traducao: 'A polícia pegou a gangue com a ajuda de um agente disfarçado.' },
+    { frase: 'My bike was ___ again! Someone stole it.', opcoes: ['nicked', 'bartered', 'demanded'], certa: 0, traducao: 'Minha bicicleta foi roubada de novo!' },
+    { frase: 'The gang admitted four bank ___.', opcoes: ['thieves', 'robberies', 'ransoms'], certa: 1, traducao: 'A gangue admitiu quatro assaltos a banco.' },
+    { frase: 'The kidnappers demanded a ___.', opcoes: ['robbery', 'thief', 'ransom'], certa: 2, traducao: 'Os sequestradores exigiram um resgate.' },
+    { frase: 'He ___ his stamp collection for her comic books.', opcoes: ['bartered', 'robbed', 'nicked'], certa: 0, traducao: 'Ele trocou a coleção de selos pelos gibis dela.' },
+    { frase: 'A person who steals is a ___.', opcoes: ['hitman', 'thief', 'barter'], certa: 1, traducao: 'Uma pessoa que rouba é um ladrão.' },
+    { frase: 'In the video, the monkeys steal hats, phones and ___.', opcoes: ['eggs', 'bananas', 'sunglasses'], certa: 2, traducao: 'No vídeo, os macacos roubam chapéus, celulares e óculos de sol.' },
+    { frase: 'The monkeys give the items back in exchange for ___.', opcoes: ['food', 'money', 'water'], certa: 0, traducao: 'Os macacos devolvem os objetos em troca de comida.' },
+    { frase: 'They are notorious for holding people to ___.', opcoes: ['money', 'ransom', 'robbery'], certa: 1, traducao: 'Eles são famosos por fazer as pessoas pagarem resgate.' },
+    { frase: 'In the video, the monkeys want protein in the form of ___.', opcoes: ['meat', 'fish', 'eggs'], certa: 2, traducao: 'No vídeo, os macacos querem proteína na forma de ovos.' }
+  ]
+});
+</script>
+</body>
+</html>

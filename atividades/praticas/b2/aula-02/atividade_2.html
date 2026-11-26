@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 2 · I was walking when...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 02 · Escrita (Why are these monkeys stealing from tourists?)
+   Alinhado ao Grammar Point (past continuous: was / were + -ing para a ação em andamento;
+   past simple para o evento principal; exercício B) e ao vocabulário de crime.
+   Conteúdo NOVO. A palavra extra nunca forma outra frase certa. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 2, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu estava caminhando quando um macaco roubou meus óculos.'), palavras: ['I', 'was', 'walking', 'when', 'a', 'monkey', 'stole', 'my', 'glasses'], isca: ['steal'], fim: '.', traducao: 'Eu estava caminhando quando um macaco roubou meus óculos.' },
+    { contexto: M('Quando eu o vi, ele estava bebendo leite.'), palavras: ['When', 'I', 'saw', 'him,', 'he', 'was', 'drinking', 'some', 'milk'], isca: ['drank'], fim: '.', traducao: 'Quando eu o vi, ele estava bebendo leite.' },
+    { contexto: M('Você estava jogando futebol quando quebrou a perna.'), palavras: ['You', 'were', 'playing', 'football', 'when', 'you', 'broke', 'your', 'leg'], isca: ['was'], fim: '.', traducao: 'Você estava jogando futebol quando quebrou a perna.' },
+    { contexto: M('O Steve estava vendo TV quando as luzes apagaram.'), palavras: ['Steve', 'was', 'watching', 'TV', 'when', 'the', 'lights', 'went', 'out'], isca: ['were'], fim: '.', traducao: 'O Steve estava vendo TV quando as luzes apagaram.' },
+    { contexto: M('Nós estávamos cozinhando quando os convidados chegaram.'), palavras: ['We', 'were', 'cooking', 'when', 'the', 'guests', 'arrived'], isca: ['was'], fim: '.', traducao: 'Nós estávamos cozinhando quando os convidados chegaram.' },
+    { contexto: M('A mamãe estava lavando a louça quando alguém bateu à porta.'), palavras: ['Mum', 'was', 'washing', 'up', 'when', 'someone', 'knocked', 'at', 'the', 'door'], isca: ['knock'], fim: '.', traducao: 'A mamãe estava lavando a louça quando alguém bateu à porta.' },
+    { contexto: M('Enquanto jantávamos, o telefone tocou.'), palavras: ['While', 'we', 'were', 'having', 'dinner,', 'the', 'phone', 'rang'], isca: ['ring'], fim: '.', traducao: 'Enquanto jantávamos, o telefone tocou.' },
+    { contexto: M('As crianças estavam brincando no jardim quando começou a chover.'), palavras: ['The', 'children', 'were', 'playing', 'in', 'the', 'garden', 'when', 'it', 'started', 'to', 'rain'], isca: ['was'], fim: '.', traducao: 'As crianças estavam brincando no jardim quando começou a chover.' },
+    { contexto: M('Eu estava ouvindo música quando meu amigo me ligou.'), palavras: ['I', 'was', 'listening', 'to', 'music', 'when', 'my', 'friend', 'called', 'me'], isca: ['listen'], fim: '.', traducao: 'Eu estava ouvindo música quando meu amigo me ligou.' },
+    { contexto: M('O que você estava fazendo quando o macaco pulou?'), palavras: ['What', 'were', 'you', 'doing', 'when', 'the', 'monkey', 'jumped'], isca: ['did'], fim: '?', traducao: 'O que você estava fazendo quando o macaco pulou?' },
+    { contexto: M('Estava chovendo quando saímos do hotel.'), palavras: ['It', 'was', 'raining', 'when', 'we', 'left', 'the', 'hotel'], isca: ['were'], fim: '.', traducao: 'Estava chovendo quando saímos do hotel.' },
+    { contexto: M('Os macacos roubaram chapéus, celulares e óculos de sol.'), palavras: ['The', 'monkeys', 'stole', 'hats,', 'phones', 'and', 'sunglasses'], isca: ['stealed'], fim: '.', traducao: 'Os macacos roubaram chapéus, celulares e óculos de sol.' },
+    { contexto: M('Eles trocam os objetos por comida.'), palavras: ['They', 'barter', 'the', 'items', 'for', 'food'], isca: ['barters'], fim: '.', traducao: 'Eles trocam os objetos por comida.' },
+    { contexto: M('Esses macacos são ladrões experientes.'), palavras: ['These', 'monkeys', 'are', 'expert', 'thieves'], isca: ['thief'], fim: '.', traducao: 'Esses macacos são ladrões experientes.' },
+    { contexto: M('Alguém roubou minha bicicleta de novo.'), palavras: ['Someone', 'nicked', 'my', 'bike', 'again'], isca: ['nick'], fim: '.', traducao: 'Alguém roubou minha bicicleta de novo.' },
+    { contexto: M('Os sequestradores exigiram um resgate.'), palavras: ['The', 'kidnappers', 'demanded', 'a', 'ransom'], isca: ['demand'], fim: '.', traducao: 'Os sequestradores exigiram um resgate.' },
+    { contexto: M('A polícia usou um agente disfarçado.'), palavras: ['The', 'police', 'used', 'an', 'undercover', 'agent'], isca: ['using'], fim: '.', traducao: 'A polícia usou um agente disfarçado.' },
+    { contexto: M('A gangue admitiu quatro assaltos a banco.'), palavras: ['The', 'gang', 'admitted', 'four', 'bank', 'robberies'], isca: ['robbery'], fim: '.', traducao: 'A gangue admitiu quatro assaltos a banco.' },
+    { contexto: M('Ele falou dos crimes com uma confiança descarada.'), palavras: ['He', 'talked', 'about', 'his', 'crimes', 'with', 'brazen', 'confidence'], isca: ['talk'], fim: '.', traducao: 'Ele falou dos crimes com uma confiança descarada.' },
+    { contexto: M('Você estava dormindo quando o alarme tocou?'), palavras: ['Were', 'you', 'sleeping', 'when', 'the', 'alarm', 'went', 'off'], isca: ['Was'], fim: '?', traducao: 'Você estava dormindo quando o alarme tocou?' }
+  ]
+});
+</script>
+</body>
+</html>

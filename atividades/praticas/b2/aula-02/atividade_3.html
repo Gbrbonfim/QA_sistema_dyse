@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 2 · Robbed by a monkey!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 02 · Leitura (Why are these monkeys stealing from tourists?)
+   Alinhado ao vídeo (macacos de Bali roubam e trocam por comida, "holding people to
+   ransom"), ao vocabulário de crime e ao Grammar Point (past continuous + past simple para
+   contar uma história). Conteúdo NOVO: Ravi conta para a Duda o que aconteceu em Bali.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Duda', 'Welcome back, Ravi! How was Bali?'],
+  ['Ravi', 'Amazing, but something crazy happened at a temple.'],
+  ['Duda', 'Oh no! What happened?'],
+  ['Ravi', 'I was taking a selfie when a monkey jumped on my head.'],
+  ['Duda', 'Seriously? What did it do?'],
+  ['Ravi', 'It nicked my sunglasses and climbed up a wall!'],
+  ['Duda', 'Ha! Those monkeys are brazen thieves. Were you alone?'],
+  ['Ravi', 'No, my sister was standing next to me. She was laughing so much!'],
+  ['Duda', 'Did you get your sunglasses back?'],
+  ['Ravi', 'Yes. A local man was selling fruit nearby, so he gave the monkey a banana.'],
+  ['Duda', 'And the monkey dropped the sunglasses?'],
+  ['Ravi', 'Exactly. It was like paying a ransom!'],
+  ['Duda', 'I read that they barter. They steal things and trade them for food.'],
+  ['Ravi', "That's true. Scientists have studied them for years."],
+  ['Duda', 'Did they steal anything else from you?'],
+  ['Ravi', "Not from me, but while we were walking back, one took a tourist's phone."],
+  ['Duda', "Wow. They're like undercover agents in the trees!"],
+  ['Ravi', "Ha! Next time, I'll put everything away in my bag."],
+  ['Duda', 'Good idea. Did you take any photos of the thief?'],
+  ['Ravi', 'Of course! The monkey was eating the banana while I was taking pictures.']
+];
+const lado = q => q === 'Duda' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 2, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Amazing, but something crazy happened at a temple.', 'Amazing, but something crazy was happen at a temple.', 'Amazing, but something crazy happens at a temple last week.'], 0, 'Incrível, mas aconteceu uma coisa maluca num templo.'),
+    prox(3, ['I was take a selfie when a monkey jumped on my head.', 'I was taking a selfie when a monkey jumped on my head.', 'I was taking a selfie when a monkey was jump on my head.'], 1, 'Eu estava tirando uma selfie quando um macaco pulou na minha cabeça.'),
+    prox(5, ['It nick my sunglasses and climbed up a wall!', 'It nicked my sunglasses and climb up a wall!', 'It nicked my sunglasses and climbed up a wall!'], 2, 'Ele roubou meus óculos de sol e subiu num muro!'),
+    prox(6, ['Ha! Those monkeys are brazen thieves. Were you alone?', 'Ha! Those monkeys are brazen thiefs. Were you alone?', 'Ha! Those monkeys are brazen thieves. Was you alone?'], 0, 'Ha! Esses macacos são ladrões descarados. Você estava sozinho?'),
+    prox(7, ['No, my sister were standing next to me. She was laughing so much!', 'No, my sister was standing next to me. She was laughing so much!', 'No, my sister was stand next to me. She was laughing so much!'], 1, 'Não, minha irmã estava do meu lado. Ela estava rindo muito!'),
+    prox(9, ['Yes. A local man were selling fruit nearby, so he gave the monkey a banana.', 'Yes. A local man was selling fruit nearby, so he give the monkey a banana.', 'Yes. A local man was selling fruit nearby, so he gave the monkey a banana.'], 2, 'Sim. Um homem local estava vendendo frutas ali perto, então deu uma banana ao macaco.'),
+    prox(11, ['Exactly. It was like paying a ransom!', 'Exactly. It was like paying a robbery!', 'Exactly. It were like paying a ransom!'], 0, 'Exatamente. Foi como pagar um resgate!'),
+    prox(12, ['I read that they nick money. They steal things and sell them in shops.', 'I read that they barter. They steal things and trade them for food.', 'I read that they barter. They steals things and trade them for food.'], 1, 'Li que eles fazem escambo. Roubam coisas e trocam por comida.'),
+    prox(13, ["That's true. Scientists studied them since years.", "That's true. Scientists has studied them for years.", "That's true. Scientists have studied them for years."], 2, 'É verdade. Cientistas estudam esses macacos há anos.'),
+    prox(15, ["Not from me, but while we were walking back, one took a tourist's phone.", "Not from me, but while we was walking back, one took a tourist's phone.", "Not from me, but while we were walking back, one taked a tourist's phone."], 0, 'De mim não, mas enquanto voltávamos, um pegou o celular de um turista.'),
+    prox(17, ["Ha! Next time, I'll put everything away on my bag.", "Ha! Next time, I'll put everything away in my bag.", "Ha! Next time, I'll putting everything away in my bag."], 1, 'Ha! Da próxima vez, vou guardar tudo na mochila.'),
+    prox(19, ['Of course! The monkey was eating the banana while I taking pictures.', 'Of course! The monkey were eating the banana while I was taking pictures.', 'Of course! The monkey was eating the banana while I was taking pictures.'], 2, 'Claro! O macaco estava comendo a banana enquanto eu tirava fotos.'),
+    { instrucao: 'Where did it happen?', frase: '___', opcoes: ['At a temple in Bali.', 'At a hotel in Bali.', 'At a beach in Brazil.'], certa: 0, traducao: 'Num templo em Bali.' },
+    { instrucao: 'What was Ravi doing when the monkey jumped?', frase: '___', opcoes: ['Eating a banana.', 'Taking a selfie.', 'Buying fruit.'], certa: 1, traducao: 'Tirando uma selfie.' },
+    { instrucao: 'What did the monkey steal from Ravi?', frase: '___', opcoes: ['A phone.', 'A hat.', 'Sunglasses.'], certa: 2, traducao: 'Óculos de sol.' },
+    { instrucao: 'Who was with Ravi?', frase: '___', opcoes: ["Ravi's sister.", "Duda's brother.", 'A tour guide.'], certa: 0, traducao: 'A irmã do Ravi.' },
+    { instrucao: 'What was the local man doing?', frase: '___', opcoes: ['Taking photos.', 'Selling fruit.', 'Feeding the monkeys eggs.'], certa: 1, traducao: 'Vendendo frutas.' },
+    { instrucao: 'What did the monkey get in exchange?', frase: '___', opcoes: ['An egg.', 'Some money.', 'A banana.'], certa: 2, traducao: 'Uma banana.' },
+    { instrucao: 'What did another monkey take?', frase: '___', opcoes: ["A tourist's phone.", "Ravi's bag.", "Duda's camera."], certa: 0, traducao: 'O celular de um turista.' },
+    { instrucao: 'What will Ravi do next time?', frase: '___', opcoes: ['Bring more bananas.', 'Put everything away in a bag.', 'Stay at the hotel.'], certa: 1, traducao: 'Guardar tudo na mochila.' }
+  ]
+});
+</script>
+</body>
+</html>
