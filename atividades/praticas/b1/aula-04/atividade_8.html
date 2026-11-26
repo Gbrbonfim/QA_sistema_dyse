@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 5 · My food experience passport</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 05 · Leitura (Food Experience Passport)
+   Alinhado ao "Speaking: My Food Experience Passport" (Have you ever...? Yes, I have / No, I
+   haven't. It was spicy / sweet / strange. I ate it in... / I tried it when...) e ao Grammar
+   Point (present perfect para experiências). Conteúdo NOVO: a Nina e o Leo fazem o
+   "passaporte" um do outro. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Nina', 'Leo, have you ever eaten something really spicy?'],
+  ['Leo', 'Yes, I have. I ate a very hot curry in London.'],
+  ['Nina', 'How was it?'],
+  ['Leo', 'It was delicious, but my mouth was on fire!'],
+  ['Nina', 'Have you ever cooked a traditional dish from another country?'],
+  ['Leo', "No, I haven't. But I've always wanted to make Japanese ramen."],
+  ['Nina', 'And have you ever made a food mistake?'],
+  ['Leo', 'Yes! I used salt instead of sugar in a cake.'],
+  ['Nina', 'Oh no! What about you? Ask me something.'],
+  ['Leo', 'Have you ever eaten dessert before the main meal?'],
+  ['Nina', 'Yes, I have. I do it on my birthday every year!'],
+  ['Leo', 'Have you ever ordered food at a restaurant in English?'],
+  ['Nina', 'Yes. I tried it when I was in New York last year.'],
+  ['Leo', 'Was it difficult?'],
+  ['Nina', 'A little. I was nervous, but the waiter was very kind.'],
+  ['Leo', 'Have you ever tasted something you didn\'t like at first, but then loved?'],
+  ['Nina', 'Yes, coffee! I hated it when I was a teenager.'],
+  ['Leo', 'Me too! Now I drink three cups a day.']
+];
+const lado = q => q === 'Nina' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 4, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I have. I ate a very hot curry in London.', 'Yes, I have. I eaten a very hot curry in London.', 'Yes, I did. I have ate a very hot curry in London.'], 0, 'Sim, já. Comi um curry muito apimentado em Londres.'),
+    prox(3, ['It is delicious tomorrow.', 'It was delicious, but my mouth was on fire!', 'It were delicious, but my mouth was on fire!'], 1, 'Estava delicioso, mas a minha boca estava pegando fogo!'),
+    prox(4, ['Have you ever cook a traditional dish from another country?', 'Did you ever cooked a traditional dish from another country?', 'Have you ever cooked a traditional dish from another country?'], 2, 'Você já cozinhou um prato tradicional de outro país?'),
+    prox(5, ["No, I haven't. But I've always wanted to make Japanese ramen.", "No, I hasn't. But I've always wanted to make Japanese ramen.", "No, I haven't. But I've always want to make Japanese ramen."], 0, 'Não. Mas sempre quis fazer lámen japonês.'),
+    prox(6, ['And have you ever make a food mistake?', 'And have you ever made a food mistake?', 'And has you ever made a food mistake?'], 1, 'E você já cometeu um erro na cozinha?'),
+    prox(7, ['Yes! I use salt instead of sugar every day.', 'Yes! I used salt instead of sugar in a cake. It tasted like delicious.', 'Yes! I used salt instead of sugar in a cake.'], 2, 'Sim! Usei sal em vez de açúcar num bolo.'),
+    prox(9, ['Have you ever eaten dessert before the main meal?', 'Have you ever ate dessert before the main meal?', 'Have you ever eat dessert before the main meal?'], 0, 'Você já comeu sobremesa antes do prato principal?'),
+    prox(10, ["Yes, I haven't. I do it on my birthday every year!", 'Yes, I have. I do it on my birthday every year!', 'Yes, I have. I did it on my birthday next year!'], 1, 'Sim, já. Faço isso todo ano no meu aniversário!'),
+    prox(11, ['Has you ever ordered food at a restaurant in English?', 'Have you ever order food at a restaurant in English?', 'Have you ever ordered food at a restaurant in English?'], 2, 'Você já pediu comida num restaurante em inglês?'),
+    prox(12, ['Yes. I tried it when I was in New York last year.', 'Yes. I have tried it when I was in New York last year.', 'Yes. I try it when I was in New York last year.'], 0, 'Sim. Tentei quando estava em Nova York no ano passado.'),
+    prox(14, ['A little. I were nervous, but the waiter was very kind.', 'A little. I was nervous, but the waiter was very kind.', 'A little. I was nervous, but the waiter were very kind.'], 1, 'Um pouco. Fiquei nervosa, mas o garçom foi muito gentil.'),
+    prox(16, ['Yes, coffee! I hate it when I am a teenager.', 'Yes, coffee! I have hated it when I was a teenager.', 'Yes, coffee! I hated it when I was a teenager.'], 2, 'Sim, café! Eu odiava quando era adolescente.'),
+    { instrucao: 'Where did Leo eat a very hot curry?', frase: 'In ___.', opcoes: ['London', 'New York', 'Japan'], certa: 0, traducao: 'Em Londres.' },
+    { instrucao: 'Has Leo ever cooked a traditional dish from another country?', frase: '___', opcoes: ['Yes, he has. Ramen.', "No, he hasn't.", 'Yes, he has. Curry.'], certa: 1, traducao: 'Não.' },
+    { instrucao: 'What has Leo always wanted to make?', frase: 'Japanese ___.', opcoes: ['sushi', 'curry', 'ramen'], certa: 2, traducao: 'Lámen japonês.' },
+    { instrucao: 'What was Leo\'s food mistake?', frase: 'He used ___.', opcoes: ['salt instead of sugar', 'sugar instead of salt', 'too much chili'], certa: 0, traducao: 'Ele usou sal em vez de açúcar.' },
+    { instrucao: 'When does Nina eat dessert before the main meal?', frase: '___', opcoes: ['Every day.', 'On her birthday.', 'At Christmas.'], certa: 1, traducao: 'No aniversário dela.' },
+    { instrucao: 'Where did Nina order food in English?', frase: 'In ___.', opcoes: ['London', 'Tokyo', 'New York'], certa: 2, traducao: 'Em Nova York.' },
+    { instrucao: 'How did Nina feel when she ordered food in English?', frase: '___', opcoes: ['A little nervous.', 'Very angry.', 'Bored.'], certa: 0, traducao: 'Um pouco nervosa.' },
+    { instrucao: 'What food did Nina hate when she was a teenager?', frase: '___', opcoes: ['Curry.', 'Coffee.', 'Cake.'], certa: 1, traducao: 'Café.' }
+  ]
+});
+</script>
+</body>
+</html>

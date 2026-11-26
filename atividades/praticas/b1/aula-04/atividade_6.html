@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 5 · Have they done it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 05 · Escuta (Food Experience Passport)
+   Alinhado ao "Grammar Point": present perfect para experiências de vida, sem tempo
+   específico (I've tried..., I've never had..., Have you ever...? Yes, I have / No, I
+   haven't). Conteúdo NOVO: o aluno ouve a frase e escolhe o que ela significa. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'restaurant' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 4, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose what the sentence means',
+  itens: [
+    q("I've tried sushi before.", 'The speaker has eaten sushi.', ["The speaker hasn't eaten sushi.", 'The speaker wants to eat sushi tomorrow.']),
+    q("I've never eaten blood sausage.", "The speaker hasn't eaten blood sausage.", ['The speaker eats blood sausage every day.', 'The speaker has eaten blood sausage.']),
+    q("We've been to a Thai restaurant.", 'They have the experience of a Thai restaurant.', ['They work in a Thai restaurant.', "They haven't been to a Thai restaurant."]),
+    q("My brother has never cooked a meal.", "The brother doesn't have this experience.", ['The brother is a cook.', 'The brother cooks every night.']),
+    q("Have you ever tried durian? No, I haven't.", "The person who answers hasn't tried durian.", ['The person who answers has tried durian.', 'The person who answers loves durian.']),
+    q("Have you ever eaten snails? Yes, I have. In France.", 'The person who answers has eaten snails.', ['The person who answers has never eaten snails.', 'The person who answers is eating snails now.']),
+    q("I've always wanted to visit Japan.", 'The speaker wants to visit Japan.', ['The speaker lives in Japan.', 'The speaker has visited Japan many times.']),
+    q("She hasn't tried mango sticky rice.", 'She has no experience with mango sticky rice.', ['She makes mango sticky rice.', 'She tried it last week.']),
+    q("I've eaten food from Thailand once.", 'The speaker has eaten Thai food one time.', ['The speaker has never eaten Thai food.', 'The speaker eats Thai food every week.']),
+    q("We haven't eaten anything today.", 'They are probably hungry.', ['They are full.', 'They had a big breakfast.']),
+    q("My dad has taught me how to cook rice.", "The dad gave the speaker cooking lessons.", ['The speaker taught the dad to cook.', 'The dad never cooks.']),
+    q("I've never spoken a word in Japanese.", "The speaker can't say anything in Japanese.", ['The speaker speaks Japanese well.', 'The speaker teaches Japanese.']),
+    q("Have you ever made a cake for someone's birthday? Yes, many times!", 'The person who answers has made birthday cakes.', ['The person who answers has never made a cake.', 'The person who answers only buys cakes.']),
+    q("I've eaten dessert before the main meal.", 'The speaker has had dessert first.', ['The speaker never eats dessert.', 'The speaker has never had dessert first.']),
+    q("He's never ordered food in English.", "He doesn't have this experience.", ['He orders food in English every day.', 'He is a waiter in London.']),
+    q("I've shared food with people from many cultures.", 'The speaker has eaten with people from different countries.', ['The speaker always eats alone.', 'The speaker has never met people from other cultures.']),
+    q("Have you ever burnt something in the kitchen? Yes, I have. Toast!", 'The person who answers has burnt toast.', ['The person who answers has never burnt anything.', 'The person who answers never cooks toast.']),
+    q("I've never had rice for breakfast.", "The speaker hasn't eaten rice in the morning.", ['The speaker eats rice every morning.', 'The speaker has rice for breakfast on Sundays.']),
+    q("They've tried a lot of spicy food.", 'They have experience with spicy food.', ["They don't like spicy food.", "They've never had spicy food."]),
+    q("I've helped my grandma cook for a big family event.", 'The speaker has cooked with their grandma.', ['The grandma has never cooked.', 'The speaker has never cooked for a family event.']),
+    q("Has your sister ever eaten century eggs? No, she hasn't.", "The sister hasn't eaten century eggs.", ['The sister loves century eggs.', 'The sister has eaten century eggs.']),
+    q("I've tasted something I didn't like at first, but then loved.", "The speaker's opinion about a food changed.", ['The speaker has never changed their opinion.', 'The speaker hated it and still hates it.']),
+    q("We've had food while travelling in Peru.", 'They have eaten in Peru.', ['They have never been to Peru.', 'They are going to Peru next year.']),
+    q("I've tried a food just because a friend told me to.", 'A friend made the speaker try a food.', ['The speaker has never listened to friends.', 'The speaker has never tried new food.'])
+  ]
+});
+</script>
+</body>
+</html>

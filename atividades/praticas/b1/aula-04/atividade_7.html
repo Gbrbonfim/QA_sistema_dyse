@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 5 · My food experiences</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 05 · Escrita (Food Experience Passport)
+   Alinhado ao "Grammar Point" (Have you ever + particípio? / I've + particípio / I've never +
+   particípio) e ao "My Food Experience Passport". Conteúdo NOVO. A isca é o past simple no
+   lugar do particípio (ou o auxiliar errado). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 4, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Você já comeu sushi?'), palavras: ['Have', 'you', 'ever', 'eaten', 'sushi'], isca: ['ate'], fim: '?', traducao: 'Você já comeu sushi?' },
+    { contexto: M('Eu nunca comi morcela.'), palavras: ["I've", 'never', 'eaten', 'blood', 'sausage'], isca: ['ate'], fim: '.', traducao: 'Nunca comi morcela.' },
+    { contexto: M('Eu já provei arroz grudento com manga.'), palavras: ["I've", 'tried', 'mango', 'sticky', 'rice'], isca: ['try'], fim: '.', traducao: 'Já provei arroz grudento com manga.' },
+    { contexto: M('Ela nunca foi a um restaurante africano.'), palavras: ['She', 'has', 'never', 'been', 'to', 'an', 'African', 'restaurant'], isca: ['have'], fim: '.', traducao: 'Ela nunca foi a um restaurante africano.' },
+    { contexto: M('Você já cozinhou um prato tradicional de outro país?'), palavras: ['Have', 'you', 'ever', 'cooked', 'a', 'traditional', 'dish', 'from', 'another', 'country'], isca: ['Has'], fim: '?', traducao: 'Você já cozinhou um prato tradicional de outro país?' },
+    { contexto: M('Nós nunca comemos sobremesa antes do prato principal.'), palavras: ["We've", 'never', 'eaten', 'dessert', 'before', 'the', 'main', 'meal'], isca: ['ate'], fim: '.', traducao: 'Nunca comemos sobremesa antes do prato principal.' },
+    { contexto: M('O meu amigo sempre quis provar durião.'), palavras: ['My', 'friend', 'has', 'always', 'wanted', 'to', 'try', 'durian'], isca: ['have'], fim: '.', traducao: 'O meu amigo sempre quis provar durião.' },
+    { contexto: M('Você já escreveu uma carta para alguém de outro país?'), palavras: ['Have', 'you', 'ever', 'written', 'a', 'letter', 'to', 'someone', 'in', 'another', 'country'], isca: ['wrote'], fim: '?', traducao: 'Você já escreveu uma carta para alguém de outro país?' },
+    { contexto: M('Eu nunca falei uma palavra em coreano.'), palavras: ["I've", 'never', 'spoken', 'a', 'word', 'in', 'Korean'], isca: ['spoke'], fim: '.', traducao: 'Nunca falei uma palavra em coreano.' },
+    { contexto: M('Nós não comemos nada hoje.'), palavras: ['We', "haven't", 'eaten', 'anything', 'today'], isca: ["hasn't"], fim: '.', traducao: 'Não comemos nada hoje.' },
+    { contexto: M('O meu avô me ensinou a fazer pão.'), palavras: ['My', 'grandpa', 'has', 'taught', 'me', 'how', 'to', 'make', 'bread'], isca: ['teached'], fim: '.', traducao: 'O meu avô me ensinou a fazer pão.' },
+    { contexto: M('Você já fez um bolo para o aniversário de alguém?'), palavras: ['Have', 'you', 'ever', 'made', 'a', 'cake', 'for', "someone's", 'birthday'], isca: ['maked'], fim: '?', traducao: 'Você já fez um bolo para o aniversário de alguém?' },
+    { contexto: M('Ela nunca provou ovos do século.'), palavras: ['She', 'has', 'never', 'tried', 'century', 'eggs'], isca: ['try'], fim: '.', traducao: 'Ela nunca provou ovos do século.' },
+    { contexto: M('Eu já pedi comida num restaurante em inglês.'), palavras: ["I've", 'ordered', 'food', 'at', 'a', 'restaurant', 'in', 'English'], isca: ['order'], fim: '.', traducao: 'Já pedi comida num restaurante em inglês.' },
+    { contexto: M('Ele já foi a uma aula de culinária com a irmã.'), palavras: ['He', 'has', 'been', 'to', 'a', 'cooking', 'class', 'with', 'his', 'sister'], isca: ['was'], fim: '.', traducao: 'Ele já foi a uma aula de culinária com a irmã.' },
+    { contexto: M('Você já comeu algo que parecia estranho, mas era delicioso?'), palavras: ['Have', 'you', 'ever', 'eaten', 'something', 'that', 'looked', 'strange'], isca: ['ate'], fim: '?', traducao: 'Você já comeu algo que parecia estranho?' },
+    { contexto: M('Sim, já. Era doce e estranho.'), palavras: ['Yes,', 'I', 'have.', 'It', 'was', 'sweet', 'and', 'strange'], isca: ['has.'], fim: '.', traducao: 'Sim, já. Era doce e estranho.' },
+    { contexto: M('Não, nunca. Mas quero provar.'), palavras: ['No,', 'I', "haven't.", 'But', 'I', 'want', 'to', 'try', 'it'], isca: ["hasn't."], fim: '.', traducao: 'Não, nunca. Mas quero provar.' },
+    { contexto: M('Eu já comi uma fruta que cresce na minha região.'), palavras: ["I've", 'eaten', 'a', 'fruit', 'that', 'grows', 'in', 'my', 'region'], isca: ['eat'], fim: '.', traducao: 'Já comi uma fruta que cresce na minha região.' },
+    { contexto: M('Você já dividiu comida com alguém de outra cultura?'), palavras: ['Have', 'you', 'ever', 'shared', 'food', 'with', 'someone', 'from', 'another', 'culture'], isca: ['share'], fim: '?', traducao: 'Você já dividiu comida com alguém de outra cultura?' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 4 · Verbs of senses</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 04 · Gramática (Food, facts and fun)
+   Alinhado ao slide "Verbs of Senses" e aos exercícios 3 e 4 (look + adjetivo, look like +
+   substantivo, taste/smell/feel/sound + adjetivo ou like + substantivo, seem). Conteúdo NOVO;
+   em cada item só uma opção é possível. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 4, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'This salad looks ___.', opcoes: ['fresh', 'like fresh', 'freshly'], certa: 0, traducao: 'Esta salada parece fresca.' },
+    { frase: 'It looks ___ a dessert, but it is breakfast.', opcoes: ['as', 'like', 'how'], certa: 1, traducao: 'Parece uma sobremesa, mas é café da manhã.' },
+    { frase: 'This tea ___ like honey.', opcoes: ['taste', 'tasting', 'tastes'], certa: 2, traducao: 'Este chá tem gosto de mel.' },
+    { instrucao: 'Which verb is about texture or touch?', frase: '___', opcoes: ['feel', 'sound', 'look'], certa: 0, traducao: '"Feel" é sobre textura ou toque.' },
+    { instrucao: 'Which verb is about flavor?', frase: '___', opcoes: ['smell', 'taste', 'seem'], certa: 1, traducao: '"Taste" é sobre sabor.' },
+    { instrucao: 'Which verb is about scent or odor?', frase: '___', opcoes: ['feel', 'look', 'smell'], certa: 2, traducao: '"Smell" é sobre cheiro.' },
+    { instrucao: 'Which verb is about appearance?', frase: '___', opcoes: ['look', 'taste', 'feel'], certa: 0, traducao: '"Look" é sobre aparência.' },
+    { frase: 'Your friend told you about a new restaurant. You say: "It ___ great!"', opcoes: ['tastes', 'sounds', 'feels'], certa: 1, traducao: 'O seu amigo contou sobre um restaurante novo: "Parece ótimo!"' },
+    { frase: 'Touch this blanket. It ___ so soft!', opcoes: ['sounds', 'tastes', 'feels'], certa: 2, traducao: 'Toque neste cobertor. É tão macio!' },
+    { frase: 'Mmm, something ___ good in the kitchen. Are you baking?', opcoes: ['smells', 'sounds', 'looks like'], certa: 0, traducao: 'Hum, tem algo cheirando bem na cozinha. Você está assando algo?' },
+    { frase: 'It tastes ___ chicken, but it is made from tofu.', opcoes: ['as', 'like', 'of'], certa: 1, traducao: 'Tem gosto de frango, mas é feito de tofu.' },
+    { frase: 'Her new boyfriend seems ___.', opcoes: ['like nice', 'nicely', 'nice'], certa: 2, traducao: 'O namorado novo dela parece legal.' },
+    { frase: 'It seems ___ a good plan.', opcoes: ['like', 'as', 'so'], certa: 0, traducao: 'Parece um bom plano.' },
+    { instrucao: 'Which option CANNOT complete the sentence?', frase: 'This cake ___ like coconut.', opcoes: ['smells', 'feels', 'tastes'], certa: 1, traducao: '"Feels" não combina: textura não tem gosto de coco.' },
+    { instrucao: 'Which option CANNOT complete the sentence?', frase: 'The pasta ___ cold.', opcoes: ['looks', 'tastes', 'sounds'], certa: 2, traducao: '"Sounds" não combina: a massa não faz som de frio.' },
+    { instrucao: 'Which option CANNOT complete the sentence?', frase: 'His explanation ___ a little confusing.', opcoes: ['smells', 'sounds', 'seems'], certa: 0, traducao: '"Smells" não combina: explicação não tem cheiro.' },
+    { instrucao: 'Which option CANNOT complete the sentence?', frase: 'The blanket ___ soft and comfortable.', opcoes: ['feels', 'sounds', 'looks'], certa: 1, traducao: '"Sounds" não combina: cobertor não faz som macio.' },
+    { instrucao: 'Which option CANNOT complete the sentence?', frase: 'This leaf ___ dry and rough.', opcoes: ['feels', 'looks', 'sounds'], certa: 2, traducao: '"Sounds" não combina com seco e áspero.' },
+    { frase: 'The milk ___ bad. Don\'t drink it!', opcoes: ['smells', 'sounds', 'looks like'], certa: 0, traducao: 'O leite está com cheiro ruim. Não beba!' },
+    { frase: 'These cookies look ___ little stars.', opcoes: ['as', 'like', 'such'], certa: 1, traducao: 'Estes biscoitos parecem estrelinhas.' },
+    { frase: 'Durian ___ terrible, but many people love the flavor.', opcoes: ['sounds like', 'looks like', 'smells'], certa: 2, traducao: 'O durião tem um cheiro horrível, mas muita gente ama o sabor.' },
+    { frase: 'A stereotype is a simple idea about a group of people that is ___ true.', opcoes: ['not always', 'always', 'never'], certa: 0, traducao: 'Um estereótipo é uma ideia simples sobre um grupo de pessoas que nem sempre é verdadeira.' },
+    { frase: 'In the 1830s, people used ketchup as a ___.', opcoes: ['dessert', 'medicine', 'drink'], certa: 1, traducao: 'Na década de 1830, as pessoas usavam ketchup como remédio.' },
+    { frase: 'Kopi Luwak coffee is made from beans eaten by ___.', opcoes: ['cows', 'birds', 'civet cats'], certa: 2, traducao: 'O café Kopi Luwak é feito de grãos comidos por civetas.' }
+  ]
+});
+</script>
+</body>
+</html>

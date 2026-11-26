@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 4 · It looks, it tastes, it smells</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 04 · Escrita (Food, facts and fun)
+   Alinhado ao slide "Verbs of Senses": look + adjetivo; look like + substantivo; taste / smell
+   / feel / sound + adjetivo ou + like + substantivo; seem + adjetivo / seem like + substantivo.
+   Conteúdo NOVO. A isca é "like" onde só cabe adjetivo, ou a forma errada do verbo.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 4, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Este bolo parece delicioso.'), palavras: ['This', 'cake', 'looks', 'delicious'], isca: ['like'], fim: '.', traducao: 'Este bolo parece delicioso.' },
+    { contexto: M('Parece arroz-doce.'), palavras: ['It', 'looks', 'like', 'rice', 'pudding'], isca: ['looking'], fim: '.', traducao: 'Parece arroz-doce. (aparência)' },
+    { contexto: M('Tem gosto de água de coco.'), palavras: ['It', 'tastes', 'like', 'coconut', 'water'], isca: ['taste'], fim: '.', traducao: 'Tem gosto de água de coco.' },
+    { contexto: M('O pão está macio e quentinho (ao toque).'), palavras: ['The', 'bread', 'feels', 'soft', 'and', 'warm'], isca: ['like'], fim: '.', traducao: 'O pão está macio e quentinho.' },
+    { contexto: M('Tem um cheiro estranho, mas doce.'), palavras: ['It', 'smells', 'strange', 'but', 'sweet'], isca: ['like'], fim: '.', traducao: 'Tem um cheiro estranho, mas doce.' },
+    { contexto: M('Parece um lanchinho de café da manhã.'), palavras: ['It', 'seems', 'like', 'a', 'breakfast', 'snack'], isca: ['seem'], fim: '.', traducao: 'Parece um lanchinho de café da manhã.' },
+    { contexto: M('Arroz-doce parece estranho, mas quero provar. (pelo que ouvi)'), palavras: ['Rice', 'pudding', 'sounds', 'strange,', 'but', 'I', 'want', 'to', 'try', 'it'], isca: ['like'], fim: '.', traducao: 'Arroz-doce parece estranho, mas quero provar.' },
+    { contexto: M('Isto parece almoço.'), palavras: ['This', 'looks', 'like', 'lunch'], isca: ['look'], fim: '.', traducao: 'Isto parece almoço.' },
+    { contexto: M('A sopa está com gosto salgado demais.'), palavras: ['The', 'soup', 'tastes', 'too', 'salty'], isca: ['like'], fim: '.', traducao: 'A sopa está salgada demais.' },
+    { contexto: M('A cozinha está com cheiro de pão fresco.'), palavras: ['The', 'kitchen', 'smells', 'like', 'fresh', 'bread'], isca: ['smell'], fim: '.', traducao: 'A cozinha está com cheiro de pão fresco.' },
+    { contexto: M('Tem gosto de frango, mas é feito de tofu.'), palavras: ['It', 'tastes', 'like', 'chicken,', 'but', "it's", 'made', 'from', 'tofu'], isca: ['tasting'], fim: '.', traducao: 'Tem gosto de frango, mas é feito de tofu.' },
+    { contexto: M('O cobertor é macio e confortável (ao toque).'), palavras: ['The', 'blanket', 'feels', 'soft', 'and', 'comfortable'], isca: ['like'], fim: '.', traducao: 'O cobertor é macio e confortável.' },
+    { contexto: M('Esse plano parece uma boa ideia.'), palavras: ['That', 'plan', 'sounds', 'like', 'a', 'good', 'idea'], isca: ['sound'], fim: '.', traducao: 'Esse plano parece uma boa ideia.' },
+    { contexto: M('Estas panquecas ficam incríveis com mel.'), palavras: ['These', 'pancakes', 'taste', 'amazing', 'with', 'honey'], isca: ['tastes'], fim: '.', traducao: 'Estas panquecas ficam incríveis com mel.' },
+    { contexto: M('O aluno novo parece um pouco nervoso.'), palavras: ['The', 'new', 'student', 'seems', 'a', 'little', 'nervous'], isca: ['like'], fim: '.', traducao: 'O aluno novo parece um pouco nervoso.' },
+    { contexto: M('Os ovos do século são pretos e têm um cheiro forte.'), palavras: ['Century', 'eggs', 'are', 'black', 'and', 'smell', 'strong'], isca: ['smells'], fim: '.', traducao: 'Os ovos do século são pretos e têm um cheiro forte.' },
+    { contexto: M('Tem gosto de chocolate, mas é café.'), palavras: ['It', 'tastes', 'like', 'chocolate,', 'but', "it's", 'coffee'], isca: ['taste'], fim: '.', traducao: 'Tem gosto de chocolate, mas é café.' },
+    { contexto: M('Este suco tem gosto fresco e doce.'), palavras: ['This', 'juice', 'tastes', 'fresh', 'and', 'sweet'], isca: ['like'], fim: '.', traducao: 'Este suco tem gosto fresco e doce.' },
+    { contexto: M('Esta folha é seca e áspera (ao toque).'), palavras: ['This', 'leaf', 'feels', 'dry', 'and', 'rough'], isca: ['like'], fim: '.', traducao: 'Esta folha é seca e áspera.' },
+    { contexto: M('A voz dela soa muito calma.'), palavras: ['Her', 'voice', 'sounds', 'very', 'calm'], isca: ['like'], fim: '.', traducao: 'A voz dela soa muito calma.' }
+  ]
+});
+</script>
+</body>
+</html>

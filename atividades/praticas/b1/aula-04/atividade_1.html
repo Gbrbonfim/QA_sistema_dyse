@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 4 · Which sense is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 04 · Escuta (Food, facts and fun)
+   Alinhado ao slide "Vocabulary: Verbs of Senses": look / look like (aparência), taste (sabor),
+   feel (textura, toque), smell (cheiro), sound (o que ouvimos ou a ideia que temos ao ouvir).
+   Conteúdo NOVO: o aluno ouve a frase e escolhe de que sentido ela fala. 24 questões. */
+const IC = { 'appearance': 'visibility', 'flavor': 'restaurant', 'texture': 'pan_tool', 'smell': 'air', 'sound or idea': 'hearing' };
+const T = ['appearance', 'flavor', 'texture', 'smell', 'sound or idea'];
+let n = 0;
+const q = (audioTexto, certa) => {
+  const outras = T.filter(t => t !== certa);
+  const iscas = [outras[n % 4], outras[(n + 2) % 4]];
+  const pos = n++ % 3;
+  iscas.splice(pos, 0, certa);
+  return { audioTexto, opcoes: iscas.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 4, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: which sense is the sentence about?',
+  itens: [
+    q('This cake looks beautiful.', 'appearance'),
+    q('The lemonade tastes sour.', 'flavor'),
+    q('The bread feels soft and warm.', 'texture'),
+    q('The coffee smells amazing.', 'smell'),
+    q('A picnic on the beach sounds fun.', 'sound or idea'),
+    q('This dessert looks like a little cloud.', 'appearance'),
+    q('This tea tastes like honey.', 'flavor'),
+    q('The pineapple feels rough.', 'texture'),
+    q('The kitchen smells like fresh bread.', 'smell'),
+    q('Pizza for breakfast sounds strange.', 'sound or idea'),
+    q('These eggs look a little burnt.', 'appearance'),
+    q('The soup tastes too salty.', 'flavor'),
+    q('The ice cream feels very cold.', 'texture'),
+    q('This cheese smells terrible, but it is delicious!', 'smell'),
+    q('Your recipe sounds delicious.', 'sound or idea'),
+    q('The watermelon looks like a square box.', 'appearance'),
+    q('The chili sauce tastes really spicy.', 'flavor'),
+    q('The towel feels wet.', 'texture'),
+    q('The garlic smells very strong.', 'smell'),
+    q('A cooking class with friends sounds like a great idea.', 'sound or idea'),
+    q('The pancakes look perfect.', 'appearance'),
+    q('This juice tastes fresh and sweet.', 'flavor'),
+    q('The baby\'s hands feel soft.', 'texture'),
+    q('The flowers in the garden smell sweet.', 'smell')
+  ]
+});
+</script>
+</body>
+</html>

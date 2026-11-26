@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 4 · Breakfasts around the world</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 04 · Leitura (Food, facts and fun)
+   Alinhado ao Warm Up ("Weird Food: Fact or Fake?" — mel não estraga, melancias quadradas no
+   Japão, cenouras eram roxas), ao vídeo dos cafés da manhã (blood sausage, chai, mango sticky
+   rice), ao Talking Point sobre estereótipos (Lagos, Cairo e Nairóbi são grandes cidades
+   africanas) e aos verbos de sentido. Conteúdo NOVO: a Lia e o Sam conversam sobre comida.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Lia', 'Look at this Japanese breakfast: rice, miso soup and fish.'],
+  ['Sam', 'Really? It looks like lunch to me!'],
+  ['Lia', 'And this is a full English breakfast. It has black pudding.'],
+  ['Sam', 'What is black pudding? It sounds strange.'],
+  ['Lia', "It's a sausage made with blood."],
+  ['Sam', "Blood? I don't think I want to try it."],
+  ['Lia', 'And in India, many people drink chai in the morning.'],
+  ['Sam', 'Is chai a kind of coffee?'],
+  ['Lia', "No, it isn't. It's tea with milk and spices. It smells amazing."],
+  ['Sam', 'That sounds nice. Did you know that honey never spoils?'],
+  ['Lia', 'Yes! It can last for thousands of years.'],
+  ['Sam', 'And carrots were originally purple, not orange.'],
+  ['Lia', "Wow, I didn't know that! What about square watermelons?"],
+  ['Sam', 'They grow them in Japan. People buy them as gifts.'],
+  ['Lia', 'In the video, a boy asked if there are cities in Africa.'],
+  ['Sam', "That's a stereotype. Lagos, Cairo and Nairobi are huge cities."],
+  ['Lia', "Exactly. It's important to be respectful about other cultures."],
+  ['Sam', 'I agree. We need to learn before we speak.']
+];
+const lado = q => q === 'Lia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 4, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Really? It looks like lunch to me!', 'Really? It looks lunch to me!', 'Really? It look like lunch to me!'], 0, 'Sério? Para mim parece almoço!'),
+    prox(3, ['What is black pudding? It sounds like strange.', 'What is black pudding? It sounds strange.', 'What is black pudding? It sound strange.'], 1, 'O que é black pudding? Parece estranho.'),
+    prox(4, ["It's a dessert made with chocolate.", "It's a sausage make with blood.", "It's a sausage made with blood."], 2, 'É uma linguiça feita com sangue.'),
+    prox(5, ["Blood? I don't think I want to try it.", "Blood? I doesn't think I want to try it.", "Blood? It tastes like delicious."], 0, 'Sangue? Acho que não quero provar.'),
+    prox(7, ['Chai is a kind of coffee?', 'Is chai a kind of coffee?', 'Does chai a kind of coffee?'], 1, 'Chai é um tipo de café?'),
+    prox(8, ["Yes, it is. It's a strong black coffee.", "No, it isn't. It's tea with milk and spices. It smells like amazing.", "No, it isn't. It's tea with milk and spices. It smells amazing."], 2, 'Não. É chá com leite e especiarias. Tem um cheiro incrível.'),
+    prox(9, ['That sounds nice. Did you know that honey never spoils?', 'That sounds like nice. Did you know that honey never spoils?', 'That sound nice. Did you know that honey never spoils?'], 0, 'Parece bom. Você sabia que o mel nunca estraga?'),
+    prox(10, ['Yes! It can last for only three days.', 'Yes! It can last for thousands of years.', 'Yes! It can lasts for thousands of years.'], 1, 'Sim! Pode durar milhares de anos.'),
+    prox(11, ['And carrots were originally blue, not orange.', 'And carrots was originally purple, not orange.', 'And carrots were originally purple, not orange.'], 2, 'E as cenouras eram originalmente roxas, não laranja.'),
+    prox(13, ['They grow them in Japan. People buy them as gifts.', 'They grow them in Italy. People use them as medicine.', 'They grows them in Japan. People buy them as gifts.'], 0, 'Eles as cultivam no Japão. As pessoas as compram como presente.'),
+    prox(15, ["That's true. There are no cities in Africa.", "That's a stereotype. Lagos, Cairo and Nairobi are huge cities.", "That's a stereotype. Lagos, Cairo and Nairobi is huge cities."], 1, 'Isso é um estereótipo. Lagos, Cairo e Nairóbi são cidades enormes.'),
+    prox(17, ['I agree. We needs to learn before we speak.', 'I disagree. Stereotypes are always true.', 'I agree. We need to learn before we speak.'], 2, 'Concordo. Precisamos aprender antes de falar.'),
+    { instrucao: 'What is in the Japanese breakfast?', frase: '___', opcoes: ['Rice, miso soup and fish.', 'Toast, eggs and coffee.', 'Black pudding and beans.'], certa: 0, traducao: 'Arroz, sopa de missô e peixe.' },
+    { instrucao: 'What is black pudding made with?', frase: '___', opcoes: ['Chocolate.', 'Blood.', 'Rice.'], certa: 1, traducao: 'Sangue.' },
+    { instrucao: 'What is chai?', frase: '___', opcoes: ['A kind of coffee.', 'A kind of soup.', 'Tea with milk and spices.'], certa: 2, traducao: 'Chá com leite e especiarias.' },
+    { instrucao: 'How long can honey last?', frase: '___', opcoes: ['Thousands of years.', 'One week.', 'Ten days.'], certa: 0, traducao: 'Milhares de anos.' },
+    { instrucao: 'What color were carrots originally?', frase: '___', opcoes: ['Orange.', 'Purple.', 'Green.'], certa: 1, traducao: 'Roxas.' },
+    { instrucao: 'Why do people in Japan buy square watermelons?', frase: '___', opcoes: ['As medicine.', 'For breakfast.', 'As gifts.'], certa: 2, traducao: 'Como presente.' },
+    { instrucao: 'What is a stereotype?', frase: '___', opcoes: ['A simple idea about a group or place that is not always true.', 'A traditional breakfast.', 'A big city in Africa.'], certa: 0, traducao: 'Uma ideia simples sobre um grupo ou lugar que nem sempre é verdadeira.' },
+    { instrucao: 'Which of these is a big city in Africa?', frase: '___', opcoes: ['Lisbon', 'Nairobi', 'Tokyo'], certa: 1, traducao: 'Nairóbi.' }
+  ]
+});
+</script>
+</body>
+</html>

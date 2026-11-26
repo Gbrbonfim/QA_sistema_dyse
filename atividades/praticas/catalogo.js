@@ -1209,6 +1209,22 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 03', titulo: 'Tell your story', tipo: 'Escute e grave', treina: 'Fala · Past simple e continuous', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 03', titulo: 'Past simple or past continuous?', tipo: 'Make a Choice', treina: 'Gramática · Past simple e continuous', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 4,
+        titulo: 'Class 04 and 05 · Food, facts and fun',
+        atividades: [
+          { num: 1, parte: 'Class 04', titulo: 'Which sense is it?', tipo: 'Escute e escolha', treina: 'Escuta · Verbos de sentido', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 04', titulo: 'It looks, it tastes, it smells', tipo: 'Monte a frase', treina: 'Escrita · Verbos de sentido', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 04', titulo: 'Breakfasts around the world', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 04', titulo: 'Describing food', tipo: 'Escute e grave', treina: 'Fala · Comida e sentidos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 04', titulo: 'Verbs of senses', tipo: 'Make a Choice', treina: 'Gramática · Verbos de sentido', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 05', titulo: 'Have they done it?', tipo: 'Escute e escolha', treina: 'Escuta · Present perfect', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 05', titulo: 'My food experiences', tipo: 'Monte a frase', treina: 'Escrita · Present perfect', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 05', titulo: 'My food experience passport', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 05', titulo: 'Have you ever...?', tipo: 'Escute e grave', treina: 'Fala · Experiências', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 05', titulo: 'Present perfect for experiences', tipo: 'Make a Choice', treina: 'Gramática · Present perfect', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
