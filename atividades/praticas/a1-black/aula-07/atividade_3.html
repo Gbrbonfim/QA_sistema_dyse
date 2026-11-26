@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 7 · I have a headache</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 07 · Escrita (Health & Emergency Basics)
+   Alinhado ao "Vocabulary" e ao exercício 3 do slide (I have a headache. My head hurts. / I
+   have a cough. / I have chest pain. / It hurts here.). Conteúdo NOVO. A isca é a forma
+   errada (hurt x hurts, a x sem artigo, have x has). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 7, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Estou com dor de cabeça.'), palavras: ['I', 'have', 'a', 'headache'], isca: ['has'], fim: '.', traducao: 'Estou com dor de cabeça.' },
+    { contexto: M('A minha cabeça dói.'), palavras: ['My', 'head', 'hurts'], isca: ['hurt'], fim: '.', traducao: 'A minha cabeça dói.' },
+    { contexto: M('Estou com tosse.'), palavras: ['I', 'have', 'a', 'cough'], isca: ['an'], fim: '.', traducao: 'Estou com tosse.' },
+    { contexto: M('Estou com dor no peito.'), palavras: ['I', 'have', 'chest', 'pain'], isca: ['has'], fim: '.', traducao: 'Estou com dor no peito.' },
+    { contexto: M('Dói aqui.'), palavras: ['It', 'hurts', 'here'], isca: ['hurt'], fim: '.', traducao: 'Dói aqui.' },
+    { contexto: M('Estou com dor de estômago.'), palavras: ['I', 'have', 'a', 'stomachache'], isca: ['an'], fim: '.', traducao: 'Estou com dor de estômago.' },
+    { contexto: M('O meu estômago dói.'), palavras: ['My', 'stomach', 'hurts'], isca: ['hurt'], fim: '.', traducao: 'O meu estômago dói.' },
+    { contexto: M('Estou com dor de garganta.'), palavras: ['I', 'have', 'a', 'sore', 'throat'], isca: ['has'], fim: '.', traducao: 'Estou com dor de garganta.' },
+    { contexto: M('A minha garganta dói.'), palavras: ['My', 'throat', 'hurts'], isca: ['hurt'], fim: '.', traducao: 'A minha garganta dói.' },
+    { contexto: M('Eu não consigo mexer o meu braço.'), palavras: ['I', "can't", 'move', 'my', 'arm'], isca: ['not'], fim: '.', traducao: 'Não consigo mexer o meu braço.' },
+    { contexto: M('Eu quebrei o braço. (Estou com um braço quebrado.)'), palavras: ['I', 'have', 'a', 'broken', 'arm'], isca: ['break'], fim: '.', traducao: 'Estou com o braço quebrado.' },
+    { contexto: M('Estou com febre.'), palavras: ['I', 'have', 'a', 'fever'], isca: ['has'], fim: '.', traducao: 'Estou com febre.' },
+    { contexto: M('Eu não estou me sentindo bem.'), palavras: ['I', "don't", 'feel', 'well'], isca: ['good'], fim: '.', traducao: 'Não estou me sentindo bem.' },
+    { contexto: M('O meu peito dói. Dói muito.'), palavras: ['My', 'chest', 'hurts.', 'It', 'hurts', 'a', 'lot'], isca: ['hurt'], fim: '.', traducao: 'O meu peito dói. Dói muito.' },
+    { contexto: M('Eu não consigo parar de tossir.'), palavras: ['I', "can't", 'stop', 'coughing'], isca: ['cough'], fim: '.', traducao: 'Não consigo parar de tossir.' },
+    { contexto: M('A minha perna dói.'), palavras: ['My', 'leg', 'hurts'], isca: ['hurt'], fim: '.', traducao: 'A minha perna dói.' },
+    { contexto: M('Dói quando eu falo.'), palavras: ['It', 'hurts', 'when', 'I', 'talk'], isca: ['hurt'], fim: '.', traducao: 'Dói quando eu falo.' },
+    { contexto: M('Estou com uma dor de cabeça forte.'), palavras: ['I', 'have', 'a', 'bad', 'headache'], isca: ['has'], fim: '.', traducao: 'Estou com uma dor de cabeça forte.' },
+    { contexto: M('Desde hoje de manhã.'), palavras: ['Since', 'this', 'morning'], isca: ['for'], fim: '.', traducao: 'Desde hoje de manhã.' },
+    { contexto: M('O meu braço dói depois do exercício.'), palavras: ['My', 'arm', 'hurts', 'after', 'the', 'exercise'], isca: ['hurt'], fim: '.', traducao: 'O meu braço dói depois do exercício.' }
+  ]
+});
+</script>
+</body>
+</html>

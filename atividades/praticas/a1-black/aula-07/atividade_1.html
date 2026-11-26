@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 7 · What's wrong?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 07 · Escuta (Health & Emergency Basics)
+   Alinhado ao vocabulário do slide (headache, cough, chest pain, stomachache, sore throat,
+   broken arm, fever, trouble breathing) e às frases "My head hurts / It hurts here". Conteúdo
+   NOVO: o aluno ouve a pessoa e escolhe o problema de saúde. 24 questões. */
+const IC = { headache: 'psychology', cough: 'masks', 'chest pain': 'cardiology', stomachache: 'gastroenterology', 'sore throat': 'ent', 'broken arm': 'orthopedics', fever: 'device_thermostat', 'trouble breathing': 'pulmonology' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 7, num: 1, tipo: 'imagem',
+  instrucao: "Listen: what's wrong?",
+  itens: [
+    q('My head hurts a lot.', 'headache', ['stomachache', 'cough', 'broken arm']),
+    q("I can't stop coughing.", 'cough', ['headache', 'chest pain', 'broken arm']),
+    q('My stomach hurts. I feel sick.', 'stomachache', ['sore throat', 'headache', 'broken arm']),
+    q('It hurts when I talk. My throat hurts.', 'sore throat', ['stomachache', 'broken arm', 'chest pain']),
+    q("I can't move my arm. It hurts a lot.", 'broken arm', ['headache', 'fever', 'sore throat']),
+    q('My chest hurts. It hurts here.', 'chest pain', ['stomachache', 'broken arm', 'sore throat']),
+    q("I'm very hot. My temperature is thirty-nine degrees.", 'fever', ['broken arm', 'stomachache', 'cough']),
+    q("I can't breathe well. It's difficult.", 'trouble breathing', ['broken arm', 'stomachache', 'headache']),
+    q('I have a bad headache. Since this morning.', 'headache', ['sore throat', 'cough', 'broken arm']),
+    q("It hurts here, in my stomach.", 'stomachache', ['headache', 'chest pain', 'sore throat']),
+    q("Cough, cough! Sorry, I have a bad cough.", 'cough', ['broken arm', 'stomachache', 'headache']),
+    q("My arm hurts. I can't move it. I need a doctor.", 'broken arm', ['cough', 'headache', 'stomachache']),
+    q('I need some water. My throat hurts.', 'sore throat', ['broken arm', 'chest pain', 'headache']),
+    q('Do you have a fever? — Yes, I do. I feel very hot.', 'fever', ['broken arm', 'sore throat', 'chest pain']),
+    q('Excuse me! My chest hurts. Please call an ambulance!', 'chest pain', ['sore throat', 'headache', 'stomachache']),
+    q("It's difficult to breathe. I need help.", 'trouble breathing', ['stomachache', 'sore throat', 'broken arm']),
+    q("I don't feel well. My head hurts.", 'headache', ['broken arm', 'stomachache', 'chest pain']),
+    q('Too much pizza! Now my stomach hurts.', 'stomachache', ['broken arm', 'headache', 'cough']),
+    q('I have a sore throat. I need some medicine.', 'sore throat', ['stomachache', 'broken arm', 'headache']),
+    q("I have a cough. I'm coughing all night.", 'cough', ['broken arm', 'headache', 'stomachache']),
+    q("I can't write. My arm is broken.", 'broken arm', ['sore throat', 'cough', 'headache']),
+    q('My chest hurts, and my arm hurts too.', 'chest pain', ['stomachache', 'sore throat', 'cough']),
+    q("I'm hot and cold. I think I have a fever.", 'fever', ['broken arm', 'chest pain', 'stomachache']),
+    q('My head hurts. I need some medicine.', 'headache', ['stomachache', 'broken arm', 'sore throat'])
+  ]
+});
+</script>
+</body>
+</html>

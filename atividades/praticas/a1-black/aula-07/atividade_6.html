@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 7 · At the hotel reception</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 07 · Leitura (Health & Emergency Basics)
+   Alinhado ao Speaking do slide ("C — At a hotel: You don't feel well. Ask the receptionist
+   for help.") e ao Dialogue 4 (emergência: chest pain, Can you breathe?, I need a doctor,
+   I'm calling an ambulance). Conteúdo NOVO: um hóspede pede ajuda à recepção para a esposa.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Mr. Lee', 'Excuse me! I need help.'],
+  ['Receptionist', "Of course. What's the problem?"],
+  ['Mr. Lee', "My wife doesn't feel well."],
+  ['Receptionist', "Oh no! What's wrong?"],
+  ['Mr. Lee', 'Her chest hurts. It hurts a lot.'],
+  ['Receptionist', 'Can she breathe?'],
+  ['Mr. Lee', "It's difficult. She needs a doctor."],
+  ['Receptionist', "OK. I'm calling an ambulance now."],
+  ['Mr. Lee', 'Thank you!'],
+  ['Receptionist', 'Where is she?'],
+  ['Mr. Lee', "She's in our room. Room twelve."],
+  ['Receptionist', 'OK. Does she have a fever?'],
+  ['Mr. Lee', "No, she doesn't. But she has a bad headache, too."],
+  ['Receptionist', 'The ambulance is coming. Do you need anything?'],
+  ['Mr. Lee', 'Yes. Some water, please.'],
+  ['Receptionist', 'Sure. Here you are.']
+];
+const lado = q => q === 'Receptionist' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 7, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Of course. What's the problem?", "Of course. Where's the problem?", 'Of course. What the problem?'], 0, 'Claro. Qual é o problema?'),
+    prox(2, ["My wife don't feel well.", "My wife doesn't feel well.", "My wife doesn't feels well."], 1, 'A minha esposa não está se sentindo bem.'),
+    prox(3, ["Oh no! Where's wrong?", 'Oh no! What wrong?', "Oh no! What's wrong?"], 2, 'Ah, não! O que ela tem?'),
+    prox(4, ['Her chest hurts. It hurts a lot.', 'Her chest hurt. It hurt a lot.', 'Her chest hurts. It hurts a lots.'], 0, 'O peito dela dói. Dói muito.'),
+    prox(5, ['Can she breathes?', 'Can she breathe?', 'Does she can breathe?'], 1, 'Ela consegue respirar?'),
+    prox(6, ["It's difficult. She need a doctor.", "It's difficult. She needs an doctor.", "It's difficult. She needs a doctor."], 2, 'Está difícil. Ela precisa de um médico.'),
+    prox(7, ["OK. I'm calling an ambulance now.", "OK. I calling an ambulance now.", "OK. I'm calling a ambulance now."], 0, 'Certo. Estou chamando uma ambulância agora.'),
+    prox(9, ['Where are she?', 'Where is she?', 'Where she is?'], 1, 'Onde ela está?'),
+    prox(10, ["She in our room. Room twelve.", "She's in our room. Room twenty.", "She's in our room. Room twelve."], 2, 'Ela está no nosso quarto. Quarto doze.'),
+    prox(11, ['OK. Does she have a fever?', 'OK. Is she have a fever?', 'OK. Does she has a fever?'], 0, 'Certo. Ela está com febre?'),
+    prox(12, ["No, she isn't. But she has a bad headache, too.", "No, she doesn't. But she has a bad headache, too.", "No, she doesn't. But she have a bad headache, too."], 1, 'Não. Mas ela está com uma dor de cabeça forte também.'),
+    prox(14, ['Yes. Some waters, please.', 'Yes. A water some, please.', 'Yes. Some water, please.'], 2, 'Sim. Um pouco de água, por favor.'),
+    { instrucao: 'Who needs a doctor?', frase: "Mr. Lee's ___.", opcoes: ['wife', 'friend', 'son'], certa: 0, traducao: 'A esposa do Sr. Lee.' },
+    { instrucao: 'What hurts?', frase: 'Her ___.', opcoes: ['arm', 'chest', 'stomach'], certa: 1, traducao: 'O peito dela.' },
+    { instrucao: 'Can she breathe well?', frase: "No. It's ___.", opcoes: ['easy', 'OK', 'difficult'], certa: 2, traducao: 'Não. Está difícil.' },
+    { instrucao: 'Who does the receptionist call?', frase: 'An ___.', opcoes: ['ambulance', 'friend', 'hotel'], certa: 0, traducao: 'Uma ambulância.' },
+    { instrucao: 'Where is the wife?', frase: 'In room ___.', opcoes: ['twenty', 'twelve', 'two'], certa: 1, traducao: 'No quarto doze.' },
+    { instrucao: 'Does she have a fever?', frase: '___', opcoes: ['Yes, she does.', "No, she isn't.", "No, she doesn't."], certa: 2, traducao: 'Não.' },
+    { instrucao: 'What other problem does she have?', frase: 'A bad ___.', opcoes: ['headache', 'cough', 'broken arm'], certa: 0, traducao: 'Uma dor de cabeça forte.' },
+    { instrucao: 'What does Mr. Lee need?', frase: 'Some ___.', opcoes: ['medicine', 'water', 'food'], certa: 1, traducao: 'Um pouco de água.' }
+  ]
+});
+</script>
+</body>
+</html>

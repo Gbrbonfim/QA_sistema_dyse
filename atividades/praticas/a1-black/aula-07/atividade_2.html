@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 7 · Choose the best response</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 07 · Escuta (Health & Emergency Basics)
+   Alinhado ao "Functional Skills 1) Choose the best response" do slide (Are you OK? / What's
+   wrong? / Do you need help? / Can you breathe? / Do you have a fever? / Since when?).
+   Conteúdo NOVO: o aluno ouve a pergunta e escolhe a melhor resposta. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'chat' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 7, num: 2, tipo: 'imagem',
+  instrucao: 'Listen and choose the best response',
+  itens: [
+    q('Are you OK?', "No. I don't feel well.", ["I'm 25 years old.", 'I like coffee.', 'On Fridays.']),
+    q("What's wrong?", 'My stomach hurts.', ['Yes, please.', 'Good morning.', "I'm from Brazil."]),
+    q('Do you need help?', 'Yes, please.', ['My name is Ana.', 'On Mondays.', 'I like pizza.']),
+    q('Can you breathe?', "Not really. I need help.", ['Yes, on Fridays.', 'I have a dog.', "It's blue."]),
+    q('Do you have a fever?', "No, I don't.", ["No, I'm not.", 'Yes, I am.', 'Since my arm.']),
+    q('Since when?', 'Since this morning.', ['In my head.', 'Yes, I do.', 'Thank you.']),
+    q('Where does it hurt?', 'It hurts here, in my chest.', ['Since yesterday.', 'Yes, please.', "I'm OK, thanks."]),
+    q('Do you need anything?', 'Yes. I need some medicine.', ['No, I am fine thank you, a headache.', "I'm from Canada.", 'Since this morning.']),
+    q('How can I help you?', "I have a sore throat. I need some medicine.", ['Since this morning.', 'Yes, I do.', "You're welcome."]),
+    q('Do you need a doctor?', 'Yes, please. My arm hurts a lot.', ['No, I like tea.', 'Since Tuesday.', "It's my birthday."]),
+    q("I'm calling an ambulance now.", 'Thank you.', ['Since this morning.', 'Yes, I do.', 'Nice to meet you.']),
+    q('Here is some medicine for your stomach. Take it after food.', 'Thank you!', ['My head hurts.', 'Since when?', 'Do you have a fever?']),
+    q("You don't look well. Are you OK?", 'No. I have a bad headache.', ["Yes, I'm 30.", 'I like your shirt.', 'Yes, on Sundays.']),
+    q("Hi! How can I help you?", "Hi. I don't feel well.", ['Since yesterday.', "You're welcome.", 'Yes, I do.']),
+    q('Excuse me! Can you help me?', "Of course. What's the problem?", ["I'm 25 years old.", 'Since this morning.', 'It hurts here.']),
+    q('My chest hurts.', 'OK. Sit down, please.', ['Have a nice day!', 'Nice weather today.', 'Me too, I like it.']),
+    q('Do you need some medicine?', 'Yes, please.', ['Since this morning.', 'In my stomach.', 'I like it.']),
+    q('Does your throat hurt?', 'Yes. It hurts when I talk.', ['Yes, I am.', 'Since Brazil.', 'It hurts my car.']),
+    q('Is it difficult to breathe?', 'Yes. I need a doctor.', ['Yes, I like it.', 'No, on Fridays.', "Yes, it's sunny."]),
+    q('Hey! How are you?', "Not very well. I don't feel well.", ['Since this morning.', 'It hurts here.', 'Yes, I need it.']),
+    q('Please sit down. The doctor will see you soon.', 'Thank you.', ['Since this morning.', 'My head.', 'Yes, I do.']),
+    q('Can you walk?', "Not really. My leg hurts.", ['Yes, I have a cough.', 'I am from Mexico.', 'Since my head.']),
+    q('Do you have a cough?', 'Yes, I do. I cough a lot.', ["Yes, I am.", 'No, I have.', 'Since a cough.']),
+    q('What do you need?', 'I need some water, please.', ['Since this morning.', 'Yes, I do.', 'It hurts here.'])
+  ]
+});
+</script>
+</body>
+</html>

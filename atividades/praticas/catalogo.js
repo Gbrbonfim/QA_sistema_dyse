@@ -1057,6 +1057,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'It or them? This or these?', tipo: 'Make a Choice', treina: 'Gramática · it/them, this/these', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'What can you say?', tipo: 'Make a Choice', treina: 'Gramática · Situações', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 7,
+        titulo: 'Class 07 · Functional Plus: Health & Emergency Basics',
+        atividades: [
+          { num: 1, titulo: "What's wrong?", tipo: 'Escute e escolha', treina: 'Escuta · Problemas de saúde', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Choose the best response', tipo: 'Escute e escolha', treina: 'Escuta · Respostas', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'I have a headache', tipo: 'Monte a frase', treina: 'Escrita · Problemas de saúde', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Asking for help', tipo: 'Monte a frase', treina: 'Escrita · Pedir ajuda', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'At the pharmacy', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'At the hotel reception', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: "Say what's wrong", tipo: 'Escute e grave', treina: 'Fala · Problemas de saúde', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Ask for help', tipo: 'Escute e grave', treina: 'Fala · Pedir ajuda', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Have or hurt?', tipo: 'Make a Choice', treina: 'Gramática · have / hurts', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Help in every place', tipo: 'Make a Choice', treina: 'Gramática · Situações', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

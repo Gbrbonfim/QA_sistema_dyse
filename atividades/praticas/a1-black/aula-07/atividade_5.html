@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 7 · At the pharmacy</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 07 · Leitura (Health & Emergency Basics)
+   Alinhado ao Dialogue 1 do slide (na farmácia: How can I help you? / I don't feel well. /
+   What's wrong? / It hurts here. / Do you have a fever? / Here's some medicine... Take it
+   after food.). Conteúdo NOVO: o Paulo tem dor de garganta e tosse. 20 questões: 12 de
+   "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Pharmacist', 'Hi! How can I help you?'],
+  ['Paulo', "Hi. I don't feel well."],
+  ['Pharmacist', "Oh no. What's wrong?"],
+  ['Paulo', 'I have a sore throat. It hurts when I talk.'],
+  ['Pharmacist', 'Do you have a cough?'],
+  ['Paulo', "Yes, I do. I can't stop coughing."],
+  ['Pharmacist', 'Do you have a fever?'],
+  ['Paulo', "No, I don't."],
+  ['Pharmacist', 'Since when?'],
+  ['Paulo', 'Since yesterday.'],
+  ['Pharmacist', 'OK. Here is some medicine for your throat. Take it after food.'],
+  ['Paulo', 'Thank you! And I need some water, please.'],
+  ['Pharmacist', 'Sure. Here you are.'],
+  ['Paulo', 'How much is it?'],
+  ['Pharmacist', "It's twelve dollars."],
+  ['Paulo', 'Thank you!'],
+  ['Pharmacist', "You're welcome. Take care!"]
+];
+const lado = q => q === 'Pharmacist' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 7, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi. I don't feel well.", "Hi. I don't feel good well.", "Hi. I not feel well."], 0, 'Oi. Não estou me sentindo bem.'),
+    prox(2, ["Oh no. Where's wrong?", "Oh no. What's wrong?", 'Oh no. What wrong?'], 1, 'Ah, não. O que você tem?'),
+    prox(3, ['I has a sore throat. It hurts when I talk.', 'I have a sore throat. It hurt when I talk.', 'I have a sore throat. It hurts when I talk.'], 2, 'Estou com dor de garganta. Dói quando eu falo.'),
+    prox(4, ['Do you have a cough?', 'Are you have a cough?', 'Do you has a cough?'], 0, 'Você está com tosse?'),
+    prox(5, ["Yes, I am. I can't stop coughing.", "Yes, I do. I can't stop coughing.", "Yes, I do. I can't stop cough."], 1, 'Sim. Não consigo parar de tossir.'),
+    prox(6, ['Are you have a fever?', 'Do you have fever a?', 'Do you have a fever?'], 2, 'Você está com febre?'),
+    prox(7, ["No, I don't.", "No, I'm not.", "No, I haven't fever."], 0, 'Não.'),
+    prox(8, ['Since what?', 'Since when?', 'When since?'], 1, 'Desde quando?'),
+    prox(9, ['For yesterday.', 'Since tomorrow.', 'Since yesterday.'], 2, 'Desde ontem.'),
+    prox(10, ['OK. Here is some medicine for your throat. Take it after food.', 'OK. Here is some medicine for your throat. Take it before you are food.', 'OK. Here are a medicine for your throat.'], 0, 'Certo. Aqui está um remédio para a sua garganta. Tome depois de comer.'),
+    prox(13, ['How many is it?', 'How much is it?', 'How much are it?'], 1, 'Quanto custa?'),
+    prox(16, ["Thank you. Take care!", "You're welcome. Have a fever!", "You're welcome. Take care!"], 2, 'De nada. Se cuida!'),
+    { instrucao: "What's wrong with Paulo?", frase: 'He has a ___.', opcoes: ['sore throat', 'broken arm', 'headache'], certa: 0, traducao: 'Ele está com dor de garganta.' },
+    { instrucao: 'When does his throat hurt?', frase: 'When he ___.', opcoes: ['eats', 'talks', 'walks'], certa: 1, traducao: 'Quando ele fala.' },
+    { instrucao: 'Does Paulo have a cough?', frase: '___', opcoes: ["No, he doesn't.", 'Yes, he is.', 'Yes, he does.'], certa: 2, traducao: 'Sim.' },
+    { instrucao: 'Does he have a fever?', frase: '___', opcoes: ["No, he doesn't.", 'Yes, he does.', "No, he isn't."], certa: 0, traducao: 'Não.' },
+    { instrucao: 'Since when?', frase: 'Since ___.', opcoes: ['this morning', 'yesterday', 'Monday'], certa: 1, traducao: 'Desde ontem.' },
+    { instrucao: 'When does he take the medicine?', frase: '___ food.', opcoes: ['Before', 'With', 'After'], certa: 2, traducao: 'Depois de comer.' },
+    { instrucao: 'What else does Paulo need?', frase: 'Some ___.', opcoes: ['water', 'coffee', 'food'], certa: 0, traducao: 'Um pouco de água.' },
+    { instrucao: 'How much is it?', frase: '___ dollars.', opcoes: ['Twenty', 'Twelve', 'Two'], certa: 1, traducao: 'Doze dólares.' }
+  ]
+});
+</script>
+</body>
+</html>

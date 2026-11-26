@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 7 · Asking for help</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 07 · Escrita (Health & Emergency Basics)
+   Alinhado ao "Functional Skills" do slide (I need help. / Can you help me? / I need a doctor.
+   / I need some medicine. / Are you OK? / What's wrong? / Do you need anything? / Where does
+   it hurt? / I'm calling an ambulance.). Conteúdo NOVO. A isca é a palavra errada.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 7, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu preciso de ajuda.'), palavras: ['I', 'need', 'help'], isca: ['needs'], fim: '.', traducao: 'Preciso de ajuda.' },
+    { contexto: M('Você pode me ajudar?'), palavras: ['Can', 'you', 'help', 'me'], isca: ['I'], fim: '?', traducao: 'Você pode me ajudar?' },
+    { contexto: M('Eu preciso de um médico.'), palavras: ['I', 'need', 'a', 'doctor'], isca: ['an'], fim: '.', traducao: 'Preciso de um médico.' },
+    { contexto: M('Eu preciso de um remédio.'), palavras: ['I', 'need', 'some', 'medicine'], isca: ['a'], fim: '.', traducao: 'Preciso de um remédio.' },
+    { contexto: M('Você está bem?'), palavras: ['Are', 'you', 'OK'], isca: ['Do'], fim: '?', traducao: 'Você está bem?' },
+    { contexto: M('O que você tem? (Qual é o problema?)'), palavras: ["What's", 'wrong'], isca: ['where'], fim: '?', traducao: 'O que você tem?' },
+    { contexto: M('Você precisa de alguma coisa?'), palavras: ['Do', 'you', 'need', 'anything'], isca: ['Are'], fim: '?', traducao: 'Você precisa de alguma coisa?' },
+    { contexto: M('Onde dói?'), palavras: ['Where', 'does', 'it', 'hurt'], isca: ['hurts'], fim: '?', traducao: 'Onde dói?' },
+    { contexto: M('Estou chamando uma ambulância agora.'), palavras: ["I'm", 'calling', 'an', 'ambulance', 'now'], isca: ['a'], fim: '.', traducao: 'Estou chamando uma ambulância agora.' },
+    { contexto: M('Você está com febre?'), palavras: ['Do', 'you', 'have', 'a', 'fever'], isca: ['Are'], fim: '?', traducao: 'Você está com febre?' },
+    { contexto: M('Você consegue respirar?'), palavras: ['Can', 'you', 'breathe'], isca: ['Do'], fim: '?', traducao: 'Você consegue respirar?' },
+    { contexto: M('Com licença! Eu preciso de ajuda.'), palavras: ['Excuse', 'me!', 'I', 'need', 'help'], isca: ['helps'], fim: '.', traducao: 'Com licença! Preciso de ajuda.' },
+    { contexto: M('Claro. Qual é o problema?'), palavras: ['Of', 'course.', "What's", 'the', 'problem'], isca: ['wrong'], fim: '?', traducao: 'Claro. Qual é o problema?' },
+    { contexto: M('Sente-se, por favor.'), palavras: ['Sit', 'down,', 'please'], isca: ['up'], fim: '.', traducao: 'Sente-se, por favor.' },
+    { contexto: M('Você precisa de um remédio?'), palavras: ['Do', 'you', 'need', 'some', 'medicine'], isca: ['Are'], fim: '?', traducao: 'Você precisa de um remédio?' },
+    { contexto: M('Aqui está um remédio para o seu estômago.'), palavras: ["Here's", 'some', 'medicine', 'for', 'your', 'stomach'], isca: ['to'], fim: '.', traducao: 'Aqui está um remédio para o seu estômago.' },
+    { contexto: M('Tome depois de comer.'), palavras: ['Take', 'it', 'after', 'food'], isca: ['before'], fim: '.', traducao: 'Tome depois de comer.' },
+    { contexto: M('Eu posso comprar um para você.'), palavras: ['I', 'can', 'get', 'some', 'for', 'you'], isca: ['to'], fim: '.', traducao: 'Posso comprar para você.' },
+    { contexto: M('Sim, por favor. Eu preciso de um pouco de água.'), palavras: ['Yes,', 'please.', 'I', 'need', 'some', 'water'], isca: ['a'], fim: '.', traducao: 'Sim, por favor. Preciso de um pouco de água.' },
+    { contexto: M('O médico vai te atender logo.'), palavras: ['The', 'doctor', 'will', 'see', 'you', 'soon'], isca: ['sees'], fim: '.', traducao: 'O médico vai te atender logo.' }
+  ]
+});
+</script>
+</body>
+</html>

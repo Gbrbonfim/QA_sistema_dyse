@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 7 · Help in every place</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 07 · Gramática (Health & Emergency Basics)
+   Alinhado ao exercício "Match the expressions to the functions" (saying where the problem
+   is x asking for help) e às situações do Speaking (farmácia, escola, trabalho, academia,
+   café, hotel, rua). Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 7, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the best answer',
+  itens: [
+    { frase: '"Can you help me?" is for ___.', opcoes: ['asking for help', 'saying where the problem is', 'saying thank you'], certa: 0, traducao: '"Can you help me?" serve para pedir ajuda.' },
+    { frase: '"It hurts here." is for ___.', opcoes: ['asking for help', 'saying where the problem is', 'saying goodbye'], certa: 1, traducao: '"It hurts here." serve para dizer onde é o problema.' },
+    { frase: '"I need a doctor." is for ___.', opcoes: ['saying where the problem is', 'saying hello', 'asking for help'], certa: 2, traducao: '"I need a doctor." serve para pedir ajuda.' },
+    { frase: '"My head hurts." is for ___.', opcoes: ['saying where the problem is', 'asking for help', 'saying thank you'], certa: 0, traducao: '"My head hurts." serve para dizer onde é o problema.' },
+    { frase: 'At the pharmacy. Your stomach hurts. You say: ___', opcoes: ['I need a haircut.', 'I have a stomachache. I need some medicine.', 'I have a broken arm.'], certa: 1, traducao: 'Na farmácia. O seu estômago dói: Estou com dor de estômago. Preciso de um remédio.' },
+    { frase: 'At a café. You are coughing a lot. You say: ___', opcoes: ['Can I have a pizza?', 'My leg hurts.', 'I have a cough. Can I have some water, please?'], certa: 2, traducao: 'Num café. Você está tossindo muito: Estou com tosse. Pode me dar um pouco de água?' },
+    { frase: 'At the gym. Your arm hurts after an exercise. You say: ___', opcoes: ['My arm hurts.', 'My head hurts.', 'I have a sore throat.'], certa: 0, traducao: 'Na academia. O seu braço dói depois de um exercício: O meu braço dói.' },
+    { frase: "On the street. Your leg hurts and you can't walk well. You say: ___", opcoes: ['I have a fever.', 'Excuse me! Can you help me? My leg hurts.', "I'm late for work."], certa: 1, traducao: 'Na rua. A sua perna dói: Com licença! Pode me ajudar? A minha perna dói.' },
+    { frase: 'At school. Your stomach hurts. You tell your teacher: ___', opcoes: ['My throat hurts.', 'I like this class.', "I don't feel well. My stomach hurts."], certa: 2, traducao: 'Na escola. O seu estômago dói: Não estou bem. O meu estômago dói.' },
+    { frase: 'At a friend\'s house. You have a sore throat. You say: ___', opcoes: ['Can I have some water? My throat hurts.', 'My arm is broken.', 'I need a taxi.'], certa: 0, traducao: 'Na casa de um amigo. Você está com dor de garganta: Pode me dar água? A minha garganta dói.' },
+    { frase: 'At work. Your head hurts. You ask a coworker: ___', opcoes: ['Do you like coffee?', 'Can you help me? I have a headache.', 'Where is the gym?'], certa: 1, traducao: 'No trabalho. A sua cabeça dói: Pode me ajudar? Estou com dor de cabeça.' },
+    { frase: "Your chest hurts and you can't breathe well. You say: ___", opcoes: ['I need some coffee.', 'I have a cough.', 'I need a doctor! Please call an ambulance!'], certa: 2, traducao: 'O seu peito dói e você não consegue respirar bem: Preciso de um médico! Chame uma ambulância!' },
+    { frase: 'Are you OK? — ___', opcoes: ["No, I don't feel well.", "I'm 25 years old.", 'I like coffee.'], certa: 0, traducao: 'Você está bem? — Não, não estou me sentindo bem.' },
+    { frase: "What's wrong? — ___", opcoes: ['Yes, please.', 'My head hurts.', 'Good morning.'], certa: 1, traducao: 'O que você tem? — A minha cabeça dói.' },
+    { frase: 'Do you need help? — ___', opcoes: ['Good morning.', 'On Fridays.', 'Yes, please.'], certa: 2, traducao: 'Você precisa de ajuda? — Sim, por favor.' },
+    { frase: 'Can you breathe? — ___', opcoes: ['Not really. I need help.', 'Yes, on Fridays.', 'I like tea.'], certa: 0, traducao: 'Você consegue respirar? — Não muito. Preciso de ajuda.' },
+    { frase: 'Where does it hurt? — ___', opcoes: ['Since yesterday.', 'Here, in my stomach.', 'Yes, I do.'], certa: 1, traducao: 'Onde dói? — Aqui, no estômago.' },
+    { frase: 'Since when? — ___', opcoes: ['In my head.', 'Yes, please.', 'Since yesterday.'], certa: 2, traducao: 'Desde quando? — Desde ontem.' },
+    { frase: 'Do you need some medicine? — ___', opcoes: ['Yes, please.', 'Since this morning.', 'It hurts here.'], certa: 0, traducao: 'Você precisa de um remédio? — Sim, por favor.' },
+    { frase: 'The pharmacist gives medicine. You say: ___', opcoes: ["You're welcome!", 'Thank you!', 'Take care!'], certa: 1, traducao: 'O farmacêutico te dá o remédio: Obrigado!' },
+    { frase: 'You have a ___ when your temperature is high.', opcoes: ['cough', 'broken arm', 'fever'], certa: 2, traducao: 'Você está com febre quando a temperatura está alta.' },
+    { frase: 'You call an ___ in an emergency.', opcoes: ['ambulance', 'pharmacy', 'café'], certa: 0, traducao: 'Você chama uma ambulância numa emergência.' },
+    { frase: 'You buy medicine at the ___.', opcoes: ['gym', 'pharmacy', 'school'], certa: 1, traducao: 'Você compra remédio na farmácia.' },
+    { frase: 'A ___ helps sick people.', opcoes: ['teacher', 'cashier', 'doctor'], certa: 2, traducao: 'Um médico ajuda pessoas doentes.' }
+  ]
+});
+</script>
+</body>
+</html>
