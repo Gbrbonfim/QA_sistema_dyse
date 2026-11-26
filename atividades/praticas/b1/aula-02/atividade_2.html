@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 2 · Living abroad with in, on, at</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 02 · Escrita (An important decision)
+   Alinhado ao slide "Vocabulary" (in / on / at para lugar e tempo) e ao tema do blog de
+   Harris Cheng (mudar de país, começar de novo). Conteúdo NOVO. A isca é a preposição errada
+   (escolhida para nunca formar outra frase correta). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 2, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu me mudei para o Canadá em 2023.'), palavras: ['I', 'moved', 'to', 'Canada', 'in', '2023'], isca: ['on'], fim: '.', traducao: 'Eu me mudei para o Canadá em 2023.' },
+    { contexto: M('Ela mora em Toronto agora.'), palavras: ['She', 'lives', 'in', 'Toronto', 'now'], isca: ['on'], fim: '.', traducao: 'Ela mora em Toronto agora.' },
+    { contexto: M('O meu voo saiu às seis horas.'), palavras: ['My', 'flight', 'left', 'at', 'six', "o'clock"], isca: ['on'], fim: '.', traducao: 'O meu voo saiu às seis horas.' },
+    { contexto: M('Eu cheguei a Londres numa segunda-feira.'), palavras: ['I', 'arrived', 'in', 'London', 'on', 'a', 'Monday'], isca: ['at'], fim: '.', traducao: 'Cheguei a Londres numa segunda-feira.' },
+    { contexto: M('Nós conhecemos pessoas novas no trabalho.'), palavras: ['We', 'met', 'new', 'people', 'at', 'work'], isca: ['on'], fim: '.', traducao: 'Conhecemos pessoas novas no trabalho.' },
+    { contexto: M('Faz muito frio no inverno.'), palavras: ["It's", 'very', 'cold', 'in', 'winter'], isca: ['on'], fim: '.', traducao: 'Faz muito frio no inverno.' },
+    { contexto: M('Ele escreveu os objetivos num pedaço de papel.'), palavras: ['He', 'wrote', 'his', 'goals', 'on', 'a', 'piece', 'of', 'paper'], isca: ['at'], fim: '.', traducao: 'Ele escreveu os objetivos num pedaço de papel.' },
+    { contexto: M('A minha família me ligou no domingo.'), palavras: ['My', 'family', 'called', 'me', 'on', 'Sunday'], isca: ['in'], fim: '.', traducao: 'A minha família me ligou no domingo.' },
+    { contexto: M('Eu trabalho em casa às sextas.'), palavras: ['I', 'work', 'at', 'home', 'on', 'Fridays'], isca: ['in'], fim: '.', traducao: 'Trabalho em casa às sextas.' },
+    { contexto: M('Ela começou a faculdade em setembro.'), palavras: ['She', 'started', 'university', 'in', 'September'], isca: ['on'], fim: '.', traducao: 'Ela começou a faculdade em setembro.' },
+    { contexto: M('Nós sempre viajamos no Natal.'), palavras: ['We', 'always', 'travel', 'at', 'Christmas'], isca: ['in'], fim: '.', traducao: 'Sempre viajamos no Natal.' },
+    { contexto: M('Eu dormi no avião.'), palavras: ['I', 'slept', 'on', 'the', 'plane'], isca: ['at'], fim: '.', traducao: 'Dormi no avião.' },
+    { contexto: M('Há um quadro bonito na parede.'), palavras: ['There', 'is', 'a', 'beautiful', 'picture', 'on', 'the', 'wall'], isca: ['at'], fim: '.', traducao: 'Há um quadro bonito na parede.' },
+    { contexto: M('A cultura é muito diferente na Europa.'), palavras: ['The', 'culture', 'is', 'very', 'different', 'in', 'Europe'], isca: ['on'], fim: '.', traducao: 'A cultura é muito diferente na Europa.' },
+    { contexto: M('Eu tomo café da manhã às sete da manhã.'), palavras: ['I', 'have', 'breakfast', 'at', 'seven', 'in', 'the', 'morning'], isca: ['on'], fim: '.', traducao: 'Tomo café da manhã às sete da manhã.' },
+    { contexto: M('A festa é no dia primeiro de março.'), palavras: ['The', 'party', 'is', 'on', '1st', 'March'], isca: ['at'], fim: '.', traducao: 'A festa é no dia primeiro de março.' },
+    { contexto: M('Eu nunca durmo bem à noite.'), palavras: ['I', 'never', 'sleep', 'well', 'at', 'night'], isca: ['on'], fim: '.', traducao: 'Nunca durmo bem à noite.' },
+    { contexto: M('Os meus pais estavam me esperando no ponto de ônibus.'), palavras: ['My', 'parents', 'were', 'waiting', 'for', 'me', 'at', 'the', 'bus', 'stop'], isca: ['on'], fim: '.', traducao: 'Os meus pais estavam me esperando no ponto de ônibus.' },
+    { contexto: M('Na escola, aprendemos a fazer as coisas do jeito "certo".'), palavras: ['At', 'school,', 'we', 'learn', 'to', 'do', 'things', 'the', 'right', 'way'], isca: ['On'], fim: '.', traducao: 'Na escola, aprendemos a fazer as coisas do jeito "certo".' },
+    { contexto: M('Eu fiz muitos amigos no meu primeiro dia no exterior.'), palavras: ['I', 'made', 'many', 'friends', 'on', 'my', 'first', 'day', 'abroad'], isca: ['at'], fim: '.', traducao: 'Fiz muitos amigos no meu primeiro dia no exterior.' }
+  ]
+});
+</script>
+</body>
+</html>

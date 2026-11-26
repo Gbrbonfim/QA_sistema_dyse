@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 3 · When and while</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 03 · Escrita (A moment that changed everything)
+   Alinhado ao "Grammar Point" (past continuous para a ação longa, past simple para a curta;
+   "when" com o past simple, "while" com o past continuous) e aos exercícios 2 e 3 (mudança
+   para outro país, aeroporto, mala, procurar apartamento). Conteúdo NOVO. A isca é a forma
+   verbal errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 2, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu estava andando no parque quando o meu telefone tocou.'), palavras: ['I', 'was', 'walking', 'in', 'the', 'park', 'when', 'my', 'phone', 'rang'], isca: ['ringed'], fim: '.', traducao: 'Eu estava andando no parque quando o meu telefone tocou.' },
+    { contexto: M('Enquanto nós estávamos jantando, as luzes se apagaram.'), palavras: ['While', 'we', 'were', 'having', 'dinner,', 'the', 'lights', 'went', 'out'], isca: ['was'], fim: '.', traducao: 'Enquanto estávamos jantando, as luzes se apagaram.' },
+    { contexto: M('Ela estava trabalhando num café quando conheceu o sócio.'), palavras: ['She', 'was', 'working', 'in', 'a', 'café', 'when', 'she', 'met', 'her', 'partner'], isca: ['meeted'], fim: '.', traducao: 'Ela estava trabalhando num café quando conheceu o sócio.' },
+    { contexto: M('Eu cheguei quando a minha amiga estava me esperando.'), palavras: ['I', 'arrived', 'when', 'my', 'friend', 'was', 'waiting', 'for', 'me'], isca: ['were'], fim: '.', traducao: 'Cheguei quando a minha amiga estava me esperando.' },
+    { contexto: M('Enquanto eles estavam viajando, perderam as malas.'), palavras: ['While', 'they', 'were', 'travelling,', 'they', 'lost', 'their', 'bags'], isca: ['losed'], fim: '.', traducao: 'Enquanto estavam viajando, perderam as malas.' },
+    { contexto: M('Ele estava dormindo quando o alarme tocou.'), palavras: ['He', 'was', 'sleeping', 'when', 'the', 'alarm', 'went', 'off'], isca: ['goed'], fim: '.', traducao: 'Ele estava dormindo quando o alarme tocou.' },
+    { contexto: M('Eu não estava prestando atenção quando o professor explicou.'), palavras: ['I', "wasn't", 'paying', 'attention', 'when', 'the', 'teacher', 'explained'], isca: ["weren't"], fim: '.', traducao: 'Eu não estava prestando atenção quando o professor explicou.' },
+    { contexto: M('O que você estava fazendo quando a chuva começou?'), palavras: ['What', 'were', 'you', 'doing', 'when', 'the', 'rain', 'started'], isca: ['did'], fim: '?', traducao: 'O que você estava fazendo quando a chuva começou?' },
+    { contexto: M('Você sentiu falta da sua família enquanto estava em Paris?'), palavras: ['Did', 'you', 'miss', 'your', 'family', 'while', 'you', 'were', 'in', 'Paris'], isca: ['missed'], fim: '?', traducao: 'Você sentiu falta da sua família enquanto estava em Paris?' },
+    { contexto: M('Enquanto eu estava procurando um apartamento, encontrei um café ótimo.'), palavras: ['While', 'I', 'was', 'looking', 'for', 'a', 'flat,', 'I', 'found', 'a', 'great', 'café'], isca: ['finded'], fim: '.', traducao: 'Enquanto procurava um apartamento, encontrei um café ótimo.' },
+    { contexto: M('Nós estávamos esperando no check-in quando vimos um ator famoso.'), palavras: ['We', 'were', 'waiting', 'at', 'the', 'check-in', 'when', 'we', 'saw', 'a', 'famous', 'actor'], isca: ['seed'], fim: '.', traducao: 'Estávamos esperando no check-in quando vimos um ator famoso.' },
+    { contexto: M('Ela estava sorrindo quando falou sobre a nova vida.'), palavras: ['She', 'was', 'smiling', 'when', 'she', 'talked', 'about', 'her', 'new', 'life'], isca: ['talking'], fim: '.', traducao: 'Ela estava sorrindo quando falou sobre a nova vida.' },
+    { contexto: M('Enquanto eu estava embarcando no avião, me senti nervoso.'), palavras: ['While', 'I', 'was', 'boarding', 'the', 'plane,', 'I', 'felt', 'nervous'], isca: ['feeled'], fim: '.', traducao: 'Enquanto embarcava no avião, me senti nervoso.' },
+    { contexto: M('Os meus pais estavam me esperando quando eu cheguei.'), palavras: ['My', 'parents', 'were', 'waiting', 'for', 'me', 'when', 'I', 'arrived'], isca: ['was'], fim: '.', traducao: 'Os meus pais estavam me esperando quando cheguei.' },
+    { contexto: M('Ele estava estudando em Londres quando decidiu ficar.'), palavras: ['He', 'was', 'studying', 'in', 'London', 'when', 'he', 'decided', 'to', 'stay'], isca: ['decide'], fim: '.', traducao: 'Ele estava estudando em Londres quando decidiu ficar.' },
+    { contexto: M('Enquanto ela estava se despedindo, começou a chorar.'), palavras: ['While', 'she', 'was', 'saying', 'goodbye,', 'she', 'started', 'to', 'cry'], isca: ['starting'], fim: '.', traducao: 'Enquanto se despedia, ela começou a chorar.' },
+    { contexto: M('Eu estava pensando em casa quando a minha mãe ligou.'), palavras: ['I', 'was', 'thinking', 'about', 'home', 'when', 'my', 'mom', 'called'], isca: ['calling'], fim: '.', traducao: 'Eu estava pensando em casa quando a minha mãe ligou.' },
+    { contexto: M('Eles estavam jogando futebol quando ela caiu.'), palavras: ['They', 'were', 'playing', 'football', 'when', 'she', 'fell'], isca: ['falled'], fim: '.', traducao: 'Eles estavam jogando futebol quando ela caiu.' },
+    { contexto: M('Enquanto nós estávamos andando pela cidade, tiramos muitas fotos.'), palavras: ['While', 'we', 'were', 'walking', 'around', 'the', 'city,', 'we', 'took', 'many', 'photos'], isca: ['taked'], fim: '.', traducao: 'Enquanto andávamos pela cidade, tiramos muitas fotos.' },
+    { contexto: M('Eu estava trabalhando até tarde quando tive uma ótima ideia.'), palavras: ['I', 'was', 'working', 'late', 'when', 'I', 'had', 'a', 'great', 'idea'], isca: ['haved'], fim: '.', traducao: 'Eu estava trabalhando até tarde quando tive uma ótima ideia.' }
+  ]
+});
+</script>
+</body>
+</html>

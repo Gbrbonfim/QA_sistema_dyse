@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 2 · In, on or at?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 02 · Gramática (An important decision)
+   Alinhado ao slide "Vocabulary" (in / on / at de lugar e de tempo) e ao exercício 4.
+   Conteúdo NOVO; só expressões em que apenas uma preposição é correta. 24 questões. */
+const P = ['in', 'on', 'at'];
+const r = (frase, certa, traducao) => ({ frase, opcoes: P, certa, traducao });
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 2, num: 5, tipo: 'escolha',
+  instrucao: 'Choose in, on or at',
+  itens: [
+    r('My cousin lives ___ Australia.', 0, 'O meu primo mora na Austrália.'),
+    r('The meeting is ___ Tuesday.', 1, 'A reunião é na terça-feira.'),
+    r('The film starts ___ eight o\'clock.', 2, 'O filme começa às oito horas.'),
+    r('We got married ___ 2019.', 0, 'Nós nos casamos em 2019.'),
+    r('There are some books ___ the floor.', 1, 'Há alguns livros no chão.'),
+    r('My dad is ___ work now.', 2, 'O meu pai está no trabalho agora.'),
+    r('I always drink coffee ___ the morning.', 0, 'Sempre tomo café de manhã.'),
+    r('Her birthday is ___ 3rd July.', 1, 'O aniversário dela é no dia 3 de julho.'),
+    r('I can\'t sleep well ___ night.', 2, 'Não consigo dormir bem à noite.'),
+    r('The leaves fall ___ autumn.', 0, 'As folhas caem no outono.'),
+    r('We had a lot of fun ___ New Year\'s Day.', 1, 'Nós nos divertimos muito no Ano-Novo.'),
+    r('The children eat chocolate eggs ___ Easter.', 2, 'As crianças comem ovos de chocolate na Páscoa.'),
+    r('Grandma is cooking ___ the kitchen.', 0, 'A vovó está cozinhando na cozinha.'),
+    r('Put the plates ___ the table, please.', 1, 'Coloque os pratos na mesa, por favor.'),
+    r('I\'m staying ___ home today. I\'m sick.', 2, 'Vou ficar em casa hoje. Estou doente.'),
+    r('We arrived ___ Rome very late.', 0, 'Chegamos a Roma muito tarde.'),
+    r('I met many people ___ my first day abroad.', 1, 'Conheci muitas pessoas no meu primeiro dia no exterior.'),
+    r('People often have lunch ___ work.', 2, 'As pessoas costumam almoçar no trabalho.'),
+    r('I found a nice café ___ the center of the city.', 0, 'Encontrei um café legal no centro da cidade.'),
+    r('I wrote my goals ___ a piece of paper.', 1, 'Escrevi os meus objetivos num pedaço de papel.'),
+    r('Harris lived ___ Hong Kong for 27 years.', 0, 'Harris morou em Hong Kong por 27 anos.'),
+    r('London is full of culture ___ the streets.', 1, 'Londres é cheia de cultura nas ruas.'),
+    r('People in Europe often finish work ___ 5 p.m.', 2, 'As pessoas na Europa costumam sair do trabalho às 17h.'),
+    r('___ school, we often learn to do things the "right" way.', 2, 'Na escola, muitas vezes aprendemos a fazer as coisas do jeito "certo".')
+  ]
+});
+</script>
+</body>
+</html>

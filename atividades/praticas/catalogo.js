@@ -1193,6 +1193,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Questions and answers about you', tipo: 'Escute e grave', treina: 'Fala · Perguntas e respostas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Word order in questions', tipo: 'Make a Choice', treina: 'Gramática · Perguntas', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 2,
+        titulo: 'Class 02 and 03 · An important decision',
+        atividades: [
+          { num: 1, parte: 'Class 02', titulo: 'In, on or at: what kind?', tipo: 'Escute e escolha', treina: 'Escuta · Preposições', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 02', titulo: 'Living abroad with in, on, at', tipo: 'Monte a frase', treina: 'Escrita · Preposições', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 02', titulo: 'A new life in Dublin', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 02', titulo: 'Talking about living abroad', tipo: 'Escute e grave', treina: 'Fala · Morar fora', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 02', titulo: 'In, on or at?', tipo: 'Make a Choice', treina: 'Gramática · Preposições', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 03', titulo: 'What interrupted the action?', tipo: 'Escute e escolha', treina: 'Escuta · Past continuous', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 03', titulo: 'When and while', tipo: 'Monte a frase', treina: 'Escrita · Past simple e continuous', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 03', titulo: 'The moment that changed my life', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 03', titulo: 'Tell your story', tipo: 'Escute e grave', treina: 'Fala · Past simple e continuous', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 03', titulo: 'Past simple or past continuous?', tipo: 'Make a Choice', treina: 'Gramática · Past simple e continuous', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 2 · In, on or at: what kind?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 02 · Escuta (An important decision)
+   Alinhado ao slide "Vocabulary 2) Listen and read": in (países e cidades, cômodos e prédios,
+   espaços fechados, meses e anos, estações, partes do dia), on (transporte, superfícies, dias,
+   datas), at (lugares como school/work/home, paradas, horas, feriados, outros horários fixos).
+   Conteúdo NOVO: o aluno ouve a frase e diz que tipo de expressão usa a preposição.
+   24 questões. */
+const IC = {
+  'a country or city': 'public', 'a room or building': 'meeting_room', 'transport': 'directions_bus',
+  'a surface': 'table_restaurant', 'a month or year': 'calendar_month', 'a day or date': 'today',
+  'a clock time': 'schedule', 'a season': 'ac_unit', 'a festival': 'celebration'
+};
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 2, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what comes after the preposition?',
+  itens: [
+    q('She lives in Lisbon now.', 'a country or city', ['a clock time', 'a surface']),
+    q('I left my passport on the table.', 'a surface', ['a month or year', 'a country or city']),
+    q('The flight leaves at seven o\'clock.', 'a clock time', ['a room or building', 'a season']),
+    q('We moved to Dublin in 2021.', 'a month or year', ['transport', 'a surface']),
+    q('My new job starts on Monday.', 'a day or date', ['a room or building', 'a clock time']),
+    q('It snows a lot in winter here.', 'a season', ['a day or date', 'transport']),
+    q('I met my best friend on a plane to Rome.', 'transport', ['a season', 'a clock time']),
+    q('We always visit my grandma at Christmas.', 'a festival', ['a surface', 'a country or city']),
+    q('He works in a big museum.', 'a room or building', ['a day or date', 'a festival']),
+    q('My birthday is on the fifth of May.', 'a day or date', ['a season', 'a room or building']),
+    q('They arrived in Canada with two suitcases.', 'a country or city', ['a festival', 'a day or date']),
+    q('There is a big map on the wall.', 'a surface', ['a clock time', 'a festival']),
+    q('The class finishes at half past nine.', 'a clock time', ['a country or city', 'transport']),
+    q('I started university in September.', 'a month or year', ['a surface', 'a festival']),
+    q('We read a book on the bus to work.', 'transport', ['a month or year', 'a room or building']),
+    q('The children paint eggs at Easter.', 'a festival', ['transport', 'a month or year']),
+    q('I usually have breakfast in the kitchen.', 'a room or building', ['a clock time', 'transport']),
+    q('The days are very long in summer.', 'a season', ['a surface', 'a room or building']),
+    q('The party is on New Year\'s Day.', 'a day or date', ['a country or city', 'a season']),
+    q('My cat sleeps on the floor.', 'a surface', ['a festival', 'a day or date']),
+    q('My sister was born in 1998.', 'a month or year', ['a clock time', 'a country or city']),
+    q('The shop opens at nine in the morning.', 'a clock time', ['a festival', 'a surface']),
+    q('Many people from India live in Toronto.', 'a country or city', ['a season', 'transport']),
+    q('I saw an old friend on the train yesterday.', 'transport', ['a day or date', 'a festival'])
+  ]
+});
+</script>
+</body>
+</html>

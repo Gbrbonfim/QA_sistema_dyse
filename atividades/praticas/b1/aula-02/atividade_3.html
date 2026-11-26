@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 2 · A new life in Dublin</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 02 · Leitura (An important decision)
+   Alinhado ao blog de Harris Cheng (mudar de país, a reação da família, seguir o coração,
+   nenhum lugar é perfeito, ser um cidadão global, horários de trabalho na Europa) e às
+   preposições in/on/at. Conteúdo NOVO: a Ana conversa com o Rafa, que se mudou para Dublin.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ana', 'Rafa! How is your new life in Dublin?'],
+  ['Rafa', "It's great! I moved here in March, and I already love it."],
+  ['Ana', 'Why did you decide to live abroad?'],
+  ['Rafa', 'I needed to grow as a person and as a professional.'],
+  ['Ana', 'What did your family say?'],
+  ['Rafa', 'They were surprised and worried. But I followed my heart.'],
+  ['Ana', 'Is Dublin a perfect place?'],
+  ['Rafa', 'No place is perfect. People are friendly, but it rains a lot and rent is expensive.'],
+  ['Ana', 'Where do you work?'],
+  ['Rafa', 'I work in a small tech company in the city center.'],
+  ['Ana', 'What time do you finish work?'],
+  ['Rafa', 'At five! People here have time for life, not just work.'],
+  ['Ana', 'Do you have friends there?'],
+  ['Rafa', 'Yes! I met people from Nigeria, India and Poland at work.'],
+  ['Ana', 'What did you learn from them?'],
+  ['Rafa', 'I understand more about different cultures now. I feel like a global citizen.'],
+  ['Ana', 'Are you going to stay there forever?'],
+  ['Rafa', "I don't know. I'm just enjoying the journey."]
+];
+const lado = q => q === 'Ana' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 2, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["It's great! I moved here in March, and I already love it.", "It's great! I moved here on March, and I already love it.", "It's great! I moved here at March, and I already love it."], 0, 'Está ótima! Mudei para cá em março e já adoro.'),
+    prox(2, ['Why you decided to live abroad?', 'Why did you decide to live abroad?', 'Why did you decided to live abroad?'], 1, 'Por que você decidiu morar fora?'),
+    prox(3, ['I need to grow as a person tomorrow.', 'I needed grow as a person and as a professional.', 'I needed to grow as a person and as a professional.'], 2, 'Eu precisava crescer como pessoa e como profissional.'),
+    prox(5, ['They were surprised and worried. But I followed my heart.', 'They was surprised and worried. But I followed my heart.', 'They were surprised and worried. But I follow my heart yesterday.'], 0, 'Eles ficaram surpresos e preocupados. Mas segui o meu coração.'),
+    prox(6, ['Dublin is a perfect place?', 'Is Dublin a perfect place?', 'Does Dublin a perfect place?'], 1, 'Dublin é um lugar perfeito?'),
+    prox(7, ['Yes, it is perfect. Everything is cheap and sunny.', 'No place is perfect. People is friendly, but it rains a lot.', 'No place is perfect. People are friendly, but it rains a lot and rent is expensive.'], 2, 'Nenhum lugar é perfeito. As pessoas são simpáticas, mas chove muito e o aluguel é caro.'),
+    prox(9, ['I work in a small tech company in the city center.', 'I work on a small tech company on the city center.', 'I work at a small tech company at the city center yesterday.'], 0, 'Trabalho numa pequena empresa de tecnologia no centro da cidade.'),
+    prox(10, ['What time you finish work?', 'What time do you finish work?', 'What time does you finish work?'], 1, 'A que horas você sai do trabalho?'),
+    prox(11, ['On five! People here have time for life, not just work.', 'In five! People here have time for life, not just work.', 'At five! People here have time for life, not just work.'], 2, 'Às cinco! As pessoas aqui têm tempo para a vida, não só para o trabalho.'),
+    prox(13, ['Yes! I met people from Nigeria, India and Poland at work.', 'Yes! I met people from Nigeria, India and Poland on work.', 'Yes! I meet people from Nigeria, India and Poland last month.'], 0, 'Sim! Conheci pessoas da Nigéria, da Índia e da Polônia no trabalho.'),
+    prox(15, ['I understand more about different cultures now. I feel like a global citizen.', 'At five, on Mondays.', 'I understands more about different cultures now.'], 0, 'Agora entendo mais sobre culturas diferentes. Eu me sinto um cidadão global.'),
+    prox(17, ["I don't know. I'm just enjoying the journey.", "I doesn't know. I'm just enjoying the journey.", "I don't know. I just enjoying the journey."], 0, 'Não sei. Só estou aproveitando a jornada.'),
+    { instrucao: 'When did Rafa move to Dublin?', frase: 'In ___.', opcoes: ['March', 'May', 'September'], certa: 0, traducao: 'Em março.' },
+    { instrucao: 'How did his family feel?', frase: '___', opcoes: ['Happy and relaxed.', 'Surprised and worried.', 'Angry and sad.'], certa: 1, traducao: 'Surpresos e preocupados.' },
+    { instrucao: 'What is one bad thing about Dublin?', frase: '___', opcoes: ['The people are unfriendly.', 'There is no work.', 'It rains a lot.'], certa: 2, traducao: 'Chove muito.' },
+    { instrucao: 'What is one good thing about Dublin?', frase: '___', opcoes: ['The people are friendly.', 'The rent is cheap.', 'It is always sunny.'], certa: 0, traducao: 'As pessoas são simpáticas.' },
+    { instrucao: 'Where does Rafa work?', frase: 'In a small ___ company.', opcoes: ['food', 'tech', 'travel'], certa: 1, traducao: 'Numa pequena empresa de tecnologia.' },
+    { instrucao: 'What time does Rafa finish work?', frase: 'At ___.', opcoes: ['nine', 'midnight', 'five'], certa: 2, traducao: 'Às cinco.' },
+    { instrucao: 'Where did Rafa meet people from Nigeria, India and Poland?', frase: '___', opcoes: ['At work.', 'On the plane.', 'At school.'], certa: 0, traducao: 'No trabalho.' },
+    { instrucao: 'Is Rafa going to stay in Dublin forever?', frase: '___', opcoes: ['Yes, he is.', "He doesn't know.", 'No, he is going home next week.'], certa: 1, traducao: 'Ele não sabe.' }
+  ]
+});
+</script>
+</body>
+</html>

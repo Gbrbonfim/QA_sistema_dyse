@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 3 · The moment that changed my life</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 03 · Leitura (A moment that changed everything)
+   Alinhado ao "Speaking and Writing: A Moment That Changed Everything" (Where were you? What
+   were you doing? What happened next? How did that change something for you?) e ao vídeo da
+   Kacie (primeira viagem sozinha, planejava ficar seis meses na Itália). Conteúdo NOVO: o
+   Tom conta à Bia como foi parar em Florença. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Bia', 'Tom, why did you move to Italy?'],
+  ['Tom', 'It was an accident! I was travelling alone for the first time.'],
+  ['Bia', 'Were you nervous?'],
+  ['Tom', 'Very nervous! But I was excited too.'],
+  ['Bia', 'Where were you when everything changed?'],
+  ['Tom', 'I was having a coffee in a small café in Florence.'],
+  ['Bia', 'What happened?'],
+  ['Tom', 'While I was drinking my coffee, the owner started talking to me.'],
+  ['Bia', 'What did he say?'],
+  ['Tom', 'He said he needed someone to teach English to his children.'],
+  ['Bia', 'And what did you do?'],
+  ['Tom', 'I said yes! I was planning to stay for only six months.'],
+  ['Bia', 'How long did you stay?'],
+  ['Tom', "Five years! And I'm still here."],
+  ['Bia', 'What were you doing in Brazil before the trip?'],
+  ['Tom', 'I was working in a bank, and I was very bored.'],
+  ['Bia', 'How did that moment change your life?'],
+  ['Tom', 'I found a new job, a new language and a new home.']
+];
+const lado = q => q === 'Bia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 2, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['It was an accident! I was travelling alone for the first time.', 'It was an accident! I were travelling alone for the first time.', 'It was an accident! I was travel alone for the first time.'], 0, 'Foi por acaso! Eu estava viajando sozinho pela primeira vez.'),
+    prox(2, ['Did you nervous?', 'Were you nervous?', 'Was you nervous?'], 1, 'Você estava nervoso?'),
+    prox(4, ['Where did you when everything changed?', 'Where you were when everything changed?', 'Where were you when everything changed?'], 2, 'Onde você estava quando tudo mudou?'),
+    prox(5, ['I was having a coffee in a small café in Florence.', 'I was have a coffee in a small café in Florence.', 'I were having a coffee in a small café in Florence.'], 0, 'Eu estava tomando um café num pequeno café em Florença.'),
+    prox(7, ['While I drinking my coffee, the owner started talking to me.', 'While I was drinking my coffee, the owner started talking to me.', 'While I was drinking my coffee, the owner was start talking to me.'], 1, 'Enquanto eu tomava o meu café, o dono começou a conversar comigo.'),
+    prox(8, ['What did he said?', 'What he said?', 'What did he say?'], 2, 'O que ele disse?'),
+    prox(9, ['He said he needed someone to teach English to his children.', 'He sayed he needed someone to teach English to his children.', 'He said he was needing someone teach English to his children.'], 0, 'Ele disse que precisava de alguém para ensinar inglês aos filhos.'),
+    prox(11, ['I said yes! I planning to stay for only six months.', 'I said yes! I was planning to stay for only six months.', 'I said yes! I were planning to stay for only six months.'], 1, 'Eu disse sim! Eu planejava ficar só seis meses.'),
+    prox(12, ['How long you stayed?', 'How long did you stayed?', 'How long did you stay?'], 2, 'Quanto tempo você ficou?'),
+    prox(14, ['What were you doing in Brazil before the trip?', 'What you were doing in Brazil before the trip?', 'What did you doing in Brazil before the trip?'], 0, 'O que você fazia no Brasil antes da viagem?'),
+    prox(15, ['I was work in a bank, and I was very bored.', 'I was working in a bank, and I was very bored.', 'I were working in a bank, and I were very bored.'], 1, 'Eu trabalhava num banco e estava muito entediado.'),
+    prox(17, ['I find a new job, a new language and a new home tomorrow.', 'I was finding a new job when I find a new home.', 'I found a new job, a new language and a new home.'], 2, 'Encontrei um emprego novo, um idioma novo e um lar novo.'),
+    { instrucao: 'How was Tom travelling?', frase: '___', opcoes: ['Alone, for the first time.', 'With his family.', 'With his business partners.'], certa: 0, traducao: 'Sozinho, pela primeira vez.' },
+    { instrucao: 'How did Tom feel before the trip?', frase: '___', opcoes: ['Bored and tired.', 'Nervous but excited.', 'Calm and relaxed.'], certa: 1, traducao: 'Nervoso, mas animado.' },
+    { instrucao: 'Where was Tom when everything changed?', frase: 'In a café in ___.', opcoes: ['Rome', 'Milan', 'Florence'], certa: 2, traducao: 'Num café em Florença.' },
+    { instrucao: 'What was Tom doing when the owner started talking to him?', frase: 'He was ___.', opcoes: ['drinking his coffee', 'teaching English', 'working in a bank'], certa: 0, traducao: 'Estava tomando o café.' },
+    { instrucao: 'What did the owner need?', frase: 'Someone to ___.', opcoes: ['cook in the café', 'teach English to his children', 'drive his car'], certa: 1, traducao: 'Alguém para ensinar inglês aos filhos.' },
+    { instrucao: 'How long was Tom planning to stay?', frase: '___', opcoes: ['Five years.', 'Two weeks.', 'Only six months.'], certa: 2, traducao: 'Só seis meses.' },
+    { instrucao: 'Is Tom still in Italy?', frase: '___', opcoes: ['Yes. He stayed five years and he is still there.', 'No. He went back after six months.', 'No. He moved to Brazil last year.'], certa: 0, traducao: 'Sim. Ficou cinco anos e ainda está lá.' },
+    { instrucao: 'What was Tom doing in Brazil before the trip?', frase: 'He was ___.', opcoes: ['studying Italian', 'working in a bank', 'teaching children'], certa: 1, traducao: 'Ele trabalhava num banco.' }
+  ]
+});
+</script>
+</body>
+</html>
