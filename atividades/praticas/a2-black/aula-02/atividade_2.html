@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 2 · Song words</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 02 · Escuta (I Want It That Way - Backstreet Boys)
+   Alinhado ao vocabulário do slide (heartache, mistake, world, fire, hear, desire, heart,
+   apart, say, way). Conteúdo NOVO: o aluno ouve uma frase e escolhe a palavra do vocabulário
+   que ouviu. 24 questões. */
+const IC = { heartache: 'heart_broken', mistake: 'error', world: 'public', fire: 'local_fire_department', hear: 'hearing', heart: 'favorite', desire: 'star', apart: 'call_split', say: 'record_voice_over', way: 'route' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 2, num: 2, tipo: 'imagem',
+  instrucao: 'Listen and choose the word you hear',
+  itens: [
+    q('This song is about a heartache.', 'heartache', ['mistake', 'heart', 'world']),
+    q("It's my mistake. I'm sorry.", 'mistake', ['heartache', 'way', 'fire']),
+    q('Music is a big part of my world.', 'world', ['way', 'heart', 'hear']),
+    q('There is a fire on the stage!', 'fire', ['desire', 'world', 'way']),
+    q("I can't hear the singer.", 'hear', ['heart', 'say', 'fire']),
+    q('You are always in my heart.', 'heart', ['hear', 'world', 'mistake']),
+    q('My biggest desire is to sing on a big stage.', 'desire', ['fire', 'heart', 'way']),
+    q('They are two worlds apart.', 'apart', ['heart', 'mistake', 'desire']),
+    q('What do you say?', 'say', ['way', 'hear', 'fire']),
+    q('I like it that way.', 'way', ['say', 'world', 'heart']),
+    q('A heartache is a sad feeling.', 'heartache', ['heart', 'desire', 'apart']),
+    q('Everybody makes a mistake sometimes.', 'mistake', ['world', 'say', 'hear']),
+    q('This band is famous all over the world.', 'world', ['fire', 'heart', 'way']),
+    q('The singer has a lot of fire on stage.', 'fire', ['desire', 'apart', 'hear']),
+    q('Can you hear the music?', 'hear', ['say', 'heart', 'world']),
+    q('My heart is happy when I listen to this song.', 'heart', ['hear', 'mistake', 'way']),
+    q('Is that your desire?', 'desire', ['fire', 'world', 'say']),
+    q('The members of the band live far apart.', 'apart', ['heart', 'way', 'fire']),
+    q('Say it again, please!', 'say', ['hear', 'mistake', 'heart']),
+    q('Is this the way to the concert?', 'way', ['world', 'say', 'desire']),
+    q('Love songs are about heartache.', 'heartache', ['mistake', 'apart', 'hear']),
+    q('That was a big mistake!', 'mistake', ['heartache', 'desire', 'world']),
+    q('The world is beautiful.', 'world', ['way', 'fire', 'apart']),
+    q("I want to hear that song again.", 'hear', ['heart', 'say', 'desire'])
+  ]
+});
+</script>
+</body>
+</html>

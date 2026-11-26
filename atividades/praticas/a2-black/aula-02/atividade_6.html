@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 2 · Music quiz night</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 02 · Leitura (I Want It That Way - Backstreet Boys)
+   Alinhado ao "Grammar - Verb To Be" (perguntas com o be antes do sujeito: Is she...? / Are
+   they...?, short answers e negativas) e ao tema de bandas favoritas. Conteúdo NOVO: um quiz
+   de música entre amigos, com fatos verdadeiros. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Host', 'Welcome to music quiz night! Question one: Is Adele from London?'],
+  ['Carla', 'Yes, she is!'],
+  ['Host', 'Correct! Question two: Are the Beatles from Manchester?'],
+  ['Carla', "No, they aren't. They're from Liverpool."],
+  ['Host', 'Correct! Question three: Is Shakira from Mexico?'],
+  ['Carla', "No, she isn't. She's from Colombia."],
+  ['Host', 'Great! Question four: Are BTS from Japan?'],
+  ['Carla', "No, they aren't. They're from South Korea."],
+  ['Host', 'Question five: Is Bruno Mars from Hawaii?'],
+  ['Carla', 'Hmm... Yes, he is!'],
+  ['Host', 'Correct! Last question: Is U2 a British band?'],
+  ['Carla', "No, it isn't. U2 is from Ireland."],
+  ['Host', "Amazing! You're the winner!"],
+  ['Carla', "Wow! I'm so happy! Music is my world!"],
+  ['Host', 'Congratulations, Carla!']
+];
+const lado = q => q === 'Host' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 2, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, she is!', "Yes, she's!", 'Yes, she are!'], 0, 'Sim!'),
+    prox(2, ['Correct! Question two: Is the Beatles from Manchester?', 'Correct! Question two: Are the Beatles from Manchester?', 'Correct! Question two: The Beatles are from Manchester?'], 1, 'Certo! Pergunta dois: os Beatles são de Manchester?'),
+    prox(3, ["No, they isn't. They're from Liverpool.", "No, they aren't. They're from London.", "No, they aren't. They're from Liverpool."], 2, 'Não. Eles são de Liverpool.'),
+    prox(4, ['Correct! Question three: Is Shakira from Mexico?', 'Correct! Question three: Are Shakira from Mexico?', 'Correct! Question three: Shakira is from Mexico?'], 0, 'Certo! Pergunta três: a Shakira é do México?'),
+    prox(5, ["No, she aren't. She's from Colombia.", "No, she isn't. She's from Colombia.", "No, she isn't. She's from Spain."], 1, 'Não. Ela é da Colômbia.'),
+    prox(6, ['Great! Question four: Is BTS from Japan they?', 'Great! Question four: BTS are from Japan?', 'Great! Question four: Are BTS from Japan?'], 2, 'Ótimo! Pergunta quatro: o BTS é do Japão?'),
+    prox(7, ["No, they aren't. They're from South Korea.", "No, they aren't. They're from China.", "No, they isn't. They're from South Korea."], 0, 'Não. Eles são da Coreia do Sul.'),
+    prox(8, ['Question five: Are Bruno Mars from Hawaii?', 'Question five: Is Bruno Mars from Hawaii?', 'Question five: Bruno Mars from Hawaii is?'], 1, 'Pergunta cinco: o Bruno Mars é do Havaí?'),
+    prox(9, ['Hmm... Yes, he are!', "Hmm... Yes, he's!", 'Hmm... Yes, he is!'], 2, 'Hmm... Sim!'),
+    prox(11, ["No, it isn't. U2 is from Ireland.", "No, it aren't. U2 is from Ireland.", "No, it isn't. U2 is from England."], 0, 'Não. O U2 é da Irlanda.'),
+    prox(12, ["Amazing! You're the loser!", "Amazing! You're the winner!", "Amazing! You is the winner!"], 1, 'Incrível! Você é a vencedora!'),
+    prox(13, ["Wow! I'm so happy! Music are my world!", "Wow! I so happy! Music is my world!", "Wow! I'm so happy! Music is my world!"], 2, 'Uau! Estou tão feliz! A música é o meu mundo!'),
+    { instrucao: 'Where is Adele from?', frase: '___.', opcoes: ['London', 'Liverpool', 'Dublin'], certa: 0, traducao: 'Londres.' },
+    { instrucao: 'Where are the Beatles from?', frase: '___.', opcoes: ['Manchester', 'Liverpool', 'London'], certa: 1, traducao: 'Liverpool.' },
+    { instrucao: 'Where is Shakira from?', frase: '___.', opcoes: ['Mexico', 'Spain', 'Colombia'], certa: 2, traducao: 'Colômbia.' },
+    { instrucao: 'Where are BTS from?', frase: '___.', opcoes: ['South Korea', 'Japan', 'China'], certa: 0, traducao: 'Coreia do Sul.' },
+    { instrucao: 'Is Bruno Mars from Hawaii?', frase: '___', opcoes: ["No, he isn't.", 'Yes, he is.', 'Yes, they are.'], certa: 1, traducao: 'Sim.' },
+    { instrucao: 'Is U2 a British band?', frase: "No. It's from ___.", opcoes: ['England', 'Scotland', 'Ireland'], certa: 2, traducao: 'Não. É da Irlanda.' },
+    { instrucao: 'Who is the winner?', frase: '___.', opcoes: ['Carla', 'The host', 'Adele'], certa: 0, traducao: 'A Carla.' },
+    { instrucao: 'What does Carla say about music?', frase: 'Music is my ___!', opcoes: ['heart', 'world', 'fire'], certa: 1, traducao: 'A música é o meu mundo!' }
+  ]
+});
+</script>
+</body>
+</html>

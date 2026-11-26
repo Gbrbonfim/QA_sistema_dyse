@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 2 · My favourite boy band</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 02 · Leitura (I Want It That Way - Backstreet Boys)
+   Alinhado ao Grammar 4 do slide (fatos sobre os Backstreet Boys com is / are) e ao Talking
+   and Writing (My favourite band is... / They are from... / The song ... is very...).
+   Conteúdo NOVO com fatos verdadeiros: a banda foi formada em Orlando, na Flórida, em 1993; o
+   Nick Carter é o mais novo. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Lucas', "What's your favourite band, Bia?"],
+  ['Bia', "My favourite band is the Backstreet Boys. They're amazing!"],
+  ['Lucas', 'Really? Are they British?'],
+  ['Bia', "No, they aren't. They're an American boy band."],
+  ['Lucas', 'Where are they from?'],
+  ['Bia', "They're from Orlando, Florida. The band started in 1993."],
+  ['Lucas', 'Wow! Who is your favourite singer in the band?'],
+  ['Bia', 'Nick Carter. He is the youngest.'],
+  ['Lucas', 'How many singers are there?'],
+  ['Bia', 'There are five: Nick, Brian, AJ, Howie and Kevin.'],
+  ['Lucas', "I'm not a big fan of boy bands. My favourite band is Coldplay."],
+  ['Bia', 'Are they from London?'],
+  ['Lucas', 'Yes, they are! Their songs are very beautiful.'],
+  ['Bia', "Cool! Let's listen to a song from each band!"],
+  ['Lucas', 'Great idea!']
+];
+const lado = q => q === 'Lucas' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 2, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["My favourite band is the Backstreet Boys. They're amazing!", "My favourite band are the Backstreet Boys. They's amazing!", "My favourite band is the Backstreet Boys. They amazing!"], 0, 'A minha banda favorita é o Backstreet Boys. Eles são incríveis!'),
+    prox(2, ['Really? Is they British?', 'Really? Are they British?', 'Really? They are British?'], 1, 'Sério? Eles são britânicos?'),
+    prox(3, ["No, they isn't. They're an American boy band.", "No, they aren't. They're a American boy band.", "No, they aren't. They're an American boy band."], 2, 'Não. Eles são uma boy band americana.'),
+    prox(4, ['Where are they from?', 'Where is they from?', 'Where they are from?'], 0, 'De onde eles são?'),
+    prox(5, ["They're from Orlando, Florida. The band started on 1993.", "They're from Orlando, Florida. The band started in 1993.", "They from Orlando, Florida. The band started in 1993."], 1, 'Eles são de Orlando, na Flórida. A banda começou em 1993.'),
+    prox(6, ['Wow! Who are your favourite singer in the band?', 'Wow! Who your favourite singer is in the band?', 'Wow! Who is your favourite singer in the band?'], 2, 'Uau! Quem é o seu cantor favorito da banda?'),
+    prox(7, ['Nick Carter. He is the youngest.', 'Nick Carter. He are the youngest.', 'Nick Carter. He is the young.'], 0, 'O Nick Carter. Ele é o mais novo.'),
+    prox(8, ['How much singers are there?', 'How many singers are there?', 'How many singers is there?'], 1, 'Quantos cantores são?'),
+    prox(10, ["I'm not a big fan of boy bands. My favourite band are Coldplay.", "I amn't a big fan of boy bands. My favourite band is Coldplay.", "I'm not a big fan of boy bands. My favourite band is Coldplay."], 2, 'Não sou muito fã de boy bands. A minha banda favorita é o Coldplay.'),
+    prox(11, ['Are they from London?', 'Is they from London?', 'They from London?'], 0, 'Eles são de Londres?'),
+    prox(12, ['Yes, they is! Their songs are very beautiful.', 'Yes, they are! Their songs are very beautiful.', "Yes, they're! Their songs are very beautiful."], 1, 'Sim! As músicas deles são muito bonitas.'),
+    prox(13, ["Cool! Let's listen to a song from each bands!", "Cool! Let's listen a song from each band!", "Cool! Let's listen to a song from each band!"], 2, 'Legal! Vamos ouvir uma música de cada banda!'),
+    { instrucao: "What is Bia's favourite band?", frase: 'The ___.', opcoes: ['Backstreet Boys', 'Beatles', 'Coldplay'], certa: 0, traducao: 'O Backstreet Boys.' },
+    { instrucao: 'Are the Backstreet Boys British?', frase: "No, they aren't. They're ___.", opcoes: ['Irish', 'American', 'Canadian'], certa: 1, traducao: 'Não. Eles são americanos.' },
+    { instrucao: 'Where are they from?', frase: '___, Florida.', opcoes: ['Miami', 'Houston', 'Orlando'], certa: 2, traducao: 'Orlando, na Flórida.' },
+    { instrucao: 'When did the band start?', frase: 'In ___.', opcoes: ['1993', '2003', '1983'], certa: 0, traducao: 'Em 1993.' },
+    { instrucao: 'Who is the youngest?', frase: '___.', opcoes: ['Kevin Richardson', 'Nick Carter', 'Brian Littrell'], certa: 1, traducao: 'O Nick Carter.' },
+    { instrucao: 'How many singers are in the band?', frase: '___.', opcoes: ['Three', 'Four', 'Five'], certa: 2, traducao: 'Cinco.' },
+    { instrucao: "What is Lucas's favourite band?", frase: '___.', opcoes: ['Coldplay', 'U2', 'Queen'], certa: 0, traducao: 'O Coldplay.' },
+    { instrucao: 'Is Lucas a big fan of boy bands?', frase: '___', opcoes: ['Yes, he is.', "No, he isn't.", "No, he doesn't."], certa: 1, traducao: 'Não.' }
+  ]
+});
+</script>
+</body>
+</html>

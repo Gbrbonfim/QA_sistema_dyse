@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 2 · Am I? Is she? Are they?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 02 · Escrita (I Want It That Way - Backstreet Boys)
+   Alinhado ao Grammar 3 do slide ("Am I your fire?" — em perguntas, o verbo to be vem antes do
+   sujeito) e às negativas (isn't / aren't / I'm not). Conteúdo NOVO com bandas e cantores
+   (fatos verdadeiros). A isca é o be errado ou a ordem de frase afirmativa. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 2, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('A Adele é britânica?'), palavras: ['Is', 'Adele', 'British'], isca: ['Are'], fim: '?', traducao: 'A Adele é britânica?' },
+    { contexto: M('Eles são de Orlando?'), palavras: ['Are', 'they', 'from', 'Orlando'], isca: ['Is'], fim: '?', traducao: 'Eles são de Orlando?' },
+    { contexto: M('Eu estou atrasado para o show?'), palavras: ['Am', 'I', 'late', 'for', 'the', 'concert'], isca: ['Is'], fim: '?', traducao: 'Estou atrasado para o show?' },
+    { contexto: M('A música é popular?'), palavras: ['Is', 'the', 'song', 'popular'], isca: ['Are'], fim: '?', traducao: 'A música é popular?' },
+    { contexto: M('Os Beatles são americanos?'), palavras: ['Are', 'the', 'Beatles', 'American'], isca: ['Is'], fim: '?', traducao: 'Os Beatles são americanos?' },
+    { contexto: M('Não, eles não são. Eles são ingleses.'), palavras: ['No,', 'they', "aren't.", "They're", 'English'], isca: ["isn't."], fim: '.', traducao: 'Não. Eles são ingleses.' },
+    { contexto: M('O Coldplay é da Irlanda?'), palavras: ['Is', 'Coldplay', 'from', 'Ireland'], isca: ['Am'], fim: '?', traducao: 'O Coldplay é da Irlanda?' },
+    { contexto: M('Não, não é. É de Londres.'), palavras: ['No,', 'it', "isn't.", "It's", 'from', 'London'], isca: ["aren't."], fim: '.', traducao: 'Não. É de Londres.' },
+    { contexto: M('Você é fã do BTS?'), palavras: ['Are', 'you', 'a', 'BTS', 'fan'], isca: ['Do'], fim: '?', traducao: 'Você é fã do BTS?' },
+    { contexto: M('Sim, eu sou!'), palavras: ['Yes,', 'I', 'am'], isca: ['is'], fim: '!', traducao: 'Sim!' },
+    { contexto: M('O Bruno Mars não é britânico.'), palavras: ['Bruno', 'Mars', "isn't", 'British'], isca: ["aren't"], fim: '.', traducao: 'O Bruno Mars não é britânico.' },
+    { contexto: M('Eu não sou um bom cantor.'), palavras: ["I'm", 'not', 'a', 'good', 'singer'], isca: ["isn't"], fim: '.', traducao: 'Não sou um bom cantor.' },
+    { contexto: M('A Shakira é da Espanha?'), palavras: ['Is', 'Shakira', 'from', 'Spain'], isca: ['Are'], fim: '?', traducao: 'A Shakira é da Espanha?' },
+    { contexto: M('Não, não é. Ela é da Colômbia.'), palavras: ['No,', 'she', "isn't.", "She's", 'from', 'Colombia'], isca: ["aren't."], fim: '.', traducao: 'Não. Ela é da Colômbia.' },
+    { contexto: M('Nós estamos no show certo?'), palavras: ['Are', 'we', 'at', 'the', 'right', 'concert'], isca: ['Is'], fim: '?', traducao: 'Estamos no show certo?' },
+    { contexto: M('O Nick Carter é o mais novo?'), palavras: ['Is', 'Nick', 'Carter', 'the', 'youngest'], isca: ['Are'], fim: '?', traducao: 'O Nick Carter é o mais novo?' },
+    { contexto: M('Os músicos não são do Brasil.'), palavras: ['The', 'musicians', "aren't", 'from', 'Brazil'], isca: ["isn't"], fim: '.', traducao: 'Os músicos não são do Brasil.' },
+    { contexto: M('Qual é a sua banda favorita?'), palavras: ['What', 'is', 'your', 'favourite', 'band'], isca: ['are'], fim: '?', traducao: 'Qual é a sua banda favorita?' },
+    { contexto: M('Quem são os cantores?'), palavras: ['Who', 'are', 'the', 'singers'], isca: ['is'], fim: '?', traducao: 'Quem são os cantores?' },
+    { contexto: M('De onde ela é?'), palavras: ['Where', 'is', 'she', 'from'], isca: ['are'], fim: '?', traducao: 'De onde ela é?' }
+  ]
+});
+</script>
+</body>
+</html>

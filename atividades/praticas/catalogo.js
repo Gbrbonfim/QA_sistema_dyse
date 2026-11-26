@@ -1096,6 +1096,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Born on, interested in', tipo: 'Make a Choice', treina: 'Gramática · Estruturas da apresentação', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Self-introduction ideas', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 2,
+        titulo: 'Class 02 · I Want It That Way - Backstreet Boys',
+        atividades: [
+          { num: 1, titulo: 'Find the rhyme', tipo: 'Escute e escolha', treina: 'Escuta · Rimas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Song words', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Famous bands', tipo: 'Monte a frase', treina: 'Escrita · To be', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Am I? Is she? Are they?', tipo: 'Monte a frase', treina: 'Escrita · Perguntas e negativas', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'My favourite boy band', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'Music quiz night', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'My favourite band', tipo: 'Escute e grave', treina: 'Fala · To be', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Words and rhymes', tipo: 'Escute e grave', treina: 'Fala · Vocabulário e pronúncia', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Am, is or are?', tipo: 'Make a Choice', treina: 'Gramática · To be', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Song vocabulary', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário e perguntas', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

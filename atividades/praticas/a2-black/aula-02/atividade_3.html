@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 2 · Famous bands</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 02 · Escrita (I Want It That Way - Backstreet Boys)
+   Alinhado ao "Grammar - Verb To Be" do slide (am / is / are) e ao exercício sobre a banda
+   (The band is from... / They are an American boy band.). Conteúdo NOVO com outras bandas e
+   cantores (fatos verdadeiros). A isca é o be errado. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 2, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Os Beatles são de Liverpool.'), palavras: ['The', 'Beatles', 'are', 'from', 'Liverpool'], isca: ['is'], fim: '.', traducao: 'Os Beatles são de Liverpool.' },
+    { contexto: M('O Coldplay é uma banda britânica.'), palavras: ['Coldplay', 'is', 'a', 'British', 'band'], isca: ['am'], fim: '.', traducao: 'O Coldplay é uma banda britânica.' },
+    { contexto: M('A Adele é de Londres.'), palavras: ['Adele', 'is', 'from', 'London'], isca: ['are'], fim: '.', traducao: 'A Adele é de Londres.' },
+    { contexto: M('Os Backstreet Boys são uma boy band americana.'), palavras: ['The', 'Backstreet', 'Boys', 'are', 'an', 'American', 'boy', 'band'], isca: ['a'], fim: '.', traducao: 'Os Backstreet Boys são uma boy band americana.' },
+    { contexto: M('O U2 é da Irlanda.'), palavras: ['U2', 'is', 'from', 'Ireland'], isca: ['am'], fim: '.', traducao: 'O U2 é da Irlanda.' },
+    { contexto: M('A Shakira é colombiana.'), palavras: ['Shakira', 'is', 'Colombian'], isca: ['Colombia'], fim: '.', traducao: 'A Shakira é colombiana.' },
+    { contexto: M('Eu sou um grande fã.'), palavras: ['I', 'am', 'a', 'big', 'fan'], isca: ['is'], fim: '.', traducao: 'Sou muito fã.' },
+    { contexto: M('A música é muito popular.'), palavras: ['The', 'song', 'is', 'very', 'popular'], isca: ['are'], fim: '.', traducao: 'A música é muito popular.' },
+    { contexto: M('O Nick Carter é o mais novo.'), palavras: ['Nick', 'Carter', 'is', 'the', 'youngest'], isca: ['are'], fim: '.', traducao: 'O Nick Carter é o mais novo.' },
+    { contexto: M('O Bruno Mars é do Havaí.'), palavras: ['Bruno', 'Mars', 'is', 'from', 'Hawaii'], isca: ['are'], fim: '.', traducao: 'O Bruno Mars é do Havaí.' },
+    { contexto: M('O BTS é da Coreia do Sul.'), palavras: ['BTS', 'are', 'from', 'South', 'Korea'], isca: ['am'], fim: '.', traducao: 'O BTS é da Coreia do Sul.' },
+    { contexto: M('Eles são cantores ótimos.'), palavras: ['They', 'are', 'great', 'singers'], isca: ['is'], fim: '.', traducao: 'Eles são ótimos cantores.' },
+    { contexto: M('Ela é muito talentosa.'), palavras: ['She', 'is', 'very', 'talented'], isca: ['are'], fim: '.', traducao: 'Ela é muito talentosa.' },
+    { contexto: M('O Imagine Dragons é de Las Vegas.'), palavras: ['Imagine', 'Dragons', 'is', 'from', 'Las', 'Vegas'], isca: ['am'], fim: '.', traducao: 'O Imagine Dragons é de Las Vegas.' },
+    { contexto: M('O Ed Sheeran é inglês.'), palavras: ['Ed', 'Sheeran', 'is', 'English'], isca: ['England'], fim: '.', traducao: 'O Ed Sheeran é inglês.' },
+    { contexto: M('A minha banda favorita é o Queen.'), palavras: ['My', 'favourite', 'band', 'is', 'Queen'], isca: ['are'], fim: '.', traducao: 'A minha banda favorita é o Queen.' },
+    { contexto: M('Nós somos fãs de música pop.'), palavras: ['We', 'are', 'pop', 'music', 'fans'], isca: ['is'], fim: '.', traducao: 'Somos fãs de música pop.' },
+    { contexto: M('A Billie Eilish é americana.'), palavras: ['Billie', 'Eilish', 'is', 'American'], isca: ['are'], fim: '.', traducao: 'A Billie Eilish é americana.' },
+    { contexto: M('A Anitta e a Ivete Sangalo são brasileiras.'), palavras: ['Anitta', 'and', 'Ivete', 'Sangalo', 'are', 'Brazilian'], isca: ['is'], fim: '.', traducao: 'A Anitta e a Ivete Sangalo são brasileiras.' },
+    { contexto: M('A música é muito bonita.'), palavras: ['The', 'song', 'is', 'very', 'beautiful'], isca: ['am'], fim: '.', traducao: 'A música é muito bonita.' }
+  ]
+});
+</script>
+</body>
+</html>

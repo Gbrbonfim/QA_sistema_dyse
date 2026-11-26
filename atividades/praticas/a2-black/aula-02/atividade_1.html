@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 2 · Find the rhyme</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 02 · Escuta (I Want It That Way - Backstreet Boys)
+   Alinhado ao exercício "Find the words that rhyme" do slide (mistake/heartache, fire/desire,
+   apart/heart, way/say). Conteúdo NOVO: o aluno ouve uma palavra e escolhe a que rima com
+   ela (rimas comuns em músicas). Só UMA opção rima. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'music_note' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 2, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the word and choose the word that rhymes',
+  itens: [
+    q('Fire.', 'desire', ['heart', 'world', 'mistake']),
+    q('Mistake.', 'heartache', ['fire', 'say', 'world']),
+    q('Apart.', 'heart', ['way', 'hear', 'fire']),
+    q('Way.', 'say', ['world', 'heart', 'desire']),
+    q('Night.', 'light', ['day', 'fire', 'heart']),
+    q('Day.', 'play', ['night', 'heart', 'fire']),
+    q('You.', 'blue', ['me', 'way', 'night']),
+    q('Me.', 'free', ['you', 'heart', 'day']),
+    q('Go.', 'know', ['say', 'free', 'night']),
+    q('Sun.', 'fun', ['day', 'blue', 'heart']),
+    q('Why.', 'cry', ['way', 'know', 'blue']),
+    q('Rain.', 'again', ['night', 'free', 'fire']),
+    q('Care.', 'there', ['here', 'fun', 'day']),
+    q('Love.', 'above', ['move', 'heart', 'free']),
+    q('Hear.', 'near', ['world', 'fire', 'heart']),
+    q('Heart.', 'start', ['hear', 'way', 'night']),
+    q('Desire.', 'fire', ['heart', 'world', 'say']),
+    q('Say.', 'today', ['night', 'fire', 'you']),
+    q('Light.', 'tonight', ['day', 'heart', 'free']),
+    q('True.', 'you', ['me', 'way', 'night']),
+    q('Heartache.', 'mistake', ['heart', 'desire', 'way']),
+    q('Free.', 'see', ['fire', 'night', 'know']),
+    q('Know.', 'show', ['now', 'heart', 'fire']),
+    q('Start.', 'apart', ['star', 'way', 'near'])
+  ]
+});
+</script>
+</body>
+</html>
