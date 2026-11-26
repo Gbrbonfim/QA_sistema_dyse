@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 14 · I enjoy reading</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 14 · Escrita (On The Same Page)
+   Alinhado ao "Grammar Point" e ao "Verbs + Gerund" (enjoy, finish, go on, don't mind, spend,
+   stop, feel like, avoid, consider + -ing; gerúndio como sujeito e depois de preposição;
+   promise / decide / know what + to). Só verbos que NÃO aceitam as duas formas (like, love,
+   hate e start aceitam -ing e to). Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 14, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu gosto de ler antes de dormir.'), palavras: ['I', 'enjoy', 'reading', 'before', 'bed'], isca: ['read'], fim: '.', traducao: 'Gosto de ler antes de dormir.' },
+    { contexto: M('Ler em inglês me ajuda a aprender palavras novas.'), palavras: ['Reading', 'in', 'English', 'helps', 'me', 'learn', 'new', 'words'], isca: ['Read'], fim: '.', traducao: 'Ler em inglês me ajuda a aprender palavras novas.' },
+    { contexto: M('Ela tem interesse em escrever um livro.'), palavras: ['She', 'is', 'interested', 'in', 'writing', 'a', 'book'], isca: ['write'], fim: '.', traducao: 'Ela tem interesse em escrever um livro.' },
+    { contexto: M('Eu não me importo de esperar.'), palavras: ['I', "don't", 'mind', 'waiting'], isca: ['wait'], fim: '.', traducao: 'Não me importo de esperar.' },
+    { contexto: M('Ele terminou de ler o livro ontem.'), palavras: ['He', 'finished', 'reading', 'the', 'book', 'yesterday'], isca: ['read'], fim: '.', traducao: 'Ele terminou de ler o livro ontem.' },
+    { contexto: M('Eu evito usar o celular na cama.'), palavras: ['I', 'avoid', 'using', 'my', 'phone', 'in', 'bed'], isca: ['use'], fim: '.', traducao: 'Evito usar o celular na cama.' },
+    { contexto: M('Ela está pensando em entrar num clube do livro.'), palavras: ['She', 'is', 'thinking', 'about', 'joining', 'a', 'book', 'club'], isca: ['join'], fim: '.', traducao: 'Ela está pensando em entrar num clube do livro.' },
+    { contexto: M('Estou considerando comprar um Kindle.'), palavras: ["I'm", 'considering', 'buying', 'a', 'Kindle'], isca: ['buy'], fim: '.', traducao: 'Estou considerando comprar um Kindle.' },
+    { contexto: M('Eu passo muito tempo ouvindo audiolivros.'), palavras: ['I', 'spend', 'a', 'lot', 'of', 'time', 'listening', 'to', 'audiobooks'], isca: ['listen'], fim: '.', traducao: 'Passo muito tempo ouvindo audiolivros.' },
+    { contexto: M('Estou com vontade de ler algo novo.'), palavras: ['I', 'feel', 'like', 'reading', 'something', 'new'], isca: ['read'], fim: '.', traducao: 'Estou com vontade de ler algo novo.' },
+    { contexto: M('Eles continuaram falando sobre o livro.'), palavras: ['They', 'went', 'on', 'talking', 'about', 'the', 'book'], isca: ['talk'], fim: '.', traducao: 'Eles continuaram falando sobre o livro.' },
+    { contexto: M('Eu parei de comprar livros de papel.'), palavras: ['I', 'stopped', 'buying', 'paper', 'books'], isca: ['buy'], fim: '.', traducao: 'Parei de comprar livros de papel.' },
+    { contexto: M('Fazer exercício é bom para a saúde.'), palavras: ['Exercising', 'is', 'good', 'for', 'your', 'health'], isca: ['are'], fim: '.', traducao: 'Fazer exercício é bom para a saúde.' },
+    { contexto: M('Audiolivros são uma ótima forma de começar a ler.'), palavras: ['Audiobooks', 'are', 'a', 'great', 'way', 'of', 'getting', 'into', 'reading'], isca: ['get'], fim: '.', traducao: 'Audiolivros são uma ótima forma de começar a ler.' },
+    { contexto: M('Ele prometeu me ajudar.'), palavras: ['He', 'promised', 'to', 'help', 'me'], isca: ['helping'], fim: '.', traducao: 'Ele prometeu me ajudar.' },
+    { contexto: M('Nós decidimos viajar para a Itália.'), palavras: ['We', 'decided', 'to', 'travel', 'to', 'Italy'], isca: ['travelling'], fim: '.', traducao: 'Decidimos viajar para a Itália.' },
+    { contexto: M('Eu nunca sei o que escolher.'), palavras: ['I', 'never', 'know', 'what', 'to', 'choose'], isca: ['choosing'], fim: '.', traducao: 'Nunca sei o que escolher.' },
+    { contexto: M('Ela quer ler mais livros neste ano.'), palavras: ['She', 'wants', 'to', 'read', 'more', 'books', 'this', 'year'], isca: ['reading'], fim: '.', traducao: 'Ela quer ler mais livros neste ano.' },
+    { contexto: M('Você gosta de ler romances de mistério?'), palavras: ['Do', 'you', 'enjoy', 'reading', 'mystery', 'novels'], isca: ['Does'], fim: '?', traducao: 'Você gosta de ler romances de mistério?' },
+    { contexto: M('Quanto tempo você passa lendo por semana?'), palavras: ['How', 'much', 'time', 'do', 'you', 'spend', 'reading', 'a', 'week'], isca: ['many'], fim: '?', traducao: 'Quanto tempo você passa lendo por semana?' }
+  ]
+});
+</script>
+</body>
+</html>

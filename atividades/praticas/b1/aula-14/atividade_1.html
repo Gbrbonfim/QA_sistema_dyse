@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 14 · Reading habits</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 14 · Escuta (On The Same Page)
+   Alinhado ao Warm Up (hábitos de leitura: read in bed, Kindle, fiction, paper books,
+   audiobooks, get distracted, finish every book, only read for work), ao Listening dos 4
+   speakers (positivo / negativo) e ao "Grammar Point" (gerúndio depois de verbos, como sujeito e
+   depois de preposição; infinitivo depois de promise / decide / know what). Conteúdo NOVO.
+   24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 14, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    q('I read on my Kindle every night.', 'reads e-books', ['buys paper books', 'never reads'], 'menu_book'),
+    q("I listen to audiobooks while I'm driving.", 'listens to audiobooks', ['reads in bed', 'joins a book club'], 'menu_book'),
+    q('I always buy paper books. I love the smell of a new book.', 'buys paper books', ['reads on a Kindle', 'listens to audiobooks'], 'menu_book'),
+    q('I only read for work. I never read for fun.', 'reads only for work', ['reads for fun every day', 'reads fiction at night'], 'menu_book'),
+    q('I meet some friends every month and we talk about a book.', 'is in a book club', ['gets distracted', 'stopped reading'], 'menu_book'),
+    q('I usually check my phone after two pages.', 'gets distracted', ['finishes every book', 'reads for hours'], 'menu_book'),
+    q('I never stop a book in the middle. I always read to the end.', 'finishes every book', ['gets distracted', 'only reads for school'], 'menu_book'),
+    q('I love stories about dragons, magic and other planets.', 'reads fiction', ['reads history books', 'only reads for work'], 'menu_book'),
+    q('Reading is boring, and it takes too much time.', 'negative about reading', ['positive about reading', 'talking about music'], 'sentiment_satisfied'),
+    q('Reading is a great way to learn new things.', 'positive about reading', ['negative about reading', 'talking about sports'], 'sentiment_satisfied'),
+    q('I prefer playing football or hanging out with friends. Books are not for me.', 'negative about reading', ['positive about reading', 'talking about audiobooks'], 'sentiment_satisfied'),
+    q('When I finish a book, I always feel like reading something new.', 'positive about reading', ['negative about reading', 'talking about films'], 'sentiment_satisfied'),
+    q('I enjoy reading fiction at night.', 'I enjoy reading fiction at night.', ['I enjoy to read fiction at night.', 'I enjoy read fiction at night.'], 'record_voice_over'),
+    q('Listening to audiobooks makes me feel good.', 'Listening to audiobooks makes me feel good.', ['Listen to audiobooks makes me feel good.', 'To listening audiobooks makes me feel good.'], 'record_voice_over'),
+    q("I'm interested in learning Italian.", "I'm interested in learning Italian.", ["I'm interested in learn Italian.", "I'm interested to learning Italian."], 'record_voice_over'),
+    q('He promised to help me with my homework.', 'He promised to help me with my homework.', ['He promised helping me with my homework.', 'He promised help me with my homework.'], 'record_voice_over'),
+    q('They decided to travel to Peru.', 'They decided to travel to Peru.', ['They decided travelling to Peru.', 'They decided travel to Peru.'], 'record_voice_over'),
+    q("I don't mind waiting for you.", "I don't mind waiting for you.", ["I don't mind to wait for you.", "I don't mind wait for you."], 'record_voice_over'),
+    q('She avoids buying expensive books.', 'She avoids buying expensive books.', ['She avoids to buy expensive books.', 'She avoids buy expensive books.'], 'record_voice_over'),
+    q("He's considering joining a book club.", "He's considering joining a book club.", ["He's considering to join a book club.", "He's considering join a book club."], 'record_voice_over'),
+    q('I spend a lot of time reading articles.', 'I spend a lot of time reading articles.', ['I spend a lot of time to read articles.', 'I spend a lot of time read articles.'], 'record_voice_over'),
+    q('She finished writing her novel last week.', 'She finished writing her novel last week.', ['She finished to write her novel last week.', 'She finished write her novel last week.'], 'record_voice_over'),
+    q('Exercising is important for good health.', 'Exercising is important for good health.', ['Exercise is important for good healthy.', 'To exercising is important for good health.'], 'record_voice_over'),
+    q('I never know what to read on holiday.', 'I never know what to read on holiday.', ['I never know what reading on holiday.', 'I never know what read on holiday.'], 'record_voice_over')
+  ]
+});
+</script>
+</body>
+</html>

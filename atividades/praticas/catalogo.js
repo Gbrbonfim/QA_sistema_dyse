@@ -1301,6 +1301,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 13', titulo: 'Pitch your campaign', tipo: 'Escute e grave', treina: 'Fala · Tempos verbais', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 13', titulo: 'One word: does, did, have...', tipo: 'Make a Choice', treina: 'Gramática · Tempos verbais', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 14,
+        titulo: 'Class 14 · On The Same Page',
+        atividades: [
+          { num: 1, titulo: 'Reading habits', tipo: 'Escute e escolha', treina: 'Escuta · Hábitos de leitura', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'I enjoy reading', tipo: 'Monte a frase', treina: 'Escrita · Gerúndio', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'What are you reading?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Do you enjoy reading?', tipo: 'Escute e grave', treina: 'Fala · Gerúndio', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Gerund or infinitive?', tipo: 'Make a Choice', treina: 'Gramática · Gerúndio e infinitivo', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

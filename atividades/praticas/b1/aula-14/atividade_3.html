@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 14 · What are you reading?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 14 · Leitura (On The Same Page)
+   Alinhado às dicas do vídeo (Kindle, evitar o celular na cama, audiobooks no carro / na
+   academia), ao Warm Up e ao gerúndio (enjoy, stop, avoid, don't mind, think about + -ing).
+   Conteúdo NOVO: a Lia e o Omar conversam sobre leitura. 20 questões: 12 de "próxima fala" +
+   8 de compreensão. */
+const D = [
+  ['Omar', 'What are you reading at the moment?'],
+  ['Lia', 'A science fiction novel. I really enjoy reading before bed.'],
+  ['Omar', 'On paper or on your phone?'],
+  ['Lia', 'On my Kindle. I stopped buying paper books last year.'],
+  ['Omar', 'Why?'],
+  ['Lia', "Because they're expensive, and I avoid carrying heavy bags."],
+  ['Omar', "I don't read much. I usually get distracted after a few pages."],
+  ['Lia', 'Have you tried listening to audiobooks?'],
+  ['Omar', 'No, I haven\'t. Are they good?'],
+  ['Lia', "Yes! I listen to them while I'm driving or at the gym."],
+  ['Omar', "That sounds great. I don't mind listening while I'm running."],
+  ['Lia', 'Try it! And avoid using your phone in bed.'],
+  ['Omar', "That's hard! I love watching videos before I sleep."],
+  ['Lia', 'I know, but reading helps me sleep better.'],
+  ['Omar', "OK, I'll try. Can you recommend a good audiobook?"],
+  ['Lia', "Sure! I'm also thinking about joining a book club. Do you want to come?"],
+  ['Omar', "Maybe! I'll finish my first audiobook and then decide."]
+];
+const lado = q => q === 'Omar' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 14, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['A science fiction novel. I really enjoy reading before bed.', 'A science fiction novel. I really enjoy to read before bed.', 'A science fiction novel. I really enjoy read before bed.'], 0, 'Um romance de ficção científica. Gosto muito de ler antes de dormir.'),
+    prox(2, ['On paper or in your phone?', 'On paper or on your phone?', 'In paper or at your phone?'], 1, 'No papel ou no celular?'),
+    prox(3, ['On my Kindle. I stopped buy paper books last year.', 'On my Kindle. I stop buying paper books next year.', 'On my Kindle. I stopped buying paper books last year.'], 2, 'No meu Kindle. Parei de comprar livros de papel no ano passado.'),
+    prox(5, ["Because they're expensive, and I avoid carrying heavy bags.", "Because they're expensive, and I avoid to carry heavy bags.", "Because they're cheap, and I love carrying heavy bags."], 0, 'Porque são caros, e evito carregar bolsas pesadas.'),
+    prox(6, ["I don't read much. I usually get distracting after a few pages.", "I don't read much. I usually get distracted after a few pages.", "I don't read much. I usually getting distracted after a few pages."], 1, 'Não leio muito. Costumo me distrair depois de algumas páginas.'),
+    prox(7, ['Have you tried listen to audiobooks?', 'Did you tried listening to audiobooks?', 'Have you tried listening to audiobooks?'], 2, 'Você já tentou ouvir audiolivros?'),
+    prox(9, ["Yes! I listen to them while I'm driving or at the gym.", "Yes! I listen them while I'm driving or at the gym.", "Yes! I listening to them while I'm driving or at the gym."], 0, 'Sim! Ouço enquanto dirijo ou na academia.'),
+    prox(10, ["That sounds great. I don't mind to listen while I'm running.", "That sounds great. I don't mind listening while I'm running.", "That tastes great. I don't mind listening while I'm running."], 1, 'Parece ótimo. Não me importo de ouvir enquanto corro.'),
+    prox(11, ['Try it! And avoid to use your phone in bed.', 'Try it! And avoid use your phone in bed.', 'Try it! And avoid using your phone in bed.'], 2, 'Experimenta! E evite usar o celular na cama.'),
+    prox(12, ["That's hard! I love watching videos before I sleep.", "That's hard! I love watch videos before I sleep.", "That's easy! I never use my phone."], 0, 'Difícil! Adoro ver vídeos antes de dormir.'),
+    prox(14, ["OK, I'll try. Can you recommend me reading a good audiobook?", "OK, I'll try. Can you recommend a good audiobook?", "OK, I try yesterday. Can you recommend a good audiobook?"], 1, 'Tá, vou tentar. Você pode recomendar um bom audiolivro?'),
+    prox(15, ["Sure! I'm also thinking about join a book club. Do you want to come?", "Sure! I'm also thinking to joining a book club. Do you want to come?", "Sure! I'm also thinking about joining a book club. Do you want to come?"], 2, 'Claro! Também estou pensando em entrar num clube do livro. Quer vir?'),
+    { instrucao: 'What kind of book is Lia reading?', frase: '___', opcoes: ['A science fiction novel.', 'A history book.', 'A cookbook.'], certa: 0, traducao: 'Um romance de ficção científica.' },
+    { instrucao: 'How does Lia read?', frase: '___', opcoes: ['On paper.', 'On her Kindle.', 'On her phone.'], certa: 1, traducao: 'No Kindle.' },
+    { instrucao: 'Why did Lia stop buying paper books?', frase: '___', opcoes: ['She doesn\'t like reading.', 'The library is near her house.', 'They are expensive and heavy.'], certa: 2, traducao: 'São caros e pesados.' },
+    { instrucao: 'What is Omar\'s problem?', frase: '___', opcoes: ['He gets distracted after a few pages.', 'He has no books.', 'He reads too much.'], certa: 0, traducao: 'Ele se distrai depois de algumas páginas.' },
+    { instrucao: 'Where does Lia listen to audiobooks?', frase: '___', opcoes: ['In bed.', 'While driving or at the gym.', 'At the library.'], certa: 1, traducao: 'Enquanto dirige ou na academia.' },
+    { instrucao: 'What does Omar love doing before he sleeps?', frase: '___', opcoes: ['Reading novels.', 'Running.', 'Watching videos.'], certa: 2, traducao: 'Ver vídeos.' },
+    { instrucao: 'What does reading do for Lia?', frase: '___', opcoes: ['It helps her sleep better.', 'It makes her tired.', 'It gives her headaches.'], certa: 0, traducao: 'Ajuda a dormir melhor.' },
+    { instrucao: 'What is Lia thinking about doing?', frase: '___', opcoes: ['Buying paper books again.', 'Joining a book club.', 'Stopping reading.'], certa: 1, traducao: 'Entrar num clube do livro.' }
+  ]
+});
+</script>
+</body>
+</html>
