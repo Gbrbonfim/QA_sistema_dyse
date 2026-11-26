@@ -1715,7 +1715,7 @@ body.dyse-modal-open{overflow:hidden;}
         return '<span class="tent' + (final ? ' last-ok' : '') + '">' + (final ? escapeHtmlLocal(t) : marcar(t, it.correta)) + '</span>';
       }).join('') : '<i>sem resposta</i>') + (it.nota != null && it.status !== 'warn' ? ' · melhor nota ' + it.nota + '%' : '') + '</div>';
       return '<div class="pr-item ' + it.status + '"><div class="top"><span class="frase"><span class="n">' + it.n + '.</span>' + escapeHtmlLocal(it.correta) + '</span>' +
-        '<span class="tag ' + it.status + '">' + (rotulo[it.status] || it.status) + '</span></div>' + lista + '</div>';
+        '<span class="tag ' + it.status + '">' + (it.leitura && it.status === 'warn' && (it.tentativas || []).length <= 1 ? 'Certo c/ leitura' : (rotulo[it.status] || it.status)) + (it.leitura && it.status === 'bad' ? ' · usou leitura' : '') + '</span></div>' + lista + '</div>';
     };
     const secao = (titulo, lista, clsScore, aberta) => !lista.length ? '' :
       '<div class="report-section' + (aberta ? '' : ' collapsed') + '"><button type="button" class="report-section-head" onclick="this.closest(\'.report-section\').classList.toggle(\'collapsed\')">' +

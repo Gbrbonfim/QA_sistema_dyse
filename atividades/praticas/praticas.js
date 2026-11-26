@@ -634,7 +634,7 @@
     const main = $('#pxMain');
     main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Listen and record') + '</p>' +
       '<div class="px-scene"><div class="card">' + I('record_voice_over') + '</div><div class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>' +
-      '<div class="px-words" id="pxWords"></div>' +
+      '<div class="px-words" id="pxWords"></div><div id="pxLeitura"></div>' +
       '<div id="pxGauge"></div><div class="px-heard" id="pxHeard"></div>' +
       (item.nota ? '<p class="px-note">' + I('lightbulb') + esc(item.nota) + '</p>' : '') +
       '<div id="pxCompare"></div>' +
@@ -650,7 +650,14 @@
   function acoesFala(item, depois){
     on('ouvir', () => falar(item.frase));
     on('gravar', () => { if(S.cur.gravando) pararGravacao(); else iniciarGravacao(item); });
-    on('leitura', () => { S.cur.leitura = true; desenharFrase(item, S.cur.ultCores, false); });
+    // Leitura antes de acertar = ajuda: a questão vale como acerto na 2ª
+    // (DYSE_PONTOS.segunda, metade dos pontos), quebra o combo e tira o bônus
+    // de atividade perfeita. O aluno é avisado na hora.
+    on('leitura', () => {
+      S.cur.leitura = true; desenharFrase(item, S.cur.ultCores, false);
+      const av = $('#pxLeitura');
+      if(av && !av.innerHTML) av.innerHTML = '<p class="px-note">' + I('visibility') + 'Com a leitura, esta questão vale metade dos pontos (' + DYSE_PONTOS.segunda + ' em vez de ' + DYSE_PONTOS.primeira + ').</p>';
+    });
     on('pular', () => { fecharItem('skip', { nota: 0 }); avancar(); });
     on('traduzir', () => modalTraducao(item.frase, item.traducao));
     on('avancar', avancar);
@@ -872,7 +879,7 @@
     $('#pxGauge').innerHTML = notaFala(best.nota, best.perfeita);
     if(best.perfeita){
       desenharFrase(item, best.cores, true);
-      fecharItem(!S.cur.falhas && !S.cur.leitura ? 'ok' : 'warn', { nota: 1 });
+      fecharItem(!S.cur.falhas && !S.cur.leitura ? 'ok' : 'warn', { nota: 1, leitura: !!S.cur.leitura });
       banner('ok', 'Você falou a frase certinha.');
       acoesFala(item, 'ok');
       return;
@@ -881,7 +888,7 @@
     if(S.cur.falhas >= MAX_FALA_TRIES){
       // 3 erros: mostra a frase, fala em voz alta e libera o Avançar.
       desenharFrase(item, null, true);
-      fecharItem('bad', { nota: best.nota });
+      fecharItem('bad', { nota: best.nota, leitura: !!S.cur.leitura });
       banner('bad', 'A frase correta é: ' + item.frase);
       acoesFala(item, 'fim');
       setTimeout(() => falar(item.frase), 500);
@@ -1003,7 +1010,7 @@
 
     const linhas = itens.map((it, k) => {
       const r = S.res[k] || { status: 'skip', tentativas: [] };
-      const ic = r.status === 'ok' ? 'certo de primeira' : r.status === 'warn' ? 'certo na 2ª tentativa' : r.status === 'skip' ? 'pulou' : 'errou';
+      const ic = r.status === 'ok' ? 'certo de primeira' : r.status === 'warn' ? (r.leitura ? 'certo usando a leitura' : 'certo na 2ª tentativa') : r.status === 'skip' ? 'pulou' : 'errou';
       return (k + 1) + '. ' + it.completa + ' — ' + ic + (r.status === 'ok' ? '' : ' (tentativas: ' + (r.tentativas.join(' | ') || 'nenhuma') + ')');
     });
     const resumo = 'Acertos de primeira: ' + p.primeira + '/' + n + ' · Acertos totais: ' + acertos + '/' + n + ' · Pontos DYSE: ' + p.total + '/' + p.max;
@@ -1013,7 +1020,7 @@
       criterio: 'dyse-v1', pontos_detalhe: p.det, combos: p.combos, max_sequencia: S.maxStreak,
       duracao_seg: Math.round(tempoGasto() / 1000),
       itens: itens.map((it, k) => { const r = S.res[k] || { status: 'skip', tentativas: [] };
-        return { n: k + 1, correta: it.completa, status: r.status, tentativas: r.tentativas, nota: r.nota != null ? Math.round(r.nota * 100) : undefined }; })
+        return { n: k + 1, correta: it.completa, status: r.status, tentativas: r.tentativas, nota: r.nota != null ? Math.round(r.nota * 100) : undefined, leitura: r.leitura || undefined }; })
     };
 
     let salvo = '';
@@ -1040,7 +1047,7 @@
       linksFim(prox) +
       '<div class="px-res-card" style="margin-top:16px;"><h3>Como você pontuou</h3>' +
         '<div class="px-res-line"><div class="ic">' + I('target') + '</div><div class="txt">Acertos de primeira<small>' + p.primeira + ' × ' + DYSE_PONTOS.primeira + ' pts</small></div><div class="pts">+' + p.det.primeira + '</div></div>' +
-        '<div class="px-res-line"><div class="ic">' + I('replay') + '</div><div class="txt">Acertos na 2ª tentativa<small>' + p.segunda + ' × ' + DYSE_PONTOS.segunda + ' pts</small></div><div class="pts">+' + p.det.segunda + '</div></div>' +
+        '<div class="px-res-line"><div class="ic">' + I('replay') + '</div><div class="txt">' + (S.cfg.tipo === 'fala' ? 'Acertos na 2ª tentativa ou com leitura' : 'Acertos na 2ª tentativa') + '<small>' + p.segunda + ' × ' + DYSE_PONTOS.segunda + ' pts</small></div><div class="pts">+' + p.det.segunda + '</div></div>' +
         '<div class="px-res-line"><div class="ic">' + I('local_fire_department') + '</div><div class="txt">Combo DYSE<small>' + p.combos + ' combo' + (p.combos === 1 ? '' : 's') + ' de ' + DYSE_PONTOS.comboACada + ' acertos seguidos</small></div><div class="pts">+' + p.det.combo + '</div></div>' +
         '<div class="px-res-line"><div class="ic">' + I('emoji_events') + '</div><div class="txt">Atividade perfeita<small>' + (p.perfeita ? 'Tudo de primeira!' : 'Acerte tudo de primeira pra ganhar') + '</small></div><div class="pts">+' + p.det.perfeita + '</div></div>' +
       '</div>' +
@@ -1048,7 +1055,7 @@
         itens.map((it, k) => {
           const r = S.res[k] || { status: 'skip', tentativas: [] };
           const st = r.status;
-          const sub = st === 'ok' ? 'Acertou de primeira' : st === 'warn' ? 'Acertou na 2ª tentativa' + (r.tentativas.length > 1 ? ' · antes: ' + r.tentativas.slice(0, -1).join(' | ') : '')
+          const sub = st === 'ok' ? 'Acertou de primeira' : st === 'warn' ? (r.leitura && r.tentativas.length <= 1 ? 'Acertou usando a leitura (metade dos pontos)' : 'Acertou na 2ª tentativa' + (r.leitura ? ' · usou a leitura' : '')) + (r.tentativas.length > 1 ? ' · antes: ' + r.tentativas.slice(0, -1).join(' | ') : '')
             : st === 'skip' ? 'Pulada' : 'Sua resposta: ' + r.tentativas.join(' | ');
           return '<li><span class="st ' + st + '">' + (st === 'ok' ? I('check') : st === 'warn' ? I('priority_high') : st === 'skip' ? I('remove') : I('close')) + '</span><div>' + esc(it.completa) + '<small>' + esc(sub) + '</small></div></li>';
         }).join('') + '</ul></div>' +
