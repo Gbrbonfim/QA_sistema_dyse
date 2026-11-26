@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 37 · At the coffee machine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 37 · Leitura (That's Small Talk, Isn't It?)
+   Alinhado ao diálogo do vídeo (fim de semana, visita da família, casa, cachorro, voltar ao
+   trabalho, reunião) e ao Grammar Point (question tags para concordar e para confirmar).
+   Conteúdo NOVO: Priya e Sam batem papo na máquina de café antes de uma reunião.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Priya', "Good morning! Cold today, isn't it?"],
+  ['Sam', 'It really is. I almost stayed in bed!'],
+  ['Priya', 'Ha! Me too. How was your weekend?'],
+  ['Sam', 'It was great, thanks. My cousin was in town, so I showed her around the city.'],
+  ['Priya', 'That sounds fun. Where did you take her?'],
+  ['Sam', 'To the old market and a little café by the river. How about you?'],
+  ['Priya', 'Nothing special. I painted my kitchen, which was kind of relaxing.'],
+  ['Sam', "Oh, nice! You live in a house, don't you?"],
+  ['Priya', "No, it's an apartment, but it has a big kitchen."],
+  ['Sam', 'Lucky you! My kitchen is tiny.'],
+  ['Priya', "By the way, the meeting starts at ten, doesn't it?"],
+  ['Sam', 'Actually, no. It starts at ten thirty.'],
+  ['Priya', "Oh, good. We still have time for coffee, don't we?"],
+  ['Sam', 'We do! Do you want one?'],
+  ['Priya', 'Yes, please. I love your mug, by the way.'],
+  ['Sam', 'Thanks! My daughter made it for me.'],
+  ['Priya', "That's so sweet. Well, I'd better get back to my desk."],
+  ['Sam', 'Sure. See you at the meeting, then.'],
+  ['Priya', "See you! Oh, and you're presenting today, aren't you?"],
+  ['Sam', 'Yes, I am. Wish me luck!']
+];
+const lado = q => q === 'Priya' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 37, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['It really is. I almost stayed in bed!', 'It really does. I almost stayed in bed!', 'It really is. I almost stay in bed tomorrow!'], 0, 'Está mesmo. Quase fiquei na cama!'),
+    prox(3, ['It was great, thanks. My cousin was in town, so I showed her around of the city.', 'It was great, thanks. My cousin was in town, so I showed her around the city.', 'It was great, thanks. My cousin were in town, so I showed her around the city.'], 1, 'Foi ótimo, obrigado. Minha prima estava na cidade, então mostrei a cidade para ela.'),
+    prox(5, ['To the old market and a little café by the river. How about your?', 'To the old market and a little café by the river. How you about?', 'To the old market and a little café by the river. How about you?'], 2, 'Ao mercado antigo e a um cafezinho perto do rio. E você?'),
+    prox(7, ["Oh, nice! You live in a house, don't you?", "Oh, nice! You live in a house, isn't it?", "Oh, nice! You live in a house, aren't you?"], 0, 'Ah, legal! Você mora numa casa, não mora?'),
+    prox(9, ['Lucky your! My kitchen is tiny.', 'Lucky you! My kitchen is tiny.', 'Lucky you! My kitchen are tiny.'], 1, 'Sorte sua! Minha cozinha é minúscula.'),
+    prox(10, ["By the way, the meeting starts at ten, isn't it?", "By the way, the meeting starts at ten, don't it?", "By the way, the meeting starts at ten, doesn't it?"], 2, 'Aliás, a reunião começa às dez, não começa?'),
+    prox(11, ['Actually, no. It starts at ten thirty.', "Actually, no. It doesn't at ten thirty.", 'Actually, no. It start at ten thirty.'], 0, 'Na verdade, não. Começa às dez e meia.'),
+    prox(12, ["Oh, good. We still have time for coffee, aren't we?", "Oh, good. We still have time for coffee, don't we?", "Oh, good. We still have time for coffee, doesn't we?"], 1, 'Ah, que bom. Ainda temos tempo para um café, não temos?'),
+    prox(13, ['We do! Do you want ones?', 'We are! Do you want one?', 'We do! Do you want one?'], 2, 'Temos! Você quer um?'),
+    prox(15, ['Thanks! My daughter made it for me.', 'Thanks! My daughter maked it for me.', 'Thanks! My daughter made it for I.'], 0, 'Obrigado! Minha filha fez para mim.'),
+    prox(17, ['Sure. Seeing you at the meeting, then.', 'Sure. See you at the meeting, then.', 'Sure. See you to the meeting, then.'], 1, 'Claro. Te vejo na reunião, então.'),
+    prox(19, ["Yes, I'm not. Wish me luck!", 'Yes, I do. Wish me luck!', 'Yes, I am. Wish me luck!'], 2, 'Sim, vou. Me deseje sorte!'),
+    { instrucao: 'What is the weather like?', frase: '___', opcoes: ['Cold.', 'Hot.', 'Rainy.'], certa: 0, traducao: 'Frio.' },
+    { instrucao: 'Who visited Sam at the weekend?', frase: '___', opcoes: ["Sam's sister.", "Sam's cousin.", "Priya's cousin."], certa: 1, traducao: 'A prima do Sam.' },
+    { instrucao: "Where did they go?", frase: '___', opcoes: ['To the beach.', 'To a football game.', 'To the old market and a café.'], certa: 2, traducao: 'Ao mercado antigo e a um café.' },
+    { instrucao: 'What did Priya do at the weekend?', frase: '___', opcoes: ['Painted the kitchen.', 'Went to the river.', 'Bought a mug.'], certa: 0, traducao: 'Pintou a cozinha.' },
+    { instrucao: 'Where does Priya live?', frase: '___', opcoes: ['In a house.', 'In an apartment.', 'With Sam.'], certa: 1, traducao: 'Num apartamento.' },
+    { instrucao: 'What time does the meeting start?', frase: '___', opcoes: ['At nine.', 'At ten.', 'At ten thirty.'], certa: 2, traducao: 'Às dez e meia.' },
+    { instrucao: 'What compliment did Priya give?', frase: '___', opcoes: ["Priya liked Sam's mug.", "Priya liked Sam's kitchen.", "Priya liked Sam's jacket."], certa: 0, traducao: 'A Priya gostou da caneca do Sam.' },
+    { instrucao: 'Who is presenting at the meeting?', frase: '___', opcoes: ['Priya.', 'Sam.', "Sam's daughter."], certa: 1, traducao: 'O Sam.' }
+  ]
+});
+</script>
+</body>
+</html>

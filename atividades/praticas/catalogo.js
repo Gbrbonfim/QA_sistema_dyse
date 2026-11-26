@@ -1524,6 +1524,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 36', titulo: 'Fake or real? Say it in the passive', tipo: 'Escute e grave', treina: 'Fala · Voz passiva', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 36', titulo: 'Is, are, was or were?', tipo: 'Make a Choice', treina: 'Gramática · Voz passiva', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 37,
+        titulo: "Class 37 · That's Small Talk, Isn't It?",
+        atividades: [
+          { num: 1, titulo: 'Small talk tips', tipo: 'Escute e escolha', treina: 'Escuta · Small talk e question tags', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "Cold today, isn't it?", tipo: 'Monte a frase', treina: 'Escrita · Question tags', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'At the coffee machine', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Make small talk', tipo: 'Escute e grave', treina: 'Fala · Small talk e question tags', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Question tags', tipo: 'Make a Choice', treina: 'Gramática · Question tags', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

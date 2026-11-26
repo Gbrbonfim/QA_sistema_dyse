@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 37 · Cold today, isn't it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 37 · Escrita (That's Small Talk, Isn't It?)
+   Alinhado ao Grammar Point (question tags: frase positiva + tag negativa e vice-versa;
+   to be, present simple, past simple e can) e aos exercícios 5 e 7. Conteúdo NOVO.
+   A palavra extra é sempre um auxiliar errado. 20 questões. */
+const M = pt => 'Write the question in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 37, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the question (one word is extra)',
+  itens: [
+    { contexto: M('Está frio hoje, não está?'), palavras: ["It's", 'cold', 'today,', "isn't", 'it'], isca: ["doesn't"], fim: '?', traducao: 'Está frio hoje, não está?' },
+    { contexto: M('Você trabalha aqui, não trabalha?'), palavras: ['You', 'work', 'here,', "don't", 'you'], isca: ["aren't"], fim: '?', traducao: 'Você trabalha aqui, não trabalha?' },
+    { contexto: M('O escritório não está cheio, está?'), palavras: ['The', 'office', "isn't", 'busy,', 'is', 'it'], isca: ['does'], fim: '?', traducao: 'O escritório não está cheio, está?' },
+    { contexto: M('Você não precisa de uma resposta agora, precisa?'), palavras: ['You', "don't", 'need', 'an', 'answer', 'now,', 'do', 'you'], isca: ['are'], fim: '?', traducao: 'Você não precisa de uma resposta agora, precisa?' },
+    { contexto: M('Este ônibus chega atrasado, não chega?'), palavras: ['This', 'bus', 'arrives', 'late,', "doesn't", 'it'], isca: ["isn't"], fim: '?', traducao: 'Este ônibus chega atrasado, não chega?' },
+    { contexto: M('Você teve um bom fim de semana, não teve?'), palavras: ['You', 'had', 'a', 'good', 'weekend,', "didn't", 'you'], isca: ["weren't"], fim: '?', traducao: 'Você teve um bom fim de semana, não teve?' },
+    { contexto: M('A reunião começou atrasada, não começou?'), palavras: ['The', 'meeting', 'started', 'late,', "didn't", 'it'], isca: ["wasn't"], fim: '?', traducao: 'A reunião começou atrasada, não começou?' },
+    { contexto: M('Podemos esperar aqui, não podemos?'), palavras: ['We', 'can', 'wait', 'here,', "can't", 'we'], isca: ["don't"], fim: '?', traducao: 'Podemos esperar aqui, não podemos?' },
+    { contexto: M('Você pode me ajudar, não pode?'), palavras: ['You', 'can', 'help', 'me,', "can't", 'you'], isca: ["don't"], fim: '?', traducao: 'Você pode me ajudar, não pode?' },
+    { contexto: M('O café ainda não está aberto, está?'), palavras: ['The', 'café', "isn't", 'open', 'yet,', 'is', 'it'], isca: ['does'], fim: '?', traducao: 'O café ainda não está aberto, está?' },
+    { contexto: M('Você não mora longe daqui, mora?'), palavras: ['You', "don't", 'live', 'far', 'from', 'here,', 'do', 'you'], isca: ['are'], fim: '?', traducao: 'Você não mora longe daqui, mora?' },
+    { contexto: M('Ela trabalha aos sábados, não trabalha?'), palavras: ['She', 'works', 'on', 'Saturdays,', "doesn't", 'she'], isca: ["isn't"], fim: '?', traducao: 'Ela trabalha aos sábados, não trabalha?' },
+    { contexto: M('Eles não gostaram do filme, gostaram?'), palavras: ['They', "didn't", 'enjoy', 'the', 'movie,', 'did', 'they'], isca: ['were'], fim: '?', traducao: 'Eles não gostaram do filme, gostaram?' },
+    { contexto: M('Foi uma reunião longa, não foi?'), palavras: ['It', 'was', 'a', 'long', 'meeting,', "wasn't", 'it'], isca: ["didn't"], fim: '?', traducao: 'Foi uma reunião longa, não foi?' },
+    { contexto: M('Você não consegue me ouvir muito bem, consegue?'), palavras: ['You', "can't", 'hear', 'me', 'very', 'well,', 'can', 'you'], isca: ['do'], fim: '?', traducao: 'Você não consegue me ouvir muito bem, consegue?' },
+    { contexto: M('Nossos vizinhos são muito simpáticos, não são?'), palavras: ['Our', 'neighbours', 'are', 'very', 'friendly,', "aren't", 'they'], isca: ["isn't"], fim: '?', traducao: 'Nossos vizinhos são muito simpáticos, não são?' },
+    { contexto: M('Você pega este ônibus todo dia, não pega?'), palavras: ['You', 'take', 'this', 'bus', 'every', 'day,', "don't", 'you'], isca: ["doesn't"], fim: '?', traducao: 'Você pega este ônibus todo dia, não pega?' },
+    { contexto: M('Você assistiu ao jogo ontem à noite, não assistiu?'), palavras: ['You', 'watched', 'the', 'game', 'last', 'night,', "didn't", 'you'], isca: ["weren't"], fim: '?', traducao: 'Você assistiu ao jogo ontem à noite, não assistiu?' },
+    { contexto: M('Este lugar fica muito barulhento à noite, não fica?'), palavras: ['This', 'place', 'gets', 'very', 'noisy', 'in', 'the', 'evening,', "doesn't", 'it'], isca: ["isn't"], fim: '?', traducao: 'Este lugar fica muito barulhento à noite, não fica?' },
+    { contexto: M('Como foi o seu fim de semana?'), palavras: ['How', 'was', 'your', 'weekend'], isca: ['were'], fim: '?', traducao: 'Como foi o seu fim de semana?' }
+  ]
+});
+</script>
+</body>
+</html>

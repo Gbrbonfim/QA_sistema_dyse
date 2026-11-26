@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 37 · Small talk tips</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 37 · Escuta (That's Small Talk, Isn't It?)
+   Alinhado ao Listening And Reading (dicas do vídeo: perguntas abertas, comentário ou
+   elogio, compartilhar informação nova, dar continuidade, sair com educação, evitar
+   silêncio constrangedor) e ao Grammar Point (question tags). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const B = 'Listen. What is the best reply?', K = 'Listen. Which question tag completes the sentence?', A = 'Listen. Which tip is the speaker following?';
+const OE = 'Use open-ended questions.', CO = 'Make a comment or give a compliment.', EX = 'Politely excuse yourself.', FU = 'Follow up on the conversation.', SH = 'Share new information about yourself.';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 37, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: B, ...q("Cold morning, isn't it?", 'It really is! I almost stayed in bed.', ['No.', 'Why are you talking to me?'], 'forum') },
+    { instrucao: B, ...q('How was your weekend?', 'Great, thanks! I went hiking with friends. How about yours?', ['Good.', 'Why do you want to know?'], 'forum') },
+    { instrucao: B, ...q("You work on the fifth floor, don't you?", "Yes, I do. I'm in the marketing team.", ['Yes, I am.', "No, I don't. I'm fine."], 'forum') },
+    { instrucao: B, ...q("What a cute dog! What's her name?", "Thanks! Her name is Luna. She's a rescue.", ['Yes.', 'Thanks! Him name is Luna.'], 'forum') },
+    { instrucao: B, ...q("This line is really slow, isn't it?", "It is! I've been here for twenty minutes.", ["Yes, it isn't.", 'No, it is.'], 'forum') },
+    { instrucao: B, ...q('Did you do anything fun this weekend?', 'Not really, but I watched a great movie. Do you like thrillers?', ['No.', 'Yes, I do anything.'], 'forum') },
+    { instrucao: B, ...q("The meeting starts at ten, doesn't it?", 'Actually, no. It starts at ten thirty.', ['Yes, it is.', "Actually, no. It doesn't at ten thirty."], 'forum') },
+    { instrucao: B, ...q("We can sit here, can't we?", 'Yes, you can. These seats are free.', ['Yes, you do.', "Yes, we can't."], 'forum') },
+    { instrucao: K, ...q("It's really hot today...", "isn't it?", ['is it?', "doesn't it?"], 'rule') },
+    { instrucao: K, ...q('You live near here...', "don't you?", ["aren't you?", "doesn't you?"], 'rule') },
+    { instrucao: K, ...q("The shop isn't open yet...", 'is it?', ["isn't it?", 'does it?'], 'rule') },
+    { instrucao: K, ...q('You had a good holiday...', "didn't you?", ['did you?', "weren't you?"], 'rule') },
+    { instrucao: K, ...q("They don't eat meat...", 'do they?', ["don't they?", 'are they?'], 'rule') },
+    { instrucao: K, ...q('We can park here...', "can't we?", ['can we?', "don't we?"], 'rule') },
+    { instrucao: K, ...q('The train was late again...', "wasn't it?", ["didn't it?", 'was it?'], 'rule') },
+    { instrucao: K, ...q("Your sister doesn't like coffee...", 'does she?', ["doesn't she?", 'is she?'], 'rule') },
+    { instrucao: A, ...q('So, what did you do on your holiday? Tell me about it.', OE, [EX, SH], 'lightbulb') },
+    { instrucao: A, ...q('I love your jacket. It looks great on you.', CO, [EX, OE], 'lightbulb') },
+    { instrucao: A, ...q("Well, I'd better get back to work. See you later!", EX, [OE, CO], 'lightbulb') },
+    { instrucao: A, ...q('Oh, you have a dog? What kind of dog is it?', FU, [CO, EX], 'lightbulb') },
+    { instrucao: A, ...q('My brother visited last weekend, so I showed him around the city.', SH, [OE, EX], 'lightbulb') },
+    { instrucao: A, ...q('Your presentation this morning was really interesting!', CO, [FU, EX], 'lightbulb') },
+    { instrucao: A, ...q('Sorry, I have to catch my bus. It was nice talking to you!', EX, [OE, CO], 'lightbulb') },
+    { instrucao: A, ...q("So, last week you said you're learning guitar. How is it going?", FU, [CO, EX], 'lightbulb') }
+  ]
+});
+</script>
+</body>
+</html>

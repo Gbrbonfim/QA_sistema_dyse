@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 37 · Question tags</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 37 · Gramática (That's Small Talk, Isn't It?)
+   Alinhado ao Grammar Point (question tags para concordar e para confirmar; frase positiva
+   + tag negativa e vice-versa; to be, present simple, past simple, can; entonação) e às
+   dicas de small talk do vídeo. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 37, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: "It's very quiet in here, ___?", opcoes: ["isn't it", 'is it', "doesn't it"], certa: 0, traducao: 'Está muito silencioso aqui, não está?' },
+    { frase: "You don't live far from here, ___?", opcoes: ["don't you", 'do you', 'are you'], certa: 1, traducao: 'Você não mora longe daqui, mora?' },
+    { frase: 'She works on Saturdays, ___?', opcoes: ["isn't she", "don't she", "doesn't she"], certa: 2, traducao: 'Ela trabalha aos sábados, não trabalha?' },
+    { frase: "They didn't enjoy the movie, ___?", opcoes: ['did they', "didn't they", 'were they'], certa: 0, traducao: 'Eles não gostaram do filme, gostaram?' },
+    { frase: 'We can leave a bit earlier today, ___?', opcoes: ["don't we", "can't we", 'can we'], certa: 1, traducao: 'Podemos sair um pouco mais cedo hoje, não podemos?' },
+    { frase: "The café isn't open yet, ___?", opcoes: ["isn't it", 'does it', 'is it'], certa: 2, traducao: 'O café ainda não está aberto, está?' },
+    { frase: 'You finished the report yesterday, ___?', opcoes: ["didn't you", "weren't you", "don't you"], certa: 0, traducao: 'Você terminou o relatório ontem, não terminou?' },
+    { frase: "Your brother doesn't like small talk, ___?", opcoes: ["doesn't he", 'does he', 'is he'], certa: 1, traducao: 'Seu irmão não gosta de papo furado, gosta?' },
+    { frase: 'It was a long meeting, ___?', opcoes: ["didn't it", 'was it', "wasn't it"], certa: 2, traducao: 'Foi uma reunião longa, não foi?' },
+    { frase: "You can't hear me very well, ___?", opcoes: ['can you', "can't you", 'do you'], certa: 0, traducao: 'Você não consegue me ouvir muito bem, consegue?' },
+    { frase: 'Our neighbours are very friendly, ___?', opcoes: ["isn't it", "aren't they", "don't they"], certa: 1, traducao: 'Nossos vizinhos são muito simpáticos, não são?' },
+    { frase: 'You watched the game last night, ___?', opcoes: ["weren't you", "don't you", "didn't you"], certa: 2, traducao: 'Você assistiu ao jogo ontem à noite, não assistiu?' },
+    { frase: "The class finishes at seven, doesn't it? — Actually, no. It ___ at six thirty.", opcoes: ['finishes', "doesn't", 'finish'], certa: 0, traducao: 'A aula termina às sete, não termina? — Na verdade, não. Termina às seis e meia.' },
+    { frase: "You take this bus every day, don't you? — Yes, I ___.", opcoes: ['am', 'do', 'take'], certa: 1, traducao: 'Você pega este ônibus todo dia, não pega? — Pego, sim.' },
+    { frase: "We can sit here, can't we? — Yes, you ___. No one is using these seats.", opcoes: ['do', 'are', 'can'], certa: 2, traducao: 'Podemos sentar aqui, não podemos? — Podem, sim. Ninguém está usando.' },
+    { frase: 'When the sentence is positive, the tag is ___.', opcoes: ['negative', 'positive', 'a question word'], certa: 0, traducao: 'Quando a frase é positiva, a tag é negativa.' },
+    { frase: 'To make the tag, we use the ___ verb from the sentence.', opcoes: ['main', 'auxiliary', 'last'], certa: 1, traducao: 'Para formar a tag, usamos o verbo auxiliar da frase.' },
+    { frase: 'When we expect the other person to agree, the intonation goes ___.', opcoes: ['up', 'nowhere', 'down'], certa: 2, traducao: 'Quando esperamos que a outra pessoa concorde, a entonação desce.' },
+    { frase: 'When we are not sure and really want to confirm, the intonation goes ___.', opcoes: ['up', 'down', 'nowhere'], certa: 0, traducao: 'Quando não temos certeza e queremos confirmar, a entonação sobe.' },
+    { frase: 'An ___ silence is a strange, uncomfortable silence.', opcoes: ['open', 'awkward', 'warm'], certa: 1, traducao: 'Um silêncio constrangedor é estranho e desconfortável.' },
+    { frase: '"What did you do this weekend?" is an ___ question.', opcoes: ['awkward', 'closed', 'open-ended'], certa: 2, traducao: '"O que você fez no fim de semana?" é uma pergunta aberta.' },
+    { frase: 'Use a ___ tone to make people feel comfortable.', opcoes: ['warm', 'cold', 'loud'], certa: 0, traducao: 'Use um tom acolhedor para deixar as pessoas à vontade.' },
+    { instrucao: 'Which is the best way to end a conversation politely?', frase: '___', opcoes: ['Bye. I am bored.', "Well, I'd better get back to work. See you later!", 'Stop talking, please.'], certa: 1, traducao: 'Bom, é melhor eu voltar ao trabalho. Até mais!' },
+    { instrucao: 'Which is the best small talk reply to "How was your weekend?"', frase: '___', opcoes: ['Fine.', 'Why?', 'Great, thanks! I went to the beach. How about yours?'], certa: 2, traducao: 'Ótimo, obrigado! Fui à praia. E o seu?' }
+  ]
+});
+</script>
+</body>
+</html>
