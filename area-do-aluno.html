@@ -1555,6 +1555,10 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
     };
     const html = niveis.map(slug => {
       const nivel = DYSE_PRATICAS[slug];
+      // Sequência obrigatória no nível: só a 1ª liberada e não concluída fica com "Fazer".
+      const feitasNivel = new Set(Object.keys(AREA_CTX.doneMap).filter(k => AREA_CTX.doneMap[k] && AREA_CTX.doneMap[k].status === 'concluida'));
+      const vez = dysePraticaProximaPendente(slug, liberadas, feitasNivel);
+      const chaveVez = vez ? vez.course + ':' + vez.aula + ':' + vez.num : null;
       return nivel.aulas.map(aula => {
         // Lista enxuta: uma linha por atividade (ícone · título · habilidade e
         // tempo · estado à direita), agrupada por Class 01 / Class 02.
@@ -1581,6 +1585,9 @@ details.dyse-collapsible .dyse-collapsible-body{padding:0 18px 18px;}
             }
             const pts = res.meta && res.meta.pontos != null ? res.meta.pontos + ' pts' : 'Feita';
             return '<div class="pr-row done" title="Concluída — pra refazer, peça à professora">' + miolo('<span class="pr-st ok">' + MI('check') + ' ' + pts + '</span>') + '</div>';
+          }
+          if(chave !== chaveVez){
+            return '<div class="pr-row locked" title="Termine a atividade anterior para liberar esta">' + miolo('<span class="pr-st">' + MI('lock') + ' Termine a anterior</span>') + '</div>';
           }
           if(metaOk){
             return '<div class="pr-row locked" title="Meta da semana concluída: volte na segunda-feira">' + miolo('<span class="pr-st">' + MI('event_available') + '</span>') + '</div>';

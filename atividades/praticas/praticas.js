@@ -965,20 +965,14 @@
     return { primeira, segunda, combos, perfeita, det, total: det.primeira + det.segunda + det.combo + det.perfeita, max: dysePraticaPontosMax(n) };
   }
 
-  /* Próxima atividade liberada pra este aluno e ainda não concluída, na
-     ordem do catálogo (começa depois da atual e dá a volta). */
+  /* Próxima atividade da vez neste nível: a 1ª liberada e ainda não concluída
+     na ordem do catálogo (sequência obrigatória — ver dysePraticaProximaPendente). */
   async function proximaLiberada(){
     try{
-      const lista = dysePraticasEmOrdem(S.info.nivel);
       const [liberadas, resultados] = await Promise.all([dyseMinhasPraticasLiberadas(), dyseListMyResults(S.cfg.course)]);
       const feitas = new Set(resultados.filter(r => r.status === 'concluida').map(r => r.course + ':' + r.aula + ':' + r.activity_num));
-      const atual = lista.findIndex(a => a.aula === S.cfg.aula && a.num === S.cfg.num);
-      for(let k = 1; k <= lista.length; k++){
-        const a = lista[(atual + k) % lista.length];
-        const chave = a.course + ':' + a.aula + ':' + a.num;
-        if(a.aula === S.cfg.aula && a.num === S.cfg.num) continue;
-        if(liberadas.has(chave) && !feitas.has(chave)) return a;
-      }
+      feitas.add(S.cfg.course + ':' + S.cfg.aula + ':' + S.cfg.num);   // a atual acabou de ser concluída
+      return dysePraticaProximaPendente(S.info.nivel, liberadas, feitas);
     }catch(e){}
     return null;
   }
@@ -1110,6 +1104,20 @@
         '<button class="px-btn ghost" onclick="location.href=\'/area-do-aluno.html#praticas\'">Voltar para Atividades</button></div>';
   }
 
+  /* Aluno abriu (por link) uma atividade fora da vez: mostra qual é a da vez. */
+  function telaFazerAnterior(vez){
+    const url = dysePraticaUrl(vez.nivel, vez.aula, vez.num);
+    document.body.innerHTML =
+      '<header class="px-top"><div class="px-top-row"><span class="px-mark">dyse</span>' +
+        '<div class="px-title"><b>' + esc(S.info.atividade.titulo) + '</b><small>' + esc(S.info.nivelNome) + ' · Aula ' + String(S.cfg.aula).padStart(2, '0') + '</small></div>' +
+        '<button class="px-close" onclick="location.href=\'/area-do-aluno.html#praticas\'">Sair</button></div></header>' +
+      '<div class="px-result">' +
+        '<div class="px-next"><div><small>Termine a atividade anterior primeiro</small><b>' + esc(vez.titulo) + '</b>' +
+          '<span>As atividades são feitas em sequência: esta abre quando você concluir a anterior.</span></div>' +
+          '<a class="px-btn" href="' + url + '" style="width:auto; margin:0; padding:12px 22px; text-decoration:none;">Ir para ela ' + I('arrow_forward') + '</a></div>' +
+        '<button class="px-btn ghost" onclick="location.href=\'/area-do-aluno.html#praticas\'">Voltar para Atividades</button></div>';
+  }
+
   /* ---------- API pública ---------- */
   window.DysePratica = {
     async iniciar(cfg){
@@ -1137,6 +1145,13 @@
         if(res && res.status === 'concluida' && podeRefazer){
           S.refazendo = true;
           S.pontosOriginais = res.pontos_ranking != null ? res.pontos_ranking : (res.meta && res.meta.pontos);
+        }
+        // Sequência obrigatória no nível: só a 1ª liberada e não concluída abre.
+        if(!S.refazendo){
+          const [liberadas, resultados] = await Promise.all([dyseMinhasPraticasLiberadas(), dyseListMyResults(cfg.course)]);
+          const feitas = new Set(resultados.filter(r => r.status === 'concluida').map(r => r.course + ':' + r.aula + ':' + r.activity_num));
+          const vez = dysePraticaProximaPendente(S.info.nivel, liberadas, feitas);
+          if(vez && !(vez.aula === cfg.aula && vez.num === cfg.num)){ telaFazerAnterior(vez); return; }
         }
         // Meta semanal: com as atividades da semana feitas, não começa outra nova.
         if(!S.refazendo){

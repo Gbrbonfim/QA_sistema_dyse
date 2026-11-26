@@ -1697,6 +1697,19 @@ function dysePraticaPontosMax(questoes){
   return n * DYSE_PONTOS.primeira + Math.floor(n / DYSE_PONTOS.comboACada) * DYSE_PONTOS.combo + DYSE_PONTOS.perfeita;
 }
 
+/* Sequência obrigatória (usuário, 26/11/2026): dentro de um mesmo nível o aluno
+   só faz a próxima atividade depois de concluir a anterior. Só a PRIMEIRA
+   liberada e ainda não concluída (na ordem do catálogo) fica disponível; as
+   demais liberadas ficam travadas. Cada nível tem sua própria sequência — quem
+   tem dois materiais (ex.: A1 e A2) anda nos dois em paralelo, cada um desde a
+   primeira atividade. "liberadas" e "feitas": Set de 'course:aula:num'. */
+function dysePraticaProximaPendente(nivel, liberadas, feitas){
+  return dysePraticasEmOrdem(nivel).find(a => {
+    const k = a.course + ':' + a.aula + ':' + a.num;
+    return liberadas.has(k) && !feitas.has(k);
+  }) || null;
+}
+
 /* Lista linear (na ordem do catálogo) das atividades de um nível — usada
    pra achar a PRÓXIMA atividade liberada depois de terminar uma. */
 function dysePraticasEmOrdem(nivel){
