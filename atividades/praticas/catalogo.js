@@ -1535,6 +1535,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Make small talk', tipo: 'Escute e grave', treina: 'Fala · Small talk e question tags', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Question tags', tipo: 'Make a Choice', treina: 'Gramática · Question tags', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 38,
+        titulo: "Class 38 · Lessons I've Learned",
+        atividades: [
+          { num: 1, titulo: 'School memories', tipo: 'Escute e escolha', treina: 'Escuta · Escola e particípios', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "I've never seen you give up", tipo: 'Monte a frase', treina: 'Escrita · Present perfect x past simple', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'The school reunion', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: "Lessons I've learned", tipo: 'Escute e grave', treina: 'Fala · Memórias da escola', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Have you ever or did you?', tipo: 'Make a Choice', treina: 'Gramática · Present perfect x past simple', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

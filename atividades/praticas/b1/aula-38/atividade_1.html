@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 38 · School memories</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 38 · Escuta (Lessons I've Learned)
+   Alinhado ao Warm Up (homework, feedback, mistake, exam, principal, report card, essay,
+   grade, matérias), à tabela de verbos (past participle) e ao Listening (memórias da escola
+   positivas, negativas e neutras; o que se aprendeu). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const W = 'Listen to the definition. What is it?', S = 'Listen. Which school subject is it?', V = 'Listen to the verb. What is the past participle?', F = 'Listen. How does the speaker feel about this memory?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 38, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: W, ...q('Work that you do at home after class.', 'homework', ['feedback', 'an essay'], 'help') },
+    { instrucao: W, ...q('Comments from the teacher that help you improve.', 'feedback', ['a grade', 'homework'], 'help') },
+    { instrucao: W, ...q('A wrong answer that helps you learn.', 'a mistake', ['a test', 'a subject'], 'help') },
+    { instrucao: W, ...q('A big activity to check what you learned.', 'an exam', ['a break', 'feedback'], 'help') },
+    { instrucao: W, ...q('The person who is responsible for the school.', 'the principal', ['a classmate', 'a student'], 'help') },
+    { instrucao: W, ...q('A document with information about your progress at school.', 'a report card', ['a timetable', 'an essay'], 'help') },
+    { instrucao: W, ...q('A written text where you explain your ideas or opinions.', 'an essay', ['a grade', 'a report card'], 'help') },
+    { instrucao: W, ...q('A number or a letter that shows your school performance.', 'a grade', ['a subject', 'a mistake'], 'help') },
+    { instrucao: S, ...q('In this class, you learn about numbers, fractions and problems.', 'Math', ['History', 'Geography'], 'science') },
+    { instrucao: S, ...q('In this class, you learn about the past and important events.', 'History', ['Science', 'Math'], 'science') },
+    { instrucao: S, ...q('In this class, you learn about countries, maps and places.', 'Geography', ['History', 'English'], 'science') },
+    { instrucao: S, ...q('In this class, you learn about nature, plants and animals.', 'Biology', ['Geography', 'Math'], 'science') },
+    { instrucao: V, ...q('see', 'seen', ['saw', 'seed'], 'rule') },
+    { instrucao: V, ...q('give', 'given', ['gave', 'gived'], 'rule') },
+    { instrucao: V, ...q('forget', 'forgotten', ['forgot', 'forgetted'], 'rule') },
+    { instrucao: V, ...q('teach', 'taught', ['teached', 'teach'], 'rule') },
+    { instrucao: V, ...q('grow', 'grown', ['grew', 'growed'], 'rule') },
+    { instrucao: V, ...q('understand', 'understood', ['understanded', 'understand'], 'rule') },
+    { instrucao: F, ...q("My history teacher always believed in me. I've never forgotten her.", 'Positive.', ['Negative.', 'Neutral.'], 'psychology') },
+    { instrucao: F, ...q('A teacher laughed at my answer once, and after that I never spoke in class again.', 'Negative.', ['Positive.', 'Neutral.'], 'psychology') },
+    { instrucao: F, ...q('I studied at a school near my house. It was OK. Nothing special happened.', 'Neutral.', ['Positive.', 'Negative.'], 'psychology') },
+    { instrucao: 'Listen. What has the speaker learned?', ...q("I failed a math test in 2015, and I've learned to ask for help when I need it.", 'to ask for help', ['to stop studying math', 'to copy from friends'], 'psychology') },
+    { instrucao: 'Listen. When did the speaker meet the best teacher?', ...q("I've met many great teachers, but I met the best one when I was ten.", 'at the age of ten', ['last year', 'at the age of twenty'], 'psychology') },
+    { instrucao: "Listen. Has the speaker ever been to the principal's office?", ...q("I've never been to the principal's office. I was a very quiet student.", 'No, never.', ['Yes, many times.', 'Yes, once.'], 'psychology') }
+  ]
+});
+</script>
+</body>
+</html>

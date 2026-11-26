@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 38 · I've never seen you give up</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 38 · Escrita (Lessons I've Learned)
+   Alinhado ao Grammar Point (present perfect para experiências e situações até agora;
+   past simple para momentos terminados com tempo claro) e à tabela de verbos.
+   Conteúdo NOVO. Marcadores de tempo deixam só uma forma certa. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 38, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu aprendi muitas lições nesta escola (até hoje).'), palavras: ['I', 'have', 'learned', 'many', 'lessons', 'at', 'this', 'school'], isca: ['learn'], fim: '.', traducao: 'Eu aprendi muitas lições nesta escola.' },
+    { contexto: M('Eu nunca vi você desistir.'), palavras: ["I've", 'never', 'seen', 'you', 'give', 'up'], isca: ['saw'], fim: '.', traducao: 'Eu nunca vi você desistir.' },
+    { contexto: M('Você já teve um professor rígido?'), palavras: ['Have', 'you', 'ever', 'had', 'a', 'strict', 'teacher'], isca: ['Did'], fim: '?', traducao: 'Você já teve um professor rígido?' },
+    { contexto: M('Ela está naquela escola há muitos anos.'), palavras: ['She', 'has', 'been', 'at', 'that', 'school', 'for', 'many', 'years'], isca: ['was'], fim: '.', traducao: 'Ela está naquela escola há muitos anos.' },
+    { contexto: M('Minha professora me ajudou muito no ano passado.'), palavras: ['My', 'teacher', 'helped', 'me', 'a', 'lot', 'last', 'year'], isca: ['has'], fim: '.', traducao: 'Minha professora me ajudou muito no ano passado.' },
+    { contexto: M('Eu era aluno lá em 2010.'), palavras: ['I', 'was', 'a', 'student', 'there', 'in', '2010'], isca: ['been'], fim: '.', traducao: 'Eu era aluno lá em 2010.' },
+    { contexto: M('Quando você aprendeu isso?'), palavras: ['When', 'did', 'you', 'learn', 'that'], isca: ['have'], fim: '?', traducao: 'Quando você aprendeu isso?' },
+    { contexto: M('Eu aprendi isso no ensino fundamental.'), palavras: ['I', 'learned', 'it', 'in', 'middle', 'school'], isca: ['did'], fim: '.', traducao: 'Eu aprendi isso no ensino fundamental.' },
+    { contexto: M('Nós nunca nos conhecemos antes.'), palavras: ['We', 'have', 'never', 'met', 'before'], isca: ['meet'], fim: '.', traducao: 'Nós nunca nos conhecemos antes.' },
+    { contexto: M('Você já cometeu um grande erro na escola?'), palavras: ['Have', 'you', 'ever', 'made', 'a', 'big', 'mistake', 'at', 'school'], isca: ['make'], fim: '?', traducao: 'Você já cometeu um grande erro na escola?' },
+    { contexto: M('Eu cometi um grande erro na prova da semana passada.'), palavras: ['I', 'made', 'a', 'big', 'mistake', 'in', 'the', 'test', 'last', 'week'], isca: ['make'], fim: '.', traducao: 'Eu cometi um grande erro na prova da semana passada.' },
+    { contexto: M('Minhas notas melhoraram desde janeiro.'), palavras: ['My', 'grades', 'have', 'improved', 'since', 'January'], isca: ['improve'], fim: '.', traducao: 'Minhas notas melhoraram desde janeiro.' },
+    { contexto: M('O professor me deu um ótimo feedback ontem.'), palavras: ['The', 'teacher', 'gave', 'me', 'great', 'feedback', 'yesterday'], isca: ['given'], fim: '.', traducao: 'O professor me deu um ótimo feedback ontem.' },
+    { contexto: M('Eu esqueci a minha lição de casa de novo!'), palavras: ['I', 'have', 'forgotten', 'my', 'homework', 'again'], isca: ['forgot'], fim: '!', traducao: 'Eu esqueci a minha lição de casa de novo!' },
+    { contexto: M('Nossa professora nos ensinou a fazer perguntas.'), palavras: ['Our', 'teacher', 'taught', 'us', 'to', 'ask', 'questions'], isca: ['teached'], fim: '.', traducao: 'Nossa professora nos ensinou a fazer perguntas.' },
+    { contexto: M('Os professores te apoiaram este ano?'), palavras: ['Have', 'teachers', 'supported', 'you', 'this', 'year'], isca: ['Did'], fim: '?', traducao: 'Os professores te apoiaram este ano?' },
+    { contexto: M('Eu não entendia matemática naquela época.'), palavras: ['I', "didn't", 'understand', 'math', 'at', 'that', 'time'], isca: ['understood'], fim: '.', traducao: 'Eu não entendia matemática naquela época.' },
+    { contexto: M('O que você aprendeu com os seus erros (até hoje)?'), palavras: ['What', 'have', 'you', 'learned', 'from', 'your', 'mistakes'], isca: ['did'], fim: '?', traducao: 'O que você aprendeu com os seus erros?' },
+    { contexto: M('O diretor me deu o boletim dez minutos atrás.'), palavras: ['The', 'principal', 'gave', 'me', 'my', 'report', 'card', 'ten', 'minutes', 'ago'], isca: ['has'], fim: '.', traducao: 'O diretor me deu o boletim dez minutos atrás.' },
+    { contexto: M('A escola cresceu muito desde 2010.'), palavras: ['The', 'school', 'has', 'grown', 'a', 'lot', 'since', '2010'], isca: ['grew'], fim: '.', traducao: 'A escola cresceu muito desde 2010.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 38 · The school reunion</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 38 · Leitura (Lessons I've Learned)
+   Alinhado ao Grammar Point (começar com present perfect para a experiência geral e
+   continuar com past simple para os detalhes), ao vídeo (agradecer aos professores) e ao
+   Speaking (memórias positivas e negativas, o que se aprendeu). Conteúdo NOVO: Ana e Marco
+   se reencontram e lembram da escola. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ana', "Marco? Wow, I haven't seen you for years!"],
+  ['Marco', "Ana! It's so good to see you. How have you been?"],
+  ['Ana', 'Great, thanks. Have you visited the school since we finished?'],
+  ['Marco', 'Yes, I have. I went there last month for a talk.'],
+  ['Ana', 'Really? Did you see Mrs. Lopes, our history teacher?'],
+  ['Marco', "I did! She's been at the school for thirty years now."],
+  ['Ana', "Amazing. She taught me so much. I've never forgotten her classes."],
+  ['Marco', 'Me neither. She always gave us useful feedback.'],
+  ['Ana', 'Do you remember when I failed the geography exam?'],
+  ['Marco', 'Of course! You were so upset that day.'],
+  ['Ana', 'I was. But she helped me after class, and I passed the next test.'],
+  ['Marco', 'That was a great lesson. Have you ever told her that?'],
+  ['Ana', "No, I haven't. Maybe I should write her a message."],
+  ['Marco', "You should. Teachers love to know they've made a difference."],
+  ['Ana', 'And you? Have you ever had a bad experience at school?'],
+  ['Marco', 'Yes, I have. A teacher laughed at my essay once.'],
+  ['Ana', 'Oh no! How did you feel?'],
+  ['Marco', "Terrible. I didn't write anything for weeks."],
+  ['Ana', "But you're a writer now! What have you learned from it?"],
+  ['Marco', "I've learned that one comment doesn't decide who you are."]
+];
+const lado = q => q === 'Ana' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 38, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Ana! It's so good to see you. How have you been?", "Ana! It's so good to see you. How have you be?", "Ana! It's so good to see you. How did you been?"], 0, 'Ana! Que bom te ver. Como você tem passado?'),
+    prox(2, ['Great, thanks. Did you visited the school since we finished?', 'Great, thanks. Have you visited the school since we finished?', 'Great, thanks. Have you visit the school since we finished?'], 1, 'Ótima, obrigada. Você visitou a escola desde que terminamos?'),
+    prox(3, ['Yes, I have. I have gone there last month for a talk.', 'Yes, I have. I go there last month for a talk.', 'Yes, I have. I went there last month for a talk.'], 2, 'Sim. Fui lá no mês passado para uma palestra.'),
+    prox(5, ["I did! She's been at the school for thirty years now.", "I did! She's been at the school since thirty years now.", "I did! She's be at the school for thirty years now."], 0, 'Vi! Ela está na escola há trinta anos.'),
+    prox(7, ['Me neither. She always give us useful feedback.', 'Me neither. She always gave us useful feedback.', 'Me neither. She has always gave us useful feedback.'], 1, 'Nem eu. Ela sempre nos dava um feedback útil.'),
+    prox(9, ['Of course! You have been so upset that day.', 'Of course! You are so upset that day.', 'Of course! You were so upset that day.'], 2, 'Claro! Você ficou tão chateada naquele dia.'),
+    prox(11, ['That was a great lesson. Have you ever told her that?', 'That was a great lesson. Did you ever told her that?', 'That was a great lesson. Have you ever tell her that?'], 0, 'Foi uma grande lição. Você já contou isso a ela?'),
+    prox(12, ["No, I haven't. Maybe I should writing her a message.", "No, I haven't. Maybe I should write her a message.", "No, I hasn't. Maybe I should write her a message."], 1, 'Não. Talvez eu deva mandar uma mensagem para ela.'),
+    prox(13, ["You should. Teachers love to know they've make a difference.", 'You should. Teachers love to know they has made a difference.', "You should. Teachers love to know they've made a difference."], 2, 'Deveria. Professores adoram saber que fizeram diferença.'),
+    prox(15, ['Yes, I have. A teacher laughed at my essay once.', 'Yes, I have. A teacher has laughed at my essay last year.', 'Yes, I am. A teacher laughed at my essay once.'], 0, 'Sim. Um professor riu da minha redação uma vez.'),
+    prox(17, ["Terrible. I didn't wrote anything for weeks.", "Terrible. I didn't write anything for weeks.", "Terrible. I don't write anything for weeks ago."], 1, 'Péssimo. Não escrevi nada por semanas.'),
+    prox(19, ["I've learn that one comment doesn't decide who you are.", "I learned that one comment don't decide who you are.", "I've learned that one comment doesn't decide who you are."], 2, 'Aprendi que um comentário não decide quem você é.'),
+    { instrucao: 'When did Marco visit the school?', frase: '___', opcoes: ['Last month.', 'Last year.', 'Yesterday.'], certa: 0, traducao: 'No mês passado.' },
+    { instrucao: 'Who is Mrs. Lopes?', frase: '___', opcoes: ['The principal.', 'Their history teacher.', 'Their math teacher.'], certa: 1, traducao: 'A professora de história deles.' },
+    { instrucao: 'How long has Mrs. Lopes been at the school?', frase: '___', opcoes: ['Since last month.', 'For ten years.', 'For thirty years.'], certa: 2, traducao: 'Há trinta anos.' },
+    { instrucao: 'Which exam did Ana fail?', frase: '___', opcoes: ['Geography.', 'History.', 'Math.'], certa: 0, traducao: 'Geografia.' },
+    { instrucao: 'How did Mrs. Lopes help?', frase: '___', opcoes: ['She changed the grade.', 'She helped after class.', 'She called the principal.'], certa: 1, traducao: 'Ela ajudou depois da aula.' },
+    { instrucao: 'Has Ana told the teacher about it?', frase: '___', opcoes: ['Yes, last year.', 'Yes, many times.', 'No, not yet.'], certa: 2, traducao: 'Ainda não.' },
+    { instrucao: "What happened to Marco's essay?", frase: '___', opcoes: ['A teacher laughed at it.', 'It won a prize.', 'Marco forgot it at home.'], certa: 0, traducao: 'Um professor riu dela.' },
+    { instrucao: "What is Marco's job now?", frase: '___', opcoes: ['Teacher.', 'Writer.', 'Principal.'], certa: 1, traducao: 'Escritor.' }
+  ]
+});
+</script>
+</body>
+</html>

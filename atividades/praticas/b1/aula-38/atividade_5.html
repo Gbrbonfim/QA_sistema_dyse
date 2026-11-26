@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 38 · Have you ever or did you?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 38 · Gramática (Lessons I've Learned)
+   Alinhado ao Grammar Point (present perfect x past simple: experiência e situações até
+   agora x ações terminadas com tempo claro), à tabela de verbos e ao vocabulário da escola.
+   Conteúdo NOVO. Marcadores de tempo deixam só uma resposta certa. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 38, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'I ___ many great teachers in my life so far.', opcoes: ['have met', 'meet', 'did meet'], certa: 0, traducao: 'Conheci muitos professores ótimos na vida até agora.' },
+    { frase: 'I ___ my first teacher in 2005.', opcoes: ['have met', 'met', 'meet'], certa: 1, traducao: 'Conheci minha primeira professora em 2005.' },
+    { frase: 'She ___ at that school for many years. She still works there.', opcoes: ['is', 'was been', 'has been'], certa: 2, traducao: 'Ela está naquela escola há muitos anos. Ainda trabalha lá.' },
+    { frase: 'When ___ you learn that?', opcoes: ['did', 'have', 'has'], certa: 0, traducao: 'Quando você aprendeu isso?' },
+    { frase: '___ you ever had a strict teacher?', opcoes: ['Did', 'Have', 'Do'], certa: 1, traducao: 'Você já teve um professor rígido?' },
+    { frase: 'My teacher ___ me a lot last year.', opcoes: ['has helped', 'helps', 'helped'], certa: 2, traducao: 'Minha professora me ajudou muito no ano passado.' },
+    { frase: "I've never ___ you give up.", opcoes: ['seen', 'saw', 'see'], certa: 0, traducao: 'Nunca vi você desistir.' },
+    { frase: 'I ___ a student there ten years ago.', opcoes: ['have been', 'was', 'am'], certa: 1, traducao: 'Eu era aluno lá dez anos atrás.' },
+    { frase: 'Oh no! I have ___ my homework again!', opcoes: ['forgot', 'forget', 'forgotten'], certa: 2, traducao: 'Ah, não! Esqueci minha lição de casa de novo!' },
+    { frase: 'Our teacher has ___ us a lot of feedback this term.', opcoes: ['given', 'gave', 'give'], certa: 0, traducao: 'Nossa professora nos deu muito feedback neste semestre.' },
+    { frase: 'My English has ___ a lot since I started this course.', opcoes: ['improve', 'improved', 'improving'], certa: 1, traducao: 'Meu inglês melhorou muito desde que comecei este curso.' },
+    { frase: 'The school has ___ a lot. It is much bigger now.', opcoes: ['grew', 'grow', 'grown'], certa: 2, traducao: 'A escola cresceu muito. Está bem maior agora.' },
+    { frase: 'Last week, the teacher ___ us how to write an essay.', opcoes: ['taught', 'has taught', 'teached'], certa: 0, traducao: 'Semana passada, a professora nos ensinou a escrever uma redação.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['I have finished school in 2015.', 'I finished school in 2015.', 'I finish school in 2015.'], certa: 1, traducao: 'Terminei a escola em 2015.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["Did you ever be in the principal's office?", "Have you ever be in the principal's office?", "Have you ever been to the principal's office?"], certa: 2, traducao: 'Você já foi à sala do diretor?' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["I've learned that mistakes are part of learning.", "I've learn that mistakes are part of learning.", "I've learned that mistakes are part of learning yesterday."], certa: 0, traducao: 'Aprendi que erros fazem parte do aprendizado.' },
+    { frase: 'We use the present perfect for ___.', opcoes: ['finished actions with a clear time', 'life experiences', 'actions with "yesterday"'], certa: 1, traducao: 'Usamos o present perfect para experiências de vida.' },
+    { frase: 'We use the past simple for actions with a ___ time, like "last year" or "ten years ago".', opcoes: ['general', 'unknown', 'clear'], certa: 2, traducao: 'Usamos o past simple com tempo claro, como "last year" ou "ten years ago".' },
+    { frase: 'Present perfect = have / has + ___.', opcoes: ['past participle', 'past simple', 'verb + -ing'], certa: 0, traducao: 'Present perfect = have / has + particípio passado.' },
+    { frase: 'The past simple of "teach" is ___.', opcoes: ['teached', 'taught', 'teaching'], certa: 1, traducao: 'O passado de "teach" é "taught".' },
+    { frase: 'The teacher wrote "A+" on my essay. That was my ___.', opcoes: ['report card', 'homework', 'grade'], certa: 2, traducao: 'A professora escreveu "A+" na minha redação. Essa foi a minha nota.' },
+    { frase: 'The work you do at home after class is ___.', opcoes: ['homework', 'housework', 'feedback'], certa: 0, traducao: 'O trabalho que você faz em casa depois da aula é a lição de casa.' },
+    { frase: 'The person who is responsible for the school is the ___.', opcoes: ['classmate', 'principal', 'student'], certa: 1, traducao: 'A pessoa responsável pela escola é o diretor.' },
+    { frase: 'A document with your grades and progress is a ___.', opcoes: ['grade', 'essay', 'report card'], certa: 2, traducao: 'Um documento com suas notas e seu progresso é um boletim.' }
+  ]
+});
+</script>
+</body>
+</html>
