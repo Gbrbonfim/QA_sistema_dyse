@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 4 · Main, side, drink or dessert?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 04 · Escuta (Ordering Food - Drive-Thru)
+   Alinhado ao vídeo do slide (I'd like... for the main / for the side / to drink / for
+   dessert) e às comidas da aula (hamburger, cheeseburger, fries, Coke, apple pie, milkshake,
+   nuggets, salad, doughnuts...). Conteúdo NOVO: o aluno ouve o pedido e escolhe a parte do
+   menu. 24 questões. */
+const IC = { main: 'lunch_dining', side: 'tapas', drink: 'local_drink', dessert: 'icecream' };
+const OPS = ['main', 'side', 'drink', 'dessert'];
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: OPS.map(c => ({ label: c, icon: IC[c] })), certa: OPS.indexOf(certa) });
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 4, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: is it the main, the side, the drink or the dessert?',
+  itens: [
+    q("I'll have a cheeseburger.", 'main'),
+    q("I'll have large fries.", 'side'),
+    q("I'll have a small Coke.", 'drink'),
+    q("I'll have two apple pies.", 'dessert'),
+    q("I'd like a chicken wrap.", 'main'),
+    q("I'd like an orange juice.", 'drink'),
+    q("I'd like a chocolate ice cream.", 'dessert'),
+    q("Can I have a salad on the side?", 'side'),
+    q("I'll have a bacon burger.", 'main'),
+    q("I'll have a bottle of water.", 'drink'),
+    q("I'll have two doughnuts for dessert.", 'dessert'),
+    q("I'll have medium fries.", 'side'),
+    q("Can I have a pepperoni pizza?", 'main'),
+    q("Can I have an iced coffee?", 'drink'),
+    q("I'll have a lemonade.", 'drink'),
+    q("I'd like a small salad on the side.", 'side'),
+    q("I'll have a hot dog.", 'main'),
+    q("I'll have a large soda.", 'drink'),
+    q("Can I have an apple pie, please?", 'dessert'),
+    q("I'll have a double cheeseburger.", 'main'),
+    q("I'd like small fries.", 'side'),
+    q("I'll have a small coffee.", 'drink'),
+    q("I'd like a piece of chocolate cake.", 'dessert'),
+    q("I'll have a chicken burger.", 'main')
+  ]
+});
+</script>
+</body>
+</html>

@@ -1025,6 +1025,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Would you like...?', tipo: 'Make a Choice', treina: 'Gramática · Would like', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Salon vocabulary', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 4,
+        titulo: 'Class 04 · Functional Plus: Ordering Food - Drive-Thru',
+        atividades: [
+          { num: 1, titulo: 'Main, side, drink or dessert?', tipo: 'Escute e escolha', treina: 'Escuta · Partes do menu', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Small, medium or large?', tipo: 'Escute e escolha', treina: 'Escuta · Tamanhos', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: "I'll have...", tipo: 'Monte a frase', treina: 'Escrita · Pedidos', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'The cashier says...', tipo: 'Monte a frase', treina: 'Escrita · Falas do atendente', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'At the drive-thru', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'A family order', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'Place your order', tipo: 'Escute e grave', treina: 'Fala · Pedidos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'You are the cashier', tipo: 'Escute e grave', treina: 'Fala · Atendente', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: "I'll have, I'd like, Can I have?", tipo: 'Make a Choice', treina: "Gramática · I'll have / a, an", minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Drive-thru talk', tipo: 'Make a Choice', treina: 'Gramática · Perguntas e respostas', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

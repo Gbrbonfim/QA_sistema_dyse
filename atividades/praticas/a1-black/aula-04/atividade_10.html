@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 4 · Drive-thru talk</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 04 · Gramática (Ordering Food - Drive-Thru)
+   Pergunta e resposta no drive-thru (What can I get for you? / Anything else? / That's all. /
+   That's $... / You're welcome.) e as partes do menu (main, side, drink, dessert). Conteúdo
+   NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 4, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the best answer',
+  itens: [
+    { frase: 'What can I get for you? — ___', opcoes: ["I'll have a hamburger, please.", "That's all.", "You're welcome."], certa: 0, traducao: 'O que vai querer? — Vou querer um hambúrguer, por favor.' },
+    { frase: 'Anything else? — ___', opcoes: ["You're welcome.", "No, that's all.", 'First window.'], certa: 1, traducao: 'Mais alguma coisa? — Não, é só isso.' },
+    { frase: 'Thank you! — ___', opcoes: ['Anything else?', 'Thank you!', "You're welcome."], certa: 2, traducao: 'Obrigado! — De nada.' },
+    { frase: 'Small, medium or large? — ___', opcoes: ['Medium, please.', 'Yes, please.', "That's $10."], certa: 0, traducao: 'Pequeno, médio ou grande? — Médio, por favor.' },
+    { frase: 'And to drink? — ___', opcoes: ['An apple pie.', 'A small Coke, please.', 'Large fries.'], certa: 1, traducao: 'E para beber? — Uma Coca pequena, por favor.' },
+    { frase: 'Anything for dessert? — ___', opcoes: ['A cheeseburger.', 'Medium fries.', 'Two doughnuts, please.'], certa: 2, traducao: 'Alguma sobremesa? — Dois donuts, por favor.' },
+    { frase: 'Anything on the side? — ___', opcoes: ['Large fries, please.', 'An orange juice.', 'An apple pie.'], certa: 0, traducao: 'Algum acompanhamento? — Batata grande, por favor.' },
+    { frase: 'So, a hot dog and a soda? — ___', opcoes: ['First window.', 'Yes, please.', 'What can I get for you?'], certa: 1, traducao: 'Então, um cachorro-quente e um refrigerante? — Sim, por favor.' },
+    { frase: "Hello! I'll have a pizza. — ___", opcoes: ["You're welcome!", "That's all!", 'Sure. Anything else?'], certa: 2, traducao: 'Olá! Vou querer uma pizza. — Claro. Mais alguma coisa?' },
+    { frase: 'How much is it? — ___', opcoes: ["That's $8.90.", 'Second window.', "That's all."], certa: 0, traducao: 'Quanto é? — Dá 8,90 dólares.' },
+    { frase: 'A hamburger is a ___.', opcoes: ['drink', 'main', 'dessert'], certa: 1, traducao: 'Um hambúrguer é um prato principal.' },
+    { frase: 'Fries are a ___.', opcoes: ['drink', 'dessert', 'side'], certa: 2, traducao: 'Batata frita é um acompanhamento.' },
+    { frase: 'An orange juice is a ___.', opcoes: ['drink', 'side', 'main'], certa: 0, traducao: 'Um suco de laranja é uma bebida.' },
+    { frase: 'An apple pie is a ___.', opcoes: ['side', 'dessert', 'drink'], certa: 1, traducao: 'Uma torta de maçã é uma sobremesa.' },
+    { frase: 'A salad can be a ___.', opcoes: ['drink', 'dessert', 'side'], certa: 2, traducao: 'Uma salada pode ser um acompanhamento.' },
+    { frase: 'What can I ___ for you?', opcoes: ['get', 'have', 'like'], certa: 0, traducao: 'O que vai querer?' },
+    { frase: 'Anything ___?', opcoes: ['more', 'else', 'all'], certa: 1, traducao: 'Mais alguma coisa?' },
+    { frase: "No, that's ___.", opcoes: ['it all', 'else', 'all'], certa: 2, traducao: 'Não, é só isso.' },
+    { frase: 'Your total ___ to $14.20.', opcoes: ['comes', 'come', 'is coming'], certa: 0, traducao: 'O total dá 14,20 dólares.' },
+    { frase: '___ window. (primeira)', opcoes: ['One', 'First', 'Firstly'], certa: 1, traducao: 'Primeira janela.' },
+    { frase: 'Thank you! Have a ___ day!', opcoes: ['good luck', 'welcome', 'nice'], certa: 2, traducao: 'Obrigado! Tenha um ótimo dia!' },
+    { frase: "You're ___.", opcoes: ['welcome', 'welcomes', 'thank'], certa: 0, traducao: 'De nada.' },
+    { instrucao: 'Who says "What can I get for you?"', frase: '___', opcoes: ['The customer', 'The cashier', 'The kids'], certa: 1, traducao: 'Quem diz "What can I get for you?" — O atendente.' },
+    { instrucao: 'Who says "I\'ll have a cheeseburger."?', frase: '___', opcoes: ['The cashier', 'The window', 'The customer'], certa: 2, traducao: 'Quem diz "I\'ll have a cheeseburger."? — O cliente.' }
+  ]
+});
+</script>
+</body>
+</html>

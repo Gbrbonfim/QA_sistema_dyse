@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 4 · Small, medium or large?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 04 · Escuta (Ordering Food - Drive-Thru)
+   Alinhado ao exercício "What size do you prefer?" (small, medium, large) e ao diálogo do
+   vídeo (a small Coke, a large fry). Conteúdo NOVO: o aluno ouve o pedido e escolhe
+   exatamente o tamanho e o item. 24 questões. */
+const icone = s => /fries/.test(s) ? 'tapas' : /coffee/.test(s) ? 'local_cafe' : /milkshake/.test(s) ? 'icecream' : 'local_drink';
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: icone(c) })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 4, num: 2, tipo: 'imagem',
+  instrucao: 'Listen and choose what the customer orders',
+  itens: [
+    q("I'll have a small Coke, please.", 'small Coke', ['large Coke', 'medium Coke', 'small coffee']),
+    q("I'll have large fries.", 'large fries', ['small fries', 'medium fries', 'large Coke']),
+    q("Can I have a medium coffee?", 'medium coffee', ['small coffee', 'large coffee', 'medium Coke']),
+    q("I'd like a large milkshake.", 'large milkshake', ['small milkshake', 'medium milkshake', 'large fries']),
+    q("I'll have medium fries, please.", 'medium fries', ['large fries', 'small fries', 'medium coffee']),
+    q("A large orange juice, please.", 'large orange juice', ['small orange juice', 'medium orange juice', 'large milkshake']),
+    q("I'll have a small coffee.", 'small coffee', ['medium coffee', 'large coffee', 'small Coke']),
+    q("Can I have small fries?", 'small fries', ['medium fries', 'large fries', 'small milkshake']),
+    q("I'd like a medium soda.", 'medium soda', ['large soda', 'small soda', 'medium fries']),
+    q("I'll have a large coffee, please.", 'large coffee', ['medium coffee', 'small coffee', 'large soda']),
+    q("A small milkshake, please.", 'small milkshake', ['large milkshake', 'medium milkshake', 'small fries']),
+    q("I'll have a medium Coke.", 'medium Coke', ['small Coke', 'large Coke', 'medium milkshake']),
+    q("Large fries and a small Coke, please.", 'large fries', ['small fries', 'medium fries', 'large soda']),
+    q("A small iced coffee, please.", 'small iced coffee', ['large iced coffee', 'medium iced coffee', 'small milkshake']),
+    q("I'll have a large Coke.", 'large Coke', ['medium Coke', 'small Coke', 'large coffee']),
+    q("Can I have a medium milkshake?", 'medium milkshake', ['small milkshake', 'large milkshake', 'medium soda']),
+    q("I'd like small fries, please.", 'small fries', ['large fries', 'medium fries', 'small soda']),
+    q("I'll have a small orange juice.", 'small orange juice', ['medium orange juice', 'large orange juice', 'small coffee']),
+    q("A medium iced coffee, please.", 'medium iced coffee', ['small iced coffee', 'large iced coffee', 'medium fries']),
+    q("I'll have a large soda, please.", 'large soda', ['small soda', 'medium soda', 'large milkshake']),
+    q("Medium fries and a large Coke.", 'medium fries', ['large fries', 'small fries', 'medium Coke']),
+    q("Can I have a small soda?", 'small soda', ['medium soda', 'large soda', 'small fries']),
+    q("I'd like a large iced coffee.", 'large iced coffee', ['medium iced coffee', 'small iced coffee', 'large orange juice']),
+    q("I'll have a medium orange juice.", 'medium orange juice', ['large orange juice', 'small orange juice', 'medium coffee'])
+  ]
+});
+</script>
+</body>
+</html>

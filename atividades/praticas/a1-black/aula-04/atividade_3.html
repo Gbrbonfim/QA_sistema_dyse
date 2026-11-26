@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 4 · I'll have...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 04 · Escrita (Ordering Food - Drive-Thru)
+   Alinhado ao "Functional Skills: Ordering Food" (I will have = I'll have; também I'd like e
+   Can I have...?) e ao exercício "Rewrite the sentences using I'll have". Conteúdo NOVO com
+   outros pedidos. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 4, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu vou querer um cheeseburger.'), palavras: ["I'll", 'have', 'a', 'cheeseburger'], isca: ['an'], fim: '.', traducao: 'Vou querer um cheeseburger.' },
+    { contexto: M('Eu vou querer uma torta de maçã.'), palavras: ["I'll", 'have', 'an', 'apple', 'pie'], isca: ['a'], fim: '.', traducao: 'Vou querer uma torta de maçã.' },
+    { contexto: M('Eu vou querer batata frita grande.'), palavras: ["I'll", 'have', 'large', 'fries'], isca: ['fry'], fim: '.', traducao: 'Vou querer batata frita grande.' },
+    { contexto: M('Eu vou querer um milkshake de morango.'), palavras: ["I'll", 'have', 'a', 'strawberry', 'milkshake'], isca: ['an'], fim: '.', traducao: 'Vou querer um milkshake de morango.' },
+    { contexto: M('Eu vou querer um café gelado.'), palavras: ["I'll", 'have', 'an', 'iced', 'coffee'], isca: ['a'], fim: '.', traducao: 'Vou querer um café gelado.' },
+    { contexto: M('Eu gostaria de um cachorro-quente, por favor.'), palavras: ["I'd", 'like', 'a', 'hot', 'dog,', 'please'], isca: ['have'], fim: '.', traducao: 'Eu gostaria de um cachorro-quente, por favor.' },
+    { contexto: M('Pode me ver uma Coca pequena?'), palavras: ['Can', 'I', 'have', 'a', 'small', 'Coke'], isca: ['like'], fim: '?', traducao: 'Pode me ver uma Coca pequena?' },
+    { contexto: M('Eu vou querer nuggets de frango.'), palavras: ["I'll", 'have', 'chicken', 'nuggets'], isca: ['a'], fim: '.', traducao: 'Vou querer nuggets de frango.' },
+    { contexto: M('Eu vou querer dois donuts.'), palavras: ["I'll", 'have', 'two', 'doughnuts'], isca: ['doughnut'], fim: '.', traducao: 'Vou querer dois donuts.' },
+    { contexto: M('Eu vou querer uma salada e uma água.'), palavras: ["I'll", 'have', 'a', 'salad', 'and', 'a', 'bottle', 'of', 'water'], isca: ['an'], fim: '.', traducao: 'Vou querer uma salada e uma garrafa de água.' },
+    { contexto: M('Eu vou querer um suco de laranja médio.'), palavras: ["I'll", 'have', 'a', 'medium', 'orange', 'juice'], isca: ['an'], fim: '.', traducao: 'Vou querer um suco de laranja médio.' },
+    { contexto: M('Eu vou querer um wrap de frango.'), palavras: ['I', 'will', 'have', 'a', 'chicken', 'wrap'], isca: ["I'll"], fim: '.', traducao: 'Vou querer um wrap de frango.' },
+    { contexto: M('Eu vou querer um cheeseburger duplo.'), palavras: ["I'll", 'have', 'a', 'double', 'cheeseburger'], isca: ['two'], fim: '.', traducao: 'Vou querer um cheeseburger duplo.' },
+    { contexto: M('Eu vou querer uma pizza de pepperoni.'), palavras: ["I'll", 'have', 'a', 'pepperoni', 'pizza'], isca: ['an'], fim: '.', traducao: 'Vou querer uma pizza de pepperoni.' },
+    { contexto: M('Eu vou querer um hambúrguer de bacon e um refrigerante.'), palavras: ["I'll", 'have', 'a', 'bacon', 'burger', 'and', 'a', 'soda'], isca: ['an'], fim: '.', traducao: 'Vou querer um hambúrguer de bacon e um refrigerante.' },
+    { contexto: M('Pode me ver um café pequeno?'), palavras: ['Can', 'I', 'have', 'a', 'small', 'coffee'], isca: ['will'], fim: '?', traducao: 'Pode me ver um café pequeno?' },
+    { contexto: M('Eu gostaria de batata frita média.'), palavras: ["I'd", 'like', 'medium', 'fries'], isca: ['have'], fim: '.', traducao: 'Eu gostaria de batata frita média.' },
+    { contexto: M('Eu vou querer um sorvete de chocolate de sobremesa.'), palavras: ["I'll", 'have', 'a', 'chocolate', 'ice', 'cream', 'for', 'dessert'], isca: ['to'], fim: '.', traducao: 'Vou querer um sorvete de chocolate de sobremesa.' },
+    { contexto: M('Eu vou querer uma Coca grande para beber.'), palavras: ["I'll", 'have', 'a', 'large', 'Coke', 'to', 'drink'], isca: ['for'], fim: '.', traducao: 'Vou querer uma Coca grande para beber.' },
+    { contexto: M('É só isso.'), palavras: ["That's", 'all'], isca: ['it'], fim: '.', traducao: 'É só isso.' }
+  ]
+});
+</script>
+</body>
+</html>

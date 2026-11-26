@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 4 · A family order</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 04 · Leitura (Ordering Food - Drive-Thru)
+   Alinhado ao "Functional Skills: Ordering Food" (I'll have / I'd like / Can I have...?),
+   aos tamanhos (small, medium, large) e às falas do atendente. Conteúdo NOVO: o pai pede
+   para a família no drive-thru. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Cashier', 'Hi! Welcome! What can I get for you?'],
+  ['Dad', "Hi! I'll have two cheeseburgers and a hot dog, please."],
+  ['Cashier', 'OK. Anything on the side?'],
+  ['Dad', "Yes. I'd like large fries and chicken nuggets."],
+  ['Cashier', 'Great. And to drink?'],
+  ['Dad', 'Can I have two small Cokes and a medium coffee?'],
+  ['Cashier', 'Sure. Small, medium or large coffee?'],
+  ['Dad', 'Medium, please.'],
+  ['Cashier', 'Anything for dessert?'],
+  ['Dad', "Yes! The kids would like two chocolate milkshakes."],
+  ['Cashier', 'Small or large milkshakes?'],
+  ['Dad', 'Small, please.'],
+  ['Cashier', 'Anything else?'],
+  ['Dad', "No, that's all. Thank you."],
+  ['Cashier', "That's $24.80. Second window, please."],
+  ['Dad', 'Thanks!']
+];
+const lado = q => q === 'Cashier' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 4, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi! I'll have two cheeseburgers and a hot dog, please.", "Hi! I'll have two cheeseburger and a hot dog, please.", "Hi! I'll have two cheeseburgers and an hot dog, please."], 0, 'Oi! Vou querer dois cheeseburgers e um cachorro-quente, por favor.'),
+    prox(2, ['OK. Anything to the side?', 'OK. Anything on the side?', 'OK. That is all on the side?'], 1, 'Certo. Algum acompanhamento?'),
+    prox(3, ["Yes. I'd likes large fries and chicken nuggets.", "Yes. I like large fries and chicken nuggets, please?", "Yes. I'd like large fries and chicken nuggets."], 2, 'Sim. Eu gostaria de batata grande e nuggets de frango.'),
+    prox(4, ['Great. And to drink?', 'Great. And for drinking?', 'Great. And drink to?'], 0, 'Ótimo. E para beber?'),
+    prox(5, ['Can I has two small Cokes and a medium coffee?', 'Can I have two small Cokes and a medium coffee?', 'Can I have two smalls Cokes and a medium coffee?'], 1, 'Pode me ver duas Cocas pequenas e um café médio?'),
+    prox(6, ['Sure. Small, medium and large coffee?', 'Sure. Smaller, medium or larger coffee?', 'Sure. Small, medium or large coffee?'], 2, 'Claro. Café pequeno, médio ou grande?'),
+    prox(7, ['Medium, please.', 'Medium, thank you welcome.', 'Mediums, please.'], 0, 'Médio, por favor.'),
+    prox(8, ['Anything to dessert?', 'Anything for dessert?', 'Anything for desserts?'], 1, 'Alguma sobremesa?'),
+    prox(9, ['Yes! The kids would likes two chocolate milkshakes.', 'Yes! The kids would like two chocolate milkshake.', 'Yes! The kids would like two chocolate milkshakes.'], 2, 'Sim! As crianças gostariam de dois milkshakes de chocolate.'),
+    prox(10, ['Small or large milkshakes?', 'Small and large milkshakes?', 'Smalls or larges milkshakes?'], 0, 'Milkshakes pequenos ou grandes?'),
+    prox(13, ["No, that's it all. Thank you.", "No, that's all. Thank you.", "No, that all. Thank you."], 1, 'Não, é só isso. Obrigado.'),
+    prox(15, ["You're welcome!", 'Anything else?', 'Thanks!'], 2, 'Obrigado!'),
+    { instrucao: 'How many cheeseburgers?', frase: '___.', opcoes: ['Two', 'One', 'Three'], certa: 0, traducao: 'Dois.' },
+    { instrucao: 'What does Dad order on the side?', frase: 'Large fries and ___.', opcoes: ['a salad', 'chicken nuggets', 'a hot dog'], certa: 1, traducao: 'Batata grande e nuggets de frango.' },
+    { instrucao: 'What size are the Cokes?', frase: '___.', opcoes: ['Large', 'Medium', 'Small'], certa: 2, traducao: 'Pequenas.' },
+    { instrucao: 'What size is the coffee?', frase: '___.', opcoes: ['Medium', 'Small', 'Large'], certa: 0, traducao: 'Médio.' },
+    { instrucao: 'What would the kids like for dessert?', frase: 'Two chocolate ___.', opcoes: ['pies', 'milkshakes', 'doughnuts'], certa: 1, traducao: 'Dois milkshakes de chocolate.' },
+    { instrucao: 'What size are the milkshakes?', frase: '___.', opcoes: ['Large', 'Medium', 'Small'], certa: 2, traducao: 'Pequenos.' },
+    { instrucao: 'How much is the order?', frase: '$___.', opcoes: ['24.80', '14.20', '11.50'], certa: 0, traducao: '24,80 dólares.' },
+    { instrucao: 'Which window?', frase: 'The ___ window.', opcoes: ['first', 'second', 'third'], certa: 1, traducao: 'A segunda janela.' }
+  ]
+});
+</script>
+</body>
+</html>

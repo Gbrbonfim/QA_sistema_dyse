@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 4 · The cashier says...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 04 · Escrita (Ordering Food - Drive-Thru)
+   Alinhado às falas do atendente no slide (Hello! Welcome! / What can I get for you? /
+   Anything else? / That's $... / Your total comes to... / First window. / You're welcome. /
+   Have a nice day!). Conteúdo NOVO. A isca é a palavra errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 4, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Olá! Bem-vindo!'), palavras: ['Hello!', 'Welcome'], isca: ['Bye'], fim: '!', traducao: 'Olá! Bem-vindo!' },
+    { contexto: M('O que vai querer?'), palavras: ['What', 'can', 'I', 'get', 'for', 'you'], isca: ['to'], fim: '?', traducao: 'O que vai querer? (O que posso trazer para você?)' },
+    { contexto: M('Mais alguma coisa?'), palavras: ['Anything', 'else'], isca: ['all'], fim: '?', traducao: 'Mais alguma coisa?' },
+    { contexto: M('Dá 9 dólares.'), palavras: ["That's", 'nine', 'dollars'], isca: ['dollar'], fim: '.', traducao: 'Dá 9 dólares.' },
+    { contexto: M('O total dá 12 dólares. Primeira janela.'), palavras: ['Your', 'total', 'comes', 'to', 'twelve', 'dollars.', 'First', 'window'], isca: ['for'], fim: '.', traducao: 'O total dá 12 dólares. Primeira janela.' },
+    { contexto: M('De nada.'), palavras: ["You're", 'welcome'], isca: ['thank'], fim: '.', traducao: 'De nada.' },
+    { contexto: M('Obrigado! Tenha um ótimo dia!'), palavras: ['Thank', 'you!', 'Have', 'a', 'nice', 'day'], isca: ['take'], fim: '!', traducao: 'Obrigado! Tenha um ótimo dia!' },
+    { contexto: M('Certo, então: um hambúrguer e uma Coca pequena?'), palavras: ['Alright,', 'so', 'I', 'have', 'a', 'hamburger', 'and', 'a', 'small', 'Coke'], isca: ['large'], fim: '?', traducao: 'Certo, então: um hambúrguer e uma Coca pequena?' },
+    { contexto: M('Que tamanho?'), palavras: ['What', 'size'], isca: ['sizes'], fim: '?', traducao: 'Que tamanho?' },
+    { contexto: M('Pequeno, médio ou grande?'), palavras: ['Small,', 'medium', 'or', 'large'], isca: ['and'], fim: '?', traducao: 'Pequeno, médio ou grande?' },
+    { contexto: M('Algo para beber?'), palavras: ['Anything', 'to', 'drink'], isca: ['for'], fim: '?', traducao: 'Algo para beber?' },
+    { contexto: M('Alguma coisa de sobremesa?'), palavras: ['Anything', 'for', 'dessert'], isca: ['to'], fim: '?', traducao: 'Alguma coisa de sobremesa?' },
+    { contexto: M('Sim, por favor.'), palavras: ['Yes,', 'please'], isca: ['welcome'], fim: '.', traducao: 'Sim, por favor.' },
+    { contexto: M('Dá 7 dólares e 50.'), palavras: ["That's", 'seven', 'fifty'], isca: ['seventy'], fim: '.', traducao: 'Dá 7,50.' },
+    { contexto: M('Segunda janela, por favor.'), palavras: ['Second', 'window,', 'please'], isca: ['first'], fim: '.', traducao: 'Segunda janela, por favor.' },
+    { contexto: M('Mais alguma coisa? — É só isso.'), palavras: ['Anything', 'else?', "That's", 'all'], isca: ['it'], fim: '.', traducao: 'Mais alguma coisa? — É só isso.' },
+    { contexto: M('Olá! Bem-vindo! O que vai querer?'), palavras: ['Hello!', 'Welcome!', 'What', 'can', 'I', 'get', 'for', 'you'], isca: ['do'], fim: '?', traducao: 'Olá! Bem-vindo! O que vai querer?' },
+    { contexto: M('Uma batata grande ou média?'), palavras: ['Large', 'or', 'medium', 'fries'], isca: ['and'], fim: '?', traducao: 'Batata grande ou média?' },
+    { contexto: M('Obrigado. — De nada.'), palavras: ['Thank', 'you.', "You're", 'welcome'], isca: ['please'], fim: '.', traducao: 'Obrigado. — De nada.' },
+    { contexto: M('Aqui está o seu pedido.'), palavras: ['Here', 'is', 'your', 'order'], isca: ['are'], fim: '.', traducao: 'Aqui está o seu pedido.' }
+  ]
+});
+</script>
+</body>
+</html>

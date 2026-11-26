@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 4 · I'll have, I'd like, Can I have?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 04 · Gramática (Ordering Food - Drive-Thru)
+   "Functional Skills: Ordering Food": I will have = I'll have; I'd like; Can I have...?; a x
+   an (an apple pie, an iced coffee); plural (two apple pies, large fries). Conteúdo NOVO.
+   24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 4, num: 9, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: "I will have = ___", opcoes: ["I'll have", "I'd have", "I've have"], certa: 0, traducao: 'I will have = I\'ll have (vou querer).' },
+    { frase: "I want the pasta. → ___ the pasta.", opcoes: ["I'd have", "I'll have", 'I will having'], certa: 1, traducao: 'Quero a massa. → Vou querer a massa.' },
+    { frase: '___ I have a small coffee?', opcoes: ['Will', 'Would', 'Can'], certa: 2, traducao: 'Pode me ver um café pequeno?' },
+    { frase: "I___ like a hot dog, please.", opcoes: ["'d", "'ll", "'m"], certa: 0, traducao: 'Eu gostaria de um cachorro-quente, por favor.' },
+    { frase: "I'll have ___ apple pie.", opcoes: ['a', 'an', '– (nothing)'], certa: 1, traducao: 'Vou querer uma torta de maçã.' },
+    { frase: "I'll have ___ cheeseburger.", opcoes: ['an', '– (nothing)', 'a'], certa: 2, traducao: 'Vou querer um cheeseburger.' },
+    { frase: "I'll have ___ iced coffee.", opcoes: ['an', 'a', '– (nothing)'], certa: 0, traducao: 'Vou querer um café gelado.' },
+    { frase: "I'll have ___ chicken nuggets.", opcoes: ['a', '– (nothing)', 'an'], certa: 1, traducao: 'Vou querer nuggets de frango.' },
+    { frase: "I'll have ___ large fries.", opcoes: ['a', 'an', '– (nothing)'], certa: 2, traducao: 'Vou querer batata grande.' },
+    { frase: "I'll have two apple ___.", opcoes: ['pies', 'pie', 'pieses'], certa: 0, traducao: 'Vou querer duas tortas de maçã.' },
+    { frase: "I'll have two ___.", opcoes: ['doughnut', 'doughnuts', 'doughnutes'], certa: 1, traducao: 'Vou querer dois donuts.' },
+    { frase: "I want a chocolate milkshake. → ___", opcoes: ["I'll have chocolate a milkshake.", "I'll having a chocolate milkshake.", "I'll have a chocolate milkshake."], certa: 2, traducao: 'Vou querer um milkshake de chocolate.' },
+    { frase: "I want chicken nuggets. → ___", opcoes: ["I'll have chicken nuggets.", "I'll have a chicken nuggets.", "I'll has chicken nuggets."], certa: 0, traducao: 'Vou querer nuggets de frango.' },
+    { frase: "I want a bacon burger and a soda. → ___", opcoes: ["I'll have a bacon burger and soda a.", "I'll have a bacon burger and a soda.", "I have'll a bacon burger and a soda."], certa: 1, traducao: 'Vou querer um hambúrguer de bacon e um refrigerante.' },
+    { frase: "I'd like a cheeseburger ___ the main.", opcoes: ['to', 'on', 'for'], certa: 2, traducao: 'Eu gostaria de um cheeseburger de prato principal.' },
+    { frase: "I'd like a Coke ___ drink.", opcoes: ['to', 'for', 'on'], certa: 0, traducao: 'Eu gostaria de uma Coca para beber.' },
+    { frase: "I'd like an apple pie ___ dessert.", opcoes: ['to', 'for', 'on'], certa: 1, traducao: 'Eu gostaria de uma torta de maçã de sobremesa.' },
+    { frase: "I'd like fries ___ the side.", opcoes: ['for', 'to', 'on'], certa: 2, traducao: 'Eu gostaria de batata de acompanhamento.' },
+    { frase: "I'll have a ___ drink. (grande)", opcoes: ['large', 'medium', 'small'], certa: 0, traducao: 'Vou querer uma bebida grande.' },
+    { frase: "I'll have ___ fries. (média)", opcoes: ['small', 'medium', 'large'], certa: 1, traducao: 'Vou querer batata média.' },
+    { frase: "I'll have a ___ coffee. (pequeno)", opcoes: ['medium', 'large', 'small'], certa: 2, traducao: 'Vou querer um café pequeno.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["I'll have a hamburger, please.", "I'll have an hamburger, please.", "I'll has a hamburger, please."], certa: 0, traducao: 'Vou querer um hambúrguer, por favor.' },
+    { instrucao: 'Which question is correct?', frase: '___', opcoes: ['Can I having a salad?', 'Can I have a salad?', 'I can have a salad?'], certa: 1, traducao: 'Pode me ver uma salada?' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["I'd likes a pizza.", "I'd like to a pizza.", "I'd like a pizza."], certa: 2, traducao: 'Eu gostaria de uma pizza.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 4 · At the drive-thru</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 04 · Leitura (Ordering Food - Drive-Thru)
+   Alinhado ao diálogo do vídeo e ao role-play do slide (cliente pede 1 prato principal, 1
+   acompanhamento, 1 bebida; atendente repete o pedido e diz o preço). Conteúdo NOVO: a Lisa
+   pede no drive-thru. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Cashier', 'Hello! Welcome! What can I get for you?'],
+  ['Lisa', "Hello! I'll have a chicken burger, please."],
+  ['Cashier', 'Anything on the side?'],
+  ['Lisa', "Yes, I'll have medium fries."],
+  ['Cashier', 'And to drink?'],
+  ['Lisa', "I'll have a large orange juice."],
+  ['Cashier', 'Anything for dessert?'],
+  ['Lisa', 'Yes! Can I have an apple pie?'],
+  ['Cashier', 'Sure. Anything else?'],
+  ['Lisa', "No, that's all."],
+  ['Cashier', 'Alright, so I have a chicken burger, medium fries, a large orange juice and an apple pie?'],
+  ['Lisa', 'Yes, please.'],
+  ['Cashier', 'Your total comes to $11.50. First window.'],
+  ['Lisa', 'Thank you!'],
+  ['Cashier', "You're welcome! Have a nice day!"]
+];
+const lado = q => q === 'Cashier' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 4, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hello! I'll have a chicken burger, please.", "Hello! I'll having a chicken burger, please.", "Hello! I'll have an chicken burger, please."], 0, 'Olá! Vou querer um hambúrguer de frango, por favor.'),
+    prox(2, ['Anything in the side?', 'Anything on the side?', 'Anything to the side?'], 1, 'Algum acompanhamento?'),
+    prox(3, ["Yes, I'll has medium fries.", "Yes, I'll have medium fry.", "Yes, I'll have medium fries."], 2, 'Sim, vou querer batata média.'),
+    prox(4, ['And to drink?', 'And for drink?', 'And drinking?'], 0, 'E para beber?'),
+    prox(5, ["I'll have a large orange juices.", "I'll have a large orange juice.", "I'll have an large orange juice."], 1, 'Vou querer um suco de laranja grande.'),
+    prox(6, ['Anything to dessert?', 'Anything for desserts?', 'Anything for dessert?'], 2, 'Alguma sobremesa?'),
+    prox(7, ['Yes! Can I have an apple pie?', 'Yes! Can I have a apple pie?', 'Yes! Can I having an apple pie?'], 0, 'Sim! Pode me ver uma torta de maçã?'),
+    prox(8, ['Sure. Anything more else?', 'Sure. Anything else?', 'Sure. Else anything?'], 1, 'Claro. Mais alguma coisa?'),
+    prox(9, ["No, that's it all.", "No, that all.", "No, that's all."], 2, 'Não, é só isso.'),
+    prox(11, ['Yes, please.', 'Yes, thank you welcome.', "You're welcome."], 0, 'Sim, por favor.'),
+    prox(13, ["You're welcome!", 'Thank you!', 'Have a nice day, please!'], 1, 'Obrigada!'),
+    prox(14, ['Thank you! Have a nice day!', "You're welcome! Have a nice days!", "You're welcome! Have a nice day!"], 2, 'De nada! Tenha um ótimo dia!'),
+    { instrucao: "What is Lisa's main?", frase: 'A ___.', opcoes: ['chicken burger', 'cheeseburger', 'hot dog'], certa: 0, traducao: 'Um hambúrguer de frango.' },
+    { instrucao: 'What size are the fries?', frase: '___.', opcoes: ['Small', 'Medium', 'Large'], certa: 1, traducao: 'Médias.' },
+    { instrucao: 'What does Lisa have to drink?', frase: 'A large ___.', opcoes: ['Coke', 'coffee', 'orange juice'], certa: 2, traducao: 'Um suco de laranja grande.' },
+    { instrucao: 'What does she have for dessert?', frase: 'An ___.', opcoes: ['apple pie', 'ice cream', 'orange'], certa: 0, traducao: 'Uma torta de maçã.' },
+    { instrucao: 'How much is the total?', frase: '$___.', opcoes: ['14.20', '11.50', '15.10'], certa: 1, traducao: '11,50 dólares.' },
+    { instrucao: 'Where does Lisa go?', frase: 'To the ___ window.', opcoes: ['second', 'third', 'first'], certa: 2, traducao: 'À primeira janela.' },
+    { instrucao: 'What does Lisa say when her order is complete?', frase: '___', opcoes: ["That's all.", 'Anything else?', 'First window.'], certa: 0, traducao: 'É só isso.' },
+    { instrucao: 'What does the cashier say at the end?', frase: '___', opcoes: ['What can I get for you?', 'Have a nice day!', 'Anything else?'], certa: 1, traducao: 'Tenha um ótimo dia!' }
+  ]
+});
+</script>
+</body>
+</html>
