@@ -1345,6 +1345,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: "I'm starving!", tipo: 'Escute e grave', treina: 'Fala · Sugestões e gírias', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Shall we or how about?', tipo: 'Make a Choice', treina: 'Gramática · Sugestões', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 18,
+        titulo: 'Class 18 and 19 · How to Make Better Decisions',
+        atividades: [
+          { num: 1, parte: 'Class 18', titulo: 'Possible or certain?', tipo: 'Escute e escolha', treina: 'Escuta · May / might', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 18', titulo: 'I might change my mind', tipo: 'Monte a frase', treina: 'Escrita · May / might', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 18', titulo: 'The job in Lisbon', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 18', titulo: 'Decisive or indecisive?', tipo: 'Escute e grave', treina: 'Fala · Decisões', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 18', titulo: 'May or might?', tipo: 'Make a Choice', treina: 'Gramática · May / might', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 19', titulo: 'Do your best', tipo: 'Escute e escolha', treina: 'Escuta · Do x make', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 19', titulo: 'Make a decision', tipo: 'Monte a frase', treina: 'Escrita · Do x make', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 19', titulo: 'The bakery decision', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 19', titulo: 'Make a difference', tipo: 'Escute e grave', treina: 'Fala · Do x make', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 19', titulo: 'Do or make?', tipo: 'Make a Choice', treina: 'Gramática · Do x make', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

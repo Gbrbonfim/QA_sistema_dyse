@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 18 · I might change my mind</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 18 · Escrita (How to Make Better Decisions)
+   Alinhado ao "Grammar Point" (may / might / may not / might not + verbo sem to) e às ideias
+   do vídeo (small choices, waste energy, honest friend, good fuel, safest option).
+   Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 18, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Talvez eu mude de ideia.'), palavras: ['I', 'might', 'change', 'my', 'mind'], isca: ['to'], fim: '.', traducao: 'Talvez eu mude de ideia.' },
+    { contexto: M('Talvez ela não venha amanhã.'), palavras: ['She', 'may', 'not', 'come', 'tomorrow'], isca: ['comes'], fim: '.', traducao: 'Talvez ela não venha amanhã.' },
+    { contexto: M('Pode chover mais tarde.'), palavras: ['It', 'might', 'rain', 'later'], isca: ['rains'], fim: '.', traducao: 'Pode chover mais tarde.' },
+    { contexto: M('Talvez você precise de mais tempo.'), palavras: ['You', 'may', 'need', 'more', 'time'], isca: ['needs'], fim: '.', traducao: 'Talvez você precise de mais tempo.' },
+    { contexto: M('Talvez eu peça conselho a um amigo.'), palavras: ['I', 'might', 'ask', 'a', 'friend', 'for', 'advice'], isca: ['asking'], fim: '.', traducao: 'Talvez eu peça conselho a um amigo.' },
+    { contexto: M('Talvez eles não gostem da ideia.'), palavras: ['They', 'might', 'not', 'like', 'the', 'idea'], isca: ['likes'], fim: '.', traducao: 'Talvez eles não gostem da ideia.' },
+    { contexto: M('Você pode se arrepender depois.'), palavras: ['You', 'may', 'regret', 'it', 'later'], isca: ['regrets'], fim: '.', traducao: 'Você pode se arrepender depois.' },
+    { contexto: M('Talvez você não pense com clareza se estiver cansado.'), palavras: ['You', 'might', 'not', 'think', 'clearly', 'if', "you're", 'tired'], isca: ['clear'], fim: '.', traducao: 'Talvez você não pense com clareza se estiver cansado.' },
+    { contexto: M('Talvez a gente pule o café da manhã hoje.'), palavras: ['We', 'might', 'skip', 'breakfast', 'today'], isca: ['skipping'], fim: '.', traducao: 'Talvez a gente pule o café da manhã hoje.' },
+    { contexto: M('Talvez ele tenha que trabalhar no sábado.'), palavras: ['He', 'may', 'have', 'to', 'work', 'on', 'Saturday'], isca: ['has'], fim: '.', traducao: 'Talvez ele tenha que trabalhar no sábado.' },
+    { contexto: M('Talvez ela esteja cansada.'), palavras: ['She', 'might', 'be', 'tired'], isca: ['is'], fim: '.', traducao: 'Talvez ela esteja cansada.' },
+    { contexto: M('Talvez eu fique em casa hoje à noite.'), palavras: ['I', 'might', 'stay', 'at', 'home', 'tonight'], isca: ['stayed'], fim: '.', traducao: 'Talvez eu fique em casa hoje à noite.' },
+    { contexto: M('O Obama sempre usava ternos cinza ou azuis.'), palavras: ['Obama', 'always', 'wore', 'grey', 'or', 'blue', 'suits'], isca: ['wears'], fim: '.', traducao: 'O Obama sempre usava ternos cinza ou azuis.' },
+    { contexto: M('Pequenas escolhas gastam energia.'), palavras: ['Small', 'choices', 'use', 'energy'], isca: ['uses'], fim: '.', traducao: 'Pequenas escolhas gastam energia.' },
+    { contexto: M('Não desperdice energia com coisas pequenas.'), palavras: ["Don't", 'waste', 'energy', 'on', 'small', 'things'], isca: ['in'], fim: '.', traducao: 'Não desperdice energia com coisas pequenas.' },
+    { contexto: M('Peça conselho a um amigo sincero.'), palavras: ['Ask', 'an', 'honest', 'friend', 'for', 'advice'], isca: ['a'], fim: '.', traducao: 'Peça conselho a um amigo sincero.' },
+    { contexto: M('Eu demoro uma eternidade para escolher o que vestir.'), palavras: ['I', 'take', 'forever', 'to', 'choose', 'what', 'to', 'wear'], isca: ['wearing'], fim: '.', traducao: 'Demoro uma eternidade para escolher o que vestir.' },
+    { contexto: M('Água e mingau são um bom combustível para o cérebro.'), palavras: ['Water', 'and', 'porridge', 'are', 'good', 'fuel', 'for', 'the', 'brain'], isca: ['is'], fim: '.', traducao: 'Água e mingau são um bom combustível para o cérebro.' },
+    { contexto: M('As pessoas costumam escolher a opção mais segura.'), palavras: ['People', 'usually', 'choose', 'the', 'safest', 'option'], isca: ['safer'], fim: '.', traducao: 'As pessoas costumam escolher a opção mais segura.' },
+    { contexto: M('Não fique com medo de perder alguma coisa.'), palavras: ["Don't", 'be', 'afraid', 'of', 'losing', 'something'], isca: ['lose'], fim: '.', traducao: 'Não tenha medo de perder alguma coisa.' }
+  ]
+});
+</script>
+</body>
+</html>

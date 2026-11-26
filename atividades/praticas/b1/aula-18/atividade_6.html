@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 19 · Do your best</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 19 · Escuta (How to Make Better Decisions)
+   Alinhado ao "Vocabulary: Do Vs Make" (do research, do your best, do nothing, do exercise,
+   do the right thing, do work; make a decision, make a mistake, make sure, make a
+   difference, make a plan), ao Listening do David (decisão grande, hábitos, conselho
+   sincero, sentir-se confiante) e revisão de may / might, have to e sugestões.
+   Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const V = 'Listen. Which verb do you hear?', T = 'Listen to the speaker. What is true?', RV = 'Listen and choose the best answer';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 18, num: 6, tipo: 'imagem',
+  instrucao: 'Listen. What does it mean?',
+  itens: [
+    q("Don't worry. Everybody makes mistakes.", 'do something wrong', ['do something perfect', 'do exercise'], 'lightbulb'),
+    q("I'm going to do some research before I buy a new laptop.", 'look for information', ['buy it right now', 'ask for a discount'], 'lightbulb'),
+    q("Today I'm going to do nothing. Just me and the sofa.", 'relax', ['work hard', 'make a plan'], 'lightbulb'),
+    q('Volunteers can make a difference in their community.', 'change things for the better', ['cause problems', 'do nothing'], 'lightbulb'),
+    q('Before you leave, make sure the door is locked.', 'check', ['forget', 'open'], 'lightbulb'),
+    q('I do exercise three times a week.', 'I go to the gym or run.', ['I do my homework.', 'I sleep a lot.'], 'lightbulb'),
+    q('It was hard, but she did the right thing and told the truth.', 'She was honest.', ['She lied.', 'She did nothing.'], 'lightbulb'),
+    q("Let's make a plan for the trip.", 'organize what to do', ['cancel the trip', 'buy the tickets now'], 'lightbulb'),
+    { instrucao: V, ...q('Scientists do research every day.', 'do', ['make', 'have'], 'hearing') },
+    { instrucao: V, ...q('Every time you make a decision, your brain uses energy.', 'make', ['do', 'take'], 'hearing') },
+    { instrucao: V, ...q('I made a big mistake yesterday.', 'made', ['did', 'had'], 'hearing') },
+    { instrucao: V, ...q('She does her homework after dinner.', 'does', ['makes', 'has'], 'hearing') },
+    { instrucao: V, ...q('Can you make a cake for the party?', 'make', ['take', 'do'], 'hearing') },
+    { instrucao: V, ...q('We did our best, but we lost the game.', 'did', ['made', 'had'], 'hearing') },
+    { instrucao: T, ...q('Last year, I had to decide whether to change my university course.', 'The speaker had to make a big decision.', ['The speaker made a small choice.', 'The speaker did nothing.'], 'psychology') },
+    { instrucao: T, ...q('To save energy, I ate the same breakfast every day and stopped wasting time on small choices.', 'The speaker removed small choices.', ['The speaker ate a lot of junk food.', 'The speaker changed clothes many times.'], 'psychology') },
+    { instrucao: T, ...q('I also did exercise in the morning and drank a lot of water.', 'The speaker had healthy habits.', ['The speaker had bad habits.', 'The speaker did no exercise.'], 'psychology') },
+    { instrucao: T, ...q('My sister gave me honest advice. She said it might be hard, but it might make me happier.', 'The speaker got honest advice.', ['The speaker got no advice.', 'The sister only said nice things.'], 'psychology') },
+    { instrucao: T, ...q("In the end, I changed my course, and I don't regret it.", 'The speaker is happy with the decision.', ['The speaker regrets the decision.', "The speaker didn't decide."], 'psychology') },
+    { instrucao: RV, ...q("You might not sleep well if you drink coffee at night.", "It's possible.", ["It's certain.", "It's a rule."], 'help') },
+    { instrucao: RV, ...q("I'm not sure. I may stay at home tonight.", "It's possible.", ["It's a rule.", "It's certain."], 'help') },
+    { instrucao: RV, ...q('Shall we make a plan for the weekend?', 'a suggestion', ['a rule', 'a complaint'], 'forum') },
+    { instrucao: RV, ...q("You don't have to decide today.", "It's not necessary.", ["It's not allowed.", "It's necessary."], 'rule') },
+    { instrucao: RV, ...q("I'll have to think about it.", 'The speaker has doubts.', ['The speaker accepts.', 'The speaker refuses.'], 'forum') }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 19 · Make a decision</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 19 · Escrita (How to Make Better Decisions)
+   Alinhado ao "Vocabulary: Do Vs Make" (collocations com do e make), ao Listening do David
+   (aceitar emprego em outra cidade, sentir-se calmo e confiante) e revisão de may / might.
+   Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 18, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ela sempre faz o melhor dela.'), palavras: ['She', 'always', 'does', 'her', 'best'], isca: ['makes'], fim: '.', traducao: 'Ela sempre faz o melhor dela.' },
+    { contexto: M('Todo mundo comete erros às vezes.'), palavras: ['Everybody', 'makes', 'mistakes', 'sometimes'], isca: ['does'], fim: '.', traducao: 'Todo mundo comete erros às vezes.' },
+    { contexto: M('Preciso fazer uma pesquisa antes de decidir.'), palavras: ['I', 'need', 'to', 'do', 'some', 'research', 'before', 'I', 'decide'], isca: ['make'], fim: '.', traducao: 'Preciso fazer uma pesquisa antes de decidir.' },
+    { contexto: M('Não tome uma decisão quando estiver cansado.'), palavras: ["Don't", 'make', 'a', 'decision', 'when', "you're", 'tired'], isca: ['do'], fim: '.', traducao: 'Não tome uma decisão quando estiver cansado.' },
+    { contexto: M('Ele faz exercícios todas as manhãs.'), palavras: ['He', 'does', 'exercise', 'every', 'morning'], isca: ['makes'], fim: '.', traducao: 'Ele faz exercícios todas as manhãs.' },
+    { contexto: M('Certifique-se de que você descansou bem.'), palavras: ['Make', 'sure', "you've", 'rested', 'well'], isca: ['Do'], fim: '.', traducao: 'Certifique-se de que você descansou bem.' },
+    { contexto: M('Às vezes é melhor não fazer nada.'), palavras: ['Sometimes', "it's", 'better', 'to', 'do', 'nothing'], isca: ['make'], fim: '.', traducao: 'Às vezes é melhor não fazer nada.' },
+    { contexto: M('Pequenas ações podem fazer diferença.'), palavras: ['Small', 'actions', 'can', 'make', 'a', 'difference'], isca: ['do'], fim: '.', traducao: 'Pequenas ações podem fazer diferença.' },
+    { contexto: M('Vamos fazer um plano para o fim de semana.'), palavras: ["Let's", 'make', 'a', 'plan', 'for', 'the', 'weekend'], isca: ['do'], fim: '.', traducao: 'Vamos fazer um plano para o fim de semana.' },
+    { contexto: M('Ela fez a coisa certa.'), palavras: ['She', 'did', 'the', 'right', 'thing'], isca: ['made'], fim: '.', traducao: 'Ela fez a coisa certa.' },
+    { contexto: M('Você faz a lição de casa à noite?'), palavras: ['Do', 'you', 'do', 'your', 'homework', 'at', 'night'], isca: ['make'], fim: '?', traducao: 'Você faz a lição de casa à noite?' },
+    { contexto: M('Eu cometi um erro ontem.'), palavras: ['I', 'made', 'a', 'mistake', 'yesterday'], isca: ['did'], fim: '.', traducao: 'Cometi um erro ontem.' },
+    { contexto: M('Talvez eles façam uma pesquisa na internet.'), palavras: ['They', 'might', 'do', 'some', 'research', 'online'], isca: ['make'], fim: '.', traducao: 'Talvez eles façam uma pesquisa na internet.' },
+    { contexto: M('Um amigo sincero pode te ajudar a fazer a coisa certa.'), palavras: ['An', 'honest', 'friend', 'can', 'help', 'you', 'do', 'the', 'right', 'thing'], isca: ['make'], fim: '.', traducao: 'Um amigo sincero pode te ajudar a fazer a coisa certa.' },
+    { contexto: M('Comer bem pode fazer diferença no seu desempenho.'), palavras: ['Eating', 'well', 'can', 'make', 'a', 'difference', 'to', 'your', 'performance'], isca: ['do'], fim: '.', traducao: 'Comer bem pode fazer diferença no seu desempenho.' },
+    { contexto: M('Ele aceitou um emprego em outra cidade.'), palavras: ['He', 'accepted', 'a', 'job', 'in', 'another', 'city'], isca: ['other'], fim: '.', traducao: 'Ele aceitou um emprego em outra cidade.' },
+    { contexto: M('Eu me sinto calmo e confiante.'), palavras: ['I', 'feel', 'calm', 'and', 'confident'], isca: ['confidently'], fim: '.', traducao: 'Eu me sinto calmo e confiante.' },
+    { contexto: M('Você deveria fazer o seu melhor e não se preocupar.'), palavras: ['You', 'should', 'do', 'your', 'best', 'and', 'not', 'worry'], isca: ['make'], fim: '.', traducao: 'Você deveria fazer o seu melhor e não se preocupar.' },
+    { contexto: M('Eu tomei a decisão certa.'), palavras: ['I', 'made', 'the', 'right', 'decision'], isca: ['did'], fim: '.', traducao: 'Tomei a decisão certa.' },
+    { contexto: M('Os cientistas fazem pesquisas para entender o cérebro.'), palavras: ['Scientists', 'do', 'research', 'to', 'understand', 'the', 'brain'], isca: ['make'], fim: '.', traducao: 'Os cientistas fazem pesquisas para entender o cérebro.' }
+  ]
+});
+</script>
+</body>
+</html>

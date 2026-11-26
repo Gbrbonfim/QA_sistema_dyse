@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 18 · The job in Lisbon</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 18 · Leitura (How to Make Better Decisions)
+   Alinhado ao vídeo (não decidir com fome ou cansado, remover pequenas escolhas, honest
+   friend, medo de perder), ao Warm Up (indecisive, regret) e ao "Grammar Point" (may /
+   might / might not). Conteúdo NOVO: Maya e Theo conversam sobre uma proposta de emprego.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Theo', "You look worried, Maya. What's up?"],
+  ['Maya', "I got a job offer in Lisbon, but I can't decide."],
+  ['Theo', 'Wow, congratulations! Why is it so hard?'],
+  ['Maya', 'I might miss my family. And the rent there may be expensive.'],
+  ['Theo', 'True. But you might learn a lot in a new company.'],
+  ['Maya', "I know. I thought about it all week, and now I'm so tired."],
+  ['Theo', "Then don't decide today. You might not think clearly if you're tired."],
+  ['Maya', "You're right. I also didn't eat anything after breakfast."],
+  ['Theo', "Let's grab a bite first. Hungry people make bad decisions!"],
+  ['Maya', 'Ha ha. OK. What else should I do?'],
+  ['Theo', 'Stop wasting energy on small choices. Last week you took an hour to choose a T-shirt!'],
+  ['Maya', "That's true. I'm so indecisive."],
+  ['Theo', 'And talk to someone honest. Not someone who just says nice things.'],
+  ['Maya', 'Like you?'],
+  ['Theo', 'Like me! Honestly, I think moving might be difficult, but it may help you grow.'],
+  ['Maya', "I'm afraid I might regret it."],
+  ['Theo', "You may regret saying no, too. Don't be afraid of losing things."],
+  ['Maya', "OK. I'll rest tonight and decide tomorrow."],
+  ['Theo', 'Good idea. And whatever you choose, just do your best.'],
+  ['Maya', "Thanks, Theo. You're a good friend."]
+];
+const lado = q => q === 'Theo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 18, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I got a job offer in Lisbon, but I can't decide.", "I got a job offer in Lisbon, but I can't deciding.", "I got a job offer in Lisbon, and I'm very happy and sure."], 0, 'Recebi uma proposta de emprego em Lisboa, mas não consigo decidir.'),
+    prox(3, ['I might to miss my family. And the rent there may be expensive.', 'I might miss my family. And the rent there may be expensive.', 'I might miss my family. And the rent there may is expensive.'], 1, 'Talvez eu sinta falta da minha família. E o aluguel lá pode ser caro.'),
+    prox(4, ['True. But you might learning a lot in a new company.', 'True. But you mights learn a lot in a new company.', 'True. But you might learn a lot in a new company.'], 2, 'É verdade. Mas você pode aprender muito numa empresa nova.'),
+    prox(6, ["Then don't decide today. You might not think clearly if you're tired.", "Then decide right now. You might not think clearly if you're tired.", "Then don't decide today. You might don't think clearly if you're tired."], 0, 'Então não decida hoje. Talvez você não pense com clareza se estiver cansada.'),
+    prox(8, ["Let's grab a bite first. Hungry people make great decisions!", "Let's grab a bite first. Hungry people make bad decisions!", "Let's grabbing a bite first. Hungry people make bad decisions!"], 1, 'Vamos comer alguma coisa primeiro. Gente com fome toma decisões ruins!'),
+    prox(10, ['Stop wasting energy on small choices. Last week you took two seconds to choose a T-shirt!', 'Stop waste energy on small choices. Last week you took an hour to choose a T-shirt!', 'Stop wasting energy on small choices. Last week you took an hour to choose a T-shirt!'], 2, 'Pare de gastar energia com escolhas pequenas. Semana passada você levou uma hora para escolher uma camiseta!'),
+    prox(12, ['And talk to someone honest. Not someone who just says nice things.', 'And talk to someone honest. Not someone who just say nice things.', 'And talk to someone who only says nice things.'], 0, 'E converse com alguém sincero. Não alguém que só diz coisas boas.'),
+    prox(14, ['Like me! Honestly, I think moving might be difficult, but it may helps you grow.', 'Like me! Honestly, I think moving might be difficult, but it may help you grow.', 'Like me! Honestly, I think moving might being difficult, but it may help you grow.'], 1, 'Como eu! Sinceramente, acho que mudar pode ser difícil, mas pode te ajudar a crescer.'),
+    prox(15, ["I'm afraid I might regretting it.", "I'm afraid I might to regret it.", "I'm afraid I might regret it."], 2, 'Tenho medo de me arrepender.'),
+    prox(16, ["You may regret saying no, too. Don't be afraid of losing things.", 'You may regret saying no, too. Be very afraid of losing things.', "You may regrets saying no, too. Don't be afraid of losing things."], 0, 'Você também pode se arrepender de dizer não. Não tenha medo de perder coisas.'),
+    prox(17, ["OK. I'll decide right now, while I'm tired and hungry.", "OK. I'll rest tonight and decide tomorrow.", "OK. I'll rest tonight and deciding tomorrow."], 1, 'Tá. Vou descansar hoje e decidir amanhã.'),
+    prox(18, ['Good idea. And whatever you choose, just make your best.', 'Good idea. And whatever you choose, just do you best.', 'Good idea. And whatever you choose, just do your best.'], 2, 'Boa ideia. E seja qual for a sua escolha, faça o seu melhor.'),
+    { instrucao: 'What decision does Maya have to make?', frase: '___', opcoes: ['Whether to accept a job in Lisbon.', 'Which T-shirt to buy.', 'Where to have lunch.'], certa: 0, traducao: 'Se aceita um emprego em Lisboa.' },
+    { instrucao: 'Why might Maya not want to move?', frase: '___', opcoes: ["She doesn't like the job.", 'She might miss her family.', "She can't speak Portuguese."], certa: 1, traducao: 'Ela pode sentir falta da família.' },
+    { instrucao: "Why shouldn't Maya decide today?", frase: '___', opcoes: ["It's Sunday.", 'Theo is busy.', "She's tired and hungry."], certa: 2, traducao: 'Ela está cansada e com fome.' },
+    { instrucao: 'What small choice took Maya an hour?', frase: '___', opcoes: ['Choosing a T-shirt.', 'Choosing a restaurant.', 'Choosing a book.'], certa: 0, traducao: 'Escolher uma camiseta.' },
+    { instrucao: 'What kind of person should Maya talk to?', frase: '___', opcoes: ['Someone who only says nice things.', 'Someone honest.', 'Her new boss.'], certa: 1, traducao: 'Alguém sincero.' },
+    { instrucao: 'What does Theo think about moving?', frase: '___', opcoes: ["It's easy and fun.", "It's a terrible idea.", 'It might be difficult, but it may help her grow.'], certa: 2, traducao: 'Pode ser difícil, mas pode ajudá-la a crescer.' },
+    { instrucao: 'What is Maya afraid of?', frase: '___', opcoes: ['Regretting her decision.', 'Flying.', 'Her new boss.'], certa: 0, traducao: 'Se arrepender da decisão.' },
+    { instrucao: 'When will Maya decide?', frase: '___', opcoes: ['Today.', 'Tomorrow.', 'Next month.'], certa: 1, traducao: 'Amanhã.' }
+  ]
+});
+</script>
+</body>
+</html>

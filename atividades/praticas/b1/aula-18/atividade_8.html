@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 19 · The bakery decision</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 19 · Leitura (How to Make Better Decisions)
+   Alinhado ao "Vocabulary: Do Vs Make" (made a decision, did research, made a plan, do your
+   best, made a mistake, made a difference, did the right thing, do exercise), ao Listening
+   do David (decisão grande, conselho sincero, hábitos saudáveis) e a may / might.
+   Conteúdo NOVO: Ana conta ao Kevin como decidiu abrir uma padaria.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Kevin', 'Hey, Ana! I heard you made a big decision last month.'],
+  ['Ana', 'Yes! I left my office job and opened a small bakery.'],
+  ['Kevin', 'Wow! Was it hard to decide?'],
+  ['Ana', 'Very hard. I did a lot of research before I made the decision.'],
+  ['Kevin', 'What kind of research?'],
+  ['Ana', 'I talked to other bakers and made a business plan.'],
+  ['Kevin', 'Smart. Did you ask anyone for advice?'],
+  ['Ana', 'My aunt. She was very honest. She said it might be difficult, but it might make me happier.'],
+  ['Kevin', 'And were you afraid?'],
+  ['Ana', 'Of course! I was afraid of losing money.'],
+  ['Kevin', 'So how did you deal with the fear?'],
+  ['Ana', 'I decided to do my best and stop worrying about being perfect.'],
+  ['Kevin', 'Did you make any mistakes in the first weeks?'],
+  ['Ana', 'Lots! Once I made two hundred croissants and only sold twenty.'],
+  ['Kevin', 'Ha ha! What did you do with the rest?'],
+  ['Ana', 'I gave them to a homeless shelter. It made a difference to a lot of people.'],
+  ['Kevin', "That's beautiful. You did the right thing."],
+  ['Ana', 'Thanks. Now I do exercise every morning before I open the shop.'],
+  ['Kevin', 'Does it help?'],
+  ['Ana', 'Yes! I think more clearly, and I make better decisions.'],
+  ['Kevin', 'Maybe I should make some changes in my life too.']
+];
+const lado = q => q === 'Kevin' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 18, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes! I left my office job and opened a small bakery.', 'Yes! I leave my office job and opened a small bakery.', 'No, I never decide anything.'], 0, 'Sim! Saí do meu emprego no escritório e abri uma pequena padaria.'),
+    prox(3, ['Very hard. I made a lot of research before I made the decision.', 'Very hard. I did a lot of research before I made the decision.', 'Very hard. I did a lot of research before I did the decision.'], 1, 'Muito difícil. Fiz muita pesquisa antes de tomar a decisão.'),
+    prox(5, ['I talked to other bakers and did a business plan.', 'I talk to other bakers and made a business plan.', 'I talked to other bakers and made a business plan.'], 2, 'Conversei com outros padeiros e fiz um plano de negócios.'),
+    prox(7, ['My aunt. She was very honest. She said it might be difficult, but it might make me happier.', 'My aunt. She was very honest. She said it might be difficult, but it might made me happier.', 'My aunt. She only said nice things. She said it might be very difficult.'], 0, 'Minha tia. Ela foi muito sincera. Disse que podia ser difícil, mas que podia me deixar mais feliz.'),
+    prox(9, ['Of course! I was afraid of lose money.', 'Of course! I was afraid of losing money.', 'Of course! I was afraid to losing money.'], 1, 'Claro! Eu tinha medo de perder dinheiro.'),
+    prox(11, ['I decided to make my best and stop worrying about being perfect.', 'I decided to do my best and start worrying about being perfect.', 'I decided to do my best and stop worrying about being perfect.'], 2, 'Decidi fazer o meu melhor e parar de me preocupar em ser perfeita.'),
+    prox(13, ['Lots! Once I made two hundred croissants and only sold twenty.', 'Lots! Once I did two hundred croissants and only sold twenty.', 'None! Once I made two hundred croissants and only sold twenty.'], 0, 'Muitos! Uma vez fiz duzentos croissants e só vendi vinte.'),
+    prox(15, ['I gave them to a homeless shelter. It did a difference to a lot of people.', 'I gave them to a homeless shelter. It made a difference to a lot of people.', 'I threw them all away. It made a difference to a lot of people.'], 1, 'Dei para um abrigo de moradores de rua. Fez diferença para muita gente.'),
+    prox(16, ["That's beautiful. You made the right thing.", "That's beautiful. You did the wrong thing.", "That's beautiful. You did the right thing."], 2, 'Que lindo. Você fez a coisa certa.'),
+    prox(17, ['Thanks. Now I do exercise every morning before I open the shop.', 'Thanks. Now I make exercise every morning before I open the shop.', 'Thanks. Now I do exercise every morning before I opens the shop.'], 0, 'Obrigada. Agora faço exercício toda manhã antes de abrir a loja.'),
+    prox(19, ['Yes! I think more clearly, and I do better decisions.', 'Yes! I think more clearly, and I make better decisions.', 'No! I think more clearly, and I make better decisions.'], 1, 'Sim! Penso com mais clareza e tomo decisões melhores.'),
+    prox(20, ['Maybe I should do some changes in my life too.', 'Maybe I should making some changes in my life too.', 'Maybe I should make some changes in my life too.'], 2, 'Talvez eu devesse fazer algumas mudanças na minha vida também.'),
+    { instrucao: 'What decision did Ana make?', frase: '___', opcoes: ['She opened a bakery.', 'She moved to another country.', 'She went back to university.'], certa: 0, traducao: 'Ela abriu uma padaria.' },
+    { instrucao: 'What did Ana do before deciding?', frase: '___', opcoes: ['Nothing.', 'She did a lot of research.', 'She asked her boss.'], certa: 1, traducao: 'Ela fez muita pesquisa.' },
+    { instrucao: 'Who gave Ana honest advice?', frase: '___', opcoes: ['Kevin.', 'Her sister.', 'Her aunt.'], certa: 2, traducao: 'A tia dela.' },
+    { instrucao: 'What was Ana afraid of?', frase: '___', opcoes: ['Losing money.', 'Baking.', 'Getting up early.'], certa: 0, traducao: 'Perder dinheiro.' },
+    { instrucao: 'What mistake did Ana make?', frase: '___', opcoes: ['She forgot to open the shop.', 'She made too many croissants.', 'She burned the cakes.'], certa: 1, traducao: 'Ela fez croissants demais.' },
+    { instrucao: 'What did Ana do with the extra croissants?', frase: '___', opcoes: ['She ate them.', 'She sold them cheap.', 'She gave them to a homeless shelter.'], certa: 2, traducao: 'Deu para um abrigo de moradores de rua.' },
+    { instrucao: 'What does Ana do every morning?', frase: '___', opcoes: ['She does exercise.', 'She does research.', 'She does nothing.'], certa: 0, traducao: 'Ela faz exercício.' },
+    { instrucao: 'How does exercise help Ana?', frase: '___', opcoes: ['She sleeps more.', 'She thinks more clearly and makes better decisions.', 'She sells more bread.'], certa: 1, traducao: 'Ela pensa com mais clareza e toma decisões melhores.' }
+  ]
+});
+</script>
+</body>
+</html>

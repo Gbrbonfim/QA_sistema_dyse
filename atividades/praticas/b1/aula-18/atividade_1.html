@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 18 · Possible or certain?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 18 · Escuta (How to Make Better Decisions)
+   Alinhado ao Warm Up (decisive / indecisive), ao vídeo (remover pequenas escolhas, ternos
+   do Obama, energia, não decidir com fome, medo de perder, honest friend, good fuel) e ao
+   "Grammar Point" (may / might = possível, não certo). Revisão de must (aula 16).
+   Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const P = "It's possible.", C = "It's certain.", R = "It's a rule.";
+const DI = 'Listen. Is the speaker decisive or indecisive?', BS = 'Listen. Is it a big or a small decision?', AD = 'Listen and choose the best answer';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 18, num: 1, tipo: 'imagem',
+  instrucao: 'Listen. Is it possible, certain or a rule?',
+  itens: [
+    q('I might change my mind later.', P, [C, R], 'help'),
+    q('The meeting is at ten. I checked the calendar.', C, [P, R], 'help'),
+    q('You must wear a helmet on the bike.', R, [C, P], 'rule'),
+    q("She may not come to the party. She's very tired.", P, [R, C], 'help'),
+    q('Water boils at one hundred degrees.', C, [R, P], 'help'),
+    q("We might go to the beach this weekend, but I'm not sure.", P, [C, R], 'help'),
+    q("Visitors mustn't touch the paintings.", R, [P, C], 'rule'),
+    q('You may need more time to decide.', P, [R, C], 'help'),
+    { instrucao: DI, ...q('I always know what I want to eat. I choose in ten seconds.', 'decisive', ['indecisive', 'honest'], 'psychology') },
+    { instrucao: DI, ...q('I take forever to choose my clothes. I change three times!', 'indecisive', ['decisive', 'honest'], 'psychology') },
+    { instrucao: DI, ...q("I ask everyone for advice, and then I still can't decide.", 'indecisive', ['honest', 'decisive'], 'psychology') },
+    { instrucao: DI, ...q("When I buy something expensive, I decide easily and I don't regret it.", 'decisive', ['honest', 'indecisive'], 'psychology') },
+    { instrucao: DI, ...q('I often regret my choices. Maybe the other option was better.', 'indecisive', ['decisive', 'honest'], 'psychology') },
+    { instrucao: BS, ...q('Should I accept a job in another country?', 'a big decision', ['a small decision', 'not a decision'], 'balance') },
+    { instrucao: BS, ...q('Should I wear the black socks or the white socks?', 'a small decision', ['not a decision', 'a big decision'], 'balance') },
+    { instrucao: BS, ...q('Which university should I choose?', 'a big decision', ['not a decision', 'a small decision'], 'balance') },
+    { instrucao: BS, ...q('What should I have for breakfast today?', 'a small decision', ['a big decision', 'not a decision'], 'balance') },
+    { instrucao: BS, ...q('Should I buy a house or keep renting?', 'a big decision', ['a small decision', 'not a decision'], 'balance') },
+    { instrucao: AD, ...q("He wears the same kind of suit every day, so he doesn't waste energy on clothes.", 'remove small choices', ['ask an honest friend', 'eat good food'], 'lightbulb') },
+    { instrucao: AD, ...q('Before a big decision, I eat porridge and drink a lot of water.', 'give your brain good fuel', ['remove small choices', 'be afraid of losing'], 'lightbulb') },
+    { instrucao: AD, ...q("My best friend always tells me the truth, even when it's hard to hear.", 'an honest friend', ['a small choice', 'an indecisive person'], 'lightbulb') },
+    { instrucao: AD, ...q("Many people choose the safest option because they're afraid of losing something.", 'They are afraid of losing.', ['They want more benefits.', 'They are hungry.'], 'lightbulb') },
+    { instrucao: AD, ...q("Don't make a big decision when you're hungry or tired.", 'Eat and rest first.', ['Decide very fast.', 'Ask a stranger.'], 'lightbulb') },
+    { instrucao: AD, ...q('Every decision, big or small, uses the same amount of energy.', 'Small choices use energy too.', ['Small choices use no energy.', 'Only big decisions use energy.'], 'lightbulb') }
+  ]
+});
+</script>
+</body>
+</html>

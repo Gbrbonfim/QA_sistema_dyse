@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 18 · May or might?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 18 · Gramática (How to Make Better Decisions)
+   Alinhado ao "Grammar Point" (may / might + verbo sem to; may not / might not; igual para
+   todos os sujeitos; might soa um pouco menos certo), ao Warm Up (decisive / indecisive) e
+   às ideias do vídeo. Revisão de must / have to (aula 16). Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 18, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: "I'm not sure. I ___ go to the party.", opcoes: ['might', 'might to', 'mights'], certa: 0, traducao: 'Não tenho certeza. Talvez eu vá à festa.' },
+    { frase: 'Take an umbrella. It ___ rain later.', opcoes: ['may to', 'may', 'mays'], certa: 1, traducao: 'Leve um guarda-chuva. Pode chover mais tarde.' },
+    { frase: "She ___ come to the meeting. She's sick.", opcoes: ['might not to', "doesn't might", 'might not'], certa: 2, traducao: 'Talvez ela não venha à reunião. Está doente.' },
+    { frase: 'He might ___ a new car next year.', opcoes: ['buy', 'buys', 'to buy'], certa: 0, traducao: 'Talvez ele compre um carro novo no ano que vem.' },
+    { frase: 'You may ___ tired after the trip.', opcoes: ['are', 'be', 'being'], certa: 1, traducao: 'Talvez você fique cansado depois da viagem.' },
+    { frase: 'We use may and might for things that are ___.', opcoes: ['certain', 'rules', 'possible, but not certain'], certa: 2, traducao: 'Usamos may e might para coisas possíveis, mas não certas.' },
+    { frase: '___ sounds a little less certain than may.', opcoes: ['Might', 'Must', 'Will'], certa: 0, traducao: 'Might soa um pouco menos certo que may.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['They mights be late.', 'They might be late.', 'They might are late.'], certa: 1, traducao: 'Talvez eles se atrasem.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["I don't may have time.", 'I may not to have time.', 'I may not have time.'], certa: 2, traducao: 'Talvez eu não tenha tempo.' },
+    { frase: "I'm ___. I take forever to choose what to eat.", opcoes: ['indecisive', 'decisive', 'honest'], certa: 0, traducao: 'Sou indeciso. Demoro uma eternidade para escolher o que comer.' },
+    { frase: "She decides quickly and doesn't regret it. She's ___.", opcoes: ['indecisive', 'decisive', 'hungry'], certa: 1, traducao: 'Ela decide rápido e não se arrepende. É decidida.' },
+    { frase: 'Choosing a career is a ___ decision.', opcoes: ['small', 'quick', 'big'], certa: 2, traducao: 'Escolher uma carreira é uma decisão grande.' },
+    { frase: 'Choosing your socks is a ___ choice.', opcoes: ['small', 'big', 'difficult'], certa: 0, traducao: 'Escolher as meias é uma escolha pequena.' },
+    { frase: 'Obama wore grey or blue suits to save ___ for bigger decisions.', opcoes: ['money', 'energy', 'clothes'], certa: 1, traducao: 'O Obama usava ternos cinza ou azuis para economizar energia para decisões maiores.' },
+    { frase: "Don't ___ your energy on small things.", opcoes: ['save', 'spend time', 'waste'], certa: 2, traducao: 'Não desperdice sua energia com coisas pequenas.' },
+    { frase: "Before a big decision, make sure you aren't ___.", opcoes: ['hungry', 'honest', 'decisive'], certa: 0, traducao: 'Antes de uma grande decisão, garanta que não está com fome.' },
+    { frase: 'Kahneman says you should ask an ___ friend for advice.', opcoes: ['angry', 'honest', 'hungry'], certa: 1, traducao: 'O Kahneman diz que você deveria pedir conselho a um amigo sincero.' },
+    { frase: 'Water, porridge and omega-3 foods are good ___ for the brain.', opcoes: ['choices', 'decisions', 'fuel'], certa: 2, traducao: 'Água, mingau e alimentos com ômega-3 são um bom combustível para o cérebro.' },
+    { frase: "People usually choose the safest option because they're afraid of ___.", opcoes: ['losing', 'lose', 'lost'], certa: 0, traducao: 'As pessoas costumam escolher a opção mais segura porque têm medo de perder.' },
+    { frase: 'You ___ regret it later if you decide too fast.', opcoes: ['must', 'may', 'have to'], certa: 1, traducao: 'Você pode se arrepender depois se decidir rápido demais.' },
+    { frase: 'Eat a good breakfast. It ___ help you think more clearly.', opcoes: ["mustn't", "doesn't have to", 'may'], certa: 2, traducao: 'Tome um bom café da manhã. Pode te ajudar a pensar com mais clareza.' },
+    { frase: "I didn't sleep much last night, so I ___ be tired today.", opcoes: ['might', 'must to', "mustn't"], certa: 0, traducao: 'Dormi pouco ontem, então talvez eu fique cansado hoje.' },
+    { frase: "It's not certain. We ___ move to another city next year.", opcoes: ['are', 'might', 'have'], certa: 1, traducao: 'Não é certo. Talvez a gente se mude para outra cidade no ano que vem.' },
+    { frase: "I'm not sure what to do. I might ___ advice from a friend.", opcoes: ['asking', 'to ask', 'ask for'], certa: 2, traducao: 'Não sei o que fazer. Talvez eu peça conselho a um amigo.' }
+  ]
+});
+</script>
+</body>
+</html>
