@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 5 · Meet Neo</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 05 · Escuta (Welcome to the Future)
+   Alinhado ao Listening (Neo, o robô humanoide da 1X), ao Reading (fatos do artigo) e ao
+   Grammar Point: Future Tenses Review (will = previsão / decisão na hora; going to =
+   expectativa com evidência; present continuous = combinado ou tendência; present simple =
+   horário oficial). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const T = 'Listen. Is it true or false, according to the lesson?', V = 'True.', F = 'False.', O = "It's an opinion.";
+const U = 'Listen. What is this future form used for?';
+const PR = 'a prediction or belief', EV = 'an expectation based on evidence', AR = 'an arrangement or plan', TR = 'a change happening now', TT = 'a timetable or schedule', SD = 'a decision made now';
+const Q = 'Listen and choose the best answer';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 5, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: T, ...q('Neo is a humanoid robot made by a company called 1X.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Neo costs about two thousand dollars.', F, [V, O], 'fact_check') },
+    { instrucao: T, ...q('Neo is about five feet six inches tall.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Neo is louder than a refrigerator.', F, [V, O], 'fact_check') },
+    { instrucao: T, ...q('Neo is covered in soft materials and neutral colours.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('The main way to control Neo is by speaking to it.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('For now, a human often operates Neo remotely.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Neo is the best invention in human history.', O, [V, F], 'fact_check') },
+    { instrucao: U, ...q('I think robots will become part of everyday life.', PR, [AR, TT], 'rule') },
+    { instrucao: U, ...q("Look at the price! Most people aren't going to buy it this year.", EV, [TT, SD], 'rule') },
+    { instrucao: U, ...q("We're meeting the sales team on Friday at three.", AR, [PR, TT], 'rule') },
+    { instrucao: U, ...q('Humanoid robots are stepping into real homes these days.', TR, [TT, SD], 'rule') },
+    { instrucao: U, ...q('According to the official schedule, the first shipments begin in 2026.', TT, [SD, PR], 'rule') },
+    { instrucao: U, ...q("The doorbell's ringing. I'll get it!", SD, [TT, AR], 'rule') },
+    { instrucao: U, ...q("It learns from you every day, so it's going to adapt to your lifestyle.", EV, [TT, SD], 'rule') },
+    { instrucao: U, ...q('The conference starts at nine tomorrow morning.', TT, [SD, PR], 'rule') },
+    { instrucao: Q, ...q('What are you doing this weekend?', "I'm visiting a robot exhibition with my brother.", ['I visit a robot exhibition last weekend.', 'I will visiting a robot exhibition.'], 'forum') },
+    { instrucao: Q, ...q('This bag is so heavy!', "Don't worry, I'll help you.", ["I'm going to helped you.", 'I help you yesterday.'], 'forum') },
+    { instrucao: Q, ...q('Do you think robots will replace people at work?', "I think they'll replace some jobs, but not all.", ['I think they replacing some jobs.', 'I think they are replace some jobs.'], 'forum') },
+    { instrucao: Q, ...q('What time does the train leave?', 'It leaves at eight fifteen.', ['It will leaving at eight fifteen.', 'It is leave at eight fifteen.'], 'forum') },
+    { instrucao: Q, ...q('Why are you saving money?', "I'm going to buy a new laptop.", ["I'll buying a new laptop.", 'I going to buy a new laptop.'], 'forum') },
+    { instrucao: Q, ...q('Look at those dark clouds!', "Oh no, it's going to rain.", ['Oh no, it rained tomorrow.', 'Oh no, it will raining.'], 'forum') },
+    { instrucao: Q, ...q('Are home robots becoming more common?', 'Yes, more and more people are buying them.', ['Yes, more and more people buys them.', 'Yes, more people will bought them.'], 'forum') },
+    { instrucao: Q, ...q('When does the course start?', 'It starts next Monday.', ['It start next Monday.', 'It starting next Monday.'], 'forum') }
+  ]
+});
+</script>
+</body>
+</html>

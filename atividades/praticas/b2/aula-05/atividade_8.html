@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 6 · Is Neo really the future?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 06 · Leitura (Welcome to the Future)
+   Alinhado ao Reading (artigo: Neo ainda é teleoperado, privacidade e confiança, câmeras
+   que borram pessoas, preço e assinatura, entregas em 2026) e ao Vocabulary: Describing
+   Trends. Conteúdo NOVO: uma especialista em tecnologia é entrevistada no rádio.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Host', "Today we're talking about Neo, the home robot. Is it really the future?"],
+  ['Dr. Lee', 'I think robots will play a bigger role in our homes, but not overnight.'],
+  ['Host', 'Why not? Neo can already fold laundry.'],
+  ['Dr. Lee', "Yes, but for now, it's largely teleoperated. A human often controls it remotely."],
+  ['Host', 'So someone is watching my home through the robot?'],
+  ['Dr. Lee', "Sometimes, yes. That's why privacy is the main concern."],
+  ['Host', 'What is the company doing about it?'],
+  ['Dr. Lee', 'It says the cameras blur out people, and owners must approve remote control.'],
+  ['Host', 'Is that enough to build trust?'],
+  ['Dr. Lee', 'For some people, yes. Others are likely to wait for more independent robots.'],
+  ['Host', 'What about the price?'],
+  ['Dr. Lee', 'It costs twenty thousand dollars, or there will be a monthly subscription.'],
+  ['Host', 'Do you think prices are going to fall?'],
+  ['Dr. Lee', 'Definitely. Technology is getting cheaper every year.'],
+  ['Host', "When are the first robots arriving in people's homes?"],
+  ['Dr. Lee', 'The first units ship in 2026, in the United States.'],
+  ['Host', 'And will robots become part of everyday life?'],
+  ['Dr. Lee', "In the near future, I believe they'll become increasingly common."],
+  ['Host', 'Would you have one at home?'],
+  ['Dr. Lee', "Not yet. I'd rather wait until it works on its own."]
+];
+const lado = q => q === 'Host' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 5, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I think robots will play a bigger role in our homes, but not overnight.', 'I think robots will plays a bigger role in our homes, but not overnight.', 'I think robots will play a more big role in our homes, but not overnight.'], 0, 'Acho que os robôs vão ter um papel maior nas nossas casas, mas não da noite para o dia.'),
+    prox(3, ["Yes, but for now, it's large teleoperated. A human often controls it remotely.", "Yes, but for now, it's largely teleoperated. A human often controls it remotely.", "Yes, but for now, it's largely teleoperated. A human often control it remotely."], 1, 'Sim, mas por enquanto ele é em grande parte operado à distância. Uma pessoa muitas vezes o controla remotamente.'),
+    prox(4, ['So someone are watching my home through the robot?', 'So someone watching my home through the robot?', 'So someone is watching my home through the robot?'], 2, 'Então alguém está vendo a minha casa pelo robô?'),
+    prox(5, ["Sometimes, yes. That's why privacy is the main concern.", "Sometimes, yes. That's why privacy are the main concern.", "Sometimes, yes. That's why privacy is the main concerns."], 0, 'Às vezes, sim. É por isso que a privacidade é a principal preocupação.'),
+    prox(7, ['It says the cameras blurs out people, and owners must approve remote control.', 'It says the cameras blur out people, and owners must approve remote control.', 'It says the cameras blur out people, and owners must to approve remote control.'], 1, 'Ela diz que as câmeras borram as pessoas e que o dono precisa aprovar o controle remoto.'),
+    prox(9, ['For some people, yes. Others are like to wait for more independent robots.', 'For some people, yes. Others is likely to wait for more independent robots.', 'For some people, yes. Others are likely to wait for more independent robots.'], 2, 'Para algumas pessoas, sim. Outras provavelmente vão esperar robôs mais independentes.'),
+    prox(11, ['It costs twenty thousand dollars, or there will be a monthly subscription.', 'It cost twenty thousand dollars, or there will be a monthly subscription.', 'It costs twenty thousand dollars, or there will is a monthly subscription.'], 0, 'Custa vinte mil dólares, ou vai haver uma assinatura mensal.'),
+    prox(12, ['Do you think prices are going to falling?', 'Do you think prices are going to fall?', 'Do you think prices is going to fall?'], 1, 'Você acha que os preços vão cair?'),
+    prox(13, ['Definitely. Technology is get cheaper every year.', 'Definitely. Technology are getting cheaper every year.', 'Definitely. Technology is getting cheaper every year.'], 2, 'Com certeza. A tecnologia está ficando mais barata a cada ano.'),
+    prox(15, ['The first units ship in 2026, in the United States.', 'The first units ships in 2026, in the United States.', 'The first units shipping in 2026, in the United States.'], 0, 'As primeiras unidades são enviadas em 2026, nos Estados Unidos.'),
+    prox(17, ["In the near future, I believe they'll become increasing common.", "In the near future, I believe they'll become increasingly common.", "In the nearly future, I believe they'll become increasingly common."], 1, 'Num futuro próximo, acredito que vão ficar cada vez mais comuns.'),
+    prox(19, ["Not yet. I'd rather waiting until it works on its own.", "Not yet. I'd rather wait until it work on its own.", "Not yet. I'd rather wait until it works on its own."], 2, 'Ainda não. Prefiro esperar até ele funcionar sozinho.'),
+    { instrucao: 'What is the topic of the interview?', frase: '___', opcoes: ['Neo, the home robot.', 'Electric cars.', 'Online privacy laws.'], certa: 0, traducao: 'O Neo, o robô doméstico.' },
+    { instrucao: 'How is Neo controlled for now?', frase: '___', opcoes: ['Completely on its own.', 'Largely by a human, remotely.', 'Only with a keyboard.'], certa: 1, traducao: 'Em grande parte por uma pessoa, à distância.' },
+    { instrucao: 'What is the main concern?', frase: '___', opcoes: ['The colour.', 'The size.', 'Privacy.'], certa: 2, traducao: 'A privacidade.' },
+    { instrucao: 'What do the cameras do, according to the company?', frase: '___', opcoes: ['They blur out people.', 'They record everything.', 'They turn off at night.'], certa: 0, traducao: 'Borram as pessoas.' },
+    { instrucao: 'What are some people likely to do?', frase: '___', opcoes: ['Buy two robots.', 'Wait for more independent robots.', 'Build their own robots.'], certa: 1, traducao: 'Esperar robôs mais independentes.' },
+    { instrucao: 'What is the alternative to paying $20,000?', frase: '___', opcoes: ['A free trial.', 'A smaller robot.', 'A monthly subscription.'], certa: 2, traducao: 'Uma assinatura mensal.' },
+    { instrucao: 'Where do the first units ship?', frase: '___', opcoes: ['In the United States.', 'In Brazil.', 'In Europe.'], certa: 0, traducao: 'Nos Estados Unidos.' },
+    { instrucao: 'Would Dr. Lee have a Neo at home now?', frase: '___', opcoes: ['Yes, today.', 'Not yet.', 'Already has one.'], certa: 1, traducao: 'Ainda não.' }
+  ]
+});
+</script>
+</body>
+</html>

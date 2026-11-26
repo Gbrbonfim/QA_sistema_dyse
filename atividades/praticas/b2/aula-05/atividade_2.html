@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 5 · Robots will become part of life</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 05 · Escrita (Welcome to the Future)
+   Alinhado ao Grammar Point: Future Tenses Review (will, going to, present continuous para
+   combinados e tendências, present simple para horários) e ao Listening sobre o Neo.
+   Conteúdo NOVO. A palavra extra nunca forma outra frase certa. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 5, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('O Neo vai fazer parte do dia a dia.'), palavras: ['Neo', 'will', 'become', 'part', 'of', 'everyday', 'life'], isca: ['becomes'], fim: '.', traducao: 'O Neo vai fazer parte do dia a dia.' },
+    { contexto: M('O Neo vai se adaptar ao seu estilo de vida.'), palavras: ['Neo', 'is', 'going', 'to', 'adapt', 'to', 'your', 'lifestyle'], isca: ['adapts'], fim: '.', traducao: 'O Neo vai se adaptar ao seu estilo de vida.' },
+    { contexto: M('A 1X está abrindo as pré-vendas esta semana.'), palavras: ['1X', 'is', 'opening', 'pre-orders', 'this', 'week'], isca: ['open'], fim: '.', traducao: 'A 1X está abrindo as pré-vendas esta semana.' },
+    { contexto: M('Robôs humanoides estão entrando em casas de verdade.'), palavras: ['Humanoid', 'robots', 'are', 'stepping', 'into', 'real', 'homes'], isca: ['is'], fim: '.', traducao: 'Robôs humanoides estão entrando em casas de verdade.' },
+    { contexto: M('As primeiras entregas começam em 2026.'), palavras: ['The', 'first', 'shipments', 'begin', 'in', '2026'], isca: ['begins'], fim: '.', traducao: 'As primeiras entregas começam em 2026.' },
+    { contexto: M('Acho que os robôs vão fazer a maioria das tarefas de casa.'), palavras: ['I', 'think', 'robots', 'will', 'do', 'most', 'of', 'our', 'chores'], isca: ['doing'], fim: '.', traducao: 'Acho que os robôs vão fazer a maioria das tarefas de casa.' },
+    { contexto: M('Vou encontrar meus amigos na feira de tecnologia amanhã.'), palavras: ["I'm", 'meeting', 'my', 'friends', 'at', 'the', 'tech', 'fair', 'tomorrow'], isca: ['meet'], fim: '.', traducao: 'Vou encontrar meus amigos na feira de tecnologia amanhã.' },
+    { contexto: M('Olha o céu! Vai chover.'), palavras: ['Look', 'at', 'the', 'sky!', "It's", 'going', 'to', 'rain'], isca: ['raining'], fim: '.', traducao: 'Olha o céu! Vai chover.' },
+    { contexto: M('O trem sai às nove amanhã.'), palavras: ['The', 'train', 'leaves', 'at', 'nine', 'tomorrow'], isca: ['leaving'], fim: '.', traducao: 'O trem sai às nove amanhã.' },
+    { contexto: M('Eu te ajudo com as caixas.'), palavras: ["I'll", 'help', 'you', 'with', 'the', 'boxes'], isca: ['helping'], fim: '.', traducao: 'Eu te ajudo com as caixas.' },
+    { contexto: M('Você vai comprar um robô?'), palavras: ['Are', 'you', 'going', 'to', 'buy', 'a', 'robot'], isca: ['buying'], fim: '?', traducao: 'Você vai comprar um robô?' },
+    { contexto: M('A que horas começa a conferência?'), palavras: ['What', 'time', 'does', 'the', 'conference', 'start'], isca: ['starts'], fim: '?', traducao: 'A que horas começa a conferência?' },
+    { contexto: M('Os robôs estão ficando mais baratos a cada ano.'), palavras: ['Robots', 'are', 'getting', 'cheaper', 'every', 'year'], isca: ['cheap'], fim: '.', traducao: 'Os robôs estão ficando mais baratos a cada ano.' },
+    { contexto: M('Nós não vamos pagar vinte mil dólares.'), palavras: ['We', "aren't", 'going', 'to', 'pay', 'twenty', 'thousand', 'dollars'], isca: ['paying'], fim: '.', traducao: 'Nós não vamos pagar vinte mil dólares.' },
+    { contexto: M('Os robôs vão substituir os professores no futuro?'), palavras: ['Will', 'robots', 'replace', 'teachers', 'in', 'the', 'future'], isca: ['replacing'], fim: '?', traducao: 'Os robôs vão substituir os professores no futuro?' },
+    { contexto: M('Um especialista pode guiar o Neo à distância.'), palavras: ['An', 'expert', 'can', 'guide', 'Neo', 'remotely'], isca: ['guides'], fim: '.', traducao: 'Um especialista pode guiar o Neo à distância.' },
+    { contexto: M('O Neo sabe dobrar roupa e arrumar prateleiras.'), palavras: ['Neo', 'can', 'fold', 'laundry', 'and', 'tidy', 'shelves'], isca: ['folds'], fim: '.', traducao: 'O Neo sabe dobrar roupa e arrumar prateleiras.' },
+    { contexto: M('Ela vai voar para a Califórnia semana que vem.'), palavras: ["She's", 'flying', 'to', 'California', 'next', 'week'], isca: ['fly'], fim: '.', traducao: 'Ela vai voar para a Califórnia semana que vem.' },
+    { contexto: M('Mais pessoas estão trabalhando de casa hoje em dia.'), palavras: ['More', 'people', 'are', 'working', 'from', 'home', 'these', 'days'], isca: ['works'], fim: '.', traducao: 'Mais pessoas estão trabalhando de casa hoje em dia.' },
+    { contexto: M('Prometo que vou limpar a cozinha mais tarde.'), palavras: ['I', 'promise', 'I', 'will', 'clean', 'the', 'kitchen', 'later'], isca: ['cleaning'], fim: '.', traducao: 'Prometo que vou limpar a cozinha mais tarde.' }
+  ]
+});
+</script>
+</body>
+</html>

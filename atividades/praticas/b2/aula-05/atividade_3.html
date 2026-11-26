@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 5 · Should we buy a robot?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 05 · Leitura (Welcome to the Future)
+   Alinhado ao Listening (o que o Neo faz, especialista que guia à distância, pré-vendas e
+   entregas em 2026) e ao Grammar Point (as várias formas de futuro). Conteúdo NOVO: Bia e
+   Lucas conversam sobre o Neo e combinam ir a uma feira de tecnologia.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Bia', 'Lucas, have you seen this video about Neo, the home robot?'],
+  ['Lucas', "Yes! It folds laundry and tidies shelves. I think it'll change everything."],
+  ['Bia', "Maybe. But look at the price. Most people aren't going to buy it soon."],
+  ['Lucas', "True, it's expensive. But prices are falling every year."],
+  ['Bia', 'When does it go on sale?'],
+  ['Lucas', 'Pre-orders are open now, and shipments begin in 2026.'],
+  ['Bia', 'Are you going to order one?'],
+  ['Lucas', "No way! I'm saving for a trip. But I'm visiting a tech fair on Saturday to see one."],
+  ['Bia', 'Oh, nice. What time does the fair open?'],
+  ['Lucas', 'It opens at ten. Do you want to come?'],
+  ['Bia', "Sure! I'll bring my brother too. He loves robots."],
+  ['Lucas', "Great. I'm sure he'll love Neo."],
+  ['Bia', 'Can it really learn new tasks?'],
+  ['Lucas', "Yes. If it doesn't know a task, an expert can guide it remotely."],
+  ['Bia', 'Hmm, so a stranger will be inside my house, in a way?'],
+  ['Lucas', "Kind of. That's why some people are worried about privacy."],
+  ['Bia', "I think robots will become common, but I'm not ready yet."],
+  ['Lucas', "Me neither. Maybe in ten years we'll all have one."],
+  ['Bia', 'OK. See you on Saturday at ten, then.'],
+  ['Lucas', "Perfect. I'll send you the address tonight."]
+];
+const lado = q => q === 'Bia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 5, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes! It folds laundry and tidies shelves. I think it'll change everything.", "Yes! It folds laundry and tidies shelves. I think it'll changes everything.", "Yes! It fold laundry and tidies shelves. I think it'll change everything."], 0, 'Sim! Ele dobra roupa e arruma prateleiras. Acho que vai mudar tudo.'),
+    prox(2, ["Maybe. But look at the price. Most people aren't going to buying it soon.", "Maybe. But look at the price. Most people aren't going to buy it soon.", "Maybe. But look at the price. Most people isn't going to buy it soon."], 1, 'Talvez. Mas olha o preço. A maioria das pessoas não vai comprar tão cedo.'),
+    prox(3, ["True, it's expensive. But prices is falling every year.", "True, it's expensive. But prices are fall every year.", "True, it's expensive. But prices are falling every year."], 2, 'É verdade, é caro. Mas os preços estão caindo a cada ano.'),
+    prox(5, ['Pre-orders are open now, and shipments begin in 2026.', 'Pre-orders are open now, and shipments begins in 2026.', 'Pre-orders are open now, and shipments beginning in 2026.'], 0, 'A pré-venda está aberta, e as entregas começam em 2026.'),
+    prox(7, ["No way! I'm saving for a trip. But I visiting a tech fair on Saturday to see one.", "No way! I'm saving for a trip. But I'm visiting a tech fair on Saturday to see one.", "No way! I'm save for a trip. But I'm visiting a tech fair on Saturday to see one."], 1, 'De jeito nenhum! Estou juntando para uma viagem. Mas vou a uma feira de tecnologia no sábado para ver um.'),
+    prox(9, ['It open at ten. Do you want to come?', 'It opening at ten. Do you want to come?', 'It opens at ten. Do you want to come?'], 2, 'Abre às dez. Quer vir?'),
+    prox(10, ["Sure! I'll bring my brother too. He loves robots.", "Sure! I'll brings my brother too. He loves robots.", 'Sure! I bringing my brother too. He loves robots.'], 0, 'Claro! Vou levar meu irmão também. Ele adora robôs.'),
+    prox(11, ["Great. I'm sure he'll loves Neo.", "Great. I'm sure he'll love Neo.", "Great. I'm sure he going to love Neo."], 1, 'Ótimo. Tenho certeza de que ele vai adorar o Neo.'),
+    prox(13, ["Yes. If it doesn't know a task, an expert can guides it remotely.", "Yes. If it don't know a task, an expert can guide it remotely.", "Yes. If it doesn't know a task, an expert can guide it remotely."], 2, 'Sim. Se ele não sabe uma tarefa, um especialista pode guiá-lo à distância.'),
+    prox(15, ["Kind of. That's why some people are worried about privacy.", "Kind of. That's why some people is worried about privacy.", "Kind of. That's why some people are worry about privacy."], 0, 'Mais ou menos. É por isso que algumas pessoas se preocupam com a privacidade.'),
+    prox(17, ["Me neither. Maybe in ten years we'll all having one.", "Me neither. Maybe in ten years we'll all have one.", 'Me neither. Maybe in ten years we all will to have one.'], 1, 'Nem eu. Talvez daqui a dez anos todos nós tenhamos um.'),
+    prox(19, ["Perfect. I'll sending you the address tonight.", 'Perfect. I send you the address yesterday.', "Perfect. I'll send you the address tonight."], 2, 'Perfeito. Te mando o endereço hoje à noite.'),
+    { instrucao: 'What can Neo do, according to Lucas?', frase: '___', opcoes: ['Fold laundry and tidy shelves.', 'Drive a car.', 'Cook for a restaurant.'], certa: 0, traducao: 'Dobrar roupa e arrumar prateleiras.' },
+    { instrucao: 'What does Bia think about the price?', frase: '___', opcoes: ["It's very cheap.", "Most people aren't going to buy it soon.", "It's going to go up."], certa: 1, traducao: 'Que a maioria das pessoas não vai comprar tão cedo.' },
+    { instrucao: 'When do shipments begin?', frase: '___', opcoes: ['Next week.', 'In 2030.', 'In 2026.'], certa: 2, traducao: 'Em 2026.' },
+    { instrucao: "Why isn't Lucas ordering a robot?", frase: '___', opcoes: ['Lucas is saving for a trip.', "Lucas doesn't like robots.", 'Lucas already has one.'], certa: 0, traducao: 'O Lucas está juntando dinheiro para uma viagem.' },
+    { instrucao: 'What time does the tech fair open?', frase: '___', opcoes: ['At nine.', 'At ten.', 'At noon.'], certa: 1, traducao: 'Às dez.' },
+    { instrucao: 'Who is Bia bringing to the fair?', frase: '___', opcoes: ['A friend from work.', "Lucas's sister.", "Bia's brother."], certa: 2, traducao: 'O irmão da Bia.' },
+    { instrucao: "What happens if Neo doesn't know a task?", frase: '___', opcoes: ['An expert guides it remotely.', 'It stops working.', 'It calls the owner.'], certa: 0, traducao: 'Um especialista o guia à distância.' },
+    { instrucao: 'What will Lucas send tonight?', frase: '___', opcoes: ['A photo of Neo.', 'The address.', 'The tickets.'], certa: 1, traducao: 'O endereço.' }
+  ]
+});
+</script>
+</body>
+</html>

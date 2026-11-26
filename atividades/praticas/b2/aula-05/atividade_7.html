@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 6 · Increasingly common</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 06 · Escrita (Welcome to the Future)
+   Alinhado ao Vocabulary: Describing Trends e ao Reading And Writing (artigo sobre o Neo:
+   teleoperação, privacidade, confiança, datas; parágrafo de opinião com futuro).
+   Conteúdo NOVO. A palavra extra nunca forma outra frase certa. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 5, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('A IA vai ter um papel maior nas nossas vidas.'), palavras: ['AI', 'will', 'play', 'a', 'bigger', 'role', 'in', 'our', 'lives'], isca: ['biggest'], fim: '.', traducao: 'A IA vai ter um papel maior nas nossas vidas.' },
+    { contexto: M('Os robôs estão ficando cada vez mais comuns.'), palavras: ['Robots', 'are', 'becoming', 'increasingly', 'common'], isca: ['increasing'], fim: '.', traducao: 'Os robôs estão ficando cada vez mais comuns.' },
+    { contexto: M('A IA pode transformar completamente a sociedade.'), palavras: ['AI', 'could', 'completely', 'transform', 'society'], isca: ['complete'], fim: '.', traducao: 'A IA pode transformar completamente a sociedade.' },
+    { contexto: M('É provável que os robôs fiquem mais acessíveis.'), palavras: ['Robots', 'are', 'likely', 'to', 'become', 'more', 'affordable'], isca: ['like'], fim: '.', traducao: 'É provável que os robôs fiquem mais acessíveis.' },
+    { contexto: M('Os robôs humanoides vão fazer parte do dia a dia.'), palavras: ['Humanoid', 'robots', 'will', 'become', 'part', 'of', 'everyday', 'life'], isca: ['parts'], fim: '.', traducao: 'Os robôs humanoides vão fazer parte do dia a dia.' },
+    { contexto: M('Isso vai acontecer num futuro próximo.'), palavras: ['This', 'will', 'happen', 'in', 'the', 'near', 'future'], isca: ['nearly'], fim: '.', traducao: 'Isso vai acontecer num futuro próximo.' },
+    { contexto: M('Por enquanto, o Neo é em grande parte operado à distância.'), palavras: ['For', 'now,', 'Neo', 'is', 'largely', 'teleoperated'], isca: ['large'], fim: '.', traducao: 'Por enquanto, o Neo é em grande parte operado à distância.' },
+    { contexto: M('Uma pessoa muitas vezes o opera remotamente.'), palavras: ['A', 'human', 'often', 'operates', 'it', 'remotely'], isca: ['remote'], fim: '.', traducao: 'Uma pessoa muitas vezes o opera remotamente.' },
+    { contexto: M('O robô consegue ver, ouvir e lembrar.'), palavras: ['The', 'robot', 'can', 'see,', 'hear', 'and', 'remember'], isca: ['remembers'], fim: '.', traducao: 'O robô consegue ver, ouvir e lembrar.' },
+    { contexto: M('Esse processo de aprendizado levanta questões sobre privacidade.'), palavras: ['That', 'learning', 'process', 'raises', 'questions', 'about', 'privacy'], isca: ['rise'], fim: '.', traducao: 'Esse processo de aprendizado levanta questões sobre privacidade.' },
+    { contexto: M('O Neo só escuta quando é chamado.'), palavras: ['Neo', 'only', 'listens', 'when', 'it', 'is', 'addressed'], isca: ['listen'], fim: '.', traducao: 'O Neo só escuta quando é chamado.' },
+    { contexto: M('Você pode impedir o Neo de entrar em alguns cômodos.'), palavras: ['You', 'can', 'stop', 'Neo', 'from', 'entering', 'some', 'rooms'], isca: ['enter'], fim: '.', traducao: 'Você pode impedir o Neo de entrar em alguns cômodos.' },
+    { contexto: M('As primeiras unidades devem ser enviadas em 2026.'), palavras: ['The', 'first', 'units', 'are', 'expected', 'to', 'ship', 'in', '2026'], isca: ['expect'], fim: '.', traducao: 'As primeiras unidades devem ser enviadas em 2026.' },
+    { contexto: M('Eu me sentiria desconfortável com um robô em casa.'), palavras: ['I', 'would', 'feel', 'uncomfortable', 'with', 'a', 'robot', 'at', 'home'], isca: ['uncomfortably'], fim: '.', traducao: 'Eu me sentiria desconfortável com um robô em casa.' },
+    { contexto: M('A privacidade é a minha maior preocupação.'), palavras: ['Privacy', 'is', 'my', 'biggest', 'concern'], isca: ['bigger'], fim: '.', traducao: 'A privacidade é a minha maior preocupação.' },
+    { contexto: M('Os robôs podem deixar nossa vida muito mais fácil.'), palavras: ['Robots', 'might', 'make', 'our', 'lives', 'much', 'easier'], isca: ['easy'], fim: '.', traducao: 'Os robôs podem deixar nossa vida muito mais fácil.' },
+    { contexto: M('Os aparelhos inteligentes estão ficando cada vez mais baratos.'), palavras: ['Smart', 'devices', 'are', 'getting', 'cheaper', 'and', 'cheaper'], isca: ['cheap'], fim: '.', traducao: 'Os aparelhos inteligentes estão ficando cada vez mais baratos.' },
+    { contexto: M('Na minha opinião, os robôs nunca vão substituir os humanos.'), palavras: ['In', 'my', 'opinion,', 'robots', 'will', 'never', 'replace', 'humans'], isca: ['replacing'], fim: '.', traducao: 'Na minha opinião, os robôs nunca vão substituir os humanos.' },
+    { contexto: M('Não tenho certeza de que estou pronto para um robô.'), palavras: ["I'm", 'not', 'sure', "I'm", 'ready', 'for', 'a', 'robot'], isca: ['readily'], fim: '.', traducao: 'Não tenho certeza de que estou pronto para um robô.' },
+    { contexto: M('Os primeiros compradores ajudam o robô a aprender.'), palavras: ['Early', 'adopters', 'help', 'the', 'robot', 'learn'], isca: ['learns'], fim: '.', traducao: 'Os primeiros compradores ajudam o robô a aprender.' }
+  ]
+});
+</script>
+</body>
+</html>

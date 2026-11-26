@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 5 · Future tenses review</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 05 · Gramática (Welcome to the Future)
+   Alinhado ao Grammar Point: Future Tenses Review (will, going to, present continuous,
+   present simple) e ao Listening / Talking Point sobre o Neo. Conteúdo NOVO. Pistas de
+   contexto deixam só uma forma certa. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 5, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'I believe robots ___ part of everyday life one day.', opcoes: ['will become', 'became', 'becoming'], certa: 0, traducao: 'Acredito que os robôs vão fazer parte do dia a dia um dia.' },
+    { frase: 'Look at the price! Most people ___ buy it this year.', opcoes: ['will to', "aren't going to", "don't going to"], certa: 1, traducao: 'Olha o preço! A maioria das pessoas não vai comprar este ano.' },
+    { frase: "We ___ the sales team on Friday at 3 p.m. It's in my calendar.", opcoes: ['met', 'will meeting', 'are meeting'], certa: 2, traducao: 'Vamos nos reunir com a equipe de vendas na sexta às 15h. Está na minha agenda.' },
+    { frase: 'Humanoid robots ___ into real homes these days.', opcoes: ['are stepping', 'stepped', 'will stepped'], certa: 0, traducao: 'Robôs humanoides estão entrando em casas de verdade hoje em dia.' },
+    { frase: 'According to the official schedule, the first shipments ___ in 2026.', opcoes: ['beginning', 'begin', 'are begin'], certa: 1, traducao: 'Segundo o cronograma oficial, as primeiras entregas começam em 2026.' },
+    { frase: 'The doorbell is ringing. I ___ it!', opcoes: ['got', 'getting', "'ll get"], certa: 2, traducao: 'A campainha está tocando. Eu atendo!' },
+    { frase: 'What time ___ the train leave tomorrow?', opcoes: ['does', 'is', 'are'], certa: 0, traducao: 'A que horas o trem sai amanhã?' },
+    { frase: "I'm saving money because I ___ buy a new laptop.", opcoes: ['will to', 'am going to', 'going'], certa: 1, traducao: 'Estou juntando dinheiro porque vou comprar um notebook novo.' },
+    { frase: 'Look at those dark clouds! It ___ rain.', opcoes: ['rains', 'will raining', 'is going to'], certa: 2, traducao: 'Olha essas nuvens escuras! Vai chover.' },
+    { frase: 'We use "will" for predictions and for ___.', opcoes: ['decisions made at the moment', 'fixed timetables', 'arrangements in the calendar'], certa: 0, traducao: 'Usamos "will" para previsões e para decisões tomadas na hora.' },
+    { frase: 'We use the present continuous for future ___.', opcoes: ['timetables', 'arrangements', 'predictions without evidence'], certa: 1, traducao: 'Usamos o present continuous para combinados no futuro.' },
+    { frase: 'We use the present simple for future ___.', opcoes: ['decisions made now', 'predictions', 'timetables and schedules'], certa: 2, traducao: 'Usamos o present simple para horários e cronogramas.' },
+    { frase: 'We use "going to" for predictions based on ___.', opcoes: ['evidence', 'dreams', 'timetables'], certa: 0, traducao: 'Usamos "going to" para previsões com base em evidências.' },
+    { instrucao: 'Which sentence describes a change that is happening now?', frase: '___', opcoes: ['Robots will be cheap one day.', 'More and more homes are using robots.', 'The fair opens at ten.'], certa: 1, traducao: 'Cada vez mais casas estão usando robôs.' },
+    { instrucao: 'Which sentence describes an arrangement?', frase: '___', opcoes: ['I think it will rain.', 'The train leaves at nine.', "I'm having lunch with Ana tomorrow."], certa: 2, traducao: 'Vou almoçar com a Ana amanhã.' },
+    { frase: 'Neo is a humanoid robot made by ___.', opcoes: ['1X', 'Tesla', 'Roomba'], certa: 0, traducao: 'O Neo é um robô humanoide da 1X.' },
+    { frase: "If Neo doesn't know a task, an expert can guide it ___.", opcoes: ['angrily', 'remotely', 'loudly'], certa: 1, traducao: 'Se o Neo não sabe uma tarefa, um especialista pode guiá-lo à distância.' },
+    { frase: 'Neo is going to adapt to your ___ over time.', opcoes: ['house price', 'car', 'lifestyle'], certa: 2, traducao: 'O Neo vai se adaptar ao seu estilo de vida com o tempo.' },
+    { frase: 'Neo has a physical body, so it is different from a normal ___.', opcoes: ['chatbot', 'home', 'person'], certa: 0, traducao: 'O Neo tem um corpo físico, então é diferente de um chatbot comum.' },
+    { frase: 'The company describes Neo as a ___ point in consumer technology.', opcoes: ['breaking', 'turning', 'starting'], certa: 1, traducao: 'A empresa descreve o Neo como um ponto de virada na tecnologia de consumo.' },
+    { frase: 'Neo is covered in ___ materials, so it looks less intimidating.', opcoes: ['metal', 'sharp', 'soft'], certa: 2, traducao: 'O Neo é coberto de materiais macios, então parece menos intimidador.' },
+    { frase: 'Neo is ___ than a refrigerator.', opcoes: ['quieter', 'louder', 'bigger'], certa: 0, traducao: 'O Neo é mais silencioso que uma geladeira.' },
+    { frase: 'Neo costs about ___ dollars.', opcoes: ['2,000', '20,000', '200,000'], certa: 1, traducao: 'O Neo custa cerca de 20 mil dólares.' },
+    { frase: 'You control Neo mainly by ___ to it.', opcoes: ['writing', 'typing', 'speaking'], certa: 2, traducao: 'Você controla o Neo principalmente falando com ele.' }
+  ]
+});
+</script>
+</body>
+</html>

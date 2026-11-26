@@ -1617,6 +1617,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Tell the story', tipo: 'Escute e grave', treina: 'Fala · Contar uma história', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Was walking, stole', tipo: 'Make a Choice', treina: 'Gramática · Past continuous e vocabulário de crime', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 5,
+        titulo: 'Class 05 and 06 · Welcome to the Future',
+        atividades: [
+          { num: 1, parte: 'Class 05', titulo: 'Meet Neo', tipo: 'Escute e escolha', treina: 'Escuta · Formas de futuro', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 05', titulo: 'Robots will become part of life', tipo: 'Monte a frase', treina: 'Escrita · Formas de futuro', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 05', titulo: 'Should we buy a robot?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 05', titulo: 'Talking about the future', tipo: 'Escute e grave', treina: 'Fala · Formas de futuro', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 05', titulo: 'Future tenses review', tipo: 'Make a Choice', treina: 'Gramática · Will, going to, presente', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 06', titulo: 'Trends and opinions', tipo: 'Escute e escolha', treina: 'Escuta · Tendências e artigo', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 06', titulo: 'Increasingly common', tipo: 'Monte a frase', treina: 'Escrita · Vocabulário de tendências', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 06', titulo: 'Is Neo really the future?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 06', titulo: 'Would you have a robot at home?', tipo: 'Escute e grave', treina: 'Fala · Opinião e previsões', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 06', titulo: 'Describing trends', tipo: 'Make a Choice', treina: 'Gramática · Tendências e leitura', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

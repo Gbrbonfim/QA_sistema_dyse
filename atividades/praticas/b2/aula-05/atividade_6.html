@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 6 · Trends and opinions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 06 · Escuta (Welcome to the Future)
+   Alinhado ao Vocabulary: Describing Trends (play a bigger role, in the near future,
+   increasingly common, completely transform, likely to, become part of; pessoas positivas ou
+   negativas sobre o futuro) e ao Reading (artigo sobre o Neo: preço, teleoperação,
+   privacidade, datas). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const P = 'Listen. How does the speaker feel about the future?', PO = 'Positive.', NE = 'Negative.', NC = "The speaker doesn't mention the future.";
+const W = 'Listen. What does the expression mean?';
+const T = 'Listen. Is it true or false, according to the article?', V = 'True.', F = 'False.', O = "It's an opinion.";
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 5, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: P, ...q("I think AI will play a bigger role in medicine, and that's great news.", PO, [NE, NC], 'psychology') },
+    { instrucao: P, ...q("I'm worried. Robots are likely to take many jobs in the near future.", NE, [PO, NC], 'psychology') },
+    { instrucao: P, ...q('Smart homes are becoming increasingly common, and they make life so much easier!', PO, [NE, NC], 'psychology') },
+    { instrucao: P, ...q('Some experts believe AI could completely transform society, and that really scares me.', NE, [PO, NC], 'psychology') },
+    { instrucao: P, ...q("Robots are likely to become more affordable over time. I can't wait!", PO, [NE, NC], 'psychology') },
+    { instrucao: P, ...q("I don't like it. Robots will become part of everyday life, and we'll lose our privacy.", NE, [PO, NC], 'psychology') },
+    { instrucao: W, ...q('play a bigger role', 'become more important', ['become smaller', 'play a game'], 'help') },
+    { instrucao: W, ...q('in the near future', 'soon', ['in the past', 'never'], 'help') },
+    { instrucao: W, ...q('increasingly common', 'more and more usual', ['less and less usual', 'very rare'], 'help') },
+    { instrucao: W, ...q('completely transform', 'change totally', ['stay the same', 'change a little'], 'help') },
+    { instrucao: W, ...q('likely to happen', 'probably going to happen', ['impossible', 'already finished'], 'help') },
+    { instrucao: W, ...q('become part of everyday life', 'become normal in daily life', ['disappear from daily life', 'be used only once'], 'help') },
+    { instrucao: T, ...q('Neo costs twenty thousand dollars.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('To pre-order Neo, you pay a deposit of two hundred dollars.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Neo can lift up to one hundred and fifty-four pounds.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Neo can work for about four hours before charging.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('A journalist saw Neo do everything on its own, without help.', F, [V, O], 'fact_check') },
+    { instrucao: T, ...q("The company says Neo will never be teleoperated without the owner's approval.", V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('There will also be a monthly subscription of four hundred and ninety-nine dollars.', V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('The international rollout is planned for 2030.', F, [V, O], 'fact_check') },
+    { instrucao: T, ...q("According to the company, Neo's cameras blur out people.", V, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Neo is made mainly for factory work.', F, [V, O], 'fact_check') },
+    { instrucao: T, ...q('Having a robot at home is a wonderful idea for everyone.', O, [V, F], 'fact_check') },
+    { instrucao: T, ...q('Neo uses a large language model, like ChatGPT, to have conversations.', V, [F, O], 'fact_check') }
+  ]
+});
+</script>
+</body>
+</html>
