@@ -287,6 +287,14 @@ html.dyse-auth-ready #dyseAuthGate{display:none;}
 }
 .gestao-field input:focus, .gestao-field select:focus, .gestao-field textarea:focus{outline:none; border-color:var(--amaranth);}
 .gestao-hint{font-size:.74rem; color:var(--seal-soft); opacity:.75; margin-top:4px;}
+/* Acessos do aluno (modal Editar dados): conta criada, primeiro e último login */
+.aluno-acessos{margin-top:18px; padding-top:14px; border-top:1px solid rgba(58,29,16,.10);}
+.aluno-acessos h4{margin:0 0 8px; font-size:.9rem; font-weight:600; color:var(--seal);}
+.aluno-acessos .aa-row{display:flex; align-items:center; gap:10px; padding:6px 0; font-size:.86rem; color:var(--seal-soft);}
+.aluno-acessos .aa-row .msr{font-size:20px; color:var(--amaranth);}
+.aluno-acessos .aa-rot{flex:1;}
+.aluno-acessos b{color:var(--seal); font-weight:600;}
+.aluno-acessos b.aa-nunca{color:var(--seal-soft); opacity:.6; font-weight:500;}
 .dias-semana-row{display:flex; flex-wrap:wrap; gap:8px;}
 .dias-semana-row label{
   display:flex; align-items:center; gap:6px; font-size:.82rem; font-weight:700; color:var(--seal-soft);
@@ -1487,6 +1495,7 @@ body.dyse-modal-open{overflow:hidden;}
         <button type="submit" class="btn btn-primary">Salvar</button>
       </form>
       <div class="auth-msg" id="alunoEditMsg"></div>
+      <div class="aluno-acessos" id="alunoEditAcessos"></div>
     </div>
   </div>
 </div>
@@ -3919,6 +3928,21 @@ body.dyse-modal-open{overflow:hidden;}
      "profiles" — por isso passa pela função serverless (service_role),
      igual criação/exclusão de conta. */
   let CURRENT_ALUNO_EDIT_ID = null;
+  /* Conta criada, primeiro e último login (seção 44, RPC aluno_acessos — só gestão). */
+  async function carregarAcessosAluno(id){
+    const box = document.getElementById('alunoEditAcessos');
+    box.innerHTML = '<p class="gestao-hint" style="margin:0;">Carregando acessos...</p>';
+    const { data, error } = await sb.rpc('aluno_acessos', { p_aluno: id });
+    if(CURRENT_ALUNO_EDIT_ID !== id) return;
+    if(error){ console.error('aluno_acessos:', error); box.innerHTML = '<p class="gestao-hint" style="margin:0;">Não foi possível carregar os acessos agora.</p>'; return; }
+    const a = (data && data[0]) || {};
+    const fmt = v => v ? new Date(v).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Nunca entrou';
+    const linha = (ic, rot, v) => '<div class="aa-row"><span class="msr" aria-hidden="true">' + ic + '</span><span class="aa-rot">' + rot + '</span><b' + (v ? '' : ' class="aa-nunca"') + '>' + (rot === 'Conta criada' && !v ? '–' : fmt(v)) + '</b></div>';
+    box.innerHTML = '<h4>Acessos</h4>' +
+      linha('person_add', 'Conta criada', a.criado_em) +
+      linha('login', 'Primeiro login', a.primeiro_login_em) +
+      linha('schedule', 'Último login', a.ultimo_login_em);
+  }
   function openAlunoEditModal(id){
     const s = STUDENTS.find(x => x.id === id);
     if(!s) return;
@@ -3927,6 +3951,7 @@ body.dyse-modal-open{overflow:hidden;}
     document.getElementById('alunoEditName').value = s.full_name || '';
     document.getElementById('alunoEditEmail').value = s.email || '';
     document.getElementById('alunoEditMsg').classList.remove('show');
+    carregarAcessosAluno(id);
     document.getElementById('alunoEditModal').classList.add('open');
     document.getElementById('alunoEditModal').setAttribute('aria-hidden','false');
     document.body.classList.add('dyse-modal-open');

@@ -5342,3 +5342,57 @@ as $$
 $$;
 revoke all on function public.ranking_black(date) from public, anon;
 grant execute on function public.ranking_black(date) to authenticated;
+
+-- ======================================================================
+-- 44) ACESSOS DO ALUNO — conta criada, primeiro login e último login
+--     Conta criada = auth.users.created_at; último login = auth.users.
+--     last_sign_in_at (o próprio Supabase atualiza). O primeiro login não é
+--     guardado pelo Supabase: profiles.primeiro_login_em passa a ser gravado
+--     no 1º login (gatilho em auth.users) e foi preenchido para quem já tinha
+--     logado, a partir do histórico de logins (auth.audit_log_entries, desde
+--     29/07/2026). A gestão vê as três datas em "Editar dados" do aluno.
+-- ======================================================================
+alter table public.profiles add column if not exists primeiro_login_em timestamptz;
+
+update public.profiles p
+set primeiro_login_em = coalesce(
+  (select min(a.created_at) from auth.audit_log_entries a
+   where a.payload->>'action' = 'login' and a.payload->>'actor_id' = p.id::text),
+  u.last_sign_in_at)
+from auth.users u
+where u.id = p.id and p.primeiro_login_em is null and u.last_sign_in_at is not null;
+
+create or replace function public.marca_primeiro_login()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if new.last_sign_in_at is not null and new.last_sign_in_at is distinct from old.last_sign_in_at then
+    update public.profiles set primeiro_login_em = new.last_sign_in_at
+    where id = new.id and primeiro_login_em is null;
+  end if;
+  return new;
+end;
+$$;
+revoke all on function public.marca_primeiro_login() from public, anon, authenticated;
+
+drop trigger if exists trg_marca_primeiro_login on auth.users;
+create trigger trg_marca_primeiro_login
+  after update of last_sign_in_at on auth.users
+  for each row execute procedure public.marca_primeiro_login();
+
+-- Só a gestão (admin/financeiro) lê as datas de acesso de um aluno.
+create or replace function public.aluno_acessos(p_aluno uuid)
+returns table(criado_em timestamptz, primeiro_login_em timestamptz, ultimo_login_em timestamptz)
+language sql
+stable
+security definer set search_path = public
+as $$
+  select u.created_at, p.primeiro_login_em, u.last_sign_in_at
+  from auth.users u
+  left join public.profiles p on p.id = u.id
+  where u.id = p_aluno and public.is_admin();
+$$;
+revoke all on function public.aluno_acessos(uuid) from public, anon;
+grant execute on function public.aluno_acessos(uuid) to authenticated;
