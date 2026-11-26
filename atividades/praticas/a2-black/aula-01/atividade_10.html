@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 1 · Self-introduction ideas</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 01 · Gramática (Who am I?)
+   Alinhado ao "Vocabulary: self-introduction ideas" do slide (categorias Months, Dates, Zodiac
+   Signs, Interests, Likes / Hobbies, Studies / Work, Future) e à combinação pergunta x
+   resposta. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 1, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: '"November" is a ___.', opcoes: ['month', 'zodiac sign', 'hobby'], certa: 0, traducao: '"November" é um mês.' },
+    { frase: '"Pisces" is a ___.', opcoes: ['month', 'zodiac sign', 'date'], certa: 1, traducao: '"Pisces" é um signo.' },
+    { frase: '"March 1st" is a ___.', opcoes: ['month', 'hobby', 'date'], certa: 2, traducao: '"March 1st" é uma data.' },
+    { frase: '"Playing tennis" is a ___.', opcoes: ['hobby', 'month', 'zodiac sign'], certa: 0, traducao: '"Playing tennis" é um hobby.' },
+    { frase: '"Student" is about ___.', opcoes: ['the future', 'studies / work', 'zodiac signs'], certa: 1, traducao: '"Student" é sobre estudos / trabalho.' },
+    { frase: '"Help people" is about ___.', opcoes: ['months', 'dates', 'the future'], certa: 2, traducao: '"Help people" é sobre o futuro.' },
+    { frase: '"Gastronomy" is an ___.', opcoes: ['interest', 'month', 'zodiac sign'], certa: 0, traducao: '"Gastronomy" é um interesse.' },
+    { frase: "What's your full name? — ___", opcoes: ['Leo.', 'Gabriela Souza Lima.', 'In August.'], certa: 1, traducao: 'Qual é o seu nome completo? — Gabriela Souza Lima.' },
+    { frase: "What's your nickname? — ___", opcoes: ['Gabriela Souza Lima.', 'In Recife.', 'Gabi.'], certa: 2, traducao: 'Qual é o seu apelido? — Gabi.' },
+    { frase: 'When were you born? — ___', opcoes: ['On August 2nd, 2008.', 'In a hospital, I like it.', "I'm a Leo."], certa: 0, traducao: 'Quando você nasceu? — Em 2 de agosto de 2008.' },
+    { frase: "What's your zodiac sign? — ___", opcoes: ['August.', "I'm a Leo.", 'Seventeen.'], certa: 1, traducao: 'Qual é o seu signo? — Sou de Leão.' },
+    { frase: 'How old are you? — ___', opcoes: ['On August 2nd.', 'Gabi.', "I'm seventeen."], certa: 2, traducao: 'Quantos anos você tem? — Tenho dezessete.' },
+    { frase: 'Where do you live? — ___', opcoes: ['In Recife.', 'I like reading.', 'A doctor.'], certa: 0, traducao: 'Onde você mora? — Em Recife.' },
+    { frase: 'What things are you interested in? — ___', opcoes: ['On Mondays.', 'Art and music.', "I'm a Libra."], certa: 1, traducao: 'Por quais coisas você se interessa? — Arte e música.' },
+    { frase: 'What do you like doing as a hobby? Why? — ___', opcoes: ['I was born in May.', 'Recife.', 'I like drawing because it helps me relax.'], certa: 2, traducao: 'O que você gosta de fazer como hobby? Por quê? — Gosto de desenhar porque me ajuda a relaxar.' },
+    { frase: 'Where do you study? — ___', opcoes: ['At a school in Recife.', 'I want to be a vet.', 'In November.'], certa: 0, traducao: 'Onde você estuda? — Numa escola em Recife.' },
+    { frase: 'What do you want for the future? — ___', opcoes: ['I play the guitar.', 'I want to be a vet.', 'Gemini.'], certa: 1, traducao: 'O que você quer para o futuro? — Quero ser veterinário.' },
+    { frase: 'People born on December 25th are ___.', opcoes: ['Sagittarius', 'Aquarius', 'Capricorn'], certa: 2, traducao: 'Quem nasce em 25 de dezembro é de Capricórnio.' },
+    { frase: 'People born on July 30th are ___.', opcoes: ['Leo', 'Cancer', 'Virgo'], certa: 0, traducao: 'Quem nasce em 30 de julho é de Leão.' },
+    { frase: 'People born on May 10th are ___.', opcoes: ['Gemini', 'Taurus', 'Aries'], certa: 1, traducao: 'Quem nasce em 10 de maio é de Touro.' },
+    { frase: 'People born on November 5th are ___.', opcoes: ['Libra', 'Sagittarius', 'Scorpio'], certa: 2, traducao: 'Quem nasce em 5 de novembro é de Escorpião.' },
+    { frase: 'The month after February is ___.', opcoes: ['March', 'January', 'April'], certa: 0, traducao: 'O mês depois de fevereiro é março.' },
+    { frase: 'The month before December is ___.', opcoes: ['October', 'November', 'January'], certa: 1, traducao: 'O mês antes de dezembro é novembro.' },
+    { frase: 'The last month of the year is ___.', opcoes: ['January', 'November', 'December'], certa: 2, traducao: 'O último mês do ano é dezembro.' }
+  ]
+});
+</script>
+</body>
+</html>

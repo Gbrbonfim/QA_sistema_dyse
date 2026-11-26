@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 1 · This is me!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 01 · Escrita (Who am I?)
+   Alinhado ao "presentation model" do slide (Hi, I'm..., but you can call me... / I was born on
+   ..., which makes me a/an... / I'm ... years old and from... / I have always been interested
+   in... / I also enjoy... / I love ... because it helps me... / In the future, I want to...).
+   Conteúdo NOVO. A isca é a forma errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 1, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Oi, eu sou a Gabriela, mas você pode me chamar de Gabi.'), palavras: ['Hi,', "I'm", 'Gabriela,', 'but', 'you', 'can', 'call', 'me', 'Gabi'], isca: ['my'], fim: '.', traducao: 'Oi, sou a Gabriela, mas pode me chamar de Gabi.' },
+    { contexto: M('Eu nasci em 10 de março.'), palavras: ['I', 'was', 'born', 'on', 'March', '10th'], isca: ['in'], fim: '.', traducao: 'Nasci em 10 de março.' },
+    { contexto: M('Eu nasci em 2008.'), palavras: ['I', 'was', 'born', 'in', '2008'], isca: ['on'], fim: '.', traducao: 'Nasci em 2008.' },
+    { contexto: M('Isso me faz ser de Peixes.'), palavras: ['That', 'makes', 'me', 'a', 'Pisces'], isca: ['an'], fim: '.', traducao: 'Isso me faz ser de Peixes.' },
+    { contexto: M('Isso me faz ser de Áries.'), palavras: ['That', 'makes', 'me', 'an', 'Aries'], isca: ['a'], fim: '.', traducao: 'Isso me faz ser de Áries.' },
+    { contexto: M('Eu tenho 17 anos e sou de Recife.'), palavras: ["I'm", 'seventeen', 'years', 'old', 'and', 'from', 'Recife'], isca: ['have'], fim: '.', traducao: 'Tenho 17 anos e sou de Recife.' },
+    { contexto: M('Eu sempre me interessei por música.'), palavras: ['I', 'have', 'always', 'been', 'interested', 'in', 'music'], isca: ['on'], fim: '.', traducao: 'Sempre me interessei por música.' },
+    { contexto: M('Eu também gosto de cozinhar.'), palavras: ['I', 'also', 'enjoy', 'cooking'], isca: ['cook'], fim: '.', traducao: 'Também gosto de cozinhar.' },
+    { contexto: M('Eu amo ler porque isso me ajuda a relaxar.'), palavras: ['I', 'love', 'reading', 'because', 'it', 'helps', 'me', 'relax'], isca: ['help'], fim: '.', traducao: 'Amo ler porque me ajuda a relaxar.' },
+    { contexto: M('No futuro, eu quero ajudar as pessoas.'), palavras: ['In', 'the', 'future,', 'I', 'want', 'to', 'help', 'people'], isca: ['helping'], fim: '.', traducao: 'No futuro, quero ajudar as pessoas.' },
+    { contexto: M('Eu sou estudante.'), palavras: ["I'm", 'a', 'student'], isca: ['an'], fim: '.', traducao: 'Sou estudante.' },
+    { contexto: M('Eu estudo gastronomia.'), palavras: ['I', 'study', 'gastronomy'], isca: ['studies'], fim: '.', traducao: 'Estudo gastronomia.' },
+    { contexto: M('Os meus hobbies são jogar tênis e desenhar.'), palavras: ['My', 'hobbies', 'are', 'playing', 'tennis', 'and', 'drawing'], isca: ['is'], fim: '.', traducao: 'Os meus hobbies são jogar tênis e desenhar.' },
+    { contexto: M('Eu também exploro hobbies diferentes, como fotografia.'), palavras: ['I', 'also', 'explore', 'different', 'hobbies,', 'like', 'photography'], isca: ['likes'], fim: '.', traducao: 'Também exploro hobbies diferentes, como fotografia.' },
+    { contexto: M('Eu moro em Curitiba.'), palavras: ['I', 'live', 'in', 'Curitiba'], isca: ['on'], fim: '.', traducao: 'Moro em Curitiba.' },
+    { contexto: M('Eu adoro mangás e livros.'), palavras: ['I', 'love', 'mangas', 'and', 'books'], isca: ['loves'], fim: '.', traducao: 'Adoro mangás e livros.' },
+    { contexto: M('Além disso, eu toco violão.'), palavras: ['In', 'addition', 'to', 'that,', 'I', 'play', 'the', 'guitar'], isca: ['plays'], fim: '.', traducao: 'Além disso, toco violão.' },
+    { contexto: M('Acho que essa sou eu!'), palavras: ['I', 'guess', "that's", 'me'], isca: ['my'], fim: '!', traducao: 'Acho que essa sou eu!' },
+    { contexto: M('Eu trabalho num hospital.'), palavras: ['I', 'work', 'in', 'a', 'hospital'], isca: ['works'], fim: '.', traducao: 'Trabalho num hospital.' },
+    { contexto: M('No futuro, eu quero viajar pelo mundo.'), palavras: ['In', 'the', 'future,', 'I', 'want', 'to', 'travel', 'the', 'world'], isca: ['traveling'], fim: '.', traducao: 'No futuro, quero viajar pelo mundo.' }
+  ]
+});
+</script>
+</body>
+</html>

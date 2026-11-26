@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 1 · Born on, interested in</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 01 · Gramática (Who am I?)
+   Estruturas do presentation model: was born on (data) / in (mês, ano, cidade); interested in;
+   enjoy / love / like + -ing; want to + verbo; it helps me + verbo; a x an com os signos
+   (a Pisces, an Aries); call me. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 1, num: 9, tipo: 'escolha',
+  instrucao: 'Complete the sentence',
+  itens: [
+    { frase: 'I was born ___ May 3rd.', opcoes: ['on', 'in', 'at'], certa: 0, traducao: 'Nasci em 3 de maio.' },
+    { frase: 'I was born ___ 2010.', opcoes: ['on', 'in', 'at'], certa: 1, traducao: 'Nasci em 2010.' },
+    { frase: 'I was born ___ Salvador.', opcoes: ['on', 'at the', 'in'], certa: 2, traducao: 'Nasci em Salvador.' },
+    { frase: 'I was born ___ July.', opcoes: ['in', 'on', 'at'], certa: 0, traducao: 'Nasci em julho.' },
+    { frase: 'When ___ you born?', opcoes: ['did', 'were', 'are'], certa: 1, traducao: 'Quando você nasceu?' },
+    { frase: "I've always been interested ___ music.", opcoes: ['on', 'at', 'in'], certa: 2, traducao: 'Sempre me interessei por música.' },
+    { frase: 'I also enjoy ___.', opcoes: ['cooking', 'cook', 'to cooking'], certa: 0, traducao: 'Também gosto de cozinhar.' },
+    { frase: 'I love ___ mangas.', opcoes: ['read', 'reading', 'to reading'], certa: 1, traducao: 'Amo ler mangás.' },
+    { frase: 'What do you like ___ as a hobby?', opcoes: ['do', 'does', 'doing'], certa: 2, traducao: 'O que você gosta de fazer como hobby?' },
+    { frase: 'In the future, I want ___ a nurse.', opcoes: ['to be', 'be', 'being'], certa: 0, traducao: 'No futuro, quero ser enfermeira.' },
+    { frase: 'Reading helps me ___.', opcoes: ['relaxing', 'relax', 'to relaxing'], certa: 1, traducao: 'Ler me ajuda a relaxar.' },
+    { frase: "Hi, I'm Eduarda, but you can call ___ Duda.", opcoes: ['my', 'I', 'me'], certa: 2, traducao: 'Oi, sou a Eduarda, mas pode me chamar de Duda.' },
+    { frase: 'I was born on March 1st, which makes me ___ Pisces.', opcoes: ['a', 'an', '– (nothing)'], certa: 0, traducao: 'Nasci em 1º de março, o que me faz ser de Peixes.' },
+    { frase: 'I was born on April 5th, which makes me ___ Aries.', opcoes: ['a', 'an', 'the'], certa: 1, traducao: 'Nasci em 5 de abril, o que me faz ser de Áries.' },
+    { frase: "I'm ___ student.", opcoes: ['an', '– (nothing)', 'a'], certa: 2, traducao: 'Sou estudante.' },
+    { frase: 'I love painting because it ___ me think.', opcoes: ['helps', 'help', 'helping'], certa: 0, traducao: 'Amo pintar porque me ajuda a pensar.' },
+    { frase: 'My hobbies ___ drawing and dancing.', opcoes: ['is', 'are', 'am'], certa: 1, traducao: 'Os meus hobbies são desenhar e dançar.' },
+    { frase: 'My favorite hobby ___ photography.', opcoes: ['are', 'am', 'is'], certa: 2, traducao: 'O meu hobby favorito é fotografia.' },
+    { frase: 'Where ___ you live?', opcoes: ['do', 'are', 'does'], certa: 0, traducao: 'Onde você mora?' },
+    { frase: 'She ___ in Natal.', opcoes: ['live', 'lives', 'living'], certa: 1, traducao: 'Ela mora em Natal.' },
+    { frase: 'What things ___ you interested in?', opcoes: ['do', 'is', 'are'], certa: 2, traducao: 'Por quais coisas você se interessa?' },
+    { frase: 'March 1st = March ___', opcoes: ['first', 'one', 'oneth'], certa: 0, traducao: '1º de março = March first.' },
+    { frase: 'January 22nd = January twenty-___', opcoes: ['two', 'second', 'twoth'], certa: 1, traducao: '22 de janeiro = January twenty-second.' },
+    { frase: 'October 3rd = October ___', opcoes: ['three', 'threeth', 'third'], certa: 2, traducao: '3 de outubro = October third.' }
+  ]
+});
+</script>
+</body>
+</html>

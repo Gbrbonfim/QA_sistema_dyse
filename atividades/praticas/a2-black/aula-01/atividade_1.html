@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 1 · What's your zodiac sign?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 01 · Escuta (Who am I?)
+   Alinhado ao vídeo e ao vocabulário do slide (birth date + zodiac sign: "I was born on...,
+   which makes me an Aquarius"). Conteúdo NOVO: o aluno ouve a data de nascimento e escolhe o
+   signo (datas reais dos signos; nenhuma data fica na divisa entre dois signos). 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'star' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 1, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the birth date and choose the zodiac sign',
+  itens: [
+    q('I was born on January 26th.', 'Aquarius', ['Pisces', 'Capricorn', 'Aries']),
+    q('I was born on March 1st.', 'Pisces', ['Aries', 'Aquarius', 'Taurus']),
+    q('I was born on April 5th.', 'Aries', ['Taurus', 'Pisces', 'Gemini']),
+    q('I was born on May 10th.', 'Taurus', ['Gemini', 'Aries', 'Cancer']),
+    q('I was born on June 2nd.', 'Gemini', ['Cancer', 'Taurus', 'Leo']),
+    q('I was born on July 4th.', 'Cancer', ['Leo', 'Gemini', 'Virgo']),
+    q('I was born on August 8th.', 'Leo', ['Virgo', 'Cancer', 'Libra']),
+    q('I was born on September 3rd.', 'Virgo', ['Libra', 'Leo', 'Scorpio']),
+    q('I was born on October 10th.', 'Libra', ['Scorpio', 'Virgo', 'Sagittarius']),
+    q('I was born on November 5th.', 'Scorpio', ['Sagittarius', 'Libra', 'Capricorn']),
+    q('I was born on December 1st.', 'Sagittarius', ['Capricorn', 'Scorpio', 'Aquarius']),
+    q('I was born on January 5th.', 'Capricorn', ['Aquarius', 'Sagittarius', 'Pisces']),
+    q('My birthday is on February 10th.', 'Aquarius', ['Pisces', 'Capricorn', 'Aries']),
+    q('My birthday is on March 10th.', 'Pisces', ['Aries', 'Aquarius', 'Taurus']),
+    q('My birthday is on April 28th.', 'Taurus', ['Aries', 'Gemini', 'Pisces']),
+    q('My birthday is on June 12th.', 'Gemini', ['Cancer', 'Taurus', 'Leo']),
+    q('My birthday is on July 15th.', 'Cancer', ['Leo', 'Gemini', 'Virgo']),
+    q('My birthday is on August 30th.', 'Virgo', ['Leo', 'Libra', 'Cancer']),
+    q('My birthday is on October 1st.', 'Libra', ['Virgo', 'Scorpio', 'Leo']),
+    q('My birthday is on November 1st.', 'Scorpio', ['Libra', 'Sagittarius', 'Virgo']),
+    q('My birthday is on December 25th.', 'Capricorn', ['Sagittarius', 'Aquarius', 'Scorpio']),
+    q('My birthday is on July 30th.', 'Leo', ['Cancer', 'Virgo', 'Gemini']),
+    q('My birthday is on May 1st.', 'Taurus', ['Aries', 'Gemini', 'Cancer']),
+    q('My birthday is on March 30th.', 'Aries', ['Pisces', 'Taurus', 'Aquarius'])
+  ]
+});
+</script>
+</body>
+</html>

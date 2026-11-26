@@ -1075,6 +1075,29 @@ window.DYSE_PRATICAS = {
         ]
       }
     ]
+  },
+  'a2-black': {
+    course: 'ativ-a2-black',
+    nome: 'A2 BLACK',
+    extra: true,
+    aulas: [
+      {
+        aula: 1,
+        titulo: 'Class 01 · Who am I?',
+        atividades: [
+          { num: 1, titulo: "What's your zodiac sign?", tipo: 'Escute e escolha', treina: 'Escuta · Datas e signos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'When were you born?', tipo: 'Escute e escolha', treina: 'Escuta · Datas', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Self-introduction questions', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'This is me!', tipo: 'Monte a frase', treina: 'Escrita · Apresentação', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'Meet the new student', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'A self-introduction video', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'My self-introduction', tipo: 'Escute e grave', treina: 'Fala · Apresentação', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Ask about you', tipo: 'Escute e grave', treina: 'Fala · Perguntas e respostas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Born on, interested in', tipo: 'Make a Choice', treina: 'Gramática · Estruturas da apresentação', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Self-introduction ideas', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 }
+        ]
+      }
+    ]
   }
 };
 

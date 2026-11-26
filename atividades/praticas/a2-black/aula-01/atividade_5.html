@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 1 · Meet the new student</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 01 · Leitura (Who am I?)
+   Alinhado às perguntas de self-introduction do slide (full name, nickname, birth date, zodiac
+   sign, age, where you live, interests, hobbies, studies/work, future). Conteúdo NOVO: o Theo
+   entrevista a nova aluna, Mariana, para o jornal da escola. 20 questões: 12 de "próxima fala"
+   + 8 de compreensão. */
+const D = [
+  ['Theo', "Hi! Welcome to our school. What's your full name?"],
+  ['Mariana', "Thanks! My full name is Mariana Costa Lima, but you can call me Mari."],
+  ['Theo', 'Nice, Mari! When were you born?'],
+  ['Mariana', 'I was born on October 15th, 2009.'],
+  ['Theo', 'So you are a Libra!'],
+  ['Mariana', 'Yes! And I was born in Fortaleza, but now I live here in Natal.'],
+  ['Theo', 'What things are you interested in?'],
+  ['Mariana', "I've always been interested in photography and nature."],
+  ['Theo', 'Cool! What do you like doing as a hobby?'],
+  ['Mariana', 'I love playing the guitar because it helps me relax.'],
+  ['Theo', 'Do you play any sports?'],
+  ['Mariana', 'Yes, I enjoy playing volleyball on weekends.'],
+  ['Theo', 'And what do you want for the future?'],
+  ['Mariana', 'In the future, I want to be a doctor and help people.'],
+  ['Theo', "That's great! Thank you, Mari!"],
+  ['Mariana', "You're welcome! That's all you need to know for now!"]
+];
+const lado = q => q === 'Theo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 1, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Thanks! My full name is Mariana Costa Lima, but you can call me Mari.', 'Thanks! My full name is Mariana Costa Lima, but you can call my Mari.', 'Thanks! My full name are Mariana Costa Lima, but you can call me Mari.'], 0, 'Obrigada! O meu nome completo é Mariana Costa Lima, mas pode me chamar de Mari.'),
+    prox(2, ['Nice, Mari! When did you born?', 'Nice, Mari! When were you born?', 'Nice, Mari! When you were born?'], 1, 'Legal, Mari! Quando você nasceu?'),
+    prox(3, ['I was born in October 15th, 2009.', 'I born on October 15th, 2009.', 'I was born on October 15th, 2009.'], 2, 'Nasci em 15 de outubro de 2009.'),
+    prox(5, ['Yes! And I was born in Fortaleza, but now I live here in Natal.', 'Yes! And I was born on Fortaleza, but now I live here in Natal.', 'Yes! And I born in Fortaleza, but now I lives here in Natal.'], 0, 'Sim! E nasci em Fortaleza, mas agora moro aqui em Natal.'),
+    prox(6, ['What things are you interested on?', 'What things are you interested in?', 'What things do you interested in?'], 1, 'Por quais coisas você se interessa?'),
+    prox(7, ["I've always been interest in photography and nature.", "I've always been interested on photography and nature.", "I've always been interested in photography and nature."], 2, 'Sempre me interessei por fotografia e natureza.'),
+    prox(8, ['Cool! What do you like doing as a hobby?', 'Cool! What do you like do as a hobby?', 'Cool! What does you like doing as a hobby?'], 0, 'Legal! O que você gosta de fazer como hobby?'),
+    prox(9, ['I love playing the guitar because it help me relax.', 'I love playing the guitar because it helps me relax.', 'I love play the guitar because it helps me relax.'], 1, 'Amo tocar violão porque me ajuda a relaxar.'),
+    prox(11, ['Yes, I enjoy play volleyball on weekends.', 'Yes, I enjoy to playing volleyball on weekends.', 'Yes, I enjoy playing volleyball on weekends.'], 2, 'Sim, gosto de jogar vôlei nos fins de semana.'),
+    prox(12, ['And what do you want for the future?', 'And what you want for the future?', 'And what do you wants for the future?'], 0, 'E o que você quer para o futuro?'),
+    prox(13, ['In the future, I want be a doctor and help people.', 'In the future, I want to be a doctor and help people.', 'In the future, I want to being a doctor and help people.'], 1, 'No futuro, quero ser médica e ajudar as pessoas.'),
+    prox(15, ["Thank you! That's all you need to know for now!", "You're welcome! That's all you needs to know for now!", "You're welcome! That's all you need to know for now!"], 2, 'De nada! É tudo o que você precisa saber por enquanto!'),
+    { instrucao: "What's Mariana's nickname?", frase: '___', opcoes: ['Mari', 'Ana', 'Lima'], certa: 0, traducao: 'Mari.' },
+    { instrucao: 'When was she born?', frase: 'On October ___, 2009.', opcoes: ['5th', '15th', '50th'], certa: 1, traducao: 'Em 15 de outubro de 2009.' },
+    { instrucao: "What's her zodiac sign?", frase: '___', opcoes: ['Scorpio', 'Virgo', 'Libra'], certa: 2, traducao: 'Libra.' },
+    { instrucao: 'Where was she born?', frase: 'In ___.', opcoes: ['Fortaleza', 'Natal', 'Recife'], certa: 0, traducao: 'Em Fortaleza.' },
+    { instrucao: 'Where does she live now?', frase: 'In ___.', opcoes: ['Fortaleza', 'Natal', 'São Paulo'], certa: 1, traducao: 'Em Natal.' },
+    { instrucao: 'What is she interested in?', frase: 'Photography and ___.', opcoes: ['music', 'cooking', 'nature'], certa: 2, traducao: 'Fotografia e natureza.' },
+    { instrucao: 'Why does she love playing the guitar?', frase: 'Because it helps her ___.', opcoes: ['relax', 'study', 'sleep'], certa: 0, traducao: 'Porque a ajuda a relaxar.' },
+    { instrucao: 'What does she want for the future?', frase: 'To be a ___.', opcoes: ['teacher', 'doctor', 'photographer'], certa: 1, traducao: 'Ser médica.' }
+  ]
+});
+</script>
+</body>
+</html>

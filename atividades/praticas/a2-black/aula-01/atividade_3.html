@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 1 · Self-introduction questions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 01 · Escrita (Who am I?)
+   Alinhado ao "Speaking and writing: preparing for a self-introduction" (What's your full name?
+   / What's your nickname? / When were you born? / What's your zodiac sign? / Where do you live?
+   / What things are you interested in? / What do you like doing as a hobby? / Where do you
+   study / work? / What do you want for the future?). Conteúdo NOVO. A isca é a palavra
+   errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 1, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the question (one word is extra)',
+  itens: [
+    { contexto: M('Qual é o seu nome completo?'), palavras: ["What's", 'your', 'full', 'name'], isca: ['all'], fim: '?', traducao: 'Qual é o seu nome completo?' },
+    { contexto: M('Qual é o seu apelido?'), palavras: ["What's", 'your', 'nickname'], isca: ['you'], fim: '?', traducao: 'Qual é o seu apelido?' },
+    { contexto: M('Quando você nasceu?'), palavras: ['When', 'were', 'you', 'born'], isca: ['did'], fim: '?', traducao: 'Quando você nasceu?' },
+    { contexto: M('Qual é o seu signo?'), palavras: ["What's", 'your', 'zodiac', 'sign'], isca: ['star'], fim: '?', traducao: 'Qual é o seu signo?' },
+    { contexto: M('Quantos anos você tem?'), palavras: ['How', 'old', 'are', 'you'], isca: ['have'], fim: '?', traducao: 'Quantos anos você tem?' },
+    { contexto: M('Onde você mora?'), palavras: ['Where', 'do', 'you', 'live'], isca: ['are'], fim: '?', traducao: 'Onde você mora?' },
+    { contexto: M('Pelo que você se interessa?'), palavras: ['What', 'things', 'are', 'you', 'interested', 'in'], isca: ['on'], fim: '?', traducao: 'Por quais coisas você se interessa?' },
+    { contexto: M('O que você gosta de fazer como hobby?'), palavras: ['What', 'do', 'you', 'like', 'doing', 'as', 'a', 'hobby'], isca: ['does'], fim: '?', traducao: 'O que você gosta de fazer como hobby?' },
+    { contexto: M('Onde você estuda?'), palavras: ['Where', 'do', 'you', 'study'], isca: ['does'], fim: '?', traducao: 'Onde você estuda?' },
+    { contexto: M('Onde você trabalha?'), palavras: ['Where', 'do', 'you', 'work'], isca: ['are'], fim: '?', traducao: 'Onde você trabalha?' },
+    { contexto: M('O que você quer para o futuro?'), palavras: ['What', 'do', 'you', 'want', 'for', 'the', 'future'], isca: ['to'], fim: '?', traducao: 'O que você quer para o futuro?' },
+    { contexto: M('Por quê?'), palavras: ['Why'], isca: ['When'], fim: '?', traducao: 'Por quê?' },
+    { contexto: M('De onde você é?'), palavras: ['Where', 'are', 'you', 'from'], isca: ['do'], fim: '?', traducao: 'De onde você é?' },
+    { contexto: M('Em que mês você nasceu?'), palavras: ['What', 'month', 'were', 'you', 'born', 'in'], isca: ['did'], fim: '?', traducao: 'Em que mês você nasceu?' },
+    { contexto: M('Você gosta de ler?'), palavras: ['Do', 'you', 'like', 'reading'], isca: ['Are'], fim: '?', traducao: 'Você gosta de ler?' },
+    { contexto: M('Qual é o seu hobby favorito?'), palavras: ["What's", 'your', 'favorite', 'hobby'], isca: ['hobbies'], fim: '?', traducao: 'Qual é o seu hobby favorito?' },
+    { contexto: M('Você é estudante?'), palavras: ['Are', 'you', 'a', 'student'], isca: ['Do'], fim: '?', traducao: 'Você é estudante?' },
+    { contexto: M('Você se interessa por arte?'), palavras: ['Are', 'you', 'interested', 'in', 'art'], isca: ['Do'], fim: '?', traducao: 'Você se interessa por arte?' },
+    { contexto: M('Como posso te chamar?'), palavras: ['What', 'can', 'I', 'call', 'you'], isca: ['your'], fim: '?', traducao: 'Como posso te chamar?' },
+    { contexto: M('Você toca algum instrumento?'), palavras: ['Do', 'you', 'play', 'any', 'instruments'], isca: ['Are'], fim: '?', traducao: 'Você toca algum instrumento?' }
+  ]
+});
+</script>
+</body>
+</html>

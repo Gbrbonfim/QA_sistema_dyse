@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 1 · A self-introduction video</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 01 · Leitura (Who am I?)
+   Alinhado ao vídeo do slide (uma garota faz um vídeo de apresentação) e às categorias do
+   vocabulário (months, dates, zodiac signs, interests, likes/hobbies, studies/work, future).
+   Conteúdo NOVO: o Bruno ajuda a amiga Júlia a preparar o vídeo de apresentação dela.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Bruno', 'So, are you ready to record your self-introduction video?'],
+  ['Júlia', "Almost! Can you help me? I don't know what to say."],
+  ['Bruno', 'Sure! Start with your name and your nickname.'],
+  ['Júlia', "OK: Hi, I'm Júlia Santos, but you can call me Ju."],
+  ['Bruno', 'Great! Now your birth date and your zodiac sign.'],
+  ['Júlia', 'I was born on June 5th, which makes me a Gemini.'],
+  ['Bruno', 'Perfect. What about your studies?'],
+  ['Júlia', "I'm a student. I study gastronomy at university."],
+  ['Bruno', 'Nice! And your hobbies?'],
+  ['Júlia', 'I enjoy cooking, of course, and playing tennis.'],
+  ['Bruno', 'Do you have any other interests?'],
+  ['Júlia', "Yes, I've always been interested in art. I love painting."],
+  ['Bruno', 'Why do you love painting?'],
+  ['Júlia', 'Because it helps me think.'],
+  ['Bruno', 'And the future?'],
+  ['Júlia', 'In the future, I want to open a restaurant.'],
+  ['Bruno', "Excellent! I guess that's you!"]
+];
+const lado = q => q === 'Bruno' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 1, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Almost! Can you help me? I don't know what to say.", "Almost! Can you help my? I don't know what to say.", "Almost! Can you help me? I doesn't know what to say."], 0, 'Quase! Você pode me ajudar? Não sei o que dizer.'),
+    prox(3, ["OK: Hi, I'm Júlia Santos, but you can call my Ju.", "OK: Hi, I'm Júlia Santos, but you can call me Ju.", "OK: Hi, I'm Júlia Santos, but you can calls me Ju."], 1, 'Certo: Oi, sou a Júlia Santos, mas pode me chamar de Ju.'),
+    prox(4, ['Great! Now your birth date and your zodiac sign.', 'Great! Now your birth date and you zodiac sign.', 'Great! Now you birth date and your zodiac sign.'], 0, 'Ótimo! Agora a sua data de nascimento e o seu signo.'),
+    prox(5, ['I was born in June 5th, which makes me a Gemini.', 'I was born on June 5th, which makes me an Gemini.', 'I was born on June 5th, which makes me a Gemini.'], 2, 'Nasci em 5 de junho, o que me faz ser de Gêmeos.'),
+    prox(7, ["I'm a student. I study gastronomy at university.", "I'm an student. I study gastronomy at university.", "I'm a student. I studies gastronomy at university."], 0, 'Sou estudante. Estudo gastronomia na faculdade.'),
+    prox(9, ['I enjoy cook, of course, and play tennis.', 'I enjoy cooking, of course, and playing tennis.', 'I enjoys cooking, of course, and playing tennis.'], 1, 'Gosto de cozinhar, claro, e de jogar tênis.'),
+    prox(11, ["Yes, I've always been interested on art. I love painting.", "Yes, I've always interested in art. I love painting.", "Yes, I've always been interested in art. I love painting."], 2, 'Sim, sempre me interessei por arte. Amo pintar.'),
+    prox(12, ['Why do you love painting?', 'Why you love painting?', 'Why does you love painting?'], 0, 'Por que você ama pintar?'),
+    prox(13, ['Because it help me think.', 'Because it helps me think.', 'Because it helps me thinking.'], 1, 'Porque me ajuda a pensar.'),
+    prox(14, ['And the futures?', 'And future the?', 'And the future?'], 2, 'E o futuro?'),
+    prox(15, ['In the future, I want to open a restaurant.', 'In the future, I want open a restaurant.', 'In the future, I wants to open a restaurant.'], 0, 'No futuro, quero abrir um restaurante.'),
+    prox(16, ["Excellent! I guess that's me!", "Excellent! I guess that's you!", 'Excellent! I guess that you!'], 1, 'Excelente! Acho que essa é você!'),
+    { instrucao: "What is Júlia's nickname?", frase: '___', opcoes: ['Jules', 'Ju', 'Ju-ju'], certa: 1, traducao: 'Ju.' },
+    { instrucao: 'When was she born?', frase: 'On June ___.', opcoes: ['15th', '25th', '5th'], certa: 2, traducao: 'Em 5 de junho.' },
+    { instrucao: "What's her zodiac sign?", frase: '___', opcoes: ['Gemini', 'Cancer', 'Taurus'], certa: 0, traducao: 'Gêmeos.' },
+    { instrucao: 'What does she study?', frase: '___', opcoes: ['Art', 'Gastronomy', 'Medicine'], certa: 1, traducao: 'Gastronomia.' },
+    { instrucao: 'What are her hobbies?', frase: 'Cooking and ___.', opcoes: ['reading', 'drawing', 'playing tennis'], certa: 2, traducao: 'Cozinhar e jogar tênis.' },
+    { instrucao: 'What is she interested in?', frase: '___', opcoes: ['Art', 'Sports', 'Music'], certa: 0, traducao: 'Arte.' },
+    { instrucao: 'Why does she love painting?', frase: 'Because it helps her ___.', opcoes: ['sleep', 'think', 'cook'], certa: 1, traducao: 'Porque a ajuda a pensar.' },
+    { instrucao: 'What does she want for the future?', frase: 'To open a ___.', opcoes: ['school', 'shop', 'restaurant'], certa: 2, traducao: 'Abrir um restaurante.' }
+  ]
+});
+</script>
+</body>
+</html>
