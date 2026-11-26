@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 21 · Facts that are always true</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 21 · Gramática (Weird But True!)
+   Alinhado ao "Grammar Point" (zero conditional: If + present simple, present simple; uso
+   para fatos, regras e coisas sempre verdadeiras) e ao Listening sobre Stephen Hawking.
+   Fatos NOVOS e verdadeiros. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 21, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'If you heat ice, it ___.', opcoes: ['melts', 'melt', 'melting'], certa: 0, traducao: 'Se você esquenta o gelo, ele derrete.' },
+    { frase: 'If you ___ red and yellow, you get orange.', opcoes: ['mixes', 'mix', 'mixing'], certa: 1, traducao: 'Se você mistura vermelho e amarelo, obtém laranja.' },
+    { frase: 'If metal ___ hot, it expands.', opcoes: ['get', 'getting', 'gets'], certa: 2, traducao: 'Se o metal fica quente, ele se expande.' },
+    { frase: "If plants ___ get water, they die.", opcoes: ["don't", "doesn't", "aren't"], certa: 0, traducao: 'Se as plantas não recebem água, elas morrem.' },
+    { frase: 'If a cat falls, it usually ___ on its feet.', opcoes: ['land', 'lands', 'landing'], certa: 1, traducao: 'Se um gato cai, geralmente cai de pé.' },
+    { frase: 'If you ___ enough, you feel tired.', opcoes: ["doesn't sleep", 'not sleep', "don't sleep"], certa: 2, traducao: 'Se você não dorme o suficiente, fica cansado.' },
+    { frase: 'We use the zero conditional for ___.', opcoes: ['facts and things that are always true', 'future plans', 'past events'], certa: 0, traducao: 'Usamos o zero conditional para fatos e coisas sempre verdadeiras.' },
+    { frase: 'Form: If + ___, present simple.', opcoes: ['past simple', 'present simple', 'will'], certa: 1, traducao: 'Forma: If + presente simples, presente simples.' },
+    { frase: 'What ___ if you mix oil and water?', opcoes: ['happen', 'happening', 'happens'], certa: 2, traducao: 'O que acontece se você mistura óleo e água?' },
+    { instrucao: 'Which sentence is a correct zero conditional?', frase: '___', opcoes: ['If you heat metal, it expands.', 'If you heat metal, it expanded.', 'If you will heat metal, it expands.'], certa: 0, traducao: 'Se você esquenta metal, ele se expande.' },
+    { instrucao: 'Which sentence is a correct zero conditional?', frase: '___', opcoes: ["If she drink coffee, she can't sleep.", "If she drinks coffee, she can't sleep.", "If she drinks coffee, she couldn't sleep."], certa: 1, traducao: 'Se ela toma café, não consegue dormir.' },
+    { frase: 'If you put an egg in very salty water, it ___.', opcoes: ['sinks', 'cooks', 'floats'], certa: 2, traducao: 'Se você põe um ovo em água bem salgada, ele flutua.' },
+    { frase: 'If light passes through a prism, it ___ into colours.', opcoes: ['splits', 'split', 'splitting'], certa: 0, traducao: 'Se a luz passa por um prisma, ela se divide em cores.' },
+    { frase: 'If an octopus ___ an arm, it grows a new one.', opcoes: ['lose', 'loses', 'losing'], certa: 1, traducao: 'Se um polvo perde um braço, cresce um novo.' },
+    { frase: 'If you shout in a cave, you hear an ___.', opcoes: ['error', 'egg', 'echo'], certa: 2, traducao: 'Se você grita numa caverna, ouve um eco.' },
+    { frase: 'If you drop a hammer and a feather on the Moon, they fall at the ___ speed.', opcoes: ['same', 'different', 'slow'], certa: 0, traducao: 'Se você solta um martelo e uma pena na Lua, eles caem na mesma velocidade.' },
+    { frase: 'If you rub your hands together, they ___ warm.', opcoes: ['gets', 'get', 'getting'], certa: 1, traducao: 'Se você esfrega as mãos, elas ficam quentes.' },
+    { frase: 'Stephen Hawking was born in ___.', opcoes: ['the United States', 'Canada', 'England'], certa: 2, traducao: 'Stephen Hawking nasceu na Inglaterra.' },
+    { frase: 'He studied physics at ___ University.', opcoes: ['Oxford', 'Harvard', 'Yale'], certa: 0, traducao: 'Ele estudou física na Universidade de Oxford.' },
+    { frase: 'He was diagnosed with a rare disease at the age of ___.', opcoes: ['thirty-one', 'twenty-one', 'forty-one'], certa: 1, traducao: 'Ele foi diagnosticado com uma doença rara aos vinte e um anos.' },
+    { frase: 'He focused on black ___ and the Big Bang.', opcoes: ['cats', 'stars', 'holes'], certa: 2, traducao: 'Ele se concentrou nos buracos negros e no Big Bang.' },
+    { frase: 'He wrote a famous book called A ___ History of Time.', opcoes: ['Brief', 'Long', 'Boring'], certa: 0, traducao: 'Ele escreveu um livro famoso chamado Uma Breve História do Tempo.' },
+    { frase: 'His life story is a testament to the power of the ___.', opcoes: ['body', 'mind', 'money'], certa: 1, traducao: 'A história da vida dele é uma prova do poder da mente.' },
+    { frase: 'Hawking was born exactly three hundred years after ___ died.', opcoes: ['Einstein', 'Newton', 'Galileo'], certa: 2, traducao: 'Hawking nasceu exatamente trezentos anos depois da morte de Galileu.' }
+  ]
+});
+</script>
+</body>
+</html>

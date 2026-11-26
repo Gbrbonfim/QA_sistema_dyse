@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 21 · The Weird Science room</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 21 · Leitura (Weird But True!)
+   Alinhado ao Reading (fatos científicos estranhos e verdadeiros) e ao "Grammar Point"
+   (zero conditional). Conteúdo NOVO: Sam visita a sala "Weird Science" com a Dra. Lee
+   (ovo na água salgada, prisma e arco-íris, metal que se expande, martelo e pena na Lua).
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Dr. Lee', 'Welcome to the Weird Science room! Do you want to see something strange?'],
+  ['Sam', "Yes, please! What's in that glass?"],
+  ['Dr. Lee', "It's very salty water. Watch: if you put an egg in it, it floats."],
+  ['Sam', 'Wow! In normal water, it sinks, right?'],
+  ['Dr. Lee', 'Exactly. Salt makes the water heavier, so the egg stays on top.'],
+  ['Sam', "Cool. What's this prism for?"],
+  ['Dr. Lee', 'If light passes through a prism, it splits into seven colours.'],
+  ['Sam', 'Like a rainbow!'],
+  ['Dr. Lee', 'Yes! A rainbow happens when sunlight passes through raindrops.'],
+  ['Sam', 'What happens if I put this metal ball in hot water?'],
+  ['Dr. Lee', 'If metal gets hot, it expands. It gets a little bigger.'],
+  ['Sam', "Only a little? I can't see the difference."],
+  ['Dr. Lee', "That's right. You need special tools to measure it."],
+  ['Sam', "And what's that video about?"],
+  ['Dr. Lee', "It's about astronauts on the Moon. If you drop a hammer and a feather there, they fall at the same speed."],
+  ['Sam', 'Really? Why?'],
+  ['Dr. Lee', "Because there's no air on the Moon, so nothing slows the feather down."],
+  ['Sam', "That's weird but true! Who discovered all this?"],
+  ['Dr. Lee', 'Many scientists. Galileo had this idea about four hundred years ago.'],
+  ['Sam', 'I love science! I might become a scientist one day.']
+];
+const lado = q => q === 'Dr. Lee' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 21, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes, please! What's in that glass?", 'Yes, please! What is in that glass are?', 'No, thanks. I hate strange things. Goodbye!'], 0, 'Sim, por favor! O que tem naquele copo?'),
+    prox(3, ['Wow! In normal water, it float, right?', 'Wow! In normal water, it sinks, right?', 'Wow! In normal water, it sinking, right?'], 1, 'Uau! Na água normal, ele afunda, né?'),
+    prox(4, ['Exactly. Salt makes the water lighter, so the egg stays on top.', 'Exactly. Salt make the water heavier, so the egg stays on top.', 'Exactly. Salt makes the water heavier, so the egg stays on top.'], 2, 'Exatamente. O sal deixa a água mais pesada, então o ovo fica em cima.'),
+    prox(6, ['If light passes through a prism, it splits into seven colours.', 'If light pass through a prism, it splits into seven colours.', 'If light passes through a prism, it disappears completely.'], 0, 'Se a luz passa por um prisma, ela se divide em sete cores.'),
+    prox(8, ['Yes! A rainbow happen when sunlight passes through raindrops.', 'Yes! A rainbow happens when sunlight passes through raindrops.', 'Yes! A rainbow happens when moonlight passes through rocks.'], 1, 'Sim! O arco-íris acontece quando a luz do sol passa pelas gotas de chuva.'),
+    prox(10, ['If metal get hot, it expands. It gets a little bigger.', 'If metal gets hot, it expanding. It gets a little bigger.', 'If metal gets hot, it expands. It gets a little bigger.'], 2, 'Se o metal fica quente, ele se expande. Fica um pouco maior.'),
+    prox(12, ["That's right. You need special tools to measure it.", "That's right. You needs special tools to measure it.", "That's wrong. It gets ten times bigger!"], 0, 'Isso mesmo. Você precisa de instrumentos especiais para medir.'),
+    prox(14, ["It's about astronauts on the Moon. If you drop a hammer and a feather there, the feather flies away.", "It's about astronauts on the Moon. If you drop a hammer and a feather there, they fall at the same speed.", "It's about astronauts on the Moon. If you drop a hammer and a feather there, they falls at the same speed."], 1, 'É sobre astronautas na Lua. Se você solta um martelo e uma pena lá, eles caem na mesma velocidade.'),
+    prox(16, ["Because there's a lot of air on the Moon, so nothing slows the feather down.", "Because there's no air on the Moon, so nothing slow the feather down.", "Because there's no air on the Moon, so nothing slows the feather down."], 2, 'Porque não tem ar na Lua, então nada freia a pena.'),
+    prox(17, ["That's weird but true! Who discovered all this?", "That's weird but true! Who discover all this?", "That's boring and false! Who discovered all this?"], 0, 'Que estranho, mas é verdade! Quem descobriu tudo isso?'),
+    prox(18, ['Many scientists. Galileo have this idea about four hundred years ago.', 'Many scientists. Galileo had this idea about four hundred years ago.', 'Nobody. Galileo had this idea about four hundred years ago.'], 1, 'Muitos cientistas. Galileu teve essa ideia há uns quatrocentos anos.'),
+    prox(19, ['I love science! I might to become a scientist one day.', 'I love science! I mights become a scientist one day.', 'I love science! I might become a scientist one day.'], 2, 'Adoro ciência! Talvez eu vire cientista um dia.'),
+    { instrucao: 'What happens to the egg in very salty water?', frase: '___', opcoes: ['It floats.', 'It sinks.', 'It breaks.'], certa: 0, traducao: 'Ele flutua.' },
+    { instrucao: 'Why does the egg stay on top?', frase: '___', opcoes: ['The egg is empty.', 'Salt makes the water heavier.', 'The water is hot.'], certa: 1, traducao: 'O sal deixa a água mais pesada.' },
+    { instrucao: 'What happens if light passes through a prism?', frase: '___', opcoes: ['It disappears.', 'It gets hot.', 'It splits into seven colours.'], certa: 2, traducao: 'Ela se divide em sete cores.' },
+    { instrucao: 'What happens if metal gets hot?', frase: '___', opcoes: ['It expands.', 'It melts immediately.', 'It changes colour.'], certa: 0, traducao: 'Ele se expande.' },
+    { instrucao: "Why can't Sam see the difference in the metal ball?", frase: '___', opcoes: ['The ball is too far.', 'The change is very small.', 'The water is dirty.'], certa: 1, traducao: 'A mudança é muito pequena.' },
+    { instrucao: 'What happens if you drop a hammer and a feather on the Moon?', frase: '___', opcoes: ['The hammer falls faster.', 'The feather floats.', 'They fall at the same speed.'], certa: 2, traducao: 'Eles caem na mesma velocidade.' },
+    { instrucao: 'Why does that happen on the Moon?', frase: '___', opcoes: ["There's no air.", "It's very cold.", 'The feather is heavy.'], certa: 0, traducao: 'Não tem ar.' },
+    { instrucao: 'Who had this idea about four hundred years ago?', frase: '___', opcoes: ['Stephen Hawking.', 'Galileo.', 'Dr. Lee.'], certa: 1, traducao: 'Galileu.' }
+  ]
+});
+</script>
+</body>
+</html>

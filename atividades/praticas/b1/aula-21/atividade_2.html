@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 21 · If you heat ice, it melts</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 21 · Escrita (Weird But True!)
+   Alinhado ao "Grammar Point" (zero conditional: If + present simple, present simple;
+   terceira pessoa com -s; negativa com don't / doesn't; What happens if...?) e ao Listening
+   sobre Stephen Hawking. Fatos NOVOS e verdadeiros. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 21, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Se você esquenta o gelo, ele derrete.'), palavras: ['If', 'you', 'heat', 'ice,', 'it', 'melts'], isca: ['melt'], fim: '.', traducao: 'Se você esquenta o gelo, ele derrete.' },
+    { contexto: M('Se você mistura azul e amarelo, você tem verde.'), palavras: ['If', 'you', 'mix', 'blue', 'and', 'yellow,', 'you', 'get', 'green'], isca: ['gets'], fim: '.', traducao: 'Se você mistura azul e amarelo, obtém verde.' },
+    { contexto: M('Se você põe um ovo em água bem salgada, ele flutua.'), palavras: ['If', 'you', 'put', 'an', 'egg', 'in', 'very', 'salty', 'water,', 'it', 'floats'], isca: ['float'], fim: '.', traducao: 'Se você põe um ovo em água bem salgada, ele flutua.' },
+    { contexto: M('Se o ar fica quente, ele sobe.'), palavras: ['If', 'air', 'gets', 'hot,', 'it', 'rises'], isca: ['rise'], fim: '.', traducao: 'Se o ar fica quente, ele sobe.' },
+    { contexto: M('Se um polvo perde um braço, ele cria um novo.'), palavras: ['If', 'an', 'octopus', 'loses', 'an', 'arm,', 'it', 'grows', 'a', 'new', 'one'], isca: ['lose'], fim: '.', traducao: 'Se um polvo perde um braço, cresce um novo.' },
+    { contexto: M('Se você corta cebola, seus olhos lacrimejam.'), palavras: ['If', 'you', 'cut', 'an', 'onion,', 'your', 'eyes', 'water'], isca: ['waters'], fim: '.', traducao: 'Se você corta cebola, os seus olhos lacrimejam.' },
+    { contexto: M('Se você não dorme o suficiente, você fica cansado.'), palavras: ['If', 'you', "don't", 'sleep', 'enough,', 'you', 'feel', 'tired'], isca: ["doesn't"], fim: '.', traducao: 'Se você não dorme o suficiente, fica cansado.' },
+    { contexto: M('Se a luz passa por um prisma, ela se divide em cores.'), palavras: ['If', 'light', 'passes', 'through', 'a', 'prism,', 'it', 'splits', 'into', 'colours'], isca: ['pass'], fim: '.', traducao: 'Se a luz passa por um prisma, ela se divide em cores.' },
+    { contexto: M('Se você grita numa caverna, você ouve um eco.'), palavras: ['If', 'you', 'shout', 'in', 'a', 'cave,', 'you', 'hear', 'an', 'echo'], isca: ['hears'], fim: '.', traducao: 'Se você grita numa caverna, ouve um eco.' },
+    { contexto: M('Se o metal fica quente, ele se expande.'), palavras: ['If', 'metal', 'gets', 'hot,', 'it', 'expands'], isca: ['expand'], fim: '.', traducao: 'Se o metal fica quente, ele se expande.' },
+    { contexto: M('Se eu como muito açúcar, fico com dor de cabeça.'), palavras: ['If', 'I', 'eat', 'too', 'much', 'sugar,', 'I', 'get', 'a', 'headache'], isca: ['gets'], fim: '.', traducao: 'Se eu como muito açúcar, fico com dor de cabeça.' },
+    { contexto: M('Se ela fica nervosa, ela fala rápido.'), palavras: ['If', 'she', 'gets', 'nervous,', 'she', 'speaks', 'fast'], isca: ['speak'], fim: '.', traducao: 'Se ela fica nervosa, fala rápido.' },
+    { contexto: M('O que acontece se você mistura óleo e água?'), palavras: ['What', 'happens', 'if', 'you', 'mix', 'oil', 'and', 'water'], isca: ['happen'], fim: '?', traducao: 'O que acontece se você mistura óleo e água?' },
+    { contexto: M('Se um gato cai, ele geralmente cai de pé.'), palavras: ['If', 'a', 'cat', 'falls,', 'it', 'usually', 'lands', 'on', 'its', 'feet'], isca: ["it's"], fim: '.', traducao: 'Se um gato cai, geralmente cai de pé.' },
+    { contexto: M('Se você não pratica, você esquece.'), palavras: ['If', 'you', "don't", 'practise,', 'you', 'forget'], isca: ['forgets'], fim: '.', traducao: 'Se você não pratica, esquece.' },
+    { contexto: M('A água ferve a cem graus.'), palavras: ['Water', 'boils', 'at', 'one', 'hundred', 'degrees'], isca: ['boil'], fim: '.', traducao: 'A água ferve a cem graus.' },
+    { contexto: M('Stephen Hawking nasceu na Inglaterra.'), palavras: ['Stephen', 'Hawking', 'was', 'born', 'in', 'England'], isca: ['is'], fim: '.', traducao: 'Stephen Hawking nasceu na Inglaterra.' },
+    { contexto: M('Ele estudou física em Oxford.'), palavras: ['He', 'studied', 'physics', 'at', 'Oxford'], isca: ['study'], fim: '.', traducao: 'Ele estudou física em Oxford.' },
+    { contexto: M('Ele escreveu um livro famoso sobre o tempo.'), palavras: ['He', 'wrote', 'a', 'famous', 'book', 'about', 'time'], isca: ['written'], fim: '.', traducao: 'Ele escreveu um livro famoso sobre o tempo.' },
+    { contexto: M('A mente é muito poderosa.'), palavras: ['The', 'mind', 'is', 'very', 'powerful'], isca: ['power'], fim: '.', traducao: 'A mente é muito poderosa.' }
+  ]
+});
+</script>
+</body>
+</html>

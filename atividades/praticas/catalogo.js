@@ -1372,6 +1372,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Can you do it?', tipo: 'Escute e grave', treina: 'Fala · Revisão 10-19', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Review: choose the right one', tipo: 'Make a Choice', treina: 'Gramática · Revisão 10-19', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 21,
+        titulo: 'Class 21 · Weird But True!',
+        atividades: [
+          { num: 1, titulo: 'What happens if...?', tipo: 'Escute e escolha', treina: 'Escuta · Zero conditional', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'If you heat ice, it melts', tipo: 'Monte a frase', treina: 'Escrita · Zero conditional', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'The Weird Science room', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Science facts', tipo: 'Escute e grave', treina: 'Fala · Zero conditional', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Facts that are always true', tipo: 'Make a Choice', treina: 'Gramática · Zero conditional', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

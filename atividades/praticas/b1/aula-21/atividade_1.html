@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 21 · What happens if...?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 21 · Escuta (Weird But True!)
+   Alinhado ao Reading (fatos científicos estranhos), ao "Grammar Point" (zero conditional:
+   If + present simple, present simple para fatos sempre verdadeiros) e ao Listening sobre
+   Stephen Hawking. Revisão de might (18) e will para promessa (11). Fatos NOVOS e
+   verdadeiros. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const H = 'Listen. Is it true or false?', K = 'Listen. What kind of sentence is it?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 21, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the question and choose what happens',
+  itens: [
+    q('If you heat ice, what happens?', 'it melts', ['it gets harder', 'it turns blue'], 'science'),
+    q('If you mix blue and yellow, what do you get?', 'green', ['purple', 'orange'], 'science'),
+    q('If you put an egg in very salty water, what happens?', 'it floats', ['it explodes', 'it cooks'], 'science'),
+    q('If you drop a feather and a hammer on the Moon, what happens?', 'they fall at the same speed', ['the feather flies away', 'the hammer falls faster'], 'rocket_launch'),
+    q('If you heat air, what happens?', 'it rises', ['it turns into water', 'it falls'], 'science'),
+    q('If you pour oil into water, what happens?', 'the oil floats on top', ['the oil disappears', 'the water turns into oil'], 'science'),
+    q('If an octopus loses an arm, what happens?', 'it grows a new one', ["it can't swim", 'it changes colour forever'], 'biotech'),
+    q('If you shout in a big cave, what do you hear?', 'an echo', ['nothing', 'music'], 'science'),
+    q('If light passes through a prism, what happens?', 'it splits into colours', ['it disappears', 'it gets heavy'], 'science'),
+    q('If you cut an onion, what happens?', 'your eyes water', ['your hair grows', 'your nose bleeds'], 'biotech'),
+    q("If you don't sleep enough, what happens?", 'your brain works more slowly', ['you grow taller', 'you remember more'], 'biotech'),
+    q('If you mix red and white, what do you get?', 'pink', ['green', 'black'], 'science'),
+    q('If you boil water on a very high mountain, what happens?', 'it boils at a lower temperature', ['it never boils', 'it turns into ice'], 'science'),
+    q('If one person yawns, what often happens?', 'other people yawn too', ['everybody laughs', 'the lights go off'], 'biotech'),
+    { instrucao: H, ...q('Stephen Hawking was born in England.', 'True.', ['False.', "It's an opinion."], 'person') },
+    { instrucao: H, ...q('Hawking studied cosmology at Cambridge University.', 'True.', ["It's an opinion.", 'False.'], 'person') },
+    { instrucao: H, ...q('He was diagnosed with a rare disease at the age of thirty-one.', 'False.', ['True.', "It's an opinion."], 'person') },
+    { instrucao: H, ...q('He wrote a famous book called A Brief History of Time.', 'True.', ['False.', "It's an opinion."], 'person') },
+    { instrucao: H, ...q('The doctors said he would live for more than twenty years.', 'False.', ["It's an opinion.", 'True.'], 'person') },
+    { instrucao: H, ...q('Hawking was born exactly three hundred years after Galileo died.', 'True.', ["It's an opinion.", 'False.'], 'person') },
+    { instrucao: K, ...q('If water reaches one hundred degrees, it boils.', 'a fact that is always true', ['a possibility', 'a promise'], 'help') },
+    { instrucao: K, ...q('I might go to the science museum tomorrow.', 'a possibility', ['a fact that is always true', 'a promise'], 'help') },
+    { instrucao: K, ...q('If metal gets hot, it expands.', 'a fact that is always true', ['a promise', 'a possibility'], 'help') },
+    { instrucao: K, ...q("I'll help you with your science project. I promise.", 'a promise', ['a possibility', 'a fact that is always true'], 'help') }
+  ]
+});
+</script>
+</body>
+</html>
