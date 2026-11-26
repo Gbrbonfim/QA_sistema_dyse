@@ -5139,8 +5139,8 @@ create index if not exists idx_horario_sugestoes_turma on public.horario_sugesto
 --     geral (seção 40) e entra no Ranking Black, que conta SÓ os pontos DYSE
 --     das atividades concluídas no mês (activity_results.pontos_ranking, os
 --     pontos congelados da 1ª conclusão — seção 39). Presença e Speaking não
---     contam. Mesma regra de elegibilidade (entrou depois do dia 1º = pontua a
---     partir do mês seguinte) e mesmo desempate do ranking geral.
+--     contam. Todo aluno Black pontua desde o 1º dia (as turmas começam juntas
+--     em 01/12/2026); desempate igual ao do ranking geral.
 -- ======================================================================
 
 -- 43.1) O aluno está numa turma com material Black?
@@ -5314,7 +5314,9 @@ as $$
     group by r.user_id
   ),
   c as (
-    select a.id, a.full_name, a.entrada, (a.entrada <= lim.m0) as elegivel,
+    -- Turmas Black começam todas juntas (01/12/2026): todo aluno Black pontua
+    -- desde o 1º dia, sem a regra "entrou depois do dia 1º" do ranking geral.
+    select a.id, a.full_name, a.entrada, true as elegivel,
            coalesce(t.pontos, 0) as pontos, coalesce(t.feitas, 0) as feitas,
            case when coalesce(t.total, 0) > 0 then round(100.0 * t.primeira / t.total, 1) end as qualidade,
            t.erros, t.duracao
