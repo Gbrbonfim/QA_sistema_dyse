@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 28 · So am I or so do I?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 28 · Gramática (Same Here!)
+   Alinhado ao "Grammar Point" (So para frase positiva, Neither para negativa; auxiliar
+   conforme o tempo: do / does, am / is / are, can; ordem So / Neither + auxiliar + sujeito)
+   e ao Reading (evento de friend speed dating). Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 28, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'A: I like pop music. B: So ___ I.', opcoes: ['do', 'am', 'can'], certa: 0, traducao: 'A: Gosto de música pop. B: Eu também.' },
+    { frase: "A: I'm hungry. B: So ___ I.", opcoes: ['do', 'am', 'is'], certa: 1, traducao: 'A: Estou com fome. B: Eu também.' },
+    { frase: 'A: I can drive. B: So ___ I.', opcoes: ['do', 'am', 'can'], certa: 2, traducao: 'A: Sei dirigir. B: Eu também.' },
+    { frase: "A: I don't like coffee. B: ___ do I.", opcoes: ['Neither', 'So', 'Too'], certa: 0, traducao: 'A: Não gosto de café. B: Eu também não.' },
+    { frase: "A: I'm not tired. B: Neither ___ I.", opcoes: ['do', 'am', 'can'], certa: 1, traducao: 'A: Não estou cansado. B: Eu também não.' },
+    { frase: "A: I can't sing. B: Neither ___ I.", opcoes: ['do', 'am', 'can'], certa: 2, traducao: 'A: Não sei cantar. B: Eu também não.' },
+    { instrucao: 'A: "I live near here." What does B say?', frase: '___', opcoes: ['So do I.', 'So am I.', 'Neither do I.'], certa: 0, traducao: 'Eu também.' },
+    { instrucao: 'A: "I\'m not from this city." What does B say?', frase: '___', opcoes: ['So am I.', 'Neither am I.', 'Neither do I.'], certa: 1, traducao: 'Eu também não.' },
+    { instrucao: 'A: "I\'m having fun." What does B say?', frase: '___', opcoes: ['So do I.', 'Neither am I.', 'So am I.'], certa: 2, traducao: 'Eu também.' },
+    { instrucao: 'A: "I can\'t cook." What does B say?', frase: '___', opcoes: ['Neither can I.', 'So can I.', 'Neither do I.'], certa: 0, traducao: 'Eu também não.' },
+    { instrucao: 'Which order is correct?', frase: '___', opcoes: ['So I do.', 'So do I.', 'Do so I.'], certa: 1, traducao: 'So + auxiliar + sujeito.' },
+    { frase: 'We use "neither" when the first sentence is ___.', opcoes: ['positive', 'a question', 'negative'], certa: 2, traducao: 'Usamos neither quando a primeira frase é negativa.' },
+    { frase: 'We use "so" when the first sentence is ___.', opcoes: ['positive', 'negative', 'a question'], certa: 0, traducao: 'Usamos so quando a primeira frase é positiva.' },
+    { frase: 'A: My brother works at a bank. B: So ___ my sister.', opcoes: ['do', 'does', 'is'], certa: 1, traducao: 'A: O meu irmão trabalha num banco. B: A minha irmã também.' },
+    { frase: "A: Anna isn't coming tonight. B: Neither ___ Tom.", opcoes: ['does', 'are', 'is'], certa: 2, traducao: 'A: A Anna não vem hoje. B: O Tom também não.' },
+    { frase: 'The friend speed dating event takes place at a ___.', opcoes: ['library', 'bank', 'hospital'], certa: 0, traducao: 'O evento acontece numa biblioteca.' },
+    { frase: 'It is for people in their ___ and thirties.', opcoes: ['teens', 'twenties', 'fifties'], certa: 1, traducao: 'É para pessoas na faixa dos vinte e dos trinta anos.' },
+    { frase: "There will be ___, so you don't need to bring food.", opcoes: ['tickets', 'games', 'snacks'], certa: 2, traducao: 'Vai ter lanches, então você não precisa levar comida.' },
+    { frase: 'Short games that help strangers start talking are called ___.', opcoes: ['icebreakers', 'snacks', 'leaflets'], certa: 0, traducao: 'Jogos curtos que ajudam desconhecidos a começar a conversar são icebreakers.' },
+    { frase: 'The event is for making ___, not for romance.', opcoes: ['money', 'friends', 'dinner'], certa: 1, traducao: 'O evento é para fazer amigos, não para romance.' },
+    { frase: 'It happens on ___, not on a weekday.', opcoes: ['Monday', 'Wednesday', 'Saturday'], certa: 2, traducao: 'Acontece no sábado, não num dia de semana.' },
+    { frase: 'Is it difficult ___ friends as an adult?', opcoes: ['to make', 'make', 'made'], certa: 0, traducao: 'É difícil fazer amigos quando se é adulto?' },
+    { frase: "A: I don't enjoy loud parties. B: Neither do I. I ___ quiet places.", opcoes: ['preferring', 'prefer', 'prefers'], certa: 1, traducao: 'A: Não curto festas barulhentas. B: Eu também não. Prefiro lugares tranquilos.' },
+    { frase: "A: I'm a vegetarian. B: ___ I. I never eat meat.", opcoes: ['So do', 'Neither am', 'So am'], certa: 2, traducao: 'A: Sou vegetariano. B: Eu também. Nunca como carne.' }
+  ]
+});
+</script>
+</body>
+</html>

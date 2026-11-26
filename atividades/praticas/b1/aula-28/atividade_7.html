@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 29 · We have a lot in common</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 29 · Escrita (Same Here!)
+   Alinhado ao "Grammar Point" (So / Neither com did, was, would, have, will) e ao
+   vocabulário de semelhanças (look like, both, same ... as, different from, identical,
+   similar to, have a lot in common) e ao Listening da psicóloga. Conteúdo NOVO. 20 questões. */
+const A = (frase, pt) => 'Someone says: "' + frase + '" Answer in English: "' + pt + '"';
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 28, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: A('I went to the concert.', 'Eu também. Foi incrível.'), palavras: ['So', 'did', 'I.', 'It', 'was', 'amazing'], isca: ['do'], fim: '.', traducao: 'Eu também. Foi incrível.' },
+    { contexto: A("I didn't work late.", 'Eu também não. Saí cedo.'), palavras: ['Neither', 'did', 'I.', 'I', 'finished', 'early'], isca: ['do'], fim: '.', traducao: 'Eu também não. Terminei cedo.' },
+    { contexto: A('I was nervous.', 'Eu também. Mas foi divertido.'), palavras: ['So', 'was', 'I.', 'But', 'it', 'was', 'fun'], isca: ['did'], fim: '.', traducao: 'Eu também. Mas foi divertido.' },
+    { contexto: A("I wouldn't like a formal party.", 'Eu também não. Prefiro lugares descontraídos.'), palavras: ['Neither', 'would', 'I.', 'I', 'prefer', 'relaxed', 'places'], isca: ['will'], fim: '.', traducao: 'Eu também não. Prefiro lugares descontraídos.' },
+    { contexto: A("I'd like to travel more.", 'Eu também. Talvez para o Japão.'), palavras: ['So', 'would', 'I.', 'Maybe', 'to', 'Japan'], isca: ['do'], fim: '.', traducao: 'Eu também. Talvez para o Japão.' },
+    { contexto: A("I've been to Mexico.", 'Eu também. Adorei a comida.'), palavras: ['So', 'have', 'I.', 'I', 'loved', 'the', 'food'], isca: ['did'], fim: '.', traducao: 'Eu também. Adorei a comida.' },
+    { contexto: A("I haven't tried sushi yet.", 'Eu também não. Estou curioso.'), palavras: ['Neither', 'have', 'I.', "I'm", 'curious'], isca: ['did'], fim: '.', traducao: 'Eu também não. Estou curioso.' },
+    { contexto: A("I'll have the soup.", 'Eu também. Está frio hoje.'), palavras: ['So', 'will', 'I.', "It's", 'cold', 'today'], isca: ['would'], fim: '.', traducao: 'Eu também. Está frio hoje.' },
+    { contexto: A("I wasn't at home yesterday.", 'Eu também não. Estava no trabalho.'), palavras: ['Neither', 'was', 'I.', 'I', 'was', 'at', 'work'], isca: ['did'], fim: '.', traducao: 'Eu também não. Estava no trabalho.' },
+    { contexto: M('O meu irmão e eu somos parecidos.'), palavras: ['My', 'brother', 'and', 'I', 'look', 'like', 'each', 'other'], isca: ['likes'], fim: '.', traducao: 'O meu irmão e eu somos parecidos.' },
+    { contexto: M('Nós dois gostamos de cozinhar.'), palavras: ['We', 'both', 'enjoy', 'cooking'], isca: ['cook'], fim: '.', traducao: 'Nós dois gostamos de cozinhar.' },
+    { contexto: M('Eu tenho os mesmos hobbies que a minha melhor amiga.'), palavras: ['I', 'have', 'the', 'same', 'hobbies', 'as', 'my', 'best', 'friend'], isca: ['than'], fim: '.', traducao: 'Tenho os mesmos hobbies que a minha melhor amiga.' },
+    { contexto: M('Ela é diferente da irmã.'), palavras: ["She's", 'different', 'from', 'her', 'sister'], isca: ['of'], fim: '.', traducao: 'Ela é diferente da irmã.' },
+    { contexto: M('Não somos idênticos, mas nos damos bem.'), palavras: ["We're", 'not', 'identical,', 'but', 'we', 'get', 'along', 'well'], isca: ['identity'], fim: '.', traducao: 'Não somos idênticos, mas nos damos bem.' },
+    { contexto: M('A minha personalidade é parecida com a do meu pai.'), palavras: ['My', 'personality', 'is', 'similar', 'to', "my", "dad's"], isca: ['with'], fim: '.', traducao: 'A minha personalidade é parecida com a do meu pai.' },
+    { contexto: M('Temos muito em comum.'), palavras: ['We', 'have', 'a', 'lot', 'in', 'common'], isca: ['on'], fim: '.', traducao: 'Temos muito em comum.' },
+    { contexto: M('Conversar sobre o dia a dia ajuda as pessoas a se conectarem.'), palavras: ['Talking', 'about', 'everyday', 'things', 'helps', 'people', 'connect'], isca: ['help'], fim: '.', traducao: 'Conversar sobre o dia a dia ajuda as pessoas a se conectarem.' },
+    { contexto: M('Ouvir com atenção ajuda as amizades a crescer.'), palavras: ['Listening', 'carefully', 'helps', 'friendships', 'grow'], isca: ['careful'], fim: '.', traducao: 'Ouvir com atenção ajuda as amizades a crescer.' },
+    { contexto: M('Amizades levam tempo para crescer.'), palavras: ['Friendships', 'take', 'time', 'to', 'grow'], isca: ['takes'], fim: '.', traducao: 'Amizades levam tempo para crescer.' },
+    { contexto: M('Você tem algo em comum com o seu melhor amigo?'), palavras: ['Do', 'you', 'have', 'anything', 'in', 'common', 'with', 'your', 'best', 'friend'], isca: ['Does'], fim: '?', traducao: 'Você tem algo em comum com o seu melhor amigo?' }
+  ]
+});
+</script>
+</body>
+</html>

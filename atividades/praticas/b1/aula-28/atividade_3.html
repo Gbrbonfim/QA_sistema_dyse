@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 28 · Friend speed dating</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 28 · Leitura (Same Here!)
+   Alinhado ao Reading (evento de friend speed dating) e ao "Grammar Point" (So / Neither
+   + auxiliar com do, am e can). Conteúdo NOVO: Clara e Diego se conhecem no evento.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Clara', "Hi! I'm Clara. Is this your first friend speed dating event?"],
+  ['Diego', "Hi, I'm Diego. Yes, it is. I'm a bit nervous."],
+  ['Clara', 'So am I! But everybody looks friendly.'],
+  ['Diego', 'They do. So, what do you do in your free time?'],
+  ['Clara', 'I love hiking. I go to the mountains every weekend.'],
+  ['Diego', 'Really? So do I! Which trails do you like?'],
+  ['Clara', "The ones near the lake. I don't like very long trails."],
+  ['Diego', 'Neither do I. Three hours is enough for me.'],
+  ['Clara', 'Ha ha! Do you like cooking?'],
+  ['Diego', "Not really. I can't cook very well."],
+  ['Clara', 'Neither can I! I usually order food.'],
+  ['Diego', "Me too. I'm reading a great book about mountains right now."],
+  ['Clara', 'Oh, so am I! I love books about mountains.'],
+  ['Diego', "That's cool. Do you like board games?"],
+  ['Clara', 'Yes! I play every Friday with my cousins.'],
+  ['Diego', "Nice. I'm not very good at board games."],
+  ['Clara', "Don't worry, I can teach you!"],
+  ['Diego', "Great! I'm really enjoying this event."],
+  ['Clara', 'So am I. We have a lot in common.'],
+  ['Diego', "We do! Let's go hiking together next weekend."]
+];
+const lado = q => q === 'Clara' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 28, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi, I'm Diego. Yes, it is. I'm a bit nervous.", "Hi, I'm Diego. Yes, it does. I'm a bit nervous.", "Hi, I'm Diego. No, it isn't. This is my first time."], 0, 'Oi, sou o Diego. Sim, é. Estou um pouco nervoso.'),
+    prox(2, ['So do I! But everybody looks friendly.', 'So am I! But everybody looks friendly.', 'Neither am I! But everybody looks friendly.'], 1, 'Eu também! Mas todo mundo parece simpático.'),
+    prox(4, ['I love hiking. I goes to the mountains every weekend.', 'I love hike. I go to the mountains every weekend.', 'I love hiking. I go to the mountains every weekend.'], 2, 'Adoro fazer trilha. Vou para as montanhas todo fim de semana.'),
+    prox(5, ['Really? So do I! Which trails do you like?', 'Really? So am I! Which trails do you like?', 'Really? So I do! Which trails do you like?'], 0, 'Sério? Eu também! De quais trilhas você gosta?'),
+    prox(7, ['So do I. Three hours is enough for me.', 'Neither do I. Three hours is enough for me.', 'Neither I do. Three hours is enough for me.'], 1, 'Eu também não. Três horas já está bom para mim.'),
+    prox(9, ["Not really. I can't cooking very well.", 'Yes! I can cook very well.', "Not really. I can't cook very well."], 2, 'Não muito. Não sei cozinhar muito bem.'),
+    prox(10, ['Neither can I! I usually order food.', 'Neither do I! I usually order food.', 'So can I! I usually order food.'], 0, 'Eu também não! Normalmente peço comida.'),
+    prox(12, ['Oh, so do I! I love books about mountains.', 'Oh, so am I! I love books about mountains.', 'Oh, neither am I! I love books about mountains.'], 1, 'Ah, eu também! Adoro livros sobre montanhas.'),
+    prox(14, ['Yes! I plays every Friday with my cousins.', 'No! I play every Friday with my cousins.', 'Yes! I play every Friday with my cousins.'], 2, 'Sim! Jogo toda sexta com os meus primos.'),
+    prox(16, ["Don't worry, I can teach you!", "Don't worry, I can to teach you!", "Don't worry, I can teaching you!"], 0, 'Não se preocupe, eu te ensino!'),
+    prox(18, ['So do I. We have a lot in common.', 'So am I. We have a lot in common.', 'Neither am I. We have a lot in common.'], 1, 'Eu também. Temos muito em comum.'),
+    prox(19, ["We do! Let's going hiking together next weekend.", "We don't! Let's go hiking together next weekend.", "We do! Let's go hiking together next weekend."], 2, 'Temos! Vamos fazer trilha juntos no próximo fim de semana.'),
+    { instrucao: 'How does Diego feel at first?', frase: '___', opcoes: ['A bit nervous.', 'Very bored.', 'Angry.'], certa: 0, traducao: 'Um pouco nervoso.' },
+    { instrucao: 'What do Clara and Diego both love?', frase: '___', opcoes: ['Cooking.', 'Hiking.', 'Long trails.'], certa: 1, traducao: 'Fazer trilha.' },
+    { instrucao: "What kind of trails don't they like?", frase: '___', opcoes: ['Trails near the lake.', 'Short trails.', 'Very long trails.'], certa: 2, traducao: 'Trilhas muito longas.' },
+    { instrucao: "What can't they do very well?", frase: '___', opcoes: ['Cook.', 'Swim.', 'Read.'], certa: 0, traducao: 'Cozinhar.' },
+    { instrucao: 'What are they both reading about?', frase: '___', opcoes: ['Cooking.', 'Mountains.', 'Board games.'], certa: 1, traducao: 'Montanhas.' },
+    { instrucao: 'When does Clara play board games?', frase: '___', opcoes: ['Every Sunday.', 'Every day.', 'Every Friday.'], certa: 2, traducao: 'Toda sexta.' },
+    { instrucao: 'What will Clara do for Diego?', frase: '___', opcoes: ['Teach him board games.', 'Cook for him.', 'Lend him a book.'], certa: 0, traducao: 'Ensinar jogos de tabuleiro.' },
+    { instrucao: 'What do they plan to do next weekend?', frase: '___', opcoes: ['Play board games.', 'Go hiking together.', 'Go to another event.'], certa: 1, traducao: 'Fazer trilha juntos.' }
+  ]
+});
+</script>
+</body>
+</html>

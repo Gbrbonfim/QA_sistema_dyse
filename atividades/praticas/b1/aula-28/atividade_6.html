@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 29 · Neither did I</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 29 · Escuta (Same Here!)
+   Alinhado ao "Grammar Point" (So / Neither com did, was, would, have, will, can), ao
+   Listening da psicóloga social (adultos ocupados, conversas do dia a dia, amigos não
+   precisam ser iguais, ouvir com atenção, amizades levam tempo) e ao vocabulário de
+   semelhanças (similar, both, same as, identical, look like, different from).
+   Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const M = 'Listen. What does it mean?', X = 'Listen. What does the expert say?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 28, num: 6, tipo: 'imagem',
+  instrucao: 'Listen. You are the same. How do you answer?',
+  itens: [
+    q('I went to the beach last weekend.', 'So did I.', ['So was I.', 'So have I.'], 'forum'),
+    q("I didn't sleep well last night.", 'Neither did I.', ['Neither do I.', 'So did I.'], 'forum'),
+    q('I was very nervous at first.', 'So was I.', ['So did I.', 'So am I.'], 'forum'),
+    q("I wasn't at the meeting yesterday.", 'Neither was I.', ['Neither did I.', 'Neither am I.'], 'forum'),
+    q("I'd like to travel more this year.", 'So would I.', ['So do I.', 'So will I.'], 'forum'),
+    q("I wouldn't like to live in a big city.", 'Neither would I.', ['Neither do I.', 'So would I.'], 'forum'),
+    q("I've been to Japan.", 'So have I.', ['So did I.', 'So am I.'], 'forum'),
+    q("I haven't seen that film yet.", 'Neither have I.', ['Neither did I.', 'Neither do I.'], 'forum'),
+    q("I'll have the chicken salad.", 'So will I.', ['So would I.', 'So do I.'], 'forum'),
+    q('I watched a great series last weekend.', 'So did I.', ['So have I.', 'So was I.'], 'forum'),
+    q("I can't stand rainy days.", 'Neither can I.', ['So can I.', 'Neither do I.'], 'forum'),
+    q("I've never tried sushi.", 'Neither have I.', ['So have I.', 'Neither did I.'], 'forum'),
+    { instrucao: M, ...q('My brother and I look like each other.', 'We have a similar appearance.', ['We have the same personality.', 'We never see each other.'], 'help') },
+    { instrucao: M, ...q('We both enjoy cooking.', 'The two people enjoy cooking.', ['Only one person enjoys cooking.', 'Nobody enjoys cooking.'], 'help') },
+    { instrucao: M, ...q("Our personalities aren't identical, but they're similar.", 'not exactly the same', ['exactly the same', 'completely different'], 'help') },
+    { instrucao: M, ...q("She's very different from her sister.", "They aren't alike.", ['They are identical.', 'They are the same age.'], 'help') },
+    { instrucao: M, ...q('I have the same phone as you.', 'Our phones are the same model.', ["I'm using your phone.", 'Our phones are different.'], 'help') },
+    { instrucao: X, ...q("Adults don't stop making friends because they change. They stop because they're busy.", 'Being busy is the problem.', ['People change too much.', "Adults don't want friends."], 'psychology') },
+    { instrucao: X, ...q('Talking about everyday things, like the weather or the traffic, helps people connect.', 'Small talk helps.', ['Small talk is a waste of time.', 'Only deep topics help.'], 'psychology') },
+    { instrucao: X, ...q("Friends don't need to have the same personality.", 'Friends can be different.', ['Friends must be identical.', 'Friends must agree on everything.'], 'psychology') },
+    { instrucao: X, ...q('If you listen carefully, the friendship can grow.', 'Listening helps friendships.', ['Talking a lot is more important.', "Listening isn't important."], 'psychology') },
+    { instrucao: X, ...q("Most friendships don't start quickly. They take time.", 'Friendships need time.', ['Friendships always start quickly.', 'Friendships end quickly.'], 'psychology') },
+    { instrucao: M, ...q("A: I didn't go to the event. B: Neither did I.", "Both people didn't go.", ['Both people went.', 'Only person B went.'], 'help') },
+    { instrucao: M, ...q("A: I'm going to the picnic on Saturday. B: So am I!", 'They are both going.', ['Only person A is going.', 'Nobody is going.'], 'help') }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 29 · Did, have, would or will?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 29 · Gramática (Same Here!)
+   Alinhado ao "Grammar Point" (auxiliar conforme o tempo: did / was / were, have / has,
+   would, will, can, do), ao vocabulário de semelhanças (similar, both, same ... as,
+   identical, look like, different from) e ao Listening da psicóloga. Conteúdo NOVO.
+   24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 28, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'A: I went to the party. B: So ___ I.', opcoes: ['did', 'was', 'have'], certa: 0, traducao: 'A: Fui à festa. B: Eu também.' },
+    { frase: 'A: I was tired. B: So ___ I.', opcoes: ['did', 'was', 'were'], certa: 1, traducao: 'A: Eu estava cansado. B: Eu também.' },
+    { frase: "A: I've finished my homework. B: So ___ I.", opcoes: ['did', 'do', 'have'], certa: 2, traducao: 'A: Terminei a lição. B: Eu também.' },
+    { frase: "A: I'd like a coffee. B: So ___ I.", opcoes: ['would', 'will', 'do'], certa: 0, traducao: 'A: Eu queria um café. B: Eu também.' },
+    { frase: "A: I'll come tomorrow. B: So ___ I.", opcoes: ['would', 'will', 'do'], certa: 1, traducao: 'A: Venho amanhã. B: Eu também.' },
+    { frase: "A: I didn't call her. B: Neither ___ I.", opcoes: ['do', 'have', 'did'], certa: 2, traducao: 'A: Não liguei para ela. B: Eu também não.' },
+    { frase: "A: I wasn't at school. B: Neither ___ I.", opcoes: ['was', 'did', 'am'], certa: 0, traducao: 'A: Não fui à escola. B: Eu também não.' },
+    { frase: "A: I haven't been to Italy. B: Neither ___ I.", opcoes: ['did', 'have', 'am'], certa: 1, traducao: 'A: Nunca fui à Itália. B: Eu também não.' },
+    { frase: "A: I wouldn't like to be famous. B: Neither ___ I.", opcoes: ['will', 'do', 'would'], certa: 2, traducao: 'A: Eu não gostaria de ser famoso. B: Eu também não.' },
+    { frase: 'For the past simple, the auxiliary is ___.', opcoes: ['did', 'do', 'have'], certa: 0, traducao: 'No passado simples, o auxiliar é did.' },
+    { frase: 'For the present perfect, the auxiliary is ___.', opcoes: ['did', 'have / has', 'would'], certa: 1, traducao: 'No present perfect, o auxiliar é have / has.' },
+    { instrucao: 'A: "I\'ve never been to a concert." What does B say?', frase: '___', opcoes: ['So have I.', 'Neither did I.', 'Neither have I.'], certa: 2, traducao: 'Eu também não.' },
+    { frase: 'My friend and I are ___, but not identical.', opcoes: ['similar', 'same', 'both'], certa: 0, traducao: 'A minha amiga e eu somos parecidas, mas não idênticas.' },
+    { frase: 'We ___ enjoy talking about everyday topics.', opcoes: ['same', 'both', 'like'], certa: 1, traducao: 'Nós dois gostamos de conversar sobre o dia a dia.' },
+    { frase: 'I have the same hobbies ___ my best friend.', opcoes: ['than', 'like', 'as'], certa: 2, traducao: 'Tenho os mesmos hobbies que o meu melhor amigo.' },
+    { frase: "We don't have ___ personalities, but we get along well.", opcoes: ['identical', 'both', 'as'], certa: 0, traducao: 'Não temos personalidades idênticas, mas nos damos bem.' },
+    { frase: 'My brother and I look ___ each other.', opcoes: ['as', 'like', 'from'], certa: 1, traducao: 'O meu irmão e eu somos parecidos.' },
+    { frase: "She's different ___ her sister.", opcoes: ['as', 'like', 'from'], certa: 2, traducao: 'Ela é diferente da irmã.' },
+    { frase: 'Talking about everyday ___ helps adults connect.', opcoes: ['topics', 'identical', 'both'], certa: 0, traducao: 'Conversar sobre assuntos do dia a dia ajuda os adultos a se conectarem.' },
+    { frase: '___ carefully helps friendships develop.', opcoes: ['Listen', 'Listening', 'Listened'], certa: 1, traducao: 'Ouvir com atenção ajuda as amizades a se desenvolverem.' },
+    { frase: "Friendships don't always start ___.", opcoes: ['quick', 'quicker', 'quickly'], certa: 2, traducao: 'As amizades nem sempre começam rápido.' },
+    { instrucao: 'A: "I watched a great series last weekend." What does B say?', frase: '___', opcoes: ['So did I.', 'So have I.', 'So was I.'], certa: 0, traducao: 'Eu também.' },
+    { instrucao: 'A: "I don\'t have many free evenings." What does B say?', frase: '___', opcoes: ['Neither have I.', 'Neither do I.', 'So do I.'], certa: 1, traducao: 'Eu também não.' },
+    { instrucao: 'A: "I can speak more than one language." What does B say?', frase: '___', opcoes: ['So do I.', 'So am I.', 'So can I.'], certa: 2, traducao: 'Eu também.' }
+  ]
+});
+</script>
+</body>
+</html>

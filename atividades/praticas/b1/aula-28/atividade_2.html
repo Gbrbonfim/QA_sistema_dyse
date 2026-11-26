@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 28 · Neither can I</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 28 · Escrita (Same Here!)
+   Alinhado ao "Grammar Point" (So / Neither + auxiliar + sujeito, nessa ordem, com do,
+   am / is / are e can, + um comentário curto como no Speaking) e ao Reading e Warm Up
+   (evento para fazer amigos). Conteúdo NOVO. 20 questões. */
+const A = (frase, pt) => 'Someone says: "' + frase + '" Answer in English: "' + pt + '"';
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 28, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: A('I like meeting new people.', 'Eu também. Adoro festas.'), palavras: ['So', 'do', 'I.', 'I', 'love', 'parties'], isca: ['am'], fim: '.', traducao: 'Eu também. Adoro festas.' },
+    { contexto: A("I don't like crowded places.", 'Eu também não. Prefiro lugares tranquilos.'), palavras: ['Neither', 'do', 'I.', 'I', 'prefer', 'quiet', 'places'], isca: ['am'], fim: '.', traducao: 'Eu também não. Prefiro lugares tranquilos.' },
+    { contexto: A("I'm a little nervous.", 'Eu também. É a minha primeira vez.'), palavras: ['So', 'am', 'I.', "It's", 'my', 'first', 'time'], isca: ['do'], fim: '.', traducao: 'Eu também. É a minha primeira vez.' },
+    { contexto: A("I can't swim.", 'Eu também não. Nunca aprendi.'), palavras: ['Neither', 'can', 'I.', 'I', 'never', 'learned'], isca: ['do'], fim: '.', traducao: 'Eu também não. Nunca aprendi.' },
+    { contexto: A('I can speak French.', 'Eu também. Morei em Paris.'), palavras: ['So', 'can', 'I.', 'I', 'lived', 'in', 'Paris'], isca: ['am'], fim: '.', traducao: 'Eu também. Morei em Paris.' },
+    { contexto: A("I'm not very sporty.", 'Eu também não. Prefiro ler.'), palavras: ['Neither', 'am', 'I.', 'I', 'prefer', 'reading'], isca: ['do'], fim: '.', traducao: 'Eu também não. Prefiro ler.' },
+    { contexto: A('I work at a hospital.', 'Eu também. Sou enfermeira.'), palavras: ['So', 'do', 'I.', "I'm", 'a', 'nurse'], isca: ['am'], fim: '.', traducao: 'Eu também. Sou enfermeira.' },
+    { contexto: A("I'm learning to cook.", 'Eu também. Estou fazendo um curso.'), palavras: ['So', 'am', 'I.', "I'm", 'taking', 'a', 'course'], isca: ['do'], fim: '.', traducao: 'Eu também. Estou fazendo um curso.' },
+    { contexto: A("I don't eat meat.", 'Eu também não. Sou vegetariano.'), palavras: ['Neither', 'do', 'I.', "I'm", 'a', 'vegetarian'], isca: ['So'], fim: '.', traducao: 'Eu também não. Sou vegetariano.' },
+    { contexto: A("I'm having a great time.", 'Eu também. As pessoas são muito simpáticas.'), palavras: ['So', 'am', 'I.', 'People', 'are', 'very', 'friendly'], isca: ['do'], fim: '.', traducao: 'Eu também. As pessoas são muito simpáticas.' },
+    { contexto: A("I can't dance.", 'Eu também não. Mas adoro música.'), palavras: ['Neither', 'can', 'I.', 'But', 'I', 'love', 'music'], isca: ['So'], fim: '.', traducao: 'Eu também não. Mas adoro música.' },
+    { contexto: M('É fácil fazer amigos quando se é adulto?'), palavras: ['Is', 'it', 'easy', 'to', 'make', 'friends', 'as', 'an', 'adult'], isca: ['do'], fim: '?', traducao: 'É fácil fazer amigos quando se é adulto?' },
+    { contexto: M('Onde as pessoas podem fazer novos amigos hoje?'), palavras: ['Where', 'can', 'people', 'make', 'new', 'friends', 'today'], isca: ['do'], fim: '?', traducao: 'Onde as pessoas podem fazer novos amigos hoje?' },
+    { contexto: M('O evento começa às duas da tarde.'), palavras: ['The', 'event', 'starts', 'at', 'two', 'in', 'the', 'afternoon'], isca: ['start'], fim: '.', traducao: 'O evento começa às duas da tarde.' },
+    { contexto: M('É para pessoas na faixa dos vinte e dos trinta anos.'), palavras: ["It's", 'for', 'people', 'in', 'their', 'twenties', 'and', 'thirties'], isca: ['they'], fim: '.', traducao: 'É para pessoas na faixa dos vinte e dos trinta anos.' },
+    { contexto: M('Vai ter lanches, então você não precisa levar comida.'), palavras: ['There', 'will', 'be', 'snacks,', 'so', 'you', "don't", 'need', 'to', 'bring', 'food'], isca: ["doesn't"], fim: '.', traducao: 'Vai ter lanches, então você não precisa levar comida.' },
+    { contexto: M('Não é um evento romântico.'), palavras: ["It's", 'not', 'a', 'romantic', 'event'], isca: ['romance'], fim: '.', traducao: 'Não é um evento romântico.' },
+    { contexto: M('Você gostaria de participar de um evento assim?'), palavras: ['Would', 'you', 'like', 'to', 'join', 'an', 'event', 'like', 'this'], isca: ['joining'], fim: '?', traducao: 'Você gostaria de participar de um evento assim?' },
+    { contexto: M('As dinâmicas quebra-gelo ajudam as pessoas a se sentirem à vontade.'), palavras: ['Icebreakers', 'help', 'people', 'feel', 'comfortable'], isca: ['helps'], fim: '.', traducao: 'As dinâmicas quebra-gelo ajudam as pessoas a se sentirem à vontade.' },
+    { contexto: M('Para se inscrever, mande um e-mail para a biblioteca.'), palavras: ['To', 'register,', 'email', 'the', 'library'], isca: ['registering'], fim: '.', traducao: 'Para se inscrever, mande um e-mail para a biblioteca.' }
+  ]
+});
+</script>
+</body>
+</html>

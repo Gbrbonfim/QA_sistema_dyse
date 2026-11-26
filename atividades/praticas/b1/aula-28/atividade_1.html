@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 28 · So do I!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 28 · Escuta (Same Here!)
+   Alinhado ao Warm Up (fazer amigos adulto), ao Reading (evento de friend speed dating:
+   lugar, horário, público, snacks, icebreakers, inscrição) e ao "Grammar Point" (So /
+   Neither + auxiliar + sujeito com do, am / is / are, can). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const E = 'Listen to the information about a new event and choose the answer';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 28, num: 1, tipo: 'imagem',
+  instrucao: 'Listen. You are the same. How do you answer?',
+  itens: [
+    q('I love meeting new people.', 'So do I.', ['Neither do I.', 'So am I.'], 'forum'),
+    q("I don't like loud music.", 'Neither do I.', ['So do I.', 'Neither am I.'], 'forum'),
+    q("I'm a bit nervous.", 'So am I.', ['So do I.', 'Neither am I.'], 'forum'),
+    q("I'm not very good at small talk.", 'Neither am I.', ['So am I.', 'Neither do I.'], 'forum'),
+    q('I can play the guitar.', 'So can I.', ['So do I.', 'Neither can I.'], 'forum'),
+    q("I can't dance very well.", 'Neither can I.', ['So can I.', 'Neither do I.'], 'forum'),
+    q("I'm having a great time.", 'So am I.', ['So do I.', 'So can I.'], 'forum'),
+    q('I work from home.', 'So do I.', ['So am I.', 'Neither do I.'], 'forum'),
+    q("I don't eat meat.", 'Neither do I.', ['So do I.', 'Neither am I.'], 'forum'),
+    q("I'm not working this weekend.", 'Neither am I.', ['Neither do I.', 'So am I.'], 'forum'),
+    q('I usually go to the gym after work.', 'So do I.', ['So am I.', 'So can I.'], 'forum'),
+    q('I can speak Spanish.', 'So can I.', ['So do I.', 'So am I.'], 'forum'),
+    q("I don't have many free evenings.", 'Neither do I.', ['So do I.', 'Neither am I.'], 'forum'),
+    q("I'm reading a great book at the moment.", 'So am I.', ['So do I.', 'So can I.'], 'forum'),
+    q("I'm not a morning person.", 'Neither am I.', ['Neither do I.', 'So am I.'], 'forum'),
+    q("I can't cook.", 'Neither can I.', ['Neither am I.', 'So can I.'], 'forum'),
+    { instrucao: E + ': where is it?', ...q('Our board games night is at the community centre on Friday at seven.', 'at the community centre', ['at the library', 'at a café'], 'groups') },
+    { instrucao: E + ': who is it for?', ...q('The board games night is for people in their forties and fifties.', 'people in their forties and fifties', ['teenagers', 'children'], 'groups') },
+    { instrucao: E + ': do people need to bring food?', ...q("There will be free snacks and drinks, so you don't need to bring food.", "No, they don't.", ['Yes, they do.', 'Only drinks.'], 'groups') },
+    { instrucao: E + ': what is it for?', ...q("It's not a romantic event. It's just for making new friends.", 'to make new friends', ['to find a partner', 'to sell games'], 'groups') },
+    { instrucao: E + ': how can people register?', ...q('To register, send us an email or call the centre.', 'by email or phone', ['only in person', 'on Instagram'], 'groups') },
+    { instrucao: 'Listen. What are icebreakers for?', ...q('Icebreakers are short games that help strangers start talking.', 'to start conversations', ['to make ice', 'to end the event'], 'groups') },
+    { instrucao: 'Listen. When is the event?', ...q('The picnic starts at two in the afternoon on Saturday.', 'on a weekend afternoon', ['on a weekday morning', 'on Sunday night'], 'groups') },
+    { instrucao: 'Listen. Why is it hard to make friends?', ...q("It's hard to make friends as an adult because we're always busy.", 'People are busy.', ['People are shy.', 'People are old.'], 'groups') }
+  ]
+});
+</script>
+</body>
+</html>

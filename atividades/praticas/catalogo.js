@@ -1449,6 +1449,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Growing up in the 90s', tipo: 'Escute e grave', treina: 'Fala · Used to', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: "Used to or didn't use to?", tipo: 'Make a Choice', treina: 'Gramática · Used to', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 28,
+        titulo: 'Class 28 and 29 · Same Here!',
+        atividades: [
+          { num: 1, parte: 'Class 28', titulo: 'So do I!', tipo: 'Escute e escolha', treina: 'Escuta · So / neither', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 28', titulo: 'Neither can I', tipo: 'Monte a frase', treina: 'Escrita · So / neither', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 28', titulo: 'Friend speed dating', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 28', titulo: 'Making friends', tipo: 'Escute e grave', treina: 'Fala · So / neither', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 28', titulo: 'So am I or so do I?', tipo: 'Make a Choice', treina: 'Gramática · So / neither', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 29', titulo: 'Neither did I', tipo: 'Escute e escolha', treina: 'Escuta · So / neither e semelhanças', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 29', titulo: 'We have a lot in common', tipo: 'Monte a frase', treina: 'Escrita · Semelhanças', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 29', titulo: 'After the event', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 29', titulo: 'Same here!', tipo: 'Escute e grave', treina: 'Fala · So / neither e semelhanças', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 29', titulo: 'Did, have, would or will?', tipo: 'Make a Choice', treina: 'Gramática · So / neither e semelhanças', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

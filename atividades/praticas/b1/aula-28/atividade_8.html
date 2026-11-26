@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 29 · After the event</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 29 · Leitura (Same Here!)
+   Alinhado ao "Grammar Point" (So / Neither com was, did, have, would, will), ao
+   vocabulário de semelhanças (same ... as, both, look like, different from) e ao Listening
+   da psicóloga (adultos precisam de chances para conversar). Conteúdo NOVO: Ruth e Kofi
+   comentam o evento. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ruth', 'Kofi! Did you go to the friend speed dating event on Saturday?'],
+  ['Kofi', 'Yes, I did. I was really nervous at the beginning.'],
+  ['Ruth', "So was I! I didn't know anyone there."],
+  ['Kofi', 'Neither did I. But the icebreakers helped a lot.'],
+  ['Ruth', 'I agree. I met a woman who has the same hobbies as me.'],
+  ['Kofi', 'Really? What do you both enjoy?'],
+  ['Ruth', 'We both love painting and old films.'],
+  ['Kofi', 'Nice! I met a guy who looks like my brother.'],
+  ['Ruth', 'Ha ha! Is his personality similar too?'],
+  ['Kofi', "No, they're very different from each other. He's much more extroverted."],
+  ['Ruth', 'Did you exchange numbers?'],
+  ['Kofi', "Yes. We've already planned a bike ride for next Sunday."],
+  ['Ruth', "That's great! I've never been on a long bike ride."],
+  ['Kofi', "Neither have I! I'm a bit worried."],
+  ['Ruth', "Ha ha! I'd like to go to another event next month."],
+  ['Kofi', "So would I. It was fun and I didn't spend much money."],
+  ['Ruth', 'Neither did I. The snacks were free!'],
+  ['Kofi', 'I think adults just need more chances to talk.'],
+  ['Ruth', 'I agree. Small talk can turn into real friendship.'],
+  ['Kofi', 'So, shall we go together next month?'],
+  ['Ruth', "Yes! I'll register tonight."],
+  ['Kofi', 'So will I.']
+];
+const lado = q => q === 'Ruth' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 28, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I did. I was really nervous at the beginning.', 'Yes, I went. I were really nervous at the beginning.', "No, I didn't. I was really nervous at the beginning."], 0, 'Fui, sim. Estava bem nervoso no começo.'),
+    prox(2, ["So did I! I didn't know anyone there.", "So was I! I didn't know anyone there.", "Neither was I! I didn't know anyone there."], 1, 'Eu também! Não conhecia ninguém lá.'),
+    prox(3, ['So did I. But the icebreakers helped a lot.', 'Neither did I. But the icebreakers help a lot yesterday.', 'Neither did I. But the icebreakers helped a lot.'], 2, 'Eu também não. Mas as dinâmicas quebra-gelo ajudaram muito.'),
+    prox(6, ['We both love painting and old films.', 'We both loves painting and old films.', 'Both we love painting and old films.'], 0, 'Nós duas adoramos pintura e filmes antigos.'),
+    prox(9, ["No, they're very different of each other. He's much more extroverted.", "No, they're very different from each other. He's much more extroverted.", "No, they're identical. He's much more extroverted."], 1, 'Não, eles são muito diferentes. Ele é bem mais extrovertido.'),
+    prox(11, ["Yes. We've already plan a bike ride for next Sunday.", "No. We've already planned a bike ride for next Sunday.", "Yes. We've already planned a bike ride for next Sunday."], 2, 'Sim. Já combinamos um passeio de bicicleta no próximo domingo.'),
+    prox(13, ["Neither have I! I'm a bit worried.", "So have I! I'm a bit worried.", "Neither did I! I'm a bit worried."], 0, 'Eu também não! Estou um pouco preocupado.'),
+    prox(15, ["So will I. It was fun and I didn't spend much money.", "So would I. It was fun and I didn't spend much money.", "So do I. It was fun and I didn't spend much money."], 1, 'Eu também. Foi divertido e não gastei muito.'),
+    prox(16, ['So did I. The snacks were free!', 'Neither do I. The snacks were free!', 'Neither did I. The snacks were free!'], 2, 'Eu também não. Os lanches eram de graça!'),
+    prox(18, ['I agree. Small talk can turn into real friendship.', 'I agree with. Small talk can turn into real friendship.', 'I agree. Small talk can turns into real friendship.'], 0, 'Concordo. Uma conversa leve pode virar uma amizade de verdade.'),
+    prox(20, ['Yes! I register will tonight.', "Yes! I'll register tonight.", "Yes! I'll registering tonight."], 1, 'Sim! Vou me inscrever hoje à noite.'),
+    prox(21, ['So would I.', 'So do I.', 'So will I.'], 2, 'Eu também.'),
+    { instrucao: 'How did Kofi feel at the beginning?', frase: '___', opcoes: ['Nervous.', 'Bored.', 'Tired.'], certa: 0, traducao: 'Nervoso.' },
+    { instrucao: 'What helped them at the event?', frase: '___', opcoes: ['The music.', 'The icebreakers.', 'The free tickets.'], certa: 1, traducao: 'As dinâmicas quebra-gelo.' },
+    { instrucao: 'What do Ruth and her new friend both love?', frase: '___', opcoes: ['Bike rides.', 'Cooking.', 'Painting and old films.'], certa: 2, traducao: 'Pintura e filmes antigos.' },
+    { instrucao: "Who does Kofi's new friend look like?", frase: '___', opcoes: ["Kofi's brother.", 'Ruth.', 'A famous actor.'], certa: 0, traducao: 'O irmão do Kofi.' },
+    { instrucao: "How is the new friend different from Kofi's brother?", frase: '___', opcoes: ["He's taller.", "He's much more extroverted.", "He's older."], certa: 1, traducao: 'Ele é bem mais extrovertido.' },
+    { instrucao: 'What have Kofi and his new friend planned?', frase: '___', opcoes: ['A dinner.', 'A trip to a museum.', 'A bike ride.'], certa: 2, traducao: 'Um passeio de bicicleta.' },
+    { instrucao: "Why didn't they spend much money?", frase: '___', opcoes: ['The snacks were free.', "They didn't eat.", 'They won a prize.'], certa: 0, traducao: 'Os lanches eram de graça.' },
+    { instrucao: 'What will Ruth and Kofi do tonight?', frase: '___', opcoes: ['Go to a party.', 'Register for the next event.', 'Call their new friends.'], certa: 1, traducao: 'Se inscrever no próximo evento.' }
+  ]
+});
+</script>
+</body>
+</html>
