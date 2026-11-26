@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 3 · You're Brazilian!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 03 · Escrita (Guess the country!)
+   Alinhado ao Talking Point (I'm from Brazil. → You're Brazilian.) e às 12 nacionalidades.
+   Conteúdo NOVO com outras pessoas e fatos verdadeiros. A isca é o país no lugar da
+   nacionalidade (ou o contrário). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 3, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu sou brasileiro.'), palavras: ["I'm", 'Brazilian'], isca: ['Brazil'], fim: '.', traducao: 'Sou brasileiro.' },
+    { contexto: M('Você é mexicana.'), palavras: ["You're", 'Mexican'], isca: ['Mexico'], fim: '.', traducao: 'Você é mexicana.' },
+    { contexto: M('Ele é da Finlândia. Ele é finlandês.'), palavras: ["He's", 'from', 'Finland.', "He's", 'Finnish'], isca: ['Finland'], fim: '.', traducao: 'Ele é da Finlândia. Ele é finlandês.' },
+    { contexto: M('Ela é japonesa.'), palavras: ["She's", 'Japanese'], isca: ['Japan'], fim: '.', traducao: 'Ela é japonesa.' },
+    { contexto: M('Nós somos canadenses.'), palavras: ["We're", 'Canadian'], isca: ['Canada'], fim: '.', traducao: 'Somos canadenses.' },
+    { contexto: M('Eles são alemães.'), palavras: ["They're", 'German'], isca: ['Germany'], fim: '.', traducao: 'Eles são alemães.' },
+    { contexto: M('A Taylor Swift é americana.'), palavras: ['Taylor', 'Swift', 'is', 'American'], isca: ['USA'], fim: '.', traducao: 'A Taylor Swift é americana.' },
+    { contexto: M('O Jackie Chan é chinês.'), palavras: ['Jackie', 'Chan', 'is', 'Chinese'], isca: ['China'], fim: '.', traducao: 'O Jackie Chan é chinês.' },
+    { contexto: M('A Priyanka Chopra é indiana.'), palavras: ['Priyanka', 'Chopra', 'is', 'Indian'], isca: ['India'], fim: '.', traducao: 'A Priyanka Chopra é indiana.' },
+    { contexto: M('O BTS é sul-coreano.'), palavras: ['BTS', 'are', 'South', 'Korean'], isca: ['Korea'], fim: '.', traducao: 'O BTS é sul-coreano.' },
+    { contexto: M('A Maria Sharapova é russa.'), palavras: ['Maria', 'Sharapova', 'is', 'Russian'], isca: ['Russia'], fim: '.', traducao: 'A Maria Sharapova é russa.' },
+    { contexto: M('O Manny Pacquiao é filipino.'), palavras: ['Manny', 'Pacquiao', 'is', 'Filipino'], isca: ['Philippines'], fim: '.', traducao: 'O Manny Pacquiao é filipino.' },
+    { contexto: M('Eu sou do México. Eu sou mexicano.'), palavras: ["I'm", 'from', 'Mexico.', "I'm", 'Mexican'], isca: ['Mexico'], fim: '.', traducao: 'Sou do México. Sou mexicano.' },
+    { contexto: M('O sushi é japonês.'), palavras: ['Sushi', 'is', 'Japanese'], isca: ['Japan'], fim: '.', traducao: 'O sushi é japonês.' },
+    { contexto: M('Os tacos são mexicanos.'), palavras: ['Tacos', 'are', 'Mexican'], isca: ['is'], fim: '.', traducao: 'Os tacos são mexicanos.' },
+    { contexto: M('O Justin Bieber é canadense.'), palavras: ['Justin', 'Bieber', 'is', 'Canadian'], isca: ['Canada'], fim: '.', traducao: 'O Justin Bieber é canadense.' },
+    { contexto: M('A Heidi Klum é alemã.'), palavras: ['Heidi', 'Klum', 'is', 'German'], isca: ['are'], fim: '.', traducao: 'A Heidi Klum é alemã.' },
+    { contexto: M('Você é da Índia. Você é indiano!'), palavras: ["You're", 'from', 'India.', "You're", 'Indian'], isca: ['India'], fim: '!', traducao: 'Você é da Índia. Você é indiano!' },
+    { contexto: M('A Toyota é japonesa.'), palavras: ['Toyota', 'is', 'Japanese'], isca: ['are'], fim: '.', traducao: 'A Toyota é japonesa.' },
+    { contexto: M('O Neymar e a Anitta são brasileiros.'), palavras: ['Neymar', 'and', 'Anitta', 'are', 'Brazilian'], isca: ['is'], fim: '.', traducao: 'O Neymar e a Anitta são brasileiros.' }
+  ]
+});
+</script>
+</body>
+</html>

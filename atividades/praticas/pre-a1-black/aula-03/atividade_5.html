@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 3 · Guess the nationality!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 03 · Leitura (Guess the country!)
+   Alinhado ao "Speaking and Writing" do slide (adivinhar a nacionalidade de famosos e corrigir
+   com a forma negativa). Conteúdo NOVO: a Bia e o Rafa fazem um quiz com outros famosos.
+   Fatos verdadeiros. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Bia', "Let's play a game! Taylor Swift is Canadian."],
+  ['Rafa', "No, she isn't Canadian. She's American."],
+  ['Bia', 'Correct! Now you.'],
+  ['Rafa', 'OK. Jackie Chan is Japanese.'],
+  ['Bia', "No! He isn't Japanese. He's Chinese."],
+  ['Rafa', 'Yes! Your turn.'],
+  ['Bia', 'BTS are South Korean.'],
+  ['Rafa', "Yes, they are. They're a pop group from South Korea."],
+  ['Bia', 'Good! Now you.'],
+  ['Rafa', 'Heidi Klum is Russian.'],
+  ['Bia', "No, she isn't. She's German. She's a top model."],
+  ['Rafa', 'Correct! Your turn.'],
+  ['Bia', 'Justin Bieber and Celine Dion are American.'],
+  ['Rafa', "No, they aren't American. They're Canadian."],
+  ['Bia', 'Yes! And Salma Hayek? Is she Brazilian?'],
+  ['Rafa', "No, she isn't. She's Mexican."],
+  ['Bia', "Wow, you're good!"]
+];
+const lado = q => q === 'Bia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 3, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["No, she isn't Canadian. She's American.", "No, she aren't Canadian. She's American.", "No, she isn't Canada. She's America."], 0, 'Não, ela não é canadense. Ela é americana.'),
+    prox(3, ['OK. Jackie Chan are Japanese.', 'OK. Jackie Chan is Japanese.', 'OK. Jackie Chan is Japan.'], 1, 'Certo. O Jackie Chan é japonês.'),
+    prox(4, ["No! He aren't Japanese. He's Chinese.", "No! He isn't Japanese. He's China.", "No! He isn't Japanese. He's Chinese."], 2, 'Não! Ele não é japonês. Ele é chinês.'),
+    prox(6, ['BTS are South Korean.', 'BTS is South Korea.', 'BTS am South Korean.'], 0, 'O BTS é sul-coreano.'),
+    prox(7, ["Yes, they is. They're a pop group from South Korea.", "Yes, they are. They're a pop group from South Korea.", "Yes, they are. They're a pop group from South Korean."], 1, 'Sim. São uma banda pop da Coreia do Sul.'),
+    prox(9, ['Heidi Klum are Russian.', 'Heidi Klum is Russia.', 'Heidi Klum is Russian.'], 2, 'A Heidi Klum é russa.'),
+    prox(10, ["No, she isn't. She's German. She's a top model.", "No, she aren't. She's German. She's a top model.", "No, she isn't. She's Germany. She's a top model."], 0, 'Não. Ela é alemã. É top model.'),
+    prox(12, ['Justin Bieber and Celine Dion is American.', 'Justin Bieber and Celine Dion are American.', 'Justin Bieber and Celine Dion are America.'], 1, 'O Justin Bieber e a Celine Dion são americanos.'),
+    prox(13, ["No, they isn't American. They're Canadian.", "No, they aren't American. They're Canada.", "No, they aren't American. They're Canadian."], 2, 'Não, eles não são americanos. São canadenses.'),
+    prox(14, ['Yes! And Salma Hayek? Is she Brazilian?', 'Yes! And Salma Hayek? Are she Brazilian?', 'Yes! And Salma Hayek? Is she Brazil?'], 0, 'Isso! E a Salma Hayek? Ela é brasileira?'),
+    prox(15, ["No, she aren't. She's Mexican.", "No, she isn't. She's Mexican.", "No, she isn't. She's Mexico."], 1, 'Não. Ela é mexicana.'),
+    prox(16, ["Wow, you're good!", "Wow, you's good!", "Wow, you is good!"], 0, 'Uau, você é bom!'),
+    { instrucao: 'What nationality is Taylor Swift?', frase: "She's ___.", opcoes: ['Canadian', 'American', 'German'], certa: 1, traducao: 'Ela é americana.' },
+    { instrucao: 'Is Jackie Chan Japanese?', frase: "No, he isn't. He's ___.", opcoes: ['South Korean', 'Filipino', 'Chinese'], certa: 2, traducao: 'Não. Ele é chinês.' },
+    { instrucao: 'What are BTS?', frase: "They're a ___ from South Korea.", opcoes: ['pop group', 'designer', 'top model'], certa: 0, traducao: 'São uma banda pop da Coreia do Sul.' },
+    { instrucao: 'What nationality is Heidi Klum?', frase: "She's ___.", opcoes: ['Russian', 'German', 'Finnish'], certa: 1, traducao: 'Ela é alemã.' },
+    { instrucao: 'What is Heidi Klum?', frase: "She's a ___.", opcoes: ['pop star', 'designer', 'top model'], certa: 2, traducao: 'Ela é top model.' },
+    { instrucao: 'Are Justin Bieber and Celine Dion American?', frase: "No, they aren't. They're ___.", opcoes: ['Canadian', 'Mexican', 'Russian'], certa: 0, traducao: 'Não. São canadenses.' },
+    { instrucao: 'What nationality is Salma Hayek?', frase: "She's ___.", opcoes: ['Brazilian', 'Mexican', 'American'], certa: 1, traducao: 'Ela é mexicana.' },
+    { instrucao: 'Is Salma Hayek Brazilian?', frase: '___', opcoes: ["Yes, she is.", "No, she aren't.", "No, she isn't."], certa: 2, traducao: 'Não.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 3 · What nationality?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 03 · Escuta (Guess the country!)
+   Alinhado ao "Vocabulary: Nationalities" (as 12 nacionalidades do slide) e ao Talking Point
+   "I'm from Brazil. → You're Brazilian.". Conteúdo NOVO: o aluno ouve de onde a pessoa é e
+   escolhe a nacionalidade. 24 questões. */
+const NAC = { 'in': 'Indian', mx: 'Mexican', fi: 'Finnish', br: 'Brazilian', ru: 'Russian', ca: 'Canadian', de: 'German', us: 'American', cn: 'Chinese', jp: 'Japanese', ph: 'Filipino', kr: 'South Korean' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const cs = iscas.slice(0, 3);
+  cs.splice(pos, 0, certa);
+  return { audioTexto, opcoes: cs.map(c => ({ label: NAC[c], img: 'https://flagcdn.com/w320/' + c + '.png' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 3, num: 1, tipo: 'imagem',
+  instrucao: 'Listen: what nationality is the person?',
+  itens: [
+    q("I'm from Finland.", 'fi', ['ru', 'de', 'ca']),
+    q("She's from Mexico.", 'mx', ['br', 'us', 'ph']),
+    q("He's from India.", 'in', ['cn', 'ph', 'mx']),
+    q("I'm from Japan.", 'jp', ['cn', 'kr', 'ph']),
+    q("They're from Germany.", 'de', ['fi', 'ru', 'us']),
+    q("We're from Brazil.", 'br', ['mx', 'ph', 'in']),
+    q("She's from South Korea.", 'kr', ['jp', 'cn', 'ph']),
+    q("He's from Canada.", 'ca', ['us', 'fi', 'de']),
+    q("I'm from the Philippines.", 'ph', ['in', 'mx', 'kr']),
+    q("They're from Russia.", 'ru', ['de', 'fi', 'cn']),
+    q("She's from China.", 'cn', ['jp', 'kr', 'in']),
+    q("He's from the USA.", 'us', ['ca', 'br', 'mx']),
+    q("Taylor Swift is from the USA.", 'us', ['ca', 'de', 'br']),
+    q("Justin Bieber is from Canada.", 'ca', ['us', 'fi', 'ru']),
+    q("Neymar is from Brazil.", 'br', ['mx', 'in', 'ph']),
+    q("Jackie Chan is from China.", 'cn', ['kr', 'jp', 'ph']),
+    q("Shohei Ohtani is from Japan.", 'jp', ['cn', 'kr', 'in']),
+    q("Salma Hayek is from Mexico.", 'mx', ['br', 'us', 'ph']),
+    q("Priyanka Chopra is from India.", 'in', ['ph', 'cn', 'br']),
+    q("Heidi Klum is from Germany.", 'de', ['ru', 'fi', 'ca']),
+    q("BTS are from South Korea.", 'kr', ['cn', 'jp', 'ph']),
+    q("Manny Pacquiao is from the Philippines.", 'ph', ['mx', 'in', 'kr']),
+    q("Maria Sharapova is from Russia.", 'ru', ['fi', 'de', 'us']),
+    q("Kimi Räikkönen is from Finland.", 'fi', ['de', 'ru', 'ca'])
+  ]
+});
+</script>
+</body>
+</html>

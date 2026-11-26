@@ -906,6 +906,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Am, is, are', tipo: 'Make a Choice', treina: 'Gramática · To be', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Subject pronouns', tipo: 'Make a Choice', treina: 'Gramática · Pronomes', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 3,
+        titulo: 'Class 03 · Guess the Country!',
+        atividades: [
+          { num: 1, titulo: 'What nationality?', tipo: 'Escute e escolha', treina: 'Escuta · Nacionalidades', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Is or isn\'t?', tipo: 'Escute e escolha', treina: 'Escuta · To be negativo', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: "You're Brazilian!", tipo: 'Monte a frase', treina: 'Escrita · Nacionalidades', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Not true!', tipo: 'Monte a frase', treina: 'Escrita · To be negativo', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'Guess the nationality!', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'An international class', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: "I'm from Brazil. I'm Brazilian.", tipo: 'Escute e grave', treina: 'Fala · Nacionalidades', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: "That's not right!", tipo: 'Escute e grave', treina: 'Fala · To be negativo', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Country or nationality?', tipo: 'Make a Choice', treina: 'Gramática · País x nacionalidade', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Negative form', tipo: 'Make a Choice', treina: 'Gramática · To be negativo', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

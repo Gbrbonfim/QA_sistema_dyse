@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 3 · An international class</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 03 · Leitura (Guess the country!)
+   Alinhado às nacionalidades e ao to be negativo/afirmativo. Conteúdo NOVO: numa aula online,
+   a professora Kate confunde as nacionalidades dos alunos e eles corrigem. 20 questões: 12 de
+   "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Kate', "Hello, class! I'm Kate. I'm American."],
+  ['Students', "Hi, Kate! We aren't American. We're from different countries."],
+  ['Kate', 'Great! Kenji, you are Chinese.'],
+  ['Kenji', "No, I'm not Chinese. I'm Japanese."],
+  ['Kate', 'Sorry! And Sofia, you are Mexican.'],
+  ['Sofia', "Yes, I am. I'm from Mexico."],
+  ['Kate', 'Raj and Priya, you are Filipino.'],
+  ['Priya', "No, we aren't Filipino. We're Indian."],
+  ['Kate', 'Oh! And Ivan is German.'],
+  ['Sofia', "No, he isn't German. He's Russian."],
+  ['Kate', 'OK! And Mika? Is he Canadian?'],
+  ['Mika', "No, I'm not. I'm Finnish. I'm from Finland."],
+  ['Kate', 'And Jin and Hana are Chinese.'],
+  ['Kenji', "No, they aren't. They're South Korean."],
+  ['Kate', "Ha ha! I'm not good at nationalities!"],
+  ['Priya', "It's OK, Kate!"]
+];
+const lado = q => q === 'Kate' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 3, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi, Kate! We aren't American. We're from different countries.", "Hi, Kate! We isn't American. We're from different countries.", "Hi, Kate! We aren't America. We're from different countries."], 0, 'Oi, Kate! Não somos americanos. Somos de países diferentes.'),
+    prox(2, ['Great! Kenji, you is Chinese.', 'Great! Kenji, you are Chinese.', 'Great! Kenji, you are China.'], 1, 'Ótimo! Kenji, você é chinês.'),
+    prox(3, ["No, I isn't Chinese. I'm Japanese.", "No, I'm not Chinese. I'm Japan.", "No, I'm not Chinese. I'm Japanese."], 2, 'Não, não sou chinês. Sou japonês.'),
+    prox(5, ["Yes, I am. I'm from Mexico.", "Yes, I is. I'm from Mexico.", "Yes, I am. I'm from Mexican."], 0, 'Sim. Sou do México.'),
+    prox(6, ['Raj and Priya, you is Filipino.', 'Raj and Priya, you are Filipino.', 'Raj and Priya, you are Philippines.'], 1, 'Raj e Priya, vocês são filipinos.'),
+    prox(7, ["No, we isn't Filipino. We're Indian.", "No, we aren't Filipino. We're India.", "No, we aren't Filipino. We're Indian."], 2, 'Não, não somos filipinos. Somos indianos.'),
+    prox(9, ["No, he isn't German. He's Russian.", "No, he aren't German. He's Russian.", "No, he isn't German. He's Russia."], 0, 'Não, ele não é alemão. É russo.'),
+    prox(10, ['OK! And Mika? Are he Canadian?', 'OK! And Mika? Is he Canadian?', 'OK! And Mika? Is he Canada?'], 1, 'Certo! E o Mika? Ele é canadense?'),
+    prox(11, ["No, I isn't. I'm Finnish. I'm from Finland.", "No, I'm not. I'm Finland. I'm from Finnish.", "No, I'm not. I'm Finnish. I'm from Finland."], 2, 'Não. Sou finlandês. Sou da Finlândia.'),
+    prox(12, ['And Jin and Hana are Chinese.', 'And Jin and Hana is Chinese.', 'And Jin and Hana are China.'], 0, 'E o Jin e a Hana são chineses.'),
+    prox(13, ["No, they isn't. They're South Korean.", "No, they aren't. They're South Korean.", "No, they aren't. They're South Korea."], 1, 'Não. São sul-coreanos.'),
+    prox(15, ["It's OK, Kate!", "It are OK, Kate!", "It am OK, Kate!"], 0, 'Tudo bem, Kate!'),
+    { instrucao: 'What nationality is Kate?', frase: "She's ___.", opcoes: ['Canadian', 'American', 'German'], certa: 1, traducao: 'Ela é americana.' },
+    { instrucao: 'What nationality is Kenji?', frase: "He's ___.", opcoes: ['Chinese', 'South Korean', 'Japanese'], certa: 2, traducao: 'Ele é japonês.' },
+    { instrucao: 'Where is Sofia from?', frase: "She's from ___.", opcoes: ['Mexico', 'Brazil', 'the USA'], certa: 0, traducao: 'Ela é do México.' },
+    { instrucao: 'What nationality are Raj and Priya?', frase: "They're ___.", opcoes: ['Filipino', 'Indian', 'Chinese'], certa: 1, traducao: 'Eles são indianos.' },
+    { instrucao: 'What nationality is Ivan?', frase: "He's ___.", opcoes: ['German', 'Finnish', 'Russian'], certa: 2, traducao: 'Ele é russo.' },
+    { instrucao: 'Where is Mika from?', frase: "He's from ___.", opcoes: ['Finland', 'Canada', 'Germany'], certa: 0, traducao: 'Ele é da Finlândia.' },
+    { instrucao: 'Are Jin and Hana Chinese?', frase: '___', opcoes: ['Yes, they are.', "No, they aren't.", "No, they isn't."], certa: 1, traducao: 'Não.' },
+    { instrucao: 'What nationality are Jin and Hana?', frase: "They're ___.", opcoes: ['Japanese', 'Chinese', 'South Korean'], certa: 2, traducao: 'Eles são sul-coreanos.' }
+  ]
+});
+</script>
+</body>
+</html>

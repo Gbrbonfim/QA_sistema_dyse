@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 3 · Not true!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 03 · Escrita (Guess the country!)
+   Alinhado ao "Grammar Point: To Be - Negative Form" e ao exercício 5 do slide (Anitta isn't
+   Mexican. She's Brazilian.). Conteúdo NOVO com outras pessoas e coisas, fatos verdadeiros.
+   A isca é a forma negativa errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 3, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('O Neymar não é mexicano. Ele é brasileiro.'), palavras: ['Neymar', "isn't", 'Mexican.', "He's", 'Brazilian'], isca: ["aren't"], fim: '.', traducao: 'O Neymar não é mexicano. Ele é brasileiro.' },
+    { contexto: M('Eu não sou americano.'), palavras: ["I'm", 'not', 'American'], isca: ["isn't"], fim: '.', traducao: 'Não sou americano.' },
+    { contexto: M('Você não é canadense.'), palavras: ['You', "aren't", 'Canadian'], isca: ["isn't"], fim: '.', traducao: 'Você não é canadense.' },
+    { contexto: M('O BTS não é japonês. Eles são sul-coreanos.'), palavras: ['BTS', "aren't", 'Japanese.', "They're", 'South', 'Korean'], isca: ["isn't"], fim: '.', traducao: 'O BTS não é japonês. Eles são sul-coreanos.' },
+    { contexto: M('O sushi não é chinês. É japonês.'), palavras: ['Sushi', "isn't", 'Chinese.', "It's", 'Japanese'], isca: ["aren't"], fim: '.', traducao: 'O sushi não é chinês. É japonês.' },
+    { contexto: M('Nós não somos russos.'), palavras: ['We', "aren't", 'Russian'], isca: ["isn't"], fim: '.', traducao: 'Não somos russos.' },
+    { contexto: M('Ela não tem 20 anos.'), palavras: ['She', "isn't", 'twenty', 'years', 'old'], isca: ["aren't"], fim: '.', traducao: 'Ela não tem 20 anos.' },
+    { contexto: M('Eles não são indianos. Eles são filipinos.'), palavras: ['They', "aren't", 'Indian.', "They're", 'Filipino'], isca: ["isn't"], fim: '.', traducao: 'Eles não são indianos. São filipinos.' },
+    { contexto: M('O Justin Bieber não é americano. Ele é canadense.'), palavras: ['Justin', 'Bieber', "isn't", 'American.', "He's", 'Canadian'], isca: ["aren't"], fim: '.', traducao: 'O Justin Bieber não é americano. Ele é canadense.' },
+    { contexto: M('Eu não sou da China. Eu sou do Japão.'), palavras: ["I'm", 'not', 'from', 'China.', "I'm", 'from', 'Japan'], isca: ["isn't"], fim: '.', traducao: 'Não sou da China. Sou do Japão.' },
+    { contexto: M('A pizza não é alemã. É italiana.'), palavras: ['Pizza', "isn't", 'German.', "It's", 'Italian'], isca: ["aren't"], fim: '.', traducao: 'A pizza não é alemã. É italiana.' },
+    { contexto: M('A Heidi Klum não é finlandesa. Ela é alemã.'), palavras: ['Heidi', 'Klum', "isn't", 'Finnish.', "She's", 'German'], isca: ["aren't"], fim: '.', traducao: 'A Heidi Klum não é finlandesa. Ela é alemã.' },
+    { contexto: M('Os tacos não são indianos.'), palavras: ['Tacos', "aren't", 'Indian'], isca: ["isn't"], fim: '.', traducao: 'Os tacos não são indianos.' },
+    { contexto: M('Ele não é do Brasil.'), palavras: ['He', "isn't", 'from', 'Brazil'], isca: ['not'], fim: '.', traducao: 'Ele não é do Brasil.' },
+    { contexto: M('Você e eu não somos alemães.'), palavras: ['You', 'and', 'I', "aren't", 'German'], isca: ["isn't"], fim: '.', traducao: 'Você e eu não somos alemães.' },
+    { contexto: M('A Salma Hayek não é brasileira. Ela é mexicana.'), palavras: ['Salma', 'Hayek', "isn't", 'Brazilian.', "She's", 'Mexican'], isca: ["aren't"], fim: '.', traducao: 'A Salma Hayek não é brasileira. Ela é mexicana.' },
+    { contexto: M('Eu não tenho 15 anos.'), palavras: ["I'm", 'not', 'fifteen'], isca: ["isn't"], fim: '.', traducao: 'Não tenho 15 anos.' },
+    { contexto: M('A Toyota não é sul-coreana. É japonesa.'), palavras: ['Toyota', "isn't", 'South', 'Korean.', "It's", 'Japanese'], isca: ["aren't"], fim: '.', traducao: 'A Toyota não é sul-coreana. É japonesa.' },
+    { contexto: M('Eles não são da Rússia.'), palavras: ['They', "aren't", 'from', 'Russia'], isca: ["isn't"], fim: '.', traducao: 'Eles não são da Rússia.' },
+    { contexto: M('O Jackie Chan não é japonês. Ele é chinês.'), palavras: ['Jackie', 'Chan', "isn't", 'Japanese.', "He's", 'Chinese'], isca: ["aren't"], fim: '.', traducao: 'O Jackie Chan não é japonês. Ele é chinês.' }
+  ]
+});
+</script>
+</body>
+</html>

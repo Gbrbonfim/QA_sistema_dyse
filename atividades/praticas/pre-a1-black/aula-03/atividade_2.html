@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 3 · Is or isn't?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 03 · Escuta (Guess the country!)
+   Alinhado ao "Grammar Point: To Be - Negative Form" (I'm not, isn't, aren't). Conteúdo
+   NOVO: o aluno ouve a frase e escolhe a forma do verbo que ouviu (afirmativa ou negativa).
+   Fatos verdadeiros. 24 questões. */
+const IC = { 'is': 'check_circle', "isn't": 'cancel', 'are': 'check_circle', "aren't": 'cancel', "'m": 'check_circle', "'m not": 'cancel' };
+const TER = ['is', "isn't", 'are', "aren't"];
+const EU = ["'m", "'m not", 'is', "isn't"];
+const q = (audioTexto, certa, base) => {
+  const ops = base || TER;
+  return { audioTexto, opcoes: ops.map(c => ({ label: c, icon: IC[c] })), certa: ops.indexOf(certa) };
+};
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 3, num: 2, tipo: 'imagem',
+  instrucao: 'Listen: which verb form do you hear?',
+  itens: [
+    q("Neymar isn't Mexican.", "isn't"),
+    q('Taylor Swift is American.', 'is'),
+    q("BTS aren't Japanese.", "aren't"),
+    q('Tacos are Mexican.', 'are'),
+    q("I'm not Russian.", "'m not", EU),
+    q("I'm Brazilian.", "'m", EU),
+    q("Sushi isn't Chinese.", "isn't"),
+    q('Justin Bieber is Canadian.', 'is'),
+    q("We aren't American.", "aren't"),
+    q('Shohei Ohtani and Naomi Osaka are Japanese.', 'are'),
+    q("Jackie Chan isn't South Korean.", "isn't"),
+    q("Salma Hayek is Mexican.", 'is'),
+    q("I'm not Indian.", "'m not", EU),
+    q("You aren't German.", "aren't"),
+    q('Pizza is Italian.', 'is'),
+    q("Heidi Klum isn't American.", "isn't"),
+    q('Anitta and Neymar are Brazilian.', 'are'),
+    q("I'm Japanese.", "'m", EU),
+    q("Celine Dion isn't American.", "isn't"),
+    q("They aren't Chinese.", "aren't"),
+    q("Priyanka Chopra is Indian.", 'is'),
+    q('Toyota and Honda are Japanese.', 'are'),
+    q("Maria Sharapova isn't German.", "isn't"),
+    q("Lady Gaga and Beyoncé aren't Canadian.", "aren't")
+  ]
+});
+</script>
+</body>
+</html>
