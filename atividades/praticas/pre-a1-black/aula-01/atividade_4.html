@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 1 · He, she, we, they</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 01 and 02 · Escrita (Meet a pop group)
+   Alinhado ao "Grammar Point: To Be Affirmative / Subject Pronouns" (I'm, you're, he's,
+   she's, it's, we're, they're) e ao exercício de trocar o nome pelo pronome. Conteúdo NOVO
+   com outras pessoas. A isca é o pronome ou a contração errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 1, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ele é do Brasil.'), palavras: ["He's", 'from', 'Brazil'], isca: ["She's"], fim: '.', traducao: 'Ele é do Brasil.' },
+    { contexto: M('Ela tem 16 anos.'), palavras: ["She's", 'sixteen', 'years', 'old'], isca: ["He's"], fim: '.', traducao: 'Ela tem 16 anos.' },
+    { contexto: M('Eles são do Canadá.'), palavras: ["They're", 'from', 'Canada'], isca: ["It's"], fim: '.', traducao: 'Eles são do Canadá.' },
+    { contexto: M('Nós somos da Alemanha.'), palavras: ["We're", 'from', 'Germany'], isca: ["He's"], fim: '.', traducao: 'Somos da Alemanha.' },
+    { contexto: M('Você tem 19 anos.'), palavras: ["You're", 'nineteen', 'years', 'old'], isca: ["It's"], fim: '.', traducao: 'Você tem 19 anos.' },
+    { contexto: M('É uma banda pop da Coreia.'), palavras: ["It's", 'a', 'pop', 'group', 'from', 'Korea'], isca: ["They're"], fim: '.', traducao: 'É uma banda pop da Coreia.' },
+    { contexto: M('Ela é uma designer da Índia.'), palavras: ["She's", 'a', 'designer', 'from', 'India'], isca: ["We're"], fim: '.', traducao: 'Ela é uma designer da Índia.' },
+    { contexto: M('Ele é um pop star do México.'), palavras: ["He's", 'a', 'pop', 'star', 'from', 'Mexico'], isca: ["They're"], fim: '.', traducao: 'Ele é um pop star do México.' },
+    { contexto: M('Eles têm 14 anos.'), palavras: ["They're", 'fourteen', 'years', 'old'], isca: ["She's"], fim: '.', traducao: 'Eles têm 14 anos.' },
+    { contexto: M('Nós somos top models.'), palavras: ["We're", 'top', 'models'], isca: ["It's"], fim: '.', traducao: 'Somos top models.' },
+    { contexto: M('Ele é o Ivan. Ele é da Rússia.'), palavras: ["He's", 'Ivan.', "He's", 'from', 'Russia'], isca: ["She's"], fim: '.', traducao: 'Ele é o Ivan. Ele é da Rússia.' },
+    { contexto: M('Ela é a Mei. Ela é da China.'), palavras: ["She's", 'Mei.', "She's", 'from', 'China'], isca: ["He's"], fim: '.', traducao: 'Ela é a Mei. Ela é da China.' },
+    { contexto: M('Você é do Japão.'), palavras: ["You're", 'from', 'Japan'], isca: ["He's"], fim: '.', traducao: 'Você é do Japão.' },
+    { contexto: M('Eles são da Finlândia.'), palavras: ["They're", 'from', 'Finland'], isca: ["It's"], fim: '.', traducao: 'Eles são da Finlândia.' },
+    { contexto: M('É um hambúrguer.'), palavras: ["It's", 'a', 'hamburger'], isca: ["They're"], fim: '.', traducao: 'É um hambúrguer.' },
+    { contexto: M('Nós temos 20 anos.'), palavras: ["We're", 'twenty', 'years', 'old'], isca: ["She's"], fim: '.', traducao: 'Temos 20 anos.' },
+    { contexto: M('Ela é dos Estados Unidos.'), palavras: ["She's", 'from', 'the', 'USA'], isca: ["They're"], fim: '.', traducao: 'Ela é dos Estados Unidos.' },
+    { contexto: M('Ele tem 11 anos.'), palavras: ["He's", 'eleven', 'years', 'old'], isca: ["We're"], fim: '.', traducao: 'Ele tem 11 anos.' },
+    { contexto: M('Eles são pop stars das Filipinas.'), palavras: ["They're", 'pop', 'stars', 'from', 'the', 'Philippines'], isca: ["He's"], fim: '.', traducao: 'Eles são pop stars das Filipinas.' },
+    { contexto: M('É um milkshake.'), palavras: ["It's", 'a', 'milkshake'], isca: ["We're"], fim: '.', traducao: 'É um milkshake.' }
+  ]
+});
+</script>
+</body>
+</html>

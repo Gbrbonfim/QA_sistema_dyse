@@ -885,6 +885,29 @@ window.DYSE_PRATICAS = {
         ]
       }
     ]
+  },
+  'pre-a1-black': {
+    course: 'ativ-pre-a1-black',
+    nome: 'Pre-A1 BLACK',
+    extra: true,
+    aulas: [
+      {
+        aula: 1,
+        titulo: 'Class 01 and 02 · Meet a Pop Group',
+        atividades: [
+          { num: 1, titulo: 'Where are they from?', tipo: 'Escute e escolha', treina: 'Escuta · Países', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'How old are they?', tipo: 'Escute e escolha', treina: 'Escuta · Números 1-20', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Introduce yourself', tipo: 'Monte a frase', treina: 'Escrita · Nome, país e idade', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'He, she, we, they', tipo: 'Monte a frase', treina: 'Escrita · Pronomes', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: "Hello, I'm Mei!", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'Meet Star Five', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'This is me!', tipo: 'Escute e grave', treina: 'Fala · Apresentação', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Famous friends', tipo: 'Escute e grave', treina: 'Fala · Pronomes', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Am, is, are', tipo: 'Make a Choice', treina: 'Gramática · To be', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Subject pronouns', tipo: 'Make a Choice', treina: 'Gramática · Pronomes', minutos: '10 - 12', questoes: 24 }
+        ]
+      }
+    ]
   }
 };
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 1 · Subject pronouns</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 01 and 02 · Gramática (Meet a pop group)
+   Alinhado ao exercício do slide de trocar o nome pelo pronome (Joana is from Brazil → She's
+   from Brazil): I, you, he, she, it, we, they + contração. Conteúdo NOVO com outras pessoas.
+   24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 1, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right pronoun',
+  itens: [
+    { frase: 'Bruna is from Brazil. → ___ from Brazil.', opcoes: ["She's", "He's", "They're"], certa: 0, traducao: 'A Bruna é do Brasil. → Ela é do Brasil.' },
+    { frase: 'Diego is sixteen. → ___ sixteen.', opcoes: ["She's", "He's", "It's"], certa: 1, traducao: 'O Diego tem dezesseis. → Ele tem dezesseis.' },
+    { frase: 'Jin and Hana are from Korea. → ___ from Korea.', opcoes: ["We're", "He's", "They're"], certa: 2, traducao: 'O Jin e a Hana são da Coreia. → Eles são da Coreia.' },
+    { frase: 'Ana and I are from Mexico. → ___ from Mexico.', opcoes: ["We're", "They're", "You're"], certa: 0, traducao: 'A Ana e eu somos do México. → Nós somos do México.' },
+    { frase: 'The milkshake is from the USA. → ___ from the USA.', opcoes: ["He's", "It's", "She's"], certa: 1, traducao: 'O milkshake é dos Estados Unidos. → Ele é dos Estados Unidos.' },
+    { frase: 'Sara and you are fifteen. → ___ fifteen.', opcoes: ["They're", "We're", "You're"], certa: 2, traducao: 'A Sara e você têm quinze. → Vocês têm quinze.' },
+    { frase: 'Tom is a designer. → ___ a designer.', opcoes: ["He's", "She's", "It's"], certa: 0, traducao: 'O Tom é designer. → Ele é designer.' },
+    { frase: 'Mei is from China. → ___ from China.', opcoes: ["He's", "She's", "They're"], certa: 1, traducao: 'A Mei é da China. → Ela é da China.' },
+    { frase: 'Raj and Leo are pop stars. → ___ pop stars.', opcoes: ["We're", "It's", "They're"], certa: 2, traducao: 'O Raj e o Leo são pop stars. → Eles são pop stars.' },
+    { frase: 'Star Five is a pop group. → ___ a pop group.', opcoes: ["It's", "They's", "We's"], certa: 0, traducao: 'A Star Five é uma banda pop. → É uma banda pop.' },
+    { frase: 'Lara is seventeen. → ___ seventeen.', opcoes: ["He's", "She's", "It's"], certa: 1, traducao: 'A Lara tem dezessete. → Ela tem dezessete.' },
+    { frase: 'Mike and I are from Canada. → ___ from Canada.', opcoes: ["They're", "You're", "We're"], certa: 2, traducao: 'O Mike e eu somos do Canadá. → Somos do Canadá.' },
+    { frase: 'Ivan is from Russia. → ___ from Russia.', opcoes: ["He's", "She's", "We're"], certa: 0, traducao: 'O Ivan é da Rússia. → Ele é da Rússia.' },
+    { frase: 'Emma and Jenny are from the USA. → ___ from the USA.', opcoes: ["She's", "They're", "We're"], certa: 1, traducao: 'A Emma e a Jenny são dos Estados Unidos. → Elas são dos Estados Unidos.' },
+    { frase: 'The pop group is from Korea. → ___ from Korea.', opcoes: ["He's", "They're", "It's"], certa: 2, traducao: 'A banda pop é da Coreia. → É da Coreia.' },
+    { frase: 'Priya is eighteen. → ___ eighteen.', opcoes: ["She's", "He's", "It's"], certa: 0, traducao: 'A Priya tem dezoito. → Ela tem dezoito.' },
+    { frase: 'Pedro and you are from Brazil. → ___ from Brazil.', opcoes: ["We're", "You're", "They're"], certa: 1, traducao: 'O Pedro e você são do Brasil. → Vocês são do Brasil.' },
+    { frase: 'Kenji is from Japan. → ___ from Japan.', opcoes: ["She's", "It's", "He's"], certa: 2, traducao: 'O Kenji é do Japão. → Ele é do Japão.' },
+    { frase: 'Yuki and I are top models. → ___ top models.', opcoes: ["We're", "They're", "You're"], certa: 0, traducao: 'A Yuki e eu somos top models. → Somos top models.' },
+    { frase: 'Maria is from the Philippines. → ___ from the Philippines.', opcoes: ["He's", "She's", "They're"], certa: 1, traducao: 'A Maria é das Filipinas. → Ela é das Filipinas.' },
+    { frase: 'Eero and Mika are from Finland. → ___ from Finland.', opcoes: ["He's", "We're", "They're"], certa: 2, traducao: 'O Eero e o Mika são da Finlândia. → Eles são da Finlândia.' },
+    { frase: 'Carlos is twenty. → ___ twenty.', opcoes: ["He's", "She's", "It's"], certa: 0, traducao: 'O Carlos tem vinte. → Ele tem vinte.' },
+    { frase: 'Anna is from Germany. → ___ from Germany.', opcoes: ["He's", "She's", "We're"], certa: 1, traducao: 'A Anna é da Alemanha. → Ela é da Alemanha.' },
+    { frase: 'Li and Wei are from China. → ___ from China.', opcoes: ["He's", "She's", "They're"], certa: 2, traducao: 'O Li e o Wei são da China. → Eles são da China.' }
+  ]
+});
+</script>
+</body>
+</html>

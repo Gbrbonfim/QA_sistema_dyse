@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 1 · Introduce yourself</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 01 and 02 · Escrita (Meet a pop group)
+   Alinhado ao "Talking point": I'm ... (name), I'm from ... (country), I'm ... years old, e às
+   perguntas What's your name? / Where are you from? / How old are you?. Conteúdo NOVO com
+   outras pessoas. A isca é a forma errada do be ou da pergunta. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 1, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Oi! Eu sou o Pedro.'), palavras: ['Hi!', "I'm", 'Pedro'], isca: ["He's"], fim: '.', traducao: 'Oi! Eu sou o Pedro.' },
+    { contexto: M('Eu sou do Brasil.'), palavras: ["I'm", 'from', 'Brazil'], isca: ['is'], fim: '.', traducao: 'Sou do Brasil.' },
+    { contexto: M('Eu tenho 18 anos.'), palavras: ["I'm", 'eighteen', 'years', 'old'], isca: ['have'], fim: '.', traducao: 'Tenho 18 anos.' },
+    { contexto: M('Qual é o seu nome?'), palavras: ["What's", 'your', 'name'], isca: ['Where'], fim: '?', traducao: 'Qual é o seu nome?' },
+    { contexto: M('De onde você é?'), palavras: ['Where', 'are', 'you', 'from'], isca: ['is'], fim: '?', traducao: 'De onde você é?' },
+    { contexto: M('Quantos anos você tem?'), palavras: ['How', 'old', 'are', 'you'], isca: ['have'], fim: '?', traducao: 'Quantos anos você tem?' },
+    { contexto: M('Eu sou a Yuki e sou do Japão.'), palavras: ["I'm", 'Yuki', 'and', "I'm", 'from', 'Japan'], isca: ["She's"], fim: '.', traducao: 'Sou a Yuki e sou do Japão.' },
+    { contexto: M('Eu tenho 15 anos.'), palavras: ["I'm", 'fifteen', 'years', 'old'], isca: ['have'], fim: '.', traducao: 'Tenho 15 anos.' },
+    { contexto: M('Olá! Eu sou a Priya, da Índia.'), palavras: ['Hello!', "I'm", 'Priya', 'from', 'India'], isca: ['are'], fim: '.', traducao: 'Olá! Sou a Priya, da Índia.' },
+    { contexto: M('Eu sou do México.'), palavras: ["I'm", 'from', 'Mexico'], isca: ["you're"], fim: '.', traducao: 'Sou do México.' },
+    { contexto: M('Eu sou do Canadá e tenho 20 anos.'), palavras: ["I'm", 'from', 'Canada', 'and', "I'm", 'twenty'], isca: ['have'], fim: '.', traducao: 'Sou do Canadá e tenho 20 anos.' },
+    { contexto: M('Eu sou um designer.'), palavras: ["I'm", 'a', 'designer'], isca: ['is'], fim: '.', traducao: 'Sou designer.' },
+    { contexto: M('Eu sou uma top model.'), palavras: ["I'm", 'a', 'top', 'model'], isca: ['are'], fim: '.', traducao: 'Sou top model.' },
+    { contexto: M('Nós somos pop stars.'), palavras: ["We're", 'pop', 'stars'], isca: ["I'm"], fim: '.', traducao: 'Somos pop stars.' },
+    { contexto: M('Eu sou da Rússia.'), palavras: ["I'm", 'from', 'Russia'], isca: ['am'], fim: '.', traducao: 'Sou da Rússia.' },
+    { contexto: M('Eu tenho 12 anos.'), palavras: ["I'm", 'twelve', 'years', 'old'], isca: ['have'], fim: '.', traducao: 'Tenho 12 anos.' },
+    { contexto: M('Eu sou o Jin, da Coreia do Sul.'), palavras: ["I'm", 'Jin', 'from', 'South', 'Korea'], isca: ['is'], fim: '.', traducao: 'Sou o Jin, da Coreia do Sul.' },
+    { contexto: M('Eu sou dos Estados Unidos.'), palavras: ["I'm", 'from', 'the', 'USA'], isca: ['are'], fim: '.', traducao: 'Sou dos Estados Unidos.' },
+    { contexto: M('Eu sou da Finlândia e tenho 17 anos.'), palavras: ["I'm", 'from', 'Finland', 'and', "I'm", 'seventeen'], isca: ['have'], fim: '.', traducao: 'Sou da Finlândia e tenho 17 anos.' },
+    { contexto: M('Eu sou das Filipinas.'), palavras: ["I'm", 'from', 'the', 'Philippines'], isca: ['is'], fim: '.', traducao: 'Sou das Filipinas.' }
+  ]
+});
+</script>
+</body>
+</html>

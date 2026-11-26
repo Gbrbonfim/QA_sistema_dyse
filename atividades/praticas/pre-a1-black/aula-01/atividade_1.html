@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 1 · Where are they from?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 01 and 02 · Escuta (Meet a pop group)
+   Alinhado ao "Vocabulary: Countries" (os 12 países do slide) + "I'm from...". Conteúdo NOVO:
+   pessoas novas dizem de onde são e o aluno escolhe a bandeira. Só os 12 países ensinados.
+   24 questões. */
+const PAIS = { 'in': 'India', mx: 'Mexico', fi: 'Finland', br: 'Brazil', ru: 'Russia', ca: 'Canada', de: 'Germany', us: 'The USA', cn: 'China', jp: 'Japan', ph: 'The Philippines', kr: 'South Korea' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const cs = iscas.slice(0, 3);
+  cs.splice(pos, 0, certa);
+  return { audioTexto, opcoes: cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 1, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the right flag',
+  itens: [
+    q("Hi! I'm Pedro. I'm from Brazil.", 'br', ['mx', 'in', 'ru']),
+    q("Hello! I'm Yuki. I'm from Japan.", 'jp', ['cn', 'kr', 'ph']),
+    q("I'm Anna and I'm from Germany.", 'de', ['fi', 'ru', 'ca']),
+    q("I'm Carlos. I'm from Mexico.", 'mx', ['br', 'us', 'in']),
+    q("Hi! I'm Mike. I'm from Canada.", 'ca', ['us', 'de', 'fi']),
+    q("I'm Priya and I'm from India.", 'in', ['ph', 'cn', 'mx']),
+    q("Hello! I'm Ivan. I'm from Russia.", 'ru', ['de', 'fi', 'kr']),
+    q("I'm Li. I'm from China.", 'cn', ['jp', 'kr', 'in']),
+    q("Hi! I'm Emma. I'm from the USA.", 'us', ['ca', 'br', 'de']),
+    q("I'm Jin and I'm from South Korea.", 'kr', ['cn', 'jp', 'ph']),
+    q("Hello! I'm Maria. I'm from the Philippines.", 'ph', ['in', 'mx', 'br']),
+    q("I'm Mika. I'm from Finland.", 'fi', ['ru', 'ca', 'de']),
+    q("He's Lucas. He's from Brazil.", 'br', ['ph', 'mx', 'us']),
+    q("She's Sakura. She's from Japan.", 'jp', ['kr', 'cn', 'fi']),
+    q("We're from Mexico.", 'mx', ['in', 'br', 'ca']),
+    q("They're from Germany.", 'de', ['us', 'ru', 'fi']),
+    q("She's Olga. She's from Russia.", 'ru', ['fi', 'de', 'cn']),
+    q("He's Raj. He's from India.", 'in', ['mx', 'ph', 'br']),
+    q("We're from Canada.", 'ca', ['fi', 'us', 'de']),
+    q("They're from South Korea.", 'kr', ['jp', 'ph', 'cn']),
+    q("He's Wei. He's from China.", 'cn', ['kr', 'jp', 'in']),
+    q("She's Jenny. She's from the USA.", 'us', ['br', 'ca', 'mx']),
+    q("They're from the Philippines.", 'ph', ['cn', 'in', 'kr']),
+    q("He's Eero. He's from Finland.", 'fi', ['de', 'ca', 'ru'])
+  ]
+});
+</script>
+</body>
+</html>

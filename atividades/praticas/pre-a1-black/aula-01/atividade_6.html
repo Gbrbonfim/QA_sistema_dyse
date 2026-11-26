@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 1 · Meet Star Five</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 01 and 02 · Leitura (Meet a pop group)
+   Alinhado ao vídeo do slide (integrantes de um grupo pop dizem nome, país e idade) e ao
+   to be afirmativo com pronomes. Conteúdo NOVO: a "Star Five", uma banda pop fictícia, se
+   apresenta num programa de TV. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Host', 'Hello! You are Star Five!'],
+  ['Band', "Hi! Yes, we're Star Five. We're a pop group."],
+  ['Host', 'Great! What\'s your name?'],
+  ['Ana', "I'm Ana. I'm from Mexico."],
+  ['Host', 'How old are you, Ana?'],
+  ['Ana', "I'm sixteen."],
+  ['Host', 'And what\'s your name?'],
+  ['Kenji', "I'm Kenji. I'm from Japan. I'm eighteen."],
+  ['Host', 'Cool! Where are you from?'],
+  ['Lara', "I'm Lara and I'm from Germany. I'm seventeen."],
+  ['Host', 'And Raj and Leo? Where are they from?'],
+  ['Lara', "Raj is from India and Leo is from the USA."],
+  ['Host', 'How old are they?'],
+  ['Ana', "Raj is fifteen and Leo is nineteen."],
+  ['Host', 'Wow! You are from five countries!'],
+  ['Band', "Yes! We're from Mexico, Japan, Germany, India and the USA."],
+  ['Host', 'Thank you, Star Five!']
+];
+const lado = q => q === 'Host' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 1, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi! Yes, we're Star Five. We're a pop group.", "Hi! Yes, they're Star Five. We're a pop group.", "Hi! Yes, we're Star Five. We's a pop group."], 0, 'Oi! Sim, somos a Star Five. Somos uma banda pop.'),
+    prox(3, ["I'm Ana. I'm Mexico.", "I'm Ana. I'm from Mexico.", "She's Ana. I'm from Mexico."], 1, 'Sou a Ana. Sou do México.'),
+    prox(4, ['How old is you, Ana?', 'How old you are, Ana?', 'How old are you, Ana?'], 2, 'Quantos anos você tem, Ana?'),
+    prox(5, ["I'm sixteen.", "I have sixteen.", "She's sixteen."], 0, 'Tenho dezesseis.'),
+    prox(7, ["I'm Kenji. I'm from Japan. I have eighteen.", "I'm Kenji. I'm from Japan. I'm eighteen.", "He's Kenji. He's from Japan. I'm eighteen."], 1, 'Sou o Kenji. Sou do Japão. Tenho dezoito.'),
+    prox(8, ['Cool! Where is you from?', 'Cool! How are you from?', 'Cool! Where are you from?'], 2, 'Legal! De onde você é?'),
+    prox(9, ["I'm Lara and I'm from Germany. I'm seventeen.", "I'm Lara and I from Germany. I'm seventeen.", "I'm Lara and I'm from Germany. I'm seventeen years."], 0, 'Sou a Lara e sou da Alemanha. Tenho dezessete.'),
+    prox(10, ['And Raj and Leo? Where is they from?', 'And Raj and Leo? Where are they from?', 'And Raj and Leo? Where are he from?'], 1, 'E o Raj e o Leo? De onde eles são?'),
+    prox(11, ["Raj are from India and Leo are from the USA.", "Raj is from India and Leo are from the USA.", "Raj is from India and Leo is from the USA."], 2, 'O Raj é da Índia e o Leo é dos Estados Unidos.'),
+    prox(12, ['How old are they?', 'How old is they?', 'How old are he?'], 0, 'Quantos anos eles têm?'),
+    prox(13, ['Raj has fifteen and Leo has nineteen.', 'Raj is fifteen and Leo is nineteen.', 'Raj are fifteen and Leo are nineteen.'], 1, 'O Raj tem quinze e o Leo tem dezenove.'),
+    prox(15, ["Yes! They're from Mexico, Japan, Germany, India and the USA.", "Yes! We from Mexico, Japan, Germany, India and the USA.", "Yes! We're from Mexico, Japan, Germany, India and the USA."], 2, 'Sim! Somos do México, do Japão, da Alemanha, da Índia e dos Estados Unidos.'),
+    { instrucao: 'What is Star Five?', frase: "It's a ___.", opcoes: ['pop group', 'designer', 'top model'], certa: 0, traducao: 'É uma banda pop.' },
+    { instrucao: 'Where is Ana from?', frase: "She's from ___.", opcoes: ['Brazil', 'Mexico', 'the USA'], certa: 1, traducao: 'Ela é do México.' },
+    { instrucao: 'How old is Kenji?', frase: "He's ___.", opcoes: ['sixteen', 'seventeen', 'eighteen'], certa: 2, traducao: 'Ele tem dezoito.' },
+    { instrucao: 'Where is Lara from?', frase: "She's from ___.", opcoes: ['Germany', 'Finland', 'Russia'], certa: 0, traducao: 'Ela é da Alemanha.' },
+    { instrucao: 'Where is Raj from?', frase: "He's from ___.", opcoes: ['China', 'India', 'the Philippines'], certa: 1, traducao: 'Ele é da Índia.' },
+    { instrucao: 'How old is Leo?', frase: "He's ___.", opcoes: ['fifteen', 'seventeen', 'nineteen'], certa: 2, traducao: 'Ele tem dezenove.' },
+    { instrucao: 'How old is Ana?', frase: "She's ___.", opcoes: ['sixteen', 'fifteen', 'eighteen'], certa: 0, traducao: 'Ela tem dezesseis.' },
+    { instrucao: 'Where is Leo from?', frase: "He's from ___.", opcoes: ['Canada', 'the USA', 'Mexico'], certa: 1, traducao: 'Ele é dos Estados Unidos.' }
+  ]
+});
+</script>
+</body>
+</html>

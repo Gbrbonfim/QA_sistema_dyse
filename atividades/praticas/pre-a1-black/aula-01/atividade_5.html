@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 1 · Hello, I'm Mei!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 01 and 02 · Leitura (Meet a pop group)
+   Alinhado ao "Talking point" (What's your name? / Where are you from? / How old are you?),
+   aos países e aos números 1–20. Conteúdo NOVO: o Lucas e a Mei se conhecem numa aula
+   online. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Lucas', 'Hello! What\'s your name?'],
+  ['Mei', "Hi! I'm Mei. What's your name?"],
+  ['Lucas', "I'm Lucas."],
+  ['Mei', 'Where are you from, Lucas?'],
+  ['Lucas', "I'm from Brazil. Where are you from?"],
+  ['Mei', "I'm from China."],
+  ['Lucas', 'Cool! How old are you?'],
+  ['Mei', "I'm nineteen. How old are you?"],
+  ['Lucas', "I'm seventeen."],
+  ['Mei', "I'm a designer. And you?"],
+  ['Lucas', "I'm a fitness model!"],
+  ['Mei', 'Wow! My friends Jin and Hana are from South Korea.'],
+  ['Lucas', 'How old are they?'],
+  ['Mei', "They're eighteen. They're pop stars!"],
+  ['Lucas', 'Cool! My friend Mike is a pop star too.'],
+  ['Mei', 'Where is he from?'],
+  ['Lucas', "He's from Canada. He's twenty."]
+];
+const lado = q => q === 'Lucas' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 1, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi! I'm Mei. What's your name?", "Hi! I'm from Mei. What's your name?", "Hi! I'm Mei. Where's your name?"], 0, 'Oi! Sou a Mei. Qual é o seu nome?'),
+    prox(2, ["I'm from Lucas.", "I'm Lucas.", "He's Lucas."], 1, 'Sou o Lucas.'),
+    prox(3, ['How are you from, Lucas?', 'Where you are from, Lucas?', 'Where are you from, Lucas?'], 2, 'De onde você é, Lucas?'),
+    prox(4, ["I'm from Brazil. Where are you from?", "I'm Brazil from. Where are you from?", "I'm from Brazil. How old are you from?"], 0, 'Sou do Brasil. De onde você é?'),
+    prox(5, ["I'm China.", "I'm from China.", "She's from China."], 1, 'Sou da China.'),
+    prox(6, ['Cool! How old you are?', 'Cool! Where old are you?', 'Cool! How old are you?'], 2, 'Legal! Quantos anos você tem?'),
+    prox(7, ["I'm nineteen. How old are you?", "I have nineteen. How old are you?", "I'm nineteen years. How are you old?"], 0, 'Tenho dezenove. Quantos anos você tem?'),
+    prox(8, ["I have seventeen.", "I'm seventeen.", "He's seventeen."], 1, 'Tenho dezessete.'),
+    prox(11, ["Wow! My friends Jin and Hana is from South Korea.", "Wow! My friends Jin and Hana am from South Korea.", 'Wow! My friends Jin and Hana are from South Korea.'], 2, 'Uau! Os meus amigos Jin e Hana são da Coreia do Sul.'),
+    prox(12, ['How old are they?', 'How old is they?', 'How old are she?'], 0, 'Quantos anos eles têm?'),
+    prox(13, ["They're eighteen. We're pop stars!", "They're eighteen. They're pop stars!", "They have eighteen. They're pop stars!"], 1, 'Eles têm dezoito. São pop stars!'),
+    prox(15, ['Where are he from?', 'Where is she from?', 'Where is he from?'], 2, 'De onde ele é?'),
+    { instrucao: 'Where is Lucas from?', frase: "He's from ___.", opcoes: ['Brazil', 'Canada', 'China'], certa: 0, traducao: 'Ele é do Brasil.' },
+    { instrucao: 'How old is Mei?', frase: "She's ___.", opcoes: ['seventeen', 'nineteen', 'eighteen'], certa: 1, traducao: 'Ela tem dezenove.' },
+    { instrucao: 'Where is Mei from?', frase: "She's from ___.", opcoes: ['Japan', 'South Korea', 'China'], certa: 2, traducao: 'Ela é da China.' },
+    { instrucao: 'How old is Lucas?', frase: "He's ___.", opcoes: ['seventeen', 'twenty', 'nineteen'], certa: 0, traducao: 'Ele tem dezessete.' },
+    { instrucao: 'What is Mei?', frase: "She's a ___.", opcoes: ['pop star', 'designer', 'top model'], certa: 1, traducao: 'Ela é designer.' },
+    { instrucao: 'Where are Jin and Hana from?', frase: "They're from ___.", opcoes: ['China', 'Japan', 'South Korea'], certa: 2, traducao: 'Eles são da Coreia do Sul.' },
+    { instrucao: 'What are Jin and Hana?', frase: "They're ___.", opcoes: ['pop stars', 'designers', 'top models'], certa: 0, traducao: 'Eles são pop stars.' },
+    { instrucao: 'Where is Mike from?', frase: "He's from ___.", opcoes: ['the USA', 'Canada', 'Brazil'], certa: 1, traducao: 'Ele é do Canadá.' }
+  ]
+});
+</script>
+</body>
+</html>
