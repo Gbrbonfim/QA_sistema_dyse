@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 2 · In the coffee line</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 02 · Leitura (Functional Plus - Everyday Small Talk with Strangers)
+   Alinhado ao Practice "In a line (food)" e ao Dialogue 2 do slide (Wow, long line today! /
+   Is the coffee good here? / Have a good day! / You too!), com tópicos bons de small talk
+   (comida, tempo, roupas). Conteúdo NOVO: duas pessoas conversam na fila de uma cafeteria.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Nina', 'Hi! Wow, long line today!'],
+  ['Sam', 'I know! Very busy.'],
+  ['Nina', 'Is the coffee good here?'],
+  ['Sam', "Yes, it's the best. And the cake is very good, too."],
+  ['Nina', 'Really? Is the chocolate cake good?'],
+  ['Sam', "Yes, it's great!"],
+  ['Nina', 'Nice! Finally some sun today, right?'],
+  ['Sam', "Yes, it's sunny and warm. Nice weather!"],
+  ['Nina', 'Nice jacket! The color is beautiful.'],
+  ['Sam', "Thanks! It's new."],
+  ['Nina', "Oh, it's my turn. A coffee and a chocolate cake, please!"],
+  ['Sam', 'Good choice!'],
+  ['Nina', 'Thanks! Have a good day!'],
+  ['Sam', 'You too!']
+];
+const lado = q => q === 'Nina' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 2, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I know! Very busy.', 'I knows! Very busy.', 'I know! Very sunny.'], 0, 'Eu sei! Muito movimentado.'),
+    prox(2, ['Are the coffee good here?', 'Is the coffee good here?', 'Is the coffee here good is?'], 1, 'O café é bom aqui?'),
+    prox(3, ["Yes, it's the good. And the cake is very good, too.", "Yes, it's best. And the cake are very good, too.", "Yes, it's the best. And the cake is very good, too."], 2, 'Sim, é o melhor. E o bolo também é muito bom.'),
+    prox(4, ['Really? Is the chocolate cake good?', 'Really? Are the chocolate cake good?', 'Really? Is good the chocolate cake?'], 0, 'Sério? O bolo de chocolate é bom?'),
+    prox(5, ["Yes, it's terrible!", "Yes, it's great!", "Yes, I'm great!"], 1, 'Sim, é ótimo!'),
+    prox(6, ['Nice! Finally some sunny today, right?', 'Nice! Finally some sun today, no?, right', 'Nice! Finally some sun today, right?'], 2, 'Legal! Finalmente um pouco de sol hoje, né?'),
+    prox(7, ["Yes, it's sunny and warm. Nice weather!", "Yes, it's cloudy and cold. Nice weather!", "Yes, it's sun and warm. Nice weather!"], 0, 'Sim, está ensolarado e quente. Tempo bom!'),
+    prox(8, ['Nice jacket! The color are beautiful.', 'Nice jacket! The color is beautiful.', 'Nice jacket! Take care.'], 1, 'Jaqueta bonita! A cor é linda.'),
+    prox(9, ["Thanks! It's news.", "Me too! It's new.", "Thanks! It's new."], 2, 'Obrigado! É nova.'),
+    prox(10, ["Oh, it's my turn. A coffee and a chocolate cake, please!", "Oh, it's my turn. A coffee and a chocolate cake, thanks you!", "Oh, it's my turn. Have a good day, please!"], 0, 'Ah, é a minha vez. Um café e um bolo de chocolate, por favor!'),
+    prox(12, ['Thanks! Have a good days!', 'Thanks! Have a good day!', 'Thanks! Good luck to day!'], 1, 'Obrigada! Tenha um bom dia!'),
+    prox(13, ['Me too!', 'Same here!', 'You too!'], 2, 'Você também!'),
+    { instrucao: 'Where are Nina and Sam?', frase: 'In a ___.', opcoes: ['coffee line', 'bus', 'elevator'], certa: 0, traducao: 'Numa fila de cafeteria.' },
+    { instrucao: 'Is the line short?', frase: '___. It is long.', opcoes: ['Yes, it is', "No, it isn't", 'Yes, very short'], certa: 1, traducao: 'Não. Está longa.' },
+    { instrucao: 'Is the coffee good there?', frase: "Yes, it's the ___.", opcoes: ['worst', 'cake', 'best'], certa: 2, traducao: 'Sim, é o melhor.' },
+    { instrucao: 'What cake is great?', frase: 'The ___ cake.', opcoes: ['chocolate', 'orange', 'carrot'], certa: 0, traducao: 'O bolo de chocolate.' },
+    { instrucao: 'How is the weather?', frase: 'Sunny and ___.', opcoes: ['cold', 'warm', 'windy'], certa: 1, traducao: 'Ensolarado e quente.' },
+    { instrucao: 'What is new?', frase: "Sam's ___.", opcoes: ['coffee', 'cake', 'jacket'], certa: 2, traducao: 'A jaqueta do Sam.' },
+    { instrucao: 'What does Nina order?', frase: 'A coffee and a ___.', opcoes: ['chocolate cake', 'tea', 'sandwich'], certa: 0, traducao: 'Um café e um bolo de chocolate.' },
+    { instrucao: 'What topics do they talk about?', frase: '___', opcoes: ['Money and politics', 'Food, weather and clothes', 'Health and religion'], certa: 1, traducao: 'Comida, tempo e roupas.' }
+  ]
+});
+</script>
+</body>
+</html>

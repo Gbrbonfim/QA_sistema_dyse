@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 2 · Answer and finish</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 02 · Escrita (Functional Plus - Everyday Small Talk with Strangers)
+   Alinhado às respostas e finalizações do slide (Yes, it's beautiful. / I know! Very busy. /
+   Yes, about ten minutes. / I'm late for work! / Me too. / Same here. / Have a good day! /
+   Thanks, you too. / Good luck! / Take care.). Conteúdo NOVO. A isca é a palavra errada.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 2, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Sim, está lindo.'), palavras: ['Yes,', "it's", 'beautiful'], isca: ['are'], fim: '.', traducao: 'Sim, está lindo.' },
+    { contexto: M('Eu sei! Muito movimentado.'), palavras: ['I', 'know!', 'Very', 'busy'], isca: ['late'], fim: '.', traducao: 'Eu sei! Muito movimentado.' },
+    { contexto: M('Sim, uns dez minutos.'), palavras: ['Yes,', 'about', 'ten', 'minutes'], isca: ['late'], fim: '.', traducao: 'Sim, uns dez minutos.' },
+    { contexto: M('Ah, não. Estou atrasado para o trabalho!'), palavras: ['Oh', 'no.', "I'm", 'late', 'for', 'work'], isca: ['early'], fim: '!', traducao: 'Ah, não. Estou atrasado para o trabalho!' },
+    { contexto: M('Eu também.'), palavras: ['Me', 'too'], isca: ['I'], fim: '.', traducao: 'Eu também.' },
+    { contexto: M('Comigo também. (Igualmente aqui.)'), palavras: ['Same', 'here'], isca: ['there'], fim: '.', traducao: 'Comigo também.' },
+    { contexto: M('Tenha um bom dia!'), palavras: ['Have', 'a', 'good', 'day'], isca: ['nice'], fim: '!', traducao: 'Tenha um bom dia!' },
+    { contexto: M('Obrigado, você também.'), palavras: ['Thanks,', 'you', 'too'], isca: ['me'], fim: '.', traducao: 'Obrigado, você também.' },
+    { contexto: M('Boa sorte hoje!'), palavras: ['Good', 'luck', 'today'], isca: ['day'], fim: '!', traducao: 'Boa sorte hoje!' },
+    { contexto: M('Se cuida!'), palavras: ['Take', 'care'], isca: ['Have'], fim: '!', traducao: 'Se cuida!' },
+    { contexto: M('Sim, é o melhor.'), palavras: ['Yes,', "it's", 'the', 'best'], isca: ['good'], fim: '.', traducao: 'Sim, é o melhor.' },
+    { contexto: M('Exatamente. Tenha um ótimo dia.'), palavras: ['Exactly.', 'Have', 'a', 'nice', 'day'], isca: ['take'], fim: '.', traducao: 'Exatamente. Tenha um ótimo dia.' },
+    { contexto: M('Sim, muito trabalho.'), palavras: ['Yes,', 'a', 'lot', 'of', 'work'], isca: ['busy'], fim: '.', traducao: 'Sim, muito trabalho.' },
+    { contexto: M('Sim, é mesmo.'), palavras: ['Yes,', 'it', 'is'], isca: ['are'], fim: '.', traducao: 'Sim, é mesmo.' },
+    { contexto: M('Sério? Ah, não!'), palavras: ['Really?', 'Oh', 'no'], isca: ['yes'], fim: '!', traducao: 'Sério? Ah, não!' },
+    { contexto: M('Sim, ensolarado e quente.'), palavras: ['Yes,', 'sunny', 'and', 'warm'], isca: ['sun'], fim: '.', traducao: 'Sim, ensolarado e quente.' },
+    { contexto: M('Eu também. É uma manhã corrida.'), palavras: ['Me', 'too.', "It's", 'a', 'busy', 'morning'], isca: ['quiet'], fim: '.', traducao: 'Eu também. É uma manhã corrida.' },
+    { contexto: M('Bom dia! Tempo bom hoje, né?'), palavras: ['Morning!', 'Nice', 'weather', 'today,', 'right'], isca: ['bad'], fim: '?', traducao: 'Bom dia! Tempo bom hoje, né?' },
+    { contexto: M('Desculpe. Bem, boa sorte hoje.'), palavras: ['Sorry.', 'Well,', 'good', 'luck', 'today'], isca: ['care'], fim: '.', traducao: 'Desculpe. Bem, boa sorte hoje.' },
+    { contexto: M('Legal. Tenha um bom dia.'), palavras: ['Nice.', 'Have', 'a', 'good', 'day'], isca: ['luck'], fim: '.', traducao: 'Legal. Tenha um bom dia.' }
+  ]
+});
+</script>
+</body>
+</html>

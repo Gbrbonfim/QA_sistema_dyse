@@ -993,6 +993,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Complete the conversation', tipo: 'Make a Choice', treina: 'Gramática · Diálogos', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Questions and answers', tipo: 'Make a Choice', treina: 'Gramática · To be e possessivos', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 2,
+        titulo: 'Class 02 · Functional Plus: Everyday Small Talk with Strangers',
+        atividades: [
+          { num: 1, titulo: 'Small talk replies', tipo: 'Escute e escolha', treina: 'Escuta · Respostas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "What's the topic?", tipo: 'Escute e escolha', treina: 'Escuta · Tópicos', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Start a conversation', tipo: 'Monte a frase', treina: 'Escrita · Small talk', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Answer and finish', tipo: 'Monte a frase', treina: 'Escrita · Respostas e despedidas', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'At the bus stop', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'In the coffee line', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'Talk about the weather', tipo: 'Escute e grave', treina: 'Fala · Tempo', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Busy day, good luck!', tipo: 'Escute e grave', treina: 'Fala · Rotina e despedidas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Complete the small talk', tipo: 'Make a Choice', treina: 'Gramática · Small talk', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Questions and reactions', tipo: 'Make a Choice', treina: 'Gramática · Perguntas e reações', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

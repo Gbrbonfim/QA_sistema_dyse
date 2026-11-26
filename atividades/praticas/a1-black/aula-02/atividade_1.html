@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 2 · Small talk replies</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 02 · Escuta (Functional Plus - Everyday Small Talk with Strangers)
+   Alinhado aos diálogos do slide (Nice weather today, right? / Is the coffee good here? / Is
+   the bus late? / Long line today!) e ao Language box (have a nice day, good luck, take care,
+   really?, me too, same here). Conteúdo NOVO: o aluno ouve a fala de um desconhecido e
+   escolhe a melhor resposta. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'chat' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 2, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    q("It's cold today, right?", 'Yes, very cold!', ['Yes, I am.', 'Good luck!', 'Nice to meet you.']),
+    q('Is the pizza good here?', "Yes, it's very good.", ['Yes, I do.', 'Take care!', "I'm late!"]),
+    q('Is the train late?', 'Yes, about five minutes.', ["Yes, it's sunny.", 'Me too!', 'Have a nice day!']),
+    q('Wow, long line today!', 'I know! Very busy.', ['Yes, very sunny.', 'Nice to meet you.', 'Thanks, you too.']),
+    q('Have a good day!', 'Thanks, you too!', ['Me too!', 'Yes, about ten minutes.', 'Really?']),
+    q("I'm late for work!", 'Me too!', ['Yes, about ten minutes.', "Yes, it's the best.", 'Nice weather.']),
+    q('Busy day today?', 'Yes, a lot of work.', ['Yes, very sunny.', 'You too!', 'Good morning.']),
+    q('Good morning!', 'Morning!', ['Good luck!', 'Same here.', 'You too!']),
+    q("I have a big meeting today.", 'Good luck!', ['Nice weather!', 'Me too, it is cold.', 'Morning!']),
+    q('Nice day today, right?', 'Yes, sunny and warm!', ['Yes, a lot of work.', 'Good luck!', 'Take care.']),
+    q("It's a long day today.", 'Same here.', ['Yes, sunny and warm.', 'Yes, it is the best.', 'Good morning!']),
+    q('Is the coffee good here?', "Yes, it's the best.", ['Yes, about ten minutes.', 'Same here.', 'Really windy!']),
+    q('So windy today!', "Yes, it's terrible!", ['Yes, it is the best coffee.', 'Good luck!', 'Thanks, you too.']),
+    q('Take care!', 'You too!', ['Me too!', 'Really?', 'Yes, very busy.']),
+    q("The bus is twenty minutes late.", 'Really? Oh no!', ['Have a good day!', 'Yes, it is sunny.', 'Good morning.']),
+    q("It's a quiet day at work today.", 'Nice!', ['Good luck!', "Oh no, I'm late!", 'You too!']),
+    q('Bad weather today, right?', 'Yes, cloudy and cold.', ['Yes, very good food.', 'Thanks, you too!', 'Same here, good luck.']),
+    q("I'm early today!", 'Me too!', ['Take care!', 'Is the bus late?', 'Nice weather.']),
+    q('Is the food good here?', "Yes, it's very good.", ['Yes, about ten minutes.', 'Me too!', 'Sunny and hot.']),
+    q("Very hot today!", 'Yes! Finally some sun!', ['Yes, very busy line.', 'Take care.', 'Good luck!']),
+    q("I'm very busy this morning.", 'Same here. Good luck!', ['Nice weather!', 'Yes, sunny.', 'Is the coffee good?']),
+    q('Is the elevator slow today?', 'Yes, very slow!', ['Yes, very sunny!', 'Have a nice day!', 'Same here, good food.']),
+    q('Have a nice day!', 'Thanks! You too.', ['Good luck to me!', 'Really?', 'Yes, very hot.']),
+    q("It's a busy morning!", 'Yes, it is!', ['Yes, I am!', 'Good morning, take care?', 'Nice to meet you!'])
+  ]
+});
+</script>
+</body>
+</html>

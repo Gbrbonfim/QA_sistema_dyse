@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 2 · At the bus stop</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 02 · Leitura (Functional Plus - Everyday Small Talk with Strangers)
+   Alinhado ao Practice do slide ("At the bus stop: You are waiting for the bus. It is late.")
+   e ao Language box (weather, busy day, late, meeting, good luck, take care, me too, same
+   here). Conteúdo NOVO: dois desconhecidos conversam no ponto de ônibus. 20 questões: 12 de
+   "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Paula', 'Good morning!'],
+  ['Mark', 'Morning! Is the bus late?'],
+  ['Paula', 'Yes, about fifteen minutes.'],
+  ['Mark', "Oh no! I'm late for work."],
+  ['Paula', 'Me too! And I have a meeting at nine.'],
+  ['Mark', 'Really? Busy day today?'],
+  ['Paula', 'Yes, a lot of work. And you?'],
+  ['Mark', "Same here. It's a long day."],
+  ['Paula', 'And bad weather today, right?'],
+  ['Mark', "Yes, it's cloudy and very windy."],
+  ['Paula', 'And cold!'],
+  ['Mark', 'I know! Oh, look, the bus!'],
+  ['Paula', 'Finally!'],
+  ['Mark', 'Good luck with your meeting!'],
+  ['Paula', 'Thanks! Have a good day!'],
+  ['Mark', 'You too. Take care!']
+];
+const lado = q => q === 'Paula' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 2, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Morning! Is the bus late?', 'Morning! Are the bus late?', 'Good luck! Is the bus late?'], 0, 'Bom dia! O ônibus está atrasado?'),
+    prox(2, ['Yes, about fifteen minute.', 'Yes, about fifteen minutes.', 'Yes, it is sunny.'], 1, 'Sim, uns quinze minutos.'),
+    prox(3, ["Oh no! I'm late of work.", 'Oh no! I late for work.', "Oh no! I'm late for work."], 2, 'Ah, não! Estou atrasado para o trabalho.'),
+    prox(4, ['Me too! And I have a meeting at nine.', 'I too! And I have a meeting at nine.', 'Me too! And I has a meeting at nine.'], 0, 'Eu também! E tenho uma reunião às nove.'),
+    prox(5, ['Really? Busy days today?', 'Really? Busy day today?', 'Really? Take care today?'], 1, 'Sério? Dia corrido hoje?'),
+    prox(6, ['Yes, a lot of works. And you?', 'Yes, a lots of work. And you?', 'Yes, a lot of work. And you?'], 2, 'Sim, muito trabalho. E você?'),
+    prox(7, ["Same here. It's a long day.", "Same there. It's a long day.", "Same here. It's a long days."], 0, 'Comigo também. É um dia longo.'),
+    prox(8, ['And bad weathers today, right?', 'And bad weather today, right?', 'And bad weather today, no right?'], 1, 'E tempo ruim hoje, né?'),
+    prox(9, ["Yes, it's cloud and very wind.", "Yes, it's sunny and very hot.", "Yes, it's cloudy and very windy."], 2, 'Sim, está nublado e ventando muito.'),
+    prox(11, ['I know! Oh, look, the bus!', 'I knows! Oh, look, the bus!', 'Me too! Oh, look, the bus!'], 0, 'Eu sei! Olha, o ônibus!'),
+    prox(13, ['Good luck with your meeting, too!', 'Good luck with your meeting!', 'Good lucky with your meeting!'], 1, 'Boa sorte com a sua reunião!'),
+    prox(14, ['Thanks! Have a goods day!', 'Thanks! Me too!', 'Thanks! Have a good day!'], 2, 'Obrigada! Tenha um bom dia!'),
+    { instrucao: 'Where are Paula and Mark?', frase: 'At the ___.', opcoes: ['bus stop', 'coffee shop', 'office'], certa: 0, traducao: 'No ponto de ônibus.' },
+    { instrucao: 'How late is the bus?', frase: 'About ___ minutes.', opcoes: ['ten', 'fifteen', 'five'], certa: 1, traducao: 'Uns quinze minutos.' },
+    { instrucao: 'What time is Paula\'s meeting?', frase: 'At ___.', opcoes: ['ten', 'eight', 'nine'], certa: 2, traducao: 'Às nove.' },
+    { instrucao: 'Is Mark late for work?', frase: '___', opcoes: ['Yes, he is.', "No, he isn't.", "No, he's early."], certa: 0, traducao: 'Sim.' },
+    { instrucao: 'How is the weather?', frase: 'Cloudy, windy and ___.', opcoes: ['sunny', 'cold', 'hot'], certa: 1, traducao: 'Nublado, com vento e frio.' },
+    { instrucao: 'Is it a quiet day for Paula?', frase: '___. A lot of work.', opcoes: ['Yes, it is', 'Yes, very quiet', "No, it isn't"], certa: 2, traducao: 'Não. Muito trabalho.' },
+    { instrucao: 'What does Mark say about the meeting?', frase: '___', opcoes: ['Good luck!', 'Same here.', 'Me too!'], certa: 0, traducao: 'Boa sorte!' },
+    { instrucao: 'What does Mark say at the end?', frase: '___', opcoes: ['Good morning!', 'You too. Take care!', 'Is the bus late?'], certa: 1, traducao: 'Você também. Se cuida!' }
+  ]
+});
+</script>
+</body>
+</html>

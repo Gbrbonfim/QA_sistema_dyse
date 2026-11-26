@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 2 · Start a conversation</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 02 · Escrita (Functional Plus - Everyday Small Talk with Strangers)
+   Alinhado às frases de small talk do slide (Nice weather today, right? / Is the bus late? /
+   Long line today! / Is the coffee good here? / Busy day today? / Finally some sun!).
+   Conteúdo NOVO. A isca é a palavra errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 2, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Que tempo bom hoje, né?'), palavras: ['Nice', 'weather', 'today,', 'right'], isca: ['is'], fim: '?', traducao: 'Que tempo bom hoje, né?' },
+    { contexto: M('Está frio hoje, né?'), palavras: ["It's", 'cold', 'today,', 'right'], isca: ['are'], fim: '?', traducao: 'Está frio hoje, né?' },
+    { contexto: M('O ônibus está atrasado?'), palavras: ['Is', 'the', 'bus', 'late'], isca: ['Are'], fim: '?', traducao: 'O ônibus está atrasado?' },
+    { contexto: M('Nossa, fila longa hoje!'), palavras: ['Wow,', 'long', 'line', 'today'], isca: ['is'], fim: '!', traducao: 'Nossa, fila longa hoje!' },
+    { contexto: M('O café é bom aqui?'), palavras: ['Is', 'the', 'coffee', 'good', 'here'], isca: ['Are'], fim: '?', traducao: 'O café é bom aqui?' },
+    { contexto: M('Dia corrido hoje?'), palavras: ['Busy', 'day', 'today'], isca: ['late'], fim: '?', traducao: 'Dia corrido hoje?' },
+    { contexto: M('Finalmente um pouco de sol!'), palavras: ['Finally', 'some', 'sun'], isca: ['sunny'], fim: '!', traducao: 'Finalmente um pouco de sol!' },
+    { contexto: M('Está ventando muito hoje!'), palavras: ["It's", 'very', 'windy', 'today'], isca: ['wind'], fim: '!', traducao: 'Está ventando muito hoje!' },
+    { contexto: M('A comida é boa aqui?'), palavras: ['Is', 'the', 'food', 'good', 'here'], isca: ['Are'], fim: '?', traducao: 'A comida é boa aqui?' },
+    { contexto: M('Está nublado hoje.'), palavras: ["It's", 'cloudy', 'today'], isca: ['cloud'], fim: '.', traducao: 'Está nublado hoje.' },
+    { contexto: M('Que dia bonito hoje!'), palavras: ['Nice', 'day', 'today'], isca: ['days'], fim: '!', traducao: 'Que dia bonito hoje!' },
+    { contexto: M('Bom dia!'), palavras: ['Good', 'morning'], isca: ['day'], fim: '!', traducao: 'Bom dia!' },
+    { contexto: M('O trem está atrasado?'), palavras: ['Is', 'the', 'train', 'late'], isca: ['early'], fim: '?', traducao: 'O trem está atrasado?' },
+    { contexto: M('Está muito quente hoje!'), palavras: ["It's", 'very', 'hot', 'today'], isca: ['cold'], fim: '!', traducao: 'Está muito quente hoje!' },
+    { contexto: M('É uma manhã corrida.'), palavras: ["It's", 'a', 'busy', 'morning'], isca: ['quiet'], fim: '.', traducao: 'É uma manhã corrida.' },
+    { contexto: M('Tempo ruim hoje, né?'), palavras: ['Bad', 'weather', 'today,', 'right'], isca: ['nice'], fim: '?', traducao: 'Tempo ruim hoje, né?' },
+    { contexto: M('Está ensolarado e quente.'), palavras: ["It's", 'sunny', 'and', 'warm'], isca: ['sun'], fim: '.', traducao: 'Está ensolarado e quente.' },
+    { contexto: M('É um dia tranquilo no trabalho.'), palavras: ["It's", 'a', 'quiet', 'day', 'at', 'work'], isca: ['busy'], fim: '.', traducao: 'É um dia tranquilo no trabalho.' },
+    { contexto: M('O chá é bom aqui?'), palavras: ['Is', 'the', 'tea', 'good', 'here'], isca: ['Are'], fim: '?', traducao: 'O chá é bom aqui?' },
+    { contexto: M('Dia longo hoje?'), palavras: ['Long', 'day', 'today'], isca: ['line'], fim: '?', traducao: 'Dia longo hoje?' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 2 · Questions and reactions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 02 · Gramática (Functional Plus - Everyday Small Talk with Strangers)
+   Perguntas curtas de small talk com to be (Is the bus late? / Is it cold? / Are you...?),
+   short answers, e reações e finalizações do Language box (really?, me too, same here, good
+   luck, take care, have a nice day). Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 2, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the best answer',
+  itens: [
+    { frase: 'Is the bus late? — ___', opcoes: ['Yes, about ten minutes.', 'Yes, I am.', 'Yes, it are.'], certa: 0, traducao: 'O ônibus está atrasado? — Sim, uns dez minutos.' },
+    { frase: 'Nice weather today, right? — ___', opcoes: ['Yes, a lot of work.', "Yes, it's beautiful.", 'Good luck!'], certa: 1, traducao: 'Tempo bom hoje, né? — Sim, está lindo.' },
+    { frase: 'Is the coffee good here? — ___', opcoes: ['Me too.', 'Yes, about ten minutes.', "Yes, it's the best."], certa: 2, traducao: 'O café é bom aqui? — Sim, é o melhor.' },
+    { frase: 'Wow, long line today! — ___', opcoes: ['I know! Very busy.', 'Nice to meet you.', 'Yes, I am late.'], certa: 0, traducao: 'Nossa, fila longa hoje! — Eu sei! Muito movimentada.' },
+    { frase: 'Have a nice day! — ___', opcoes: ['Me too.', 'Thanks, you too.', 'Yes, it is.'], certa: 1, traducao: 'Tenha um ótimo dia! — Obrigado, você também.' },
+    { frase: "I'm late for work! — ___", opcoes: ['Have a nice day!', "Yes, it's the best.", 'Me too!'], certa: 2, traducao: 'Estou atrasado para o trabalho! — Eu também!' },
+    { frase: 'Busy day today? — ___', opcoes: ['Yes, a lot of work.', 'Yes, very sunny.', 'You too!'], certa: 0, traducao: 'Dia corrido hoje? — Sim, muito trabalho.' },
+    { frase: "I have a meeting now. — ___", opcoes: ['Same weather.', 'Good luck!', 'Finally some sun!'], certa: 1, traducao: 'Tenho uma reunião agora. — Boa sorte!' },
+    { frase: 'Take care! — ___', opcoes: ['Me too!', 'Really?', 'You too!'], certa: 2, traducao: 'Se cuida! — Você também!' },
+    { frase: "The bus is thirty minutes late! — ___", opcoes: ['Really? Oh no!', 'Nice weather!', 'Have a good day!'], certa: 0, traducao: 'O ônibus está trinta minutos atrasado! — Sério? Ah, não!' },
+    { frase: "It's a long day. — ___", opcoes: ['You too.', 'Same here.', 'Yes, very sunny.'], certa: 1, traducao: 'É um dia longo. — Comigo também.' },
+    { frase: 'Good morning! — ___', opcoes: ['Take care!', 'Good luck!', 'Morning!'], certa: 2, traducao: 'Bom dia! — Bom dia!' },
+    { frase: '___ the train late?', opcoes: ['Is', 'Are', 'Am'], certa: 0, traducao: 'O trem está atrasado?' },
+    { frase: '___ you busy today?', opcoes: ['Is', 'Are', 'Am'], certa: 1, traducao: 'Você está ocupado hoje?' },
+    { frase: '___ it cold today?', opcoes: ['Are', 'Am', 'Is'], certa: 2, traducao: 'Está frio hoje?' },
+    { frase: 'Is the food good? — Yes, it ___.', opcoes: ['is', 'are', "'s"], certa: 0, traducao: 'A comida é boa? — Sim, é.' },
+    { frase: "Is it windy? — No, it ___.", opcoes: ["aren't", "isn't", "'m not"], certa: 1, traducao: 'Está ventando? — Não.' },
+    { frase: "Are you late? — Yes, I ___.", opcoes: ['is', 'are', 'am'], certa: 2, traducao: 'Você está atrasado? — Sim.' },
+    { frase: "Are the people in the line busy? — Yes, they ___.", opcoes: ['are', 'is', 'am'], certa: 0, traducao: 'As pessoas da fila estão com pressa? — Sim.' },
+    { frase: "It ___ sunny today. It's cloudy.", opcoes: ["aren't", "isn't", "'m not"], certa: 1, traducao: 'Não está ensolarado hoje. Está nublado.' },
+    { frase: "The coffee ___ good. It's terrible!", opcoes: ["aren't", "'m not", "isn't"], certa: 2, traducao: 'O café não é bom. É horrível!' },
+    { instrucao: 'Which question is OK for small talk?', frase: '___', opcoes: ['Is the coffee good here?', 'How much money do you have?', 'What is your religion?'], certa: 0, traducao: 'O café é bom aqui?' },
+    { instrucao: 'Which question is OK for small talk?', frase: '___', opcoes: ['Who do you vote for?', 'Nice weather today, right?', 'Are you sick?'], certa: 1, traducao: 'Tempo bom hoje, né?' },
+    { instrucao: 'Which question is OK for small talk?', frase: '___', opcoes: ['How much is your salary?', 'Is your health OK?', 'Busy day today?'], certa: 2, traducao: 'Dia corrido hoje?' }
+  ]
+});
+</script>
+</body>
+</html>
