@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 41 · Reported speech</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 41 · Gramática ("I Almost Agree With You")
+   Alinhado ao Grammar Point (reported speech: tempos verbais e pronomes mudam; say x tell;
+   that opcional) e ao vídeo (o que os britânicos dizem x o que querem dizer).
+   Conteúdo NOVO. Uma só opção certa por item. 24 questões. */
+const MB = 'What does a British person probably mean?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 41, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: '"I almost agree with you." → She said she almost ___ with me.', opcoes: ['agreed', 'agreeing', 'agree'], certa: 0, traducao: 'Ela disse que quase concordava comigo.' },
+    { frase: '"I can explain it better." → He said he ___ explain it better.', opcoes: ['will', 'could', 'must'], certa: 1, traducao: 'Ele disse que podia explicar melhor.' },
+    { frase: '"I\'m just being honest." → She said she ___ just being honest.', opcoes: ['were', 'be', 'was'], certa: 2, traducao: 'Ela disse que só estava sendo sincera.' },
+    { frase: '"I\'ll think about it." → He said he ___ think about it.', opcoes: ['would', 'is', 'had'], certa: 0, traducao: 'Ele disse que ia pensar no assunto.' },
+    { frase: '"I made a few changes." → She told me she ___ a few changes.', opcoes: ['has made', 'had made', 'have made'], certa: 1, traducao: 'Ela me disse que tinha feito algumas mudanças.' },
+    { frase: '"I\'ve tried everything." → He told me he ___ everything.', opcoes: ['has try', 'have tried', 'had tried'], certa: 2, traducao: 'Ele me disse que tinha tentado de tudo.' },
+    { frase: '"I don\'t agree." → Matt said he ___ agree.', opcoes: ["didn't", 'not', "don't"], certa: 0, traducao: 'O Matt disse que não concordava.' },
+    { frase: '"I\'m not convinced." → She said she ___ convinced.', opcoes: ['not was', 'was not', 'no is'], certa: 1, traducao: 'Ela disse que não estava convencida.' },
+    { frase: 'She ___ me she didn\'t agree.', opcoes: ['said', 'talked', 'told'], certa: 2, traducao: 'Ela me disse que não concordava.' },
+    { frase: 'He ___ he almost agreed.', opcoes: ['said', 'told', 'talked'], certa: 0, traducao: 'Ele disse que quase concordava.' },
+    { frase: 'They told ___ they had some comments.', opcoes: ['that', 'us', 'to'], certa: 1, traducao: 'Eles nos disseram que tinham alguns comentários.' },
+    { frase: '"I like your idea." → He said ___ liked my idea.', opcoes: ['I', 'you', 'he'], certa: 2, traducao: 'Ele disse que gostava da minha ideia.' },
+    { frase: 'In reported speech, "will" changes to ___.', opcoes: ['would', 'could', 'had'], certa: 0, traducao: 'No discurso indireto, "will" vira "would".' },
+    { frase: 'In reported speech, the present perfect changes to the ___.', opcoes: ['past simple', 'past perfect', 'present simple'], certa: 1, traducao: 'O present perfect vira past perfect.' },
+    { frase: 'In reported speech, "can" changes to ___.', opcoes: ['would', 'had', 'could'], certa: 2, traducao: '"Can" vira "could".' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['He told me he was tired.', 'He said me he was tired.', 'He told he was tired.'], certa: 0, traducao: 'Ele me disse que estava cansado.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['She told that she had some comments.', 'She said that she had some comments.', 'She said us that she had some comments.'], certa: 1, traducao: 'Ela disse que tinha alguns comentários.' },
+    { instrucao: MB + ' "I only have a few minor comments."', frase: '___', opcoes: ['It is almost perfect.', 'I have no comments.', 'Please do it all again.'], certa: 2, traducao: 'Por favor, refaça tudo.' },
+    { instrucao: MB + ' "I almost agree with you."', frase: '___', opcoes: ["I don't agree at all.", 'I agree completely.', 'I agree a little more every day.'], certa: 0, traducao: 'Não concordo nada.' },
+    { instrucao: MB + ' "I\'m sure it\'s my fault."', frase: '___', opcoes: ["It's really my fault.", "It's probably your fault.", "It's nobody's fault."], certa: 1, traducao: 'Provavelmente a culpa é sua.' },
+    { instrucao: MB + ' "That\'s quite good."', frase: '___', opcoes: ['Excellent!', 'Perfect!', "It's a bit disappointing."], certa: 2, traducao: 'É um pouco decepcionante.' },
+    { instrucao: MB + ' "I hear what you\'re saying."', frase: '___', opcoes: ['I disagree.', 'I agree.', "I can't hear you."], certa: 0, traducao: 'Eu discordo.' },
+    { frase: 'George Mikes was a ___-born British writer who joked about British people.', opcoes: ['Brazilian', 'Hungarian', 'American'], certa: 1, traducao: 'George Mikes era um escritor britânico nascido na Hungria.' },
+    { frase: 'We use reported speech to tell someone what another person ___.', opcoes: ['will say', 'is saying now', 'said'], certa: 2, traducao: 'Usamos o discurso indireto para contar o que outra pessoa disse.' }
+  ]
+});
+</script>
+</body>
+</html>

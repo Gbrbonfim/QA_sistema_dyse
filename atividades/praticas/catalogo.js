@@ -1562,6 +1562,22 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 40', titulo: 'What had happened before?', tipo: 'Escute e grave', treina: 'Fala · Past perfect', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 40', titulo: 'Had or did?', tipo: 'Make a Choice', treina: 'Gramática · Past perfect x past simple', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 41,
+        titulo: 'Class 41 and 42 · "I Almost Agree With You"',
+        atividades: [
+          { num: 1, parte: 'Class 41', titulo: 'What they say vs what they mean', tipo: 'Escute e escolha', treina: 'Escuta · Reported speech', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 41', titulo: 'She said she almost agreed', tipo: 'Monte a frase', treina: 'Escrita · Reported speech', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 41', titulo: '"Quite good"?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 41', titulo: 'Report what they said', tipo: 'Escute e grave', treina: 'Fala · Reported speech', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 41', titulo: 'Reported speech', tipo: 'Make a Choice', treina: 'Gramática · Reported speech', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 42', titulo: 'Flat or apartment?', tipo: 'Escute e escolha', treina: 'Escuta · Inglês britânico x americano', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 42', titulo: 'Say or tell?', tipo: 'Monte a frase', treina: 'Escrita · Say x tell e vocabulário', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 42', titulo: 'A New Yorker in London', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 42', titulo: 'London or New York?', tipo: 'Escute e grave', treina: 'Fala · Inglês britânico x americano', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 42', titulo: 'Bill or check?', tipo: 'Make a Choice', treina: 'Gramática · Say x tell e BrE x AmE', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

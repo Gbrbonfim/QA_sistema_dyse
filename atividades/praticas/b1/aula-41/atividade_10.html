@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 42 · Bill or check?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 42 · Gramática ("I Almost Agree With You")
+   Alinhado ao Grammar Point (say x tell, exercício 7; direct speech, exercício 6) e ao
+   Vocabulary: British Vs American English (palavras, grafia -our / -re / -ll, expressões).
+   Conteúdo NOVO. 24 questões. */
+const X = 'What were the exact words?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 41, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: '"I agree with you," she ___ politely.', opcoes: ['said', 'told', 'talked'], certa: 0, traducao: '"Concordo com você", ela disse educadamente.' },
+    { frase: 'Lucy ___ him that British food was better.', opcoes: ['said', 'told', 'spoke'], certa: 1, traducao: 'A Lucy disse a ele que a comida britânica era melhor.' },
+    { frase: 'Matt ___ that fast food was part of American culture.', opcoes: ['told', 'talked', 'said'], certa: 2, traducao: 'O Matt disse que fast food fazia parte da cultura americana.' },
+    { frase: 'He ___ her that he loved the Sunday roast.', opcoes: ['told', 'said', 'spoke'], certa: 0, traducao: 'Ele disse a ela que adorava o Sunday roast.' },
+    { frase: 'Can you ___ them that dinner starts at 7 p.m.?', opcoes: ['say', 'tell', 'speak'], certa: 1, traducao: 'Você pode avisar a eles que o jantar começa às 19h?' },
+    { frase: 'What did she ___ when he criticized the food?', opcoes: ['tell', 'told', 'say'], certa: 2, traducao: 'O que ela disse quando ele criticou a comida?' },
+    { frase: 'In British English, an apartment is a ___.', opcoes: ['flat', 'lift', 'queue'], certa: 0, traducao: 'No inglês britânico, apartamento é "flat".' },
+    { frase: 'In American English, a lift is an ___.', opcoes: ['apartment', 'elevator', 'vacation'], certa: 1, traducao: 'No inglês americano, "lift" é "elevator".' },
+    { frase: 'In British English, fries are ___.', opcoes: ['crisps', 'petrol', 'chips'], certa: 2, traducao: 'No inglês britânico, batata frita é "chips".' },
+    { frase: 'In American English, petrol is ___.', opcoes: ['gas', 'bill', 'line'], certa: 0, traducao: 'No inglês americano, gasolina é "gas".' },
+    { frase: 'In British English, you wait in a ___.', opcoes: ['line', 'queue', 'check'], certa: 1, traducao: 'No inglês britânico, fila é "queue".' },
+    { frase: 'In American English, a holiday is a ___.', opcoes: ['flat', 'restroom', 'vacation'], certa: 2, traducao: 'No inglês americano, férias é "vacation".' },
+    { frase: 'At a restaurant in London, you ask for the ___.', opcoes: ['bill', 'check', 'loo'], certa: 0, traducao: 'Num restaurante em Londres, você pede "the bill".' },
+    { frase: 'In a shop in New York, you ask: "Where\'s the ___?"', opcoes: ['loo', 'restroom', 'lift'], certa: 1, traducao: 'Numa loja em Nova York, você pergunta onde fica o "restroom".' },
+    { instrucao: 'Which word has British spelling?', frase: '___', opcoes: ['color', 'center', 'favourite'], certa: 2, traducao: 'favourite (britânico) / favorite (americano).' },
+    { instrucao: 'Which word has British spelling?', frase: '___', opcoes: ['colour', 'favorite', 'traveled'], certa: 0, traducao: 'colour (britânico) / color (americano).' },
+    { instrucao: 'Which word has American spelling?', frase: '___', opcoes: ['centre', 'center', 'travelled'], certa: 1, traducao: 'center (americano) / centre (britânico).' },
+    { frase: 'British spelling often uses -our and -re, like colour and ___.', opcoes: ['center', 'centar', 'centre'], certa: 2, traducao: 'A grafia britânica costuma usar -our e -re: colour, centre.' },
+    { frase: 'A country with a mix of many cultures is a melting ___.', opcoes: ['pot', 'pan', 'plate'], certa: 0, traducao: 'Um país com mistura de culturas é um "melting pot".' },
+    { frase: 'Chicken tikka masala is very popular in ___, but it has Indian roots.', opcoes: ['the USA', 'Britain', 'Brazil'], certa: 1, traducao: 'O frango tikka masala é muito popular na Grã-Bretanha, mas tem raízes indianas.' },
+    { instrucao: X + ' She said that she wasn\'t impressed.', frase: '___', opcoes: ['"I wasn\'t impress."', '"She isn\'t impressed."', '"I\'m not impressed."'], certa: 2, traducao: '"Não estou impressionada."' },
+    { instrucao: X + ' Matt said that he would defend American food.', frase: '___', opcoes: ['"I\'ll defend American food."', '"He will defend American food."', '"I defended American food."'], certa: 0, traducao: '"Vou defender a comida americana."' },
+    { instrucao: X + ' Emily told him that British food was not very popular.', frase: '___', opcoes: ['"British food were not very popular."', '"British food is not very popular."', '"British food had not popular."'], certa: 1, traducao: '"A comida britânica não é muito popular."' },
+    { instrucao: X + ' He said that he hadn\'t enjoyed the meal.', frase: '___', opcoes: ['"He didn\'t enjoy the meal."', '"I don\'t enjoying the meal."', '"I didn\'t enjoy the meal."'], certa: 2, traducao: '"Não gostei da refeição."' }
+  ]
+});
+</script>
+</body>
+</html>

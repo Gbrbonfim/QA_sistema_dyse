@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 42 · Flat or apartment?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 42 · Escuta ("I Almost Agree With You")
+   Alinhado ao Vocabulary: British Vs American English (flat / apartment, lift / elevator,
+   holiday / vacation, petrol / gas, chips / fries, queue / line, bill / check, loo /
+   restroom), ao Listening And Speaking (Emily Blunt e Matt Damon discutem comida britânica e
+   americana) e ao reported speech. Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const A = 'Listen to the British word. What is the American word?';
+const B = 'Listen. Is this British or American English?', BR = 'British English.', AM = 'American English.', NE = 'Neither. It is Australian slang.';
+const T = 'Listen. Is it true or false?', V = 'True.', F = 'False.', O = "It's an opinion.";
+const R = 'Listen to the exact words. Choose the reported sentence.';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 41, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: A, ...q('flat', 'apartment', ['elevator', 'vacation'], 'travel_explore') },
+    { instrucao: A, ...q('lift', 'elevator', ['apartment', 'line'], 'travel_explore') },
+    { instrucao: A, ...q('holiday', 'vacation', ['check', 'gas'], 'travel_explore') },
+    { instrucao: A, ...q('petrol', 'gas', ['fries', 'restroom'], 'travel_explore') },
+    { instrucao: A, ...q('chips', 'fries', ['gas', 'check'], 'travel_explore') },
+    { instrucao: A, ...q('queue', 'line', ['bill', 'elevator'], 'travel_explore') },
+    { instrucao: A, ...q('the bill', 'the check', ['the line', 'the elevator'], 'travel_explore') },
+    { instrucao: A, ...q('the loo', 'the restroom', ['the apartment', 'the vacation'], 'travel_explore') },
+    { instrucao: B, ...q('Can I have the bill, please?', BR, [AM, NE], 'location_city') },
+    { instrucao: B, ...q("Excuse me, where's the restroom?", AM, [BR, NE], 'location_city') },
+    { instrucao: B, ...q("We're going on vacation next week.", AM, [BR, NE], 'location_city') },
+    { instrucao: B, ...q('I live in a small flat near the station.', BR, [AM, NE], 'location_city') },
+    { instrucao: B, ...q("Let's take the elevator to the fifth floor.", AM, [BR, NE], 'location_city') },
+    { instrucao: B, ...q('We waited in the queue for an hour.', BR, [AM, NE], 'location_city') },
+    { instrucao: T, ...q('Chicken tikka masala is one of the most popular dishes in Britain.', V, [F, O], 'restaurant') },
+    { instrucao: T, ...q('A Sunday roast is a traditional British meal.', V, [F, O], 'restaurant') },
+    { instrucao: T, ...q('In the video, Matt Damon is the British actor.', F, [V, O], 'restaurant') },
+    { instrucao: T, ...q('Emily Blunt is from Britain.', V, [F, O], 'restaurant') },
+    { instrucao: T, ...q('A melting pot is a place with a mix of many cultures.', V, [F, O], 'restaurant') },
+    { instrucao: T, ...q('American food is better than British food.', O, [V, F], 'restaurant') },
+    { instrucao: R, ...q('British food is not very popular.', 'They said British food was not very popular.', ['They said British food were not very popular.', 'They told British food was not very popular.'], 'forum') },
+    { instrucao: R, ...q('American burgers are more creative.', 'They said American burgers were more creative.', ['They said American burgers was more creative.', 'They said me American burgers were more creative.'], 'forum') },
+    { instrucao: R, ...q("I've tried traditional British dishes.", 'They said they had tried traditional British dishes.', ['They said they had try traditional British dishes.', 'They told they had tried traditional British dishes.'], 'forum') },
+    { instrucao: R, ...q("I'll defend American food.", 'They said they would defend American food.', ['They said they would defended American food.', 'They told they would defend American food.'], 'forum') }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 41 · She said she almost agreed</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 41 · Escrita ("I Almost Agree With You")
+   Alinhado ao Grammar Point (reported speech: can > could, presente > passado, will >
+   would, past simple e present perfect > past perfect; pronomes mudam; say + frase x tell +
+   pessoa + frase) e ao exercício 5. Conteúdo NOVO. A palavra extra nunca forma outra frase
+   certa. 20 questões. */
+const M = pt => 'Write the reported sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 41, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ela disse que quase concordava comigo.'), palavras: ['She', 'said', 'she', 'almost', 'agreed', 'with', 'me'], isca: ['told'], fim: '.', traducao: 'Ela disse que quase concordava comigo.' },
+    { contexto: M('Ele disse que ouvia o que eu estava dizendo.'), palavras: ['He', 'said', 'he', 'heard', 'what', 'I', 'was', 'saying'], isca: ['hearing'], fim: '.', traducao: 'Ele disse que ouvia o que eu estava dizendo.' },
+    { contexto: M('Ele me disse que tinha certeza de que era culpa dele.'), palavras: ['He', 'told', 'me', 'he', 'was', 'sure', 'it', 'was', 'his', 'fault'], isca: ['said'], fim: '.', traducao: 'Ele me disse que tinha certeza de que era culpa dele.' },
+    { contexto: M('Ela me disse que só tinha alguns comentários pequenos.'), palavras: ['She', 'told', 'me', 'she', 'only', 'had', 'a', 'few', 'minor', 'comments'], isca: ['said'], fim: '.', traducao: 'Ela me disse que só tinha alguns comentários pequenos.' },
+    { contexto: M('Ele disse que podia explicar melhor.'), palavras: ['He', 'said', 'he', 'could', 'explain', 'it', 'better'], isca: ['explained'], fim: '.', traducao: 'Ele disse que podia explicar melhor.' },
+    { contexto: M('Ela disse que só estava sendo sincera.'), palavras: ['She', 'said', 'she', 'was', 'just', 'being', 'honest'], isca: ['be'], fim: '.', traducao: 'Ela disse que só estava sendo sincera.' },
+    { contexto: M('Ele disse que ia pensar no assunto.'), palavras: ['He', 'said', 'he', 'would', 'think', 'about', 'it'], isca: ['thinks'], fim: '.', traducao: 'Ele disse que ia pensar no assunto.' },
+    { contexto: M('Ela me disse que tinha feito algumas mudanças.'), palavras: ['She', 'told', 'me', 'she', 'had', 'made', 'a', 'few', 'changes'], isca: ['make'], fim: '.', traducao: 'Ela me disse que tinha feito algumas mudanças.' },
+    { contexto: M('Ele me disse que tinha tentado de tudo.'), palavras: ['He', 'told', 'me', 'he', 'had', 'tried', 'everything'], isca: ['said'], fim: '.', traducao: 'Ele me disse que tinha tentado de tudo.' },
+    { contexto: M('Eles disseram que já tinham discutido aquilo.'), palavras: ['They', 'said', 'they', 'had', 'already', 'discussed', 'that'], isca: ['discuss'], fim: '.', traducao: 'Eles disseram que já tinham discutido aquilo.' },
+    { contexto: M('Ela disse que não estava convencida.'), palavras: ['She', 'said', 'she', 'was', 'not', 'convinced'], isca: ['told'], fim: '.', traducao: 'Ela disse que não estava convencida.' },
+    { contexto: M('O Matt disse que não concordava com aquela ideia.'), palavras: ['Matt', 'said', 'he', "didn't", 'agree', 'with', 'that', 'idea'], isca: ['agreed'], fim: '.', traducao: 'O Matt disse que não concordava com aquela ideia.' },
+    { contexto: M('Ela disse à Sara que estava tentando entender a situação dela.'), palavras: ['She', 'told', 'Sara', 'she', 'was', 'trying', 'to', 'understand', 'her', 'situation'], isca: ['said'], fim: '.', traducao: 'Ela disse à Sara que estava tentando entender a situação dela.' },
+    { contexto: M('A Emily nos disse que preferia comida britânica.'), palavras: ['Emily', 'told', 'us', 'she', 'preferred', 'British', 'food'], isca: ['said'], fim: '.', traducao: 'A Emily nos disse que preferia comida britânica.' },
+    { contexto: M('Ele disse que entendia completamente o meu ponto.'), palavras: ['He', 'said', 'that', 'he', 'completely', 'understood', 'my', 'point'], isca: ['understanding'], fim: '.', traducao: 'Ele disse que entendia completamente o meu ponto.' },
+    { contexto: M('Eles me disseram que podiam melhorar aquela parte.'), palavras: ['They', 'told', 'me', 'they', 'could', 'improve', 'that', 'section'], isca: ['said'], fim: '.', traducao: 'Eles me disseram que podiam melhorar aquela parte.' },
+    { contexto: M('O que o seu chefe disse?'), palavras: ['What', 'did', 'your', 'boss', 'say'], isca: ['told'], fim: '?', traducao: 'O que o seu chefe disse?' },
+    { contexto: M('Ela disse que ia levar isso em conta.'), palavras: ['She', 'said', 'she', 'would', 'bear', 'it', 'in', 'mind'], isca: ['bears'], fim: '.', traducao: 'Ela disse que ia levar isso em conta.' },
+    { contexto: M('Ele disse a ela que a culpa era dela.'), palavras: ['He', 'told', 'her', 'it', 'was', 'her', 'fault'], isca: ['said'], fim: '.', traducao: 'Ele disse a ela que a culpa era dela.' },
+    { contexto: M('Eu disse que sentia muito.'), palavras: ['I', 'said', 'I', 'was', 'sorry'], isca: ['told'], fim: '.', traducao: 'Eu disse que sentia muito.' }
+  ]
+});
+</script>
+</body>
+</html>

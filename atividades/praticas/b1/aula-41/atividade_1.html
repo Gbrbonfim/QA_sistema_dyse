@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 41 · What they say vs what they mean</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 41 · Escuta ("I Almost Agree With You")
+   Alinhado ao Warm Up (George Mikes e o humor sobre como os britânicos se comunicam), ao
+   vídeo (o que os britânicos dizem x o que querem dizer) e ao Grammar Point (reported
+   speech: tempos verbais e pronomes mudam). Conteúdo NOVO. Nos relatos usamos "They" porque
+   não sabemos quem fala. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const M = 'Listen. What does the speaker probably mean?';
+const R = 'Listen to the exact words. Choose the reported sentence.';
+const D = 'Listen to the reported sentence. What were the exact words?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 41, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: M, ...q('Yeah, I almost agree with you.', "I don't agree at all.", ['I agree one hundred percent.', 'I need more time to think.'], 'psychology') },
+    { instrucao: M, ...q("Yeah, I hear what you're saying.", "I disagree, and I don't want to discuss it.", ['I can hear you very well.', 'You are completely right.'], 'psychology') },
+    { instrucao: M, ...q("Well, I'm sure it's my fault.", "It's probably your fault.", ["It's really my fault. Sorry!", 'Nobody made a mistake.'], 'psychology') },
+    { instrucao: M, ...q('So, I only have a few minor comments and suggestions.', 'Please do the whole thing again.', ['It is almost perfect.', 'I had no time to read it.'], 'psychology') },
+    { instrucao: M, ...q("That's quite good.", "It's a bit disappointing.", ["It's excellent!", "It's the best I've seen."], 'psychology') },
+    { instrucao: M, ...q("I'll bear it in mind.", "I've probably forgotten it already.", ["I'll do it today.", 'I love the idea.'], 'psychology') },
+    { instrucao: M, ...q('Not bad at all.', "It's very good.", ["It's terrible.", "It's boring."], 'psychology') },
+    { instrucao: M, ...q('Hmm, very interesting.', "I don't think it's a good idea.", ['Please tell me more.', 'I love it.'], 'psychology') },
+    { instrucao: R, ...q('I completely agree with you.', 'They said they completely agreed with me.', ['They said they completely agreeing with me.', 'They said me they completely agreed.'], 'forum') },
+    { instrucao: R, ...q('I can explain it better.', 'They said they could explain it better.', ['They said they coulds explain it better.', 'They told they could explain it better.'], 'forum') },
+    { instrucao: R, ...q("I'm just being honest.", 'They said they were just being honest.', ['They said they were just be honest.', 'They told that they were just being honest.'], 'forum') },
+    { instrucao: R, ...q("I'll think about it.", 'They said they would think about it.', ['They said they would thought about it.', 'They said me they would think about it.'], 'forum') },
+    { instrucao: R, ...q('I made a few changes.', 'They told me they had made a few changes.', ['They told me they had make a few changes.', 'They told they had made a few changes.'], 'forum') },
+    { instrucao: R, ...q("I've tried everything.", 'They told me they had tried everything.', ['They told me they had try everything.', 'They said me they had tried everything.'], 'forum') },
+    { instrucao: R, ...q("I'm not convinced.", 'They said they were not convinced.', ['They said they not convinced.', 'They told they were not convinced.'], 'forum') },
+    { instrucao: R, ...q("We've already discussed this.", 'They said they had already discussed that.', ['They said they had already discuss that.', 'They told they had already discussed that.'], 'forum') },
+    { instrucao: D, ...q("He said he didn't agree with that idea.", "\"I don't agree with that idea.\"", ["\"He doesn't agree with that idea.\"", "\"I didn't agreed with that idea.\""], 'rule') },
+    { instrucao: D, ...q("She said she wasn't impressed.", "\"I'm not impressed.\"", ["\"She isn't impressed.\"", "\"I wasn't impress.\""], 'rule') },
+    { instrucao: D, ...q('They said they could consider the idea.', '"We can consider the idea."', ['"They can consider the idea."', '"We could considered the idea."'], 'rule') },
+    { instrucao: D, ...q('He said he would defend American food.', "\"I'll defend American food.\"", ['"He will defend American food."', "\"I'd defended American food.\""], 'rule') },
+    { instrucao: D, ...q('She told us she was feeling a bit disappointed.', "\"I'm feeling a bit disappointed.\"", ['"She is feeling a bit disappointed."', '"I feeling a bit disappointed."'], 'rule') },
+    { instrucao: D, ...q('He said he had tried British dishes before.', "\"I've tried British dishes before.\"", ['"He has tried British dishes before."', "\"I've try British dishes before.\""], 'rule') },
+    { instrucao: D, ...q('She said she preferred American food.', '"I prefer American food."', ['"She prefers American food."', '"I preferring American food."'], 'rule') },
+    { instrucao: D, ...q('He told me he had watched the debate.', '"I watched the debate."', ['"He watched the debate."', '"I watching the debate."'], 'rule') }
+  ]
+});
+</script>
+</body>
+</html>

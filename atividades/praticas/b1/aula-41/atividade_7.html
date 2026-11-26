@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 42 · Say or tell?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 42 · Escrita ("I Almost Agree With You")
+   Alinhado ao Grammar Point (say + frase x tell + pessoa + frase; exercício 7), ao debate
+   sobre comida britânica e americana e ao Vocabulary: British Vs American English.
+   Conteúdo NOVO. A palavra extra nunca forma outra frase certa. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 41, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Pode me trazer a conta, por favor? (inglês britânico)'), palavras: ['Can', 'I', 'have', 'the', 'bill,', 'please'], isca: ['has'], fim: '?', traducao: 'Pode me trazer a conta, por favor?' },
+    { contexto: M('Pode me trazer a conta? (inglês americano)'), palavras: ['Can', 'I', 'get', 'the', 'check'], isca: ['gets'], fim: '?', traducao: 'Pode me trazer a conta?' },
+    { contexto: M('Onde fica o banheiro? (inglês britânico)'), palavras: ["Where's", 'the', 'loo'], isca: ['an'], fim: '?', traducao: 'Onde fica o banheiro?' },
+    { contexto: M('Nós moramos num apartamento pequeno em Londres.'), palavras: ['We', 'live', 'in', 'a', 'small', 'flat', 'in', 'London'], isca: ['lives'], fim: '.', traducao: 'Nós moramos num apartamento pequeno em Londres.' },
+    { contexto: M('Vamos pegar o elevador.'), palavras: ["Let's", 'take', 'the', 'elevator'], isca: ['takes'], fim: '.', traducao: 'Vamos pegar o elevador.' },
+    { contexto: M('Esperamos na fila por uma hora.'), palavras: ['We', 'waited', 'in', 'the', 'queue', 'for', 'an', 'hour'], isca: ['waiting'], fim: '.', traducao: 'Esperamos na fila por uma hora.' },
+    { contexto: M('Preciso comprar gasolina para o carro.'), palavras: ['I', 'need', 'to', 'buy', 'petrol', 'for', 'the', 'car'], isca: ['buys'], fim: '.', traducao: 'Preciso comprar gasolina para o carro.' },
+    { contexto: M('A Lucy disse a ele que a comida americana era melhor.'), palavras: ['Lucy', 'told', 'him', 'that', 'American', 'food', 'was', 'better'], isca: ['said'], fim: '.', traducao: 'A Lucy disse a ele que a comida americana era melhor.' },
+    { contexto: M('O Matt disse que os hambúrgueres americanos eram mais criativos.'), palavras: ['Matt', 'said', 'that', 'American', 'burgers', 'were', 'more', 'creative'], isca: ['told'], fim: '.', traducao: 'O Matt disse que os hambúrgueres americanos eram mais criativos.' },
+    { contexto: M('Ele disse a ela que não concordava com ela.'), palavras: ['He', 'told', 'her', 'that', 'he', "didn't", 'agree', 'with', 'her'], isca: ['said'], fim: '.', traducao: 'Ele disse a ela que não concordava com ela.' },
+    { contexto: M('Ela disse que só estava tentando ser sincera.'), palavras: ['She', 'said', 'she', 'was', 'only', 'trying', 'to', 'be', 'honest'], isca: ['told'], fim: '.', traducao: 'Ela disse que só estava tentando ser sincera.' },
+    { contexto: M('Você pode avisar a eles que o debate começa às sete?'), palavras: ['Can', 'you', 'tell', 'them', 'the', 'debate', 'starts', 'at', 'seven'], isca: ['say'], fim: '?', traducao: 'Você pode avisar a eles que o debate começa às sete?' },
+    { contexto: M('O que ela disse quando ele criticou a comida britânica?'), palavras: ['What', 'did', 'she', 'say', 'when', 'he', 'criticized', 'British', 'food'], isca: ['told'], fim: '?', traducao: 'O que ela disse quando ele criticou a comida britânica?' },
+    { contexto: M('Ele nos disse que precisava de mais sal.'), palavras: ['He', 'told', 'us', 'that', 'it', 'needed', 'more', 'salt'], isca: ['said'], fim: '.', traducao: 'Ele nos disse que precisava de mais sal.' },
+    { contexto: M('Os Estados Unidos são um caldeirão de culturas.'), palavras: ['The', 'United', 'States', 'is', 'a', 'melting', 'pot'], isca: ['are'], fim: '.', traducao: 'Os Estados Unidos são um caldeirão de culturas.' },
+    { contexto: M('Frango tikka masala é muito popular na Inglaterra.'), palavras: ['Chicken', 'tikka', 'masala', 'is', 'very', 'popular', 'in', 'England'], isca: ['are'], fim: '.', traducao: 'Frango tikka masala é muito popular na Inglaterra.' },
+    { contexto: M('Vamos sair de férias em julho. (inglês americano)'), palavras: ['We', 'are', 'going', 'on', 'vacation', 'in', 'July'], isca: ['goes'], fim: '.', traducao: 'Vamos sair de férias em julho.' },
+    { contexto: M('A cor favorita deles é azul. (grafia britânica)'), palavras: ['Their', 'favourite', 'colour', 'is', 'blue'], isca: ['are'], fim: '.', traducao: 'A cor favorita deles é azul.' },
+    { contexto: M('Eu viajei para o centro da cidade no ano passado. (grafia britânica)'), palavras: ['I', 'travelled', 'to', 'the', 'city', 'centre', 'last', 'year'], isca: ['travel'], fim: '.', traducao: 'Eu viajei para o centro da cidade no ano passado.' },
+    { contexto: M('A Emily disse que a comida britânica era deliciosa.'), palavras: ['Emily', 'said', 'that', 'British', 'food', 'was', 'delicious'], isca: ['told'], fim: '.', traducao: 'A Emily disse que a comida britânica era deliciosa.' }
+  ]
+});
+</script>
+</body>
+</html>

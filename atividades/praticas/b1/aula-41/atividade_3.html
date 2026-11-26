@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 41 · "Quite good"?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 41 · Leitura ("I Almost Agree With You")
+   Alinhado ao vídeo (o que os britânicos dizem x o que querem dizer) e ao Grammar Point
+   (reported speech com say e tell). Conteúdo NOVO: Lena conta ao Joe o que o chefe britânico
+   disse, e o Joe explica o que ele quis dizer.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Joe', 'How was your meeting with Mr. Hughes?'],
+  ['Lena', 'Great, I think! He said he only had a few minor comments.'],
+  ['Joe', 'Oh dear. What else did he say?'],
+  ['Lena', 'He said my report was quite good.'],
+  ['Joe', 'Quite good? In British English, that can mean it was a bit disappointing.'],
+  ['Lena', 'Really? He also told me he would bear my ideas in mind.'],
+  ['Joe', 'Hmm. That usually means he has already forgotten them.'],
+  ['Lena', 'But he was smiling! He said he almost agreed with me.'],
+  ['Joe', '"I almost agree" means he doesn\'t agree at all. Sorry, Lena.'],
+  ['Lena', 'What about "I hear what you\'re saying"?'],
+  ['Joe', "That means he disagrees and doesn't want to discuss it."],
+  ['Lena', 'And he told me it was probably his fault.'],
+  ['Joe', "That one means he thinks it's your fault, but he's being polite."],
+  ['Lena', 'Wow. So what should I do now?'],
+  ['Joe', "Ask him what changes he wants. I'm sure he'll explain."],
+  ['Lena', "OK. I'll send him an email this afternoon."],
+  ['Joe', "Good idea. And don't worry, everyone learns this the hard way."],
+  ['Lena', 'Did you have the same problem when you started?'],
+  ['Joe', 'Yes! My first boss told me my work was "very interesting".'],
+  ['Lena', "Let me guess. The boss didn't like it at all!"]
+];
+const lado = q => q === 'Joe' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 41, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Great, I think! He said he only had a few minor comments.', 'Great, I think! He said me he only had a few minor comments.', 'Great, I think! He told he only had a few minor comments.'], 0, 'Ótima, eu acho! Ele disse que só tinha alguns comentários pequenos.'),
+    prox(3, ['He said my report is was quite good.', 'He said my report was quite good.', 'He told my report was quite good.'], 1, 'Ele disse que o meu relatório estava bem bom.'),
+    prox(5, ['Really? He also said me he would bear my ideas in mind.', 'Really? He also told me he will bears my ideas in mind.', 'Really? He also told me he would bear my ideas in mind.'], 2, 'Sério? Ele também me disse que ia levar as minhas ideias em conta.'),
+    prox(7, ['But he was smiling! He said he almost agreed with me.', 'But he was smiling! He said he almost agreeing with me.', 'But he was smiling! He told that he almost agreed with me.'], 0, 'Mas ele estava sorrindo! Disse que quase concordava comigo.'),
+    prox(8, ['"I almost agree" means he agrees completely. Sorry, Lena.', '"I almost agree" means he doesn\'t agree at all. Sorry, Lena.', '"I almost agree" mean he doesn\'t agree at all. Sorry, Lena.'], 1, '"Quase concordo" quer dizer que ele não concorda nada. Desculpa, Lena.'),
+    prox(9, ['What about "I hear what you saying"?', 'What about "I hear what are you saying"?', 'What about "I hear what you\'re saying"?'], 2, 'E "entendo o que você está dizendo"?'),
+    prox(11, ['And he told me it was probably his fault.', 'And he said me it was probably his fault.', 'And he told me it were probably his fault.'], 0, 'E ele me disse que provavelmente a culpa era dele.'),
+    prox(12, ["That one means he thinks it's really his fault.", "That one means he thinks it's your fault, but he's being polite.", "That one means he think it's your fault, but he's being polite."], 1, 'Essa quer dizer que ele acha que a culpa é sua, mas está sendo educado.'),
+    prox(13, ['Wow. So what I should do now?', 'Wow. So what should I doing now?', 'Wow. So what should I do now?'], 2, 'Nossa. E o que eu faço agora?'),
+    prox(15, ["OK. I'll send him an email this afternoon.", "OK. I'll sent him an email this afternoon.", "OK. I'll send he an email this afternoon."], 0, 'Tá. Vou mandar um e-mail para ele hoje à tarde.'),
+    prox(17, ['Did you had the same problem when you started?', 'Did you have the same problem when you started?', 'Do you had the same problem when you started?'], 1, 'Você teve o mesmo problema quando começou?'),
+    prox(19, ["Let me guess. The boss didn't liked it at all!", "Let me guess. The boss don't like it at all!", "Let me guess. The boss didn't like it at all!"], 2, 'Deixa eu adivinhar. O chefe não gostou nada!'),
+    { instrucao: 'Who is Mr. Hughes?', frase: '___', opcoes: ["Lena's boss.", "Joe's brother.", 'A new client.'], certa: 0, traducao: 'O chefe da Lena.' },
+    { instrucao: 'What did Mr. Hughes say about the report?', frase: '___', opcoes: ['It was perfect.', 'It was quite good.', 'It was terrible.'], certa: 1, traducao: 'Que estava bem bom.' },
+    { instrucao: 'According to Joe, what can "quite good" mean?', frase: '___', opcoes: ['Excellent.', 'Very funny.', 'A bit disappointing.'], certa: 2, traducao: 'Um pouco decepcionante.' },
+    { instrucao: 'What does "I\'ll bear it in mind" usually mean?', frase: '___', opcoes: ['He has already forgotten it.', 'He will do it today.', 'He loves the idea.'], certa: 0, traducao: 'Ele já esqueceu.' },
+    { instrucao: 'What does "I almost agree" really mean?', frase: '___', opcoes: ['He agrees a little.', "He doesn't agree at all.", 'He agrees completely.'], certa: 1, traducao: 'Ele não concorda nada.' },
+    { instrucao: 'What does Joe tell Lena to do?', frase: '___', opcoes: ['Find a new job.', 'Forget the report.', 'Ask what changes the boss wants.'], certa: 2, traducao: 'Perguntar que mudanças o chefe quer.' },
+    { instrucao: 'When will Lena send the email?', frase: '___', opcoes: ['This afternoon.', 'Tomorrow morning.', 'Next week.'], certa: 0, traducao: 'Hoje à tarde.' },
+    { instrucao: "What did Joe's first boss say about Joe's work?", frase: '___', opcoes: ['It was perfect.', 'It was "very interesting".', 'It was "not bad".'], certa: 1, traducao: 'Que era "muito interessante".' }
+  ]
+});
+</script>
+</body>
+</html>

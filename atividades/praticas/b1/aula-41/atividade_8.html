@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 42 · A New Yorker in London</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 42 · Leitura ("I Almost Agree With You")
+   Alinhado ao Vocabulary: British Vs American English (flat / apartment, lift / elevator,
+   chips / fries, queue / line, holiday / vacation, bill / check), à comida britânica
+   (Sunday roast, chicken tikka masala) e ao Extra Challenge (turistas em Londres).
+   Conteúdo NOVO: Mia, de Nova York, visita o amigo Olly em Londres.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Olly', 'Welcome to London, Mia! How was your flight?'],
+  ['Mia', "Long, but fine. I'm so tired. Is your apartment far from here?"],
+  ['Olly', "My flat? No, it's ten minutes away. We can take the Tube."],
+  ['Mia', 'Great. Is there an elevator in your building?'],
+  ['Olly', "Yes, there's a lift. Don't worry about your bags."],
+  ['Mia', "Perfect. I'm starving. Can we get some fries?"],
+  ['Olly', "Sure! Here we call them chips. Let's get fish and chips."],
+  ['Mia', 'Look at that line! Is the restaurant always so busy?'],
+  ['Olly', 'The queue? Yes, but it moves fast. British people love to queue.'],
+  ['Mia', "Ha! In New York, people don't wait so patiently."],
+  ['Olly', 'So, how long is your holiday?'],
+  ['Mia', 'My vacation is two weeks. I want to see everything!'],
+  ['Olly', 'Lovely. My mum said she would cook a Sunday roast for you.'],
+  ['Mia', "That's so kind! I've never tried a Sunday roast."],
+  ['Olly', "And you have to try chicken tikka masala. It's a British favourite."],
+  ['Mia', 'Really? My friend told me it came from India.'],
+  ['Olly', "It's complicated! Some people say it was created in Britain."],
+  ['Mia', 'OK. After dinner, can I ask for the check?'],
+  ['Olly', "Here you ask for the bill. And I'll pay this time!"],
+  ['Mia', "Thanks! I'm learning so much British English already."]
+];
+const lado = q => q === 'Olly' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 41, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Long, but fine. I'm so tired. Is your apartment far from here?", "Long, but fine. I'm so tired. Is your apartment far of here?", "Long, but fine. I so tired. Is your apartment far from here?"], 0, 'Longo, mas tudo bem. Estou muito cansada. Seu apartamento fica longe daqui?'),
+    prox(2, ["My flat? No, it's ten minutes away. We can takes the Tube.", "My flat? No, it's ten minutes away. We can take the Tube.", "My flat? No, it's ten minutes far. We can take the Tube."], 1, 'Meu apartamento? Não, fica a dez minutos. Podemos pegar o metrô.'),
+    prox(4, ["Yes, there's a lift. Don't worry about you bags.", "Yes, there are a lift. Don't worry about your bags.", "Yes, there's a lift. Don't worry about your bags."], 2, 'Sim, tem elevador. Não se preocupe com as malas.'),
+    prox(6, ["Sure! Here we call them chips. Let's get fish and chips.", "Sure! Here we call them petrol. Let's get fish and chips.", "Sure! Here we call they chips. Let's get fish and chips."], 0, 'Claro! Aqui a gente chama de chips. Vamos comer fish and chips.'),
+    prox(8, ['The queue? Yes, but it move fast. British people love to queue.', 'The queue? Yes, but it moves fast. British people love to queue.', 'The lift? Yes, but it moves fast. British people love to queue.'], 1, 'A fila? Sim, mas anda rápido. Os britânicos adoram fazer fila.'),
+    prox(10, ['So, how long is your flat?', 'So, how long are your holiday?', 'So, how long is your holiday?'], 2, 'E quanto tempo duram as suas férias?'),
+    prox(12, ['Lovely. My mum said she would cook a Sunday roast for you.', 'Lovely. My mum said me she would cook a Sunday roast for you.', 'Lovely. My mum told she would cook a Sunday roast for you.'], 0, 'Que ótimo. Minha mãe disse que vai fazer um Sunday roast para você.'),
+    prox(13, ["That's so kind! I've never try a Sunday roast.", "That's so kind! I've never tried a Sunday roast.", "That's so kind! I never have tried a Sunday roast."], 1, 'Que gentil! Nunca comi um Sunday roast.'),
+    prox(14, ["And you have to try chicken tikka masala. It's a American favourite.", "And you has to try chicken tikka masala. It's a British favourite.", "And you have to try chicken tikka masala. It's a British favourite."], 2, 'E você tem que provar frango tikka masala. É um favorito britânico.'),
+    prox(16, ["It's complicated! Some people say it was created in Britain.", "It's complicated! Some people tell it was created in Britain.", "It's complicated! Some people say it was create in Britain."], 0, 'É complicado! Algumas pessoas dizem que foi criado na Grã-Bretanha.'),
+    prox(18, ["Here you ask for the check. And I'll pay this time!", "Here you ask for the bill. And I'll pay this time!", "Here you ask for the bill. And I'll paying this time!"], 1, 'Aqui você pede the bill. E desta vez eu pago!'),
+    prox(19, ["Thanks! I'm learn so much British English already.", "Thanks! I learning so much British English already.", "Thanks! I'm learning so much British English already."], 2, 'Obrigada! Já estou aprendendo muito inglês britânico.'),
+    { instrucao: 'Where is Mia from?', frase: '___', opcoes: ['New York.', 'London.', 'India.'], certa: 0, traducao: 'Nova York.' },
+    { instrucao: "How far is Olly's flat?", frase: '___', opcoes: ['An hour away.', 'Ten minutes away.', 'Next to the restaurant.'], certa: 1, traducao: 'A dez minutos.' },
+    { instrucao: 'What is "elevator" in British English?', frase: '___', opcoes: ['Queue.', 'Flat.', 'Lift.'], certa: 2, traducao: 'Lift.' },
+    { instrucao: 'What do British people call fries?', frase: '___', opcoes: ['Chips.', 'Crisps.', 'Petrol.'], certa: 0, traducao: 'Chips.' },
+    { instrucao: 'What does Olly say British people love?', frase: '___', opcoes: ['Fast food.', 'To queue.', 'To take the lift.'], certa: 1, traducao: 'Fazer fila.' },
+    { instrucao: "How long is Mia's vacation?", frase: '___', opcoes: ['One week.', 'A month.', 'Two weeks.'], certa: 2, traducao: 'Duas semanas.' },
+    { instrucao: "What did Olly's mum say?", frase: '___', opcoes: ['She would cook a Sunday roast.', 'She would pay the bill.', 'She would visit New York.'], certa: 0, traducao: 'Que ia fazer um Sunday roast.' },
+    { instrucao: 'In London, what should Mia ask for after dinner?', frase: '___', opcoes: ['The check.', 'The bill.', 'The loo.'], certa: 1, traducao: 'The bill (a conta).' }
+  ]
+});
+</script>
+</body>
+</html>
