@@ -688,6 +688,58 @@ function dyseMesAtualISO(){
 }
 function dyseNomeMes(iso){ const [a, m] = String(iso).split('-'); return DYSE_MESES[Number(m) - 1] + ' de ' + a; }
 
+/* ---------- Ranking Black (seção 43) ----------
+   Turma com material Black (matéria "*-black") tem ranking só dela: conta só a
+   soma dos pontos das atividades concluídas no mês. O aluno Black vê só esse
+   ranking; gestão e professora veem o geral e, embaixo, o Black. */
+async function dyseEuBlack(){
+  const { data, error } = await sb.rpc('eu_black');
+  if(error){ console.error('eu_black:', error); return false; }
+  return data === true;
+}
+async function dyseRankingBlack(mes){
+  const { data, error } = await sb.rpc('ranking_black', { p_mes: mes || null });
+  return { data: data || [], error };
+}
+function dyseRankingBlackHtml(data, mes, soAluno){
+  const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
+  const pts = v => Number(v || 0).toLocaleString('pt-BR');
+  const elegiveis = data.filter(r => r.elegivel);
+  const verTodos = data.some(r => r.nome);
+  const eu = data.find(r => r.eu);
+  const lista = verTodos ? elegiveis : elegiveis.filter(r => r.posicao <= 3);
+  const medalha = p => p <= 3
+    ? '<span class="msr" aria-hidden="true" style="font-size:30px; font-variation-settings:\'FILL\' 1,\'wght\' 500,\'GRAD\' 0,\'opsz\' 40; color:' + (p === 1 ? '#E0A100' : p === 2 ? '#9AA3AD' : '#B8733D') + ';">workspace_premium</span>'
+    : p + 'º';
+  const partes = r => r.atividades_feitas == null ? '' :
+    '<div class="dy-rank-parts"><span><b>' + r.atividades_feitas + '</b> atividade' + (r.atividades_feitas === 1 ? '' : 's') + ' no mês</span>' +
+    (r.qualidade != null ? '<span title="Desempate: % de acertos de primeira">' + Number(r.qualidade).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '% de primeira</span>' : '') + '</div>';
+  const linhas = lista.length ? lista.map(r =>
+    '<div class="dy-rank-row' + (r.posicao <= 3 ? ' podio p' + r.posicao : '') + (r.eu ? ' eu' : '') + '">' +
+      '<span class="pos">' + medalha(r.posicao) + '</span>' +
+      '<span class="who">' + (r.nome ? esc(r.nome) : (r.eu ? 'Você' : 'Aluno(a) ' + r.posicao + 'º lugar')) + partes(r) + '</span>' +
+      '<span class="pts">' + pts(r.pontos) + ' <small>pts</small></span>' +
+    '</div>').join('')
+    : '<p style="opacity:.7; padding:10px 4px;">Ainda não há alunos pontuando neste mês.</p>';
+  const naoElegiveis = verTodos ? data.filter(r => !r.elegivel) : [];
+  let minha = '';
+  if(eu && !eu.elegivel){
+    const prox = new Date(mes + 'T12:00:00'); prox.setMonth(prox.getMonth() + 1);
+    minha = '<div class="dy-rank-me">Você entrou neste mês: sua pontuação começa a contar em <b>' + DYSE_MESES[prox.getMonth()] + '</b>.</div>';
+  } else if(eu && eu.posicao > 3){
+    minha = '<div class="dy-rank-me">Sua posição: <b>' + eu.posicao + 'º lugar</b> com <b>' + pts(eu.pontos) + ' pts</b>' + partes(eu) + '</div>';
+  } else if(eu){
+    minha = '<div class="dy-rank-me top">Você está no top 3! <b>' + eu.posicao + 'º lugar</b> com <b>' + pts(eu.pontos) + ' pts</b>' + partes(eu) + '</div>';
+  }
+  return (soAluno ? '' : '<h3 class="dy-rank-sec">Ranking Black <small>turmas com material Black</small></h3>') +
+    '<div class="dy-rank-card">' + linhas + '</div>' +
+    (naoElegiveis.length ? '<p class="dy-rank-fora"><b>Começam a pontuar no mês seguinte</b> (entraram depois do dia 1º): ' + naoElegiveis.map(r => esc(r.nome || 'Aluno(a)')).join(', ') + '.</p>' : '') +
+    minha +
+    '<p class="dy-rank-how"><b>Como funciona' + (soAluno ? '' : ' o Ranking Black') + ':</b> soma dos pontos das atividades que você conclui no mês. ' +
+    'Cada atividade conta só os pontos da primeira vez que você termina. ' +
+    'Empate: vence quem tem mais acertos de primeira, depois menos erros, depois menos tempo nas atividades e, por último, quem está há mais tempo na DYSE.</p>';
+}
+
 /* Monta o ranking dentro de "container" — mesma tela no painel do aluno,
    da professora e da gestão. */
 async function dyseRenderRankingAtividades(container, mesEscolhido){
@@ -695,9 +747,19 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
   const mes = mesEscolhido || container.dataset.mes || dyseMesAtualISO();
   container.dataset.mes = mes;
   container.innerHTML = '<p style="opacity:.6;">Carregando ranking...</p>';
-  const [{ data, error }, avisos] = await Promise.all([dyseRankingMensal(mes), dyseRankingMensalAvisos(mes)]);
+  const session = await dyseGetSession();
+  const perfil = session ? await dyseGetProfile(session) : null;
+  const papel = perfil ? String(perfil.role || '').trim().toLowerCase() : '';
+  const equipe = papel === 'admin' || papel === 'financeiro' || papel === 'teacher';
+  const souBlack = !equipe && await dyseEuBlack();
+  const [{ data, error }, avisos, black] = await Promise.all([
+    souBlack ? Promise.resolve({ data: [], error: null }) : dyseRankingMensal(mes),
+    souBlack ? Promise.resolve([]) : dyseRankingMensalAvisos(mes),
+    (souBlack || equipe) ? dyseRankingBlack(mes) : Promise.resolve({ data: [], error: null })
+  ]);
+  if(black.error) console.error('ranking_black:', black.error);
   const esc = s => { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; };
-  if(error){
+  if(error || (souBlack && black.error)){
     console.error('ranking_mensal:', error);
     container.innerHTML = '<p style="opacity:.75;">Não foi possível carregar o ranking agora. Tente de novo em instantes.</p>';
     return;
@@ -769,10 +831,13 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
       '.dy-rank-aviso{background:#FDF0DD; color:#7A4A12; border-radius:14px; padding:10px 14px; font-size:.82rem; margin-bottom:14px;}' +
       '.dy-rank-fora{font-size:.8rem; color:#562915; opacity:.8; margin:0 0 14px;}' +
       '.dy-rank-how{font-size:.8rem; color:#562915; opacity:.8; margin-top:14px; line-height:1.6;}' +
+      '.dy-rank-sec{font-size:1.05rem; font-weight:600; color:#3A1D10; margin:30px 0 10px;} .dy-rank-sec small{font-size:.75rem; font-weight:500; opacity:.7; margin-left:6px;}' +
     '</style>' +
     '<div class="dy-rank">' +
       '<div class="dy-rank-top"><label for="dyRankMes" style="font-weight:700; font-size:.85rem; color:#562915;">Mês</label>' +
         '<select id="dyRankMes">' + opcoes.join('') + '</select></div>' +
+      (souBlack ? dyseRankingBlackHtml(black.data, mes, true) + '</div>' : '') +
+      (souBlack ? '' :
       avisoHtml +
       '<div class="dy-rank-card">' + linhas + '</div>' +
       (naoElegiveis.length ? '<p class="dy-rank-fora"><b>Começam a pontuar no mês seguinte</b> (entraram depois do dia 1º): ' + naoElegiveis.map(r => esc(r.nome || 'Aluno(a)')).join(', ') + '.</p>' : '') +
@@ -781,7 +846,8 @@ async function dyseRenderRankingAtividades(container, mesEscolhido){
       '<b>30</b> pela presença nas aulas (falta justificada, "vai assistir gravada" e "remarcou" não contam como falta) e ' +
       '<b>20</b> pelo Speaking Club (ir pelo menos 1 vez por semana). Feriados e recessos do calendário não contam. ' +
       'Empate: vence quem tem mais acertos de primeira, depois menos erros, depois menos tempo nas atividades e, por último, quem está há mais tempo na DYSE.</p>' +
-    '</div>';
+      (equipe && !black.error && black.data.length ? dyseRankingBlackHtml(black.data, mes, false) : '') +
+    '</div>');
   const sel = container.querySelector('#dyRankMes');
   if(sel) sel.onchange = () => dyseRenderRankingAtividades(container, sel.value);
 }

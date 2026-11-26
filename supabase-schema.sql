@@ -5132,3 +5132,211 @@ create index if not exists idx_registro_classe_sessao_turma_data on public.regis
 create index if not exists idx_activity_results_user_status_criado on public.activity_results (user_id, status, created_at);
 create index if not exists idx_horario_sugestoes_teacher on public.horario_sugestoes (teacher_id);
 create index if not exists idx_horario_sugestoes_turma on public.horario_sugestoes (turma_id);
+
+-- ======================================================================
+-- 43) RANKING BLACK — turma com material Black tem ranking só dela
+--     Aluno cuja turma tem matéria "*-black" (turma_materias) sai do ranking
+--     geral (seção 40) e entra no Ranking Black, que conta SÓ os pontos DYSE
+--     das atividades concluídas no mês (activity_results.pontos_ranking, os
+--     pontos congelados da 1ª conclusão — seção 39). Presença e Speaking não
+--     contam. Mesma regra de elegibilidade (entrou depois do dia 1º = pontua a
+--     partir do mês seguinte) e mesmo desempate do ranking geral.
+-- ======================================================================
+
+-- 43.1) O aluno está numa turma com material Black?
+create or replace function public.aluno_black(p_aluno uuid)
+returns boolean
+language sql
+stable
+security definer set search_path = public
+as $$
+  select exists (
+    select 1 from public.profiles p
+    join public.turma_materias tm on tm.turma_id = p.turma_id
+    where p.id = p_aluno and tm.materia_slug like '%-black'
+  );
+$$;
+revoke all on function public.aluno_black(uuid) from public, anon, authenticated;
+
+-- O próprio usuário logado é aluno Black? (a Área do Aluno usa pra escolher o ranking)
+create or replace function public.eu_black()
+returns boolean
+language sql
+stable
+security definer set search_path = public
+as $$ select public.aluno_black(auth.uid()); $$;
+revoke all on function public.eu_black() from public, anon;
+grant execute on function public.eu_black() to authenticated;
+
+-- 43.2) Ranking geral (seção 40.5) sem os alunos Black.
+create or replace function public.ranking_mensal_calculo(p_mes date)
+returns table(
+  aluno_id uuid, nome text, elegivel boolean, entrada date,
+  atividades_feitas int, atividades_liberadas int, pts_atividades numeric,
+  aulas_presente int, aulas_contadas int, pts_presenca numeric,
+  speaking_semanas int, speaking_previstas int, pts_speaking numeric,
+  media numeric, qualidade numeric, erros int, duracao_media int)
+language sql
+stable
+security definer set search_path = public
+as $$
+  with lim as (
+    select date_trunc('month', p_mes)::date as m0,
+           (date_trunc('month', p_mes) + interval '1 month' - interval '1 day')::date as m1
+  ),
+  nao_letivo as (
+    select d.data from public.calendario_letivo_dias d, lim
+    where d.tipo in ('recesso', 'feriado') and d.data between lim.m0 - 7 and lim.m1 + 7
+  ),
+  alunos as (
+    select p.id, p.full_name,
+           coalesce((select min(h.data_inicio) from public.aluno_financeiro_historico h where h.aluno_id = p.id),
+                    (p.created_at at time zone 'America/Sao_Paulo')::date) as entrada
+    from public.profiles p
+    where (lower(trim(p.role)) = 'student' or p.also_student)
+      and coalesce(p.situacao_financeira, 'ativo') not in ('cancelado', 'encerrado')
+      and not public.aluno_black(p.id)
+  ),
+  ativ as (
+    select l.aluno_id,
+           count(*)::int as liberadas,
+           count(*) filter (where exists (
+             select 1 from public.activity_results r
+             where r.user_id = l.aluno_id and r.course = l.course and r.aula = l.aula
+               and r.activity_num = l.activity_num and r.status = 'concluida'
+               and (coalesce(r.created_at, r.updated_at) at time zone 'America/Sao_Paulo')::date <= lim.m1
+           ))::int as feitas
+    from public.aluno_atividades_liberadas l, lim
+    where l.liberada and (l.liberada_em at time zone 'America/Sao_Paulo')::date between lim.m0 and lim.m1
+    group by l.aluno_id
+  ),
+  pres as (
+    select sp.aluno_id,
+           count(*) filter (where sp.status = 'presente')::int as presente,
+           count(*) filter (where sp.status in ('presente', 'falta'))::int as contadas
+    from public.sessao_presencas sp
+    join public.turma_sessoes ts on ts.id = sp.sessao_id, lim
+    where ts.data between lim.m0 and lim.m1
+      and ts.data not in (select data from nao_letivo)
+    group by sp.aluno_id
+  ),
+  semanas as (
+    select distinct date_trunc('week', d)::date as semana
+    from lim, generate_series(lim.m0 - 7, lim.m1 + 7, interval '1 day') g(d)
+    where extract(isodow from d) between 1 and 5
+      and (date_trunc('week', d)::date + 3) between lim.m0 and lim.m1
+      and d::date not in (select data from nao_letivo)
+  ),
+  semanas_com_speaking as (
+    select s.semana from semanas s
+    where exists (select 1 from public.speaking_encontros e where date_trunc('week', e.data)::date = s.semana)
+  ),
+  spk as (
+    select sp.aluno_id, count(distinct date_trunc('week', e.data)::date)::int as semanas
+    from public.speaking_presencas sp
+    join public.speaking_encontros e on e.id = sp.encontro_id
+    where sp.presente and date_trunc('week', e.data)::date in (select semana from semanas_com_speaking)
+    group by sp.aluno_id
+  ),
+  qual as (
+    select r.user_id,
+           sum(case when (r.meta->>'acertos_primeira') ~ '^[0-9]+$' then (r.meta->>'acertos_primeira')::int else 0 end) as primeira,
+           sum(case when (r.meta->>'total') ~ '^[0-9]+$' then (r.meta->>'total')::int else 0 end) as total,
+           sum(case when (r.meta->>'total') ~ '^[0-9]+$' and (r.meta->>'acertos') ~ '^[0-9]+$'
+                    then (r.meta->>'total')::int - (r.meta->>'acertos')::int else 0 end) as erros,
+           avg(case when (r.meta->>'duracao_seg') ~ '^[0-9]+$' then (r.meta->>'duracao_seg')::int end) as duracao
+    from public.activity_results r, lim
+    where r.course like 'ativ-%' and r.status = 'concluida'
+      and (coalesce(r.created_at, r.updated_at) at time zone 'America/Sao_Paulo')::date between lim.m0 and lim.m1
+    group by r.user_id
+  ),
+  prev as (select count(*)::int as n from semanas_com_speaking)
+  select a.id, a.full_name, (a.entrada <= lim.m0) as elegivel, a.entrada,
+         coalesce(at.feitas, 0), coalesce(at.liberadas, 0),
+         round(case when coalesce(at.liberadas, 0) = 0 then 50 else 50.0 * at.feitas / at.liberadas end, 1),
+         coalesce(pr.presente, 0), coalesce(pr.contadas, 0),
+         round(case when coalesce(pr.contadas, 0) = 0 then 30 else 30.0 * pr.presente / pr.contadas end, 1),
+         coalesce(sk.semanas, 0), prev.n,
+         round(case when prev.n = 0 then 20 else 20.0 * least(coalesce(sk.semanas, 0), prev.n) / prev.n end, 1),
+         round(
+           (case when coalesce(at.liberadas, 0) = 0 then 50 else 50.0 * at.feitas / at.liberadas end) +
+           (case when coalesce(pr.contadas, 0) = 0 then 30 else 30.0 * pr.presente / pr.contadas end) +
+           (case when prev.n = 0 then 20 else 20.0 * least(coalesce(sk.semanas, 0), prev.n) / prev.n end), 1),
+         case when coalesce(q.total, 0) > 0 then round(100.0 * q.primeira / q.total, 1) end,
+         q.erros::int,
+         round(q.duracao)::int
+  from alunos a
+  cross join lim
+  cross join prev
+  left join ativ at on at.aluno_id = a.id
+  left join pres pr on pr.aluno_id = a.id
+  left join spk sk on sk.aluno_id = a.id
+  left join qual q on q.user_id = a.id;
+$$;
+revoke all on function public.ranking_mensal_calculo(date) from public, anon, authenticated;
+
+-- 43.3) Ranking Black do mês: soma dos pontos das atividades concluídas no mês.
+--       Gestão vê todos com nome; professora vê o top 3 (sem nome); aluno Black
+--       vê o top 3 (sem nome) e a própria linha. Aluno de fora não vê nada.
+create or replace function public.ranking_black(p_mes date default null)
+returns table(
+  posicao int, pontos int, nome text, eu boolean, elegivel boolean, entrada date,
+  atividades_feitas int, qualidade numeric)
+language sql
+stable
+security definer set search_path = public
+as $$
+  with lim as (
+    select date_trunc('month', coalesce(p_mes, (now() at time zone 'America/Sao_Paulo')::date))::date as m0,
+           (date_trunc('month', coalesce(p_mes, (now() at time zone 'America/Sao_Paulo')::date)) + interval '1 month' - interval '1 day')::date as m1
+  ),
+  alunos as (
+    select p.id, p.full_name,
+           coalesce((select min(h.data_inicio) from public.aluno_financeiro_historico h where h.aluno_id = p.id),
+                    (p.created_at at time zone 'America/Sao_Paulo')::date) as entrada
+    from public.profiles p
+    where (lower(trim(p.role)) = 'student' or p.also_student)
+      and coalesce(p.situacao_financeira, 'ativo') not in ('cancelado', 'encerrado')
+      and public.aluno_black(p.id)
+  ),
+  pts as (
+    select r.user_id,
+           sum(coalesce(r.pontos_ranking, 0))::int as pontos,
+           count(*)::int as feitas,
+           sum(case when (r.meta->>'acertos_primeira') ~ '^[0-9]+$' then (r.meta->>'acertos_primeira')::int else 0 end) as primeira,
+           sum(case when (r.meta->>'total') ~ '^[0-9]+$' then (r.meta->>'total')::int else 0 end) as total,
+           sum(case when (r.meta->>'total') ~ '^[0-9]+$' and (r.meta->>'acertos') ~ '^[0-9]+$'
+                    then (r.meta->>'total')::int - (r.meta->>'acertos')::int else 0 end) as erros,
+           avg(case when (r.meta->>'duracao_seg') ~ '^[0-9]+$' then (r.meta->>'duracao_seg')::int end) as duracao
+    from public.activity_results r, lim
+    where r.course like 'ativ-%' and r.status = 'concluida'
+      and (coalesce(r.created_at, r.updated_at) at time zone 'America/Sao_Paulo')::date between lim.m0 and lim.m1
+    group by r.user_id
+  ),
+  c as (
+    select a.id, a.full_name, a.entrada, (a.entrada <= lim.m0) as elegivel,
+           coalesce(t.pontos, 0) as pontos, coalesce(t.feitas, 0) as feitas,
+           case when coalesce(t.total, 0) > 0 then round(100.0 * t.primeira / t.total, 1) end as qualidade,
+           t.erros, t.duracao
+    from alunos a cross join lim left join pts t on t.user_id = a.id
+  ),
+  rk as (
+    select c.*, case when c.elegivel then (row_number() over (partition by c.elegivel order by c.pontos desc,
+             c.qualidade desc nulls last, c.erros asc nulls last, c.duracao asc nulls last,
+             c.entrada asc, c.full_name))::int end as pos
+    from c
+  ),
+  quem as (select public.is_admin() as adm, public.is_teacher() as prof, public.aluno_black(auth.uid()) as black)
+  select rk.pos, rk.pontos,
+         case when quem.adm then rk.full_name end,
+         (rk.id = auth.uid()),
+         rk.elegivel, rk.entrada,
+         case when quem.adm or rk.id = auth.uid() then rk.feitas end,
+         case when quem.adm or rk.id = auth.uid() then rk.qualidade end
+  from rk cross join quem
+  where (quem.adm or quem.prof or quem.black)
+    and (quem.adm or (rk.elegivel and rk.pos <= 3) or rk.id = auth.uid())
+  order by rk.elegivel desc, rk.pos nulls last, rk.full_name;
+$$;
+revoke all on function public.ranking_black(date) from public, anon;
+grant execute on function public.ranking_black(date) to authenticated;
