@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 4 · Positive, negative or question?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 04 and 05 · Escuta (A Celebrity's Routine)
+   Alinhado ao "Using the Present Simple" do slide (Positive: He listens... / Negative: Rihanna
+   doesn't eat... / We don't like... / Question: Do you...? / Does she...?). Conteúdo NOVO: o
+   aluno ouve a frase e escolhe a forma que ouviu. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'record_voice_over' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 4, num: 2, tipo: 'imagem',
+  instrucao: 'Listen: which words do you hear?',
+  itens: [
+    q("She doesn't eat meat.", "doesn't eat", ["don't eat", 'eats', 'does eat']),
+    q('He listens to music all the time.', 'listens', ['listen', "doesn't listen", 'does listen']),
+    q("We don't like to cook.", "don't like", ["doesn't like", 'likes', 'like']),
+    q('Do you drink coffee in the morning?', 'Do you drink', ['Does you drink', 'You drink', "Don't you drink"]),
+    q('Does she go to the gym every day?', 'Does she go', ['Do she go', 'She goes', "Doesn't she go"]),
+    q('They work early on Mondays.', 'work', ['works', "don't work", "doesn't work"]),
+    q("My dad doesn't drink water. He prefers juice.", "doesn't drink", ["don't drink", 'drinks', 'drink']),
+    q('I spend time with my family on Sundays.', 'spend', ['spends', "don't spend", "doesn't spend"]),
+    q("They don't visit us often.", "don't visit", ["doesn't visit", 'visit', 'visits']),
+    q('Does Tom work every day?', 'Does Tom work', ['Do Tom work', 'Tom works', "Doesn't Tom work"]),
+    q('She never visits me.', 'visits', ['visit', "doesn't visit", "don't visit"]),
+    q('Do they go to the city once a week?', 'Do they go', ['Does they go', 'They go', "Don't they go"]),
+    q("You don't play the guitar very well.", "don't play", ["doesn't play", 'play', 'plays']),
+    q('Tim and Kate watch music videos at night.', 'watch', ['watches', "don't watch", "doesn't watch"]),
+    q("Lucas doesn't eat breakfast.", "doesn't eat", ["don't eat", 'eats', 'eat']),
+    q('She has fish for dinner.', 'has', ['have', "doesn't have", "don't have"]),
+    q('Do you feel overwhelmed sometimes?', 'Do you feel', ['Does you feel', 'You feel', 'Did you feel']),
+    q("I don't clean the house on Mondays.", "don't clean", ["doesn't clean", 'clean', 'cleans']),
+    q('Does your mom have lunch at home?', 'Does your mom have', ['Do your mom have', 'Your mom has', 'Does your mom has']),
+    q('The singer drinks hot water with lemon.', 'drinks', ['drink', "doesn't drink", "don't drink"]),
+    q("He doesn't like vegetables.", "doesn't like", ["don't like", 'likes', 'like']),
+    q('We usually go to school by bus.', 'go', ['goes', "don't go", "doesn't go"]),
+    q('Do your friends spend time together?', 'Do your friends spend', ['Does your friends spend', 'Your friends spend', "Don't your friends spend"]),
+    q("It doesn't feel good.", "doesn't feel", ["don't feel", 'feels', 'feel'])
+  ]
+});
+</script>
+</body>
+</html>

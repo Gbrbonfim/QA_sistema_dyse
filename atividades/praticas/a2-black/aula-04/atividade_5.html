@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 4 · Interview with a pop star</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 04 and 05 · Leitura (A Celebrity's Routine)
+   Alinhado ao texto do slide (rotina, dieta e equilíbrio entre trabalho e família de uma
+   estrela pop) e ao present simple (perguntas com Do you...?, afirmativas e negativas).
+   Conteúdo NOVO: um repórter entrevista a Maya Stone, uma cantora fictícia. 20 questões: 12 de
+   "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Reporter', 'Maya, thank you for the interview! What time do you wake up?'],
+  ['Maya', 'I usually wake up at six. I work early.'],
+  ['Reporter', 'What do you have for breakfast?'],
+  ['Maya', 'I have yogurt and fruit, and I drink hot water with lemon.'],
+  ['Reporter', 'Do you go to the gym?'],
+  ['Maya', 'Yes, I do. I go to the gym four times a week.'],
+  ['Reporter', 'What do you have for lunch?'],
+  ['Maya', "I have chicken and rice. I don't eat a lot of vegetables, but I try!"],
+  ['Reporter', 'Do you eat snacks on tour?'],
+  ['Maya', 'Yes! My dressing room is always full of chocolate and chips.'],
+  ['Reporter', 'Do you have time for your family?'],
+  ['Maya', "Not always. Sometimes I feel overwhelmed with work."],
+  ['Reporter', 'What do you do on Sundays?'],
+  ['Maya', 'I spend time with my family. We have dinner together.'],
+  ['Reporter', 'Does your family listen to your songs?'],
+  ['Maya', "Ha ha! My mom does. My brother doesn't!"]
+];
+const lado = q => q === 'Reporter' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 4, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I usually wake up at six. I work early.', 'I usually wakes up at six. I works early.', 'I usually wake up at six. I working early.'], 0, 'Normalmente acordo às seis. Trabalho cedo.'),
+    prox(2, ['What does you have for breakfast?', 'What do you have for breakfast?', 'What you have for breakfast?'], 1, 'O que você toma no café da manhã?'),
+    prox(3, ['I has yogurt and fruit, and I drinks hot water.', 'I have yogurt and fruit, and I drinking hot water.', 'I have yogurt and fruit, and I drink hot water with lemon.'], 2, 'Como iogurte e fruta, e bebo água quente com limão.'),
+    prox(4, ['Do you go to the gym?', 'Does you go to the gym?', 'Do you goes to the gym?'], 0, 'Você vai à academia?'),
+    prox(5, ['Yes, I does. I go to the gym four times a week.', 'Yes, I do. I go to the gym four times a week.', 'Yes, I do. I goes to the gym four times a week.'], 1, 'Sim. Vou à academia quatro vezes por semana.'),
+    prox(6, ['What does you have for lunch?', 'What you do have for lunch?', 'What do you have for lunch?'], 2, 'O que você almoça?'),
+    prox(7, ["I have chicken and rice. I don't eat a lot of vegetables, but I try!", "I have chicken and rice. I doesn't eat a lot of vegetables.", "I have chicken and rice. I don't eats a lot of vegetables."], 0, 'Como frango e arroz. Não como muitos legumes, mas tento!'),
+    prox(8, ['Does you eat snacks on tour?', 'Do you eat snacks on tour?', 'Do you eats snacks on tour?'], 1, 'Você come besteiras na turnê?'),
+    prox(10, ['Does you have time for your family?', 'Do you has time for your family?', 'Do you have time for your family?'], 2, 'Você tem tempo para a sua família?'),
+    prox(11, ['Not always. Sometimes I feel overwhelmed with work.', 'Not always. Sometimes I feels overwhelmed with work.', 'Not always. Sometimes I am feel overwhelmed with work.'], 0, 'Nem sempre. Às vezes me sinto sobrecarregada com o trabalho.'),
+    prox(13, ['I spends time with my family. We have dinner together.', 'I spend time with my family. We have dinner together.', 'I spend time with my family. We has dinner together.'], 1, 'Passo tempo com a minha família. Jantamos juntos.'),
+    prox(15, ["Ha ha! My mom do. My brother don't!", "Ha ha! My mom does. My brother don't!", "Ha ha! My mom does. My brother doesn't!"], 2, 'Ha ha! A minha mãe ouve. O meu irmão não!'),
+    { instrucao: 'What time does Maya wake up?', frase: 'At ___.', opcoes: ['six', 'seven', 'eight'], certa: 0, traducao: 'Às seis.' },
+    { instrucao: 'What does she drink in the morning?', frase: 'Hot water with ___.', opcoes: ['honey', 'lemon', 'milk'], certa: 1, traducao: 'Água quente com limão.' },
+    { instrucao: 'How often does she go to the gym?', frase: '___ times a week.', opcoes: ['Two', 'Three', 'Four'], certa: 2, traducao: 'Quatro vezes por semana.' },
+    { instrucao: 'What does she have for lunch?', frase: 'Chicken and ___.', opcoes: ['rice', 'potatoes', 'fish'], certa: 0, traducao: 'Frango e arroz.' },
+    { instrucao: 'Does she eat a lot of vegetables?', frase: '___', opcoes: ['Yes, she does.', "No, she doesn't.", "No, she don't."], certa: 1, traducao: 'Não.' },
+    { instrucao: 'How does she feel sometimes?', frase: '___ with work.', opcoes: ['Happy', 'Bored', 'Overwhelmed'], certa: 2, traducao: 'Sobrecarregada com o trabalho.' },
+    { instrucao: 'What does she do on Sundays?', frase: 'She spends time with her ___.', opcoes: ['family', 'band', 'fans'], certa: 0, traducao: 'Ela passa tempo com a família.' },
+    { instrucao: 'Who listens to her songs?', frase: 'Her ___.', opcoes: ['brother', 'mom', 'dad'], certa: 1, traducao: 'A mãe dela.' }
+  ]
+});
+</script>
+</body>
+</html>

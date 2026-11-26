@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 4 · Daily routine</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 04 and 05 · Escuta (A Celebrity's Routine)
+   Alinhado ao Warm Up e ao Vocabulary do slide (go to school, work early, clean your house,
+   have breakfast / lunch / dinner, drink water, spend time with the family, be overwhelmed).
+   Conteúdo NOVO: o aluno ouve a frase e escolhe a atividade da rotina. 24 questões. */
+const IC = { 'have breakfast': 'breakfast_dining', 'have lunch': 'lunch_dining', 'have dinner': 'dinner_dining', 'drink water': 'water_full', 'spend time with the family': 'family_restroom', 'be overwhelmed': 'sentiment_stressed', 'go to school': 'school', 'work early': 'work', 'clean the house': 'cleaning_services', 'go to the gym': 'fitness_center' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 4, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the activity',
+  itens: [
+    q('I have eggs and fruit at seven in the morning.', 'have breakfast', ['have dinner', 'go to the gym', 'clean the house']),
+    q('At noon, I eat fish and rice.', 'have lunch', ['have breakfast', 'work early', 'drink water']),
+    q('At night, she eats soup with her kids.', 'have dinner', ['have breakfast', 'go to school', 'work early']),
+    q('He drinks two liters a day. It is good for the skin.', 'drink water', ['have lunch', 'clean the house', 'go to school']),
+    q('On Sundays, we visit my grandparents and play games together.', 'spend time with the family', ['work early', 'go to the gym', 'drink water']),
+    q('She has too much work and too many problems. She feels stressed.', 'be overwhelmed', ['have breakfast', 'drink water', 'go to school']),
+    q('The kids take the bus to class at seven.', 'go to school', ['have dinner', 'clean the house', 'be overwhelmed']),
+    q('He starts work at six in the morning.', 'work early', ['have dinner', 'spend time with the family', 'drink water']),
+    q('On Saturdays, I wash the floor and the windows.', 'clean the house', ['go to school', 'have lunch', 'work early']),
+    q('She runs and lifts weights every afternoon.', 'go to the gym', ['have dinner', 'clean the house', 'go to school']),
+    q('Rihanna has egg whites and pineapple in the morning.', 'have breakfast', ['have lunch', 'have dinner', 'go to the gym']),
+    q('For lunch, Rihanna has fish and potatoes.', 'have lunch', ['have breakfast', 'clean the house', 'drink water']),
+    q('My parents eat at eight thirty at night.', 'have dinner', ['have lunch', 'go to school', 'work early']),
+    q('I always have a bottle with me. I drink a lot.', 'drink water', ['have dinner', 'go to the gym', 'be overwhelmed']),
+    q("The singer doesn't answer her messages. She has too many things to do.", 'be overwhelmed', ['have lunch', 'go to school', 'drink water']),
+    q('He has dinner with his wife and children every night. Family is important.', 'spend time with the family', ['work early', 'go to school', 'clean the house']),
+    q('I get up at five because my job starts at six.', 'work early', ['have dinner', 'go to the gym', 'spend time with the family']),
+    q('My little brother studies at a school near our house. He goes there every day.', 'go to school', ['work early', 'have dinner', 'drink water']),
+    q('She vacuums the living room every week.', 'clean the house', ['have breakfast', 'go to school', 'be overwhelmed']),
+    q('They exercise at the gym three times a week.', 'go to the gym', ['clean the house', 'have breakfast', 'drink water']),
+    q('Coffee and toast at eight, before work.', 'have breakfast', ['have dinner', 'go to the gym', 'clean the house']),
+    q('A sandwich at one o\'clock in the office.', 'have lunch', ['have breakfast', 'have dinner', 'go to school']),
+    q('We watch movies together with our kids on Friday nights.', 'spend time with the family', ['work early', 'clean the house', 'drink water']),
+    q('Pasta at nine, before I go to bed.', 'have dinner', ['have breakfast', 'have lunch', 'go to school'])
+  ]
+});
+</script>
+</body>
+</html>

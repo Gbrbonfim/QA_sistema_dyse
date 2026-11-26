@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 4 · Positive and negative</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 04 and 05 · Escrita (A Celebrity's Routine)
+   Alinhado ao "Using the Present Simple" do slide (Positive: They listen... / He listens...;
+   Negative: Rihanna doesn't eat... / We don't like...) e ao vocabulário de rotina. Conteúdo
+   NOVO. A isca é a forma errada (don't x doesn't, -s depois de doesn't...). 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 4, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu tomo café da manhã às sete.'), palavras: ['I', 'have', 'breakfast', 'at', 'seven'], isca: ['has'], fim: '.', traducao: 'Tomo café da manhã às sete.' },
+    { contexto: M('Ela almoça em casa.'), palavras: ['She', 'has', 'lunch', 'at', 'home'], isca: ['have'], fim: '.', traducao: 'Ela almoça em casa.' },
+    { contexto: M('Nós jantamos às oito.'), palavras: ['We', 'have', 'dinner', 'at', 'eight'], isca: ['has'], fim: '.', traducao: 'Jantamos às oito.' },
+    { contexto: M('Ele bebe muita água.'), palavras: ['He', 'drinks', 'a', 'lot', 'of', 'water'], isca: ['drink'], fim: '.', traducao: 'Ele bebe muita água.' },
+    { contexto: M('Eu passo tempo com a minha família aos domingos.'), palavras: ['I', 'spend', 'time', 'with', 'my', 'family', 'on', 'Sundays'], isca: ['spends'], fim: '.', traducao: 'Passo tempo com a minha família aos domingos.' },
+    { contexto: M('Ela não come carne.'), palavras: ['She', "doesn't", 'eat', 'meat'], isca: ["don't"], fim: '.', traducao: 'Ela não come carne.' },
+    { contexto: M('Nós não trabalhamos aos sábados.'), palavras: ['We', "don't", 'work', 'on', 'Saturdays'], isca: ["doesn't"], fim: '.', traducao: 'Não trabalhamos aos sábados.' },
+    { contexto: M('Ele não gosta de legumes.'), palavras: ['He', "doesn't", 'like', 'vegetables'], isca: ['likes'], fim: '.', traducao: 'Ele não gosta de legumes.' },
+    { contexto: M('Eles acordam cedo.'), palavras: ['They', 'wake', 'up', 'early'], isca: ['wakes'], fim: '.', traducao: 'Eles acordam cedo.' },
+    { contexto: M('A cantora trabalha muito.'), palavras: ['The', 'singer', 'works', 'a', 'lot'], isca: ['work'], fim: '.', traducao: 'A cantora trabalha muito.' },
+    { contexto: M('Eu não limpo a casa todo dia.'), palavras: ['I', "don't", 'clean', 'the', 'house', 'every', 'day'], isca: ["doesn't"], fim: '.', traducao: 'Não limpo a casa todo dia.' },
+    { contexto: M('Ela vai para a academia três vezes por semana.'), palavras: ['She', 'goes', 'to', 'the', 'gym', 'three', 'times', 'a', 'week'], isca: ['go'], fim: '.', traducao: 'Ela vai para a academia três vezes por semana.' },
+    { contexto: M('O meu irmão não toma café da manhã.'), palavras: ['My', 'brother', "doesn't", 'have', 'breakfast'], isca: ['has'], fim: '.', traducao: 'O meu irmão não toma café da manhã.' },
+    { contexto: M('Eles ouvem as músicas dela o tempo todo.'), palavras: ['They', 'listen', 'to', 'her', 'songs', 'all', 'the', 'time'], isca: ['listens'], fim: '.', traducao: 'Eles ouvem as músicas dela o tempo todo.' },
+    { contexto: M('Ela às vezes se sente sobrecarregada.'), palavras: ['She', 'sometimes', 'feels', 'overwhelmed'], isca: ['feel'], fim: '.', traducao: 'Ela às vezes se sente sobrecarregada.' },
+    { contexto: M('Eu vou para a escola de ônibus.'), palavras: ['I', 'go', 'to', 'school', 'by', 'bus'], isca: ['goes'], fim: '.', traducao: 'Vou para a escola de ônibus.' },
+    { contexto: M('Ele nunca janta tarde.'), palavras: ['He', 'never', 'has', 'dinner', 'late'], isca: ['have'], fim: '.', traducao: 'Ele nunca janta tarde.' },
+    { contexto: M('Vocês não visitam os seus avós com frequência.'), palavras: ['You', "don't", 'visit', 'your', 'grandparents', 'often'], isca: ['visits'], fim: '.', traducao: 'Vocês não visitam os seus avós com frequência.' },
+    { contexto: M('A minha mãe cozinha muito bem.'), palavras: ['My', 'mom', 'cooks', 'very', 'well'], isca: ['cook'], fim: '.', traducao: 'A minha mãe cozinha muito bem.' },
+    { contexto: M('O Tom não trabalha todos os dias.'), palavras: ['Tom', "doesn't", 'work', 'every', 'day'], isca: ['works'], fim: '.', traducao: 'O Tom não trabalha todos os dias.' }
+  ]
+});
+</script>
+</body>
+</html>

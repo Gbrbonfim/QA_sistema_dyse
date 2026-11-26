@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 4 · Our routines</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 04 and 05 · Leitura (A Celebrity's Routine)
+   Alinhado ao Warm Up do slide ("Which of these things do you do in your daily life?") e ao
+   exercício 4 (Write sentences about your routine), com present simple e advérbios de
+   frequência (usually, never, often, once a week). Conteúdo NOVO: o Pedro e a Lia comparam as
+   rotinas. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Pedro', 'Lia, do you work early?'],
+  ['Lia', 'Yes, I do. I start work at seven. And you?'],
+  ['Pedro', "No, I don't. I go to school in the afternoon."],
+  ['Lia', 'Lucky you! Do you have breakfast?'],
+  ['Pedro', 'Yes, I always have breakfast with my mom.'],
+  ['Lia', "I never have breakfast. I don't have time!"],
+  ['Pedro', "That's not good! Do you drink water at work?"],
+  ['Lia', "Not much. I usually drink coffee."],
+  ['Pedro', 'Who cleans your house?'],
+  ['Lia', 'I clean it once a week, on Saturdays.'],
+  ['Pedro', 'My dad cleans our house. He likes it!'],
+  ['Lia', 'Nice! Does your family have dinner together?'],
+  ['Pedro', 'Yes, we have dinner together every night.'],
+  ['Lia', "I live alone, so I often feel overwhelmed. I don't spend a lot of time with my family."],
+  ['Pedro', 'You can have dinner with us on Sunday!'],
+  ['Lia', "Thanks, Pedro! That's very kind."]
+];
+const lado = q => q === 'Pedro' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 4, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I do. I start work at seven. And you?', 'Yes, I does. I start work at seven.', 'Yes, I do. I starts work at seven.'], 0, 'Sim. Começo a trabalhar às sete. E você?'),
+    prox(2, ["No, I doesn't. I go to school in the afternoon.", "No, I don't. I go to school in the afternoon.", "No, I don't. I goes to school in the afternoon."], 1, 'Não. Vou à escola à tarde.'),
+    prox(3, ['Lucky you! Does you have breakfast?', 'Lucky you! You have breakfast do?', 'Lucky you! Do you have breakfast?'], 2, 'Sorte sua! Você toma café da manhã?'),
+    prox(4, ['Yes, I always have breakfast with my mom.', 'Yes, I always has breakfast with my mom.', 'Yes, always I have breakfast with my mom.'], 0, 'Sim, sempre tomo café com a minha mãe.'),
+    prox(5, ["I never have breakfast. I doesn't have time!", "I never have breakfast. I don't have time!", "I don't never have breakfast. I have time!"], 1, 'Nunca tomo café da manhã. Não tenho tempo!'),
+    prox(6, ["That's not good! Does you drink water at work?", "That's not good! Do you drinks water at work?", "That's not good! Do you drink water at work?"], 2, 'Isso não é bom! Você bebe água no trabalho?'),
+    prox(8, ['Who cleans your house?', 'Who clean your house?', 'Who does cleans your house?'], 0, 'Quem limpa a sua casa?'),
+    prox(9, ['I clean it once a week, in Saturdays.', 'I clean it once a week, on Saturdays.', 'I cleans it once a week, on Saturdays.'], 1, 'Limpo uma vez por semana, aos sábados.'),
+    prox(10, ['My dad clean our house. He like it!', 'My dad cleans our house. He like it!', 'My dad cleans our house. He likes it!'], 2, 'O meu pai limpa a nossa casa. Ele gosta!'),
+    prox(11, ['Nice! Does your family have dinner together?', 'Nice! Do your family have dinner together?', 'Nice! Does your family has dinner together?'], 0, 'Legal! A sua família janta junta?'),
+    prox(12, ['Yes, we has dinner together every night.', 'Yes, we have dinner together every night.', 'Yes, we have dinner together every nights.'], 1, 'Sim, jantamos juntos todas as noites.'),
+    prox(15, ["Thanks, Pedro! That's very kinds.", "Thank, Pedro! That very kind.", "Thanks, Pedro! That's very kind."], 2, 'Obrigada, Pedro! Muito gentil.'),
+    { instrucao: 'What time does Lia start work?', frase: 'At ___.', opcoes: ['seven', 'six', 'eight'], certa: 0, traducao: 'Às sete.' },
+    { instrucao: 'When does Pedro go to school?', frase: 'In the ___.', opcoes: ['morning', 'afternoon', 'evening'], certa: 1, traducao: 'À tarde.' },
+    { instrucao: 'Does Lia have breakfast?', frase: '___', opcoes: ['Yes, always.', 'Yes, she does.', 'No, never.'], certa: 2, traducao: 'Não, nunca.' },
+    { instrucao: 'What does Lia usually drink at work?', frase: '___.', opcoes: ['Coffee', 'Water', 'Tea'], certa: 0, traducao: 'Café.' },
+    { instrucao: 'How often does Lia clean her house?', frase: '___.', opcoes: ['Every day', 'Once a week', 'Twice a week'], certa: 1, traducao: 'Uma vez por semana.' },
+    { instrucao: "Who cleans Pedro's house?", frase: 'His ___.', opcoes: ['mom', 'sister', 'dad'], certa: 2, traducao: 'O pai dele.' },
+    { instrucao: "How often does Pedro's family have dinner together?", frase: '___.', opcoes: ['Every night', 'On Sundays', 'Never'], certa: 0, traducao: 'Todas as noites.' },
+    { instrucao: 'Why does Lia often feel overwhelmed?', frase: 'She lives ___.', opcoes: ['with her family', 'alone', 'with Pedro'], certa: 1, traducao: 'Ela mora sozinha.' }
+  ]
+});
+</script>
+</body>
+</html>

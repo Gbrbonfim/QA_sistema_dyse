@@ -1128,6 +1128,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Third person spelling', tipo: 'Make a Choice', treina: 'Gramática · -s, -es, -ies', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'What is it for?', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 4,
+        titulo: "Class 04 and 05 · A Celebrity's Routine",
+        atividades: [
+          { num: 1, titulo: 'Daily routine', tipo: 'Escute e escolha', treina: 'Escuta · Rotina', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Positive, negative or question?', tipo: 'Escute e escolha', treina: 'Escuta · Present simple', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Positive and negative', tipo: 'Monte a frase', treina: 'Escrita · Afirmativa e negativa', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Do you...? Does she...?', tipo: 'Monte a frase', treina: 'Escrita · Perguntas', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'Interview with a pop star', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'Our routines', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'My routine', tipo: 'Escute e grave', treina: 'Fala · Rotina', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Her routine', tipo: 'Escute e grave', treina: 'Fala · Terceira pessoa', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: "Do, does, don't, doesn't", tipo: 'Make a Choice', treina: 'Gramática · Present simple', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Routine words and facts', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário e frequência', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 4 · Routine words and facts</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 04 and 05 · Gramática (A Celebrity's Routine)
+   Vocabulário de rotina do slide (have breakfast / lunch / dinner, drink water, spend time with
+   the family, be overwhelmed, go to school, work early, clean the house), advérbios de
+   frequência e o uso do present simple para rotinas, hábitos e fatos (Grammar Point 1).
+   Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 4, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'The first meal of the day is ___.', opcoes: ['breakfast', 'lunch', 'dinner'], certa: 0, traducao: 'A primeira refeição do dia é o café da manhã.' },
+    { frase: 'We have ___ at noon.', opcoes: ['breakfast', 'lunch', 'dinner'], certa: 1, traducao: 'Almoçamos ao meio-dia.' },
+    { frase: 'We have ___ at night.', opcoes: ['breakfast', 'lunch', 'dinner'], certa: 2, traducao: 'Jantamos à noite.' },
+    { frase: 'When you have too many things to do, you feel ___.', opcoes: ['overwhelmed', 'early', 'balanced'], certa: 0, traducao: 'Quando você tem coisas demais para fazer, se sente sobrecarregado.' },
+    { frase: 'On Sundays, I visit my parents. I ___ with my family.', opcoes: ['clean the house', 'spend time', 'work early'], certa: 1, traducao: 'Aos domingos, visito os meus pais. Passo tempo com a família.' },
+    { frase: 'He starts his job at 5 a.m. He ___.', opcoes: ['goes to school', 'has dinner', 'works early'], certa: 2, traducao: 'Ele começa a trabalhar às 5 da manhã. Ele trabalha cedo.' },
+    { frase: 'Students ___ every day.', opcoes: ['go to school', 'work early', 'are overwhelmed'], certa: 0, traducao: 'Os alunos vão à escola todo dia.' },
+    { frase: 'It is good for your health to ___ every day.', opcoes: ['be overwhelmed', 'drink water', 'eat snacks'], certa: 1, traducao: 'É bom para a saúde beber água todo dia.' },
+    { frase: 'We use the present simple to talk about ___.', opcoes: ['the future', 'past actions', 'routines, habits and facts'], certa: 2, traducao: 'Usamos o present simple para falar de rotinas, hábitos e fatos.' },
+    { frase: '"I have egg whites for breakfast." This sentence is about ___.', opcoes: ['her daily breakfast', 'her last meal', 'her past'], certa: 0, traducao: '"Como claras no café da manhã." A frase é sobre o café da manhã diário dela.' },
+    { frase: '"She eats many fruits." EAT gets an S because ___.', opcoes: ["it's in the plural", "it's in the third person (he, she, it)", "it's a question"], certa: 1, traducao: '"Ela come muitas frutas." EAT recebe S porque está na terceira pessoa.' },
+    { frase: '100% of the time = ___', opcoes: ['never', 'sometimes', 'always'], certa: 2, traducao: '100% das vezes = sempre.' },
+    { frase: '0% of the time = ___', opcoes: ['never', 'often', 'usually'], certa: 0, traducao: '0% das vezes = nunca.' },
+    { frase: 'I go to the gym ___. (uma vez por semana)', opcoes: ['once a weeks', 'once a week', 'one a week'], certa: 1, traducao: 'Vou à academia uma vez por semana.' },
+    { frase: 'She listens to Rihanna ___. (o tempo todo)', opcoes: ['all time', 'every the time', 'all the time'], certa: 2, traducao: 'Ela ouve Rihanna o tempo todo.' },
+    { frase: 'Where is the adverb? She ___ visits me.', opcoes: ['never', 'is never', 'never does'], certa: 0, traducao: 'Ela nunca me visita.' },
+    { frase: 'Where is the adverb? I ___ go to school by bus.', opcoes: ['am usually', 'usually', 'usually do'], certa: 1, traducao: 'Normalmente vou à escola de ônibus.' },
+    { frase: 'A person who sings pop songs and is very famous is a ___.', opcoes: ['street vendor', 'teacher', 'pop diva'], certa: 2, traducao: 'Uma pessoa que canta pop e é muito famosa é uma diva pop.' },
+    { frase: 'Rihanna is from ___.', opcoes: ['Barbados', 'Texas', 'Cuba'], certa: 0, traducao: 'A Rihanna é de Barbados.' },
+    { frase: "Rihanna's cosmetics brand is ___.", opcoes: ['Savage X Fenty', 'Fenty Beauty', 'Golden Grahams'], certa: 1, traducao: 'A marca de cosméticos da Rihanna é a Fenty Beauty.' },
+    { frase: 'Do you clean your house? — Yes, I clean it ___ a week.', opcoes: ['one', 'two', 'twice'], certa: 2, traducao: 'Você limpa a sua casa? — Sim, limpo duas vezes por semana.' },
+    { frase: 'My mom ___ dinner for the family every night.', opcoes: ['cooks', 'cook', 'cooking'], certa: 0, traducao: 'A minha mãe faz o jantar para a família todas as noites.' },
+    { frase: 'I want more ___ between work and family.', opcoes: ['snacks', 'balance', 'breakfast'], certa: 1, traducao: 'Quero mais equilíbrio entre trabalho e família.' },
+    { frase: 'Snacks like chips and chocolate are not a ___ diet.', opcoes: ['busy', 'overwhelmed', 'balanced'], certa: 2, traducao: 'Besteiras como batatinha e chocolate não são uma dieta equilibrada.' }
+  ]
+});
+</script>
+</body>
+</html>
