@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 13 · Tenses review</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 13 · Escrita (Campaign Catastrophes)
+   Alinhado ao "Review Of Verb Tenses" (os 7 tempos e as perguntas com Does / Did / Have / Has /
+   Was / Were / are / will) e ao "Fix The Failed Campaign". Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 12, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('A empresa vende fast food.'), palavras: ['The', 'company', 'sells', 'fast', 'food'], isca: ['selling'], fim: '.', traducao: 'A empresa vende fast food.' },
+    { contexto: M('Estamos trabalhando com um chef novo.'), palavras: ["We're", 'working', 'with', 'a', 'new', 'chef'], isca: ['work'], fim: '.', traducao: 'Estamos trabalhando com um chef novo.' },
+    { contexto: M('Eles lançaram o anúncio no mês passado.'), palavras: ['They', 'launched', 'the', 'ad', 'last', 'month'], isca: ['launch'], fim: '.', traducao: 'Eles lançaram o anúncio no mês passado.' },
+    { contexto: M('As pessoas estavam compartilhando avaliações ruins.'), palavras: ['People', 'were', 'sharing', 'bad', 'reviews'], isca: ['was'], fim: '.', traducao: 'As pessoas estavam compartilhando avaliações ruins.' },
+    { contexto: M('A empresa perdeu muitos clientes (e isso importa agora).'), palavras: ['The', 'company', 'has', 'lost', 'many', 'customers'], isca: ['have'], fim: '.', traducao: 'A empresa perdeu muitos clientes.' },
+    { contexto: M('Nós vamos mudar o anúncio (já está planejado).'), palavras: ["We're", 'going', 'to', 'change', 'the', 'ad'], isca: ['changing'], fim: '.', traducao: 'Vamos mudar o anúncio.' },
+    { contexto: M('Nós vamos testar o produto, prometemos.'), palavras: ['We', 'will', 'test', 'the', 'product'], isca: ['tests'], fim: '.', traducao: 'Vamos testar o produto, prometemos.' },
+    { contexto: M('A sua equipe fala sobre propaganda com frequência?'), palavras: ['Does', 'your', 'team', 'often', 'talk', 'about', 'ads'], isca: ['Do'], fim: '?', traducao: 'A sua equipe fala sobre propaganda com frequência?' },
+    { contexto: M('Você viu o comercial ontem à noite?'), palavras: ['Did', 'you', 'see', 'the', 'commercial', 'last', 'night'], isca: ['saw'], fim: '?', traducao: 'Você viu o comercial ontem à noite?' },
+    { contexto: M('Você já viu um anúncio dessa marca?'), palavras: ['Have', 'you', 'ever', 'seen', 'an', 'ad', 'for', 'that', 'brand'], isca: ['saw'], fim: '?', traducao: 'Você já viu um anúncio dessa marca?' },
+    { contexto: M('O que você vai mostrar na reunião?'), palavras: ['What', 'are', 'you', 'going', 'to', 'show', 'at', 'the', 'meeting'], isca: ['is'], fim: '?', traducao: 'O que você vai mostrar na reunião?' },
+    { contexto: M('Você estava na reunião com o cliente ontem?'), palavras: ['Were', 'you', 'at', 'the', 'client', 'meeting', 'yesterday'], isca: ['Was'], fim: '?', traducao: 'Você estava na reunião com o cliente ontem?' },
+    { contexto: M('A campanha já viralizou?'), palavras: ['Has', 'the', 'campaign', 'gone', 'viral', 'yet'], isca: ['Have'], fim: '?', traducao: 'A campanha já viralizou?' },
+    { contexto: M('Quem você acha que vai liderar a próxima campanha?'), palavras: ['Who', 'do', 'you', 'think', 'will', 'lead', 'the', 'next', 'campaign'], isca: ['does'], fim: '?', traducao: 'Quem você acha que vai liderar a próxima campanha?' },
+    { contexto: M('A empresa gastou milhões na campanha.'), palavras: ['The', 'company', 'spent', 'millions', 'on', 'the', 'campaign'], isca: ['spend'], fim: '.', traducao: 'A empresa gastou milhões na campanha.' },
+    { contexto: M('Eles receberam milhares de reclamações.'), palavras: ['They', 'received', 'thousands', 'of', 'complaints'], isca: ['receive'], fim: '.', traducao: 'Eles receberam milhares de reclamações.' },
+    { contexto: M('Estamos nos sentindo confiantes.'), palavras: ["We're", 'feeling', 'confident'], isca: ['feel'], fim: '.', traducao: 'Estamos nos sentindo confiantes.' },
+    { contexto: M('Eles estavam filmando quando a notícia saiu.'), palavras: ['They', 'were', 'filming', 'when', 'the', 'news', 'came', 'out'], isca: ['come'], fim: '.', traducao: 'Eles estavam filmando quando a notícia saiu.' },
+    { contexto: M('Você já lançou um produto sem pesquisa?'), palavras: ['Have', 'you', 'ever', 'launched', 'a', 'product', 'without', 'research'], isca: ['launch'], fim: '?', traducao: 'Você já lançou um produto sem pesquisa?' },
+    { contexto: M('A empresa não testou o produto.'), palavras: ['The', 'company', "didn't", 'test', 'the', 'product'], isca: ['tested'], fim: '.', traducao: 'A empresa não testou o produto.' }
+  ]
+});
+</script>
+</body>
+</html>

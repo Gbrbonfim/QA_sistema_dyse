@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 12 · Don't fall for false friends</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 12 · Escrita (Campaign Catastrophes)
+   Alinhado ao "False Friends And Confusing Words" e às histórias de tradução. A isca, quando é
+   o falso cognato, muda o sentido da frase (pretend x intend, library x bookshop...), que é o
+   ponto da aula. Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 12, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Na verdade, eu prefiro chá.'), palavras: ['Actually,', 'I', 'prefer', 'tea'], isca: ['prefers'], fim: '.', traducao: 'Na verdade, eu prefiro chá.' },
+    { contexto: M('No momento, eu estou muito ocupado.'), palavras: ['At', 'the', 'moment,', "I'm", 'very', 'busy'], isca: ['am'], fim: '.', traducao: 'No momento, estou muito ocupado.' },
+    { contexto: M('Ele fingiu estar doente.'), palavras: ['He', 'pretended', 'to', 'be', 'sick'], isca: ['pretend'], fim: '.', traducao: 'Ele fingiu estar doente.' },
+    { contexto: M('Eu pretendo viajar no ano que vem.'), palavras: ['I', 'intend', 'to', 'travel', 'next', 'year'], isca: ['pretend'], fim: '.', traducao: 'Eu pretendo viajar no ano que vem.' },
+    { contexto: M('Eu não percebi que era tão tarde.'), palavras: ['I', "didn't", 'realize', 'it', 'was', 'so', 'late'], isca: ['realized'], fim: '.', traducao: 'Não percebi que era tão tarde.' },
+    { contexto: M('Eu peguei este livro na biblioteca.'), palavras: ['I', 'got', 'this', 'book', 'from', 'the', 'library'], isca: ['bookshop'], fim: '.', traducao: 'Peguei este livro na biblioteca.' },
+    { contexto: M('Comprei um dicionário na livraria.'), palavras: ['I', 'bought', 'a', 'dictionary', 'at', 'the', 'bookshop'], isca: ['library'], fim: '.', traducao: 'Comprei um dicionário na livraria.' },
+    { contexto: M('Foi uma decisão sensata.'), palavras: ['It', 'was', 'a', 'sensible', 'decision'], isca: ['sensitive'], fim: '.', traducao: 'Foi uma decisão sensata.' },
+    { contexto: M('Ela é muito sensível.'), palavras: ['She', 'is', 'very', 'sensitive'], isca: ['sensible'], fim: '.', traducao: 'Ela é muito sensível.' },
+    { contexto: M('Eles tiveram uma briga feia.'), palavras: ['They', 'had', 'a', 'terrible', 'argument'], isca: ['discussion'], fim: '.', traducao: 'Eles tiveram uma briga feia.' },
+    { contexto: M('Tivemos uma conversa produtiva sobre o projeto.'), palavras: ['We', 'had', 'a', 'productive', 'discussion', 'about', 'the', 'project'], isca: ['argument'], fim: '.', traducao: 'Tivemos uma conversa produtiva sobre o projeto.' },
+    { contexto: M('Posso fazer uma pergunta?'), palavras: ['Can', 'I', 'ask', 'a', 'question'], isca: ['make'], fim: '?', traducao: 'Posso fazer uma pergunta?' },
+    { contexto: M('Tenho algumas dúvidas sobre o plano.'), palavras: ['I', 'have', 'some', 'doubts', 'about', 'the', 'plan'], isca: ['has'], fim: '.', traducao: 'Tenho algumas dúvidas sobre o plano.' },
+    { contexto: M('A tradução foi um grande erro.'), palavras: ['The', 'translation', 'was', 'a', 'big', 'mistake'], isca: ['were'], fim: '.', traducao: 'A tradução foi um grande erro.' },
+    { contexto: M('O slogan soava estranho em chinês.'), palavras: ['The', 'slogan', 'sounded', 'strange', 'in', 'Chinese'], isca: ['strangely'], fim: '.', traducao: 'O slogan soava estranho em chinês.' },
+    { contexto: M('A empresa mudou o slogan rapidamente.'), palavras: ['The', 'company', 'changed', 'the', 'slogan', 'quickly'], isca: ['quick'], fim: '.', traducao: 'A empresa mudou o slogan rapidamente.' },
+    { contexto: M('Algumas palavras têm significados diferentes em outros países.'), palavras: ['Some', 'words', 'have', 'different', 'meanings', 'in', 'other', 'countries'], isca: ['has'], fim: '.', traducao: 'Algumas palavras têm significados diferentes em outros países.' },
+    { contexto: M('É importante entender outras culturas.'), palavras: ["It's", 'important', 'to', 'understand', 'other', 'cultures'], isca: ['understanding'], fim: '.', traducao: 'É importante entender outras culturas.' },
+    { contexto: M('O frango estava tão bom que eu lambi os dedos.'), palavras: ['The', 'chicken', 'was', 'so', 'good', 'that', 'I', 'licked', 'my', 'fingers'], isca: ['lick'], fim: '.', traducao: 'O frango estava tão bom que lambi os dedos.' },
+    { contexto: M('Eles reverenciam os seus antepassados.'), palavras: ['They', 'revere', 'their', 'ancestors'], isca: ['graves'], fim: '.', traducao: 'Eles reverenciam os seus antepassados.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 13 · The BlueBite disaster</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 13 · Leitura (Campaign Catastrophes)
+   Alinhado ao "Fix The Failed Campaign" (What happened? / What was happening? / What has
+   happened since? / What are they doing? / What will they do next?) e à revisão dos tempos.
+   Conteúdo NOVO: marca FICTÍCIA BlueBite. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Rosa', 'Dan, have you seen the comments about our new ad?'],
+  ['Dan', 'Yes, I have. People are really angry.'],
+  ['Rosa', 'What happened? We spent a lot of money on it.'],
+  ['Dan', 'The ad showed a man eating ten BlueBite bars at once.'],
+  ['Rosa', "And people didn't like it?"],
+  ['Dan', 'No. They said it looked unhealthy.'],
+  ['Rosa', 'Were people sharing the video?'],
+  ['Dan', 'Yes, they were sharing it a lot, but not in a good way.'],
+  ['Rosa', 'Have we lost customers?'],
+  ['Dan', 'Yes. Our sales have gone down by fifteen percent.'],
+  ['Rosa', 'OK. What are we doing to fix it?'],
+  ['Dan', "We're working with a nutritionist now."],
+  ['Rosa', "Good. And what's the plan for next month?"],
+  ['Dan', "We're going to make a new ad with real athletes."],
+  ['Rosa', 'Great idea. Can you send me the new script?'],
+  ['Dan', "Sure, I'll send it to you tomorrow morning."],
+  ['Rosa', "Perfect. And next time, we'll test the ad first."],
+  ['Dan', "Definitely. We won't make the same mistake again."]
+];
+const lado = q => q === 'Rosa' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 12, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, I have. People are really angry.', 'Yes, I did. People are really angry.', 'Yes, I have. People is really angry.'], 0, 'Sim, vi. As pessoas estão muito bravas.'),
+    prox(3, ['The ad show a man eating ten BlueBite bars at once yesterday.', 'The ad showed a man eating ten BlueBite bars at once.', 'The ad was show a man eating ten BlueBite bars at once.'], 1, 'O anúncio mostrava um homem comendo dez barrinhas BlueBite de uma vez.'),
+    prox(5, ['No. They say it looks unhealthy tomorrow.', 'Yes. They said it looked very healthy.', 'No. They said it looked unhealthy.'], 2, 'Não. Disseram que parecia pouco saudável.'),
+    prox(7, ['Yes, they were sharing it a lot, but not in a good way.', 'Yes, they was sharing it a lot, but not in a good way.', 'Yes, they were share it a lot, but not in a good way.'], 0, 'Sim, estavam compartilhando muito, mas não de um jeito bom.'),
+    prox(8, ['Did we lost customers?', 'Have we lost customers?', 'Have we lose customers?'], 1, 'Perdemos clientes?'),
+    prox(9, ['Yes. Our sales has gone down by fifteen percent.', 'Yes. Our sales have went down by fifteen percent.', 'Yes. Our sales have gone down by fifteen percent.'], 2, 'Sim. As nossas vendas caíram quinze por cento.'),
+    prox(11, ["We're working with a nutritionist now.", "We working with a nutritionist now.", "We were work with a nutritionist now."], 0, 'Estamos trabalhando com um nutricionista agora.'),
+    prox(12, ["Good. And what's the plan for last month?", "Good. And what's the plan for next month?", "Good. And what was the plan for next month yesterday?"], 1, 'Ótimo. E qual é o plano para o mês que vem?'),
+    prox(13, ["We going to make a new ad with real athletes.", "We're going make a new ad with real athletes.", "We're going to make a new ad with real athletes."], 2, 'Vamos fazer um anúncio novo com atletas de verdade.'),
+    prox(15, ["Sure, I'll send it to you tomorrow morning.", "Sure, I sent it to you tomorrow morning.", "Sure, I'll sending it to you tomorrow morning."], 0, 'Claro, te mando amanhã de manhã.'),
+    prox(16, ["Perfect. And next time, we tested the ad first.", "Perfect. And next time, we'll test the ad first.", "Perfect. And next time, we'll tests the ad first."], 1, 'Perfeito. E da próxima vez, vamos testar o anúncio antes.'),
+    prox(17, ["Definitely. We will make the same mistake again.", "Definitely. We don't make the same mistake again yesterday.", "Definitely. We won't make the same mistake again."], 2, 'Com certeza. Não vamos cometer o mesmo erro de novo.'),
+    { instrucao: 'How do people feel about the ad?', frase: '___', opcoes: ['Angry.', 'Excited.', 'Relaxed.'], certa: 0, traducao: 'Bravas.' },
+    { instrucao: 'What did the ad show?', frase: '___', opcoes: ['A woman running.', 'A man eating ten bars at once.', 'Children playing.'], certa: 1, traducao: 'Um homem comendo dez barrinhas de uma vez.' },
+    { instrucao: 'Why didn\'t people like the ad?', frase: '___', opcoes: ['It was too short.', 'It was boring.', 'It looked unhealthy.'], certa: 2, traducao: 'Parecia pouco saudável.' },
+    { instrucao: 'What has happened to sales?', frase: '___', opcoes: ['They have gone down by 15%.', 'They have gone up by 15%.', 'Nothing has happened.'], certa: 0, traducao: 'Caíram 15%.' },
+    { instrucao: 'Who is the company working with now?', frase: '___', opcoes: ['A translator.', 'A nutritionist.', 'A famous chef.'], certa: 1, traducao: 'Um nutricionista.' },
+    { instrucao: 'What are they going to do next month?', frase: '___', opcoes: ['Stop selling BlueBite bars.', 'Show the same ad again.', 'Make a new ad with real athletes.'], certa: 2, traducao: 'Fazer um anúncio novo com atletas de verdade.' },
+    { instrucao: 'When will Dan send the script?', frase: '___', opcoes: ['Tomorrow morning.', 'Tonight.', 'Next month.'], certa: 0, traducao: 'Amanhã de manhã.' },
+    { instrucao: 'What will they do next time?', frase: '___', opcoes: ['Spend more money.', 'Test the ad first.', 'Use the same ad.'], certa: 1, traducao: 'Testar o anúncio antes.' }
+  ]
+});
+</script>
+</body>
+</html>

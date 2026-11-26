@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 12 · Confusing words</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 12 · Gramática (Campaign Catastrophes)
+   Alinhado ao "False Friends And Confusing Words" (pares at the moment / actually, intend /
+   pretend, make / realize, library / bookshop, sensible / sensitive, discussion / argument,
+   question / doubts), ao glossário e às histórias de tradução como contadas no slide.
+   Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 12, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: "My friends think I'm from Spain, but ___ I'm from Mexico.", opcoes: ['actually', 'at the moment', 'currently'], certa: 0, traducao: 'Os meus amigos acham que sou da Espanha, mas na verdade sou do México.' },
+    { frase: "I can't talk ___. I'm driving.", opcoes: ['actually', 'at the moment', 'sensible'], certa: 1, traducao: 'Não posso falar no momento. Estou dirigindo.' },
+    { frase: 'The children ___ to be lions and ran around the garden.', opcoes: ['intended', 'realized', 'pretended'], certa: 2, traducao: 'As crianças fingiram ser leões e correram pelo jardim.' },
+    { frase: 'We ___ to open a new shop next year.', opcoes: ['intend', 'pretend', 'realize'], certa: 0, traducao: 'Pretendemos abrir uma loja nova no ano que vem.' },
+    { frase: 'I suddenly ___ that I left my keys at work.', opcoes: ['pretended', 'realized', 'intended'], certa: 1, traducao: 'De repente percebi que deixei as chaves no trabalho.' },
+    { frase: 'You can borrow books for free at the ___.', opcoes: ['bookshop', 'supermarket', 'library'], certa: 2, traducao: 'Você pode pegar livros de graça na biblioteca.' },
+    { frase: 'This ___ sells new and old books.', opcoes: ['bookshop', 'library', 'grave'], certa: 0, traducao: 'Esta livraria vende livros novos e usados.' },
+    { frase: "Taking an umbrella is ___. It's going to rain.", opcoes: ['sensitive', 'sensible', 'embarrassing'], certa: 1, traducao: 'Levar um guarda-chuva é sensato. Vai chover.' },
+    { frase: 'My skin is very ___ to the sun.', opcoes: ['sensible', 'actually', 'sensitive'], certa: 2, traducao: 'A minha pele é muito sensível ao sol.' },
+    { frase: 'They had an ___ and now they are not speaking to each other.', opcoes: ['argument', 'discussion', 'question'], certa: 0, traducao: 'Eles brigaram e agora não estão se falando.' },
+    { frase: 'The class had an interesting ___ about social media.', opcoes: ['argument', 'discussion', 'doubt'], certa: 1, traducao: 'A turma teve uma discussão interessante sobre redes sociais.' },
+    { frase: 'Can I ask you a ___ about the homework?', opcoes: ['doubt', 'discussion', 'question'], certa: 2, traducao: 'Posso te fazer uma pergunta sobre a lição?' },
+    { frase: "I have ___ about the new plan. I'm not sure it will work.", opcoes: ['doubts', 'questions', 'arguments'], certa: 0, traducao: 'Tenho dúvidas sobre o plano novo. Não tenho certeza de que vai funcionar.' },
+    { frase: '"Atualmente" in English is ___.', opcoes: ['actually', 'currently', 'pretend'], certa: 1, traducao: '"Atualmente" em inglês é currently (ou at the moment).' },
+    { frase: '"Pretender" in English is ___.', opcoes: ['pretend', 'realize', 'intend'], certa: 2, traducao: '"Pretender" em inglês é intend.' },
+    { frase: 'A ___ cleans the floor by sucking up dirt and dust.', opcoes: ['vacuum cleaner', 'grave', 'library'], certa: 0, traducao: 'Um aspirador de pó limpa o chão sugando a sujeira e a poeira.' },
+    { frase: 'Our ___ are the people in our family who lived a long time ago.', opcoes: ['graves', 'ancestors', 'customers'], certa: 1, traducao: 'Os nossos antepassados são as pessoas da família que viveram há muito tempo.' },
+    { frase: 'People bring flowers to the ___ of their grandparents.', opcoes: ['library', 'bookshop', 'grave'], certa: 2, traducao: 'As pessoas levam flores ao túmulo dos avós.' },
+    { frase: "In the story, Pepsi's problem was the ___.", opcoes: ['translation', 'price', 'images'], certa: 0, traducao: 'Na história, o problema da Pepsi foi a tradução.' },
+    { frase: 'In Taiwan, the message was offensive because people ___ their ancestors.', opcoes: ['forget', 'revere', 'pretend'], certa: 1, traducao: 'Em Taiwan, a mensagem foi ofensiva porque as pessoas reverenciam os antepassados.' },
+    { frase: 'In China, the KFC slogan sounded like "Eat your ___ off".', opcoes: ['hands', 'chicken', 'fingers'], certa: 2, traducao: 'Na China, o slogan da KFC soou como "Coma os seus dedos".' },
+    { frase: 'In English, "sucks" can also mean something is ___.', opcoes: ['bad', 'powerful', 'cheap'], certa: 0, traducao: 'Em inglês, "sucks" também pode significar que algo é ruim.' },
+    { frase: 'Electrolux is a company from ___.', opcoes: ['the USA', 'Sweden', 'China'], certa: 1, traducao: 'A Electrolux é uma empresa da Suécia.' },
+    { frase: 'A message that works in one country could be ___ in another.', opcoes: ['sensible', 'actually', 'offensive'], certa: 2, traducao: 'Uma mensagem que funciona em um país pode ser ofensiva em outro.' }
+  ]
+});
+</script>
+</body>
+</html>

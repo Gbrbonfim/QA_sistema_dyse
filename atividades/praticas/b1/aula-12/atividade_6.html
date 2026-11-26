@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 13 · Which tense is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 13 · Escuta (Campaign Catastrophes)
+   Alinhado ao "Grammar Point: Review Of Verb Tenses" (present simple, present continuous,
+   past simple, past continuous, be going to, will / won't, present perfect + o uso de cada um;
+   passado / presente / futuro). Conteúdo NOVO (marca FICTÍCIA BlueBite). 24 questões. */
+const PS = 'Present Simple', PC = 'Present Continuous', PA = 'Past Simple', PAC = 'Past Continuous',
+  GT = 'Be going to', W = 'Will', PP = 'Present Perfect';
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'schedule' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 12, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose the tense or the use',
+  itens: [
+    q('BlueBite sells healthy snacks.', PS, [PA, PP]),
+    q('We are planning a new ad right now.', PC, [PAC, W]),
+    q('They made a commercial last year.', PA, [PS, GT]),
+    q('We were filming when it started to rain.', PAC, [PC, PP]),
+    q("We're going to change the website next month.", GT, [PA, PAC]),
+    q("Don't worry. We'll fix the problem, I promise.", W, [PA, PS]),
+    q('The company has lost many customers.', PP, [PC, GT]),
+    q('Our team works with clients from many countries.', PS, [PAC, W]),
+    q('The agency is presenting the new idea tomorrow.', PC, [PA, PP]),
+    q('Have you ever bought something because of an ad?', PP, [PAC, GT]),
+    q('People were sharing bad reviews during the campaign.', PAC, [PS, W]),
+    q('They launched the product without any research.', PA, [PC, GT]),
+    q('I think the new slogan will be a success.', W, [PA, PAC]),
+    q('What are you going to show at the meeting?', GT, [PP, PA]),
+    q('The campaign has already gone viral.', PP, [PAC, PS]),
+    q('Did you see the commercial last night?', PA, [PC, W]),
+    q('We sell smartphones.', 'what happens regularly', ['what was happening at a past time', 'a future promise']),
+    q('We were filming when the news came out.', 'what was happening at a past time', ['what happens regularly', 'a past result that matters now']),
+    q("We've lost customers because of the ad.", 'a past result that matters now', ['a future plan', 'what is happening now']),
+    q("We'll change the slogan, I promise.", 'a future promise', ['something that finished', 'what happens regularly']),
+    q("We're going to fix the website.", 'a future plan', ['something that finished', 'what was happening at a past time']),
+    q('They launched the ad last month.', 'the past', ['the present', 'the future']),
+    q('Maybe your team will test the idea next week.', 'the future', ['the past', 'the present']),
+    q("You're feeling confident about the results.", 'the present', ['the past', 'the future'])
+  ]
+});
+</script>
+</body>
+</html>

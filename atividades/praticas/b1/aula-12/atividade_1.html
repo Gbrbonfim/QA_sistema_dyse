@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 12 · False friends</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 12 · Escuta (Campaign Catastrophes)
+   Alinhado ao "False Friends And Confusing Words" (actually, at the moment, pretend, intend,
+   realize, library, bookshop, sensible, sensitive, argument, discussion, question, doubts), ao
+   glossário (vacuum cleaner, ancestors, grave, lick fingers, revere ancestors) e às histórias
+   de tradução (Pepsi, KFC, Electrolux) como contadas no slide. Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 12, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the meaning',
+  itens: [
+    q("Actually, I don't like coffee. I prefer tea.", 'in fact, really', ['at the moment', 'never']),
+    q("At the moment, I'm working from home.", 'now, currently', ['in fact, really', 'in the future']),
+    q('He pretended to be sick, but he was fine.', 'acted like it was true', ['planned', 'understood']),
+    q('I intend to study in Canada next year.', 'plan to', ['act like', 'understand']),
+    q("I didn't realize it was so late!", "didn't understand or know", ["didn't make it real", "didn't plan"]),
+    q('I borrowed three books from the library.', 'a place where you borrow books', ['a place where you buy books', 'a place where you eat']),
+    q('I bought a new dictionary at the bookshop.', 'a place where you buy books', ['a place where you borrow books', 'a school']),
+    q("It's sensible to save some money every month.", 'smart, practical', ['sensitive, emotional', 'expensive']),
+    q("She gets sad very easily. She's very sensitive.", 'emotional, easily hurt', ['smart, practical', 'tired']),
+    q('My neighbours had an argument and they shouted at each other.', 'a fight, a disagreement', ['a calm conversation', 'a question']),
+    q('We had a calm discussion about our holiday plans.', 'a calm conversation', ['a fight', 'a doubt']),
+    q('Can I ask a question? What time does the shop open?', 'a request for information', ['a statement', 'a strong belief']),
+    q('I have some doubts about this plan.', "I'm not sure about it.", ["I'm sure about it.", 'I love it.']),
+    q('I use this machine to clean the dust from the carpet.', 'a vacuum cleaner', ['a grave', 'an ancestor']),
+    q('My great-great-grandparents came from Italy a long time ago.', 'ancestors', ['graves', 'vacuum cleaners']),
+    q('This is the place where my great-grandfather is buried.', 'a grave', ['a library', 'a bookshop']),
+    q('The pizza was so tasty that I cleaned my fingers with my tongue.', 'I licked my fingers.', ['I pretended.', 'I realized.']),
+    q('In some cultures, people show great respect for their family from long ago.', 'They revere their ancestors.', ['They pretend.', 'They have an argument.']),
+    q('In the story, the Pepsi slogan sounded like: Pepsi will bring your ancestors back from the grave.', 'a translation problem', ['a problem with the images', 'a problem with the price']),
+    q('In China, the slogan sounded like: Eat your fingers off.', 'KFC', ['Pepsi', 'Electrolux']),
+    q('Nothing sucks like an Electrolux.', 'Electrolux', ['KFC', 'Pepsi']),
+    q('Electrolux is a Swedish company.', 'It is from Sweden.', ['It is from China.', 'It is from Taiwan.']),
+    q('This company makes home appliances, like vacuum cleaners.', 'Electrolux', ['KFC', 'Pepsi']),
+    q('This company makes fried chicken.', 'KFC', ['Electrolux', 'Pepsi'])
+  ].map(i => (i.opcoes.forEach(o => { o.icon = 'translate'; }), i))
+});
+</script>
+</body>
+</html>

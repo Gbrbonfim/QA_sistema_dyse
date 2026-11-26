@@ -1285,6 +1285,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: "Don't worry, I'll...", tipo: 'Escute e grave', treina: 'Fala · Ofertas e promessas', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Decisions, offers and promises', tipo: 'Make a Choice', treina: 'Gramática · Will / Shall', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 12,
+        titulo: 'Class 12 and 13 · Campaign Catastrophes',
+        atividades: [
+          { num: 1, parte: 'Class 12', titulo: 'False friends', tipo: 'Escute e escolha', treina: 'Escuta · Falsos cognatos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 12', titulo: "Don't fall for false friends", tipo: 'Monte a frase', treina: 'Escrita · Falsos cognatos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 12', titulo: 'Lost in translation', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 12', titulo: 'Actually, I intend to...', tipo: 'Escute e grave', treina: 'Fala · Falsos cognatos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 12', titulo: 'Confusing words', tipo: 'Make a Choice', treina: 'Gramática · Falsos cognatos', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 13', titulo: 'Which tense is it?', tipo: 'Escute e escolha', treina: 'Escuta · Tempos verbais', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 13', titulo: 'Tenses review', tipo: 'Monte a frase', treina: 'Escrita · Tempos verbais', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 13', titulo: 'The BlueBite disaster', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 13', titulo: 'Pitch your campaign', tipo: 'Escute e grave', treina: 'Fala · Tempos verbais', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 13', titulo: 'One word: does, did, have...', tipo: 'Make a Choice', treina: 'Gramática · Tempos verbais', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

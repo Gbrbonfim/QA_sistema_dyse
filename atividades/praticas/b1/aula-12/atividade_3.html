@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 12 · Lost in translation</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 12 · Leitura (Campaign Catastrophes)
+   Alinhado às histórias de tradução (Pepsi, KFC, Electrolux) e aos falsos cognatos (pretend x
+   intend, actually, realize, argument, sensible, doubts). Conteúdo NOVO: uma empresa FICTÍCIA
+   de sucos (Sunny Juice) erra a tradução do slogan. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Ken', 'Did you see the news about Sunny Juice?'],
+  ['Paula', "No, I didn't. What happened?"],
+  ['Ken', 'They launched a new ad in England, but the translation was terrible.'],
+  ['Paula', 'Really? What was the problem?'],
+  ['Ken', 'The slogan said: "The juice you pretend to drink every day."'],
+  ['Paula', 'Pretend? So people thought nobody really drinks it!'],
+  ['Ken', 'Exactly. Actually, they wanted to say "intend".'],
+  ['Paula', "That's so embarrassing! Did people complain?"],
+  ['Ken', 'Yes, they received hundreds of complaints online.'],
+  ['Paula', "I didn't realize one small word could cause so many problems."],
+  ['Ken', 'Me neither. The marketing team had a big argument about it.'],
+  ['Paula', 'Who made the translation?'],
+  ['Ken', 'A new student on the team. He used an online translator.'],
+  ['Paula', 'Oh no! What are they doing now?'],
+  ['Ken', "They're working with a professional translator."],
+  ['Paula', "That's sensible. I have no doubts it will work."],
+  ['Ken', "I hope so. They're going to launch a new ad next month."]
+];
+const lado = q => q === 'Ken' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 12, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["No, I didn't. What happened?", "No, I don't. What happened?", "No, I didn't. What did happened?"], 0, 'Não vi. O que aconteceu?'),
+    prox(3, ['Really? What were the problem?', 'Really? What was the problem?', 'Really? What the problem was?'], 1, 'Sério? Qual foi o problema?'),
+    prox(5, ['Pretend? So people thought it was delicious!', 'Pretend? So people think nobody really drink it!', 'Pretend? So people thought nobody really drinks it!'], 2, 'Fingir? Então as pessoas acharam que ninguém bebe de verdade!'),
+    prox(6, ['Exactly. Actually, they wanted to say "intend".', 'Exactly. At the moment, they wanted to say "intend".', 'Exactly. Actually, they wanted to say "pretend".'], 0, 'Exatamente. Na verdade, eles queriam dizer "intend" (pretender).'),
+    prox(7, ["That's so embarrassed! Did people complain?", "That's so embarrassing! Did people complain?", "That's so embarrassing! Did people complained?"], 1, 'Que vergonha! As pessoas reclamaram?'),
+    prox(8, ['Yes, they receive hundreds of complaints online last week.', 'No, nobody saw the ad.', 'Yes, they received hundreds of complaints online.'], 2, 'Sim, receberam centenas de reclamações on-line.'),
+    prox(9, ["I didn't realize one small word could cause so many problems.", "I didn't realized one small word could cause so many problems.", "I didn't pretend one small word could cause so many problems."], 0, 'Eu não sabia que uma palavrinha podia causar tantos problemas.'),
+    prox(10, ['Me neither. The marketing team had a big discussion calm about it.', 'Me neither. The marketing team had a big argument about it.', 'Me neither. The marketing team have a big argument about it yesterday.'], 1, 'Nem eu. A equipe de marketing teve uma briga feia por causa disso.'),
+    prox(12, ['A new student on the team. He use an online translator.', 'A professional translator. He never makes mistakes.', 'A new student on the team. He used an online translator.'], 2, 'Um estagiário novo da equipe. Ele usou um tradutor on-line.'),
+    prox(13, ['Oh no! What are they doing now?', 'Oh no! What they are doing now?', 'Oh no! What do they doing now?'], 0, 'Ah, não! O que eles estão fazendo agora?'),
+    prox(15, ["That's sensitive. I have no doubts it will work.", "That's sensible. I have no doubts it will work.", "That's sensible. I have no questions it works yesterday."], 1, 'Isso é sensato. Não tenho dúvidas de que vai funcionar.'),
+    prox(16, ["I hope so. They're going launch a new ad next month.", "I hope so. They launched a new ad next month.", "I hope so. They're going to launch a new ad next month."], 2, 'Espero que sim. Eles vão lançar uma propaganda nova no mês que vem.'),
+    { instrucao: 'Where did Sunny Juice launch the new ad?', frase: '___', opcoes: ['In England.', 'In China.', 'In Taiwan.'], certa: 0, traducao: 'Na Inglaterra.' },
+    { instrucao: 'Which word was the problem?', frase: '___', opcoes: ['"Actually".', '"Pretend".', '"Sensible".'], certa: 1, traducao: '"Pretend" (fingir).' },
+    { instrucao: 'Which word did they want to use?', frase: '___', opcoes: ['"Realize".', '"Pretend".', '"Intend".'], certa: 2, traducao: '"Intend" (pretender).' },
+    { instrucao: 'What did people think?', frase: '___', opcoes: ['That nobody really drinks the juice.', 'That the juice was very cheap.', 'That the juice was from Sweden.'], certa: 0, traducao: 'Que ninguém bebe o suco de verdade.' },
+    { instrucao: 'How did people react?', frase: '___', opcoes: ['They bought more juice.', 'They complained online.', 'They had a calm discussion.'], certa: 1, traducao: 'Eles reclamaram on-line.' },
+    { instrucao: 'Who made the translation?', frase: '___', opcoes: ['A professional translator.', 'The boss.', 'A new student, with an online translator.'], certa: 2, traducao: 'Um estagiário novo, com um tradutor on-line.' },
+    { instrucao: 'What is the company doing now?', frase: '___', opcoes: ['Working with a professional translator.', 'Closing the company.', 'Using the same slogan.'], certa: 0, traducao: 'Trabalhando com um tradutor profissional.' },
+    { instrucao: 'What is the company going to do next month?', frase: '___', opcoes: ['Stop making juice.', 'Launch a new ad.', 'Move to England.'], certa: 1, traducao: 'Lançar uma propaganda nova.' }
+  ]
+});
+</script>
+</body>
+</html>
