@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 10 · What's the weather like?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 10 · Escuta (Why Is It Always Raining?)
+   Alinhado ao "Vocabulary: weather" (hot, cold, warm, sunny, rainy, cloudy, windy, snowy), ao
+   "The weather forecast" (clear skies, strong winds, chance of rain, light breeze, high, low,
+   partly cloudy, showers), ao vocabulário do vídeo (precipitation, evaporate, statistics, blame)
+   e a will / won't / I think / I don't think / I'm sure. Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 10, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the right weather word',
+  itens: [
+    q('Take your sunglasses. There are no clouds today.', 'sunny', ['snowy', 'windy'], 'partly_cloudy_day'),
+    q('The sky is grey, but it is not raining.', 'cloudy', ['sunny', 'snowy'], 'partly_cloudy_day'),
+    q('Hold your hat! The trees are moving a lot.', 'windy', ['hot', 'snowy'], 'partly_cloudy_day'),
+    q('Everything is white outside and the children are making a snowman.', 'snowy', ['warm', 'rainy'], 'partly_cloudy_day'),
+    q("Don't forget your umbrella. The streets are wet.", 'rainy', ['sunny', 'hot'], 'partly_cloudy_day'),
+    q('It is thirty-eight degrees today. Drink a lot of water!', 'hot', ['cold', 'snowy'], 'thermostat'),
+    q('It is twenty-two degrees. A T-shirt is perfect.', 'warm', ['cold', 'snowy'], 'thermostat'),
+    q('Wear gloves and a hat. It is two degrees outside.', 'cold', ['hot', 'warm'], 'thermostat'),
+    q("There won't be any clouds tonight. You will see the stars.", 'clear skies', ['showers', 'strong winds'], 'cloud'),
+    q('There will be some sun and some clouds.', 'partly cloudy', ['clear skies', 'snowy'], 'cloud'),
+    q('The wind will be very strong in the afternoon.', 'strong winds', ['a light breeze', 'clear skies'], 'air'),
+    q('There will be a little wind. It will be perfect for a walk.', 'a light breeze', ['strong winds', 'showers'], 'air'),
+    q('It will rain for short periods in the north.', 'showers', ['clear skies', 'a light breeze'], 'umbrella'),
+    q('Maybe it will rain. The forecast says forty percent.', 'a chance of rain', ['clear skies', 'snowy'], 'umbrella'),
+    q('The highest temperature tomorrow will be twenty-five degrees.', 'the high', ['the low', 'precipitation'], 'thermostat'),
+    q('At night, the temperature will go down to eight degrees.', 'the low', ['the high', 'statistics'], 'thermostat'),
+    q('Rain, snow, or any water falling from the sky.', 'precipitation', ['statistics', 'average'], 'water_drop'),
+    q('When the sun is hot, water from the sea turns into gas and goes into the air.', 'evaporate', ['blame', 'average'], 'water_drop'),
+    q('Numbers that give us information about something.', 'statistics', ['evaporate', 'blame'], 'bar_chart'),
+    q('He always says the rain is the reason for his bad day.', 'He blames the rain.', ['He evaporates the rain.', 'He averages the rain.'], 'sentiment_dissatisfied'),
+    q("I think it'll rain later.", 'a prediction about the future', ['something that happened yesterday', 'something that is happening now'], 'schedule'),
+    q("I don't think it'll be cold tomorrow.", "The speaker doesn't expect cold weather.", ['The speaker expects cold weather.', 'It was cold yesterday.'], 'schedule'),
+    q("I'm sure it'll be sunny on Saturday.", 'The speaker is certain.', ["The speaker isn't certain.", 'The speaker is talking about last Saturday.'], 'schedule'),
+    q("It won't snow this weekend.", 'No snow this weekend.', ['A lot of snow this weekend.', 'It snowed last weekend.'], 'ac_unit')
+  ]
+});
+</script>
+</body>
+</html>

@@ -1263,6 +1263,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'Review: say it!', tipo: 'Escute e grave', treina: 'Fala · Revisão 1-8', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Review: grammar and vocabulary', tipo: 'Make a Choice', treina: 'Gramática · Revisão 1-8', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 10,
+        titulo: 'Class 10 · Why Is It Always Raining?',
+        atividades: [
+          { num: 1, titulo: "What's the weather like?", tipo: 'Escute e escolha', treina: 'Escuta · Clima e previsão', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "Will or won't?", tipo: 'Monte a frase', treina: "Escrita · Will / won't", minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'A trip to the mountains', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'You are the weather reporter', tipo: 'Escute e grave', treina: 'Fala · Previsão do tempo', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Weather and predictions', tipo: 'Make a Choice', treina: "Gramática · Will / won't", minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

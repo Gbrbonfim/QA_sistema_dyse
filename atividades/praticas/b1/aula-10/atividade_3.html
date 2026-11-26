@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 10 · A trip to the mountains</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 10 · Leitura (Why Is It Always Raining?)
+   Alinhado à previsão do tempo do slide (sunny, partly cloudy, chance of rain, high / low,
+   strong winds) e a will / won't + I think / I don't think / I'm sure. Conteúdo NOVO: a Nina
+   e o Leo conferem a previsão antes de uma trilha. 20 questões: 12 de "próxima fala" +
+   8 de compreensão. */
+const D = [
+  ['Leo', 'Are we going to the mountains on Saturday?'],
+  ['Nina', 'I hope so! Have you checked the weather forecast?'],
+  ['Leo', "Yes. It says it'll be sunny in the morning."],
+  ['Nina', 'Great! What about the afternoon?'],
+  ['Leo', "It'll be partly cloudy, and there's a chance of rain after 4 p.m."],
+  ['Nina', "Then we'll need our umbrellas."],
+  ['Leo', "Or we can start early. I think we'll finish before 3."],
+  ['Nina', 'Good idea. Will it be cold up there?'],
+  ['Leo', 'The high will be 18 degrees and the low around 6.'],
+  ['Nina', "Six degrees? That's cold! I'm going to take a warm jacket."],
+  ['Leo', 'And there will be strong winds at the top.'],
+  ['Nina', "Strong winds? I don't think it'll be safe."],
+  ['Leo', "Don't worry. The winds will stop by lunchtime."],
+  ['Nina', 'Are you sure?'],
+  ['Leo', "Yes, I'm sure. The forecast is usually right."],
+  ['Nina', "And it won't snow, right?"],
+  ['Leo', "No, it won't snow. It's summer!"],
+  ['Nina', "You're right. See you on Saturday at 6 a.m.!"]
+];
+const lado = q => q === 'Leo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 10, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I hope so! Have you checked the weather forecast?', 'I hope so! Have you check the weather forecast?', 'I hope so! Did you checked the weather forecast?'], 0, 'Espero que sim! Você conferiu a previsão do tempo?'),
+    prox(2, ["Yes. It says it'll sunny in the morning.", "Yes. It says it'll be sunny in the morning.", "Yes. It says it will is sunny in the morning."], 1, 'Sim. Diz que vai fazer sol de manhã.'),
+    prox(4, ["It'll be partly cloudy, and there's a chance of rains after 4 p.m.", "It'll partly cloudy, and there's a chance of rain after 4 p.m.", "It'll be partly cloudy, and there's a chance of rain after 4 p.m."], 2, 'Vai estar parcialmente nublado, e há chance de chuva depois das 4 da tarde.'),
+    prox(5, ["Then we'll need our umbrellas.", "Then we'll needs our umbrellas.", "Then we'll need our sunglasses only."], 0, 'Então vamos precisar dos guarda-chuvas.'),
+    prox(6, ["Or we can start early. I think we won't finish never.", "Or we can start early. I think we'll finish before 3.", "Or we can start early. I think we'll finished before 3."], 1, 'Ou podemos começar cedo. Acho que vamos terminar antes das 3.'),
+    prox(7, ['Good idea. Does it will be cold up there?', 'Good idea. It will be cold up there?', 'Good idea. Will it be cold up there?'], 2, 'Boa ideia. Vai estar frio lá em cima?'),
+    prox(8, ['The high will be 18 degrees and the low around 6.', 'The high will be 6 degrees and the low around 18.', 'The high will being 18 degrees and the low around 6.'], 0, 'A máxima vai ser de 18 graus e a mínima, de uns 6.'),
+    prox(9, ["Six degrees? That's hot! I'm going to take a warm jacket.", "Six degrees? That's cold! I'm going to take a warm jacket.", "Six degrees? That's cold! I'm going to take my sunglasses only."], 1, 'Seis graus? Que frio! Vou levar um casaco quente.'),
+    prox(11, ["Strong winds? I think it won't be safe never.", "Strong winds? I don't think it won't be safe.", "Strong winds? I don't think it'll be safe."], 2, 'Ventos fortes? Acho que não vai ser seguro.'),
+    prox(12, ["Don't worry. The winds will stop by lunchtime.", "Don't worry. The winds will stops by lunchtime.", "Don't worry. The winds won't stop never."], 0, 'Não se preocupe. Os ventos vão parar até a hora do almoço.'),
+    prox(14, ["Yes, I'm sure. The forecast is usually wrong, so I don't know.", "Yes, I'm sure. The forecast is usually right.", "No, I'm sure. The forecast is usually right."], 1, 'Sim, tenho certeza. A previsão costuma acertar.'),
+    prox(16, ["No, it won't snowing. It's summer!", "No, it will snow. It's summer!", "No, it won't snow. It's summer!"], 2, 'Não, não vai nevar. É verão!'),
+    { instrucao: 'When are they going to the mountains?', frase: '___', opcoes: ['On Saturday.', 'On Sunday.', 'Next month.'], certa: 0, traducao: 'No sábado.' },
+    { instrucao: 'What will the weather be like in the morning?', frase: '___', opcoes: ['Rainy.', 'Sunny.', 'Snowy.'], certa: 1, traducao: 'Ensolarado.' },
+    { instrucao: 'What is possible after 4 p.m.?', frase: '___', opcoes: ['Snow.', 'Very hot weather.', 'Rain.'], certa: 2, traducao: 'Chuva.' },
+    { instrucao: 'What will the low be?', frase: '___', opcoes: ['Around 6 degrees.', '18 degrees.', '30 degrees.'], certa: 0, traducao: 'Uns 6 graus.' },
+    { instrucao: 'What is Nina going to take?', frase: '___', opcoes: ['Her sunglasses only.', 'A warm jacket.', 'A big umbrella only.'], certa: 1, traducao: 'Um casaco quente.' },
+    { instrucao: 'What will there be at the top?', frase: '___', opcoes: ['Snow.', 'Clear skies all day.', 'Strong winds.'], certa: 2, traducao: 'Ventos fortes.' },
+    { instrucao: 'When will the winds stop?', frase: '___', opcoes: ['By lunchtime.', 'At 4 p.m.', 'On Sunday.'], certa: 0, traducao: 'Até a hora do almoço.' },
+    { instrucao: 'Why won\'t it snow?', frase: '___', opcoes: ["Because it's winter.", "Because it's summer.", 'Because it will be windy.'], certa: 1, traducao: 'Porque é verão.' }
+  ]
+});
+</script>
+</body>
+</html>

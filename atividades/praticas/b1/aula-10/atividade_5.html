@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 10 · Weather and predictions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 10 · Gramática (Why Is It Always Raining?)
+   Alinhado ao vocabulário de clima e da previsão do tempo, ao vocabulário e aos fatos do vídeo
+   (o Reino Unido não é o país mais chuvoso; a Corrente do Golfo é quente; água quente evapora
+   mais rápido; o Reino Unido é uma ilha) e a will / won't + I think / I don't think / I'm sure.
+   Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 10, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'Put on your sunscreen. It\'s very ___ today.', opcoes: ['sunny', 'snowy', 'cloudy'], certa: 0, traducao: 'Passe protetor solar. Está muito ensolarado hoje.' },
+    { frase: 'The sky is completely grey. It\'s ___.', opcoes: ['sunny', 'cloudy', 'hot'], certa: 1, traducao: 'O céu está todo cinza. Está nublado.' },
+    { frase: 'My umbrella flew away! It\'s really ___.', opcoes: ['warm', 'snowy', 'windy'], certa: 2, traducao: 'O meu guarda-chuva voou! Está ventando muito.' },
+    { frase: 'It\'s minus five degrees. It\'s ___!', opcoes: ['freezing', 'hot', 'warm'], certa: 0, traducao: 'Está fazendo menos cinco graus. Está congelando!' },
+    { frase: 'There are no clouds tonight. We\'ll have ___.', opcoes: ['showers', 'clear skies', 'strong winds'], certa: 1, traducao: 'Não há nuvens hoje à noite. Teremos céu limpo.' },
+    { frase: 'The lowest temperature of the day is ___.', opcoes: ['the high', 'the average', 'the low'], certa: 2, traducao: 'A temperatura mais baixa do dia é a mínima.' },
+    { frase: 'Rain and snow are types of ___.', opcoes: ['precipitation', 'statistics', 'breeze'], certa: 0, traducao: 'Chuva e neve são tipos de precipitação.' },
+    { frase: 'In the sun, the water on the street will ___ quickly.', opcoes: ['blame', 'evaporate', 'rain'], certa: 1, traducao: 'No sol, a água da rua vai evaporar rápido.' },
+    { frase: 'Don\'t ___ me for the rain! It isn\'t my fault.', opcoes: ['evaporate', 'average', 'blame'], certa: 2, traducao: 'Não me culpe pela chuva! Não é culpa minha.' },
+    { instrucao: 'Is the UK the rainiest country in the world?', frase: '___', opcoes: ['No. Many countries have more precipitation.', 'Yes. It rains more there than anywhere.', 'No. It never rains in the UK.'], certa: 0, traducao: 'Não. Muitos países têm mais precipitação.' },
+    { frase: 'The Gulf Stream is a ___ ocean current.', opcoes: ['cold', 'warm', 'frozen'], certa: 1, traducao: 'A Corrente do Golfo é uma corrente oceânica quente.' },
+    { frase: 'Warm water evaporates ___ than cold water.', opcoes: ['slower', 'colder', 'faster'], certa: 2, traducao: 'A água quente evapora mais rápido do que a água fria.' },
+    { frase: 'The UK is ___.', opcoes: ['an island', 'in the middle of a continent', 'a desert'], certa: 0, traducao: 'O Reino Unido é uma ilha.' },
+    { frase: 'We use will and won\'t to talk about ___.', opcoes: ['the past', 'the future', 'every day'], certa: 1, traducao: 'Usamos will e won\'t para falar do futuro.' },
+    { frase: 'It ___ rain tomorrow. The forecast says clear skies.', opcoes: ['will', "'ll", "won't"], certa: 2, traducao: 'Não vai chover amanhã. A previsão diz céu limpo.' },
+    { frase: 'I think it will ___ windy tonight.', opcoes: ['be', 'is', 'being'], certa: 0, traducao: 'Acho que vai ventar hoje à noite.' },
+    { frase: '___ it be sunny on Sunday?', opcoes: ['Does', 'Will', 'Is'], certa: 1, traducao: 'Vai fazer sol no domingo?' },
+    { frase: "I don't think it ___ snow this year.", opcoes: ["won't", 'wills', 'will'], certa: 2, traducao: 'Não acho que vai nevar neste ano.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["I don't think he'll come.", "I think he won't come.", "I don't think he won't come."], certa: 0, traducao: 'Não acho que ele vem.' },
+    { frase: 'I\'m ___ it\'ll be a beautiful day. Look at the sky!', opcoes: ['think', 'sure', 'don\'t'], certa: 1, traducao: 'Tenho certeza de que vai ser um dia lindo. Olhe o céu!' },
+    { frase: 'There ___ be a light breeze in the morning.', opcoes: ['are', 'is', 'will'], certa: 2, traducao: 'Vai haver uma brisa leve de manhã.' },
+    { frase: "It'll ___ dry by tomorrow, so don't worry.", opcoes: ['be', 'is', 'are'], certa: 0, traducao: 'Vai estar seco até amanhã, então não se preocupe.' },
+    { frase: 'The forecast says there\'s a 90% ___ of rain after 6 p.m.', opcoes: ['breeze', 'chance', 'average'], certa: 1, traducao: 'A previsão diz que há 90% de chance de chuva depois das 18h.' },
+    { frase: 'Don\'t worry about your trip. The weather will ___ dry and sunny.', opcoes: ['stays', 'staying', 'stay'], certa: 2, traducao: 'Não se preocupe com a viagem. O tempo vai continuar seco e ensolarado.' }
+  ]
+});
+</script>
+</body>
+</html>

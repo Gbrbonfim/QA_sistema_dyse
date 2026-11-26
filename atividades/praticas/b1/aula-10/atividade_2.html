@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 10 · Will or won't?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 10 · Escrita (Why Is It Always Raining?)
+   Alinhado ao "Grammar Point: will/won't for predictions" (will + base verb; 'll / won't;
+   I think / I don't think / I'm sure + will) e ao vocabulário da previsão do tempo.
+   Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 10, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Vai chover amanhã.'), palavras: ['It', 'will', 'rain', 'tomorrow'], isca: ['rains'], fim: '.', traducao: 'Vai chover amanhã.' },
+    { contexto: M('Não vai nevar neste fim de semana.'), palavras: ['It', "won't", 'snow', 'this', 'weekend'], isca: ['snows'], fim: '.', traducao: 'Não vai nevar neste fim de semana.' },
+    { contexto: M('Acho que vai fazer sol.'), palavras: ['I', 'think', "it'll", 'be', 'sunny'], isca: ['is'], fim: '.', traducao: 'Acho que vai fazer sol.' },
+    { contexto: M('Não acho que vai fazer frio.'), palavras: ['I', "don't", 'think', "it'll", 'be', 'cold'], isca: ["won't"], fim: '.', traducao: 'Não acho que vai fazer frio.' },
+    { contexto: M('Tenho certeza de que vai ventar muito.'), palavras: ["I'm", 'sure', "it'll", 'be', 'windy'], isca: ['wind'], fim: '.', traducao: 'Tenho certeza de que vai ventar muito.' },
+    { contexto: M('O tempo vai estar bom amanhã?'), palavras: ['Will', 'the', 'weather', 'be', 'nice', 'tomorrow'], isca: ['Is'], fim: '?', traducao: 'O tempo vai estar bom amanhã?' },
+    { contexto: M('Você vai levar um guarda-chuva?'), palavras: ['Will', 'you', 'take', 'an', 'umbrella'], isca: ['a'], fim: '?', traducao: 'Você vai levar um guarda-chuva?' },
+    { contexto: M('Não vai ter céu limpo hoje.'), palavras: ['There', "won't", 'be', 'clear', 'skies', 'today'], isca: ['are'], fim: '.', traducao: 'Não vai ter céu limpo hoje.' },
+    { contexto: M('Vai ter ventos fortes à tarde.'), palavras: ['There', 'will', 'be', 'strong', 'winds', 'in', 'the', 'afternoon'], isca: ['on'], fim: '.', traducao: 'Vai ter ventos fortes à tarde.' },
+    { contexto: M('A máxima vai ser de trinta graus.'), palavras: ['The', 'high', 'will', 'be', 'thirty', 'degrees'], isca: ['is'], fim: '.', traducao: 'A máxima vai ser de trinta graus.' },
+    { contexto: M('A mínima vai ser de doze graus.'), palavras: ['The', 'low', 'will', 'be', 'twelve', 'degrees'], isca: ['being'], fim: '.', traducao: 'A mínima vai ser de doze graus.' },
+    { contexto: M('Há chance de chuva hoje à noite.'), palavras: ["There's", 'a', 'chance', 'of', 'rain', 'tonight'], isca: ['raining'], fim: '.', traducao: 'Há chance de chuva hoje à noite.' },
+    { contexto: M('Vai estar parcialmente nublado de manhã.'), palavras: ["It'll", 'be', 'partly', 'cloudy', 'in', 'the', 'morning'], isca: ['at'], fim: '.', traducao: 'Vai estar parcialmente nublado de manhã.' },
+    { contexto: M('Vai haver pancadas de chuva no norte.'), palavras: ['There', 'will', 'be', 'showers', 'in', 'the', 'north'], isca: ['on'], fim: '.', traducao: 'Vai haver pancadas de chuva no norte.' },
+    { contexto: M('Vai haver uma brisa leve.'), palavras: ['There', 'will', 'be', 'a', 'light', 'breeze'], isca: ['are'], fim: '.', traducao: 'Vai haver uma brisa leve.' },
+    { contexto: M('Não vai estar quente amanhã.'), palavras: ['It', "won't", 'be', 'hot', 'tomorrow'], isca: ['not'], fim: '.', traducao: 'Não vai estar quente amanhã.' },
+    { contexto: M('Tudo vai estar seco até amanhã.'), palavras: ['Everything', 'will', 'be', 'dry', 'by', 'tomorrow'], isca: ['dries'], fim: '.', traducao: 'Tudo vai estar seco até amanhã.' },
+    { contexto: M('Você acha que vai chover?'), palavras: ['Do', 'you', 'think', "it'll", 'rain'], isca: ['Does'], fim: '?', traducao: 'Você acha que vai chover?' },
+    { contexto: M('Não acho que ela vem.'), palavras: ['I', "don't", 'think', "she'll", 'come'], isca: ['comes'], fim: '.', traducao: 'Não acho que ela vem.' },
+    { contexto: M('O Reino Unido não é o país mais chuvoso do mundo.'), palavras: ['The', 'UK', "isn't", 'the', 'rainiest', 'country', 'in', 'the', 'world'], isca: ['rainier'], fim: '.', traducao: 'O Reino Unido não é o país mais chuvoso do mundo.' }
+  ]
+});
+</script>
+</body>
+</html>
