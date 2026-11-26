@@ -1274,6 +1274,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'You are the weather reporter', tipo: 'Escute e grave', treina: 'Fala · Previsão do tempo', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Weather and predictions', tipo: 'Make a Choice', treina: "Gramática · Will / won't", minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 11,
+        titulo: 'Class 11 · Scenes You Will Never Forget',
+        atividades: [
+          { num: 1, titulo: "I'll help you!", tipo: 'Escute e escolha', treina: 'Escuta · Ofertas e promessas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Offers and promises', tipo: 'Monte a frase', treina: 'Escrita · Will / Shall', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Movie night', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: "Don't worry, I'll...", tipo: 'Escute e grave', treina: 'Fala · Ofertas e promessas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Decisions, offers and promises', tipo: 'Make a Choice', treina: 'Gramática · Will / Shall', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

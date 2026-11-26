@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 11 · Offers and promises</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 11 · Escrita (Scenes You Will Never Forget)
+   Alinhado ao "Grammar Point" (will / won't + base verb para decisões na hora, ofertas e
+   promessas; Shall I...? / Shall we...?) e aos "Verb Phrases". Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 11, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Vou assistir com você hoje à noite.'), palavras: ["I'll", 'watch', 'it', 'with', 'you', 'tonight'], isca: ['watching'], fim: '.', traducao: 'Vou assistir com você hoje à noite.' },
+    { contexto: M('Quer que eu traga pipoca?'), palavras: ['Shall', 'I', 'bring', 'some', 'popcorn'], isca: ['brings'], fim: '?', traducao: 'Quer que eu traga pipoca?' },
+    { contexto: M('Vamos assistir algo mais leve?'), palavras: ['Shall', 'we', 'watch', 'something', 'lighter'], isca: ['watching'], fim: '?', traducao: 'Vamos assistir algo mais leve?' },
+    { contexto: M('Não vou contar o seu segredo para ninguém.'), palavras: ['I', "won't", 'tell', 'anybody', 'your', 'secret'], isca: ['tells'], fim: '.', traducao: 'Não vou contar o seu segredo para ninguém.' },
+    { contexto: M('Eu te ajudo com a lição de casa.'), palavras: ["I'll", 'help', 'you', 'with', 'your', 'homework'], isca: ['helping'], fim: '.', traducao: 'Eu te ajudo com a lição de casa.' },
+    { contexto: M('Te ligo mais tarde.'), palavras: ["I'll", 'call', 'you', 'later'], isca: ['calling'], fim: '.', traducao: 'Te ligo mais tarde.' },
+    { contexto: M('Eu te retorno a ligação em cinco minutos.'), palavras: ["I'll", 'call', 'you', 'back', 'in', 'five', 'minutes'], isca: ['on'], fim: '.', traducao: 'Eu te retorno a ligação em cinco minutos.' },
+    { contexto: M('Eu pago os ingressos.'), palavras: ["I'll", 'pay', 'for', 'the', 'tickets'], isca: ['pays'], fim: '.', traducao: 'Eu pago os ingressos.' },
+    { contexto: M('Eu te levo para casa.'), palavras: ["I'll", 'take', 'you', 'home'], isca: ['to'], fim: '.', traducao: 'Eu te levo para casa.' },
+    { contexto: M('Vou te mandar um e-mail hoje à noite.'), palavras: ["I'll", 'send', 'you', 'an', 'email', 'tonight'], isca: ['a'], fim: '.', traducao: 'Vou te mandar um e-mail hoje à noite.' },
+    { contexto: M('Quer que eu faça um café para você?'), palavras: ['Shall', 'I', 'make', 'you', 'a', 'coffee'], isca: ['do'], fim: '?', traducao: 'Quer que eu faça um café para você?' },
+    { contexto: M('Vou te recomendar uma boa comédia.'), palavras: ["I'll", 'recommend', 'a', 'good', 'comedy'], isca: ['recommends'], fim: '.', traducao: 'Vou te recomendar uma boa comédia.' },
+    { contexto: M('Eu explico a história.'), palavras: ["I'll", 'explain', 'the', 'story'], isca: ['explains'], fim: '.', traducao: 'Eu explico a história.' },
+    { contexto: M('Prometo que não vou me atrasar.'), palavras: ['I', 'promise', 'I', "won't", 'be', 'late'], isca: ['am'], fim: '.', traducao: 'Prometo que não vou me atrasar.' },
+    { contexto: M('Nós vamos resolver o problema.'), palavras: ["We'll", 'solve', 'the', 'problem'], isca: ['solving'], fim: '.', traducao: 'Nós vamos resolver o problema.' },
+    { contexto: M('Ela vai tomar uma decisão amanhã.'), palavras: ["She'll", 'make', 'a', 'decision', 'tomorrow'], isca: ['do'], fim: '.', traducao: 'Ela vai tomar uma decisão amanhã.' },
+    { contexto: M('Eu carrego uma para você.'), palavras: ["I'll", 'carry', 'one', 'for', 'you'], isca: ['carries'], fim: '.', traducao: 'Eu carrego uma para você.' },
+    { contexto: M('Ah, está chovendo! Vou levar o meu guarda-chuva.'), palavras: ["I'll", 'take', 'my', 'umbrella'], isca: ['taking'], fim: '.', traducao: 'Vou levar o meu guarda-chuva.' },
+    { contexto: M('Eu nunca vou esquecer esta cena.'), palavras: ["I'll", 'never', 'forget', 'this', 'scene'], isca: ['forgot'], fim: '.', traducao: 'Eu nunca vou esquecer esta cena.' },
+    { contexto: M('Quer que eu pegue uns lenços para você?'), palavras: ['Shall', 'I', 'get', 'you', 'some', 'tissues'], isca: ['gets'], fim: '?', traducao: 'Quer que eu pegue uns lenços para você?' }
+  ]
+});
+</script>
+</body>
+</html>

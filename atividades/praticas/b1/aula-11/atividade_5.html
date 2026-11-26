@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 11 · Decisions, offers and promises</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 11 · Gramática (Scenes You Will Never Forget)
+   Alinhado ao "Grammar Point" (will / won't + base verb para decisões na hora, ofertas e
+   promessas; não usar o presente nessas situações; Shall I / Shall we para oferecer), aos
+   "Verb Phrases" e aos gêneros de filme. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 11, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: "The phone is ringing. — Don't get up. ___ it.", opcoes: ["I'll answer", 'I answer', 'I answered'], certa: 0, traducao: 'O telefone está tocando. — Não levante. Eu atendo.' },
+    { frase: "I'm thirsty. — ___ I get you some water?", opcoes: ['Will', 'Shall', 'Do'], certa: 1, traducao: 'Estou com sede. — Quer que eu pegue água para você?' },
+    { frase: "I promise I ___ tell your mum.", opcoes: ["don't", "didn't", "won't"], certa: 2, traducao: 'Prometo que não vou contar para a sua mãe.' },
+    { frase: "___ we go to the cinema on Friday?", opcoes: ['Shall', 'Do', 'Are'], certa: 0, traducao: 'Vamos ao cinema na sexta?' },
+    { instrucao: 'Which sentence is a promise?', frase: '___', opcoes: ["Shall I open the door?", "I'll always love you.", "It'll rain tomorrow."], certa: 1, traducao: 'Vou sempre te amar.' },
+    { instrucao: 'Which sentence is a polite offer?', frase: '___', opcoes: ["I'll be back.", "It won't snow.", 'Shall I carry your bag?'], certa: 2, traducao: 'Quer que eu carregue a sua bolsa?' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["Don't worry. I'll help you.", "Don't worry. I help you.", "Don't worry. I helping you."], certa: 0, traducao: 'Não se preocupe. Eu te ajudo.' },
+    { frase: 'I missed your call. I\'ll call you ___ after lunch.', opcoes: ['home', 'back', 'for'], certa: 1, traducao: 'Perdi a sua ligação. Te retorno depois do almoço.' },
+    { frase: "It's late. Get in the car, I'll ___ you home.", opcoes: ['bring', 'send', 'take'], certa: 2, traducao: 'Está tarde. Entra no carro, eu te levo para casa.' },
+    { frase: 'Jane can never ___ a decision!', opcoes: ['make', 'do', 'solve'], certa: 0, traducao: 'A Jane nunca consegue decidir!' },
+    { frase: 'The computer is broken, but the technician will ___ the problem.', opcoes: ['make', 'solve', 'explain'], certa: 1, traducao: 'O computador quebrou, mas o técnico vai resolver o problema.' },
+    { frase: "You forgot your wallet? I'll ___ for lunch.", opcoes: ['take', 'send', 'pay'], certa: 2, traducao: 'Você esqueceu a carteira? Eu pago o almoço.' },
+    { frase: "I'll ___ you a message with the address.", opcoes: ['send', 'bring', 'pay'], certa: 0, traducao: 'Vou te mandar uma mensagem com o endereço.' },
+    { frase: 'Can you ___ a good restaurant near here?', opcoes: ['explain', 'recommend', 'call'], certa: 1, traducao: 'Você pode recomendar um bom restaurante aqui perto?' },
+    { frase: "Sit down. I'll ___ you a cup of tea.", opcoes: ['do', 'take', 'make'], certa: 2, traducao: 'Sente-se. Vou fazer uma xícara de chá para você.' },
+    { frase: "I didn't get the joke. — I'll ___ it to you.", opcoes: ['explain', 'recommend', 'solve'], certa: 0, traducao: 'Não entendi a piada. — Eu te explico.' },
+    { frase: "Let me ___ you with your English homework.", opcoes: ['take', 'help', 'make'], certa: 1, traducao: 'Deixa eu te ajudar com a lição de inglês.' },
+    { frase: "Don't forget to ___ some drinks to the party!", opcoes: ['pay', 'make', 'bring'], certa: 2, traducao: 'Não esqueça de levar bebidas para a festa!' },
+    { frase: "We don't use the ___ for instant decisions, offers and promises.", opcoes: ['present tense', 'base verb', 'word will'], certa: 0, traducao: 'Não usamos o presente para decisões na hora, ofertas e promessas.' },
+    { frase: 'After will, we use the ___.', opcoes: ['-ing form', 'base verb', 'past form'], certa: 1, traducao: 'Depois de will, usamos o verbo na forma base.' },
+    { frase: 'The Lion King is ___.', opcoes: ['a science fiction film', 'a romance', 'an animation'], certa: 2, traducao: 'O Rei Leão é um filme de animação.' },
+    { frase: 'A film with a lot of songs is a ___.', opcoes: ['musical', 'thriller', 'drama'], certa: 0, traducao: 'Um filme com muitas músicas é um musical.' },
+    { frase: 'A film about robots from the future is ___.', opcoes: ['romance', 'science fiction', 'historical'], certa: 1, traducao: 'Um filme sobre robôs do futuro é de ficção científica.' },
+    { frase: 'A film that makes you laugh is a ___.', opcoes: ['thriller', 'drama', 'comedy'], certa: 2, traducao: 'Um filme que te faz rir é uma comédia.' }
+  ]
+});
+</script>
+</body>
+</html>

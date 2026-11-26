@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 11 · Movie night</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 11 · Leitura (Scenes You Will Never Forget)
+   Alinhado às conversas do "Grammar Point" (I'll watch..., Shall I bring...?, I'll recommend...)
+   e aos "Verb Phrases" (make a decision, recommend, pay for, call sb back...). Conteúdo NOVO:
+   a Clara e o Max planejam uma noite de filme. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Max', 'What shall we watch tonight?'],
+  ['Clara', "I don't know. I can't make a decision!"],
+  ['Max', "OK, I'll recommend a film. Have you seen Toy Story?"],
+  ['Clara', "No, I haven't. Is it a comedy?"],
+  ['Max', "It's an animation, but it's very funny too."],
+  ['Clara', 'Great! Shall I make some popcorn?'],
+  ['Max', "Yes, please. And I'll bring the drinks."],
+  ['Clara', "Oh no, we don't have any soda."],
+  ['Max', "No problem. I'll go to the store and buy some."],
+  ['Clara', 'Thanks! Shall I give you some money?'],
+  ['Max', "No, it's OK. I'll pay for it."],
+  ['Clara', "You're so nice. I'll make dinner next time, I promise."],
+  ['Max', 'Deal! What time shall I come?'],
+  ['Clara', 'Come at seven. Oh, my phone is ringing!'],
+  ['Max', "Answer it. I'll call you back later."],
+  ['Clara', 'Thanks. See you at seven!'],
+  ['Max', "See you! I won't be late, I promise."]
+];
+const lado = q => q === 'Max' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 11, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["I don't know. I can't make a decision!", "I don't know. I can't do a decision!", "I don't know. I can't making a decision!"], 0, 'Não sei. Não consigo decidir!'),
+    prox(2, ["OK, I recommend a film yesterday. Have you seen Toy Story?", "OK, I'll recommend a film. Have you seen Toy Story?", "OK, I'll recommending a film. Have you seen Toy Story?"], 1, 'Tá, vou recomendar um filme. Você já viu Toy Story?'),
+    prox(3, ["No, I didn't. Is it a comedy?", "No, I haven't. Does it a comedy?", "No, I haven't. Is it a comedy?"], 2, 'Não, não vi. É comédia?'),
+    prox(4, ["It's an animation, but it's very funny too.", "It's a romance, so it isn't funny at all.", "It's an animation, but it's very fun too much."], 0, 'É uma animação, mas também é muito engraçada.'),
+    prox(5, ['Great! Will I make some popcorn yesterday?', 'Great! Shall I make some popcorn?', 'Great! Shall I making some popcorn?'], 1, 'Ótimo! Quer que eu faça pipoca?'),
+    prox(6, ["Yes, please. And I bring the drinks last week.", "Yes, please. And I'll brings the drinks.", "Yes, please. And I'll bring the drinks."], 2, 'Sim, por favor. E eu levo as bebidas.'),
+    prox(8, ["No problem. I'll go to the store and buy some.", "No problem. I go to the store yesterday and buy some.", "No problem. I'll went to the store and buy some."], 0, 'Sem problema. Vou ao mercado e compro.'),
+    prox(9, ['Thanks! Shall I gives you some money?', 'Thanks! Shall I give you some money?', 'Thanks! Shall you give me some money?'], 1, 'Obrigada! Quer que eu te dê um dinheiro?'),
+    prox(10, ["No, it's OK. I'll paying for it.", "No, it's OK. I'll pay it for.", "No, it's OK. I'll pay for it."], 2, 'Não, tudo bem. Eu pago.'),
+    prox(11, ["You're so nice. I'll make dinner next time, I promise.", "You're so nice. I make dinner next time, I promise.", "You're so nice. I'll do dinner next time, I promises."], 0, 'Você é muito legal. Eu faço o jantar da próxima vez, prometo.'),
+    prox(14, ["Answer it. I'll call you back yesterday.", "Answer it. I'll call you back later.", "Answer it. I'll calling you back later."], 1, 'Atende. Eu te ligo depois.'),
+    prox(16, ["See you! I'll be late, I promise.", "See you! I don't be late, I promise.", "See you! I won't be late, I promise."], 2, 'Até! Não vou me atrasar, prometo.'),
+    { instrucao: 'Why can\'t Clara choose a film?', frase: '___', opcoes: ["She can't make a decision.", "She doesn't like films.", 'She has no TV.'], certa: 0, traducao: 'Ela não consegue decidir.' },
+    { instrucao: 'What type of film is Toy Story?', frase: '___', opcoes: ['A thriller.', 'An animation.', 'A romance.'], certa: 1, traducao: 'Uma animação.' },
+    { instrucao: 'What does Clara offer to make?', frase: '___', opcoes: ['Dinner tonight.', 'Coffee.', 'Popcorn.'], certa: 2, traducao: 'Pipoca.' },
+    { instrucao: 'What is the problem with the drinks?', frase: '___', opcoes: ["They don't have any soda.", 'The soda is too cold.', 'Max forgot the juice.'], certa: 0, traducao: 'Eles não têm refrigerante.' },
+    { instrucao: 'Who will pay for the soda?', frase: '___', opcoes: ['Clara.', 'Max.', 'Nobody.'], certa: 1, traducao: 'O Max.' },
+    { instrucao: 'What does Clara promise?', frase: '___', opcoes: ['To pay for the tickets.', 'To take Max home.', 'To make dinner next time.'], certa: 2, traducao: 'Fazer o jantar da próxima vez.' },
+    { instrucao: 'What time will Max come?', frase: '___', opcoes: ['At seven.', 'At six.', 'At eight.'], certa: 0, traducao: 'Às sete.' },
+    { instrucao: 'What does Max promise at the end?', frase: '___', opcoes: ["He'll call Clara back.", "He won't be late.", "He'll bring popcorn."], certa: 1, traducao: 'Que não vai se atrasar.' }
+  ]
+});
+</script>
+</body>
+</html>

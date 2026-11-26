@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 11 · I'll help you!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 11 · Escuta (Scenes You Will Never Forget)
+   Alinhado ao "Grammar Point" (will / won't para decisões na hora, ofertas e promessas;
+   Shall I...? / Shall we...?), aos "Verb Phrases" (make a decision, solve a problem, explain,
+   recommend, help sb with sth, call sb later / back, pay for, bring, make sb a coffee, send an
+   email, take sb home) e aos gêneros de filme do Warm Up. Conteúdo NOVO (filmes com fatos
+   verdadeiros). 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 11, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    q("I'm so hungry, but I forgot my lunch.", 'Shall I make you a sandwich?', ["I'll take you home.", "I'll call you back."], 'forum'),
+    q('Oh no, I missed the last bus!', "Don't worry, I'll take you home.", ["I'll make you a coffee.", "I'll send you an email."], 'forum'),
+    q("I didn't understand the end of the film.", "I'll explain the story.", ["I'll pay for the tickets.", 'Shall I carry your bag?'], 'forum'),
+    q('I left my wallet at home and the tickets are expensive.', "It's OK, I'll pay for the tickets.", ["I'll explain the story.", "I'll make you a coffee."], 'forum'),
+    q('Your friend calls you, but you are in the cinema.', "I'll call you back after the film.", ["I'll make you a coffee.", "I'll take you home."], 'forum'),
+    q("I don't know what film to watch tonight.", "I'll recommend a good one.", ["I'll pay for dinner.", "I'll call you back."], 'forum'),
+    q('These boxes are really heavy.', 'Shall I help you with them?', ['Shall I send you an email?', "I'll recommend a film."], 'forum'),
+    q("I'm cold and tired.", "Sit down. I'll make you some tea.", ["I'll send you a message.", "I'll recommend a comedy."], 'forum'),
+    q('The teacher needs the photos for the project now!', "I'll email them to you right now.", ["I'll make you a sandwich.", 'Shall I take you home?'], 'forum'),
+    q("I can't decide. Action or comedy?", "I'll help you make a decision.", ["I'll call you back.", "I'll pay for the soda."], 'forum'),
+    q("We don't have any popcorn for movie night!", "I'll bring some.", ["I'll explain the story.", "I'll call you back."], 'forum'),
+    q('I have a terrible headache.', "I'll get you some paracetamol.", ["I'll recommend an action film.", "I'll send an email."], 'forum'),
+    q("I won't tell anybody your secret. I promise.", 'a promise', ['a question', 'something in the past'], 'handshake'),
+    q('Shall I open the window?', 'a polite offer', ['a promise', 'a weather forecast'], 'handshake'),
+    q("Oh, it's raining! I'll take my umbrella.", 'an instant decision', ['a polite offer', 'a promise'], 'handshake'),
+    q("I'll never forget you.", 'a promise', ['a polite offer', 'a weather forecast'], 'handshake'),
+    q('In Toy Story, all the characters are made by computer.', 'animation', ['historical', 'thriller'], 'movie'),
+    q('Mamma Mia! has a lot of songs by ABBA.', 'musical', ['science fiction', 'thriller'], 'movie'),
+    q('Jurassic Park is about dinosaurs that scientists bring back to life.', 'science fiction', ['romance', 'musical'], 'movie'),
+    q('In this film, two people meet in Paris and fall in love.', 'romance', ['action', 'animation'], 'movie'),
+    q('This film is so funny! I laughed from the beginning to the end.', 'comedy', ['drama', 'thriller'], 'movie'),
+    q('Car chases, fights and explosions in every scene!', 'action', ['romance', 'musical'], 'movie'),
+    q('Titanic came out in 1997.', '1997', ['1984', '2008'], 'calendar_month'),
+    q("I'll be back.", 'The Terminator', ['Titanic', 'The Lion King'], 'movie')
+  ]
+});
+</script>
+</body>
+</html>
