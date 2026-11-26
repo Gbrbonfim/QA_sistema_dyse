@@ -1591,6 +1591,23 @@ window.DYSE_PRATICAS = {
         ]
       }
     ]
+  },
+  b2: {
+    course: 'ativ-b2',
+    nome: 'B2',
+    aulas: [
+      {
+        aula: 1,
+        titulo: 'Class 01 · Welcome Class',
+        atividades: [
+          { num: 1, titulo: 'How much do you remember?', tipo: 'Escute e escolha', treina: 'Escuta · Revisão e aprender idiomas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Back to English', tipo: 'Monte a frase', treina: 'Escrita · Tempos verbais e metas', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'First day in B2', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My goals for B2', tipo: 'Escute e grave', treina: 'Fala · Rotina, experiências e metas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Ready for B2?', tipo: 'Make a Choice', treina: 'Gramática · Collocations e tempos verbais', minutos: '10 - 12', questoes: 24 }
+        ]
+      }
+    ]
   }
 };
 

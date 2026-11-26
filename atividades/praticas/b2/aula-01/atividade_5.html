@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 1 · Ready for B2?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 01 · Gramática (Welcome Class)
+   Alinhado ao Vocabulary (texto "My Daily Routine": get / make / take / go / put / run /
+   look; qual palavra não pertence ao grupo), ao "How Much Do You Remember?" (tempos
+   verbais) e ao Listening. Conteúdo NOVO. 24 questões. */
+const OD = "Which word doesn't belong in the group?";
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 1, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'I usually wake up early and ___ ready for work.', opcoes: ['get', 'make', 'do'], certa: 0, traducao: 'Eu normalmente acordo cedo e me arrumo para o trabalho.' },
+    { frase: 'At work, I often have to ___ important decisions.', opcoes: ['do', 'make', 'give'], certa: 1, traducao: 'No trabalho, muitas vezes tenho que tomar decisões importantes.' },
+    { frase: 'When I feel tired, I ___ a short break.', opcoes: ['make', 'do', 'take'], certa: 2, traducao: 'Quando me sinto cansado, faço uma pausa curta.' },
+    { frase: 'I ___ on well with my colleagues.', opcoes: ['get', 'go', 'come'], certa: 0, traducao: 'Eu me dou bem com os meus colegas.' },
+    { frase: 'At home, I like to ___ my phone away for a while.', opcoes: ['take', 'put', 'make'], certa: 1, traducao: 'Em casa, gosto de guardar o celular por um tempo.' },
+    { frase: 'I sometimes ___ out of energy by the end of the day.', opcoes: ['get', 'go', 'run'], certa: 2, traducao: 'Às vezes fico sem energia no fim do dia.' },
+    { frase: 'At the weekend, I like to ___ out with friends.', opcoes: ['go', 'make', 'do'], certa: 0, traducao: 'No fim de semana, gosto de sair com amigos.' },
+    { frase: 'I always look ___ to the weekend.', opcoes: ['for', 'forward', 'after'], certa: 1, traducao: 'Eu sempre espero ansiosamente pelo fim de semana.' },
+    { frase: 'What ___ you doing at this time yesterday?', opcoes: ['did', 'are', 'were'], certa: 2, traducao: 'O que você estava fazendo a esta hora ontem?' },
+    { frase: 'If I ___ more free time, I would travel more.', opcoes: ['had', 'have', 'will have'], certa: 0, traducao: 'Se eu tivesse mais tempo livre, viajaria mais.' },
+    { frase: '___ you ever tried something new that you loved?', opcoes: ['Did', 'Have', 'Do'], certa: 1, traducao: 'Você já experimentou algo novo que adorou?' },
+    { frase: 'When I was younger, I ___ play outside every day.', opcoes: ['use to', 'am used to', 'used to'], certa: 2, traducao: 'Quando eu era mais novo, brincava na rua todos os dias.' },
+    { frase: "You ___ sleep at least seven hours a night. It's good advice.", opcoes: ['should', "mustn't", "don't have to"], certa: 0, traducao: 'Você deveria dormir pelo menos sete horas por noite. É um bom conselho.' },
+    { frase: "Next weekend, I ___ visit my grandparents. It's already planned.", opcoes: ['visited', 'am going to', 'was going to'], certa: 1, traducao: 'No próximo fim de semana, vou visitar meus avós. Já está combinado.' },
+    { frase: 'For me, staying at home is ___ than going out.', opcoes: ['relaxinger', 'most relaxing', 'more relaxing'], certa: 2, traducao: 'Para mim, ficar em casa é mais relaxante do que sair.' },
+    { instrucao: OD + ' (personality adjectives)', frase: '___', opcoes: ['argue', 'confident', 'reliable'], certa: 0, traducao: '"argue" é um verbo; os outros são adjetivos de personalidade.' },
+    { instrucao: OD + ' (clothes)', frase: '___', opcoes: ['sweater', 'bookshelf', 'socks'], certa: 1, traducao: '"bookshelf" é um móvel; os outros são roupas.' },
+    { instrucao: OD + ' (how a person feels)', frase: '___', opcoes: ['relaxed', 'excited', 'boring'], certa: 2, traducao: '"boring" descreve o que causa o sentimento (-ing); os outros descrevem como a pessoa se sente (-ed).' },
+    { instrucao: OD + ' (places for travel)', frase: '___', opcoes: ['suitcase', 'airport', 'platform'], certa: 0, traducao: '"suitcase" é um objeto; os outros são lugares.' },
+    { instrucao: OD + ' (adjectives for places)', frase: '___', opcoes: ['crowded', 'improve', 'polluted'], certa: 1, traducao: '"improve" é um verbo; os outros são adjetivos.' },
+    { instrucao: OD + ' (media and news)', frase: '___', opcoes: ['headline', 'source', 'sustainable'], certa: 2, traducao: '"sustainable" é do meio ambiente; os outros são de mídia.' },
+    { frase: 'According to the speaker, travelling abroad to learn a language is ___.', opcoes: ['not necessary', 'the only way', 'impossible'], certa: 0, traducao: 'Segundo a falante, viajar para fora para aprender um idioma não é necessário.' },
+    { frase: "A foreign environment is hard for beginners because the brain can't ___ unknown information.", opcoes: ['forget', 'process', 'buy'], certa: 1, traducao: 'Um ambiente estrangeiro é difícil para iniciantes porque o cérebro não consegue processar informação desconhecida.' },
+    { frase: 'The speaker believes learning should be fun and ___.', opcoes: ['expensive', 'difficult', 'consistent'], certa: 2, traducao: 'A falante acredita que aprender deve ser divertido e constante.' }
+  ]
+});
+</script>
+</body>
+</html>

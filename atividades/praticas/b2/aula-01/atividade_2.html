@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 1 · Back to English</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 01 · Escrita (Welcome Class)
+   Alinhado ao "How Much Do You Remember?" (presente, passado, past continuous, 2º
+   condicional, present perfect, going to, used to, should, comparativos), ao Vocabulary
+   (collocations e phrasal verbs da rotina) e ao Talking Point (compromissos com will).
+   Conteúdo NOVO. A palavra extra nunca forma outra frase certa. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 1, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu normalmente vou à academia depois do trabalho.'), palavras: ['I', 'usually', 'go', 'to', 'the', 'gym', 'after', 'work'], isca: ['goes'], fim: '.', traducao: 'Eu normalmente vou à academia depois do trabalho.' },
+    { contexto: M('O que você estava fazendo a esta hora ontem?'), palavras: ['What', 'were', 'you', 'doing', 'at', 'this', 'time', 'yesterday'], isca: ['did'], fim: '?', traducao: 'O que você estava fazendo a esta hora ontem?' },
+    { contexto: M('Se eu tivesse mais tempo livre, aprenderia piano.'), palavras: ['If', 'I', 'had', 'more', 'free', 'time,', 'I', 'would', 'learn', 'the', 'piano'], isca: ['will'], fim: '.', traducao: 'Se eu tivesse mais tempo livre, aprenderia piano.' },
+    { contexto: M('Você já experimentou algo novo?'), palavras: ['Have', 'you', 'ever', 'tried', 'something', 'new'], isca: ['Did'], fim: '?', traducao: 'Você já experimentou algo novo?' },
+    { contexto: M('Vou visitar meus pais no próximo fim de semana.'), palavras: ["I'm", 'going', 'to', 'visit', 'my', 'parents', 'next', 'weekend'], isca: ['went'], fim: '.', traducao: 'Vou visitar meus pais no próximo fim de semana.' },
+    { contexto: M('Eu costumava jogar futebol quando era mais novo.'), palavras: ['I', 'used', 'to', 'play', 'football', 'when', 'I', 'was', 'younger'], isca: ['use'], fim: '.', traducao: 'Eu costumava jogar futebol quando era mais novo.' },
+    { contexto: M('As pessoas deveriam dormir pelo menos sete horas por noite.'), palavras: ['People', 'should', 'sleep', 'at', 'least', 'seven', 'hours', 'a', 'night'], isca: ['to'], fim: '.', traducao: 'As pessoas deveriam dormir pelo menos sete horas por noite.' },
+    { contexto: M('Ficar em casa é mais relaxante do que sair.'), palavras: ['Staying', 'at', 'home', 'is', 'more', 'relaxing', 'than', 'going', 'out'], isca: ['most'], fim: '.', traducao: 'Ficar em casa é mais relaxante do que sair.' },
+    { contexto: M('Eu não consigo viver sem o meu celular.'), palavras: ['I', "can't", 'live', 'without', 'my', 'phone'], isca: ['living'], fim: '.', traducao: 'Eu não consigo viver sem o meu celular.' },
+    { contexto: M('Você não precisa viajar para o exterior para aprender um idioma.'), palavras: ['You', "don't", 'need', 'to', 'travel', 'abroad', 'to', 'learn', 'a', 'language'], isca: ['travelling'], fim: '.', traducao: 'Você não precisa viajar para o exterior para aprender um idioma.' },
+    { contexto: M('Eu aprendi inglês em casa, usando a internet.'), palavras: ['I', 'learned', 'English', 'at', 'home,', 'using', 'the', 'internet'], isca: ['learning'], fim: '.', traducao: 'Eu aprendi inglês em casa, usando a internet.' },
+    { contexto: M('Aprender deveria ser divertido e constante.'), palavras: ['Learning', 'should', 'be', 'fun', 'and', 'consistent'], isca: ['Learn'], fim: '.', traducao: 'Aprender deveria ser divertido e constante.' },
+    { contexto: M('Vou falar inglês em todas as aulas.'), palavras: ['I', 'will', 'speak', 'English', 'in', 'every', 'class'], isca: ['speaking'], fim: '.', traducao: 'Vou falar inglês em todas as aulas.' },
+    { contexto: M('Não vou ter medo de cometer erros.'), palavras: ['I', 'will', 'not', 'be', 'afraid', 'of', 'making', 'mistakes'], isca: ['make'], fim: '.', traducao: 'Não vou ter medo de cometer erros.' },
+    { contexto: M('Vou fazer perguntas quando não entender.'), palavras: ['I', 'will', 'ask', 'questions', 'when', 'I', "don't", 'understand'], isca: ['asking'], fim: '.', traducao: 'Vou fazer perguntas quando não entender.' },
+    { contexto: M('Eu tento fazer uma pausa curta quando me sinto cansado.'), palavras: ['I', 'try', 'to', 'take', 'a', 'short', 'break', 'when', 'I', 'feel', 'tired'], isca: ['make'], fim: '.', traducao: 'Eu tento fazer uma pausa curta quando me sinto cansado.' },
+    { contexto: M('Eu me dou bem com os meus colegas.'), palavras: ['I', 'get', 'on', 'well', 'with', 'my', 'colleagues'], isca: ['go'], fim: '.', traducao: 'Eu me dou bem com os meus colegas.' },
+    { contexto: M('No trabalho, eu tenho que tomar decisões importantes.'), palavras: ['At', 'work,', 'I', 'have', 'to', 'make', 'important', 'decisions'], isca: ['do'], fim: '.', traducao: 'No trabalho, eu tenho que tomar decisões importantes.' },
+    { contexto: M('Eu muitas vezes fico sem energia no fim do dia.'), palavras: ['I', 'often', 'run', 'out', 'of', 'energy', 'by', 'the', 'end', 'of', 'the', 'day'], isca: ['go'], fim: '.', traducao: 'Eu muitas vezes fico sem energia no fim do dia.' },
+    { contexto: M('Qual é um hábito que você quer mudar?'), palavras: ['What', 'is', 'one', 'habit', 'you', 'want', 'to', 'change'], isca: ['does'], fim: '?', traducao: 'Qual é um hábito que você quer mudar?' }
+  ]
+});
+</script>
+</body>
+</html>

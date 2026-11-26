@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 1 · First day in B2</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 01 · Leitura (Welcome Class)
+   Alinhado ao Listening (aprender em casa, sem morar fora; aprender com diversão e
+   constância) e ao Talking Point (metas e compromissos para chegar ao B2). Conteúdo NOVO:
+   Nina e Theo se conhecem na primeira aula do B2.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Nina', 'Hi! Is this your first class in the B2 group too?'],
+  ['Theo', 'Yes, it is. I finished B1 last month. How about you?'],
+  ['Nina', "Same here. I'm a bit nervous, to be honest."],
+  ['Theo', "Me too. I'm always afraid of making mistakes when I speak."],
+  ['Nina', 'I used to feel like that, but my teacher said mistakes help us learn.'],
+  ['Theo', "That's true. Have you ever studied abroad?"],
+  ['Nina', "No, I haven't. I've learned everything here, in Brazil."],
+  ['Theo', 'Really? I thought you needed to live abroad to speak well.'],
+  ['Nina', "That's a myth! With the internet, you can practise at home every day."],
+  ['Theo', 'What do you usually do to practise?'],
+  ['Nina', 'I watch series in English and I listen to podcasts on the bus.'],
+  ['Theo', 'Nice. I should do that. I usually just do my homework.'],
+  ['Nina', "Homework is important, but it's better to make learning fun."],
+  ['Theo', 'What are your goals for this course?'],
+  ['Nina', 'I want to give longer answers and use new expressions.'],
+  ['Theo', "Good goals. I'm going to speak English in every class, even if I make mistakes."],
+  ['Nina', "Great! If we practise together, we'll improve faster."],
+  ['Theo', 'Deal. Shall we meet after class on Fridays?'],
+  ['Nina', "Sure! I'm really looking forward to it."],
+  ['Theo', "Me too. Let's get started!"]
+];
+const lado = q => q === 'Nina' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 1, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, it is. I finished B1 last month. How about you?', 'Yes, it is. I have finished B1 last month. How about you?', 'Yes, it does. I finished B1 last month. How about you?'], 0, 'Sim. Terminei o B1 mês passado. E você?'),
+    prox(3, ["Me too. I'm always afraid of make mistakes when I speak.", "Me too. I'm always afraid of making mistakes when I speak.", 'Me too. I always am afraid of making mistakes when I speaks.'], 1, 'Eu também. Sempre tenho medo de errar quando falo.'),
+    prox(4, ['I use to feel like that, but my teacher said mistakes help us learn.', 'I used to feel like that, but my teacher said mistakes helps us learn.', 'I used to feel like that, but my teacher said mistakes help us learn.'], 2, 'Eu me sentia assim, mas minha professora disse que os erros nos ajudam a aprender.'),
+    prox(5, ["That's true. Have you ever studied abroad?", "That's true. Did you ever studied abroad?", "That's true. Have you ever study abroad?"], 0, 'É verdade. Você já estudou fora?'),
+    prox(7, ['Really? I thought you need to living abroad to speak well.', 'Really? I thought you needed to live abroad to speak well.', 'Really? I thinked you needed to live abroad to speak well.'], 1, 'Sério? Eu achava que precisava morar fora para falar bem.'),
+    prox(8, ["That's a myth! With the internet, you can to practise at home every day.", "That's a myth! With the internet, you can practising at home every day.", "That's a myth! With the internet, you can practise at home every day."], 2, 'Isso é um mito! Com a internet, dá para praticar em casa todos os dias.'),
+    prox(10, ['I watch series in English and I listen to podcasts on the bus.', 'I watch series in English and I listen podcasts on the bus.', 'I watching series in English and I listen to podcasts on the bus.'], 0, 'Assisto a séries em inglês e ouço podcasts no ônibus.'),
+    prox(12, ["Homework is important, but it's better to do learning fun.", "Homework is important, but it's better to make learning fun.", "Homework is important, but it's more better to make learning fun."], 1, 'A lição de casa é importante, mas é melhor tornar o aprendizado divertido.'),
+    prox(14, ['I want to give more long answers and use new expressions.', 'I want giving longer answers and use new expressions.', 'I want to give longer answers and use new expressions.'], 2, 'Quero dar respostas mais longas e usar expressões novas.'),
+    prox(15, ["Good goals. I'm going to speak English in every class, even if I make mistakes.", "Good goals. I'm going to speak English in every class, even if I will make mistakes.", 'Good goals. I going to speak English in every class, even if I make mistakes.'], 0, 'Boas metas. Vou falar inglês em todas as aulas, mesmo se errar.'),
+    prox(16, ["Great! If we will practise together, we'll improve faster.", "Great! If we practise together, we'll improve faster.", 'Great! If we practise together, we improved faster.'], 1, 'Ótimo! Se praticarmos juntos, vamos melhorar mais rápido.'),
+    prox(18, ["Sure! I'm really looking forward to meet.", "Sure! I'm really looking forward it.", "Sure! I'm really looking forward to it."], 2, 'Claro! Estou muito animada.'),
+    { instrucao: 'When did Theo finish B1?', frase: '___', opcoes: ['Last month.', 'Last year.', 'Yesterday.'], certa: 0, traducao: 'No mês passado.' },
+    { instrucao: 'What is Theo afraid of?', frase: '___', opcoes: ['Doing homework.', 'Making mistakes when speaking.', 'Travelling abroad.'], certa: 1, traducao: 'De errar ao falar.' },
+    { instrucao: 'Where has Nina learned English?', frase: '___', opcoes: ['In London.', 'In the USA.', 'In Brazil.'], certa: 2, traducao: 'No Brasil.' },
+    { instrucao: 'What does Nina say about living abroad?', frase: '___', opcoes: ["It's a myth that you need it.", "It's the only way to learn.", "It's too expensive."], certa: 0, traducao: 'Que é um mito que seja necessário.' },
+    { instrucao: 'Where does Nina listen to podcasts?', frase: '___', opcoes: ['At the gym.', 'On the bus.', 'In bed.'], certa: 1, traducao: 'No ônibus.' },
+    { instrucao: 'What does Theo usually do to practise?', frase: '___', opcoes: ['Watches series.', 'Listens to podcasts.', 'Only does the homework.'], certa: 2, traducao: 'Só faz a lição de casa.' },
+    { instrucao: "What is one of Nina's goals?", frase: '___', opcoes: ['To give longer answers.', 'To travel to Canada.', 'To stop doing homework.'], certa: 0, traducao: 'Dar respostas mais longas.' },
+    { instrucao: 'When are they going to practise together?', frase: '___', opcoes: ['Before class on Mondays.', 'After class on Fridays.', 'At the weekend.'], certa: 1, traducao: 'Depois da aula, às sextas.' }
+  ]
+});
+</script>
+</body>
+</html>

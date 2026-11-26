@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B2 · Aula 1 · How much do you remember?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B2 · Class 01 · Escuta (Welcome Class)
+   Alinhado ao "How Much Do You Remember?" (perguntas em vários tempos verbais), ao
+   Vocabulary (qual palavra não pertence ao grupo; get ready, make decisions, take a break,
+   get on well) e ao Listening (não é preciso morar fora para aprender um idioma).
+   Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const Q = 'Listen to the question. Choose the best answer.', O = "Listen to the four words. Which one doesn't belong?";
+const C = 'Listen to the meaning. Which expression is it?';
+DysePratica.iniciar({
+  course: 'ativ-b2', aula: 1, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: Q, ...q('What do you usually do after work?', 'I usually go to the gym.', ['I went to the gym.', 'I am going to the gym yesterday.'], 'forum') },
+    { instrucao: Q, ...q('What did you do last weekend?', 'I visited my grandparents.', ['I visit my grandparents every day.', 'I will visit my grandparents.'], 'forum') },
+    { instrucao: Q, ...q('What were you doing at this time yesterday?', 'I was having lunch with a friend.', ['I have lunch with a friend.', 'I am having lunch.'], 'forum') },
+    { instrucao: Q, ...q('If you had more free time, what would you do?', 'I would learn to play the piano.', ['I learned the piano yesterday.', 'I am learning the piano now.'], 'forum') },
+    { instrucao: Q, ...q('Have you ever tried something new that you really liked?', 'Yes, I tried surfing last summer and loved it.', ['Yes, I try surfing tomorrow.', "No, I didn't liked it."], 'forum') },
+    { instrucao: Q, ...q('What are you going to do next weekend?', "I'm going to visit a museum.", ['I went to a museum.', 'I was visiting a museum.'], 'forum') },
+    { instrucao: Q, ...q('What did you use to do when you were younger?', 'I used to play football every day.', ['I use to play football now.', 'I am used to play football tomorrow.'], 'forum') },
+    { instrucao: Q, ...q('Which is better for you, staying at home or going out?', 'Going out is better for me than staying at home.', ['Going out is more good for me.', 'Going out is the better than staying.'], 'forum') },
+    { instrucao: O, ...q('confident, ambitious, reliable, argue', 'argue', ['confident', 'reliable'], 'help') },
+    { instrucao: O, ...q('sweater, sneakers, socks, bookshelf', 'bookshelf', ['socks', 'sweater'], 'help') },
+    { instrucao: O, ...q('frightened, relaxed, excited, boring', 'boring', ['relaxed', 'excited'], 'help') },
+    { instrucao: O, ...q('airport, station, platform, suitcase', 'suitcase', ['airport', 'platform'], 'help') },
+    { instrucao: O, ...q('polluted, crowded, noisy, improve', 'improve', ['noisy', 'crowded'], 'help') },
+    { instrucao: O, ...q('headline, source, meme, sustainable', 'sustainable', ['meme', 'source'], 'help') },
+    { instrucao: 'Listen. What does the speaker say about living abroad?', ...q("Many people think you need to live abroad to learn a language, but that's a myth.", 'It is not necessary.', ['It is the only way.', 'It is too expensive.'], 'hearing') },
+    { instrucao: 'Listen. Where did the speaker learn languages?', ...q('I learned five languages at home, in my own country.', 'at home, in their own country', ['in five different countries', 'at a university abroad'], 'hearing') },
+    { instrucao: 'Listen. What makes learning at home possible today?', ...q('Today, the internet lets you hear real people speaking the language every day.', 'the internet', ['expensive private schools', 'long trips abroad'], 'hearing') },
+    { instrucao: 'Listen. Why is a foreign environment hard for beginners?', ...q("For beginners, a completely foreign environment can be confusing, because the brain can't process what it doesn't understand.", "The brain can't process unknown information.", ['People are not friendly.', 'The food is too different.'], 'hearing') },
+    { instrucao: 'Listen. When did the speaker start travelling?', ...q('I only travelled after I could understand and speak a bit.', 'after reaching a certain level', ['before starting to learn', 'never'], 'hearing') },
+    { instrucao: 'Listen. What is the key to learning a language?', ...q('The key is to make learning fun and to do it every day.', 'making it fun and consistent', ['travelling and spending money', 'studying grammar books only'], 'hearing') },
+    { instrucao: C, ...q('To prepare yourself to go to work.', 'get ready', ['make ready', 'do ready'], 'rule') },
+    { instrucao: C, ...q('To choose between two or more options.', 'make a decision', ['do a decision', 'get a decision'], 'rule') },
+    { instrucao: C, ...q('To stop working for a few minutes and rest.', 'take a break', ['do a break', 'make a break'], 'rule') },
+    { instrucao: C, ...q('To have a good, friendly relationship with someone.', 'get on well with', ['go on well with', 'come on well with'], 'rule') }
+  ]
+});
+</script>
+</body>
+</html>
