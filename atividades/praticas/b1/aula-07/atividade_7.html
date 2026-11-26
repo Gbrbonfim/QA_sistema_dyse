@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 8 · I was going to...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 08 · Escrita (Plans that didn't happen)
+   Alinhado ao "Grammar Point II": am / is / are + going to + verbo (planos); was / were +
+   going to + verbo (planos que não aconteceram); exercício 3 (Last summer, I was going to...,
+   but...). Conteúdo NOVO. A isca é a forma errada (was x were, verbo com -ing...).
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 7, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu ia te ligar, mas esqueci.'), palavras: ['I', 'was', 'going', 'to', 'call', 'you,', 'but', 'I', 'forgot'], isca: ['were'], fim: '.', traducao: 'Eu ia te ligar, mas esqueci.' },
+    { contexto: M('Nós íamos visitar o museu, mas estava fechado.'), palavras: ['We', 'were', 'going', 'to', 'visit', 'the', 'museum,', 'but', 'it', 'was', 'closed'], isca: ['visiting'], fim: '.', traducao: 'Íamos visitar o museu, mas estava fechado.' },
+    { contexto: M('Ela vai entrar no grêmio estudantil.'), palavras: ['She', 'is', 'going', 'to', 'join', 'the', 'student', 'council'], isca: ['are'], fim: '.', traducao: 'Ela vai entrar no grêmio estudantil.' },
+    { contexto: M('Ele ia comprar aquela jaqueta, mas era cara demais.'), palavras: ['He', 'was', 'going', 'to', 'buy', 'that', 'jacket,', 'but', 'it', 'was', 'too', 'expensive'], isca: ['bought'], fim: '.', traducao: 'Ele ia comprar aquela jaqueta, mas era cara demais.' },
+    { contexto: M('Você vai viajar nas festas de fim de ano?'), palavras: ['Are', 'you', 'going', 'to', 'travel', 'during', 'the', 'holidays'], isca: ['Was'], fim: '?', traducao: 'Você vai viajar nas festas de fim de ano?' },
+    { contexto: M('Eles não iam terminar o projeto a tempo.'), palavras: ['They', "weren't", 'going', 'to', 'finish', 'the', 'project', 'on', 'time'], isca: ["wasn't"], fim: '.', traducao: 'Eles não iam terminar o projeto a tempo.' },
+    { contexto: M('Nós vamos fazer o jantar hoje à noite.'), palavras: ['We', 'are', 'going', 'to', 'cook', 'dinner', 'tonight'], isca: ['cooking'], fim: '.', traducao: 'Vamos fazer o jantar hoje à noite.' },
+    { contexto: M('Ela ia te ligar ontem à noite?'), palavras: ['Was', 'she', 'going', 'to', 'call', 'you', 'last', 'night'], isca: ['Were'], fim: '?', traducao: 'Ela ia te ligar ontem à noite?' },
+    { contexto: M('O que você vai fazer neste fim de semana?'), palavras: ['What', 'are', 'you', 'going', 'to', 'do', 'this', 'weekend'], isca: ['doing'], fim: '?', traducao: 'O que você vai fazer neste fim de semana?' },
+    { contexto: M('Os meus pais não vão me deixar sair até tarde.'), palavras: ['My', 'parents', 'are', 'not', 'going', 'to', 'let', 'me', 'stay', 'out', 'late'], isca: ['is'], fim: '.', traducao: 'Os meus pais não vão me deixar sair até tarde.' },
+    { contexto: M('A Sue ia fazer tudo neste ano.'), palavras: ['Sue', 'was', 'going', 'to', 'do', 'everything', 'this', 'year'], isca: ['were'], fim: '.', traducao: 'A Sue ia fazer tudo neste ano.' },
+    { contexto: M('Ela não ia à academia ontem; estava cansada.'), palavras: ['She', "wasn't", 'going', 'to', 'go', 'to', 'the', 'gym'], isca: ["weren't"], fim: '.', traducao: 'Ela não ia à academia.' },
+    { contexto: M('Eu ia viajar no verão passado, mas fiquei doente.'), palavras: ['I', 'was', 'going', 'to', 'travel', 'last', 'summer,', 'but', 'I', 'got', 'sick'], isca: ['travelled'], fim: '.', traducao: 'Eu ia viajar no verão passado, mas fiquei doente.' },
+    { contexto: M('Vou encontrar a minha amiga depois da aula.'), palavras: ["I'm", 'going', 'to', 'meet', 'my', 'friend', 'after', 'class'], isca: ['meeting'], fim: '.', traducao: 'Vou encontrar a minha amiga depois da aula.' },
+    { contexto: M('Eles iam fazer um piquenique, mas choveu.'), palavras: ['They', 'were', 'going', 'to', 'have', 'a', 'picnic,', 'but', 'it', 'rained'], isca: ['was'], fim: '.', traducao: 'Eles iam fazer um piquenique, mas choveu.' },
+    { contexto: M('Você ia a algum lugar?'), palavras: ['Were', 'you', 'going', 'to', 'go', 'somewhere'], isca: ['Did'], fim: '?', traducao: 'Você ia a algum lugar?' },
+    { contexto: M('Nós vamos preparar tudo na noite anterior.'), palavras: ['We', 'are', 'going', 'to', 'prepare', 'everything', 'the', 'night', 'before'], isca: ['prepared'], fim: '.', traducao: 'Vamos preparar tudo na noite anterior.' },
+    { contexto: M('Ele ia estudar, mas dormiu.'), palavras: ['He', 'was', 'going', 'to', 'study,', 'but', 'he', 'fell', 'asleep'], isca: ['studied'], fim: '.', traducao: 'Ele ia estudar, mas dormiu.' },
+    { contexto: M('Vocês vão fazer alguma coisa interessante nas próximas férias?'), palavras: ['Are', 'you', 'going', 'to', 'do', 'anything', 'interesting', 'on', 'your', 'next', 'break'], isca: ['Is'], fim: '?', traducao: 'Vocês vão fazer algo interessante nas próximas férias?' },
+    { contexto: M('Eu ia encontrar alguém na semana passada, mas não encontrei.'), palavras: ['I', 'was', 'going', 'to', 'meet', 'somebody', 'last', 'week,', 'but', 'I', "didn't"], isca: ['nobody'], fim: '.', traducao: 'Eu ia encontrar alguém na semana passada, mas não encontrei.' }
+  ]
+});
+</script>
+</body>
+</html>

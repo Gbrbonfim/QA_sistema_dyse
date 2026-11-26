@@ -1236,6 +1236,22 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'What have you done today?', tipo: 'Escute e grave', treina: 'Fala · Tarefas e present perfect', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Housework and the present perfect', tipo: 'Make a Choice', treina: 'Gramática · Just, already, yet', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 7,
+        titulo: "Class 07 and 08 · There's nothing like it!",
+        atividades: [
+          { num: 1, parte: 'Class 07', titulo: 'Nobody, nowhere or nothing?', tipo: 'Escute e escolha', treina: 'Escuta · Pronomes indefinidos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 07', titulo: 'Somebody, anything, nowhere', tipo: 'Monte a frase', treina: 'Escrita · Pronomes indefinidos', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 07', titulo: 'The forgotten birthday', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 07', titulo: 'Somebody, anybody, nobody', tipo: 'Escute e grave', treina: 'Fala · Pronomes indefinidos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 07', titulo: 'Indefinite pronouns', tipo: 'Make a Choice', treina: 'Gramática · Pronomes indefinidos', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 08', titulo: 'Did the plan happen?', tipo: 'Escute e escolha', treina: 'Escuta · Be going to', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 08', titulo: 'I was going to...', tipo: 'Monte a frase', treina: 'Escrita · Was going to', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 08', titulo: 'My first day at work', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 08', titulo: 'Feelings and plans', tipo: 'Escute e grave', treina: 'Fala · Adjetivos e planos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 08', titulo: '-ed or -ing? Going to', tipo: 'Make a Choice', treina: 'Gramática · Adjetivos -ed/-ing', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

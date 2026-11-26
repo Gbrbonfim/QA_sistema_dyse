@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 7 · The forgotten birthday</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 07 · Leitura (There's nothing like it!)
+   Alinhado ao Talking Point (Have you ever forgotten an important date or event like the Heck
+   family did? What happened? How did you handle the situation?), ao episódio de The Middle
+   (ninguém olhou o site da escola) e aos pronomes indefinidos. Conteúdo NOVO: o Caio conta à
+   Duda que esqueceu o aniversário da namorada. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Duda', 'Caio, you look worried. Is something wrong?'],
+  ['Caio', 'Yes. I forgot something very important yesterday.'],
+  ['Duda', 'Oh no! What did you forget?'],
+  ['Caio', "My girlfriend's birthday! I didn't buy anything."],
+  ['Duda', "Didn't anybody remind you?"],
+  ['Caio', 'Nobody! And there was nothing on my phone calendar.'],
+  ['Duda', 'What happened when you saw her?'],
+  ['Caio', "She asked, \"Are we going anywhere tonight?\" and I didn't know what to say."],
+  ['Duda', 'So what did you do?'],
+  ['Caio', 'I said, "Of course! We are going somewhere special."'],
+  ['Duda', 'Did you find a restaurant?'],
+  ['Caio', 'Every restaurant was full. There was nowhere to go!'],
+  ['Duda', 'Oh, no. And then?'],
+  ['Caio', 'I cooked dinner at home and told her the truth.'],
+  ['Duda', 'How did she handle the situation?'],
+  ['Caio', 'She laughed. She said anybody can forget a date.'],
+  ['Duda', "That's nice. What are you going to do next year?"],
+  ['Caio', "I'm going to write the date somewhere I can see it!"]
+];
+const lado = q => q === 'Duda' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 7, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes. I forgot something very important yesterday.', 'Yes. I forgot somewhere very important yesterday.', 'Yes. I forgot nobody very important yesterday.'], 0, 'Sim. Esqueci uma coisa muito importante ontem.'),
+    prox(2, ['Oh no! Where did you forget?', 'Oh no! What did you forget?', 'Oh no! Who did you forgot?'], 1, 'Ah, não! O que você esqueceu?'),
+    prox(3, ["My girlfriend's birthday! I didn't buy nothing.", "My girlfriend's birthday! I didn't buy anywhere.", "My girlfriend's birthday! I didn't buy anything."], 2, 'O aniversário da minha namorada! Não comprei nada.'),
+    prox(4, ["Didn't anybody remind you?", "Didn't anything remind you somewhere?", "Didn't nobody remind you?"], 0, 'Ninguém te lembrou?'),
+    prox(5, ['Nobody! And there was nowhere on my phone calendar.', 'Nobody! And there was nothing on my phone calendar.', 'Somebody! And there was nothing on my phone calendar.'], 1, 'Ninguém! E não tinha nada no calendário do meu celular.'),
+    prox(7, ['She asked, "Are we going anybody tonight?"', 'She asked, "Are we going nowhere tonight?" and I was happy.', 'She asked, "Are we going anywhere tonight?" and I didn\'t know what to say.'], 2, 'Ela perguntou: "Vamos a algum lugar hoje à noite?" e eu não soube o que dizer.'),
+    prox(9, ['I said, "Of course! We are going somewhere special."', 'I said, "Of course! We are going something special."', 'I said, "Of course! We are going nobody special."'], 0, 'Eu disse: "Claro! Vamos a um lugar especial."'),
+    prox(11, ['Every restaurant was full. There was anywhere to go!', 'Every restaurant was full. There was nowhere to go!', 'Every restaurant was empty. There was nowhere to go!'], 1, 'Todos os restaurantes estavam lotados. Não havia para onde ir!'),
+    prox(13, ['I cooked dinner at home and told her nothing.', 'I cook dinner at home tomorrow.', 'I cooked dinner at home and told her the truth.'], 2, 'Fiz o jantar em casa e contei a verdade a ela.'),
+    prox(14, ['How did she handle the situation?', 'How did she handled the situation?', 'How she handled the situation?'], 0, 'Como ela lidou com a situação?'),
+    prox(15, ['She laughed. She said nobody can forget a date.', 'She laughed. She said anybody can forget a date.', 'She laughed. She said anything can forget a date.'], 1, 'Ela riu. Disse que qualquer um pode esquecer uma data.'),
+    prox(17, ["I'm going to write the date nowhere!", "I going to write the date somewhere I can see it!", "I'm going to write the date somewhere I can see it!"], 2, 'Vou escrever a data num lugar onde eu possa ver!'),
+    { instrucao: 'What did Caio forget?', frase: '___', opcoes: ["His girlfriend's birthday.", "His mother's birthday.", 'The first day of school.'], certa: 0, traducao: 'O aniversário da namorada.' },
+    { instrucao: 'Who reminded Caio?', frase: '___', opcoes: ['His mother.', 'Nobody.', 'Duda.'], certa: 1, traducao: 'Ninguém.' },
+    { instrucao: 'What was on his phone calendar?', frase: '___', opcoes: ['The date of the party.', 'A restaurant.', 'Nothing.'], certa: 2, traducao: 'Nada.' },
+    { instrucao: 'Why couldn\'t they go to a restaurant?', frase: '___', opcoes: ['Every restaurant was full.', "Caio didn't have money.", 'It was raining.'], certa: 0, traducao: 'Todos os restaurantes estavam lotados.' },
+    { instrucao: 'What did Caio do?', frase: '___', opcoes: ['He bought a big present.', 'He cooked dinner at home.', 'He went to a party.'], certa: 1, traducao: 'Ele fez o jantar em casa.' },
+    { instrucao: 'Did Caio tell her the truth?', frase: '___', opcoes: ['No, he told her nothing.', 'No, he lied.', 'Yes, he did.'], certa: 2, traducao: 'Sim.' },
+    { instrucao: 'How did his girlfriend react?', frase: '___', opcoes: ['She laughed.', 'She cried.', 'She went home.'], certa: 0, traducao: 'Ela riu.' },
+    { instrucao: 'What is Caio going to do next year?', frase: '___', opcoes: ['Buy nothing.', 'Write the date somewhere he can see it.', 'Go nowhere.'], certa: 1, traducao: 'Escrever a data num lugar onde possa ver.' }
+  ]
+});
+</script>
+</body>
+</html>

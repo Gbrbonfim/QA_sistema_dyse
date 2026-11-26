@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 7 · Nobody, nowhere or nothing?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 07 · Escuta (There's nothing like it!)
+   Alinhado ao "Grammar Point I: Indefinite Pronouns" e ao exercício 5 (Answer with: Nobody,
+   Nowhere, or Nothing): no- para pessoas (nobody), lugares (nowhere) e coisas (nothing).
+   Conteúdo NOVO: o aluno ouve a pergunta e escolhe a resposta curta que combina.
+   24 questões. */
+const IC = { 'Nobody.': 'person_off', 'Nowhere.': 'location_off', 'Nothing.': 'block' };
+const T = ['Nobody.', 'Nowhere.', 'Nothing.'];
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: T.map(c => ({ label: c, icon: IC[c] })), certa: T.indexOf(certa) });
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 7, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the question and choose the short answer',
+  itens: [
+    q('Who called you this morning?', 'Nobody.'),
+    q('Where did you go last weekend?', 'Nowhere.'),
+    q('What did you buy at the mall?', 'Nothing.'),
+    q('Who helped you with the homework?', 'Nobody.'),
+    q('What did you eat for breakfast?', 'Nothing.'),
+    q('Where are you going after class?', 'Nowhere.'),
+    q('Who was at the door?', 'Nobody.'),
+    q('What is in the box?', 'Nothing.'),
+    q('Where did the family travel this summer?', 'Nowhere.'),
+    q('Who remembered the first day of school?', 'Nobody.'),
+    q('What did Sue do to prepare for school?', 'Nothing.'),
+    q('Where can I find the school calendar?', 'Nowhere.'),
+    q('Who knows the answer?', 'Nobody.'),
+    q('What did the teacher say about the test?', 'Nothing.'),
+    q('Where did you hide the chocolate?', 'Nowhere.'),
+    q('Who did you meet at the party?', 'Nobody.'),
+    q('What are you doing tonight?', 'Nothing.'),
+    q('Where do you want to eat?', 'Nowhere.'),
+    q('Who is coming to dinner?', 'Nobody.'),
+    q('What did you write in your notebook?', 'Nothing.'),
+    q('Where did they stay during the holiday?', 'Nowhere.'),
+    q('Who checked the school website?', 'Nobody.'),
+    q('What is on the calendar for September?', 'Nothing.'),
+    q('Where did you put my keys?', 'Nowhere.')
+  ]
+});
+</script>
+</body>
+</html>

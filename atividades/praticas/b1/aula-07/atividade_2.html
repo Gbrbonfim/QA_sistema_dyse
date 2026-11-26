@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 7 · Somebody, anything, nowhere</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 07 · Escrita (There's nothing like it!)
+   Alinhado ao "Grammar Point I": some- em frases positivas, any- em perguntas e negativas,
+   no- quando temos certeza de que nenhuma pessoa / coisa / lugar está envolvido; -body para
+   pessoas, -thing para coisas, -where para lugares; "any + positive" = não importa quem / o
+   que / onde. Conteúdo NOVO. A isca é o pronome da categoria errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 7, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Alguém esqueceu de olhar o calendário.'), palavras: ['Somebody', 'forgot', 'to', 'check', 'the', 'calendar'], isca: ['Something'], fim: '.', traducao: 'Alguém esqueceu de olhar o calendário.' },
+    { contexto: M('Eles planejaram algo divertido para o fim de semana.'), palavras: ['They', 'planned', 'something', 'fun', 'for', 'the', 'weekend'], isca: ['somebody'], fim: '.', traducao: 'Eles planejaram algo divertido para o fim de semana.' },
+    { contexto: M('Nós queríamos ir a algum lugar antes das férias acabarem.'), palavras: ['We', 'wanted', 'to', 'go', 'somewhere', 'before', 'the', 'vacation', 'ended'], isca: ['somebody'], fim: '.', traducao: 'Queríamos ir a algum lugar antes das férias acabarem.' },
+    { contexto: M('Ela não falou com ninguém sobre a festa.'), palavras: ['She', "didn't", 'speak', 'to', 'anybody', 'about', 'the', 'party'], isca: ['anything'], fim: '.', traducao: 'Ela não falou com ninguém sobre a festa.' },
+    { contexto: M('Eles não fizeram nada para se preparar.'), palavras: ['They', "didn't", 'do', 'anything', 'to', 'get', 'ready'], isca: ['anywhere'], fim: '.', traducao: 'Eles não fizeram nada para se preparar.' },
+    { contexto: M('Nós não fomos a lugar nenhum no verão.'), palavras: ['We', "didn't", 'go', 'anywhere', 'in', 'the', 'summer'], isca: ['anybody'], fim: '.', traducao: 'Não fomos a lugar nenhum no verão.' },
+    { contexto: M('Alguém da família percebeu?'), palavras: ['Did', 'anybody', 'in', 'the', 'family', 'notice'], isca: ['anywhere'], fim: '?', traducao: 'Alguém da família percebeu?' },
+    { contexto: M('Tinha alguma coisa importante no e-mail?'), palavras: ['Was', 'there', 'anything', 'important', 'in', 'the', 'email'], isca: ['anywhere'], fim: '?', traducao: 'Tinha alguma coisa importante no e-mail?' },
+    { contexto: M('Ninguém lembrou de olhar o site da escola.'), palavras: ['Nobody', 'remembered', 'to', 'check', 'the', 'school', 'website'], isca: ['Nothing'], fim: '.', traducao: 'Ninguém lembrou de olhar o site da escola.' },
+    { contexto: M('Não havia nada no calendário deles.'), palavras: ['There', 'was', 'nothing', 'on', 'their', 'calendar'], isca: ['nowhere'], fim: '.', traducao: 'Não havia nada no calendário deles.' },
+    { contexto: M('Não temos para onde ir hoje à noite.'), palavras: ['We', 'have', 'nowhere', 'to', 'go', 'tonight'], isca: ['nobody'], fim: '.', traducao: 'Não temos para onde ir hoje à noite.' },
+    { contexto: M('Não há nada como o verão.'), palavras: ["There's", 'nothing', 'like', 'summer'], isca: ['nobody'], fim: '.', traducao: 'Não há nada como o verão.' },
+    { contexto: M('Por que ninguém nos contou?'), palavras: ['Why', "didn't", 'anybody', 'tell', 'us'], isca: ['anything'], fim: '?', traducao: 'Por que ninguém nos contou?' },
+    { contexto: M('Qualquer um pode esquecer uma data.'), palavras: ['Anybody', 'can', 'forget', 'a', 'date'], isca: ['Anywhere'], fim: '.', traducao: 'Qualquer um pode esquecer uma data.' },
+    { contexto: M('Eles poderiam ter ido a qualquer lugar.'), palavras: ['They', 'could', 'have', 'gone', 'anywhere'], isca: ['anybody'], fim: '.', traducao: 'Eles poderiam ter ido a qualquer lugar.' },
+    { contexto: M('Eu não vi ninguém na escola.'), palavras: ['I', "didn't", 'see', 'anybody', 'at', 'school'], isca: ['anywhere'], fim: '.', traducao: 'Não vi ninguém na escola.' },
+    { contexto: M('Ela não fez nada no fim de semana.'), palavras: ['She', 'did', 'nothing', 'at', 'the', 'weekend'], isca: ['nowhere'], fim: '.', traducao: 'Ela não fez nada no fim de semana.' },
+    { contexto: M('Tem alguém na porta.'), palavras: ['There', 'is', 'somebody', 'at', 'the', 'door'], isca: ['somewhere'], fim: '.', traducao: 'Tem alguém na porta.' },
+    { contexto: M('Eu perdi as minhas chaves em algum lugar.'), palavras: ['I', 'lost', 'my', 'keys', 'somewhere'], isca: ['someone'], fim: '.', traducao: 'Perdi as minhas chaves em algum lugar.' },
+    { contexto: M('Você foi a algum lugar nas férias?'), palavras: ['Did', 'you', 'go', 'anywhere', 'on', 'vacation'], isca: ['anything'], fim: '?', traducao: 'Você foi a algum lugar nas férias?' }
+  ]
+});
+</script>
+</body>
+</html>

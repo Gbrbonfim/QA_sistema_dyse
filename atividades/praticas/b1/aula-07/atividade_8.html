@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 8 · My first day at work</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 08 · Leitura (Plans that didn't happen)
+   Alinhado ao texto do Jordan ("How Not to Mess Up Your First Day of School": checar a agenda,
+   não ter pressa, conversar com as pessoas, esperar o inesperado), aos adjetivos -ed / -ing e a
+   was / were going to. Conteúdo NOVO: a Gabi conta ao Rui como foi o primeiro dia num emprego
+   novo. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Rui', 'How was your first day at the new job?'],
+  ['Gabi', 'It was exciting, but a little confusing too.'],
+  ['Rui', 'Confusing? Why?'],
+  ['Gabi', 'I was going to arrive early, but I took the wrong bus.'],
+  ['Rui', 'Oh no! Were you embarrassed?'],
+  ['Gabi', 'Very embarrassed! I walked into the wrong office.'],
+  ['Rui', "That's so embarrassing! What happened next?"],
+  ['Gabi', 'A woman smiled and said, "Don\'t worry. Anybody can get lost here."'],
+  ['Rui', 'That was nice. Did you meet your team?'],
+  ['Gabi', 'Yes. They are really interesting people.'],
+  ['Rui', 'Were you nervous when you talked to them?'],
+  ['Gabi', 'At first, yes. But then I felt relaxed.'],
+  ['Rui', 'And the training? Was it boring?'],
+  ['Gabi', 'No, it was interesting! I was surprised.'],
+  ['Rui', 'What are you going to do differently tomorrow?'],
+  ['Gabi', "I'm going to check the bus schedule twice!"],
+  ['Rui', 'Good idea. And prepare everything the night before.'],
+  ['Gabi', "Yes! I'm going to choose my clothes tonight."]
+];
+const lado = q => q === 'Rui' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 7, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['It was exciting, but a little confusing too.', 'It was excited, but a little confused too.', 'I was exciting, but a little confusing too.'], 0, 'Foi emocionante, mas um pouco confuso também.'),
+    prox(3, ['I was going arrive early, but I took the wrong bus.', 'I was going to arrive early, but I took the wrong bus.', 'I were going to arrive early, but I took the wrong bus.'], 1, 'Eu ia chegar cedo, mas peguei o ônibus errado.'),
+    prox(4, ['Oh no! Were you embarrassing?', 'Oh no! Was you embarrassed?', 'Oh no! Were you embarrassed?'], 2, 'Ah, não! Você ficou com vergonha?'),
+    prox(5, ['Very embarrassed! I walked into the wrong office.', 'Very embarrassing! I walked into the wrong office.', 'Very embarrassed! I walk into the wrong office tomorrow.'], 0, 'Muita vergonha! Entrei na sala errada.'),
+    prox(6, ["That's so embarrassed! What happened next?", "That's so embarrassing! What happened next?", "That's so embarrassing! What did happened next?"], 1, 'Que vergonha! O que aconteceu depois?'),
+    prox(8, ['That was nice. Did you met your team?', 'That was nice. You did meet your team?', 'That was nice. Did you meet your team?'], 2, 'Que legal. Você conheceu a sua equipe?'),
+    prox(9, ['Yes. They are really interesting people.', 'Yes. They are really interested people.', 'Yes. They is really interesting people.'], 0, 'Sim. São pessoas muito interessantes.'),
+    prox(11, ['At first, yes. But then I felt relaxing.', 'At first, yes. But then I felt relaxed.', 'At first, yes. But then I feel relaxed tomorrow.'], 1, 'No começo, sim. Mas depois fiquei tranquila.'),
+    prox(13, ['No, it was interested! I was surprising.', 'Yes, it was very boring. I fell asleep.', 'No, it was interesting! I was surprised.'], 2, 'Não, foi interessante! Fiquei surpresa.'),
+    prox(14, ['What are you going to do differently tomorrow?', 'What were you going to do differently tomorrow?', 'What are you going do differently tomorrow?'], 0, 'O que você vai fazer diferente amanhã?'),
+    prox(15, ["I was going to check the bus schedule twice yesterday!", "I'm going to check the bus schedule twice!", "I'm going check the bus schedule twice!"], 1, 'Vou conferir o horário do ônibus duas vezes!'),
+    prox(17, ["Yes! I'm going choose my clothes tonight.", "Yes! I was going to choose my clothes tonight.", "Yes! I'm going to choose my clothes tonight."], 2, 'Sim! Vou escolher a minha roupa hoje à noite.'),
+    { instrucao: 'How was Gabi\'s first day?', frase: '___', opcoes: ['Exciting, but a little confusing.', 'Boring and annoying.', 'Relaxing and boring.'], certa: 0, traducao: 'Emocionante, mas um pouco confuso.' },
+    { instrucao: 'What was Gabi going to do?', frase: '___', opcoes: ['Take a taxi.', 'Arrive early.', 'Stay at home.'], certa: 1, traducao: 'Chegar cedo.' },
+    { instrucao: 'Why was she late?', frase: '___', opcoes: ['She woke up late.', 'She forgot the address.', 'She took the wrong bus.'], certa: 2, traducao: 'Ela pegou o ônibus errado.' },
+    { instrucao: 'Why did Gabi feel embarrassed?', frase: '___', opcoes: ['She walked into the wrong office.', 'She wore the wrong shoes.', 'She forgot her name.'], certa: 0, traducao: 'Ela entrou na sala errada.' },
+    { instrucao: 'What did the woman say?', frase: '___', opcoes: ['"Nobody gets lost here."', '"Anybody can get lost here."', '"You are in the right office."'], certa: 1, traducao: '"Qualquer um pode se perder aqui."' },
+    { instrucao: 'How does Gabi describe her team?', frase: '___', opcoes: ['Boring.', 'Annoying.', 'Really interesting.'], certa: 2, traducao: 'Muito interessantes.' },
+    { instrucao: 'How did Gabi feel about the training?', frase: '___', opcoes: ['Surprised. It was interesting.', 'Bored. It was boring.', 'Frightened.'], certa: 0, traducao: 'Surpresa. Foi interessante.' },
+    { instrucao: 'What is Gabi going to do tonight?', frase: '___', opcoes: ['Go to a party.', 'Choose her clothes.', 'Take the wrong bus.'], certa: 1, traducao: 'Escolher a roupa.' }
+  ]
+});
+</script>
+</body>
+</html>

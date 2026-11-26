@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 8 · -ed or -ing? Going to</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 08 · Gramática (Plans that didn't happen)
+   Alinhado ao "Vocabulary: Ed or Ing Adjectives" (-ed: como a pessoa se sente; -ing: como a
+   coisa ou a situação é — bored/boring, confused/confusing, embarrassed/embarrassing,
+   excited/exciting, relaxed/relaxing, surprised/surprising, interested/interesting,
+   annoyed/annoying, frightened) e ao "Grammar Point II" (am/is/are/was/were going to).
+   Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 7, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: "I didn't understand the instructions. They were really ___.", opcoes: ['confusing', 'confused', 'confuse'], certa: 0, traducao: 'Não entendi as instruções. Eram muito confusas.' },
+    { frase: 'After two hours of the meeting, I was completely ___.', opcoes: ['boring', 'bored', 'bore'], certa: 1, traducao: 'Depois de duas horas de reunião, eu estava completamente entediado.' },
+    { frase: 'The trip to Japan was ___. I loved every day!', opcoes: ['excited', 'excite', 'exciting'], certa: 2, traducao: 'A viagem ao Japão foi emocionante. Amei cada dia!' },
+    { frase: 'He was ___ when he fell in front of the class.', opcoes: ['embarrassed', 'embarrassing', 'embarrass'], certa: 0, traducao: 'Ele ficou com vergonha quando caiu na frente da turma.' },
+    { frase: 'A hot bath is very ___.', opcoes: ['relaxed', 'relaxing', 'relax'], certa: 1, traducao: 'Um banho quente é muito relaxante.' },
+    { frase: 'We were ___ to see snow in April!', opcoes: ['surprising', 'surprise', 'surprised'], certa: 2, traducao: 'Ficamos surpresos de ver neve em abril!' },
+    { frase: 'That buzzing sound is really ___.', opcoes: ['annoying', 'annoyed', 'annoy'], certa: 0, traducao: 'Esse zumbido é muito irritante.' },
+    { frase: 'Are you ___ in history?', opcoes: ['interesting', 'interested', 'interest'], certa: 1, traducao: 'Você se interessa por história?' },
+    { frase: 'My little brother is ___ of the dark.', opcoes: ['frightening', 'fright', 'frightened'], certa: 2, traducao: 'O meu irmãozinho tem medo do escuro.' },
+    { frase: '-ED adjectives describe ___.', opcoes: ['how a person feels', 'how a thing is', 'the weather only'], certa: 0, traducao: 'Adjetivos com -ED descrevem como uma pessoa se sente.' },
+    { frase: '-ING adjectives describe ___.', opcoes: ['how a person feels', 'how a thing or situation is', 'only people'], certa: 1, traducao: 'Adjetivos com -ING descrevem como uma coisa ou situação é.' },
+    { frase: 'My friend said something really silly in class. It was so ___!', opcoes: ['embarrassed', 'embarrass', 'embarrassing'], certa: 2, traducao: 'O meu amigo disse algo muito bobo na aula. Que vergonha!' },
+    { frase: 'I ___ going to meet my friend after class today.', opcoes: ['am', 'was', 'is'], certa: 0, traducao: 'Vou encontrar a minha amiga depois da aula hoje.' },
+    { frase: 'She ___ going to go to the gym yesterday — she felt tired.', opcoes: ["isn't", "wasn't", "weren't"], certa: 1, traducao: 'Ela não ia à academia ontem — estava cansada.' },
+    { frase: '___ you going to travel during the next holidays?', opcoes: ['Is', 'Was', 'Are'], certa: 2, traducao: 'Você vai viajar nas próximas férias?' },
+    { frase: 'We ___ going to visit the museum, but it was closed.', opcoes: ['were', 'are', 'was'], certa: 0, traducao: 'Íamos visitar o museu, mas estava fechado.' },
+    { frase: 'He was going to ___ that jacket, but it was too expensive.', opcoes: ['bought', 'buy', 'buying'], certa: 1, traducao: 'Ele ia comprar aquela jaqueta, mas era cara demais.' },
+    { frase: 'What ___ you going to do this weekend?', opcoes: ['was', 'is', 'are'], certa: 2, traducao: 'O que você vai fazer neste fim de semana?' },
+    { frase: 'We use "was / were going to" for plans that ___.', opcoes: ["didn't happen", 'are happening now', 'are for next year'], certa: 0, traducao: 'Usamos "was / were going to" para planos que não aconteceram.' },
+    { frase: 'They ___ going to have a barbecue, but it rained.', opcoes: ['was', 'were', 'are'], certa: 1, traducao: 'Eles iam fazer um churrasco, mas choveu.' },
+    { frase: 'Jordan used to feel ___ before the first day of school.', opcoes: ['bored', 'relaxed', 'frightened'], certa: 2, traducao: 'O Jordan sentia medo antes do primeiro dia de aula.' },
+    { frase: 'Jordan\'s tip: "Check your ___!"', opcoes: ['schedule', 'shoes', 'phone'], certa: 0, traducao: 'A dica do Jordan: "Confira a sua agenda!"' },
+    { frase: 'Jordan prepares everything ___.', opcoes: ['at 7:58 a.m.', 'the night before', 'after school'], certa: 1, traducao: 'O Jordan prepara tudo na noite anterior.' },
+    { frase: 'Making new friends is actually ___!', opcoes: ['bored', 'excited', 'exciting'], certa: 2, traducao: 'Fazer novos amigos é, na verdade, emocionante!' }
+  ]
+});
+</script>
+</body>
+</html>

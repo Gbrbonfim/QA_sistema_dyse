@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 8 · Did the plan happen?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 08 · Escuta (Plans that didn't happen)
+   Alinhado ao "Grammar Point II: Be going to (REVIEW)": am / is / are going to para planos
+   futuros; was / were going to para planos do passado que não aconteceram (She was going to
+   take the senior photo — but she missed it). Conteúdo NOVO: o aluno ouve a frase e diz se é
+   um plano para o futuro ou um plano que não aconteceu. 24 questões. */
+const IC = { 'a plan for the future': 'event_upcoming', "a plan that didn't happen": 'event_busy' };
+const T = ['a plan for the future', "a plan that didn't happen"];
+const q = (audioTexto, certa) => ({ audioTexto, opcoes: T.map(c => ({ label: c, icon: IC[c] })), certa });
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 7, num: 6, tipo: 'imagem',
+  instrucao: 'Listen: is it a future plan or a plan that didn\'t happen?',
+  itens: [
+    q("I'm going to meet my friend after class today.", 0),
+    q('I was going to call you, but I forgot.', 1),
+    q('We are going to cook dinner tonight.', 0),
+    q('He was going to buy that jacket, but it was too expensive.', 1),
+    q('She is going to join the student council this year.', 0),
+    q('We were going to visit the museum, but it was closed.', 1),
+    q('Are you going to travel during the holidays?', 0),
+    q('They were going to have a picnic, but it rained.', 1),
+    q("My sister is going to start a new job in March.", 0),
+    q('I was going to study last night, but I fell asleep.', 1),
+    q("They're going to paint the kitchen next weekend.", 0),
+    q('Sue was going to take the senior photo, but she missed it.', 1),
+    q("I'm going to clean my room after lunch.", 0),
+    q('She was going to go to the gym, but she felt tired.', 1),
+    q('What are you going to do this weekend?', 0),
+    q('We were going to watch a film, but the TV broke.', 1),
+    q('He is going to learn Spanish next year.', 0),
+    q('I was going to send the email, but the internet stopped working.', 1),
+    q("We're going to have a party on Saturday.", 0),
+    q('They were going to finish the project, but they ran out of time.', 1),
+    q("I'm going to prepare everything the night before.", 0),
+    q('My dad was going to drive us to school, but the car broke down.', 1),
+    q('She is going to visit her grandparents in December.', 0),
+    q('I was going to go to the beach, but I had to work.', 1)
+  ]
+});
+</script>
+</body>
+</html>
