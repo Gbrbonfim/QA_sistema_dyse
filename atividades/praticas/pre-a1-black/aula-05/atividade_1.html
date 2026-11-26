@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 5 · Guess the flag!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 05 · Escuta (Wave your Flag! - Review)
+   Alinhado ao Talking Point do slide (cores + "This flag is blue, red and white." → "Russia!")
+   e às 12 bandeiras revisadas. Conteúdo NOVO: o aluno ouve as cores e escolhe a bandeira. Nas
+   opções, só UMA bandeira tem exatamente aquelas cores (cores reais das bandeiras). 24 questões. */
+const PAIS = { 'in': 'India', mx: 'Mexico', fi: 'Finland', br: 'Brazil', ru: 'Russia', ca: 'Canada', de: 'Germany', us: 'The USA', cn: 'China', jp: 'Japan', ph: 'The Philippines', kr: 'South Korea' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const cs = iscas.slice(0, 3);
+  cs.splice(pos, 0, certa);
+  return { audioTexto, opcoes: cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 5, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the colors and choose the flag',
+  itens: [
+    q('This flag is green, yellow, blue and white.', 'br', ['mx', 'in', 'de']),
+    q('This flag is white and blue.', 'fi', ['ca', 'jp', 'cn']),
+    q('This flag is black, red and yellow.', 'de', ['cn', 'br', 'ca']),
+    q('This flag is red and yellow.', 'cn', ['jp', 'ca', 'fi']),
+    q('This flag is white, blue and red.', 'ru', ['fi', 'cn', 'jp']),
+    q('This flag is green, white and red.', 'mx', ['br', 'fi', 'cn']),
+    q("This flag is white and red. It isn't Canadian.", 'jp', ['ca', 'mx', 'br']),
+    q("This flag is red and white. It isn't Japanese.", 'ca', ['jp', 'cn', 'fi']),
+    q('This flag is orange, white, green and blue.', 'in', ['mx', 'br', 'jp']),
+    q('This flag is white, red, blue and black.', 'kr', ['fi', 'cn', 'br']),
+    q('This flag is red, white and blue. It has stars.', 'us', ['ru', 'fi', 'mx']),
+    q('This flag is blue, red, white and yellow.', 'ph', ['jp', 'fi', 'de']),
+    q('Is this flag green, yellow and blue? Yes, it is.', 'br', ['de', 'ca', 'jp']),
+    q("This flag isn't red. It's white and blue.", 'fi', ['ca', 'cn', 'jp']),
+    q("This flag isn't green. It's red and yellow.", 'cn', ['br', 'mx', 'in']),
+    q("This flag isn't blue. It's black, red and yellow.", 'de', ['fi', 'ru', 'kr']),
+    q("This flag is green, white and red. It isn't Italian.", 'mx', ['ca', 'fi', 'jp']),
+    q('This flag is orange, white and green.', 'in', ['br', 'cn', 'ca']),
+    q("This flag is red and white. It's Japanese.", 'jp', ['ca', 'cn', 'mx']),
+    q("This flag is red and white. It's Canadian.", 'ca', ['jp', 'fi', 'de']),
+    q("This flag is white, blue and red. It's Russian.", 'ru', ['us', 'ph', 'kr']),
+    q("This flag is red, white and blue. It's American.", 'us', ['ru', 'ph', 'kr']),
+    q("This flag is white, red, blue and black. It's South Korean.", 'kr', ['jp', 'cn', 'ph']),
+    q("This flag is blue, red, white and yellow. It's Filipino.", 'ph', ['us', 'ru', 'kr'])
+  ]
+});
+</script>
+</body>
+</html>

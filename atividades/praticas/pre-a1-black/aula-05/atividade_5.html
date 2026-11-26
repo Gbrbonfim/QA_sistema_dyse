@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 5 · Interview a classmate</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 05 · Leitura (Wave your Flag! - Review)
+   Alinhado ao "Speaking and Writing" do slide (perguntar nome, país, nacionalidade, cidade e
+   idade e depois contar para a turma). Conteúdo NOVO: o Antônio entrevista a Yuna, uma colega
+   nova. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Antônio', "Hi! What's your name?"],
+  ['Yuna', "Hi! I'm Yuna."],
+  ['Antônio', 'Where are you from, Yuna?'],
+  ['Yuna', "I'm from South Korea. I'm South Korean."],
+  ['Antônio', 'Are you from Seoul?'],
+  ['Yuna', "No, I'm not. I'm from Busan."],
+  ['Antônio', 'How old are you?'],
+  ['Yuna', "I'm fourteen. And you? Are you Brazilian?"],
+  ['Antônio', "Yes, I am. I'm from Caxias do Sul."],
+  ['Yuna', 'How old are you?'],
+  ['Antônio', "I'm fifteen."],
+  ['Yuna', 'What colors are on your flag?'],
+  ['Antônio', "Brazil's flag is green, yellow, blue and white."],
+  ['Yuna', 'Cool! My flag is white, red, blue and black.'],
+  ['Antônio', "Great! Now I tell the class: She's Yuna. She's South Korean, from Busan. She's fourteen."],
+  ['Yuna', 'Perfect!']
+];
+const lado = q => q === 'Antônio' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 5, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Hi! I'm Yuna.", "Hi! I'm from Yuna.", "Hi! She's Yuna."], 0, 'Oi! Sou a Yuna.'),
+    prox(2, ['Where is you from, Yuna?', 'Where are you from, Yuna?', 'How are you from, Yuna?'], 1, 'De onde você é, Yuna?'),
+    prox(3, ["I'm from South Korean. I'm South Korea.", "I'm South Korea. I'm from South Korean.", "I'm from South Korea. I'm South Korean."], 2, 'Sou da Coreia do Sul. Sou sul-coreana.'),
+    prox(4, ['Are you from Seoul?', 'Is you from Seoul?', 'Are you Seoul?'], 0, 'Você é de Seul?'),
+    prox(5, ["No, I amn't. I'm from Busan.", "No, I'm not. I'm from Busan.", "No, I'm not. I'm Busan."], 1, 'Não. Sou de Busan.'),
+    prox(6, ['How old is you?', 'Where old are you?', 'How old are you?'], 2, 'Quantos anos você tem?'),
+    prox(7, ["I'm fourteen. And you? Are you Brazilian?", "I have fourteen. And you? Are you Brazilian?", "I'm fourteen. And you? Are you Brazil?"], 0, 'Tenho catorze. E você? Você é brasileiro?'),
+    prox(8, ["Yes, I'm. I'm from Caxias do Sul.", "Yes, I am. I'm from Caxias do Sul.", "Yes, I is. I'm from Caxias do Sul."], 1, 'Sim. Sou de Caxias do Sul.'),
+    prox(10, ["I have fifteen.", "I fifteen.", "I'm fifteen."], 2, 'Tenho quinze.'),
+    prox(12, ["Brazil's flag is green, yellow, blue and white.", "Brazil's flag are green, yellow, blue and white.", "Brazil's flag is red, yellow, blue and white."], 0, 'A bandeira do Brasil é verde, amarela, azul e branca.'),
+    prox(13, ['Cool! My flag are white, red, blue and black.', 'Cool! My flag is white, red, blue and black.', 'Cool! My flag is green, red, blue and black.'], 1, 'Legal! A minha bandeira é branca, vermelha, azul e preta.'),
+    prox(14, ["Great! Now I tell the class: He's Yuna. He's South Korean.", "Great! Now I tell the class: She's Yuna. She's South Korea, from Busan.", "Great! Now I tell the class: She's Yuna. She's South Korean, from Busan. She's fourteen."], 2, 'Ótimo! Agora eu conto para a turma: Ela é a Yuna. Ela é sul-coreana, de Busan. Ela tem catorze anos.'),
+    { instrucao: 'What nationality is Yuna?', frase: "She's ___.", opcoes: ['South Korean', 'Japanese', 'Chinese'], certa: 0, traducao: 'Ela é sul-coreana.' },
+    { instrucao: 'Is Yuna from Seoul?', frase: "No, she isn't. She's from ___.", opcoes: ['Tokyo', 'Busan', 'Seoul'], certa: 1, traducao: 'Não. Ela é de Busan.' },
+    { instrucao: 'How old is Yuna?', frase: "She's ___.", opcoes: ['fifteen', 'thirteen', 'fourteen'], certa: 2, traducao: 'Ela tem catorze.' },
+    { instrucao: 'Is Antônio Brazilian?', frase: '___', opcoes: ['Yes, he is.', "No, he isn't.", 'Yes, she is.'], certa: 0, traducao: 'Sim.' },
+    { instrucao: 'Where is Antônio from?', frase: "He's from ___.", opcoes: ['São Paulo', 'Caxias do Sul', 'Busan'], certa: 1, traducao: 'Ele é de Caxias do Sul.' },
+    { instrucao: 'How old is Antônio?', frase: "He's ___.", opcoes: ['fourteen', 'sixteen', 'fifteen'], certa: 2, traducao: 'Ele tem quinze.' },
+    { instrucao: 'What colors are on the flag of Brazil?', frase: 'Green, yellow, ___.', opcoes: ['blue and white', 'red and white', 'black and red'], certa: 0, traducao: 'Verde, amarela, azul e branca.' },
+    { instrucao: "What colors are on Yuna's flag?", frase: 'White, red, ___.', opcoes: ['green and yellow', 'blue and black', 'yellow and green'], certa: 1, traducao: 'Branca, vermelha, azul e preta.' }
+  ]
+});
+</script>
+</body>
+</html>

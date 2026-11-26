@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 5 · Flags and colors</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 05 · Escrita (Wave your Flag! - Review)
+   Alinhado ao Talking Point do slide (descrever as cores de uma bandeira) e às nacionalidades.
+   Conteúdo NOVO com as cores reais das bandeiras. A isca é a forma errada do be ou o país no
+   lugar da nacionalidade. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 5, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Esta bandeira é branca e azul.'), palavras: ['This', 'flag', 'is', 'white', 'and', 'blue'], isca: ['are'], fim: '.', traducao: 'Esta bandeira é branca e azul.' },
+    { contexto: M('A bandeira do Japão é branca e vermelha.'), palavras: ['The', 'flag', 'of', 'Japan', 'is', 'white', 'and', 'red'], isca: ['Japanese'], fim: '.', traducao: 'A bandeira do Japão é branca e vermelha.' },
+    { contexto: M('A bandeira da China é vermelha e amarela.'), palavras: ['The', 'flag', 'of', 'China', 'is', 'red', 'and', 'yellow'], isca: ['Chinese'], fim: '.', traducao: 'A bandeira da China é vermelha e amarela.' },
+    { contexto: M('Esta bandeira não é verde.'), palavras: ['This', 'flag', "isn't", 'green'], isca: ["aren't"], fim: '.', traducao: 'Esta bandeira não é verde.' },
+    { contexto: M('A bandeira do Brasil é verde, amarela, azul e branca.'), palavras: ['The', 'flag', 'of', 'Brazil', 'is', 'green,', 'yellow,', 'blue', 'and', 'white'], isca: ['Brazilian'], fim: '.', traducao: 'A bandeira do Brasil é verde, amarela, azul e branca.' },
+    { contexto: M('Esta bandeira é vermelha e branca?'), palavras: ['Is', 'this', 'flag', 'red', 'and', 'white'], isca: ['Are'], fim: '?', traducao: 'Esta bandeira é vermelha e branca?' },
+    { contexto: M('É canadense.'), palavras: ["It's", 'Canadian'], isca: ['Canada'], fim: '.', traducao: 'É canadense.' },
+    { contexto: M('A bandeira da Alemanha é preta, vermelha e amarela.'), palavras: ['The', 'flag', 'of', 'Germany', 'is', 'black,', 'red', 'and', 'yellow'], isca: ['German'], fim: '.', traducao: 'A bandeira da Alemanha é preta, vermelha e amarela.' },
+    { contexto: M('Esta bandeira é finlandesa.'), palavras: ['This', 'flag', 'is', 'Finnish'], isca: ['Finland'], fim: '.', traducao: 'Esta bandeira é finlandesa.' },
+    { contexto: M('A bandeira do México é verde, branca e vermelha.'), palavras: ['The', 'flag', 'of', 'Mexico', 'is', 'green,', 'white', 'and', 'red'], isca: ['are'], fim: '.', traducao: 'A bandeira do México é verde, branca e vermelha.' },
+    { contexto: M('Não é a bandeira russa.'), palavras: ["It", "isn't", 'the', 'Russian', 'flag'], isca: ['Russia'], fim: '.', traducao: 'Não é a bandeira russa.' },
+    { contexto: M('O sol é amarelo.'), palavras: ['The', 'sun', 'is', 'yellow'], isca: ['are'], fim: '.', traducao: 'O sol é amarelo.' },
+    { contexto: M('As minhas malas são pretas.'), palavras: ['My', 'bags', 'are', 'black'], isca: ['is'], fim: '.', traducao: 'As minhas malas são pretas.' },
+    { contexto: M('O avião é branco e azul.'), palavras: ['The', 'plane', 'is', 'white', 'and', 'blue'], isca: ['are'], fim: '.', traducao: 'O avião é branco e azul.' },
+    { contexto: M('A bandeira da Índia é laranja, branca, verde e azul.'), palavras: ['The', 'flag', 'of', 'India', 'is', 'orange,', 'white,', 'green', 'and', 'blue'], isca: ['Indian'], fim: '.', traducao: 'A bandeira da Índia é laranja, branca, verde e azul.' },
+    { contexto: M('A bandeira americana é vermelha, branca e azul.'), palavras: ['The', 'American', 'flag', 'is', 'red,', 'white', 'and', 'blue'], isca: ['USA'], fim: '.', traducao: 'A bandeira americana é vermelha, branca e azul.' },
+    { contexto: M('Futebol é a minha paixão.'), palavras: ['Football', 'is', 'my', 'passion'], isca: ['are'], fim: '.', traducao: 'Futebol é a minha paixão.' },
+    { contexto: M('A bandeira da Coreia do Sul é branca, vermelha, azul e preta.'), palavras: ['The', 'flag', 'of', 'South', 'Korea', 'is', 'white,', 'red,', 'blue', 'and', 'black'], isca: ['Korean'], fim: '.', traducao: 'A bandeira da Coreia do Sul é branca, vermelha, azul e preta.' },
+    { contexto: M('Mostre as suas cores!'), palavras: ['Show', 'me', 'your', 'colors'], isca: ['is'], fim: '!', traducao: 'Mostre as suas cores!' },
+    { contexto: M('A bandeira das Filipinas é azul, vermelha, branca e amarela.'), palavras: ['The', 'flag', 'of', 'the', 'Philippines', 'is', 'blue,', 'red,', 'white', 'and', 'yellow'], isca: ['Filipino'], fim: '.', traducao: 'A bandeira das Filipinas é azul, vermelha, branca e amarela.' }
+  ]
+});
+</script>
+</body>
+</html>

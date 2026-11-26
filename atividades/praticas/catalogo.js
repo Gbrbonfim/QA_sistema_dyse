@@ -938,6 +938,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Am, is or are?', tipo: 'Make a Choice', treina: 'Gramática · Perguntas com to be', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Choose the short answer', tipo: 'Make a Choice', treina: 'Gramática · Short answers', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 5,
+        titulo: 'Class 05 · Wave your Flag! (Review)',
+        atividades: [
+          { num: 1, titulo: 'Guess the flag!', tipo: 'Escute e escolha', treina: 'Escuta · Cores e bandeiras', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Words from the song', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Flags and colors', tipo: 'Monte a frase', treina: 'Escrita · Cores', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Review: to be', tipo: 'Monte a frase', treina: 'Escrita · Revisão', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'Interview a classmate', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'Design your flag', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'Describe the flag', tipo: 'Escute e grave', treina: 'Fala · Cores', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'All about me', tipo: 'Escute e grave', treina: 'Fala · Revisão', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Review: positive, negative, question', tipo: 'Make a Choice', treina: 'Gramática · To be (revisão)', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Review: countries, numbers and colors', tipo: 'Make a Choice', treina: 'Gramática · Revisão', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

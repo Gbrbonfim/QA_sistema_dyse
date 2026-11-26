@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · Pre-A1 BLACK · Aula 5 · Design your flag</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* Pre-A1 BLACK · Class 05 · Leitura (Wave your Flag! - Review)
+   Alinhado ao "Design your flag!" do slide (cores + nome, país, cidade, nacionalidade, idade)
+   e ao vocabulário da música (passion, plane, bags, run, sun, globe). Conteúdo NOVO: a Mia
+   mostra a bandeira que criou para o Ben. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Ben', 'Wow! Is this your flag, Mia?'],
+  ['Mia', 'Yes, it is! My flag is blue and yellow.'],
+  ['Ben', 'Cool! Is the sun on your flag?'],
+  ['Mia', "Yes, it is. The sun is yellow. It's my favorite color."],
+  ['Ben', 'And what is this? Is it a plane?'],
+  ['Mia', 'Yes, it is. Travel is my passion!'],
+  ['Ben', 'Are you from Brazil?'],
+  ['Mia', "No, I'm not. I'm Mexican. I'm from Cancún."],
+  ['Ben', 'Is this a globe?'],
+  ['Mia', "Yes, it is. It's blue and green."],
+  ['Ben', 'How old are you, Mia?'],
+  ['Mia', "I'm twelve. Look, the number twelve is on the flag too."],
+  ['Ben', 'Great flag! My flag is red and black.'],
+  ['Mia', 'Is football on your flag?'],
+  ['Ben', "Yes, it is! Football is my passion. And I run every day."],
+  ['Mia', 'Cool! Show me your flag!']
+];
+const lado = q => q === 'Ben' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-pre-a1-black', aula: 5, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, it is! My flag is blue and yellow.', "Yes, it's! My flag is blue and yellow.", 'Yes, it is! My flag are blue and yellow.'], 0, 'Sim! A minha bandeira é azul e amarela.'),
+    prox(2, ['Cool! Are the sun on your flag?', 'Cool! Is the sun on your flag?', 'Cool! Is the sun in your bags?'], 1, 'Legal! O sol está na sua bandeira?'),
+    prox(3, ["Yes, it is. The sun is blue. It's my favorite color.", "Yes, it are. The sun is yellow.", "Yes, it is. The sun is yellow. It's my favorite color."], 2, 'Sim. O sol é amarelo. É a minha cor favorita.'),
+    prox(4, ['And what is this? Is it a plane?', 'And what is this? Are it a plane?', 'And what is this? Is it plane?'], 0, 'E o que é isto? É um avião?'),
+    prox(5, ['Yes, it is. Travel are my passion!', 'Yes, it is. Travel is my passion!', "Yes, it isn't. Travel is my passion!"], 1, 'Sim. Viajar é a minha paixão!'),
+    prox(6, ['Is you from Brazil?', 'Are you Brazil?', 'Are you from Brazil?'], 2, 'Você é do Brasil?'),
+    prox(7, ["No, I'm not. I'm Mexican. I'm from Cancún.", "No, I'm not. I'm Mexico. I'm from Cancún.", "No, I isn't. I'm Mexican. I'm from Cancún."], 0, 'Não. Sou mexicana. Sou de Cancún.'),
+    prox(9, ["Yes, it is. It's yellow and red.", "Yes, it is. It's blue and green.", "Yes, it are. It's blue and green."], 1, 'Sim. É azul e verde.'),
+    prox(10, ['How old is you, Mia?', 'Where old are you, Mia?', 'How old are you, Mia?'], 2, 'Quantos anos você tem, Mia?'),
+    prox(11, ["I'm twelve. Look, the number twelve is on the flag too.", "I have twelve. Look, the number twelve is on the flag too.", "I'm twelve. Look, the number twelve are on the flag too."], 0, 'Tenho doze. Olha, o número doze também está na bandeira.'),
+    prox(13, ['Are football on your flag?', 'Is football on your flag?', 'Is football your flag on?'], 1, 'O futebol está na sua bandeira?'),
+    prox(14, ["Yes, it is! Football are my passion. And I run every day.", "Yes, it's! Football is my passion.", "Yes, it is! Football is my passion. And I run every day."], 2, 'Sim! Futebol é a minha paixão. E eu corro todo dia.'),
+    { instrucao: "What colors are on Mia's flag?", frase: 'Blue and ___.', opcoes: ['yellow', 'red', 'green'], certa: 0, traducao: 'Azul e amarelo.' },
+    { instrucao: 'What color is the sun on the flag?', frase: "It's ___.", opcoes: ['blue', 'yellow', 'white'], certa: 1, traducao: 'É amarelo.' },
+    { instrucao: "What is Mia's passion?", frase: '___.', opcoes: ['Football', 'Music', 'Travel'], certa: 2, traducao: 'Viajar.' },
+    { instrucao: 'What nationality is Mia?', frase: "She's ___.", opcoes: ['Mexican', 'Brazilian', 'Canadian'], certa: 0, traducao: 'Ela é mexicana.' },
+    { instrucao: 'Where is Mia from?', frase: "She's from ___.", opcoes: ['Mexico City', 'Cancún', 'Toronto'], certa: 1, traducao: 'Ela é de Cancún.' },
+    { instrucao: 'How old is Mia?', frase: "She's ___.", opcoes: ['ten', 'eleven', 'twelve'], certa: 2, traducao: 'Ela tem doze.' },
+    { instrucao: "What colors are on Ben's flag?", frase: 'Red and ___.', opcoes: ['black', 'white', 'yellow'], certa: 0, traducao: 'Vermelho e preto.' },
+    { instrucao: "What is Ben's passion?", frase: '___.', opcoes: ['Travel', 'Football', 'Music'], certa: 1, traducao: 'Futebol.' }
+  ]
+});
+</script>
+</body>
+</html>
