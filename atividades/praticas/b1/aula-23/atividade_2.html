@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 23 · If I won the lottery...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 23 · Escrita (Is It Really a Dream Job?)
+   Alinhado ao "Grammar Point" (second conditional: If + past simple, would / wouldn't /
+   could + infinitivo; If I were you; if no meio sem vírgula), aos empregos dos sonhos e ao
+   Warm Up (salary, working hours). Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 23, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Se eu ganhasse na loteria, viajaria pelo mundo.'), palavras: ['If', 'I', 'won', 'the', 'lottery,', 'I', 'would', 'travel', 'around', 'the', 'world'], isca: ['win'], fim: '.', traducao: 'Se eu ganhasse na loteria, viajaria pelo mundo.' },
+    { contexto: M('Se eu tivesse mais tempo livre, aprenderia a cozinhar.'), palavras: ['If', 'I', 'had', 'more', 'free', 'time,', 'I', 'would', 'learn', 'to', 'cook'], isca: ['have'], fim: '.', traducao: 'Se eu tivesse mais tempo livre, aprenderia a cozinhar.' },
+    { contexto: M('Se eu fosse você, pediria um aumento.'), palavras: ['If', 'I', 'were', 'you,', "I'd", 'ask', 'for', 'a', 'pay', 'rise'], isca: ['am'], fim: '.', traducao: 'Se eu fosse você, pediria um aumento.' },
+    { contexto: M('Ela ficaria feliz se tivesse um emprego remoto.'), palavras: ['She', 'would', 'be', 'happy', 'if', 'she', 'had', 'a', 'remote', 'job'], isca: ['has'], fim: '.', traducao: 'Ela ficaria feliz se tivesse um emprego remoto.' },
+    { contexto: M('Se ele não viajasse tanto, passaria mais tempo com a família.'), palavras: ['If', 'he', "didn't", 'travel', 'so', 'much,', 'he', 'would', 'spend', 'more', 'time', 'with', 'his', 'family'], isca: ["doesn't"], fim: '.', traducao: 'Se ele não viajasse tanto, passaria mais tempo com a família.' },
+    { contexto: M('Eu não trabalharia tanto se não precisasse do dinheiro.'), palavras: ['I', "wouldn't", 'work', 'so', 'much', 'if', 'I', "didn't", 'need', 'the', 'money'], isca: ["won't"], fim: '.', traducao: 'Eu não trabalharia tanto se não precisasse do dinheiro.' },
+    { contexto: M('O que você faria se perdesse o emprego?'), palavras: ['What', 'would', 'you', 'do', 'if', 'you', 'lost', 'your', 'job'], isca: ['lose'], fim: '?', traducao: 'O que você faria se perdesse o emprego?' },
+    { contexto: M('Se morássemos perto da praia, poderíamos surfar todo dia.'), palavras: ['If', 'we', 'lived', 'near', 'the', 'beach,', 'we', 'could', 'surf', 'every', 'day'], isca: ['live'], fim: '.', traducao: 'Se morássemos perto da praia, poderíamos surfar todo dia.' },
+    { contexto: M('Você gostaria de um emprego que não pagasse bem?'), palavras: ['Would', 'you', 'enjoy', 'a', 'job', 'that', "didn't", 'pay', 'well'], isca: ['enjoyed'], fim: '?', traducao: 'Você gostaria de um emprego que não pagasse bem?' },
+    { contexto: M('Se eu pudesse escolher qualquer emprego, seria provador de chocolate.'), palavras: ['If', 'I', 'could', 'choose', 'any', 'job,', 'I', 'would', 'be', 'a', 'chocolate', 'taster'], isca: ['can'], fim: '.', traducao: 'Se eu pudesse escolher qualquer emprego, seria provador de chocolate.' },
+    { contexto: M('Ele poderia explorar mais lugares se trabalhasse menos.'), palavras: ['He', 'could', 'explore', 'more', 'places', 'if', 'he', 'worked', 'less'], isca: ['works'], fim: '.', traducao: 'Ele poderia explorar mais lugares se trabalhasse menos.' },
+    { contexto: M('Se ela não tivesse que trabalhar nos fins de semana, iria à praia.'), palavras: ['If', 'she', "didn't", 'have', 'to', 'work', 'on', 'weekends,', 'she', 'would', 'go', 'to', 'the', 'beach'], isca: ['has'], fim: '.', traducao: 'Se ela não tivesse que trabalhar nos fins de semana, iria à praia.' },
+    { contexto: M('Eu ficaria mais animado se tirasse uma folga.'), palavras: ['I', 'would', 'feel', 'more', 'energized', 'if', 'I', 'took', 'a', 'break'], isca: ['take'], fim: '.', traducao: 'Eu ficaria mais animado se tirasse uma folga.' },
+    { contexto: M('Se você precisasse viajar a trabalho, aonde iria?'), palavras: ['If', 'you', 'needed', 'to', 'travel', 'for', 'work,', 'where', 'would', 'you', 'go'], isca: ['need'], fim: '?', traducao: 'Se você precisasse viajar a trabalho, aonde iria?' },
+    { contexto: M('Ele edita os vídeos dele à noite.'), palavras: ['He', 'edits', 'his', 'videos', 'at', 'night'], isca: ['edit'], fim: '.', traducao: 'Ele edita os vídeos dele à noite.' },
+    { contexto: M('Uma babá de panda cuida de pandas filhotes.'), palavras: ['A', 'panda', 'nanny', 'takes', 'care', 'of', 'baby', 'pandas'], isca: ['take'], fim: '.', traducao: 'Uma babá de panda cuida de pandas filhotes.' },
+    { contexto: M('Um testador de videogame tem que prestar atenção aos detalhes.'), palavras: ['A', 'video', 'game', 'tester', 'has', 'to', 'pay', 'attention', 'to', 'details'], isca: ['have'], fim: '.', traducao: 'Um testador de videogame tem que prestar atenção aos detalhes.' },
+    { contexto: M('Um bom salário é importante para mim.'), palavras: ['A', 'good', 'salary', 'is', 'important', 'to', 'me'], isca: ['are'], fim: '.', traducao: 'Um bom salário é importante para mim.' },
+    { contexto: M('Eu gostaria de escolher o meu horário de trabalho.'), palavras: ["I'd", 'like', 'to', 'choose', 'my', 'working', 'hours'], isca: ['choosing'], fim: '.', traducao: 'Eu gostaria de escolher o meu horário de trabalho.' },
+    { contexto: M('Amar o seu trabalho não significa que é fácil.'), palavras: ['Loving', 'your', 'job', "doesn't", 'mean', 'it', 'is', 'easy'], isca: ['Love'], fim: '.', traducao: 'Amar o seu trabalho não significa que é fácil.' }
+  ]
+});
+</script>
+</body>
+</html>

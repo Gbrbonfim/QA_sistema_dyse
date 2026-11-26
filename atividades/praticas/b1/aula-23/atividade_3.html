@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 23 · Not just playing</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 23 · Leitura (Is It Really a Dream Job?)
+   Alinhado aos empregos dos sonhos (video game tester, luxury hotel reviewer, panda nanny),
+   ao Talking Point (amar o trabalho e mesmo assim cansar) e ao "Grammar Point" (second
+   conditional com would / could; If I were you). Conteúdo NOVO: Bella e Omar conversam
+   sobre empregos dos sonhos. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Bella', "Omar, you're a video game tester, right? That's my dream job!"],
+  ['Omar', "Ha ha! Everybody says that. But it isn't just playing for fun."],
+  ['Bella', 'Really? What do you do all day?'],
+  ['Omar', 'I play the same level for hours and look for problems before the game goes on sale.'],
+  ['Bella', 'The same level? That sounds boring.'],
+  ['Omar', 'Sometimes it is. I have to pay attention to every small detail.'],
+  ['Bella', "Hmm. If I were you, I'd ask for a different game every week."],
+  ['Omar', 'Good idea! What about you? Do you like your job at the hotel?'],
+  ['Bella', "It's OK, but if I could choose any job, I'd be a luxury hotel reviewer."],
+  ['Omar', 'Why? You already work in a hotel!'],
+  ['Bella', 'Yes, but as a reviewer, I would sleep in the best rooms and eat amazing food.'],
+  ['Omar', "And you'd travel all the time. Would you miss your family?"],
+  ['Bella', "Maybe. If I travelled every week, I wouldn't see my parents much."],
+  ['Omar', "That's the problem with many dream jobs."],
+  ['Bella', "True. What would you do if you didn't need the money?"],
+  ['Omar', "I'd be a panda nanny! I'd work in a forest and play with baby pandas."],
+  ['Bella', "Ha ha! But you'd have a lot of responsibility. The pandas would depend on you."],
+  ['Omar', "That's fine. If I had a job in nature, I'd feel more relaxed."],
+  ['Bella', "Well, if you got that job, I'd visit you in China!"],
+  ['Omar', 'Deal! And if you became a hotel reviewer, you could invite me to a free hotel!']
+];
+const lado = q => q === 'Bella' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 23, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Ha ha! Everybody says that. But it isn't just playing for fun.", "Ha ha! Everybody says that. But it isn't just play for fun.", "Ha ha! Everybody say that. But it isn't just playing for fun."], 0, 'Ha ha! Todo mundo diz isso. Mas não é só jogar por diversão.'),
+    prox(3, ['I play the same level for hours and looking for problems before the game goes on sale.', 'I play the same level for hours and look for problems before the game goes on sale.', 'I play the same level for hours and look for problems after the game go on sale.'], 1, 'Jogo a mesma fase por horas e procuro problemas antes de o jogo ser lançado.'),
+    prox(5, ['Sometimes it is. I have pay attention to every small detail.', 'Sometimes it is. I has to pay attention to every small detail.', 'Sometimes it is. I have to pay attention to every small detail.'], 2, 'Às vezes é. Tenho que prestar atenção a cada pequeno detalhe.'),
+    prox(6, ["Hmm. If I were you, I'd ask for a different game every week.", 'Hmm. If I were you, I will ask for a different game every week.', "Hmm. If I am you, I'd ask for a different game every week."], 0, 'Hmm. Se eu fosse você, pediria um jogo diferente toda semana.'),
+    prox(8, ["It's OK, but if I can choose any job, I'd be a luxury hotel reviewer.", "It's OK, but if I could choose any job, I'd be a luxury hotel reviewer.", "It's OK, but if I could choose any job, I'll be a luxury hotel reviewer."], 1, 'É ok, mas se eu pudesse escolher qualquer emprego, seria avaliadora de hotéis de luxo.'),
+    prox(10, ['Yes, but as a reviewer, I will sleeping in the best rooms and eat amazing food.', 'Yes, but as a reviewer, I would slept in the best rooms and eat amazing food.', 'Yes, but as a reviewer, I would sleep in the best rooms and eat amazing food.'], 2, 'Sim, mas como avaliadora, eu dormiria nos melhores quartos e comeria comidas incríveis.'),
+    prox(12, ["Maybe. If I travelled every week, I wouldn't see my parents much.", "Maybe. If I travel every week, I wouldn't see my parents much.", 'Maybe. If I travelled every week, I would see my parents every day.'], 0, 'Talvez. Se eu viajasse toda semana, não veria muito os meus pais.'),
+    prox(14, ["True. What would you do if you don't need the money?", "True. What would you do if you didn't need the money?", "True. What will you do if you didn't need the money?"], 1, 'É verdade. O que você faria se não precisasse do dinheiro?'),
+    prox(15, ["I'd be a panda nanny! I'd work in an office and never see a panda.", "I'd be a panda nanny! I'd working in a forest and play with baby pandas.", "I'd be a panda nanny! I'd work in a forest and play with baby pandas."], 2, 'Eu seria babá de panda! Trabalharia numa floresta e brincaria com pandas filhotes.'),
+    prox(16, ["Ha ha! But you'd have a lot of responsibility. The pandas would depend on you.", "Ha ha! But you'd have a lot of responsibility. The pandas would depends on you.", "Ha ha! But you'd have no responsibility. The pandas would depend on you."], 0, 'Ha ha! Mas você teria muita responsabilidade. Os pandas dependeriam de você.'),
+    prox(17, ["That's fine. If I have a job in nature, I'd feel more relaxed.", "That's fine. If I had a job in nature, I'd feel more relaxed.", "That's fine. If I had a job in nature, I'd felt more relaxed."], 1, 'Tudo bem. Se eu tivesse um emprego na natureza, me sentiria mais relaxado.'),
+    prox(19, ['Deal! And if you become a hotel reviewer, you could invite me to a free hotel!', 'Deal! And if you became a hotel reviewer, you could invited me to a free hotel!', 'Deal! And if you became a hotel reviewer, you could invite me to a free hotel!'], 2, 'Combinado! E se você virasse avaliadora de hotéis, poderia me convidar para um hotel de graça!'),
+    { instrucao: "What is Omar's job?", frase: '___', opcoes: ['A video game tester.', 'A hotel receptionist.', 'A panda nanny.'], certa: 0, traducao: 'Testador de videogame.' },
+    { instrucao: 'What does Omar have to pay attention to?', frase: '___', opcoes: ['His salary.', 'Every small detail.', 'The weather.'], certa: 1, traducao: 'A cada pequeno detalhe.' },
+    { instrucao: 'Where does Bella work?', frase: '___', opcoes: ['In a game company.', 'In a forest.', 'In a hotel.'], certa: 2, traducao: 'Num hotel.' },
+    { instrucao: 'What would Bella be if she could choose any job?', frase: '___', opcoes: ['A luxury hotel reviewer.', 'A chocolate taster.', 'A travel influencer.'], certa: 0, traducao: 'Avaliadora de hotéis de luxo.' },
+    { instrucao: "What would be the problem with Bella's dream job?", frase: '___', opcoes: ['The salary would be low.', "She wouldn't see her parents much.", 'The food would be bad.'], certa: 1, traducao: 'Ela não veria muito os pais.' },
+    { instrucao: "What would Omar be if he didn't need the money?", frase: '___', opcoes: ['A video game tester.', 'A hotel reviewer.', 'A panda nanny.'], certa: 2, traducao: 'Babá de panda.' },
+    { instrucao: 'Why would a panda nanny have a lot of responsibility?', frase: '___', opcoes: ['The pandas would depend on him.', 'He would work at night.', 'He would travel a lot.'], certa: 0, traducao: 'Os pandas dependeriam dele.' },
+    { instrucao: 'How would Omar feel if he had a job in nature?', frase: '___', opcoes: ['Bored.', 'More relaxed.', 'Tired.'], certa: 1, traducao: 'Mais relaxado.' }
+  ]
+});
+</script>
+</body>
+</html>

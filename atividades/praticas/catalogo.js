@@ -1394,6 +1394,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'A greener wardrobe', tipo: 'Escute e grave', treina: 'Fala · First conditional', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'If it rains, we will...', tipo: 'Make a Choice', treina: 'Gramática · First conditional', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 23,
+        titulo: 'Class 23 · Is It Really a Dream Job?',
+        atividades: [
+          { num: 1, titulo: 'Dream jobs', tipo: 'Escute e escolha', treina: 'Escuta · Second conditional', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'If I won the lottery...', tipo: 'Monte a frase', treina: 'Escrita · Second conditional', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Not just playing', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'If I were you...', tipo: 'Escute e grave', treina: 'Fala · Second conditional', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Would or will?', tipo: 'Make a Choice', treina: 'Gramática · Second conditional', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

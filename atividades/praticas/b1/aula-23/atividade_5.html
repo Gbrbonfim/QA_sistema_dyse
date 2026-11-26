@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 23 · Would or will?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 23 · Gramática (Is It Really a Dream Job?)
+   Alinhado ao "Grammar Point" (second conditional: If + past simple, would / wouldn't /
+   could + infinitivo; If I were you; first x second conditional), aos empregos dos sonhos,
+   ao vídeo do travel vlogger e ao Warm Up. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 23, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'If I ___ the lottery, I would buy a house by the sea.', opcoes: ['won', 'win', 'will win'], certa: 0, traducao: 'Se eu ganhasse na loteria, compraria uma casa na praia.' },
+    { frase: 'If she had more time, she ___ learn Italian.', opcoes: ['will', 'would', 'is'], certa: 1, traducao: 'Se ela tivesse mais tempo, aprenderia italiano.' },
+    { frase: "If I ___ you, I'd take the job.", opcoes: ['am', 'be', 'were'], certa: 2, traducao: 'Se eu fosse você, aceitaria o emprego.' },
+    { frase: 'What would you do if you ___ your job?', opcoes: ['lost', 'lose', 'will lose'], certa: 0, traducao: 'O que você faria se perdesse o emprego?' },
+    { frase: 'He ___ travel more if he had more money.', opcoes: ['will', 'would', 'does'], certa: 1, traducao: 'Ele viajaria mais se tivesse mais dinheiro.' },
+    { frase: 'If we lived near the sea, we ___ go swimming every day.', opcoes: ['can', 'will can', 'could'], certa: 2, traducao: 'Se morássemos perto do mar, poderíamos nadar todo dia.' },
+    { frase: 'We use the second conditional for ___ situations.', opcoes: ['imaginary', 'real future', 'past'], certa: 0, traducao: 'Usamos o second conditional para situações imaginárias.' },
+    { frase: 'Form: If + ___, would + infinitive.', opcoes: ['present simple', 'past simple', 'will'], certa: 1, traducao: 'Forma: If + passado simples, would + infinitivo.' },
+    { frase: "I ___ work so much if I didn't need the money.", opcoes: ["won't", "don't", "wouldn't"], certa: 2, traducao: 'Eu não trabalharia tanto se não precisasse do dinheiro.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["If I had a car, I'd drive to work.", "If I have a car, I'd drive to work.", "If I had a car, I'll drive to work."], certa: 0, traducao: 'Se eu tivesse carro, iria de carro para o trabalho.' },
+    { instrucao: 'Which sentence is a second conditional?', frase: '___', opcoes: ["If it rains, we'll stay at home.", "If I were rich, I'd buy an island.", 'If you heat ice, it melts.'], certa: 1, traducao: 'Se eu fosse rico, compraria uma ilha.' },
+    { instrucao: 'Which situation is imaginary?', frase: '___', opcoes: ["If I finish early, I'll call you.", "If you're hungry, eat something.", "If I were a bird, I'd fly to Japan."], certa: 2, traducao: 'Se eu fosse um pássaro, voaria até o Japão.' },
+    { frase: 'If he ___ work on weekends, he would go to the beach.', opcoes: ["didn't have to", "doesn't have to", "won't have to"], certa: 0, traducao: 'Se ele não tivesse que trabalhar nos fins de semana, iria à praia.' },
+    { frase: "I'd feel more energized if I ___ a break.", opcoes: ['take', 'took', 'will take'], certa: 1, traducao: 'Eu me sentiria mais animado se tirasse uma folga.' },
+    { frase: 'If you could choose any job, what ___ it be?', opcoes: ['will', 'is', 'would'], certa: 2, traducao: 'Se você pudesse escolher qualquer emprego, qual seria?' },
+    { frase: 'A chocolate ___ tries chocolates before the company sells them.', opcoes: ['taster', 'cooker', 'nanny'], certa: 0, traducao: 'Um provador de chocolate experimenta os chocolates antes de a empresa vendê-los.' },
+    { frase: 'A video game ___ looks for problems in new games.', opcoes: ['taster', 'tester', 'nanny'], certa: 1, traducao: 'Um testador de videogame procura problemas em jogos novos.' },
+    { frase: 'A panda ___ takes care of baby pandas.', opcoes: ['taster', 'tester', 'nanny'], certa: 2, traducao: 'Uma babá de panda cuida de pandas filhotes.' },
+    { frase: 'A luxury hotel ___ stays in expensive hotels and writes about them.', opcoes: ['reviewer', 'taster', 'nanny'], certa: 0, traducao: 'Um avaliador de hotéis de luxo se hospeda em hotéis caros e escreve sobre eles.' },
+    { frase: 'The vlogger moves all the videos to his hard ___.', opcoes: ['car', 'drive', 'road'], certa: 1, traducao: 'O vlogger passa todos os vídeos para o HD.' },
+    { frase: 'He films the city from the sky with his ___.', opcoes: ['script', 'hard drive', 'drone'], certa: 2, traducao: 'Ele filma a cidade do céu com o drone.' },
+    { frase: 'A good, high ___ is important for many people.', opcoes: ['salary', 'workplace', 'hour'], certa: 0, traducao: 'Um salário bom e alto é importante para muita gente.' },
+    { frase: "I'd like a fun and friendly ___.", opcoes: ['salary', 'workplace', 'money'], certa: 1, traducao: 'Eu gostaria de um ambiente de trabalho divertido e amigável.' },
+    { frase: 'If I had a dream job, I ___ still feel tired sometimes.', opcoes: ['will', 'am', 'could'], certa: 2, traducao: 'Se eu tivesse o emprego dos sonhos, ainda poderia me sentir cansado às vezes.' }
+  ]
+});
+</script>
+</body>
+</html>

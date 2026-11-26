@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 23 · Dream jobs</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 23 · Escuta (Is It Really a Dream Job?)
+   Alinhado ao Warm Up (o que importa num emprego), ao vídeo do travel vlogger (script,
+   filmar com drone, hard drive, editar, upload), aos 5 empregos dos sonhos e ao "Grammar
+   Point" (second conditional: If + past simple, would / could; real x imaginário).
+   Contraste com first e zero conditional. Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const V = 'Listen. What is the vlogger doing?', K = 'Listen. What kind of situation is it?',
+  M = 'Listen. What does the speaker mean?', I = 'Listen. What is important for the speaker?';
+const RE = 'a real possibility', IM = 'an imaginary situation', FA = 'a fact that is always true';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 23, num: 1, tipo: 'imagem',
+  instrucao: 'Listen. What is the job?',
+  itens: [
+    q('I try new chocolates and say if they taste good before the company sells them.', 'chocolate taster', ['video game tester', 'panda nanny'], 'work'),
+    q('I play new games for hours and look for problems before they go on sale.', 'video game tester', ['chocolate taster', 'luxury hotel reviewer'], 'work'),
+    q('I stay in expensive hotels and write about the rooms, the food and the service.', 'luxury hotel reviewer', ['panda nanny', 'video game tester'], 'work'),
+    q('I take care of young pandas. I feed them and play with them in the forest.', 'panda nanny', ['luxury hotel reviewer', 'chocolate taster'], 'work'),
+    q('I travel to different countries and post photos and videos for my followers.', 'travel influencer', ['panda nanny', 'chocolate taster'], 'work'),
+    { instrucao: V, ...q('I research the city and write the script for my video on my phone.', 'writing a script', ['editing a video', 'uploading a video'], 'videocam') },
+    { instrucao: V, ...q('I move all the videos to my hard drive and start editing.', 'editing videos', ['writing a script', 'flying a drone'], 'videocam') },
+    { instrucao: V, ...q('The Wi-Fi is slow, so the upload takes a long time.', 'uploading a video', ['editing a video', 'writing a script'], 'videocam') },
+    { instrucao: V, ...q('I fly my drone over the city to film it from the sky.', 'filming', ['sleeping', 'uploading a video'], 'videocam') },
+    { instrucao: K, ...q('If I won the lottery, I would travel around the world.', IM, [RE, FA], 'help') },
+    { instrucao: K, ...q("If it rains tomorrow, I'll stay at home.", RE, [IM, FA], 'help') },
+    { instrucao: K, ...q('If I were a panda nanny, I would work in China.', IM, [FA, RE], 'help') },
+    { instrucao: K, ...q('If you finish early today, you can go home.', RE, [FA, IM], 'help') },
+    { instrucao: K, ...q("If I didn't have to work, I'd learn to play the piano.", IM, [RE, FA], 'help') },
+    { instrucao: K, ...q('If water reaches one hundred degrees, it boils.', FA, [IM, RE], 'help') },
+    { instrucao: M, ...q('If I had more free time, I would learn Japanese.', "The speaker doesn't have much free time.", ['The speaker speaks Japanese.', 'The speaker has a lot of free time.'], 'forum') },
+    { instrucao: M, ...q("If I lived near the beach, I'd go surfing every day.", "The speaker doesn't live near the beach.", ['The speaker lives near the beach.', 'The speaker surfs every day.'], 'forum') },
+    { instrucao: M, ...q("I wouldn't work so much if I didn't need the money.", 'The speaker needs the money.', ["The speaker doesn't work.", "The speaker doesn't need money."], 'forum') },
+    { instrucao: M, ...q('If my boss let me work from home, I could sleep more.', "The speaker can't work from home now.", ['The speaker works from home.', 'The speaker is the boss.'], 'forum') },
+    { instrucao: M, ...q('If I were you, I would ask for a higher salary.', 'It is advice.', ['It is a rule.', 'It is a promise.'], 'forum') },
+    { instrucao: I, ...q('I want to earn a lot of money every month.', 'a high salary', ['travel opportunities', 'a friendly workplace'], 'work') },
+    { instrucao: I, ...q("For me, it's important to start and finish work when I want.", 'choosing working hours', ['a high salary', 'travel opportunities'], 'work') },
+    { instrucao: I, ...q('I love visiting other countries for work.', 'travel opportunities', ['choosing working hours', 'a high salary'], 'work') },
+    { instrucao: I, ...q('I want to take courses and get better at my job.', 'opportunities to grow and learn', ['a high salary', 'a friendly workplace'], 'work') }
+  ]
+});
+</script>
+</body>
+</html>
