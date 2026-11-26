@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 24 · From games to clean beaches</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 24 · Leitura (From Clicks to Causes)
+   Alinhado ao Reading (criadores que usam a fama para boas causas), ao Talking Point
+   (influencers ajudam só para ficar mais famosos?) e ao "Grammar Point" (present perfect +
+   for / since; Do you...? x How long have you...?). Revisão de might e first conditional.
+   Conteúdo NOVO: a apresentadora Rita entrevista o criador Dan.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Rita', 'Welcome to the podcast, Dan! You make videos about recycling, right?'],
+  ['Dan', "Yes! I've made recycling videos since 2020."],
+  ['Rita', 'Wow. How long have you had your channel?'],
+  ['Dan', "I've had it for about six years, but at first I only posted gaming videos."],
+  ['Rita', 'Why did you change?'],
+  ['Dan', 'During the pandemic, I saw a lot of plastic on the beach near my house.'],
+  ['Rita', 'And how many followers do you have now?'],
+  ['Dan', "I've gained more than two million followers since I started the recycling videos."],
+  ['Rita', 'Amazing! Have you worked with other creators?'],
+  ['Dan', "Yes, I have. I've worked with a science YouTuber for two years."],
+  ['Rita', 'What have you done together?'],
+  ['Dan', "We've cleaned five beaches, and we've planted ten thousand trees."],
+  ['Rita', 'Some people say influencers only help others to get more famous. What do you think?'],
+  ['Dan', "I disagree. I've used my fame to help, and my followers have helped too."],
+  ['Rita', 'Do your followers join your clean-ups?'],
+  ['Dan', 'Yes, they do! Some of them have come to every clean-up since 2022.'],
+  ['Rita', "That's fantastic. Do you still play video games?"],
+  ['Dan', "Ha ha! Yes, I do, but I haven't posted a gaming video for years."],
+  ['Rita', "What's next for your channel?"],
+  ['Dan', "I might start a project in other countries. If it works, I'll tell you!"]
+];
+const lado = q => q === 'Rita' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 24, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes! I've made recycling videos since 2020.", 'Yes! I make recycling videos since 2020.', "Yes! I've made recycling videos for 2020."], 0, 'Sim! Faço vídeos sobre reciclagem desde 2020.'),
+    prox(3, ["I've had it since about six years, but at first I only posted gaming videos.", "I've had it for about six years, but at first I only posted gaming videos.", "I've have it for about six years, but at first I only posted gaming videos."], 1, 'Tenho há uns seis anos, mas no começo só postava vídeos de games.'),
+    prox(5, ['During the pandemic, I have seen a lot of plastic on the beach near my house.', 'During the pandemic, I see a lot of plastic on the beach near my house.', 'During the pandemic, I saw a lot of plastic on the beach near my house.'], 2, 'Durante a pandemia, vi muito plástico na praia perto da minha casa.'),
+    prox(7, ["I've gained more than two million followers since I started the recycling videos.", 'I gained more than two million followers since I started the recycling videos.', "I've gained more than two million followers for I started the recycling videos."], 0, 'Ganhei mais de dois milhões de seguidores desde que comecei os vídeos de reciclagem.'),
+    prox(8, ['Amazing! Have you work with other creators?', 'Amazing! Have you worked with other creators?', 'Amazing! Do you have worked with other creators?'], 1, 'Incrível! Você já trabalhou com outros criadores?'),
+    prox(9, ["Yes, I have. I've worked with a science YouTuber since two years.", "Yes, I do. I've worked with a science YouTuber for two years.", "Yes, I have. I've worked with a science YouTuber for two years."], 2, 'Sim. Trabalho com um youtuber de ciência há dois anos.'),
+    prox(11, ["We've cleaned five beaches, and we've planted ten thousand trees.", "We've clean five beaches, and we've planted ten thousand trees.", "We've cleaned five beaches, and we've plant ten thousand trees."], 0, 'Limpamos cinco praias e plantamos dez mil árvores.'),
+    prox(13, ["I disagree. I've use my fame to help, and my followers have helped too.", "I disagree. I've used my fame to help, and my followers have helped too.", "I agree. I've used my fame to help, and my followers have helped too."], 1, 'Discordo. Usei a minha fama para ajudar, e os meus seguidores ajudaram também.'),
+    prox(15, ['Yes, they do! Some of them have came to every clean-up since 2022.', 'Yes, they do! Some of them came to every clean-up since 2022.', 'Yes, they do! Some of them have come to every clean-up since 2022.'], 2, 'Sim! Alguns vieram a todos os mutirões desde 2022.'),
+    prox(16, ["That's fantastic. Do you still play video games?", "That's fantastic. Have you still play video games?", "That's fantastic. Does you still play video games?"], 0, 'Fantástico. Você ainda joga videogame?'),
+    prox(17, ["Ha ha! Yes, I do, but I didn't post a gaming video for years.", "Ha ha! Yes, I do, but I haven't posted a gaming video for years.", "Ha ha! Yes, I do, but I haven't posted a gaming video since years."], 1, 'Ha ha! Jogo, mas não posto um vídeo de games há anos.'),
+    prox(19, ["I might starting a project in other countries. If it works, I'll tell you!", "I might start a project in other countries. If it will work, I'll tell you!", "I might start a project in other countries. If it works, I'll tell you!"], 2, 'Talvez eu comece um projeto em outros países. Se der certo, eu te conto!'),
+    { instrucao: 'What kind of videos does Dan make now?', frase: '___', opcoes: ['Recycling videos.', 'Gaming videos.', 'Dance videos.'], certa: 0, traducao: 'Vídeos sobre reciclagem.' },
+    { instrucao: 'How long has Dan had his channel?', frase: '___', opcoes: ['Since 2022.', 'For about six years.', 'For two years.'], certa: 1, traducao: 'Há uns seis anos.' },
+    { instrucao: 'Why did Dan change his videos?', frase: '___', opcoes: ['His followers asked him.', 'He got bored of games.', 'He saw a lot of plastic on the beach.'], certa: 2, traducao: 'Ele viu muito plástico na praia.' },
+    { instrucao: 'How many followers has he gained since he started the recycling videos?', frase: '___', opcoes: ['More than two million.', 'About six thousand.', 'Ten thousand.'], certa: 0, traducao: 'Mais de dois milhões.' },
+    { instrucao: 'Who has Dan worked with for two years?', frase: '___', opcoes: ['A dancer.', 'A science YouTuber.', 'A chef.'], certa: 1, traducao: 'Um youtuber de ciência.' },
+    { instrucao: 'What have they done together?', frase: '___', opcoes: ['They have made a film.', 'They have opened a shop.', 'They have cleaned beaches and planted trees.'], certa: 2, traducao: 'Limparam praias e plantaram árvores.' },
+    { instrucao: 'Does Dan think influencers only help to get famous?', frase: '___', opcoes: ["No, he doesn't.", 'Yes, he does.', "He doesn't know."], certa: 0, traducao: 'Não.' },
+    { instrucao: 'Does Dan still post gaming videos?', frase: '___', opcoes: ['Yes, every week.', 'No, not for years.', 'Only on Fridays.'], certa: 1, traducao: 'Não, há anos que não.' }
+  ]
+});
+</script>
+</body>
+</html>

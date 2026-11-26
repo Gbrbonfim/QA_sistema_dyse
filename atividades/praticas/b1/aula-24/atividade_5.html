@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 24 · For or since?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 24 · Gramática (From Clicks to Causes)
+   Alinhado ao "Grammar Point" (present perfect: have / has + particípio, inclusive
+   irregulares; for + período, since + ponto de partida; How long...?; não usar present
+   simple nesse caso; Do you...? para perguntar se faz), ao Reading e ao Listening das
+   plataformas. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 24, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: "I've lived here ___ 2018.", opcoes: ['since', 'for', 'ago'], certa: 0, traducao: 'Moro aqui desde 2018.' },
+    { frase: "She's worked at the hospital ___ ten years.", opcoes: ['since', 'for', 'ago'], certa: 1, traducao: 'Ela trabalha no hospital há dez anos.' },
+    { frase: "We've known each other ___ we were children.", opcoes: ['for', 'ago', 'since'], certa: 2, traducao: 'Nós nos conhecemos desde crianças.' },
+    { frase: 'He ___ made videos since 2015.', opcoes: ['has', 'have', 'is'], certa: 0, traducao: 'Ele faz vídeos desde 2015.' },
+    { frase: 'They ___ been friends for a long time.', opcoes: ['has', 'have', 'are'], certa: 1, traducao: 'Eles são amigos há muito tempo.' },
+    { frase: 'I ___ English since I was twelve.', opcoes: ['study', 'studied', 'have studied'], certa: 2, traducao: 'Estudo inglês desde os doze anos.' },
+    { frase: 'How long ___ she had her dog?', opcoes: ['has', 'have', 'does'], certa: 0, traducao: 'Há quanto tempo ela tem o cachorro?' },
+    { frase: 'How long have you ___ in this city?', opcoes: ['live', 'lived', 'living'], certa: 1, traducao: 'Há quanto tempo você mora nesta cidade?' },
+    { frase: '___ you follow any influencers?', opcoes: ['Have', 'Has', 'Do'], certa: 2, traducao: 'Você segue algum influencer?' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['My sister has played the guitar since 2019.', 'My sister plays the guitar since 2019.', 'My sister is playing the guitar since 2019.'], certa: 0, traducao: 'A minha irmã toca violão desde 2019.' },
+    { instrucao: 'Which one is a period of time? (We use "for".)', frase: '___', opcoes: ['last summer', 'three months', '2010'], certa: 1, traducao: 'Três meses é um período.' },
+    { instrucao: 'Which one is a starting point? (We use "since".)', frase: '___', opcoes: ['two weeks', 'a long time', 'last year'], certa: 2, traducao: 'O ano passado é um ponto de partida.' },
+    { frase: 'He has ___ English for twenty years.', opcoes: ['taught', 'teached', 'teach'], certa: 0, traducao: 'Ele ensina inglês há vinte anos.' },
+    { frase: "I haven't ___ my grandparents since Easter.", opcoes: ['saw', 'seen', 'see'], certa: 1, traducao: 'Não vejo os meus avós desde a Páscoa.' },
+    { frase: 'She has ___ two books about the environment.', opcoes: ['wrote', 'write', 'written'], certa: 2, traducao: 'Ela escreveu dois livros sobre o meio ambiente.' },
+    { frase: 'We use the present perfect + for / since for things that started in the past and are ___.', opcoes: ['still true now', 'finished', 'in the future'], certa: 0, traducao: 'Usamos o present perfect + for / since para coisas que começaram no passado e ainda são verdade.' },
+    { frase: 'Mark Rober is a former ___ engineer.', opcoes: ['Google', 'NASA', 'Tesla'], certa: 1, traducao: 'O Mark Rober é ex-engenheiro da NASA.' },
+    { frase: 'MrBeast and Mark Rober worked together on Team Trees and Team ___.', opcoes: ['Clouds', 'Birds', 'Seas'], certa: 2, traducao: 'MrBeast e Mark Rober trabalharam juntos no Team Trees e no Team Seas.' },
+    { frase: 'YouTube has existed ___ 2005.', opcoes: ['since', 'for', 'ago'], certa: 0, traducao: 'O YouTube existe desde 2005.' },
+    { frase: 'Spotify started in ___ in 2008.', opcoes: ['the USA', 'Sweden', 'China'], certa: 1, traducao: 'O Spotify começou na Suécia em 2008.' },
+    { frase: 'TikTok started in ___ in 2016.', opcoes: ['Sweden', 'Japan', 'China'], certa: 2, traducao: 'O TikTok começou na China em 2016.' },
+    { frase: 'How long have you followed her? — ___ three years.', opcoes: ['For', 'Since', 'Ago'], certa: 0, traducao: 'Há quanto tempo você segue ela? — Há três anos.' },
+    { frase: 'How long has he been a K-pop fan? — ___ he was fifteen.', opcoes: ['For', 'Since', 'Ago'], certa: 1, traducao: 'Há quanto tempo ele é fã de K-pop? — Desde os quinze anos.' },
+    { frase: 'Since and science ___ the same.', opcoes: ['sound', 'are sounding', "don't sound"], certa: 2, traducao: 'Since e science não soam iguais.' }
+  ]
+});
+</script>
+</body>
+</html>

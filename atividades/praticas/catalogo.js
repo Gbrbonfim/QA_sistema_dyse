@@ -1405,6 +1405,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'If I were you...', tipo: 'Escute e grave', treina: 'Fala · Second conditional', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Would or will?', tipo: 'Make a Choice', treina: 'Gramática · Second conditional', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 24,
+        titulo: 'Class 24 · From Clicks to Causes',
+        atividades: [
+          { num: 1, titulo: 'How long?', tipo: 'Escute e escolha', treina: 'Escuta · Present perfect', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: "I've lived here since...", tipo: 'Monte a frase', treina: 'Escrita · For / since', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'From games to clean beaches', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Fame for good causes', tipo: 'Escute e grave', treina: 'Fala · Present perfect', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'For or since?', tipo: 'Make a Choice', treina: 'Gramática · Present perfect', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

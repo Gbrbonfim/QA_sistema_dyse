@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 24 · How long?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 24 · Escuta (From Clicks to Causes)
+   Alinhado ao "Grammar Point" (present perfect + for / since para o que começou no passado
+   e continua; How long...?; present simple para perguntar se faz, present perfect para
+   perguntar há quanto tempo), ao Reading (MrBeast, Charli D'Amelio, Emma Chamberlain,
+   Mark Rober) e ao Listening (história das plataformas). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const S = 'Listen. Is it still true now?', A = 'Listen to the question and choose the best answer',
+  W = 'Listen. Who is it?', P = 'Listen. Which platform is it?', M = 'Listen. What does the speaker mean?';
+const SIM = "Yes, it's still true.", NAO = 'No, it finished.';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 24, num: 1, tipo: 'imagem',
+  instrucao: "It's 2026 now. Listen. When did it start?",
+  itens: [
+    q("I've had this phone for two years.", 'in 2024', ['in 2022', 'two months ago'], 'schedule'),
+    q("She's lived in Lisbon since 2019.", 'in 2019', ['in 2009', 'nineteen years ago'], 'schedule'),
+    q("We've known each other for ten years.", 'in 2016', ['in 2010', 'ten months ago'], 'schedule'),
+    q("He's worked at the bank since 2021.", 'in 2021', ['in 2012', 'twenty-one years ago'], 'schedule'),
+    q("They've been married for twenty years.", 'in 2006', ['in 2020', 'twenty months ago'], 'schedule'),
+    q("I've followed her channel for six months.", 'six months ago', ['six years ago', 'in 2006'], 'schedule'),
+    { instrucao: S, ...q("I've lived in this city since 2015.", SIM, [NAO, "It hasn't started yet."], 'help') },
+    { instrucao: S, ...q('I lived in London for two years, but now I live in Paris.', NAO, [SIM, "It hasn't started yet."], 'help') },
+    { instrucao: S, ...q('She has played the piano since she was six.', SIM, ["It hasn't started yet.", NAO], 'help') },
+    { instrucao: S, ...q("He worked as a teacher for five years. Now he's a chef.", NAO, ["It hasn't started yet.", SIM], 'help') },
+    { instrucao: A, ...q('Do you have a social media account?', 'Yes, I do.', ['For three years.', 'Since I have.'], 'forum') },
+    { instrucao: A, ...q('How long have you had it?', 'For about five years.', ['Yes, I do.', 'On Instagram.'], 'forum') },
+    { instrucao: A, ...q('Do you follow any YouTubers?', 'Yes, I follow a science channel.', ['Since 2020.', 'For a long time.'], 'forum') },
+    { instrucao: A, ...q('How long have you been a fan of that singer?', 'Since I was fifteen.', ['Yes, I am.', 'Her songs are great.'], 'forum') },
+    { instrucao: A, ...q('How long has your teacher taught English?', 'For more than ten years.', ['Yes, she does.', 'Tomorrow.'], 'forum') },
+    { instrucao: W, ...q("He's a former NASA engineer who has made science videos for more than ten years.", 'Mark Rober', ['MrBeast', 'Emma Chamberlain'], 'videocam') },
+    { instrucao: W, ...q('She has shared dance videos on TikTok and has more than one hundred and fifty million followers.', "Charli D'Amelio", ['Emma Chamberlain', 'Mark Rober'], 'videocam') },
+    { instrucao: W, ...q('She has used humour and honesty in her lifestyle videos since she was sixteen.', 'Emma Chamberlain', ["Charli D'Amelio", 'MrBeast'], 'videocam') },
+    { instrucao: W, ...q('He has planted millions of trees and donated millions of dollars to good causes.', 'MrBeast', ['Mark Rober', "Charli D'Amelio"], 'videocam') },
+    { instrucao: P, ...q('It started in Sweden in 2008, and people have listened to music on it ever since.', 'Spotify', ['Netflix', 'TikTok'], 'videocam') },
+    { instrucao: P, ...q('The first video on it was called Me at the Zoo.', 'YouTube', ['Instagram', 'Spotify'], 'videocam') },
+    { instrucao: P, ...q('Before streaming, it sent DVDs to people by post.', 'Netflix', ['YouTube', 'Instagram'], 'videocam') },
+    { instrucao: P, ...q('It started in China in 2016, and it is famous for short videos.', 'TikTok', ['Spotify', 'Netflix'], 'videocam') },
+    { instrucao: M, ...q("I haven't seen my cousin since Christmas.", 'The last time was at Christmas.', ['The speaker sees the cousin every day.', 'The speaker saw the cousin yesterday.'], 'forum') }
+  ]
+});
+</script>
+</body>
+</html>

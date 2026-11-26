@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 24 · I've lived here since...</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 24 · Escrita (From Clicks to Causes)
+   Alinhado ao "Grammar Point" (present perfect: have / has + particípio; for + período,
+   since + ponto de partida; How long have / has...?; nunca present simple nesse uso) e ao
+   Reading / Speaking (influencers, seguidores, boas causas, redes sociais).
+   Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 24, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu moro aqui desde 2018.'), palavras: ["I've", 'lived', 'here', 'since', '2018'], isca: ['for'], fim: '.', traducao: 'Moro aqui desde 2018.' },
+    { contexto: M('Ela trabalha aqui há cinco anos.'), palavras: ["She's", 'worked', 'here', 'for', 'five', 'years'], isca: ['since'], fim: '.', traducao: 'Ela trabalha aqui há cinco anos.' },
+    { contexto: M('Nós nos conhecemos há muito tempo.'), palavras: ["We've", 'known', 'each', 'other', 'for', 'a', 'long', 'time'], isca: ['since'], fim: '.', traducao: 'Nós nos conhecemos há muito tempo.' },
+    { contexto: M('Há quanto tempo você mora aqui?'), palavras: ['How', 'long', 'have', 'you', 'lived', 'here'], isca: ['has'], fim: '?', traducao: 'Há quanto tempo você mora aqui?' },
+    { contexto: M('Há quanto tempo ele segue esse canal?'), palavras: ['How', 'long', 'has', 'he', 'followed', 'this', 'channel'], isca: ['have'], fim: '?', traducao: 'Há quanto tempo ele segue esse canal?' },
+    { contexto: M('Ela posta vídeos de culinária desde 2020.'), palavras: ["She's", 'posted', 'cooking', 'videos', 'since', '2020'], isca: ['posts'], fim: '.', traducao: 'Ela posta vídeos de culinária desde 2020.' },
+    { contexto: M('Eu tenho este celular há dois anos.'), palavras: ["I've", 'had', 'this', 'phone', 'for', 'two', 'years'], isca: ['since'], fim: '.', traducao: 'Tenho este celular há dois anos.' },
+    { contexto: M('Eles são casados há vinte anos.'), palavras: ["They've", 'been', 'married', 'for', 'twenty', 'years'], isca: ['are'], fim: '.', traducao: 'Eles são casados há vinte anos.' },
+    { contexto: M('Não vejo o meu primo desde o Natal.'), palavras: ['I', "haven't", 'seen', 'my', 'cousin', 'since', 'Christmas'], isca: ['saw'], fim: '.', traducao: 'Não vejo o meu primo desde o Natal.' },
+    { contexto: M('Ele ensina inglês há mais de dez anos.'), palavras: ["He's", 'taught', 'English', 'for', 'more', 'than', 'ten', 'years'], isca: ['teached'], fim: '.', traducao: 'Ele ensina inglês há mais de dez anos.' },
+    { contexto: M('Você tem conta em alguma rede social?'), palavras: ['Do', 'you', 'have', 'a', 'social', 'media', 'account'], isca: ['Does'], fim: '?', traducao: 'Você tem conta em alguma rede social?' },
+    { contexto: M('Ela é fã de K-pop desde a escola.'), palavras: ["She's", 'been', 'a', 'K-pop', 'fan', 'since', 'school'], isca: ['is'], fim: '.', traducao: 'Ela é fã de K-pop desde a escola.' },
+    { contexto: M('A Wikipédia existe desde 2001.'), palavras: ['Wikipedia', 'has', 'existed', 'since', '2001'], isca: ['exists'], fim: '.', traducao: 'A Wikipédia existe desde 2001.' },
+    { contexto: M('Eu uso o TikTok há três anos.'), palavras: ["I've", 'used', 'TikTok', 'for', 'three', 'years'], isca: ['use'], fim: '.', traducao: 'Uso o TikTok há três anos.' },
+    { contexto: M('Ele já doou milhões de dólares para boas causas.'), palavras: ["He's", 'donated', 'millions', 'of', 'dollars', 'to', 'good', 'causes'], isca: ['donate'], fim: '.', traducao: 'Ele já doou milhões de dólares para boas causas.' },
+    { contexto: M('Ela inspirou muitos jovens.'), palavras: ["She's", 'inspired', 'many', 'young', 'people'], isca: ['inspire'], fim: '.', traducao: 'Ela inspirou muitos jovens.' },
+    { contexto: M('Ele ganhou muitos seguidores desde o ano passado.'), palavras: ["He's", 'gained', 'a', 'lot', 'of', 'followers', 'since', 'last', 'year'], isca: ['for'], fim: '.', traducao: 'Ele ganhou muitos seguidores desde o ano passado.' },
+    { contexto: M('Há quanto tempo você estuda inglês?'), palavras: ['How', 'long', 'have', 'you', 'studied', 'English'], isca: ['study'], fim: '?', traducao: 'Há quanto tempo você estuda inglês?' },
+    { contexto: M('Moramos nesta casa desde que eu tinha dez anos.'), palavras: ["We've", 'lived', 'in', 'this', 'house', 'since', 'I', 'was', 'ten'], isca: ['for'], fim: '.', traducao: 'Moramos nesta casa desde que eu tinha dez anos.' },
+    { contexto: M('Ela não come carne há um ano.'), palavras: ['She', "hasn't", 'eaten', 'meat', 'for', 'a', 'year'], isca: ['ate'], fim: '.', traducao: 'Ela não come carne há um ano.' }
+  ]
+});
+</script>
+</body>
+</html>
