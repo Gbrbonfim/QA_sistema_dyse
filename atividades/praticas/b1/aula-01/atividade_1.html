@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 1 · What's the best answer?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 01 · Escuta (Are you a language learner?)
+   Alinhado aos slides "The 15 Essential Questions" e "Grammar Point: Word Order in Questions".
+   Conteúdo NOVO: o aluno ouve uma pergunta pessoal e escolhe a resposta que combina com ela
+   (as iscas respondem a outra pergunta). 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'chat' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 1, num: 1, tipo: 'imagem',
+  instrucao: 'Listen to the question and choose the best answer',
+  itens: [
+    q('Where are you originally from?', "I'm from Recife, in Brazil.", ["I'm twenty-eight.", 'I work in a bank.']),
+    q('How old is your younger sister?', "She's nineteen.", ["She's from Italy.", 'She lives in a flat.']),
+    q('What do you do?', "I'm a nurse.", ["I'm fine, thanks.", 'I did nothing.']),
+    q('What languages can you speak?', 'Portuguese, English and a little Spanish.', ['Pasta and pizza.', 'Every Saturday.']),
+    q('Why are you studying English?', 'Because I want to work abroad.', ['At eight in the morning.', 'With my cousin.']),
+    q('What did you do last weekend?', 'I visited my grandparents.', ["I'm going to visit my grandparents.", 'I visit them every month.']),
+    q('What are you going to do next weekend?', "I'm going to watch a football match.", ['I watched a football match.', 'I watch football every day.']),
+    q('How often do you meet your friends?', 'Twice a week.', ['Last Friday.', 'In a café.']),
+    q('Do you live in a house or a flat?', 'In a flat, on the fifth floor.', ['Yes, I do.', 'With my parents.']),
+    q('Who do you live with?', 'With my husband and our cat.', ['In São Paulo.', 'For three years.']),
+    q('Do you have any brothers or sisters?', 'Yes, I have two brothers.', ['Yes, I am.', "No, I can't."]),
+    q('Can you talk about your personality?', "Sure. I'm calm and very curious.", ['Sure. I like rock music.', 'Sure. I live near here.']),
+    q('Were you born in this city?', "No, I wasn't. I was born in Curitiba.", ["No, I don't. I live in Curitiba.", "No, I can't. I'm from Curitiba."]),
+    q('Did you study English at school?', 'Yes, I did, but only grammar.', ['Yes, I do, every day.', 'Yes, I can, very well.']),
+    q('What does this word mean?', 'It means "difficult".', ['It is on page ten.', 'It is my word.']),
+    q('Where did you study English before?', 'At a language school near my house.', ['Next year.', 'Because I love it.']),
+    q('What are you talking about?', 'About our trip to Chile.', ['With my teacher.', 'Since Monday.']),
+    q('What kind of music does she like?', 'She likes jazz and pop.', ['She plays in a band.', 'She is twenty years old.']),
+    q('Is your teacher from London?', "No, she isn't. She's from Dublin.", ["No, she doesn't. She lives in Dublin.", "No, she can't. She's in Dublin."]),
+    q('Can your classmates speak French?', 'Yes, they can. They lived in Paris.', ['Yes, they do. They live in Paris.', 'Yes, they are. They are in Paris.']),
+    q('When did you start learning English?', 'When I was twelve.', ['For twelve hours.', 'Twelve students.']),
+    q('How often do you practice speaking?', 'Every day, with an app.', ['Last night.', 'Very well, thanks.']),
+    q("What's your favorite book?", 'The Little Prince.', ['Reading at night.', 'In the library.']),
+    q('Can you say that again, please?', 'Of course. I said "Wednesday".', ['Yes, I can swim.', 'Of course. I am Laura.'])
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 1 · Word order in questions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 01 · Gramática (Are you a language learner?)
+   Alinhado ao "Grammar Point: Word Order in Questions": com be/can o verbo vem antes do
+   sujeito; do (I/you/we/they), does (he/she/it), did (passado, todos); regra ASI/QuASI;
+   preposição no fim. Conteúdo NOVO. 24 questões. */
+const C = 'Choose the correct question';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 1, num: 5, tipo: 'escolha',
+  instrucao: 'Complete the question',
+  itens: [
+    { frase: '___ you from Argentina?', opcoes: ['Are', 'Do', 'Does'], certa: 0, traducao: 'Você é da Argentina?' },
+    { frase: '___ she speak Japanese?', opcoes: ['Is', 'Can', 'Do'], certa: 1, traducao: 'Ela sabe falar japonês?' },
+    { frase: '___ your brother work in a hotel?', opcoes: ['Do', 'Is', 'Does'], certa: 2, traducao: 'O seu irmão trabalha num hotel?' },
+    { frase: '___ they study Spanish last year?', opcoes: ['Did', 'Do', 'Were'], certa: 0, traducao: 'Eles estudaram espanhol no ano passado?' },
+    { frase: '___ you tired after the class yesterday?', opcoes: ['Did', 'Were', 'Are'], certa: 1, traducao: 'Você estava cansado depois da aula ontem?' },
+    { frase: 'Where ___ your parents live?', opcoes: ['does', 'are', 'do'], certa: 2, traducao: 'Onde os seus pais moram?' },
+    { frase: 'What ___ this word mean?', opcoes: ['does', 'do', 'is'], certa: 0, traducao: 'O que esta palavra significa?' },
+    { frase: 'Why ___ you learning German?', opcoes: ['do', 'are', 'does'], certa: 1, traducao: 'Por que você está aprendendo alemão?' },
+    { frase: 'Where ___ you born?', opcoes: ['did', 'are', 'were'], certa: 2, traducao: 'Onde você nasceu?' },
+    { frase: 'What time ___ you get up yesterday?', opcoes: ['did', 'do', 'were'], certa: 0, traducao: 'A que horas você se levantou ontem?' },
+    { frase: 'Did she ___ English at university?', opcoes: ['studied', 'study', 'studies'], certa: 1, traducao: 'Ela estudou inglês na faculdade?' },
+    { frase: 'Does he ___ in a hospital?', opcoes: ['works', 'worked', 'work'], certa: 2, traducao: 'Ele trabalha num hospital?' },
+    { frase: 'Who do you usually travel ___?', opcoes: ['with', 'at', 'in'], certa: 0, traducao: 'Com quem você costuma viajar?' },
+    { frase: 'What are you thinking ___?', opcoes: ['in', 'about', 'on'], certa: 1, traducao: 'Em que você está pensando?' },
+    { frase: 'Who is she talking ___ on the phone?', opcoes: ['at', 'of', 'to'], certa: 2, traducao: 'Com quem ela está falando ao telefone?' },
+    { frase: 'In "Where did you go?", "did" is the ___.', opcoes: ['auxiliary', 'subject', 'question word'], certa: 0, traducao: 'Em "Where did you go?", "did" é o auxiliar.' },
+    { frase: 'ASI means Auxiliary, Subject and ___.', opcoes: ['Interview', 'Infinitive', 'Information'], certa: 1, traducao: 'ASI significa Auxiliar, Sujeito e Infinitivo (verbo na forma base).' },
+    { frase: 'We use "does" with ___.', opcoes: ['I, you, we and they', 'all subjects in the past', 'he, she and it'], certa: 2, traducao: 'Usamos "does" com he, she e it.' },
+    { instrucao: C, frase: '___', opcoes: ['Can you write emails in French?', 'Do you can write emails in French?', 'You can write emails in French?'], certa: 0, traducao: 'Você consegue escrever e-mails em francês?' },
+    { instrucao: C, frase: '___', opcoes: ['Where your teacher is from?', 'Where is your teacher from?', 'Where does your teacher is from?'], certa: 1, traducao: 'De onde é a sua professora?' },
+    { instrucao: C, frase: '___', opcoes: ['How often you practice speaking?', 'How often does you practice speaking?', 'How often do you practice speaking?'], certa: 2, traducao: 'Com que frequência você pratica a fala?' },
+    { instrucao: C, frase: '___', opcoes: ['What university did she study at?', 'What university she studied at?', 'What university did she studied at?'], certa: 0, traducao: 'Em que universidade ela estudou?' },
+    { instrucao: C, frase: '___', opcoes: ['Was difficult it to learn the alphabet?', 'Was it difficult to learn the alphabet?', 'Did it difficult to learn the alphabet?'], certa: 1, traducao: 'Foi difícil aprender o alfabeto?' },
+    { instrucao: C, frase: '___', opcoes: ['Anybody does in your family speak English?', 'Does anybody in your family speaks English?', 'Does anybody in your family speak English?'], certa: 2, traducao: 'Alguém na sua família fala inglês?' }
+  ]
+});
+</script>
+</body>
+</html>

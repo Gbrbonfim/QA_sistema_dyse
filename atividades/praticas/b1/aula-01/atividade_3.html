@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 1 · Meet a language lover</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 01 · Leitura (Are you a language learner?)
+   Alinhado aos slides "Listening" (o poliglota Ioannis Ikonomou: curiosidade, viajar e
+   conversar com pessoas, usar o idioma para aprender) e "Talking Point" (desafios, como se
+   sente ao falar outro idioma, 10 idiomas básicos x 2 avançados). Conteúdo NOVO: a Carol
+   entrevista o Diego, que fala cinco idiomas. 20 questões: 12 de "próxima fala" + 8 de
+   compreensão. */
+const D = [
+  ['Carol', 'Diego, how many languages can you speak?'],
+  ['Diego', 'I can speak five: Spanish, Portuguese, English, French and some Korean.'],
+  ['Carol', 'Wow! Where were you born?'],
+  ['Diego', 'I was born in Uruguay, but I grew up in Brazil.'],
+  ['Carol', 'When did you start learning English?'],
+  ['Diego', 'When I was ten. I watched a lot of cartoons in English.'],
+  ['Carol', 'Why are you learning Korean now?'],
+  ['Diego', 'Because I love Korean series and I want to visit Seoul.'],
+  ['Carol', 'What is the most difficult thing for you?'],
+  ['Diego', 'The pronunciation. Sometimes people don\'t understand me.'],
+  ['Carol', 'How do you feel when you speak another language?'],
+  ['Diego', 'I feel free. It\'s like I have a different personality!'],
+  ['Carol', 'Do you study at home every day?'],
+  ['Diego', 'Yes, but I think travelling and talking to people is more important.'],
+  ['Carol', 'Is there a best method to learn a language?'],
+  ['Diego', 'Not really. You need to use the language to learn it.'],
+  ['Carol', 'Would you prefer to speak ten languages at a basic level or two at a very advanced level?'],
+  ['Diego', 'Two at an advanced level. I like to have deep conversations.']
+];
+const lado = q => q === 'Carol' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 1, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I can speak five: Spanish, Portuguese, English, French and some Korean.', 'I can to speak five: Spanish, Portuguese, English, French and some Korean.', 'I speak can five: Spanish, Portuguese, English, French and some Korean.'], 0, 'Falo cinco: espanhol, português, inglês, francês e um pouco de coreano.'),
+    prox(2, ['Wow! Where did you born?', 'Wow! Where were you born?', 'Wow! Where you were born?'], 1, 'Uau! Onde você nasceu?'),
+    prox(3, ['I born in Uruguay, but I grew up in Brazil.', 'I was born in Uruguay, but I grow up in Brazil yesterday.', 'I was born in Uruguay, but I grew up in Brazil.'], 2, 'Nasci no Uruguai, mas cresci no Brasil.'),
+    prox(4, ['When did you start learning English?', 'When you did start learning English?', 'When did you started learning English?'], 0, 'Quando você começou a aprender inglês?'),
+    prox(5, ['When I am ten. I watch a lot of cartoons in English.', 'When I was ten. I watched a lot of cartoons in English.', 'When I was ten. I am watching a lot of cartoons in English.'], 1, 'Quando eu tinha dez anos. Eu assistia a muitos desenhos em inglês.'),
+    prox(6, ['Why do you are learning Korean now?', 'Why you are learning Korean now?', 'Why are you learning Korean now?'], 2, 'Por que você está aprendendo coreano agora?'),
+    prox(7, ['Because I love Korean series and I want to visit Seoul.', 'Because I love Korean series and I want visit Seoul.', 'With my friends from Seoul.'], 0, 'Porque adoro séries coreanas e quero visitar Seul.'),
+    prox(9, ["The pronunciation. Sometimes people doesn't understand me.", "The pronunciation. Sometimes people don't understand me.", 'The pronunciation. Sometimes people not understand me.'], 1, 'A pronúncia. Às vezes as pessoas não me entendem.'),
+    prox(10, ['How you feel when you speak another language?', 'How does you feel when you speak another language?', 'How do you feel when you speak another language?'], 2, 'Como você se sente quando fala outro idioma?'),
+    prox(12, ['Do you study at home every day?', 'Are you study at home every day?', 'Does you study at home every day?'], 0, 'Você estuda em casa todos os dias?'),
+    prox(14, ['Is there a best method to learn a language?', 'There is a best method to learn a language?', 'Does there a best method to learn a language?'], 0, 'Existe um melhor método para aprender um idioma?'),
+    prox(15, ['Yes. You only need a good grammar book.', 'Not really. You need to use the language to learn it.', 'Not really. You need use the language to learning it.'], 1, 'Na verdade, não. Você precisa usar o idioma para aprendê-lo.'),
+    { instrucao: 'How many languages can Diego speak?', frase: '___', opcoes: ['Five.', 'Two.', 'Ten.'], certa: 0, traducao: 'Cinco.' },
+    { instrucao: 'Where was Diego born?', frase: 'In ___.', opcoes: ['Brazil', 'Uruguay', 'Korea'], certa: 1, traducao: 'No Uruguai.' },
+    { instrucao: 'How did Diego start learning English?', frase: 'He watched ___.', opcoes: ['the news', 'Korean series', 'cartoons in English'], certa: 2, traducao: 'Ele assistia a desenhos em inglês.' },
+    { instrucao: 'Why is Diego learning Korean?', frase: 'Because he loves Korean ___.', opcoes: ['series', 'food', 'teachers'], certa: 0, traducao: 'Porque ele adora séries coreanas.' },
+    { instrucao: 'What is the most difficult thing for Diego?', frase: 'The ___.', opcoes: ['grammar', 'pronunciation', 'alphabet'], certa: 1, traducao: 'A pronúncia.' },
+    { instrucao: 'How does Diego feel when he speaks another language?', frase: 'He feels ___.', opcoes: ['nervous', 'tired', 'free'], certa: 2, traducao: 'Ele se sente livre.' },
+    { instrucao: 'What is more important for Diego than studying at home?', frase: '___', opcoes: ['Travelling and talking to people.', 'Reading grammar books.', 'Watching cartoons.'], certa: 0, traducao: 'Viajar e conversar com pessoas.' },
+    { instrucao: 'What would Diego prefer?', frase: 'To speak ___.', opcoes: ['ten languages at a basic level', 'two languages at an advanced level', 'only Spanish'], certa: 1, traducao: 'Falar dois idiomas num nível avançado.' }
+  ]
+});
+</script>
+</body>
+</html>

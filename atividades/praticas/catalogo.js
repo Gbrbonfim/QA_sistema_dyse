@@ -1178,6 +1178,23 @@ window.DYSE_PRATICAS = {
         ]
       }
     ]
+  },
+  b1: {
+    course: 'ativ-b1',
+    nome: 'B1',
+    aulas: [
+      {
+        aula: 1,
+        titulo: 'Class 01 · Are you a language learner?',
+        atividades: [
+          { num: 1, titulo: "What's the best answer?", tipo: 'Escute e escolha', treina: 'Escuta · Perguntas pessoais', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Questions in the right order', tipo: 'Monte a frase', treina: 'Escrita · Ordem das palavras', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Meet a language lover', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Questions and answers about you', tipo: 'Escute e grave', treina: 'Fala · Perguntas e respostas', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Word order in questions', tipo: 'Make a Choice', treina: 'Gramática · Perguntas', minutos: '10 - 12', questoes: 24 }
+        ]
+      }
+    ]
   }
 };
 
