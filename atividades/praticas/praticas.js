@@ -300,8 +300,12 @@
   /* IMAGEM — escute e escolha */
   function renderImagem(item){
     const main = $('#pxMain');
+    // O texto da opção só fica escondido quando todas são fotos (a foto mostra a
+    // resposta). Com ícone, o desenho é só apoio — "#", balão, mesmo copo para
+    // small/large Coke, was/were... — então o texto aparece desde o início.
+    const soFotos = item.opcoes.every(o => !o.icon);
     main.innerHTML = '<p class="px-instr">' + esc(S.cfg.instrucao || 'Listen and choose the right picture') + '</p>' +
-      '<div class="px-imgs">' + item.opcoes.map((o, k) =>
+      '<div class="px-imgs' + (soFotos ? '' : ' com-texto') + '">' + item.opcoes.map((o, k) =>
         '<button type="button" class="px-img" id="pxImg' + k + '" onclick="DysePratica._img(' + k + ')">' +
           '<span class="key">' + 'ABCDEFGH'[k] + '</span><span class="ph">' +
             // "icon": desenho do Material Symbols no lugar da foto (vocabulário de objetos).
