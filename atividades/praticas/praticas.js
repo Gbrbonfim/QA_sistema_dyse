@@ -992,7 +992,7 @@
     if(prox){
       const url = dysePraticaUrl(prox.nivel, prox.aula, prox.num);
       return '<div class="px-next"><div><small>Próxima atividade liberada</small><b>' + esc(prox.titulo) + '</b>' +
-          '<span id="pxNextCount">Abrindo em <i>10</i>s…</span></div>' +
+          '<span id="pxNextCount">Abrindo em <i>' + CONTAGEM_SEG + '</i>s…</span></div>' +
           '<a class="px-btn" href="' + url + '" style="width:auto; margin:0; padding:12px 22px; text-decoration:none;">Ir agora ' + I('arrow_forward') + '</a></div>' +
         '<button class="px-btn ghost" onclick="DysePratica._ficar(\'' + voltar + '\')">Voltar para Atividades</button>';
     }
@@ -1064,10 +1064,11 @@
     if(prox) iniciarContagem(dysePraticaUrl(prox.nivel, prox.aula, prox.num));
   }
 
-  // Vai sozinho pra próxima atividade liberada em 10s (dá pra ir na hora ou voltar).
+  // Vai sozinho pra próxima atividade liberada em 30s (dá pra ir na hora ou voltar).
+  const CONTAGEM_SEG = 30;
   let CONTAGEM = null;
   function iniciarContagem(url){
-    let s = 10;
+    let s = CONTAGEM_SEG;
     CONTAGEM = setInterval(() => {
       s--;
       const el = document.querySelector('#pxNextCount i');
