@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 26 · My speech</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 26 · Leitura (The Most Important People in My Life)
+   Alinhado ao discurso da Shivani (pessoas importantes e o que fazem), ao vocabulário de
+   personalidade e ao "Grammar Point" (who / which / where). Revisão de comparativo.
+   Conteúdo NOVO: Priya ensaia o discurso com o professor Mr. Clark.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Mr. Clark', 'Priya, are you ready for your speech about important people?'],
+  ['Priya', 'Almost! Can I read you the first part?'],
+  ['Mr. Clark', 'Of course. Go ahead.'],
+  ['Priya', '"My grandmother is the person who taught me to cook."'],
+  ['Mr. Clark', 'Lovely. What else do you say about her?'],
+  ['Priya', "She's very supportive. She always encourages me when I'm nervous."],
+  ['Mr. Clark', 'Great. Who else is in your speech?'],
+  ['Priya', "My neighbour Tom. He's the man who fixes everything in our building."],
+  ['Mr. Clark', 'Ha ha! Every building needs someone like that.'],
+  ['Priya', "And he's very reliable. He never forgets to help."],
+  ['Mr. Clark', 'Do you mention any places?'],
+  ['Priya', 'Yes, the library where I study after school. The librarian is really kind.'],
+  ['Mr. Clark', 'Is she the woman who recommended those adventure books?'],
+  ['Priya', "Yes! She's very creative. She organises a reading club every month."],
+  ['Mr. Clark', 'Very nice. And what about your friends?'],
+  ['Priya', "My best friend Leo is extroverted. He's the one who makes everybody laugh."],
+  ['Mr. Clark', 'And you? Are you extroverted too?'],
+  ['Priya', "No, I'm a bit introverted. That's why I'm nervous about the speech!"],
+  ['Mr. Clark', "Don't worry. You're more confident than you think."],
+  ['Priya', "Thanks! You're a teacher who always believes in his students."]
+];
+const lado = q => q === 'Mr. Clark' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 26, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Almost! Can I read you the first part?', 'Almost! Can I reading you the first part?', 'Almost! Can I to read you the first part?'], 0, 'Quase! Posso ler a primeira parte para o senhor?'),
+    prox(3, ['"My grandmother is the person which taught me to cook."', '"My grandmother is the person who taught me to cook."', '"My grandmother is the place where taught me to cook."'], 1, '"A minha avó é a pessoa que me ensinou a cozinhar."'),
+    prox(5, ["She's very supportive. She never encourages me when I'm nervous.", "She's very supportive. She always encourage me when I'm nervous.", "She's very supportive. She always encourages me when I'm nervous."], 2, 'Ela me apoia muito. Sempre me encoraja quando estou nervosa.'),
+    prox(7, ["My neighbour Tom. He's the man who fixes everything in our building.", "My neighbour Tom. He's the man which fixes everything in our building.", "My neighbour Tom. He's the man where fixes everything in our building."], 0, 'O meu vizinho Tom. Ele é o homem que conserta tudo no nosso prédio.'),
+    prox(9, ["And he's very reliable. He always forgets to help.", "And he's very reliable. He never forgets to help.", "And he's very reliability. He never forgets to help."], 1, 'E ele é muito confiável. Nunca esquece de ajudar.'),
+    prox(11, ['Yes, the library which I study after school. The librarian is really kind.', 'Yes, the library who I study after school. The librarian is really kind.', 'Yes, the library where I study after school. The librarian is really kind.'], 2, 'Sim, a biblioteca onde estudo depois da aula. A bibliotecária é muito gentil.'),
+    prox(12, ['Is she the woman who recommended those adventure books?', 'Is she the woman which recommended those adventure books?', 'Is she the woman where recommended those adventure books?'], 0, 'Ela é a mulher que recomendou aqueles livros de aventura?'),
+    prox(13, ["Yes! She's very creative. She organise a reading club every month.", "Yes! She's very creative. She organises a reading club every month.", "Yes! She's very creatively. She organises a reading club every month."], 1, 'Sim! Ela é muito criativa. Organiza um clube de leitura todo mês.'),
+    prox(15, ["My best friend Leo is introverted. He's the one who makes everybody laugh at parties.", "My best friend Leo is extroverted. He's the one which makes everybody laugh.", "My best friend Leo is extroverted. He's the one who makes everybody laugh."], 2, 'O meu melhor amigo, o Leo, é extrovertido. É ele que faz todo mundo rir.'),
+    prox(17, ["No, I'm a bit introverted. That's why I'm nervous about the speech!", "No, I'm a bit extroverted. That's why I'm nervous about the speech!", "No, I'm a bit introverted. That's why I'm not nervous about the speech!"], 0, 'Não, sou um pouco introvertida. É por isso que estou nervosa com o discurso!'),
+    prox(18, ["Don't worry. You're confidenter than you think.", "Don't worry. You're more confident than you think.", "Don't worry. You're more confident that you think."], 1, 'Não se preocupe. Você é mais confiante do que pensa.'),
+    prox(19, ["Thanks! You're a teacher which always believes in his students.", "Thanks! You're a teacher who always believe in his students.", "Thanks! You're a teacher who always believes in his students."], 2, 'Obrigada! O senhor é um professor que sempre acredita nos alunos.'),
+    { instrucao: "What did Priya's grandmother teach her?", frase: '___', opcoes: ['To cook.', 'To ride a bike.', 'To read.'], certa: 0, traducao: 'A cozinhar.' },
+    { instrucao: 'How does Priya describe her grandmother?', frase: '___', opcoes: ['Introverted.', 'Supportive.', 'Ambitious.'], certa: 1, traducao: 'Ela apoia muito.' },
+    { instrucao: 'What does Tom do in the building?', frase: '___', opcoes: ['He cleans the windows.', 'He drives the bus.', 'He fixes everything.'], certa: 2, traducao: 'Ele conserta tudo.' },
+    { instrucao: 'Where does Priya study after school?', frase: '___', opcoes: ['At the library.', 'At home.', 'At a café.'], certa: 0, traducao: 'Na biblioteca.' },
+    { instrucao: 'What does the librarian organise every month?', frase: '___', opcoes: ['A party.', 'A reading club.', 'A trip.'], certa: 1, traducao: 'Um clube de leitura.' },
+    { instrucao: 'Who makes everybody laugh?', frase: '___', opcoes: ['Mr. Clark.', 'Tom.', 'Leo.'], certa: 2, traducao: 'O Leo.' },
+    { instrucao: 'Why is Priya nervous?', frase: '___', opcoes: ["She's a bit introverted.", 'She forgot her speech.', "She's sick."], certa: 0, traducao: 'Ela é um pouco introvertida.' },
+    { instrucao: 'What does Mr. Clark think about Priya?', frase: '___', opcoes: ["She's too nervous to speak.", "She's more confident than she thinks.", "She's very extroverted."], certa: 1, traducao: 'Ela é mais confiante do que pensa.' }
+  ]
+});
+</script>
+</body>
+</html>

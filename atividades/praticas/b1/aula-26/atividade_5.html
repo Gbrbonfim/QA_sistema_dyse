@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 26 · Who, which or where?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 26 · Gramática (The Most Important People in My Life)
+   Alinhado ao "Grammar Point" (defining relative clauses: who = pessoas, which = coisas,
+   that = pessoas e coisas, where = lugares, com sujeito depois) e ao vocabulário de
+   personalidade. Itens com who / which / where não oferecem "that" como isca (também
+   estaria certo). Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 26, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'A nurse is a person ___ takes care of sick people.', opcoes: ['who', 'which', 'where'], certa: 0, traducao: 'Um enfermeiro é uma pessoa que cuida de doentes.' },
+    { frase: 'A fridge is something ___ keeps food cold.', opcoes: ['who', 'which', 'where'], certa: 1, traducao: 'Uma geladeira é algo que mantém a comida fria.' },
+    { frase: 'A library is a place ___ you can borrow books.', opcoes: ['who', 'which', 'where'], certa: 2, traducao: 'Uma biblioteca é um lugar onde você pode pegar livros emprestados.' },
+    { frase: 'My mom is the person ___ makes the decisions at home.', opcoes: ['who', 'where', 'which'], certa: 0, traducao: 'A minha mãe é a pessoa que toma as decisões em casa.' },
+    { frase: 'This is the café ___ we met for the first time.', opcoes: ['who', 'where', 'which'], certa: 1, traducao: 'Este é o café onde nos conhecemos.' },
+    { frase: 'Is this the app ___ helps you learn English?', opcoes: ['who', 'where', 'which'], certa: 2, traducao: 'Este é o aplicativo que te ajuda a aprender inglês?' },
+    { instrucao: 'Which word can replace both "who" and "which"?', frase: '___', opcoes: ['that', 'where', 'what'], certa: 0, traducao: 'That pode substituir who e which.' },
+    { frase: 'The verb after "where" needs a ___.', opcoes: ['preposition', 'subject', 'comma'], certa: 1, traducao: 'O verbo depois de where precisa de um sujeito.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['A pharmacy is a place where buy medicine.', 'A pharmacy is a place who you buy medicine.', 'A pharmacy is a place where you buy medicine.'], certa: 2, traducao: 'Uma farmácia é um lugar onde você compra remédio.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ["He's the man who fixed my car.", "He's the man which fixed my car.", "He's the man where fixed my car."], certa: 0, traducao: 'Ele é o homem que consertou o meu carro.' },
+    { frase: "She never cancels plans. She's very ___.", opcoes: ['creative', 'reliable', 'introverted'], certa: 1, traducao: 'Ela nunca cancela planos. É muito confiável.' },
+    { frase: "He always has original ideas. He's ___.", opcoes: ['ambitious', 'independent', 'creative'], certa: 2, traducao: 'Ele sempre tem ideias originais. É criativo.' },
+    { frase: "She speaks clearly in big meetings. She's ___.", opcoes: ['confident', 'introverted', 'easy-going'], certa: 0, traducao: 'Ela fala com clareza em reuniões grandes. É confiante.' },
+    { frase: "He stays calm when things go wrong. He's ___.", opcoes: ['ambitious', 'easy-going', 'reliable'], certa: 1, traducao: 'Ele fica calmo quando as coisas dão errado. É tranquilo.' },
+    { frase: "She wants to be the boss one day. She's ___.", opcoes: ['supportive', 'introverted', 'ambitious'], certa: 2, traducao: 'Ela quer ser a chefe um dia. É ambiciosa.' },
+    { frase: "He likes doing things by himself. He's ___.", opcoes: ['independent', 'extroverted', 'supportive'], certa: 0, traducao: 'Ele gosta de fazer as coisas sozinho. É independente.' },
+    { frase: "She listens to me and encourages me. She's ___.", opcoes: ['ambitious', 'supportive', 'independent'], certa: 1, traducao: 'Ela me ouve e me encoraja. Me apoia muito.' },
+    { frase: "He loves parties and meeting new people. He's ___.", opcoes: ['introverted', 'reliable', 'extroverted'], certa: 2, traducao: 'Ele adora festas e conhecer gente nova. É extrovertido.' },
+    { frase: "She prefers quiet evenings at home. She's ___.", opcoes: ['introverted', 'extroverted', 'ambitious'], certa: 0, traducao: 'Ela prefere noites tranquilas em casa. É introvertida.' },
+    { frase: 'The man ___ brings our letters is very friendly.', opcoes: ['which', 'who', 'where'], certa: 1, traducao: 'O homem que traz as nossas cartas é muito simpático.' },
+    { frase: 'The town ___ my grandparents live is very small.', opcoes: ['who', 'which', 'where'], certa: 2, traducao: 'A cidade onde os meus avós moram é muito pequena.' },
+    { frase: 'The book ___ you lent me was great.', opcoes: ['that', 'who', 'where'], certa: 0, traducao: 'O livro que você me emprestou era ótimo.' },
+    { frase: 'A dentist is someone ___ looks after your teeth.', opcoes: ['which', 'who', 'where'], certa: 1, traducao: 'Um dentista é alguém que cuida dos seus dentes.' },
+    { instrucao: 'Which sentence has a relative clause?', frase: '___', opcoes: ["She's kind and funny.", 'I like my teacher a lot.', "She's the teacher who helped me most."], certa: 2, traducao: 'Ela é a professora que mais me ajudou.' }
+  ]
+});
+</script>
+</body>
+</html>

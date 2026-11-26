@@ -1427,6 +1427,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'My favourite city', tipo: 'Escute e grave', treina: 'Fala · Cidades e viagens', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'The best, the worst', tipo: 'Make a Choice', treina: 'Gramática · Comparativos e superlativos', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 26,
+        titulo: 'Class 26 · The Most Important People in My Life',
+        atividades: [
+          { num: 1, titulo: 'Reliable or creative?', tipo: 'Escute e escolha', treina: 'Escuta · Personalidade', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'The person who helps me', tipo: 'Monte a frase', treina: 'Escrita · Relative clauses', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'My speech', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'People who make my life work', tipo: 'Escute e grave', treina: 'Fala · Personalidade', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Who, which or where?', tipo: 'Make a Choice', treina: 'Gramática · Relative clauses', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 26 · The person who helps me</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 26 · Escrita (The Most Important People in My Life)
+   Alinhado ao "Grammar Point" (defining relative clauses: who para pessoas, which para
+   coisas, that para os dois, where para lugares com sujeito depois) e ao vocabulário de
+   personalidade. Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 26, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Ela é a pessoa que me ajuda com tudo.'), palavras: ['She', 'is', 'the', 'person', 'who', 'helps', 'me', 'with', 'everything'], isca: ['which'], fim: '.', traducao: 'Ela é a pessoa que me ajuda com tudo.' },
+    { contexto: M('Esta é a casa onde eu cresci.'), palavras: ['This', 'is', 'the', 'house', 'where', 'I', 'grew', 'up'], isca: ['who'], fim: '.', traducao: 'Esta é a casa onde eu cresci.' },
+    { contexto: M('Um chef é alguém que cozinha num restaurante.'), palavras: ['A', 'chef', 'is', 'someone', 'who', 'cooks', 'in', 'a', 'restaurant'], isca: ['where'], fim: '.', traducao: 'Um chef é alguém que cozinha num restaurante.' },
+    { contexto: M('Uma geladeira é uma coisa que mantém a comida fria.'), palavras: ['A', 'fridge', 'is', 'something', 'which', 'keeps', 'food', 'cold'], isca: ['who'], fim: '.', traducao: 'Uma geladeira é uma coisa que mantém a comida fria.' },
+    { contexto: M('Uma biblioteca é um lugar onde você pode pegar livros emprestados.'), palavras: ['A', 'library', 'is', 'a', 'place', 'where', 'you', 'can', 'borrow', 'books'], isca: ['who'], fim: '.', traducao: 'Uma biblioteca é um lugar onde você pode pegar livros emprestados.' },
+    { contexto: M('O motorista que nos leva para a escola é muito simpático.'), palavras: ['The', 'driver', 'who', 'takes', 'us', 'to', 'school', 'is', 'very', 'nice'], isca: ['where'], fim: '.', traducao: 'O motorista que nos leva para a escola é muito simpático.' },
+    { contexto: M('Este é o celular que eu comprei ontem.'), palavras: ['This', 'is', 'the', 'phone', 'that', 'I', 'bought', 'yesterday'], isca: ['who'], fim: '.', traducao: 'Este é o celular que comprei ontem.' },
+    { contexto: M('A minha mãe é a pessoa que toma as decisões em casa.'), palavras: ['My', 'mom', 'is', 'the', 'person', 'who', 'makes', 'the', 'decisions', 'at', 'home'], isca: ['does'], fim: '.', traducao: 'A minha mãe é a pessoa que toma as decisões em casa.' },
+    { contexto: M('O parque onde a gente brincava fechou.'), palavras: ['The', 'park', 'where', 'we', 'played', 'has', 'closed'], isca: ['who'], fim: '.', traducao: 'O parque onde a gente brincava fechou.' },
+    { contexto: M('A minha irmã é muito confiável.'), palavras: ['My', 'sister', 'is', 'very', 'reliable'], isca: ['relied'], fim: '.', traducao: 'A minha irmã é muito confiável.' },
+    { contexto: M('Ele é ambicioso e trabalha muito.'), palavras: ["He's", 'ambitious', 'and', 'works', 'very', 'hard'], isca: ['hardly'], fim: '.', traducao: 'Ele é ambicioso e trabalha muito.' },
+    { contexto: M('Sou introvertido, então prefiro noites tranquilas.'), palavras: ["I'm", 'introverted,', 'so', 'I', 'prefer', 'quiet', 'evenings'], isca: ['quietly'], fim: '.', traducao: 'Sou introvertido, então prefiro noites tranquilas.' },
+    { contexto: M('Ela faz amigos com facilidade.'), palavras: ['She', 'makes', 'friends', 'easily'], isca: ['does'], fim: '.', traducao: 'Ela faz amigos com facilidade.' },
+    { contexto: M('Ele fica calmo mesmo quando as coisas dão errado.'), palavras: ['He', 'stays', 'calm', 'even', 'when', 'things', 'go', 'wrong'], isca: ['stay'], fim: '.', traducao: 'Ele fica calmo mesmo quando as coisas dão errado.' },
+    { contexto: M('O meu amigo me apoia muito.'), palavras: ['My', 'friend', 'is', 'very', 'supportive'], isca: ['support'], fim: '.', traducao: 'O meu amigo me apoia muito.' },
+    { contexto: M('Um segurança é alguém que mantém o prédio seguro.'), palavras: ['A', 'security', 'guard', 'is', 'someone', 'who', 'keeps', 'the', 'building', 'safe'], isca: ['where'], fim: '.', traducao: 'Um segurança é alguém que mantém o prédio seguro.' },
+    { contexto: M('Uma padaria é um lugar onde você compra pão.'), palavras: ['A', 'bakery', 'is', 'a', 'place', 'where', 'you', 'buy', 'bread'], isca: ['who'], fim: '.', traducao: 'Uma padaria é um lugar onde você compra pão.' },
+    { contexto: M('Essas são as pessoas que fazem a minha vida funcionar.'), palavras: ['These', 'are', 'the', 'people', 'who', 'make', 'my', 'life', 'work'], isca: ['makes'], fim: '.', traducao: 'Essas são as pessoas que fazem a minha vida funcionar.' },
+    { contexto: M('É um aplicativo que te ajuda a aprender inglês.'), palavras: ["It's", 'an', 'app', 'which', 'helps', 'you', 'learn', 'English'], isca: ['who'], fim: '.', traducao: 'É um aplicativo que te ajuda a aprender inglês.' },
+    { contexto: M('Você conhece alguém que fala japonês?'), palavras: ['Do', 'you', 'know', 'anyone', 'who', 'speaks', 'Japanese'], isca: ['where'], fim: '?', traducao: 'Você conhece alguém que fala japonês?' }
+  ]
+});
+</script>
+</body>
+</html>

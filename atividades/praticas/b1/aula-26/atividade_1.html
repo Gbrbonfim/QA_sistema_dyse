@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 26 · Reliable or creative?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 26 · Escuta (The Most Important People in My Life)
+   Alinhado ao vocabulário de personalidade (reliable, creative, confident, easy-going,
+   ambitious, independent, supportive, introverted, extroverted), ao discurso da Shivani
+   (pessoas que fazem a vida funcionar) e ao "Grammar Point" (defining relative clauses:
+   who / which / that / where). Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const K = 'Listen. Is it about a person, a thing or a place?', W = 'Listen to the definition. What is it?';
+const PE = 'a person', TH = 'a thing', PL = 'a place';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 26, num: 1, tipo: 'imagem',
+  instrucao: 'Listen. What is this person like?',
+  itens: [
+    q('She never cancels plans and always arrives on time.', 'reliable', ['creative', 'introverted'], 'psychology'),
+    q('He has amazing, original ideas for every project.', 'creative', ['reliable', 'easy-going'], 'psychology'),
+    q('She speaks in front of big groups without feeling nervous.', 'confident', ['introverted', 'supportive'], 'psychology'),
+    q('Nothing worries him. He stays calm when things go wrong.', 'easy-going', ['ambitious', 'extroverted'], 'psychology'),
+    q('She wants to be the director of the company in five years.', 'ambitious', ['easy-going', 'introverted'], 'psychology'),
+    q('He likes to do things by himself, without any help.', 'independent', ['supportive', 'extroverted'], 'psychology'),
+    q("When I'm sad, she listens and encourages me.", 'supportive', ['independent', 'ambitious'], 'psychology'),
+    q('He prefers a quiet night with a book to a big party.', 'introverted', ['extroverted', 'confident'], 'psychology'),
+    q('She loves meeting new people and talking at parties.', 'extroverted', ['introverted', 'independent'], 'psychology'),
+    { instrucao: K, ...q("It's someone who repairs cars.", PE, [TH, PL], 'help') },
+    { instrucao: K, ...q("It's something which you use to cut paper.", TH, [PE, PL], 'help') },
+    { instrucao: K, ...q("It's a place where you can borrow books.", PL, [TH, PE], 'help') },
+    { instrucao: K, ...q("It's a machine that washes the dishes.", TH, [PL, PE], 'help') },
+    { instrucao: K, ...q("It's a person that teaches at a university.", PE, [PL, TH], 'help') },
+    { instrucao: K, ...q("It's a place where people watch films on a big screen.", PL, [PE, TH], 'help') },
+    { instrucao: W, ...q("It's a person who flies planes.", 'a pilot', ['a chef', 'a nurse'], 'help') },
+    { instrucao: W, ...q("It's a place where people go to see wild animals.", 'a zoo', ['a library', 'a bank'], 'help') },
+    { instrucao: W, ...q("It's a thing which keeps your food cold.", 'a fridge', ['an oven', 'a toaster'], 'help') },
+    { instrucao: W, ...q("It's someone who takes care of sick people in a hospital.", 'a nurse', ['a pilot', 'a baker'], 'help') },
+    { instrucao: W, ...q("It's a place where you can buy medicine.", 'a pharmacy', ['a bakery', 'a cinema'], 'help') },
+    { instrucao: W, ...q("It's something that tells you the time.", 'a clock', ['a map', 'a mirror'], 'help') },
+    { instrucao: 'Listen. Who is the speaker talking about?', ...q("She's the lady who makes the best bread in our neighbourhood.", 'the baker', ['the bus driver', 'the doctor'], 'forum') },
+    { instrucao: 'Listen. Who is the speaker talking about?', ...q("He's the man who brings letters and parcels to our door every morning.", 'the postman', ['the baker', 'the teacher'], 'forum') },
+    { instrucao: 'Listen. What is the best friend like?', ...q('My best friend is the person who always listens and encourages me.', 'supportive', ['introverted', 'ambitious'], 'psychology') }
+  ]
+});
+</script>
+</body>
+</html>
