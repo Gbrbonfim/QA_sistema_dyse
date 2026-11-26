@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 5 · Shopping for sneakers</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 05 and 06 · Leitura (Buying Clothes at a Store)
+   Alinhado ao Speaking do slide (o cliente pergunta sobre outro tamanho ou cor, o provador e o
+   preço; o vendedor usa "Sorry, we don't have it in..." e "You can pay at the register") e ao
+   uso de them para itens no plural (sneakers, shorts, pants). Conteúdo NOVO: a Ana compra
+   tênis e shorts. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Assistant', 'Hi! Can I help you?'],
+  ['Ana', 'Yes, please. I really like these white sneakers. Do you have them in size 7?'],
+  ['Assistant', "Sorry, we don't have them in white. We have them in black and pink."],
+  ['Ana', 'OK. Can I try on the pink sneakers?'],
+  ['Assistant', 'Sure. Here you are.'],
+  ['Ana', 'They fit well! How much are they?'],
+  ['Assistant', "They're $59.90."],
+  ['Ana', "Great. I'll take them. And do you have these shorts in small?"],
+  ['Assistant', 'Let me check. Yes, we do. What color would you like?'],
+  ['Ana', 'Blue, please. Can I try them on?'],
+  ['Assistant', 'Of course. The fitting room is over there.'],
+  ['Ana', "Hmm... they're too big. Do you have them in extra small?"],
+  ['Assistant', "Sorry, we don't have them in extra small."],
+  ['Ana', "OK, no, thank you. Just the sneakers, then."],
+  ['Assistant', 'No problem! You can pay at the register.'],
+  ['Ana', 'Thanks!']
+];
+const lado = q => q === 'Assistant' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 5, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes, please. I really like these white sneakers. Do you have them in size 7?', 'Yes, please. I really like this white sneakers. Do you have it in size 7?', 'Yes, please. I really like these white sneakers. Do you has them in size 7?'], 0, 'Sim, por favor. Gostei muito destes tênis brancos. Vocês têm no tamanho 7?'),
+    prox(2, ["Sorry, we don't have it in white.", "Sorry, we don't have them in white. We have them in black and pink.", "Sorry, we not have them in white."], 1, 'Desculpe, não temos em branco. Temos em preto e rosa.'),
+    prox(3, ['OK. Can I try in the pink sneakers?', 'OK. Can I try on this pink sneakers?', 'OK. Can I try on the pink sneakers?'], 2, 'Certo. Posso provar o tênis rosa?'),
+    prox(4, ['Sure. Here you are.', 'Sure. Here are you.', 'Sure. Here you is.'], 0, 'Claro. Aqui está.'),
+    prox(5, ['They fits well! How much are they?', 'They fit well! How much are they?', 'They fit well! How much is they?'], 1, 'Serviram bem! Quanto custam?'),
+    prox(6, ["It's $59.90.", "They is $59.90.", "They're $59.90."], 2, 'Custam 59,90 dólares.'),
+    prox(7, ["Great. I'll take them. And do you have these shorts in small?", "Great. I'll take it. And do you have this shorts in small?", "Great. I'll take them. And do you have these shorts in smaller?"], 0, 'Ótimo. Vou levar. E vocês têm estes shorts em pequeno?'),
+    prox(8, ['Let me check. Yes, we are. What color would you like?', 'Let me check. Yes, we do. What color would you like?', 'Let me check. Yes, we do. What color you would like?'], 1, 'Deixa eu ver. Sim, temos. Que cor você gostaria?'),
+    prox(9, ['Blue, please. Can I try it on?', 'Blue, please. Can I try on them?', 'Blue, please. Can I try them on?'], 2, 'Azul, por favor. Posso provar?'),
+    prox(11, ["Hmm... they're too big. Do you have them in extra small?", "Hmm... it's too big. Do you have it in extra large?", "Hmm... they're too small. Do you have them in extra small?"], 0, 'Hmm... estão grandes demais. Vocês têm em extra pequeno?'),
+    prox(12, ["Sorry, we don't have it in extra small.", "Sorry, we don't have them in extra small.", "Sorry, we haven't them in extra small."], 1, 'Desculpe, não temos em extra pequeno.'),
+    prox(14, ['No problem! You can pay in the fitting room.', 'No problem! You can paying at the register.', 'No problem! You can pay at the register.'], 2, 'Sem problema! Você pode pagar no caixa.'),
+    { instrucao: 'What does Ana like first?', frase: 'White ___.', opcoes: ['sneakers', 'shorts', 'jeans'], certa: 0, traducao: 'Tênis brancos.' },
+    { instrucao: 'What colors does the store have?', frase: 'Black and ___.', opcoes: ['white', 'pink', 'blue'], certa: 1, traducao: 'Preto e rosa.' },
+    { instrucao: 'How much are the sneakers?', frase: '$___.', opcoes: ['49.90', '19.90', '59.90'], certa: 2, traducao: '59,90 dólares.' },
+    { instrucao: 'Does Ana buy the sneakers?', frase: '___', opcoes: ['Yes, she does.', "No, she doesn't.", 'Yes, the shorts.'], certa: 0, traducao: 'Sim.' },
+    { instrucao: 'What color shorts would she like?', frase: '___.', opcoes: ['Pink', 'Blue', 'Black'], certa: 1, traducao: 'Azuis.' },
+    { instrucao: 'What is the problem with the shorts?', frase: "They're too ___.", opcoes: ['small', 'expensive', 'big'], certa: 2, traducao: 'Estão grandes demais.' },
+    { instrucao: 'Does the store have the shorts in extra small?', frase: '___', opcoes: ["No, it doesn't.", 'Yes, it does.', 'Yes, in blue.'], certa: 0, traducao: 'Não.' },
+    { instrucao: 'What does Ana buy?', frase: 'Just the ___.', opcoes: ['shorts', 'sneakers', 'jacket'], certa: 1, traducao: 'Só o tênis.' }
+  ]
+});
+</script>
+</body>
+</html>

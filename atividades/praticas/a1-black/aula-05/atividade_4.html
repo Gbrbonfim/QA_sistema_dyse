@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 5 · The shop assistant answers</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 05 and 06 · Escrita (Buying Clothes at a Store)
+   Alinhado às falas do vendedor no slide (Can I help you? / Let me check. / Yes, we do. / Here
+   you are. / Of course. / The fitting room is over there, next to the mirrors. / How is the
+   T-shirt? / It's $19.90. / You can pay at the register. / Sorry, we don't have it in...).
+   Conteúdo NOVO. A isca é a palavra errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 5, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Oi! Posso ajudar?'), palavras: ['Hi!', 'Can', 'I', 'help', 'you'], isca: ['your'], fim: '?', traducao: 'Oi! Posso ajudar?' },
+    { contexto: M('Deixa eu ver. Sim, temos.'), palavras: ['Let', 'me', 'check.', 'Yes,', 'we', 'do'], isca: ['are'], fim: '.', traducao: 'Deixa eu ver. Sim, temos.' },
+    { contexto: M('Aqui está.'), palavras: ['Here', 'you', 'are'], isca: ['is'], fim: '.', traducao: 'Aqui está.' },
+    { contexto: M('Claro. O provador é ali, ao lado dos espelhos.'), palavras: ['Of', 'course.', 'The', 'fitting', 'room', 'is', 'over', 'there,', 'next', 'to', 'the', 'mirrors'], isca: ['are'], fim: '.', traducao: 'Claro. O provador é ali, ao lado dos espelhos.' },
+    { contexto: M('Como ficou a camiseta?'), palavras: ['How', 'is', 'the', 'T-shirt'], isca: ['are'], fim: '?', traducao: 'Como ficou a camiseta?' },
+    { contexto: M('Custa 19,90 dólares.'), palavras: ["It's", 'nineteen', 'ninety'], isca: ['ninety-nine'], fim: '.', traducao: 'Custa 19,90.' },
+    { contexto: M('Você pode pagar no caixa ali.'), palavras: ['You', 'can', 'pay', 'at', 'the', 'register', 'over', 'there'], isca: ['in'], fim: '.', traducao: 'Você pode pagar no caixa ali.' },
+    { contexto: M('Desculpe, não temos em médio.'), palavras: ['Sorry,', 'we', "don't", 'have', 'it', 'in', 'medium'], isca: ['not'], fim: '.', traducao: 'Desculpe, não temos em médio.' },
+    { contexto: M('Sim, temos em azul.'), palavras: ['Yes,', 'we', 'have', 'it', 'in', 'blue'], isca: ['on'], fim: '.', traducao: 'Sim, temos em azul.' },
+    { contexto: M('Ótimo! Você pode pagar no caixa.'), palavras: ['Great!', 'You', 'can', 'pay', 'at', 'the', 'register'], isca: ['buy'], fim: '.', traducao: 'Ótimo! Você pode pagar no caixa.' },
+    { contexto: M('Claro! Você pode provar.'), palavras: ['Of', 'course!', 'You', 'can', 'try', 'it', 'on'], isca: ['in'], fim: '.', traducao: 'Claro! Você pode provar.' },
+    { contexto: M('Perfeito! Vou deixar pronto para você.'), palavras: ['Perfect!', "I'll", 'get', 'it', 'ready', 'for', 'you'], isca: ['to'], fim: '.', traducao: 'Perfeito! Vou deixar pronto para você.' },
+    { contexto: M('Custam 24,90 dólares.'), palavras: ["They're", 'twenty-four', 'ninety'], isca: ["It's"], fim: '.', traducao: 'Custam 24,90.' },
+    { contexto: M('Desculpe, não temos elas em pequeno.'), palavras: ['Sorry,', 'we', "don't", 'have', 'them', 'in', 'small'], isca: ['it'], fim: '.', traducao: 'Desculpe, não temos elas em pequeno.' },
+    { contexto: M('Sim, aqui está.'), palavras: ['Yes,', 'here', 'you', 'are'], isca: ['is'], fim: '.', traducao: 'Sim, aqui está.' },
+    { contexto: M('Claro. O provador é ali.'), palavras: ['Sure.', 'The', 'fitting', 'room', 'is', 'over', 'there'], isca: ['here'], fim: '.', traducao: 'Claro. O provador é ali.' },
+    { contexto: M('Que tamanho?'), palavras: ['What', 'size'], isca: ['color'], fim: '?', traducao: 'Que tamanho?' },
+    { contexto: M('Que cor você gostaria?'), palavras: ['What', 'color', 'would', 'you', 'like'], isca: ['size'], fim: '?', traducao: 'Que cor você gostaria?' },
+    { contexto: M('Como ficaram as calças?'), palavras: ['How', 'are', 'the', 'pants'], isca: ['is'], fim: '?', traducao: 'Como ficaram as calças?' },
+    { contexto: M('Temos em pequeno, médio e grande.'), palavras: ['We', 'have', 'it', 'in', 'small,', 'medium', 'and', 'large'], isca: ['or'], fim: '.', traducao: 'Temos em pequeno, médio e grande.' }
+  ]
+});
+</script>
+</body>
+</html>

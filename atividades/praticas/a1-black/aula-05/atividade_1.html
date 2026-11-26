@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 5 · What are they wearing?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 05 and 06 · Escuta (Buying Clothes at a Store)
+   Alinhado ao vocabulário do slide: roupas (jeans, T-shirt, dress, jacket, sneakers, shirt,
+   shorts, pants, leggings), cores e "I'm wearing a/an...". Conteúdo NOVO: o aluno ouve a frase
+   e escolhe a roupa com a cor certa. As iscas mudam a cor OU a peça. 24 questões. */
+const icone = s => /sneakers/.test(s) ? 'steps' : /dress/.test(s) ? 'styler' : /jacket/.test(s) ? 'checkroom' : 'apparel';
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: icone(c) })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 5, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the right clothes',
+  itens: [
+    q("I'm wearing blue jeans.", 'blue jeans', ['black jeans', 'blue shorts', 'blue dress']),
+    q("She's wearing a red dress.", 'red dress', ['red shirt', 'black dress', 'red jacket']),
+    q("I'm wearing a white T-shirt.", 'white T-shirt', ['white shirt', 'gray T-shirt', 'white dress']),
+    q("He's wearing a black jacket.", 'black jacket', ['brown jacket', 'black shirt', 'black jeans']),
+    q("I'm wearing white sneakers.", 'white sneakers', ['black sneakers', 'white shorts', 'white leggings']),
+    q("She's wearing gray leggings.", 'gray leggings', ['gray pants', 'black leggings', 'gray shorts']),
+    q("I'm wearing brown pants.", 'brown pants', ['brown shorts', 'black pants', 'brown jacket']),
+    q("He's wearing a blue shirt.", 'blue shirt', ['blue T-shirt', 'white shirt', 'blue jacket']),
+    q("I'm wearing black shorts.", 'black shorts', ['black pants', 'blue shorts', 'black leggings']),
+    q("She's wearing a green jacket.", 'green jacket', ['green dress', 'gray jacket', 'green shirt']),
+    q("I like this yellow T-shirt.", 'yellow T-shirt', ['yellow shirt', 'white T-shirt', 'yellow dress']),
+    q("These black jeans are beautiful.", 'black jeans', ['blue jeans', 'black shorts', 'black pants']),
+    q("Do you have this pink dress in small?", 'pink dress', ['red dress', 'pink shirt', 'pink jacket']),
+    q("I really like these red sneakers.", 'red sneakers', ['red shorts', 'white sneakers', 'red leggings']),
+    q("This gray jacket is too big.", 'gray jacket', ['gray shirt', 'green jacket', 'gray dress']),
+    q("These blue shorts are too small.", 'blue shorts', ['blue pants', 'black shorts', 'blue leggings']),
+    q("I'm looking for white pants.", 'white pants', ['white shorts', 'gray pants', 'white jeans']),
+    q("How much is this orange shirt?", 'orange shirt', ['orange T-shirt', 'brown shirt', 'orange jacket']),
+    q("He's wearing a black T-shirt and blue jeans.", 'black T-shirt', ['black shirt', 'blue T-shirt', 'black dress']),
+    q("She's wearing purple leggings.", 'purple leggings', ['purple pants', 'pink leggings', 'purple shorts']),
+    q("Can I try on this brown jacket?", 'brown jacket', ['brown shirt', 'black jacket', 'brown dress']),
+    q("I'll take the white dress.", 'white dress', ['white shirt', 'blue dress', 'white T-shirt']),
+    q("Do you have these gray sneakers in large?", 'gray sneakers', ['gray shorts', 'black sneakers', 'gray leggings']),
+    q("I'm wearing a green T-shirt and black pants.", 'green T-shirt', ['green shirt', 'gray T-shirt', 'green jacket'])
+  ]
+});
+</script>
+</body>
+</html>

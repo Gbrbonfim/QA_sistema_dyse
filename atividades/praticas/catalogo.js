@@ -1041,6 +1041,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: "I'll have, I'd like, Can I have?", tipo: 'Make a Choice', treina: "Gramática · I'll have / a, an", minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Drive-thru talk', tipo: 'Make a Choice', treina: 'Gramática · Perguntas e respostas', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 5,
+        titulo: 'Class 05 and 06 · Functional Plus: Buying Clothes at a Store',
+        atividades: [
+          { num: 1, titulo: 'What are they wearing?', tipo: 'Escute e escolha', treina: 'Escuta · Roupas e cores', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'What does the customer want?', tipo: 'Escute e escolha', treina: 'Escuta · Funções', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'The customer asks', tipo: 'Monte a frase', treina: 'Escrita · Falas do cliente', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'The shop assistant answers', tipo: 'Monte a frase', treina: 'Escrita · Falas do vendedor', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'At the clothing store', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'Shopping for sneakers', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: "I'm the customer", tipo: 'Escute e grave', treina: 'Fala · Cliente', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: "I'm the shop assistant", tipo: 'Escute e grave', treina: 'Fala · Vendedor', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'It or them? This or these?', tipo: 'Make a Choice', treina: 'Gramática · it/them, this/these', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'What can you say?', tipo: 'Make a Choice', treina: 'Gramática · Situações', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

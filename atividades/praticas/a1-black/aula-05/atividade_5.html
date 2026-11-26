@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 5 · At the clothing store</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 05 and 06 · Leitura (Buying Clothes at a Store)
+   Alinhado à conversa do slide (Can I help you? / too small / Do you have it in...? / Let me
+   check. / Here you are. / Can I try it on? / fitting room / It fits well. / How much is it? /
+   I'll take it. / register). Conteúdo NOVO: o Diego compra uma jaqueta. 20 questões: 12 de
+   "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Assistant', 'Good afternoon! Can I help you?'],
+  ['Diego', "Yes, please. I'm looking for a jacket."],
+  ['Assistant', 'We have this black jacket. What size?'],
+  ['Diego', "Large, please. But I don't like black. Do you have it in green?"],
+  ['Assistant', 'Let me check. Yes, we do. Here you are.'],
+  ['Diego', 'Great, thank you. Can I try it on?'],
+  ['Assistant', 'Of course. The fitting room is over there, next to the mirrors.'],
+  ['Diego', 'Thanks!'],
+  ['Assistant', 'How is the jacket?'],
+  ['Diego', "It's too big. Do you have it in medium?"],
+  ['Assistant', 'Yes, here you are.'],
+  ['Diego', 'Perfect! It fits well. How much is it?'],
+  ['Assistant', "It's $49.90."],
+  ['Diego', "Great. I'll take it."],
+  ['Assistant', 'Great! You can pay at the register over there.'],
+  ['Diego', 'Thank you!']
+];
+const lado = q => q === 'Assistant' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 5, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes, please. I'm looking for a jacket.", "Yes, please. I'm looking at a jacket for.", "Yes, thank you. I looking for a jacket."], 0, 'Sim, por favor. Estou procurando uma jaqueta.'),
+    prox(3, ["Large, please. But I don't like black. Do you have them in green?", "Large, please. But I don't like black. Do you have it in green?", "Large, please. But I not like black. Do you have it in green?"], 1, 'Grande, por favor. Mas não gosto de preto. Vocês têm em verde?'),
+    prox(4, ['Let me check. Yes, we are. Here you are.', 'Let me check. Yes, we do. Here you is.', 'Let me check. Yes, we do. Here you are.'], 2, 'Deixa eu ver. Sim, temos. Aqui está.'),
+    prox(5, ['Great, thank you. Can I try it on?', 'Great, thank you. Can I try on it?', 'Great, thank you. Can I try it in?'], 0, 'Ótimo, obrigado. Posso provar?'),
+    prox(6, ['Of course. The fitting room are over there.', 'Of course. The fitting room is over there, next to the mirrors.', 'Of course. The fitting room is next the mirrors to.'], 1, 'Claro. O provador é ali, ao lado dos espelhos.'),
+    prox(8, ['How are the jacket?', 'How much is the jacket fits?', 'How is the jacket?'], 2, 'Como ficou a jaqueta?'),
+    prox(9, ["It's too big. Do you have it in medium?", "It's too big. Do you have it in large?", "It's very big. Do you have them in medium?"], 0, 'Está grande demais. Vocês têm em médio?'),
+    prox(10, ['Yes, here you is.', 'Yes, here you are.', 'Yes, here are you.'], 1, 'Sim, aqui está.'),
+    prox(11, ['Perfect! It fit well. How much is it?', 'Perfect! It fits good. How many is it?', 'Perfect! It fits well. How much is it?'], 2, 'Perfeito! Serve bem. Quanto custa?'),
+    prox(12, ["It's $49.90.", "They're $49.90.", "It's the register."], 0, 'Custa 49,90 dólares.'),
+    prox(13, ["Great. I'll take them.", "Great. I'll take it.", "Great. I take'll it."], 1, 'Ótimo. Vou levar.'),
+    prox(14, ['Great! You can pay in the register over there.', 'Great! You can pays at the register over there.', 'Great! You can pay at the register over there.'], 2, 'Ótimo! Você pode pagar no caixa ali.'),
+    { instrucao: 'What is Diego looking for?', frase: 'A ___.', opcoes: ['jacket', 'T-shirt', 'dress'], certa: 0, traducao: 'Uma jaqueta.' },
+    { instrucao: 'What color would Diego like?', frase: '___.', opcoes: ['Black', 'Green', 'Blue'], certa: 1, traducao: 'Verde.' },
+    { instrucao: 'Where is the fitting room?', frase: 'Next to the ___.', opcoes: ['register', 'door', 'mirrors'], certa: 2, traducao: 'Ao lado dos espelhos.' },
+    { instrucao: 'What is the problem with the large jacket?', frase: "It's too ___.", opcoes: ['big', 'small', 'expensive'], certa: 0, traducao: 'Está grande demais.' },
+    { instrucao: 'What size is good for Diego?', frase: '___.', opcoes: ['Large', 'Medium', 'Small'], certa: 1, traducao: 'Médio.' },
+    { instrucao: 'How much is the jacket?', frase: '$___.', opcoes: ['19.90', '24.90', '49.90'], certa: 2, traducao: '49,90 dólares.' },
+    { instrucao: 'Does Diego buy the jacket?', frase: "Yes. He says: \"___\"", opcoes: ["I'll take it.", 'Can I help you?', 'Here you are.'], certa: 0, traducao: 'Sim. Ele diz: "Vou levar."' },
+    { instrucao: 'Where can Diego pay?', frase: 'At the ___.', opcoes: ['fitting room', 'register', 'mirrors'], certa: 1, traducao: 'No caixa.' }
+  ]
+});
+</script>
+</body>
+</html>

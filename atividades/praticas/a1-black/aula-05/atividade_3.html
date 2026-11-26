@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 5 · The customer asks</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 05 and 06 · Escrita (Buying Clothes at a Store)
+   Alinhado às falas do cliente no slide (Do you have it/them in...? / Can I try it on? / How
+   much is it? / I'll take it. / I'm looking for... / It's too small. / It fits well. / I'm
+   wearing...). Conteúdo NOVO. A isca é a palavra errada (it x them, this x these...).
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 5, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Vocês têm em médio?'), palavras: ['Do', 'you', 'have', 'it', 'in', 'medium'], isca: ['on'], fim: '?', traducao: 'Vocês têm em médio? (it = uma peça)' },
+    { contexto: M('Posso provar?'), palavras: ['Can', 'I', 'try', 'it', 'on'], isca: ['in'], fim: '?', traducao: 'Posso provar?' },
+    { contexto: M('Quanto custa?'), palavras: ['How', 'much', 'is', 'it'], isca: ['many'], fim: '?', traducao: 'Quanto custa?' },
+    { contexto: M('Vou levar.'), palavras: ["I'll", 'take', 'it'], isca: ['have'], fim: '.', traducao: 'Vou levar.' },
+    { contexto: M('Estou procurando uma camiseta.'), palavras: ["I'm", 'looking', 'for', 'a', 'T-shirt'], isca: ['at'], fim: '.', traducao: 'Estou procurando uma camiseta.' },
+    { contexto: M('Esta camisa está pequena demais.'), palavras: ['This', 'shirt', 'is', 'too', 'small'], isca: ['big'], fim: '.', traducao: 'Esta camisa está pequena demais.' },
+    { contexto: M('Estas calças estão grandes demais.'), palavras: ['These', 'pants', 'are', 'too', 'big'], isca: ['is'], fim: '.', traducao: 'Estas calças estão grandes demais.' },
+    { contexto: M('Vocês têm elas em preto?'), palavras: ['Do', 'you', 'have', 'them', 'in', 'black'], isca: ['it'], fim: '?', traducao: 'Vocês têm elas em preto?' },
+    { contexto: M('Não gosto desta cor.'), palavras: ['I', "don't", 'like', 'this', 'color'], isca: ['these'], fim: '.', traducao: 'Não gosto desta cor.' },
+    { contexto: M('Serve bem. Gostei muito.'), palavras: ['It', 'fits', 'well.', 'I', 'really', 'like', 'it'], isca: ['good'], fim: '.', traducao: 'Serve bem. Gostei muito.' },
+    { contexto: M('Estou usando uma jaqueta preta e calça jeans azul.'), palavras: ["I'm", 'wearing', 'a', 'black', 'jacket', 'and', 'blue', 'jeans'], isca: ['an'], fim: '.', traducao: 'Estou usando uma jaqueta preta e jeans azul.' },
+    { contexto: M('Com licença. Vocês têm isto em azul?'), palavras: ['Excuse', 'me.', 'Do', 'you', 'have', 'this', 'in', 'blue'], isca: ['these'], fim: '?', traducao: 'Com licença. Vocês têm isto em azul?' },
+    { contexto: M('Quanto custam estes tênis?'), palavras: ['How', 'much', 'are', 'these', 'sneakers'], isca: ['is'], fim: '?', traducao: 'Quanto custam estes tênis?' },
+    { contexto: M('Posso provar estes shorts?'), palavras: ['Can', 'I', 'try', 'on', 'these', 'shorts'], isca: ['this'], fim: '?', traducao: 'Posso provar estes shorts?' },
+    { contexto: M('Ótimo, obrigado. Posso provar?'), palavras: ['Great,', 'thank', 'you.', 'Can', 'I', 'try', 'it', 'on'], isca: ['in'], fim: '?', traducao: 'Ótimo, obrigado. Posso provar?' },
+    { contexto: M('Perfeito. Vou levar.'), palavras: ['Perfect.', "I'll", 'take', 'it'], isca: ['buy'], fim: '.', traducao: 'Perfeito. Vou levar.' },
+    { contexto: M('Eu gosto muito deste vestido vermelho.'), palavras: ['I', 'really', 'like', 'this', 'red', 'dress'], isca: ['these'], fim: '.', traducao: 'Gosto muito deste vestido vermelho.' },
+    { contexto: M('Vocês têm em extra grande?'), palavras: ['Do', 'you', 'have', 'it', 'in', 'extra', 'large'], isca: ['big'], fim: '?', traducao: 'Vocês têm em extra grande?' },
+    { contexto: M('Não, obrigado.'), palavras: ['No,', 'thank', 'you'], isca: ['please'], fim: '.', traducao: 'Não, obrigado.' },
+    { contexto: M('Sim, por favor. Estou procurando um vestido.'), palavras: ['Yes,', 'please.', "I'm", 'looking', 'for', 'a', 'dress'], isca: ['an'], fim: '.', traducao: 'Sim, por favor. Estou procurando um vestido.' }
+  ]
+});
+</script>
+</body>
+</html>

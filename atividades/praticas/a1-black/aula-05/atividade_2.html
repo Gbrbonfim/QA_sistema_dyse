@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 5 · What does the customer want?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 05 and 06 · Escuta (Buying Clothes at a Store)
+   Alinhado ao exercício "Match the phrases to their functions" do slide (Ask about the price.
+   / Offer help. / Ask for another size. / Say you want to buy something. / Ask to try the
+   item.) e às situações "too small / too big / you want blue". Conteúdo NOVO: o aluno ouve a
+   fala e escolhe a função. 24 questões. */
+const IC = { 'another size': 'straighten', 'another color': 'palette', 'the price': 'sell', 'to try it on': 'checkroom', 'to buy it': 'shopping_cart', 'to offer help': 'support_agent' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 5, num: 2, tipo: 'imagem',
+  instrucao: 'Listen: what does the person want?',
+  itens: [
+    q('This shirt is too small. Do you have it in large?', 'another size', ['another color', 'the price', 'to buy it']),
+    q("I don't like this color. Do you have it in blue?", 'another color', ['another size', 'to try it on', 'the price']),
+    q('How much is it?', 'the price', ['another size', 'to buy it', 'to try it on']),
+    q('Can I try it on?', 'to try it on', ['the price', 'another color', 'to offer help']),
+    q("It fits well. I'll take it.", 'to buy it', ['another size', 'to try it on', 'another color']),
+    q('Hi! Can I help you?', 'to offer help', ['the price', 'to buy it', 'another size']),
+    q('These pants are too big. Do you have them in small?', 'another size', ['the price', 'another color', 'to offer help']),
+    q('I like these shorts, but do you have them in black?', 'another color', ['another size', 'to buy it', 'to offer help']),
+    q('Excuse me, how much are these sneakers?', 'the price', ['to try it on', 'another color', 'to buy it']),
+    q('Can I try on these jeans?', 'to try it on', ['another size', 'the price', 'to offer help']),
+    q("Perfect. I'll take it.", 'to buy it', ['to try it on', 'the price', 'another color']),
+    q('Good morning! Can I help you?', 'to offer help', ['to buy it', 'another color', 'the price']),
+    q('This jacket is too small. Do you have it in medium?', 'another size', ['to buy it', 'another color', 'to try it on']),
+    q('Do you have this dress in red?', 'another color', ['the price', 'to try it on', 'to buy it']),
+    q('How much is this T-shirt?', 'the price', ['another color', 'another size', 'to offer help']),
+    q('Where is the fitting room? I want to try this on.', 'to try it on', ['to buy it', 'another size', 'the price']),
+    q("I really like it. I'll take it.", 'to buy it', ['another size', 'to offer help', 'the price']),
+    q("Hello! Are you looking for something? Can I help you?", 'to offer help', ['another color', 'to try it on', 'to buy it']),
+    q('These leggings are too small. Do you have them in extra large?', 'another size', ['another color', 'to buy it', 'the price']),
+    q('The shirt is nice, but do you have it in white?', 'another color', ['to try it on', 'to offer help', 'another size']),
+    q("How much are these shorts?", 'the price', ['to buy it', 'to try it on', 'another color']),
+    q('Can I try on this dress, please?', 'to try it on', ['another color', 'to offer help', 'the price']),
+    q("Great, I'll take the jeans.", 'to buy it', ['the price', 'another size', 'to try it on']),
+    q('The T-shirt is too big. Do you have it in extra small?', 'another size', ['to offer help', 'another color', 'the price'])
+  ]
+});
+</script>
+</body>
+</html>

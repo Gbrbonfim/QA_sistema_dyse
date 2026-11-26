@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 5 · What can you say?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 05 and 06 · Gramática (Buying Clothes at a Store)
+   Alinhado aos exercícios "Choose the best thing to say" e "What can the shop assistant say?"
+   do slide: a frase certa para cada situação e a resposta certa do vendedor. Conteúdo NOVO.
+   24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 5, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the best thing to say',
+  itens: [
+    { frase: 'You want a different size. — ___', opcoes: ['Do you have it in large?', 'How much is it?', "I'll take it."], certa: 0, traducao: 'Você quer outro tamanho. — Vocês têm em grande?' },
+    { frase: 'You want to see if the shirt fits. — ___', opcoes: ['Can I help you?', 'Can I try it on?', 'Here you are.'], certa: 1, traducao: 'Você quer ver se a camisa serve. — Posso provar?' },
+    { frase: 'You want to know the price. — ___', opcoes: ['Do you have it in blue?', "I'll take it.", 'How much is it?'], certa: 2, traducao: 'Você quer saber o preço. — Quanto custa?' },
+    { frase: 'You decide to buy the item. — ___', opcoes: ["I'll take it.", 'Can I try it on?', 'Can I help you?'], certa: 0, traducao: 'Você decide comprar. — Vou levar.' },
+    { frase: 'You like the T-shirt, but you want it in red. — ___', opcoes: ['Do you have it in large?', 'Do you have it in red?', 'How much is it?'], certa: 1, traducao: 'Você gosta da camiseta, mas quer em vermelho. — Vocês têm em vermelho?' },
+    { frase: 'The pants are too small. You need size L. — ___', opcoes: ['Do you have them in small?', 'Do you have it in red?', 'Do you have them in large?'], certa: 2, traducao: 'As calças estão pequenas demais. Você precisa do tamanho L. — Vocês têm em grande?' },
+    { frase: 'The shirt is too big. You need size S. — ___', opcoes: ['Do you have it in small?', 'Do you have it in large?', "I'll take it."], certa: 0, traducao: 'A camisa está grande demais. Você precisa do tamanho S. — Vocês têm em pequeno?' },
+    { frase: 'The shop assistant wants to help you. She says: ___', opcoes: ["I'll take it.", 'Can I help you?', 'How much is it?'], certa: 1, traducao: 'A vendedora quer ajudar. Ela diz: Posso ajudar?' },
+    { frase: 'Customer: Do you have it in medium? — Assistant: ___', opcoes: ["It's $19.90.", 'You can pay at the register.', 'Yes, here you are.'], certa: 2, traducao: 'Vocês têm em médio? — Sim, aqui está.' },
+    { frase: 'Customer: Do you have it in medium? — Assistant: ___', opcoes: ["Sorry, we don't have it in medium.", 'The fitting room is over there.', 'Perfect! I\'ll take it.'], certa: 0, traducao: 'Vocês têm em médio? — Desculpe, não temos em médio.' },
+    { frase: 'Customer: Can I try it on? — Assistant: ___', opcoes: ["It's $24.90.", 'Sure. The fitting room is over there.', 'You can pay at the register.'], certa: 1, traducao: 'Posso provar? — Claro. O provador é ali.' },
+    { frase: 'Customer: Can I try it on? — Assistant: ___', opcoes: ["Sorry, it's $19.90.", 'Great! I\'ll get it ready.', 'Of course! You can try it on.'], certa: 2, traducao: 'Posso provar? — Claro! Você pode provar.' },
+    { frase: 'Customer: How much is it? — Assistant: ___', opcoes: ["It's $29.90.", 'Yes, here you are.', 'Can I help you?'], certa: 0, traducao: 'Quanto custa? — Custa 29,90.' },
+    { frase: "Customer: I'll take it. — Assistant: ___", opcoes: ['How much is it?', 'Great! You can pay at the register.', 'Can I try it on?'], certa: 1, traducao: 'Vou levar. — Ótimo! Você pode pagar no caixa.' },
+    { frase: "Customer: I'll take it. — Assistant: ___", opcoes: ['Do you have it in small?', 'Can I help you?', "Perfect! I'll get it ready for you."], certa: 2, traducao: 'Vou levar. — Perfeito! Vou deixar pronto para você.' },
+    { frase: 'Assistant: Can I help you? — Customer: ___', opcoes: ["Yes, please. I'm looking for a dress.", "Sorry, we don't have it.", 'You can pay at the register.'], certa: 0, traducao: 'Posso ajudar? — Sim, por favor. Estou procurando um vestido.' },
+    { frase: 'Assistant: How is the T-shirt? — Customer: ___', opcoes: ["It's $19.90.", 'It fits well. I really like it.', 'The fitting room is over there.'], certa: 1, traducao: 'Como ficou a camiseta? — Serve bem. Gostei muito.' },
+    { frase: 'Where do you try on clothes? In the ___.', opcoes: ['register', 'mirror', 'fitting room'], certa: 2, traducao: 'Onde você prova roupas? No provador.' },
+    { frase: 'Where do you pay? At the ___.', opcoes: ['register', 'fitting room', 'mirrors'], certa: 0, traducao: 'Onde você paga? No caixa.' },
+    { frase: 'Shorts, pants and leggings are ___.', opcoes: ['colors', 'clothes', 'sizes'], certa: 1, traducao: 'Shorts, calças e leggings são roupas.' },
+    { frase: 'Black, gray and brown are ___.', opcoes: ['sizes', 'prices', 'colors'], certa: 2, traducao: 'Preto, cinza e marrom são cores.' },
+    { frase: 'Small, medium and large are ___.', opcoes: ['sizes', 'colors', 'clothes'], certa: 0, traducao: 'Pequeno, médio e grande são tamanhos.' },
+    { frase: '$14.90 and $29.90 are ___.', opcoes: ['sizes', 'prices', 'colors'], certa: 1, traducao: '$14,90 e $29,90 são preços.' },
+    { frase: 'Do you like wearing jeans? — Yes, I ___.', opcoes: ['am', 'like', 'do'], certa: 2, traducao: 'Você gosta de usar jeans? — Sim.' }
+  ]
+});
+</script>
+</body>
+</html>
