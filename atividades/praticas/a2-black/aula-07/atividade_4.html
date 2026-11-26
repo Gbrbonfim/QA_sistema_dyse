@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 7 · Advice and favorites</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 07 · Escrita (Queen Charlotte)
+   Alinhado ao "Before Watching" e ao Talking Point do slide (What is your favorite thing about
+   your personality? / What advice would you give to your young self? / What is the essential
+   item that you would bring to a party? / You will survive and thrive. / Don't take things so
+   seriously.) e ao vocabulário formal x informal. Conteúdo NOVO. A isca é a palavra errada.
+   20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 7, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Qual é a coisa favorita na sua personalidade?'), palavras: ['What', 'is', 'your', 'favorite', 'thing', 'about', 'your', 'personality'], isca: ['who'], fim: '?', traducao: 'Qual é a sua coisa favorita na sua personalidade?' },
+    { contexto: M('Que conselho você daria para o seu eu mais jovem?'), palavras: ['What', 'advice', 'would', 'you', 'give', 'to', 'your', 'young', 'self'], isca: ['do'], fim: '?', traducao: 'Que conselho você daria para o seu eu mais jovem?' },
+    { contexto: M('Você vai sobreviver e prosperar.'), palavras: ['You', 'will', 'survive', 'and', 'thrive'], isca: ['are'], fim: '.', traducao: 'Você vai sobreviver e prosperar.' },
+    { contexto: M('Não leve as coisas tão a sério.'), palavras: ["Don't", 'take', 'things', 'so', 'seriously'], isca: ['serious'], fim: '.', traducao: 'Não leve as coisas tão a sério.' },
+    { contexto: M('Vamos nos conhecer.'), palavras: ["Let's", 'get', 'to', 'know', 'each', 'other'], isca: ['knowing'], fim: '.', traducao: 'Vamos nos conhecer.' },
+    { contexto: M('Vamos nos conhecer. (formal)'), palavras: ["Let's", 'get', 'acquainted'], isca: ['know'], fim: '.', traducao: 'Vamos nos conhecer. (formal)' },
+    { contexto: M('Ela esconde a carta na bolsa.'), palavras: ['She', 'hides', 'the', 'letter', 'in', 'her', 'handbag'], isca: ['hide'], fim: '.', traducao: 'Ela esconde a carta na bolsa.' },
+    { contexto: M('Ela guarda escondido um drinque na bolsa. (formal)'), palavras: ['She', 'tucks', 'away', 'a', 'tipple', 'in', 'her', 'reticule'], isca: ['tuck'], fim: '.', traducao: 'Ela esconde um drinque na bolsa. (formal)' },
+    { contexto: M('Eu admiro a resiliência dela.'), palavras: ['I', 'admire', 'her', 'resilience'], isca: ['she'], fim: '.', traducao: 'Admiro a resiliência dela.' },
+    { contexto: M('Elas admiram a juventude e a beleza dela.'), palavras: ['They', 'admire', 'her', 'youth', 'and', 'beauty'], isca: ['admires'], fim: '.', traducao: 'Elas admiram a juventude e a beleza dela.' },
+    { contexto: M('A minha personagem favorita é a Lady Danbury.'), palavras: ['My', 'favorite', 'character', 'is', 'Lady', 'Danbury'], isca: ['are'], fim: '.', traducao: 'A minha personagem favorita é a Lady Danbury.' },
+    { contexto: M('Eu levaria o meu celular para uma festa.'), palavras: ['I', 'would', 'bring', 'my', 'phone', 'to', 'a', 'party'], isca: ['brings'], fim: '.', traducao: 'Eu levaria o meu celular para uma festa.' },
+    { contexto: M('Você confiaria um segredo real a ela?'), palavras: ['Would', 'you', 'trust', 'her', 'with', 'a', 'royal', 'secret'], isca: ['Do'], fim: '?', traducao: 'Você confiaria um segredo real a ela?' },
+    { contexto: M('Com certeza.'), palavras: ['Absolutely'], isca: ['Absolute'], fim: '.', traducao: 'Com certeza.' },
+    { contexto: M('Claro que não.'), palavras: ['Of', 'course', 'not'], isca: ['yes'], fim: '.', traducao: 'Claro que não.' },
+    { contexto: M('Quando eu ando de cabeça erguida, eu controlo o mundo.'), palavras: ['When', 'I', 'walk', 'tall,', 'I', 'control', 'the', 'world'], isca: ['tallly'], fim: '.', traducao: 'Quando ando de cabeça erguida, controlo o mundo.' },
+    { contexto: M('Ela usa uma saia longa no baile.'), palavras: ['She', 'wears', 'a', 'long', 'skirt', 'to', 'the', 'ball'], isca: ['an'], fim: '.', traducao: 'Ela usa uma saia longa no baile.' },
+    { contexto: M('Eu faço yoga calmamente.'), palavras: ['I', 'do', 'yoga', 'calmly'], isca: ['calm'], fim: '.', traducao: 'Faço yoga calmamente.' },
+    { contexto: M('Eu falo com os meus amigos com frequência.'), palavras: ['I', 'talk', 'to', 'my', 'friends', 'frequently'], isca: ['frequent'], fim: '.', traducao: 'Falo com os meus amigos com frequência.' },
+    { contexto: M('Eu nado bem.'), palavras: ['I', 'swim', 'well'], isca: ['good'], fim: '.', traducao: 'Nado bem.' }
+  ]
+});
+</script>
+</body>
+</html>

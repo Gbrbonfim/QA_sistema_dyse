@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 7 · At the royal ball</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 07 · Leitura (Queen Charlotte)
+   Alinhado ao vocabulário formal do slide (let's get acquainted, reticule, tipple, tuck away),
+   às perguntas do vídeo (favorite thing about each other's character, essential item for a
+   ball, would you trust...?, advice) e aos advérbios. Conteúdo NOVO: duas damas fictícias se
+   conhecem num baile, numa conversa no estilo da série. 20 questões: 12 de "próxima fala" + 8
+   de compreensão. */
+const D = [
+  ['Lady Rose', 'Good evening! Let us get acquainted. I am Lady Rose.'],
+  ['Lady Mary', 'Good evening, Lady Rose. I am Lady Mary. You dance beautifully!'],
+  ['Lady Rose', 'Thank you! What is in your reticule?'],
+  ['Lady Mary', 'Only a fan and a small tipple. I tuck it away carefully.'],
+  ['Lady Rose', 'Ha ha! That is the essential item for a ball!'],
+  ['Lady Mary', 'Absolutely. What is your favorite thing about the queen?'],
+  ['Lady Rose', 'Her resilience. She learns quickly and works hard.'],
+  ['Lady Mary', 'I admire her youth and beauty.'],
+  ['Lady Rose', 'Would you trust the king with a royal secret?'],
+  ['Lady Mary', 'Of course not! He talks too much.'],
+  ['Lady Rose', 'Ha ha! What advice would you give to the young queen?'],
+  ['Lady Mary', 'You will survive and thrive. And do not take things so seriously.'],
+  ['Lady Rose', 'Wise words! Shall we dance?'],
+  ['Lady Mary', 'Happily!']
+];
+const lado = q => q === 'Lady Rose' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 7, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Good evening, Lady Rose. I am Lady Mary. You dance beautifully!', 'Good evening, Lady Rose. I am Lady Mary. You dance beautiful!', 'Good evening, Lady Rose. I is Lady Mary. You dance beautifully!'], 0, 'Boa noite, Lady Rose. Sou a Lady Mary. Você dança lindamente!'),
+    prox(2, ['Thank you! What are in your reticule?', 'Thank you! What is in your reticule?', 'Thank you! Who is in your reticule?'], 1, 'Obrigada! O que tem na sua bolsinha?'),
+    prox(3, ['Only a fan and a small tipple. I tuck it away careful.', 'Only a fan and a small tipple. I tucks it away carefully.', 'Only a fan and a small tipple. I tuck it away carefully.'], 2, 'Só um leque e um pequeno drinque. Guardo escondido com cuidado.'),
+    prox(4, ['Ha ha! That is the essential item for a ball!', 'Ha ha! That are the essential item for a ball!', 'Ha ha! That is the essentially item for a ball!'], 0, 'Ha ha! Esse é o item essencial para um baile!'),
+    prox(5, ['Absolute. What is your favorite thing about the queen?', 'Absolutely. What is your favorite thing about the queen?', 'Absolutely. What are your favorite thing about the queen?'], 1, 'Com certeza. Qual é a sua coisa favorita na rainha?'),
+    prox(6, ['Her resilience. She learns quick and works hardly.', 'Her resilience. She learn quickly and work hard.', 'Her resilience. She learns quickly and works hard.'], 2, 'A resiliência dela. Ela aprende rápido e trabalha muito.'),
+    prox(7, ['I admire her youth and beauty.', 'I admire her young and beautiful.', 'I admires her youth and beauty.'], 0, 'Admiro a juventude e a beleza dela.'),
+    prox(8, ['Would you trusts the king with a royal secret?', 'Would you trust the king with a royal secret?', 'Do you would trust the king with a royal secret?'], 1, 'Você confiaria um segredo real ao rei?'),
+    prox(9, ['Of course yes! He talks too much.', 'Of course not! He talk too much.', 'Of course not! He talks too much.'], 2, 'Claro que não! Ele fala demais.'),
+    prox(10, ['Ha ha! What advice would you give to the young queen?', 'Ha ha! What advices would you gives to the young queen?', 'Ha ha! What advice you would give to the young queen?'], 0, 'Ha ha! Que conselho você daria para a jovem rainha?'),
+    prox(11, ['You will survive and thrive. And do not take things so serious.', 'You will survive and thrive. And do not take things so seriously.', 'You will surviving and thrive. And do not take things so seriously.'], 1, 'Você vai sobreviver e prosperar. E não leve as coisas tão a sério.'),
+    prox(13, ['Happy!', 'Happiness!', 'Happily!'], 2, 'Com prazer!'),
+    { instrucao: 'How does Lady Mary say "let\'s get to know each other" in formal English?', frase: '___', opcoes: ["Let us get acquainted.", 'Let us tuck away.', 'Let us dance.'], certa: 0, traducao: '"Let us get acquainted."' },
+    { instrucao: 'What is a "reticule"?', frase: 'A ___.', opcoes: ['skirt', 'handbag', 'drink'], certa: 1, traducao: 'Uma bolsa.' },
+    { instrucao: 'What is a "tipple"?', frase: 'An ___.', opcoes: ['old dress', 'item for the hair', 'alcoholic drink'], certa: 2, traducao: 'Uma bebida alcoólica.' },
+    { instrucao: 'How does Lady Mary hide the tipple?', frase: '___.', opcoes: ['Carefully', 'Badly', 'Quickly'], certa: 0, traducao: 'Com cuidado.' },
+    { instrucao: "What is Lady Rose's favorite thing about the queen?", frase: 'Her ___.', opcoes: ['beauty', 'resilience', 'youth'], certa: 1, traducao: 'A resiliência dela.' },
+    { instrucao: 'Would Lady Mary trust the king with a secret?', frase: '___', opcoes: ['Absolutely.', 'Yes, of course.', 'Of course not.'], certa: 2, traducao: 'Claro que não.' },
+    { instrucao: 'Why not?', frase: 'He talks ___.', opcoes: ['too much', 'beautifully', 'well'], certa: 0, traducao: 'Ele fala demais.' },
+    { instrucao: 'How does Lady Rose dance?', frase: '___.', opcoes: ['Badly', 'Beautifully', 'Slowly'], certa: 1, traducao: 'Lindamente.' }
+  ]
+});
+</script>
+</body>
+</html>

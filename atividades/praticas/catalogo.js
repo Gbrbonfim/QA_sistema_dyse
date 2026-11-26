@@ -1160,6 +1160,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: 'Prepositions of place', tipo: 'Make a Choice', treina: 'Gramática · in, on, under, next to, behind', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Toys and bedroom objects', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 7,
+        titulo: 'Class 07 · Queen Charlotte',
+        atividades: [
+          { num: 1, titulo: 'How do they do it?', tipo: 'Escute e escolha', treina: 'Escuta · Advérbios', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Formal or informal?', tipo: 'Escute e escolha', treina: 'Escuta · Vocabulário formal e informal', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Adverbs in sentences', tipo: 'Monte a frase', treina: 'Escrita · Advérbios', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Advice and favorites', tipo: 'Monte a frase', treina: 'Escrita · Conselhos e vocabulário', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'Talking about Queen Charlotte', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'At the royal ball', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'Things I do well', tipo: 'Escute e grave', treina: 'Fala · Advérbios', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Advice and formal words', tipo: 'Escute e grave', treina: 'Fala · Conselhos e vocabulário', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Adjective to adverb', tipo: 'Make a Choice', treina: 'Gramática · Formação de advérbios', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Using adverbs', tipo: 'Make a Choice', treina: 'Gramática · Uso dos advérbios', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

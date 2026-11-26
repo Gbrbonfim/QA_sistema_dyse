@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 7 · Formal or informal?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 07 · Escuta (Queen Charlotte)
+   Alinhado ao Vocabulary do slide: pares formal x informal (let's get acquainted x let's get
+   to know each other / tuck away x hide / tipple x alcoholic drinks / reticule x handbag) e as
+   palavras resilience, youth, beauty, skirt. Conteúdo NOVO: o aluno ouve uma palavra ou frase
+   e escolhe o par / a palavra certa. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'chat' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 7, num: 2, tipo: 'imagem',
+  instrucao: 'Listen and choose the word with the same meaning',
+  itens: [
+    q("Let's get acquainted.", "let's get to know each other", ['hide', 'handbag', 'alcoholic drinks']),
+    q('Tuck away.', 'hide', ["let's get to know each other", 'handbag', 'skirt']),
+    q('A tipple.', 'an alcoholic drink', ['a handbag', 'a skirt', 'youth']),
+    q('A reticule.', 'a handbag', ['a skirt', 'an alcoholic drink', 'beauty']),
+    q("Let's get to know each other.", "let's get acquainted", ['tuck away', 'reticule', 'tipple']),
+    q('Hide.', 'tuck away', ["let's get acquainted", 'reticule', 'tipple']),
+    q('Booze.', 'tipple', ['reticule', 'tuck away', "let's get acquainted"]),
+    q('A handbag.', 'a reticule', ['a tipple', 'resilience', 'youth']),
+    q('The period between being a child and an adult.', 'youth', ['beauty', 'resilience', 'skirt']),
+    q('Being beautiful and attractive.', 'beauty', ['youth', 'resilience', 'handbag']),
+    q('The ability to be happy and successful after something difficult happens.', 'resilience', ['beauty', 'youth', 'skirt']),
+    q('Clothes for women, from the waist down, like a dress without the top.', 'skirt', ['handbag', 'youth', 'tipple']),
+    q('She hides her drink in her reticule.', 'handbag', ['skirt', 'ball', 'tipple']),
+    q('Please, tuck away the letter. Nobody can see it!', 'hide', ['read', 'write', 'send']),
+    q('The queen admires her youth and beauty.', 'young age and good looks', ['money and power', 'clothes and shoes', 'drinks and food']),
+    q('After many problems, she is still strong and happy. She has a lot of...', 'resilience', ['youth', 'beauty', 'skirt']),
+    q('This is formal English: "reticule". What is it in informal English?', 'handbag', ['tipple', 'hide', 'skirt']),
+    q('This is informal English: "hide". What is it in formal English?', 'tuck away', ['reticule', 'tipple', "let's get acquainted"]),
+    q('This is informal: "alcoholic drinks". What is it in formal English?', 'tipple', ['reticule', 'tuck away', 'youth']),
+    q("This is formal: \"let's get acquainted\". What is it in informal English?", "let's get to know each other", ['hide', 'handbag', 'booze']),
+    q('She wears a long blue skirt to the ball.', 'skirt', ['handbag', 'tipple', 'youth']),
+    q('In her youth, the queen was very shy.', 'when she was young', ['when she was old', 'at the ball', 'in her handbag']),
+    q('You will survive and thrive.', 'you will be OK and successful', ['you will be sad', 'you will hide', 'you will drink']),
+    q("Don't take things so seriously.", 'relax and have fun', ['work very hard', 'hide everything', 'be very sad'])
+  ]
+});
+</script>
+</body>
+</html>

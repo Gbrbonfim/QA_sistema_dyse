@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 7 · Talking about Queen Charlotte</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 07 · Leitura (Queen Charlotte)
+   Alinhado ao Warm Up do slide (a série Queen Charlotte e os atores: India Amarteifio e Golda
+   Rosheuvel como a Rainha Charlotte; Arsema Thomas e Adjoa Andoh como Lady Danbury; Corey
+   Mylchreest como o Rei George III jovem) e aos advérbios. Conteúdo NOVO com fatos
+   verdadeiros. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Bia', 'Do you watch Queen Charlotte on Netflix?'],
+  ['Leo', 'Yes! I watch it regularly. It is a Bridgerton story.'],
+  ['Bia', 'Who plays the young queen?'],
+  ['Leo', 'India Amarteifio. She acts beautifully.'],
+  ['Bia', 'And the adult queen is Golda Rosheuvel, right?'],
+  ['Leo', 'Yes. And the young King George is Corey Mylchreest.'],
+  ['Bia', 'Who is your favorite character?'],
+  ['Leo', 'Lady Danbury. She is smart and she speaks very well.'],
+  ['Bia', 'Two actresses play her: Arsema Thomas and Adjoa Andoh.'],
+  ['Leo', 'Yes! They know their character extremely well.'],
+  ['Bia', 'Was Queen Charlotte a real person?'],
+  ['Leo', 'Yes, she was. She was the wife of King George III.'],
+  ['Bia', 'Wow! I want to watch it carefully now.'],
+  ['Leo', "Do it! But don't take it too seriously. It's not all real!"]
+];
+const lado = q => q === 'Bia' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 7, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Yes! I watch it regularly. It is a Bridgerton story.', 'Yes! I watch it regular. It is a Bridgerton story.', 'Yes! I watches it regularly. It is a Bridgerton story.'], 0, 'Sim! Assisto regularmente. É uma história de Bridgerton.'),
+    prox(2, ['Who play the young queen?', 'Who plays the young queen?', 'Who does plays the young queen?'], 1, 'Quem interpreta a rainha jovem?'),
+    prox(3, ['India Amarteifio. She acts beautiful.', 'India Amarteifio. She act beautifully.', 'India Amarteifio. She acts beautifully.'], 2, 'India Amarteifio. Ela atua lindamente.'),
+    prox(4, ['And the adult queen is Golda Rosheuvel, right?', 'And the adult queen are Golda Rosheuvel, right?', 'And the adult queen is Golda Rosheuvel, rightly?'], 0, 'E a rainha adulta é a Golda Rosheuvel, né?'),
+    prox(5, ['Yes. And the young King George are Corey Mylchreest.', 'Yes. And the young King George is Corey Mylchreest.', 'Yes. And the young King George is Golda Rosheuvel.'], 1, 'Sim. E o jovem Rei George é o Corey Mylchreest.'),
+    prox(6, ['What is your favorite character?', 'Who are your favorite character?', 'Who is your favorite character?'], 2, 'Quem é o seu personagem favorito?'),
+    prox(7, ['Lady Danbury. She is smart and she speaks very well.', 'Lady Danbury. She is smart and she speaks very good.', 'Lady Danbury. She is smartly and she speaks very well.'], 0, 'A Lady Danbury. Ela é inteligente e fala muito bem.'),
+    prox(8, ['Two actresses play her: Arsema Thomas and Golda Rosheuvel.', 'Two actresses play her: Arsema Thomas and Adjoa Andoh.', 'Two actresses plays her: Arsema Thomas and Adjoa Andoh.'], 1, 'Duas atrizes a interpretam: Arsema Thomas e Adjoa Andoh.'),
+    prox(9, ['Yes! They know their character extreme well.', 'Yes! They know their character extremely good.', 'Yes! They know their character extremely well.'], 2, 'Sim! Elas conhecem a personagem extremamente bem.'),
+    prox(10, ['Was Queen Charlotte a real person?', 'Were Queen Charlotte a real person?', 'Did Queen Charlotte a real person?'], 0, 'A Rainha Charlotte foi uma pessoa real?'),
+    prox(12, ['Wow! I want to watch it careful now.', 'Wow! I want to watch it carefully now.', 'Wow! I want watching it carefully now.'], 1, 'Uau! Agora quero assistir com atenção.'),
+    prox(13, ["Do it! But don't take it too serious. It's not all real!", "Do it! But don't takes it too seriously.", "Do it! But don't take it too seriously. It's not all real!"], 2, 'Assista! Mas não leve tão a sério. Nem tudo é real!'),
+    { instrucao: 'Where can you watch Queen Charlotte?', frase: 'On ___.', opcoes: ['Netflix', 'the radio', 'YouTube only'], certa: 0, traducao: 'Na Netflix.' },
+    { instrucao: 'Who plays the young queen?', frase: '___.', opcoes: ['Golda Rosheuvel', 'India Amarteifio', 'Adjoa Andoh'], certa: 1, traducao: 'India Amarteifio.' },
+    { instrucao: 'Who plays the young King George?', frase: '___.', opcoes: ['James Fleet', 'Arsema Thomas', 'Corey Mylchreest'], certa: 2, traducao: 'Corey Mylchreest.' },
+    { instrucao: "Who is Leo's favorite character?", frase: '___.', opcoes: ['Lady Danbury', 'Queen Charlotte', 'King George'], certa: 0, traducao: 'A Lady Danbury.' },
+    { instrucao: 'How does Lady Danbury speak?', frase: 'Very ___.', opcoes: ['badly', 'well', 'slowly'], certa: 1, traducao: 'Muito bem.' },
+    { instrucao: 'Was Queen Charlotte a real person?', frase: '___', opcoes: ["No, she wasn't.", 'Only in the series.', 'Yes, she was.'], certa: 2, traducao: 'Sim.' },
+    { instrucao: 'Who was her husband?', frase: 'King ___.', opcoes: ['George III', 'Charles III', 'Henry VIII'], certa: 0, traducao: 'O Rei George III.' },
+    { instrucao: 'How often does Leo watch the series?', frase: '___.', opcoes: ['Never', 'Regularly', 'Once a year'], certa: 1, traducao: 'Regularmente.' }
+  ]
+});
+</script>
+</body>
+</html>

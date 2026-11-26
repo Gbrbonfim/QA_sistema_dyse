@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 7 · How do they do it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 07 · Escuta (Queen Charlotte)
+   Alinhado ao "Grammar Point - Adverbs" do slide (slowly, quickly, badly, healthily, easily,
+   well, fast, hard, carefully, regularly, magically, calmly, happily, frequently, seriously).
+   Conteúdo NOVO: o aluno ouve a situação e escolhe o advérbio que combina. As iscas
+   contradizem a situação. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'auto_awesome' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 7, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the adverb that matches',
+  itens: [
+    q('The queen learns her new duties in one day. She learns...', 'quickly', ['slowly', 'badly', 'calmly']),
+    q('He eats fruit and vegetables every day. He eats...', 'healthily', ['badly', 'fast', 'seriously']),
+    q('She speaks English, French and German with no mistakes. She speaks...', 'well', ['badly', 'slowly', 'hard']),
+    q('The old king walks with a stick. He walks...', 'slowly', ['fast', 'quickly', 'happily']),
+    q('The exam is very simple. I answer the questions...', 'easily', ['badly', 'hard', 'seriously']),
+    q('I watch a new episode every Friday. I watch the series...', 'regularly', ['badly', 'slowly', 'easily']),
+    q('She smiles and sings all day. She lives...', 'happily', ['badly', 'seriously', 'slowly']),
+    q('He studies ten hours a day. He studies...', 'hard', ['badly', 'easily', 'slowly']),
+    q('She reads every word two times to understand the story. She reads...', 'carefully', ['quickly', 'badly', 'happily']),
+    q("He can't sing. Everybody leaves the room! He sings...", 'badly', ['well', 'beautifully', 'happily']),
+    q("In a difficult moment, she doesn't shout. She speaks...", 'calmly', ['loudly', 'badly', 'fast']),
+    q('The horse runs and wins the race. It runs...', 'fast', ['slowly', 'calmly', 'badly']),
+    q('He goes to the theater three times a week. He goes...', 'frequently', ['badly', 'slowly', 'easily']),
+    q('The story takes us to a world of fantasy. It transports us...', 'magically', ['badly', 'slowly', 'seriously']),
+    q("She always thinks about everything. She doesn't laugh much. She takes things...", 'seriously', ['happily', 'easily', 'badly']),
+    q('The actress knows her character very, very well. She knows it...', 'extremely well', ['badly', 'slowly', 'seriously']),
+    q('My grandma drives at thirty kilometers per hour. She drives...', 'slowly', ['fast', 'quickly', 'badly']),
+    q('The duchess is good at everything. She dances...', 'well', ['badly', 'slowly', 'seriously']),
+    q('The baby sleeps all night and smiles in the morning. She wakes up...', 'happily', ['badly', 'seriously', 'fast']),
+    q("I finish the puzzle in two minutes. It's simple! I do it...", 'easily', ['badly', 'hard', 'seriously']),
+    q('He works from 7 a.m. to 10 p.m. He works...', 'hard', ['easily', 'badly', 'slowly']),
+    q('She answers all the messages in one minute. She answers...', 'quickly', ['slowly', 'calmly', 'badly']),
+    q("We cross the street looking left and right. We cross it...", 'carefully', ['badly', 'quickly', 'happily']),
+    q('I practice English every Monday and Wednesday. I practice...', 'regularly', ['badly', 'slowly', 'easily'])
+  ]
+});
+</script>
+</body>
+</html>
