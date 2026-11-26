@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 1 · At a birthday party</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 01 · Leitura (Functional Plus - Meeting Someone New)
+   Alinhado ao Practice do slide ("You are at a birthday party": nome, país e cidade) e às
+   frases Nice to meet you (too) / Where in...? / I live in... / ...is beautiful! / See you
+   later. Conteúdo NOVO: a Bruna conhece o Oliver numa festa. 20 questões: 12 de "próxima
+   fala" + 8 de compreensão. */
+const D = [
+  ['Oliver', "Hi! What's your name?"],
+  ['Bruna', "My name is Bruna. What's your name?"],
+  ['Oliver', "I'm Oliver. Nice to meet you!"],
+  ['Bruna', 'Nice to meet you too, Oliver.'],
+  ['Oliver', 'Where are you from?'],
+  ['Bruna', "I'm from Brazil. And you?"],
+  ['Oliver', "I'm from Australia."],
+  ['Bruna', 'Oh, great! Where in Australia?'],
+  ['Oliver', 'I live in Sydney. Where in Brazil?'],
+  ['Bruna', 'I live in Florianópolis.'],
+  ['Oliver', 'Oh, Brazil is beautiful!'],
+  ['Bruna', 'Thank you! Australia is nice, too.'],
+  ['Oliver', 'Yes, it is. So, how are you?'],
+  ['Bruna', "I'm good, thanks! And you?"],
+  ['Oliver', "Good! Oh, it's my friend Ali. See you later, Bruna!"],
+  ['Bruna', 'Bye, Oliver!']
+];
+const lado = q => q === 'Oliver' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 1, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["My name is Bruna. What's your name?", "My name is Bruna. Where's your name?", "My name are Bruna. What's your name?"], 0, 'O meu nome é Bruna. Qual é o seu nome?'),
+    prox(2, ["I'm Oliver. Nice to meet you, too!", "I'm Oliver. Nice to meet you!", "I'm Oliver. See you later!"], 1, 'Sou o Oliver. Prazer em te conhecer!'),
+    prox(3, ['Nice to meeting you, Oliver.', 'Nice to meet you, Oliver. Bye!', 'Nice to meet you too, Oliver.'], 2, 'Prazer em te conhecer também, Oliver.'),
+    prox(4, ['Where are you from?', 'Where is you from?', 'Where you are from?'], 0, 'De onde você é?'),
+    prox(5, ["I'm Brazil. And you?", "I'm from Brazil. And you?", "I from Brazil. And your?"], 1, 'Sou do Brasil. E você?'),
+    prox(7, ['Oh, great! Where from Australia?', 'Oh, great! What in Australia?', 'Oh, great! Where in Australia?'], 2, 'Ah, que ótimo! De onde na Austrália?'),
+    prox(8, ['I live in Sydney. Where in Brazil?', 'I live from Sydney. Where in Brazil?', 'I am live in Sydney. Where in Brazil?'], 0, 'Moro em Sydney. De onde no Brasil?'),
+    prox(9, ['I live on Florianópolis.', 'I live in Florianópolis.', 'I lives in Florianópolis.'], 1, 'Moro em Florianópolis.'),
+    prox(11, ['Thank you! Australia are nice, too.', "You're welcome! Australia is nice, too.", 'Thank you! Australia is nice, too.'], 2, 'Obrigada! A Austrália é legal também.'),
+    prox(12, ['Yes, it is. So, how are you?', 'Yes, it are. So, how are you?', 'Yes, I am. So, how are you?'], 0, 'Sim, é. Então, como vai você?'),
+    prox(13, ["I'm from Brazil, thanks! And you?", "I'm good, thanks! And you?", "I'm good, thanks! And your?"], 1, 'Estou bem, obrigada! E você?'),
+    prox(15, ['Hi, Oliver!', 'Nice to meet you, Oliver!', 'Bye, Oliver!'], 2, 'Tchau, Oliver!'),
+    { instrucao: 'Where is Bruna from?', frase: "She's from ___.", opcoes: ['Brazil', 'Australia', 'Turkey'], certa: 0, traducao: 'Ela é do Brasil.' },
+    { instrucao: 'Where is Oliver from?', frase: "He's from ___.", opcoes: ['England', 'Australia', 'Canada'], certa: 1, traducao: 'Ele é da Austrália.' },
+    { instrucao: 'Where does Oliver live?', frase: 'In ___.', opcoes: ['Melbourne', 'London', 'Sydney'], certa: 2, traducao: 'Em Sydney.' },
+    { instrucao: 'Where does Bruna live?', frase: 'In ___.', opcoes: ['Florianópolis', 'São Paulo', 'Sydney'], certa: 0, traducao: 'Em Florianópolis.' },
+    { instrucao: 'What does Oliver say about Brazil?', frase: 'Brazil is ___!', opcoes: ['nice, too', 'beautiful', 'great'], certa: 1, traducao: 'O Brasil é lindo!' },
+    { instrucao: 'How is Bruna?', frase: "She's ___.", opcoes: ['from Sydney', 'Oliver', 'good'], certa: 2, traducao: 'Ela está bem.' },
+    { instrucao: 'Who is Ali?', frase: "Oliver's ___.", opcoes: ['friend', 'teacher', 'brother'], certa: 0, traducao: 'O amigo do Oliver.' },
+    { instrucao: 'Where is the conversation?', frase: 'At a ___.', opcoes: ['hotel', 'birthday party', 'school'], certa: 1, traducao: 'Numa festa de aniversário.' }
+  ]
+});
+</script>
+</body>
+</html>

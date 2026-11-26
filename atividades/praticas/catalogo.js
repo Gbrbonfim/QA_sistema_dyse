@@ -972,6 +972,29 @@ window.DYSE_PRATICAS = {
         ]
       }
     ]
+  },
+  'a1-black': {
+    course: 'ativ-a1-black',
+    nome: 'A1 BLACK',
+    extra: true,
+    aulas: [
+      {
+        aula: 1,
+        titulo: 'Class 01 · Functional Plus: Meeting Someone New',
+        atividades: [
+          { num: 1, titulo: 'What do you say?', tipo: 'Escute e escolha', treina: 'Escuta · Respostas', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Which country?', tipo: 'Escute e escolha', treina: 'Escuta · Países e cidades', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'Nice to meet you!', tipo: 'Monte a frase', treina: 'Escrita · Apresentações', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Where are you from?', tipo: 'Monte a frase', treina: 'Escrita · País e cidade', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'At a birthday party', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'First day of class', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'Introduce yourself', tipo: 'Escute e grave', treina: 'Fala · Apresentações', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'Countries and cities', tipo: 'Escute e grave', treina: 'Fala · País e cidade', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Complete the conversation', tipo: 'Make a Choice', treina: 'Gramática · Diálogos', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Questions and answers', tipo: 'Make a Choice', treina: 'Gramática · To be e possessivos', minutos: '10 - 12', questoes: 24 }
+        ]
+      }
+    ]
   }
 };
 

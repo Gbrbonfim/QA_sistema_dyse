@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 1 · What do you say?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 01 · Escuta (Functional Plus - Meeting Someone New)
+   Alinhado aos diálogos do slide: Hi! / Hello! / How are you? / What's your name? / Nice to
+   meet you. / Nice to meet you, too. / Where are you from? / Where in...? / See you later. /
+   Bye!. Conteúdo NOVO: o aluno ouve uma fala e escolhe a melhor resposta. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: 'chat' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 1, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    q("What's your name?", "I'm Daniel.", ["I'm from Canada.", 'Nice to meet you, too.', 'See you later!']),
+    q('Nice to meet you.', 'Nice to meet you, too.', ["I'm from Brazil.", 'Good!', 'My name is Ana.']),
+    q('Where are you from?', "I'm from Australia.", ["I'm fine.", "My name's Joe.", 'Bye!']),
+    q('How are you?', "Good! And you?", ["I'm from Turkey.", 'Nice to meet you.', 'In London.']),
+    q("I'm from Mexico.", 'Oh, great! Where in Mexico?', ["What's your name?", 'Nice to meet you, too.', 'Bye!']),
+    q('Where in England?', 'From Manchester.', ["I'm Tom.", 'Good, thanks!', 'Nice to meet you.']),
+    q('See you later!', 'Bye!', ['Nice to meet you.', "I'm from Korea.", 'Where in Brazil?']),
+    q("Hi! I'm Sara.", "Hi, Sara! I'm Leo.", ['Where in Canada?', 'Bye, Sara!', "I'm from Melbourne."]),
+    q('Where do you live?', 'I live in Toronto.', ["I'm Paul.", 'Nice to meet you.', 'Good!']),
+    q('Are you from Canada?', 'Yes, I am.', ['Yes, I do.', 'Nice to meet you.', "I'm Laura."]),
+    q('Hello! How are you?', "I'm good, thanks!", ['From Istanbul.', "My name's Ali.", 'See you later!']),
+    q('Where in Argentina?', 'I live in Buenos Aires.', ["I'm Carla.", 'Nice to meet you, too.', 'Yes, I am.']),
+    q("My name is Jonathan. What's your name?", "I'm Hannah.", ['From London.', 'Nice to meet you, too.', 'Good!']),
+    q('Bye, Mina!', 'Bye! See you later!', ['Nice to meet you.', "I'm from Seoul.", 'Where in Korea?']),
+    q('Where are you from, Ali?', "I'm from Turkey.", ["I'm Ali.", 'Good, and you?', 'Bye!']),
+    q('Brazil is beautiful!', 'Thank you!', ['Nice to meet you.', 'Bye!', "I'm Pedro."]),
+    q('Hi, nice to meet you.', 'Nice to meet you.', ['From Vancouver.', 'See you later.', 'Where in Canada?']),
+    q('Where in Australia?', 'From Melbourne.', ["I'm Justine.", 'Good!', 'Yes, I am.']),
+    q("I'm from South Korea.", 'Oh, nice! Where in South Korea?', ['Nice to meet you, too.', 'Good, thanks!', "What's your name?"]),
+    q('Are you from England?', "No, I'm not. I'm from Canada.", ["No, I don't.", 'Nice to meet you.', 'See you later!']),
+    q("What's your name?", 'My name is Isha.', ['I live in Mumbai.', "I'm from India.", 'Bye!']),
+    q('So, where are you from?', "I'm from Brazil. And you?", ['Nice to meet you, too.', 'Good!', 'Bye, Tom!']),
+    q('Where in Brazil?', 'I live in São Paulo.', ["I'm Pedro.", 'Thank you!', 'Nice to meet you.']),
+    q("Thank you! Turkey is nice, too.", 'Yes, it is.', ['Yes, I am.', "I'm from Turkey.", 'Nice to meet you.'])
+  ]
+});
+</script>
+</body>
+</html>

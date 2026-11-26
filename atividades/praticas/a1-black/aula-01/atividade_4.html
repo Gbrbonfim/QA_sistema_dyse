@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 1 · Where are you from?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 01 · Escrita (Functional Plus - Meeting Someone New)
+   Alinhado ao "Where Are You From?" do slide (Where are you from? / I'm from... / Where in...?
+   / I live in... / ...is beautiful! / ...is nice, too.). Conteúdo NOVO com outros lugares. A
+   isca é a palavra errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 1, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('De onde você é?'), palavras: ['Where', 'are', 'you', 'from'], isca: ['is'], fim: '?', traducao: 'De onde você é?' },
+    { contexto: M('Eu sou da Austrália.'), palavras: ["I'm", 'from', 'Australia'], isca: ['in'], fim: '.', traducao: 'Sou da Austrália.' },
+    { contexto: M('De onde na Austrália?'), palavras: ['Where', 'in', 'Australia'], isca: ['from'], fim: '?', traducao: 'De onde na Austrália?' },
+    { contexto: M('Eu moro em Sydney.'), palavras: ['I', 'live', 'in', 'Sydney'], isca: ['from'], fim: '.', traducao: 'Moro em Sydney.' },
+    { contexto: M('Então, você é do Canadá?'), palavras: ['So,', 'are', 'you', 'from', 'Canada'], isca: ['is'], fim: '?', traducao: 'Então, você é do Canadá?' },
+    { contexto: M('Sim, sou.'), palavras: ['Yes,', 'I', 'am'], isca: ['do'], fim: '.', traducao: 'Sim.' },
+    { contexto: M('Ah, é mesmo? De onde no Canadá?'), palavras: ['Oh,', 'really?', 'Where', 'in', 'Canada'], isca: ['from'], fim: '?', traducao: 'Ah, é mesmo? De onde no Canadá?' },
+    { contexto: M('De Vancouver.'), palavras: ['From', 'Vancouver'], isca: ['In'], fim: '.', traducao: 'De Vancouver.' },
+    { contexto: M('Ah, que ótimo! De onde no México?'), palavras: ['Oh,', 'great!', 'Where', 'in', 'Mexico'], isca: ['from'], fim: '?', traducao: 'Ah, que ótimo! De onde no México?' },
+    { contexto: M('Eu moro em Monterrey.'), palavras: ['I', 'live', 'in', 'Monterrey'], isca: ['am'], fim: '.', traducao: 'Moro em Monterrey.' },
+    { contexto: M('Eu sou da Turquia. E você?'), palavras: ["I'm", 'from', 'Turkey.', 'And', 'you'], isca: ['your'], fim: '?', traducao: 'Sou da Turquia. E você?' },
+    { contexto: M('A Turquia é linda!'), palavras: ['Turkey', 'is', 'beautiful'], isca: ['are'], fim: '!', traducao: 'A Turquia é linda!' },
+    { contexto: M('Obrigado! O Brasil é legal também.'), palavras: ['Thank', 'you!', 'Brazil', 'is', 'nice', 'too'], isca: ['are'], fim: '.', traducao: 'Obrigado! O Brasil é legal também.' },
+    { contexto: M('Sim, é.'), palavras: ['Yes,', 'it', 'is'], isca: ['am'], fim: '.', traducao: 'Sim, é.' },
+    { contexto: M('Eu sou da Coreia do Sul.'), palavras: ["I'm", 'from', 'South', 'Korea'], isca: ['live'], fim: '.', traducao: 'Sou da Coreia do Sul.' },
+    { contexto: M('Eu moro em Seul.'), palavras: ['I', 'live', 'in', 'Seoul'], isca: ['from'], fim: '.', traducao: 'Moro em Seul.' },
+    { contexto: M('Oh, legal! De onde na Inglaterra?'), palavras: ['Oh,', 'nice!', 'Where', 'in', 'England'], isca: ['from'], fim: '?', traducao: 'Ah, legal! De onde na Inglaterra?'},
+    { contexto: M('De Londres.'), palavras: ['From', 'London'], isca: ['In'], fim: '.', traducao: 'De Londres.' },
+    { contexto: M('Liza, de onde você é?'), palavras: ['Liza,', 'where', 'are', 'you', 'from'], isca: ['is'], fim: '?', traducao: 'Liza, de onde você é?' },
+    { contexto: M('Eu moro em Buenos Aires.'), palavras: ['I', 'live', 'in', 'Buenos', 'Aires'], isca: ['from'], fim: '.', traducao: 'Moro em Buenos Aires.' }
+  ]
+});
+</script>
+</body>
+</html>

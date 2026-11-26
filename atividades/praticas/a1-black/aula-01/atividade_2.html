@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 1 · Which country?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 01 · Escuta (Functional Plus - Meeting Someone New)
+   Alinhado ao "Where are you from? / Where in...? / I live in..." do slide, com países e
+   cidades. Conteúdo NOVO: a pessoa diz a cidade onde mora e o aluno escolhe o país (geografia
+   verdadeira). 24 questões. */
+const PAIS = { 'gb-eng': 'England', mx: 'Mexico', ca: 'Canada', ar: 'Argentina', tr: 'Turkey', au: 'Australia', kr: 'South Korea', br: 'Brazil', us: 'The USA', jp: 'Japan', it: 'Italy', es: 'Spain', fr: 'France', 'in': 'India', de: 'Germany' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const cs = iscas.slice(0, 3);
+  cs.splice(pos, 0, certa);
+  return { audioTexto, opcoes: cs.map(c => ({ label: PAIS[c], img: 'https://flagcdn.com/w320/' + c + '.png' })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 1, num: 2, tipo: 'imagem',
+  instrucao: 'Listen: what country is the person from?',
+  itens: [
+    q('I live in Toronto.', 'ca', ['us', 'gb-eng', 'au']),
+    q('I live in Manchester.', 'gb-eng', ['ca', 'au', 'us']),
+    q('I live in Guadalajara.', 'mx', ['es', 'ar', 'br']),
+    q('I live in Melbourne.', 'au', ['gb-eng', 'ca', 'us']),
+    q('I live in Istanbul.', 'tr', ['it', 'es', 'in']),
+    q('I live in Seoul.', 'kr', ['jp', 'in', 'tr']),
+    q('I live in Buenos Aires.', 'ar', ['mx', 'es', 'br']),
+    q('I live in São Paulo.', 'br', ['ar', 'mx', 'es']),
+    q('I live in Vancouver.', 'ca', ['au', 'us', 'gb-eng']),
+    q('I live in London.', 'gb-eng', ['us', 'ca', 'au']),
+    q('I live in Monterrey.', 'mx', ['ar', 'br', 'es']),
+    q('I live in Sydney.', 'au', ['ca', 'gb-eng', 'us']),
+    q('I live in Tokyo.', 'jp', ['kr', 'in', 'tr']),
+    q('I live in Houston.', 'us', ['ca', 'mx', 'au']),
+    q('I live in Rome.', 'it', ['es', 'fr', 'tr']),
+    q('I live in Madrid.', 'es', ['it', 'mx', 'ar']),
+    q('I live in Paris.', 'fr', ['it', 'de', 'es']),
+    q('I live in Mumbai.', 'in', ['tr', 'kr', 'jp']),
+    q('I live in Berlin.', 'de', ['fr', 'it', 'gb-eng']),
+    q('I live in Busan.', 'kr', ['jp', 'tr', 'in']),
+    q('I live in Rio de Janeiro.', 'br', ['es', 'mx', 'ar']),
+    q('I live in New York.', 'us', ['gb-eng', 'ca', 'au']),
+    q('I live in Osaka.', 'jp', ['kr', 'tr', 'in']),
+    q('I live in Barcelona.', 'es', ['it', 'fr', 'br'])
+  ]
+});
+</script>
+</body>
+</html>

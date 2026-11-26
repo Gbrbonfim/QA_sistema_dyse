@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A1 BLACK · Aula 1 · Nice to meet you!</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A1 BLACK · Class 01 · Escrita (Functional Plus - Meeting Someone New)
+   Alinhado aos diálogos "Nice To Meet You!" do slide (What's your name? / My name is... /
+   I'm... / Nice to meet you. / Nice to meet you, too. / How are you? / Good!). Conteúdo NOVO
+   com outros nomes. A isca é a palavra errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a1-black', aula: 1, num: 3, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Então, qual é o seu nome?'), palavras: ['So,', "what's", 'your', 'name'], isca: ['where'], fim: '?', traducao: 'Então, qual é o seu nome?' },
+    { contexto: M('O meu nome é Daniel.'), palavras: ['My', 'name', 'is', 'Daniel'], isca: ['are'], fim: '.', traducao: 'O meu nome é Daniel.' },
+    { contexto: M('Prazer em te conhecer.'), palavras: ['Nice', 'to', 'meet', 'you'], isca: ['know'], fim: '.', traducao: 'Prazer em te conhecer.' },
+    { contexto: M('O prazer é meu também.'), palavras: ['Nice', 'to', 'meet', 'you,', 'too'], isca: ['know'], fim: '.', traducao: 'Prazer em te conhecer também.' },
+    { contexto: M('Oi! Eu sou a Hannah.'), palavras: ['Hi!', "I'm", 'Hannah'], isca: ['is'], fim: '.', traducao: 'Oi! Sou a Hannah.' },
+    { contexto: M('Olá! Como vai você?'), palavras: ['Hello!', 'How', 'are', 'you'], isca: ['is'], fim: '?', traducao: 'Olá! Como vai você?' },
+    { contexto: M('Bem! Qual é o seu nome?'), palavras: ['Good!', "What's", 'your', 'name'], isca: ['you'], fim: '?', traducao: 'Bem! Qual é o seu nome?' },
+    { contexto: M('Matthew, eu sou o Asher.'), palavras: ['Matthew,', "I'm", 'Asher'], isca: ['my'], fim: '.', traducao: 'Matthew, sou o Asher.' },
+    { contexto: M('Qual é o seu nome?'), palavras: ['What', 'is', 'your', 'name'], isca: ['are'], fim: '?', traducao: 'Qual é o seu nome?' },
+    { contexto: M('Oi, prazer em te conhecer.'), palavras: ['Hi,', 'nice', 'to', 'meet', 'you'], isca: ['meeting'], fim: '.', traducao: 'Oi, prazer em te conhecer.' },
+    { contexto: M('Eu estou bem, obrigado!'), palavras: ["I'm", 'good,', 'thanks'], isca: ['is'], fim: '!', traducao: 'Estou bem, obrigado!' },
+    { contexto: M('Bem! E você?'), palavras: ['Good!', 'And', 'you'], isca: ['your'], fim: '?', traducao: 'Bem! E você?' },
+    { contexto: M('Até mais, Isha!'), palavras: ['See', 'you', 'later,', 'Isha'], isca: ['meet'], fim: '!', traducao: 'Até mais, Isha!' },
+    { contexto: M('Tchau, Louis!'), palavras: ['Bye,', 'Louis'], isca: ['Hi,'], fim: '!', traducao: 'Tchau, Louis!' },
+    { contexto: M('O meu nome é Giulia. Qual é o seu nome?'), palavras: ['My', 'name', 'is', 'Giulia.', "What's", 'your', 'name'], isca: ['you'], fim: '?', traducao: 'O meu nome é Giulia. Qual é o seu nome?' },
+    { contexto: M('Prazer em te conhecer também, Wei.'), palavras: ['Nice', 'to', 'meet', 'you', 'too,', 'Wei'], isca: ['your'], fim: '.', traducao: 'Prazer em te conhecer também, Wei.' },
+    { contexto: M('Obrigada!'), palavras: ['Thank', 'you'], isca: ['your'], fim: '!', traducao: 'Obrigada!' },
+    { contexto: M('Oi! Eu sou o Kayto.'), palavras: ['Hi!', "I'm", 'Kayto'], isca: ['my'], fim: '.', traducao: 'Oi! Sou o Kayto.' },
+    { contexto: M('Heidi, eu sou a Carla.'), palavras: ['Heidi,', "I'm", 'Carla'], isca: ['is'], fim: '.', traducao: 'Heidi, sou a Carla.' },
+    { contexto: M('Prazer em te conhecer!'), palavras: ['Nice', 'to', 'meet', 'you'], isca: ['meeting'], fim: '!', traducao: 'Prazer em te conhecer!' }
+  ]
+});
+</script>
+</body>
+</html>
