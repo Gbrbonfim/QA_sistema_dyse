@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 6 · Where is my robot?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 06 · Leitura (You've Got a Friend in Me)
+   Alinhado às preposições de lugar (in, under, on, next to, behind), aos brinquedos e aos
+   objetos do quarto do slide. Conteúdo NOVO: o Theo procura os brinquedos no quarto e a mãe
+   ajuda. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Theo', "Mom! Where is my robot? I can't find it!"],
+  ['Mom', 'Is it under your bed?'],
+  ['Theo', "No, it isn't. There are only shoes under my bed."],
+  ['Mom', 'Is it on your desk?'],
+  ['Theo', 'No. My books and my lamp are on my desk.'],
+  ['Mom', "Look! It's next to the window, on the rug."],
+  ['Theo', 'Yes! Thanks, Mom! And where are my soldiers?'],
+  ['Mom', 'They are in the toy box.'],
+  ['Theo', 'Cool! And my teddy bear?'],
+  ['Mom', "It's on your pillow, of course."],
+  ['Theo', 'Oh, yes! And the dinosaur?'],
+  ['Mom', "Hmm... It's behind the door!"],
+  ['Theo', 'Ha ha! Who put it there?'],
+  ['Mom', 'Maybe the toys move at night, like in Toy Story!'],
+  ['Theo', "Ha ha! That's my favorite movie!"]
+];
+const lado = q => q === 'Theo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 6, num: 5, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Is it under your bed?', 'Are it under your bed?', 'Is it under you bed?'], 0, 'Está embaixo da sua cama?'),
+    prox(2, ["No, it isn't. There are only shoes under my bed.", "No, it aren't. There are only shoes under my bed.", "No, it isn't. There is only shoes under my bed."], 1, 'Não. Só tem sapatos embaixo da minha cama.'),
+    prox(3, ['Are it on your desk?', 'Is it in your desk on?', 'Is it on your desk?'], 2, 'Está na sua escrivaninha?'),
+    prox(4, ['No. My books and my lamp are on my desk.', 'No. My books and my lamp is on my desk.', 'No. My books and my lamp are under my desk on.'], 0, 'Não. Os meus livros e a minha luminária estão na escrivaninha.'),
+    prox(5, ["Look! It's next the window, on the rug.", "Look! It's next to the window, on the rug.", "Look! It's next to the window, in the rug."], 1, 'Olha! Está ao lado da janela, no tapete.'),
+    prox(6, ['Yes! Thanks, Mom! And where is my soldiers?', 'Yes! Thanks, Mom! And where my soldiers are?', 'Yes! Thanks, Mom! And where are my soldiers?'], 2, 'Sim! Obrigado, mãe! E onde estão os meus soldadinhos?'),
+    prox(7, ['They are in the toy box.', 'They is in the toy box.', 'They are on the toy box in.'], 0, 'Estão na caixa de brinquedos.'),
+    prox(8, ['Cool! And my teddy bears is?', 'Cool! And my teddy bear?', 'Cool! And my teddy bear are?'], 1, 'Legal! E o meu ursinho?'),
+    prox(9, ["It's in your pillow, of course.", "They're on your pillow, of course.", "It's on your pillow, of course."], 2, 'Está no seu travesseiro, claro.'),
+    prox(11, ["Hmm... It's behind the door!", "Hmm... It's behind of the door!", "Hmm... They're behind the door!"], 0, 'Hmm... Está atrás da porta!'),
+    prox(12, ['Ha ha! Who putted it there?', 'Ha ha! Who put it there?', 'Ha ha! Who put it here there?'], 1, 'Ha ha! Quem colocou lá?'),
+    prox(14, ["Ha ha! That's my favorites movie!", "Ha ha! That my favorite movie!", "Ha ha! That's my favorite movie!"], 2, 'Ha ha! É o meu filme favorito!'),
+    { instrucao: 'What is under the bed?', frase: '___.', opcoes: ['Shoes', 'The robot', 'Books'], certa: 0, traducao: 'Sapatos.' },
+    { instrucao: 'What is on the desk?', frase: 'Books and a ___.', opcoes: ['robot', 'lamp', 'teddy bear'], certa: 1, traducao: 'Livros e uma luminária.' },
+    { instrucao: 'Where is the robot?', frase: 'Next to the window, on the ___.', opcoes: ['bed', 'desk', 'rug'], certa: 2, traducao: 'Ao lado da janela, no tapete.' },
+    { instrucao: 'Where are the soldiers?', frase: 'In the ___.', opcoes: ['toy box', 'dresser', 'desk'], certa: 0, traducao: 'Na caixa de brinquedos.' },
+    { instrucao: 'Where is the teddy bear?', frase: 'On the ___.', opcoes: ['rug', 'pillow', 'desk'], certa: 1, traducao: 'No travesseiro.' },
+    { instrucao: 'Where is the dinosaur?', frase: '___ the door.', opcoes: ['Under', 'Next to', 'Behind'], certa: 2, traducao: 'Atrás da porta.' },
+    { instrucao: "What is Theo's favorite movie?", frase: '___.', opcoes: ['Toy Story', 'Cars', 'Frozen'], certa: 0, traducao: 'Toy Story.' },
+    { instrucao: 'What does Mom say about the toys?', frase: 'Maybe they ___ at night.', opcoes: ['sleep', 'move', 'sing'], certa: 1, traducao: 'Talvez eles se mexam à noite.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 6 · Toy Story fans</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 06 · Leitura (You've Got a Friend in Me)
+   Alinhado ao Warm Up (personagens: Woody, Buzz Lightyear, Rex, Slinky, Forky), ao vocabulário
+   de brinquedos e ao Talking Point (favorite movie / character / toy). Conteúdo NOVO com fatos
+   verdadeiros sobre os filmes. 20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Ana', 'Do you like Toy Story?'],
+  ['João', "Yes! It's my favorite animated movie."],
+  ['Ana', 'Who is your favorite character?'],
+  ['João', 'Buzz Lightyear. He is a space ranger.'],
+  ['Ana', 'My favorite is Woody. He is a cowboy, and he is a great friend.'],
+  ['João', 'And Rex is funny. He is a dinosaur, but he is scared of everything!'],
+  ['Ana', 'Ha ha! Yes. And Slinky is a dog.'],
+  ['João', 'What is your favorite Toy Story movie?'],
+  ['Ana', 'My favorite is Toy Story 4. Forky is in it.'],
+  ['João', 'Forky? Is he a toy?'],
+  ['Ana', "Yes. A girl named Bonnie makes him. He is a spork!"],
+  ['João', "Cool! My favorite is Toy Story 3. Andy goes to college in that movie."],
+  ['Ana', 'What is your favorite toy?'],
+  ['João', 'My favorite toy is my old robot. It is on my desk.'],
+  ['Ana', 'Mine is a teddy bear. It is always on my bed!']
+];
+const lado = q => q === 'Ana' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 6, num: 6, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Yes! It's my favorite animated movie.", "Yes! It my favorite animated movie.", "Yes! It's my favorites animated movie."], 0, 'Sim! É o meu filme de animação favorito.'),
+    prox(2, ['What is your favorite character?', 'Who is your favorite character?', 'Who are your favorite character?'], 1, 'Quem é o seu personagem favorito?'),
+    prox(3, ['Buzz Lightyear. He is a cowboy.', 'Buzz Lightyear. He are a space ranger.', 'Buzz Lightyear. He is a space ranger.'], 2, 'O Buzz Lightyear. Ele é um patrulheiro espacial.'),
+    prox(4, ['My favorite is Woody. He is a cowboy, and he is a great friend.', 'My favorite is Woody. He is a space ranger.', 'My favorite are Woody. He is a cowboy.'], 0, 'O meu favorito é o Woody. Ele é um caubói e um ótimo amigo.'),
+    prox(5, ['And Rex is funny. He is a doll, but he is scared of everything!', 'And Rex is funny. He is a dinosaur, but he is scared of everything!', 'And Rex is funny. He are a dinosaur.'], 1, 'E o Rex é engraçado. Ele é um dinossauro, mas tem medo de tudo!'),
+    prox(7, ['Who is your favorite Toy Story movie?', 'What are your favorite Toy Story movie?', 'What is your favorite Toy Story movie?'], 2, 'Qual é o seu filme favorito do Toy Story?'),
+    prox(8, ['My favorite is Toy Story 4. Forky is in it.', 'My favorite is Toy Story 4. Forky is on it.', 'My favorite are Toy Story 4. Forky is in it.'], 0, 'O meu favorito é o Toy Story 4. O Forky está nele.'),
+    prox(9, ['Forky? Are he a toy?', 'Forky? Is he a toy?', 'Forky? Is he toy a?'], 1, 'Forky? Ele é um brinquedo?'),
+    prox(11, ["Cool! My favorite is Toy Story 3. Andy go to college.", "Cool! My favorite is Toy Story 3. Andy goes on college.", "Cool! My favorite is Toy Story 3. Andy goes to college in that movie."], 2, 'Legal! O meu favorito é o Toy Story 3. O Andy vai para a faculdade nesse filme.'),
+    prox(12, ['What is your favorite toy?', 'Who is your favorite toy?', 'What are your favorite toy?'], 0, 'Qual é o seu brinquedo favorito?'),
+    prox(13, ['My favorite toy is my old robot. It is under my desk on.', 'My favorite toy is my old robot. It is on my desk.', 'My favorite toy are my old robot. It is on my desk.'], 1, 'O meu brinquedo favorito é o meu robô antigo. Ele fica na escrivaninha.'),
+    prox(14, ['Mine is a teddy bear. It are always on my bed!', 'Mine is a teddy bear. It is always in my bed on!', 'Mine is a teddy bear. It is always on my bed!'], 2, 'O meu é um ursinho. Ele está sempre na minha cama!'),
+    { instrucao: 'What is Buzz Lightyear?', frase: 'A ___.', opcoes: ['space ranger', 'cowboy', 'dinosaur'], certa: 0, traducao: 'Um patrulheiro espacial.' },
+    { instrucao: 'What is Woody?', frase: 'A ___.', opcoes: ['robot', 'cowboy', 'dog'], certa: 1, traducao: 'Um caubói.' },
+    { instrucao: 'What is Rex?', frase: 'A ___.', opcoes: ['dog', 'robot', 'dinosaur'], certa: 2, traducao: 'Um dinossauro.' },
+    { instrucao: 'What is Slinky?', frase: 'A ___.', opcoes: ['dog', 'cowboy', 'teddy bear'], certa: 0, traducao: 'Um cachorro.' },
+    { instrucao: 'In which movie is Forky?', frase: 'Toy Story ___.', opcoes: ['2', '4', '3'], certa: 1, traducao: 'Toy Story 4.' },
+    { instrucao: 'Who makes Forky?', frase: '___.', opcoes: ['Andy', 'Woody', 'Bonnie'], certa: 2, traducao: 'A Bonnie.' },
+    { instrucao: "What is João's favorite toy?", frase: 'His old ___.', opcoes: ['robot', 'car', 'teddy bear'], certa: 0, traducao: 'O robô antigo dele.' },
+    { instrucao: "Where is Ana's teddy bear?", frase: 'On her ___.', opcoes: ['desk', 'bed', 'dresser'], certa: 1, traducao: 'Na cama dela.' }
+  ]
+});
+</script>
+</body>
+</html>

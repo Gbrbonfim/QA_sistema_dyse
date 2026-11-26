@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 6 · Toys</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 06 · Escuta (You've Got a Friend in Me)
+   Alinhado ao "Vocabulary - Toys" do slide (doll, space ranger, cowboy, robot, dinosaur, car,
+   train, soldiers, teddy bear, alien). Conteúdo NOVO: o aluno ouve uma frase e escolhe o
+   brinquedo. 24 questões. */
+const IC = { doll: 'girl', 'space ranger': 'rocket_launch', cowboy: 'cruelty_free', robot: 'smart_toy', dinosaur: 'pets', car: 'directions_car', train: 'train', soldiers: 'military_tech', 'teddy bear': 'toys', alien: 'skull' };
+let n = 0;
+const q = (audioTexto, certa, iscas) => {
+  const pos = n++ % 4;
+  const ns = iscas.slice(0, 3);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 6, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the toy',
+  itens: [
+    q('My little sister sleeps with her teddy bear.', 'teddy bear', ['robot', 'train', 'alien']),
+    q('Woody is a cowboy.', 'cowboy', ['space ranger', 'dinosaur', 'doll']),
+    q('Buzz Lightyear is a space ranger.', 'space ranger', ['cowboy', 'robot', 'car']),
+    q('Rex is a green dinosaur.', 'dinosaur', ['alien', 'teddy bear', 'soldiers']),
+    q('The little green aliens live in a box.', 'alien', ['robot', 'doll', 'train']),
+    q('This robot can walk and talk!', 'robot', ['alien', 'car', 'cowboy']),
+    q('He plays with his red car every day.', 'car', ['train', 'robot', 'doll']),
+    q('The toy train goes around the bedroom.', 'train', ['car', 'teddy bear', 'dinosaur']),
+    q('The green army soldiers are on the floor.', 'soldiers', ['alien', 'robot', 'cowboy']),
+    q('My favorite toy is a doll with long hair.', 'doll', ['teddy bear', 'robot', 'soldiers']),
+    q("I'm a cowboy! I have a hat and boots.", 'cowboy', ['robot', 'alien', 'train']),
+    q('The space ranger flies to the stars.', 'space ranger', ['dinosaur', 'car', 'teddy bear']),
+    q('The dinosaur is big and scary.', 'dinosaur', ['doll', 'train', 'car']),
+    q('The alien has three eyes.', 'alien', ['cowboy', 'teddy bear', 'car']),
+    q('The robot is gray and has lights.', 'robot', ['doll', 'dinosaur', 'soldiers']),
+    q('My brother has a fast blue car.', 'car', ['teddy bear', 'alien', 'cowboy']),
+    q('The train has five cars and it is very long.', 'train', ['robot', 'doll', 'alien']),
+    q('There are twenty soldiers in the bucket.', 'soldiers', ['doll', 'train', 'dinosaur']),
+    q('The doll has a pink dress.', 'doll', ['cowboy', 'robot', 'car']),
+    q('The brown teddy bear is soft.', 'teddy bear', ['robot', 'car', 'train']),
+    q('Jessie is a cowgirl, and Woody is a cowboy.', 'cowboy', ['dinosaur', 'alien', 'train']),
+    q('I want a robot for my birthday.', 'robot', ['teddy bear', 'cowboy', 'dinosaur']),
+    q('Look! The space ranger has wings.', 'space ranger', ['train', 'doll', 'teddy bear']),
+    q('The baby has a small teddy bear.', 'teddy bear', ['soldiers', 'dinosaur', 'space ranger'])
+  ]
+});
+</script>
+</body>
+</html>

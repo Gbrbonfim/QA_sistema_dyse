@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 6 · Where is it?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 06 · Escuta (You've Got a Friend in Me)
+   Alinhado ao "Grammar - Prepositions: In, Under, On, Next To And Behind" do slide e aos
+   objetos do quarto (bed, door, desk, window, rug, pillow, lamp, poster, dresser). Conteúdo
+   NOVO: o aluno ouve onde está o brinquedo e escolhe a preposição. 24 questões. */
+const IC = { in: 'move_down', under: 'vertical_align_bottom', on: 'vertical_align_top', 'next to': 'arrow_forward', behind: 'visibility_off' };
+const OPS = ['in', 'on', 'under', 'next to', 'behind'];
+let n = 0;
+const q = (audioTexto, certa) => {
+  const outras = OPS.filter(o => o !== certa);
+  const ns = outras.slice(n % 2, n % 2 + 3);
+  const pos = n++ % 4;
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon: IC[c] })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 6, num: 2, tipo: 'imagem',
+  instrucao: 'Listen: where is it?',
+  itens: [
+    q('The robot is under the bed.', 'under'),
+    q('The teddy bear is on the pillow.', 'on'),
+    q('The soldiers are in the box.', 'in'),
+    q('The lamp is next to the bed.', 'next to'),
+    q('The ball is behind the door.', 'behind'),
+    q('The dinosaur is on the desk.', 'on'),
+    q('My shoes are under the desk.', 'under'),
+    q('The doll is in the dresser.', 'in'),
+    q('The poster is next to the window.', 'next to'),
+    q('The cat is behind the curtain.', 'behind'),
+    q('The train is on the rug.', 'on'),
+    q('The aliens are in the toy box.', 'in'),
+    q('The car is under the chair.', 'under'),
+    q('The desk is next to the window.', 'next to'),
+    q('The cowboy is behind the lamp.', 'behind'),
+    q('My books are on the shelf.', 'on'),
+    q('The space ranger is next to the rocket.', 'next to'),
+    q('The pillow is in the closet.', 'in'),
+    q('The rug is under the bed.', 'under'),
+    q('The boy is behind the dresser. He is hiding!', 'behind'),
+    q('The phone is on the bed.', 'on'),
+    q('My clothes are in the dresser.', 'in'),
+    q('The dog sleeps under the table.', 'under'),
+    q('My chair is next to my desk.', 'next to')
+  ]
+});
+</script>
+</body>
+</html>

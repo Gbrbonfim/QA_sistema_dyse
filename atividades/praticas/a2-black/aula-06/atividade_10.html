@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 6 · Toys and bedroom objects</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 06 · Gramática (You've Got a Friend in Me)
+   Vocabulário do slide: brinquedos (doll, space ranger, cowboy, robot, dinosaur, car, train,
+   soldiers, teddy bear, alien) e objetos do quarto (bed, door, desk, window, rug, pillow, lamp,
+   poster, dresser), com a ideia principal da música (amizade). Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 6, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right word',
+  itens: [
+    { frase: 'You sleep on a ___.', opcoes: ['bed', 'desk', 'door'], certa: 0, traducao: 'Você dorme numa cama.' },
+    { frase: 'You put your head on a ___.', opcoes: ['rug', 'pillow', 'lamp'], certa: 1, traducao: 'Você deita a cabeça num travesseiro.' },
+    { frase: 'You study and do homework at a ___.', opcoes: ['bed', 'window', 'desk'], certa: 2, traducao: 'Você estuda e faz a lição numa escrivaninha.' },
+    { frase: 'You open the ___ to get in the bedroom.', opcoes: ['door', 'rug', 'poster'], certa: 0, traducao: 'Você abre a porta para entrar no quarto.' },
+    { frase: 'You look outside through the ___.', opcoes: ['dresser', 'window', 'pillow'], certa: 1, traducao: 'Você olha para fora pela janela.' },
+    { frase: 'You put your clothes in the ___.', opcoes: ['lamp', 'rug', 'dresser'], certa: 2, traducao: 'Você guarda as roupas na cômoda.' },
+    { frase: 'You turn on the ___ at night to read.', opcoes: ['lamp', 'door', 'rug'], certa: 0, traducao: 'Você acende a luminária à noite para ler.' },
+    { frase: 'A picture of your favorite band on the wall is a ___.', opcoes: ['pillow', 'poster', 'dresser'], certa: 1, traducao: 'Uma imagem da sua banda favorita na parede é um pôster.' },
+    { frase: 'A soft carpet on the floor is a ___.', opcoes: ['poster', 'lamp', 'rug'], certa: 2, traducao: 'Um tapete macio no chão é um tapete (rug).' },
+    { frase: 'A toy that looks like a baby or a girl is a ___.', opcoes: ['doll', 'robot', 'train'], certa: 0, traducao: 'Um brinquedo que parece um bebê ou uma menina é uma boneca.' },
+    { frase: 'A toy animal that is soft and brown is a ___.', opcoes: ['dinosaur', 'teddy bear', 'robot'], certa: 1, traducao: 'Um bichinho de pelúcia macio e marrom é um ursinho.' },
+    { frase: 'A toy from space with three eyes is an ___.', opcoes: ['cowboy', 'robot', 'alien'], certa: 2, traducao: 'Um brinquedo do espaço com três olhos é um alienígena.' },
+    { frase: 'Woody wears a hat and boots. He is a ___.', opcoes: ['cowboy', 'space ranger', 'soldier'], certa: 0, traducao: 'O Woody usa chapéu e botas. Ele é um caubói.' },
+    { frase: 'Buzz Lightyear flies to the stars. He is a ___.', opcoes: ['cowboy', 'space ranger', 'dinosaur'], certa: 1, traducao: 'O Buzz Lightyear voa para as estrelas. Ele é um patrulheiro espacial.' },
+    { frase: 'Rex is a big green ___.', opcoes: ['robot', 'doll', 'dinosaur'], certa: 2, traducao: 'O Rex é um grande dinossauro verde.' },
+    { frase: 'A toy made of metal that walks and has lights is a ___.', opcoes: ['robot', 'teddy bear', 'doll'], certa: 0, traducao: 'Um brinquedo de metal que anda e tem luzes é um robô.' },
+    { frase: 'Little green men in an army are toy ___.', opcoes: ['aliens', 'soldiers', 'cowboys'], certa: 1, traducao: 'Homenzinhos verdes de exército são soldadinhos.' },
+    { frase: 'A toy that goes on tracks is a ___.', opcoes: ['car', 'doll', 'train'], certa: 2, traducao: 'Um brinquedo que anda em trilhos é um trem.' },
+    { frase: '"You\'ve Got a Friend in Me" is about ___.', opcoes: ['a friend who is always there for you', 'a boy who wants a new toy', 'a family on vacation'], certa: 0, traducao: 'A música é sobre um amigo que está sempre lá por você.' },
+    { frase: 'In Toy Story, the boy who has Woody and Buzz is ___.', opcoes: ['Forky', 'Andy', 'Rex'], certa: 1, traducao: 'No Toy Story, o menino que tem o Woody e o Buzz é o Andy.' },
+    { frase: 'Forky is in Toy Story ___.', opcoes: ['1', '2', '4'], certa: 2, traducao: 'O Forky está no Toy Story 4.' },
+    { frase: 'Slinky is a toy ___.', opcoes: ['dog', 'robot', 'alien'], certa: 0, traducao: 'O Slinky é um cachorro de brinquedo.' },
+    { frase: 'Who ___ your favorite character?', opcoes: ['are', 'is', 'am'], certa: 1, traducao: 'Quem é o seu personagem favorito?' },
+    { frase: 'What ___ your favorite toys?', opcoes: ['is', 'am', 'are'], certa: 2, traducao: 'Quais são os seus brinquedos favoritos?' }
+  ]
+});
+</script>
+</body>
+</html>

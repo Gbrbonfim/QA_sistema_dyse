@@ -1144,6 +1144,22 @@ window.DYSE_PRATICAS = {
           { num: 9, titulo: "Do, does, don't, doesn't", tipo: 'Make a Choice', treina: 'Gramática · Present simple', minutos: '10 - 12', questoes: 24 },
           { num: 10, titulo: 'Routine words and facts', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário e frequência', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 6,
+        titulo: "Class 06 · You've Got a Friend in Me",
+        atividades: [
+          { num: 1, titulo: 'Toys', tipo: 'Escute e escolha', treina: 'Escuta · Brinquedos', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Where is it?', tipo: 'Escute e escolha', treina: 'Escuta · Preposições de lugar', minutos: '10 - 12', questoes: 24 },
+          { num: 3, titulo: 'In, on, under', tipo: 'Monte a frase', treina: 'Escrita · Preposições de lugar', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'My bedroom, my favorites', tipo: 'Monte a frase', treina: 'Escrita · Quarto e favoritos', minutos: '10 - 12', questoes: 20 },
+          { num: 5, titulo: 'Where is my robot?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 6, titulo: 'Toy Story fans', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 7, titulo: 'Describe your bedroom', tipo: 'Escute e grave', treina: 'Fala · Preposições de lugar', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 8, titulo: 'My favorite toy', tipo: 'Escute e grave', treina: 'Fala · Brinquedos e favoritos', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 9, titulo: 'Prepositions of place', tipo: 'Make a Choice', treina: 'Gramática · in, on, under, next to, behind', minutos: '10 - 12', questoes: 24 },
+          { num: 10, titulo: 'Toys and bedroom objects', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · A2 BLACK · Aula 6 · My bedroom, my favorites</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* A2 BLACK · Class 06 · Escrita (You've Got a Friend in Me)
+   Alinhado ao Talking Point (What is your favorite Toy Story movie? / Who is your favorite
+   character? / What is your favorite toy?) e ao Extra (What's under your bed? / What's in your
+   dresser? / What's behind your door?). Conteúdo NOVO. A isca é a palavra errada. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-a2-black', aula: 6, num: 4, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Qual é o seu filme favorito do Toy Story?'), palavras: ['What', 'is', 'your', 'favorite', 'Toy', 'Story', 'movie'], isca: ['Who'], fim: '?', traducao: 'Qual é o seu filme favorito do Toy Story?' },
+    { contexto: M('Quem é o seu personagem favorito?'), palavras: ['Who', 'is', 'your', 'favorite', 'character'], isca: ['What'], fim: '?', traducao: 'Quem é o seu personagem favorito?' },
+    { contexto: M('Qual é o seu brinquedo favorito?'), palavras: ['What', 'is', 'your', 'favorite', 'toy'], isca: ['Where'], fim: '?', traducao: 'Qual é o seu brinquedo favorito?' },
+    { contexto: M('O meu personagem favorito é o Buzz Lightyear.'), palavras: ['My', 'favorite', 'character', 'is', 'Buzz', 'Lightyear'], isca: ['are'], fim: '.', traducao: 'O meu personagem favorito é o Buzz Lightyear.' },
+    { contexto: M('O meu brinquedo favorito é um ursinho.'), palavras: ['My', 'favorite', 'toy', 'is', 'a', 'teddy', 'bear'], isca: ['an'], fim: '.', traducao: 'O meu brinquedo favorito é um ursinho.' },
+    { contexto: M('O que tem embaixo da sua cama?'), palavras: ["What's", 'under', 'your', 'bed'], isca: ['on'], fim: '?', traducao: 'O que tem embaixo da sua cama?' },
+    { contexto: M('O que tem na sua cômoda?'), palavras: ["What's", 'in', 'your', 'dresser'], isca: ['under'], fim: '?', traducao: 'O que tem na sua cômoda?' },
+    { contexto: M('O que tem atrás da sua porta?'), palavras: ["What's", 'behind', 'your', 'door'], isca: ['in'], fim: '?', traducao: 'O que tem atrás da sua porta?' },
+    { contexto: M('O que tem na sua escrivaninha?'), palavras: ["What's", 'on', 'your', 'desk'], isca: ['under'], fim: '?', traducao: 'O que tem na sua escrivaninha?' },
+    { contexto: M('A minha mochila está atrás da minha porta.'), palavras: ['My', 'backpack', 'is', 'behind', 'my', 'door'], isca: ['are'], fim: '.', traducao: 'A minha mochila está atrás da minha porta.' },
+    { contexto: M('O meu notebook está na minha escrivaninha.'), palavras: ['My', 'laptop', 'is', 'on', 'my', 'desk'], isca: ['under'], fim: '.', traducao: 'O meu notebook está na minha escrivaninha.' },
+    { contexto: M('Os meus sapatos estão embaixo da minha cama.'), palavras: ['My', 'shoes', 'are', 'under', 'my', 'bed'], isca: ['is'], fim: '.', traducao: 'Os meus sapatos estão embaixo da minha cama.' },
+    { contexto: M('O Woody é um caubói.'), palavras: ['Woody', 'is', 'a', 'cowboy'], isca: ['an'], fim: '.', traducao: 'O Woody é um caubói.' },
+    { contexto: M('O Buzz Lightyear é um patrulheiro espacial.'), palavras: ['Buzz', 'Lightyear', 'is', 'a', 'space', 'ranger'], isca: ['an'], fim: '.', traducao: 'O Buzz Lightyear é um patrulheiro espacial.' },
+    { contexto: M('O Rex é um dinossauro.'), palavras: ['Rex', 'is', 'a', 'dinosaur'], isca: ['are'], fim: '.', traducao: 'O Rex é um dinossauro.' },
+    { contexto: M('Tem um pôster na minha parede.'), palavras: ['There', 'is', 'a', 'poster', 'on', 'my', 'wall'], isca: ['are'], fim: '.', traducao: 'Tem um pôster na minha parede.' },
+    { contexto: M('Tem dois travesseiros na minha cama.'), palavras: ['There', 'are', 'two', 'pillows', 'on', 'my', 'bed'], isca: ['is'], fim: '.', traducao: 'Tem dois travesseiros na minha cama.' },
+    { contexto: M('O meu quarto tem uma janela grande.'), palavras: ['My', 'bedroom', 'has', 'a', 'big', 'window'], isca: ['have'], fim: '.', traducao: 'O meu quarto tem uma janela grande.' },
+    { contexto: M('Você tem um amigo em mim.'), palavras: ["You've", 'got', 'a', 'friend', 'in', 'me'], isca: ['on'], fim: '.', traducao: 'Você tem um amigo em mim.' },
+    { contexto: M('O meu filme favorito é o Toy Story 3.'), palavras: ['My', 'favorite', 'movie', 'is', 'Toy', 'Story', '3'], isca: ['are'], fim: '.', traducao: 'O meu filme favorito é o Toy Story 3.' }
+  ]
+});
+</script>
+</body>
+</html>
