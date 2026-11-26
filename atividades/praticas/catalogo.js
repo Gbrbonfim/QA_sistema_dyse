@@ -1508,6 +1508,22 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 34', titulo: 'Can you join the 5 a.m. club?', tipo: 'Escute e grave', treina: 'Fala · Phrasal verbs separáveis', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 34', titulo: 'Turn it off, not off it', tipo: 'Make a Choice', treina: 'Gramática · Tipos de phrasal verbs', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 35,
+        titulo: 'Class 35 and 36 · Before You Share',
+        atividades: [
+          { num: 1, parte: 'Class 35', titulo: 'Real or fake?', tipo: 'Escute e escolha', treina: 'Escuta · Fake news e vocabulário de mídia', minutos: '10 - 12', questoes: 24 },
+          { num: 2, parte: 'Class 35', titulo: 'Check the source', tipo: 'Monte a frase', treina: 'Escrita · Vocabulário de mídia', minutos: '10 - 12', questoes: 20 },
+          { num: 3, parte: 'Class 35', titulo: 'A shark in the street?', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, parte: 'Class 35', titulo: 'Before you share', tipo: 'Escute e grave', treina: 'Fala · Vocabulário de mídia', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, parte: 'Class 35', titulo: 'Media and the news', tipo: 'Make a Choice', treina: 'Gramática · Vocabulário de mídia', minutos: '10 - 12', questoes: 24 },
+          { num: 6, parte: 'Class 36', titulo: 'It was shared by millions', tipo: 'Escute e escolha', treina: 'Escuta · Voz passiva', minutos: '10 - 12', questoes: 24 },
+          { num: 7, parte: 'Class 36', titulo: 'The story was published', tipo: 'Monte a frase', treina: 'Escrita · Voz passiva', minutos: '10 - 12', questoes: 20 },
+          { num: 8, parte: 'Class 36', titulo: 'In the newsroom', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 9, parte: 'Class 36', titulo: 'Fake or real? Say it in the passive', tipo: 'Escute e grave', treina: 'Fala · Voz passiva', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 10, parte: 'Class 36', titulo: 'Is, are, was or were?', tipo: 'Make a Choice', treina: 'Gramática · Voz passiva', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

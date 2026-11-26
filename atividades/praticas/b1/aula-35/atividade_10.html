@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 36 · Is, are, was or were?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 36 · Gramática (Before You Share)
+   Alinhado ao Grammar Point (ativa x passiva; foco na pessoa x no objeto; present passive
+   am / is / are + particípio; past passive was / were + particípio; uso de by) e aos
+   exercícios 4 e 5. Conteúdo NOVO. 24 questões. */
+const PA = 'Choose the passive sentence';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 35, num: 10, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'Fake news ___ shared very quickly online these days.', opcoes: ['is', 'are', 'were'], certa: 0, traducao: 'Notícias falsas são compartilhadas muito rápido na internet hoje em dia.' },
+    { frase: 'Images and memes ___ used to mislead people every day.', opcoes: ['is', 'are', 'was'], certa: 1, traducao: 'Imagens e memes são usados para enganar as pessoas todos os dias.' },
+    { frase: 'The video ___ shared in many countries in 2018.', opcoes: ['were', 'is', 'was'], certa: 2, traducao: 'O vídeo foi compartilhado em muitos países em 2018.' },
+    { frase: 'Some stories ___ reported as real news last year.', opcoes: ['were', 'was', 'are'], certa: 0, traducao: 'Algumas histórias foram noticiadas como reais no ano passado.' },
+    { frase: 'The quote was ___ from a meme.', opcoes: ['take', 'taken', 'took'], certa: 1, traducao: 'A citação foi tirada de um meme.' },
+    { frase: 'The story was ___ on several websites.', opcoes: ['publish', 'publishing', 'published'], certa: 2, traducao: 'A notícia foi publicada em vários sites.' },
+    { frase: 'The video was ___ by millions of people.', opcoes: ['seen', 'saw', 'see'], certa: 0, traducao: 'O vídeo foi visto por milhões de pessoas.' },
+    { frase: 'Many public figures are ___ in fake headlines.', opcoes: ['quote', 'quoted', 'quoting'], certa: 1, traducao: 'Muitas figuras públicas são citadas em manchetes falsas.' },
+    { frase: 'The telephone was invented ___ Alexander Graham Bell.', opcoes: ['from', 'with', 'by'], certa: 2, traducao: 'O telefone foi inventado por Alexander Graham Bell.' },
+    { frase: 'The Colosseum ___ opened almost two thousand years ago.', opcoes: ['was', 'is', 'were'], certa: 0, traducao: 'O Coliseu foi inaugurado há quase dois mil anos.' },
+    { frase: 'English ___ spoken in many countries.', opcoes: ['are', 'is', 'were'], certa: 1, traducao: 'O inglês é falado em muitos países.' },
+    { frase: 'The photo ___ in 2011.', opcoes: ['took', 'was take', 'was taken'], certa: 2, traducao: 'A foto foi tirada em 2011.' },
+    { instrucao: 'Which sentence is in the passive?', frase: '___', opcoes: ['The video was shared online.', 'People shared the video online.', 'The video shared people online.'], certa: 0, traducao: 'O vídeo foi compartilhado na internet.' },
+    { instrucao: 'Which sentence is in the active?', frase: '___', opcoes: ['The story was published.', 'Journalists published the story.', 'The story is published.'], certa: 1, traducao: 'Jornalistas publicaram a notícia.' },
+    { frase: 'In a passive sentence, the focus is on ___.', opcoes: ['the people who did the action', 'the time of the action', 'the object, what happened'], certa: 2, traducao: 'Na passiva, o foco é no objeto, no que aconteceu.' },
+    { frase: 'We use "by" when we want to say ___ did the action.', opcoes: ['who', 'where', 'when'], certa: 0, traducao: 'Usamos "by" para dizer quem fez a ação.' },
+    { frase: 'Present passive = am / is / are + ___.', opcoes: ['infinitive', 'past participle', 'verb + -ing'], certa: 1, traducao: 'Presente passivo = am / is / are + particípio passado.' },
+    { frase: 'Past passive = ___ + past participle.', opcoes: ['am / is / are', 'do / did', 'was / were'], certa: 2, traducao: 'Passado passivo = was / were + particípio passado.' },
+    { instrucao: PA + ' "Bloggers copied the content."', frase: '___', opcoes: ['The content was copied by bloggers.', 'The content is copied by bloggers.', 'The content copied bloggers.'], certa: 0, traducao: 'O conteúdo foi copiado por blogueiros.' },
+    { instrucao: PA + ' "Users share fake posts."', frase: '___', opcoes: ['Fake posts were shared by users.', 'Fake posts are shared by users.', 'Fake posts are share by users.'], certa: 1, traducao: 'Posts falsos são compartilhados por usuários.' },
+    { instrucao: PA + ' "Sensationalist newspapers present stories as shocking."', frase: '___', opcoes: ['Stories is presented as shocking.', 'Stories presented as shocking.', 'Stories are presented as shocking.'], certa: 2, traducao: 'As histórias são apresentadas como chocantes.' },
+    { instrucao: PA + ' "Many websites published the headline."', frase: '___', opcoes: ['The headline was published by many websites.', 'The headline is published by many websites.', 'The headline was publish by many websites.'], certa: 0, traducao: 'A manchete foi publicada por muitos sites.' },
+    { frase: 'Two new chemical elements ___ discovered by Marie Curie.', opcoes: ['was', 'were', 'is'], certa: 1, traducao: 'Dois novos elementos químicos foram descobertos por Marie Curie.' },
+    { frase: '"The Great Wall of China ___ built in one year." That is fake!', opcoes: ['is', 'were', 'was'], certa: 2, traducao: '"A Muralha da China foi construída em um ano." Isso é falso!' }
+  ]
+});
+</script>
+</body>
+</html>

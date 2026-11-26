@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 36 · The story was published</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 36 · Escrita (Before You Share)
+   Alinhado ao Grammar Point (present passive am / is / are + particípio; past passive
+   was / were + particípio; by para dizer quem fez) e aos exercícios 1, 4 e 5.
+   Conteúdo NOVO. A palavra extra nunca forma outra frase certa. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 35, num: 7, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Notícias falsas são compartilhadas muito rápido na internet.'), palavras: ['Fake', 'news', 'is', 'shared', 'very', 'quickly', 'online'], isca: ['share'], fim: '.', traducao: 'Notícias falsas são compartilhadas muito rápido na internet.' },
+    { contexto: M('O vídeo foi visto em muitos países.'), palavras: ['The', 'video', 'was', 'seen', 'in', 'many', 'countries'], isca: ['saw'], fim: '.', traducao: 'O vídeo foi visto em muitos países.' },
+    { contexto: M('Imagens e memes são usados para enganar as pessoas.'), palavras: ['Images', 'and', 'memes', 'are', 'used', 'to', 'mislead', 'people'], isca: ['is'], fim: '.', traducao: 'Imagens e memes são usados para enganar as pessoas.' },
+    { contexto: M('A notícia foi publicada na semana passada.'), palavras: ['The', 'story', 'was', 'published', 'last', 'week'], isca: ['were'], fim: '.', traducao: 'A notícia foi publicada na semana passada.' },
+    { contexto: M('A citação foi tirada de contexto.'), palavras: ['The', 'quote', 'was', 'taken', 'out', 'of', 'context'], isca: ['took'], fim: '.', traducao: 'A citação foi tirada de contexto.' },
+    { contexto: M('Muitas histórias falsas são noticiadas como reais.'), palavras: ['Many', 'fake', 'stories', 'are', 'reported', 'as', 'real', 'news'], isca: ['is'], fim: '.', traducao: 'Muitas histórias falsas são noticiadas como reais.' },
+    { contexto: M('A manchete foi escrita por um robô.'), palavras: ['The', 'headline', 'was', 'written', 'by', 'a', 'robot'], isca: ['wrote'], fim: '.', traducao: 'A manchete foi escrita por um robô.' },
+    { contexto: M('As fotos foram tiradas no México.'), palavras: ['The', 'photos', 'were', 'taken', 'in', 'Mexico'], isca: ['was'], fim: '.', traducao: 'As fotos foram tiradas no México.' },
+    { contexto: M('Este aplicativo é usado por milhões de pessoas.'), palavras: ['This', 'app', 'is', 'used', 'by', 'millions', 'of', 'people'], isca: ['are'], fim: '.', traducao: 'Este aplicativo é usado por milhões de pessoas.' },
+    { contexto: M('O conteúdo foi copiado de outro site.'), palavras: ['The', 'content', 'was', 'copied', 'from', 'another', 'website'], isca: ['copy'], fim: '.', traducao: 'O conteúdo foi copiado de outro site.' },
+    { contexto: M('O vídeo foi compartilhado nas redes sociais?'), palavras: ['Was', 'the', 'video', 'shared', 'on', 'social', 'media'], isca: ['Were'], fim: '?', traducao: 'O vídeo foi compartilhado nas redes sociais?' },
+    { contexto: M('A informação não foi verificada.'), palavras: ['The', 'information', 'was', 'not', 'checked'], isca: ['check'], fim: '.', traducao: 'A informação não foi verificada.' },
+    { contexto: M('Português é falado no Brasil e em Portugal.'), palavras: ['Portuguese', 'is', 'spoken', 'in', 'Brazil', 'and', 'Portugal'], isca: ['speak'], fim: '.', traducao: 'Português é falado no Brasil e em Portugal.' },
+    { contexto: M('O telefone foi inventado por Alexander Graham Bell.'), palavras: ['The', 'telephone', 'was', 'invented', 'by', 'Alexander', 'Graham', 'Bell'], isca: ['invent'], fim: '.', traducao: 'O telefone foi inventado por Alexander Graham Bell.' },
+    { contexto: M('O Coliseu foi construído há quase dois mil anos.'), palavras: ['The', 'Colosseum', 'was', 'built', 'almost', 'two', 'thousand', 'years', 'ago'], isca: ['build'], fim: '.', traducao: 'O Coliseu foi construído há quase dois mil anos.' },
+    { contexto: M('Posts falsos são compartilhados em várias plataformas.'), palavras: ['Fake', 'posts', 'are', 'shared', 'on', 'different', 'platforms'], isca: ['sharing'], fim: '.', traducao: 'Posts falsos são compartilhados em várias plataformas.' },
+    { contexto: M('Onde a foto foi tirada?'), palavras: ['Where', 'was', 'the', 'photo', 'taken'], isca: ['took'], fim: '?', traducao: 'Onde a foto foi tirada?' },
+    { contexto: M('A conta foi apagada ontem.'), palavras: ['The', 'account', 'was', 'deleted', 'yesterday'], isca: ['delete'], fim: '.', traducao: 'A conta foi apagada ontem.' },
+    { contexto: M('Dois novos elementos foram descobertos por Marie Curie.'), palavras: ['Two', 'new', 'elements', 'were', 'discovered', 'by', 'Marie', 'Curie'], isca: ['was'], fim: '.', traducao: 'Dois novos elementos foram descobertos por Marie Curie.' },
+    { contexto: M('As notícias são lidas por milhões todos os dias.'), palavras: ['The', 'news', 'is', 'read', 'by', 'millions', 'every', 'day'], isca: ['are'], fim: '.', traducao: 'As notícias são lidas por milhões todos os dias.' }
+  ]
+});
+</script>
+</body>
+</html>

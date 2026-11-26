@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 35 · Media and the news</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 35 · Gramática (Before You Share)
+   Alinhado ao Vocabulary: Media And The News (headline, source, meme, quote; collocations
+   misleading information, sensationalist language, public figure; go viral, be skeptical,
+   share content, double-check), ao Listening (bio, handle, zoom, busca de imagem; vídeo de
+   2018) e ao Warm Up (notícias reais e inventadas). Conteúdo NOVO. 24 questões. */
+const RN = 'Real news, fake news or an opinion?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 35, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'Where does this information come from? Check the ___.', opcoes: ['source', 'meme', 'quote'], certa: 0, traducao: 'De onde vem esta informação? Verifique a fonte.' },
+    { frase: 'The ___ of the article was in big, red letters.', opcoes: ['quote', 'headline', 'source'], certa: 1, traducao: 'A manchete do artigo estava em letras grandes e vermelhas.' },
+    { frase: 'People shared a funny ___ with a photo of a cat and a joke.', opcoes: ['source', 'headline', 'meme'], certa: 2, traducao: 'As pessoas compartilharam um meme engraçado com a foto de um gato e uma piada.' },
+    { frase: 'The article used a ___ from the minister: "We will win."', opcoes: ['quote', 'meme', 'bio'], certa: 0, traducao: 'O artigo usou uma citação do ministro: "Vamos vencer."' },
+    { frase: 'A famous politician is a public ___.', opcoes: ['language', 'figure', 'information'], certa: 1, traducao: 'Um político famoso é uma figura pública.' },
+    { frase: 'This post makes people believe something false. It is ___ information.', opcoes: ['public', 'reliable', 'misleading'], certa: 2, traducao: 'Este post faz as pessoas acreditarem em algo falso. É informação enganosa.' },
+    { frase: '"SHOCKING! You won\'t believe this!" is ___ language.', opcoes: ['sensationalist', 'calm', 'scientific'], certa: 0, traducao: '"CHOCANTE! Você não vai acreditar!" é linguagem sensacionalista.' },
+    { frase: 'The video ___ viral in two hours.', opcoes: ['did', 'went', 'made'], certa: 1, traducao: 'O vídeo viralizou em duas horas.' },
+    { frase: 'Be ___ when a headline sounds too dramatic.', opcoes: ['viral', 'public', 'skeptical'], certa: 2, traducao: 'Seja cético quando uma manchete parece dramática demais.' },
+    { frase: 'Always ___ the information before you share it.', opcoes: ['double-check', 'go viral', 'zoom'], certa: 0, traducao: 'Sempre confira a informação antes de compartilhar.' },
+    { frase: 'Many people share ___ online without checking the source.', opcoes: ['source', 'content', 'skeptical'], certa: 1, traducao: 'Muitas pessoas compartilham conteúdo sem verificar a fonte.' },
+    { frase: 'A ___ account can post the same thing more than 70 times a day.', opcoes: ['public', 'true', 'bot'], certa: 2, traducao: 'Uma conta robô pode postar a mesma coisa mais de 70 vezes por dia.' },
+    { frase: "Read the account's ___ to learn who is behind it.", opcoes: ['bio', 'meme', 'headline'], certa: 0, traducao: 'Leia a bio da conta para saber quem está por trás dela.' },
+    { frase: 'The name that starts with @ is the account ___.', opcoes: ['bio', 'handle', 'headline'], certa: 1, traducao: 'O nome que começa com @ é o "handle" da conta.' },
+    { frase: 'Zoom ___ the image and look for street signs.', opcoes: ['out of', 'off', 'into'], certa: 2, traducao: 'Dê zoom na imagem e procure placas de rua.' },
+    { frase: 'Google and TinEye can show when an image first ___ online.', opcoes: ['appeared', 'disappeared', 'went off'], certa: 0, traducao: 'O Google e o TinEye mostram quando uma imagem apareceu pela primeira vez na internet.' },
+    { frase: 'In the 2018 video, the police shields had a word in ___.', opcoes: ['French', 'Spanish', 'Persian'], certa: 1, traducao: 'No vídeo de 2018, os escudos da polícia tinham uma palavra em espanhol.' },
+    { frase: 'The video said it was from Iran, but it was really from ___.', opcoes: ['Spain', 'Brazil', 'Mexico'], certa: 2, traducao: 'O vídeo dizia que era do Irã, mas na verdade era do México.' },
+    { frase: 'It is ___ easy to identify a bot account.', opcoes: ['not', 'very', 'always'], certa: 0, traducao: 'Não é fácil identificar uma conta robô.' },
+    { instrucao: RN + ' "NASA and Nokia are testing a 4G network on the Moon."', frase: '___', opcoes: ['Real news.', 'Fake news.', 'An opinion.'], certa: 0, traducao: 'Real: a NASA e a Nokia estão testando uma rede 4G na Lua.' },
+    { instrucao: RN + ' "An eight-year-old girl pulled an ancient sword out of a lake in Sweden."', frase: '___', opcoes: ['Fake news.', 'Real news.', 'An opinion.'], certa: 1, traducao: 'Real: uma menina de oito anos tirou uma espada antiga de um lago na Suécia.' },
+    { instrucao: RN + ' "A university banned capital letters to avoid scaring students."', frase: '___', opcoes: ['Real news.', 'An opinion.', 'Fake news.'], certa: 2, traducao: 'Falsa: uma universidade proibiu letras maiúsculas para não assustar os alunos.' },
+    { instrucao: RN + ' "A couple in California gave their baby a name made of emojis."', frase: '___', opcoes: ['Fake news.', 'Real news.', 'An opinion.'], certa: 0, traducao: 'Falsa: um casal na Califórnia deu ao bebê um nome feito de emojis.' },
+    { instrucao: RN + ' "Memes are the best way to learn about the news."', frase: '___', opcoes: ['Real news.', 'An opinion.', 'Fake news.'], certa: 1, traducao: 'Opinião: memes são o melhor jeito de se informar.' }
+  ]
+});
+</script>
+</body>
+</html>

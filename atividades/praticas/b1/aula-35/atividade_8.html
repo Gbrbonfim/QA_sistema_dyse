@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 36 · In the newsroom</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 36 · Leitura (Before You Share)
+   Alinhado ao Grammar Point (voz passiva no presente e no passado, com e sem by; na notícia
+   o foco é no que aconteceu) e ao Vocabulary (source, quote, double-check, sensationalist,
+   misleading). Conteúdo NOVO: a editora Nora e o repórter Tom checam uma notícia viral.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Nora', 'Tom, is the story about the robot chef ready?'],
+  ['Tom', 'Almost. The video was shared two million times yesterday.'],
+  ['Nora', 'Who made the video?'],
+  ['Tom', "We don't know. It was posted by an account with no bio."],
+  ['Nora', 'Hmm. Was the information checked?'],
+  ['Tom', 'Yes, it was. The restaurant was contacted this morning.'],
+  ['Nora', 'And what did they say?'],
+  ['Tom', 'They said the robot was built by a company in Japan.'],
+  ['Nora', 'Were any photos taken at the restaurant?'],
+  ['Tom', 'Yes, some photos were taken by our photographer.'],
+  ['Nora', 'Great. And the quote from the chef?'],
+  ['Tom', 'It was double-checked. The chef really said it.'],
+  ['Nora', 'Good. Who wrote the headline?'],
+  ['Tom', "It was written by the new intern. It's a bit sensationalist."],
+  ['Nora', "Let's change it. Our news is read by thousands of people."],
+  ['Tom', "You're right. Misleading headlines are shared too fast."],
+  ['Nora', 'Is the article finished now?'],
+  ['Tom', 'Yes. It was finished an hour ago.'],
+  ['Nora', 'Perfect. Then it can go online tonight.'],
+  ['Tom', 'Great! I hope a lot of people read it.']
+];
+const lado = q => q === 'Nora' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 35, num: 8, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Almost. The video was shared two million times yesterday.', 'Almost. The video is shared two million times yesterday.', 'Almost. The video was share two million times yesterday.'], 0, 'Quase. O vídeo foi compartilhado dois milhões de vezes ontem.'),
+    prox(3, ["We don't know. It posted by an account with no bio.", "We don't know. It was posted by an account with no bio.", "We don't know. It was post by an account with no bio."], 1, 'Não sabemos. Foi postado por uma conta sem bio.'),
+    prox(4, ['Hmm. Were the information checked?', 'Hmm. Was the information check?', 'Hmm. Was the information checked?'], 2, 'Hmm. A informação foi verificada?'),
+    prox(5, ['Yes, it was. The restaurant was contacted this morning.', 'Yes, it were. The restaurant was contacted this morning.', 'Yes, it was. The restaurant was contact this morning.'], 0, 'Sim. O restaurante foi contatado hoje de manhã.'),
+    prox(7, ['They said the robot was build by a company in Japan.', 'They said the robot was built by a company in Japan.', 'They said the robot were built by a company in Japan.'], 1, 'Disseram que o robô foi construído por uma empresa no Japão.'),
+    prox(8, ['Was any photos taken at the restaurant?', 'Were any photos take at the restaurant?', 'Were any photos taken at the restaurant?'], 2, 'Foram tiradas fotos no restaurante?'),
+    prox(9, ['Yes, some photos were taken by our photographer.', 'Yes, some photos was taken by our photographer.', 'Yes, some photos were took by our photographer.'], 0, 'Sim, algumas fotos foram tiradas pelo nosso fotógrafo.'),
+    prox(11, ['It was double-check. The chef really said it.', 'It was double-checked. The chef really said it.', 'It double-checked. The chef really said it.'], 1, 'Foi conferida. O chef realmente disse aquilo.'),
+    prox(13, ["It was wrote by the new intern. It's a bit sensationalist.", "It written by the new intern. It's a bit sensationalist.", "It was written by the new intern. It's a bit sensationalist."], 2, 'Foi escrita pelo novo estagiário. Está um pouco sensacionalista.'),
+    prox(14, ["Let's change it. Our news is read by thousands of people.", "Let's change it. Our news is reads by thousands of people.", "Let's change it. Our news are readed by thousands of people."], 0, 'Vamos mudar. Nossas notícias são lidas por milhares de pessoas.'),
+    prox(15, ["You're right. Misleading headlines is shared too fast.", "You're right. Misleading headlines are shared too fast.", "You're right. Misleading headlines are share too fast."], 1, 'Você tem razão. Manchetes enganosas são compartilhadas rápido demais.'),
+    prox(17, ['Yes. It were finished an hour ago.', 'Yes. It is finished an hour ago.', 'Yes. It was finished an hour ago.'], 2, 'Sim. Foi terminado há uma hora.'),
+    { instrucao: 'What is the story about?', frase: '___', opcoes: ['A robot chef.', 'A new phone.', 'A football match.'], certa: 0, traducao: 'Um robô chef.' },
+    { instrucao: 'How many times was the video shared?', frase: '___', opcoes: ['Two thousand times.', 'Two million times.', 'Twenty times.'], certa: 1, traducao: 'Dois milhões de vezes.' },
+    { instrucao: 'Who posted the video?', frase: '___', opcoes: ['The restaurant.', 'Nora.', 'An account with no bio.'], certa: 2, traducao: 'Uma conta sem bio.' },
+    { instrucao: 'When was the restaurant contacted?', frase: '___', opcoes: ['This morning.', 'Last week.', 'Last night.'], certa: 0, traducao: 'Hoje de manhã.' },
+    { instrucao: 'Where was the robot built?', frase: '___', opcoes: ['In China.', 'In Japan.', 'In Brazil.'], certa: 1, traducao: 'No Japão.' },
+    { instrucao: 'Who took photos at the restaurant?', frase: '___', opcoes: ['The chef.', 'The intern.', "The newspaper's photographer."], certa: 2, traducao: 'O fotógrafo do jornal.' },
+    { instrucao: 'What was the problem with the headline?', frase: '___', opcoes: ['It was a bit sensationalist.', 'It was too long.', 'It was in Japanese.'], certa: 0, traducao: 'Estava um pouco sensacionalista.' },
+    { instrucao: 'When can the story go online?', frase: '___', opcoes: ['Tomorrow morning.', 'Tonight.', 'Next week.'], certa: 1, traducao: 'Hoje à noite.' }
+  ]
+});
+</script>
+</body>
+</html>

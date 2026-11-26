@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 35 · A shark in the street?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 35 · Leitura (Before You Share)
+   Alinhado ao Vocabulary (meme, source, go viral, skeptical, misleading, sensationalist,
+   double-check, public figure) e ao Listening (olhar a fonte, a bio e o username, olhar de
+   perto, busca reversa de imagem). Conteúdo NOVO: Leo quase compartilha uma foto falsa.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Leo', 'Maya, look at this! A shark is swimming down a street in Miami!'],
+  ['Maya', 'Wow. Where did you see that?'],
+  ['Leo', "In a meme. It's going viral. Everyone is sharing it."],
+  ['Maya', "Hmm, I'm a bit skeptical. What's the source?"],
+  ['Leo', "I don't know. It came from an account called news24_8831."],
+  ['Maya', "That username has lots of random numbers. Let's check the bio."],
+  ['Leo', "There's no bio and no profile photo."],
+  ['Maya', "That's suspicious. Let's look closer at the image."],
+  ['Leo', 'The water looks strange, and the shark is really big.'],
+  ['Maya', "Let's do a reverse image search to see when it first appeared."],
+  ['Leo', 'Oh! This photo appeared online in 2011, with a different headline.'],
+  ['Maya', "So it's an old, edited image. It's misleading information."],
+  ['Leo', 'But the headline says "SHOCKING! Sharks in the city!"'],
+  ['Maya', "That's sensationalist language. They just want more clicks."],
+  ['Leo', 'I almost shared it with my family group.'],
+  ['Maya', 'Lots of people share content without checking it.'],
+  ['Leo', "From now on, I'll double-check everything."],
+  ['Maya', 'Good idea. And be careful with quotes from public figures, too.'],
+  ['Leo', 'Why? Are they often fake?'],
+  ['Maya', 'Sometimes. Always check if the person really said it.']
+];
+const lado = q => q === 'Leo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 35, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['Wow. Where did you see that?', 'Wow. Where you saw that?', 'Wow. Where did you saw that?'], 0, 'Nossa. Onde você viu isso?'),
+    prox(2, ["In a meme. It's go viral. Everyone is sharing it.", "In a meme. It's going viral. Everyone is sharing it.", "In a meme. It's going viral. Everyone are sharing it."], 1, 'Num meme. Está viralizando. Todo mundo está compartilhando.'),
+    prox(3, ["Hmm, I'm a bit skeptic. What's the source?", "Hmm, I believe everything. What's the source?", "Hmm, I'm a bit skeptical. What's the source?"], 2, 'Hmm, estou meio desconfiada. Qual é a fonte?'),
+    prox(5, ["That username has lots of random numbers. Let's check the bio.", "That username has lots of random number. Let's check the bio.", "That username have lots of random numbers. Let's check the bio."], 0, 'Esse nome de usuário tem muitos números aleatórios. Vamos ver a bio.'),
+    prox(7, ["That's suspicious. Let's look closer the image.", "That's suspicious. Let's look closer at the image.", "That's suspicious. Let's looking closer at the image."], 1, 'Isso é suspeito. Vamos olhar a imagem de perto.'),
+    prox(9, ["Let's do a reverse image search to see when it first appear.", "Let's doing a reverse image search to see when it first appeared.", "Let's do a reverse image search to see when it first appeared."], 2, 'Vamos fazer uma busca reversa de imagem para ver quando ela apareceu pela primeira vez.'),
+    prox(11, ["So it's an old, edited image. It's misleading information.", "So it's an old, edited image. It's a misleading informations.", "So it's an old, edited image. It's reliable information."], 0, 'Então é uma imagem antiga e editada. É informação enganosa.'),
+    prox(13, ["That's clear language. They just want more clicks.", "That's sensationalist language. They just want more clicks.", "That's sensationalist language. They just wants more clicks."], 1, 'Isso é linguagem sensacionalista. Eles só querem mais cliques.'),
+    prox(15, ['Lots of people share content without check it.', 'Lots of people shares content without checking it.', 'Lots of people share content without checking it.'], 2, 'Muita gente compartilha conteúdo sem verificar.'),
+    prox(16, ["From now on, I'll double-check everything.", "From now on, I'll double-checking everything.", "From now on, I'll share everything."], 0, 'De agora em diante, vou conferir tudo.'),
+    prox(17, ['Good idea. And be careful with quote from public figures, too.', 'Good idea. And be careful with quotes from public figures, too.', 'Good idea. And be carefully with quotes from public figures, too.'], 1, 'Boa ideia. E tome cuidado com citações de figuras públicas também.'),
+    prox(19, ['Sometimes. Always check if the person really say it.', 'Sometimes. Never check if the person really said it.', 'Sometimes. Always check if the person really said it.'], 2, 'Às vezes. Sempre verifique se a pessoa realmente disse aquilo.'),
+    { instrucao: 'What was in the image?', frase: '___', opcoes: ['A shark in a street.', 'A dog on a bus.', 'A bear in a park.'], certa: 0, traducao: 'Um tubarão numa rua.' },
+    { instrucao: 'What was strange about the username?', frase: '___', opcoes: ['It was very short.', 'It had lots of random numbers.', 'It had a famous name.'], certa: 1, traducao: 'Tinha muitos números aleatórios.' },
+    { instrucao: 'What was missing from the account?', frase: '___', opcoes: ['A username.', 'Followers.', 'A bio and a profile photo.'], certa: 2, traducao: 'A bio e a foto de perfil.' },
+    { instrucao: 'When did the photo first appear online?', frase: '___', opcoes: ['In 2011.', 'Last week.', 'In 2021.'], certa: 0, traducao: 'Em 2011.' },
+    { instrucao: 'What kind of language was in the headline?', frase: '___', opcoes: ['Clear and calm.', 'Sensationalist.', 'Scientific.'], certa: 1, traducao: 'Sensacionalista.' },
+    { instrucao: 'Where did Leo almost share the image?', frase: '___', opcoes: ['On a news website.', 'At school.', 'In the family group.'], certa: 2, traducao: 'No grupo da família.' },
+    { instrucao: 'What will Leo do from now on?', frase: '___', opcoes: ['Double-check everything.', 'Stop using the internet.', 'Share only memes.'], certa: 0, traducao: 'Conferir tudo.' },
+    { instrucao: 'What should you check about quotes?', frase: '___', opcoes: ['If they are funny.', 'If the person really said them.', 'If they went viral.'], certa: 1, traducao: 'Se a pessoa realmente disse aquilo.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 36 · It was shared by millions</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 36 · Escuta (Before You Share)
+   Alinhado ao Grammar Point (ativa x passiva; present passive am / is / are + particípio;
+   past passive was / were + particípio; by) e ao Role-Play "Fake or Real?" (dizer frases
+   na passiva e decidir se são verdadeiras). Conteúdo NOVO: fatos reais e falsos diferentes
+   dos do slide. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const P = 'Listen to the active sentence. Choose the same idea in the passive.', T = 'Listen. Is it real or fake?';
+const R = 'Real.', F = 'Fake.', O = "It's an opinion.";
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 35, num: 6, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: P, ...q('People shared the video thousands of times.', 'The video was shared thousands of times.', ['The video were shared thousands of times.', 'The video was share thousands of times.'], 'rule') },
+    { instrucao: P, ...q('Websites report fake stories every day.', 'Fake stories are reported every day.', ['Fake stories is reported every day.', 'Fake stories are report every day.'], 'rule') },
+    { instrucao: P, ...q('A blogger copied the article.', 'The article was copied by a blogger.', ['The article copied a blogger.', 'The article was copy by a blogger.'], 'rule') },
+    { instrucao: P, ...q('Websites use images to get more clicks.', 'Images are used to get more clicks.', ['Images is used to get more clicks.', 'Images are using to get more clicks.'], 'rule') },
+    { instrucao: P, ...q('Thousands of users saw the post yesterday.', 'The post was seen by thousands of users yesterday.', ['The post was saw by thousands of users yesterday.', 'The post were seen by thousands of users yesterday.'], 'rule') },
+    { instrucao: P, ...q('Bots spread misleading information.', 'Misleading information is spread by bots.', ['Misleading information are spread by bots.', 'Misleading information spreads bots.'], 'rule') },
+    { instrucao: P, ...q('Someone took the photo in 2011.', 'The photo was taken in 2011.', ['The photo was took in 2011.', 'The photo were taken in 2011.'], 'rule') },
+    { instrucao: P, ...q('A news website published the headline last night.', 'The headline was published last night.', ['The headline published last night.', 'The headline were published last night.'], 'rule') },
+    { instrucao: P, ...q('People speak Portuguese in Brazil.', 'Portuguese is spoken in Brazil.', ['Portuguese is speaked in Brazil.', 'Portuguese are spoken in Brazil.'], 'rule') },
+    { instrucao: P, ...q('The editors made the decision this morning.', 'The decision was made this morning.', ['The decision was make this morning.', 'The decision made this morning.'], 'rule') },
+    { instrucao: T, ...q('The Mona Lisa was painted by Leonardo da Vinci.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Penicillin was discovered by Alexander Fleming.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('The Pyramids of Giza were built by the Romans.', F, [R, O], 'fact_check') },
+    { instrucao: T, ...q('The Statue of Liberty was given to the United States by France.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('The Titanic was built in Brazil.', F, [R, O], 'fact_check') },
+    { instrucao: T, ...q('The World Wide Web was invented by Tim Berners-Lee.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('The Harry Potter books were written by Stephen King.', F, [R, O], 'fact_check') },
+    { instrucao: T, ...q('The first Olympic Games were held in Ancient Greece.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Christ the Redeemer in Rio de Janeiro was finished in 1931.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Brasília was built to be the new capital of Brazil.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('The Eiffel Tower was built in London.', F, [R, O], 'fact_check') },
+    { instrucao: T, ...q('Romeo and Juliet was written by William Shakespeare.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('The first smartphone was made in the year 1900.', F, [R, O], 'fact_check') },
+    { instrucao: T, ...q('Rice is eaten by billions of people every day.', R, [F, O], 'fact_check') }
+  ]
+});
+</script>
+</body>
+</html>

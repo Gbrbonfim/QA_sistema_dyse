@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 35 · Real or fake?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 35 · Escuta (Before You Share)
+   Alinhado ao Warm Up (notícia real ou inventada), ao Vocabulary (headline, source, meme,
+   quote, public figure, misleading information, sensationalist language, go viral, be
+   skeptical, double-check) e ao Listening (dicas para identificar fake news: fonte, olhar
+   de perto, algo suspeito). Conteúdo NOVO: fatos reais e mitos populares. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const T = 'Listen. Is it real or fake?', W = 'Listen to the definition. What is it?', A = 'Listen. What should the speaker do?';
+const R = 'Real.', F = 'Fake.', O = "It's an opinion.";
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 35, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best answer',
+  itens: [
+    { instrucao: T, ...q('In 2019, scientists showed the first photo of a black hole.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('You can easily see the Great Wall of China from the Moon with your eyes.', F, [R, O], 'fact_check') },
+    { instrucao: T, ...q('An octopus has three hearts.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Goldfish can only remember things for three seconds.', F, [R, O], 'fact_check') },
+    { instrucao: T, ...q('A day on Venus is longer than a year on Venus.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Lightning never hits the same place twice.', F, [R, O], 'fact_check') },
+    { instrucao: T, ...q('Bananas are berries, but strawberries are not.', R, [F, O], 'fact_check') },
+    { instrucao: T, ...q('Humans only use ten percent of their brains.', F, [R, O], 'fact_check') },
+    { instrucao: W, ...q('The title of a news story, written in big letters.', 'a headline', ['a quote', 'a meme'], 'help') },
+    { instrucao: W, ...q('The place where a piece of information comes from.', 'a source', ['a headline', 'a username'], 'help') },
+    { instrucao: W, ...q('A funny image or video that people copy and share online.', 'a meme', ['a source', 'a headline'], 'help') },
+    { instrucao: W, ...q('The exact words that someone said.', 'a quote', ['a meme', 'a source'], 'help') },
+    { instrucao: W, ...q('A famous person, like a politician or an actor.', 'a public figure', ['a bot account', 'a headline'], 'help') },
+    { instrucao: W, ...q('Information that makes people believe something that is not true.', 'misleading information', ['public information', 'a quote'], 'help') },
+    { instrucao: W, ...q('Very dramatic words that try to shock people and get clicks.', 'sensationalist language', ['clear language', 'a username'], 'help') },
+    { instrucao: W, ...q('When millions of people see and share something very quickly.', 'It goes viral.', ['It is double-checked.', 'It is deleted.'], 'help') },
+    { instrucao: W, ...q('To question information and not believe everything immediately.', 'to be skeptical', ['to go viral', 'to share content'], 'help') },
+    { instrucao: W, ...q('To check information again to be sure it is correct.', 'to double-check', ['to share', 'to scroll'], 'help') },
+    { instrucao: A, ...q("I saw a shocking headline, but I don't know which website published it.", 'Look at the source.', ['Share it right away.', 'Turn off the phone.'], 'lightbulb') },
+    { instrucao: A, ...q('There is a quote from a famous actor in this meme. It sounds strange.', 'Double-check the quote.', ['Send it to everyone.', 'Change the quote.'], 'lightbulb') },
+    { instrucao: A, ...q('This photo says it is from Paris, but the street signs are in Spanish.', 'Look closer. It may be fake.', ['Believe it. It is from Paris.', 'Share it with friends.'], 'lightbulb') },
+    { instrucao: A, ...q('This account has a username with lots of random numbers and no bio.', 'Be careful. It may be a bot.', ['Follow it.', 'Copy its posts.'], 'lightbulb') },
+    { instrucao: A, ...q('This account posts more than seventy times a day, and it never writes its own content.', 'Be suspicious of it.', ['Trust it more.', 'Share all its posts.'], 'lightbulb') },
+    { instrucao: A, ...q('I want to know when this image first appeared online.', 'Do a reverse image search.', ['Read the comments.', 'Turn up the volume.'], 'lightbulb') }
+  ]
+});
+</script>
+</body>
+</html>

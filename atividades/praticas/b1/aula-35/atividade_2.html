@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 35 · Check the source</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 35 · Escrita (Before You Share)
+   Alinhado ao Vocabulary: Media And The News (source, headline, meme, quote, go viral,
+   be skeptical, share content, double-check, misleading information, sensationalist
+   language) e ao Listening (bio, username, olhar de perto). Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write the sentence in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 35, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Sempre verifique a fonte antes de compartilhar.'), palavras: ['Always', 'check', 'the', 'source', 'before', 'you', 'share'], isca: ['checks'], fim: '.', traducao: 'Sempre verifique a fonte antes de compartilhar.' },
+    { contexto: M('Este vídeo viralizou na semana passada.'), palavras: ['This', 'video', 'went', 'viral', 'last', 'week'], isca: ['go'], fim: '.', traducao: 'Este vídeo viralizou na semana passada.' },
+    { contexto: M('Seja cético quando uma manchete parece dramática demais.'), palavras: ['Be', 'skeptical', 'when', 'a', 'headline', 'sounds', 'too', 'dramatic'], isca: ['skeptic'], fim: '.', traducao: 'Seja cético quando uma manchete parece dramática demais.' },
+    { contexto: M('Muitas pessoas compartilham conteúdo sem verificá-lo.'), palavras: ['Many', 'people', 'share', 'content', 'without', 'checking', 'it'], isca: ['checked'], fim: '.', traducao: 'Muitas pessoas compartilham conteúdo sem verificá-lo.' },
+    { contexto: M('Confira de novo a informação antes de acreditar nela.'), palavras: ['Double-check', 'the', 'information', 'before', 'you', 'believe', 'it'], isca: ['believes'], fim: '.', traducao: 'Confira de novo a informação antes de acreditar nela.' },
+    { contexto: M('O meme tinha uma citação falsa.'), palavras: ['The', 'meme', 'had', 'a', 'fake', 'quote'], isca: ['quoted'], fim: '.', traducao: 'O meme tinha uma citação falsa.' },
+    { contexto: M('Informação enganosa pode ser perigosa.'), palavras: ['Misleading', 'information', 'can', 'be', 'dangerous'], isca: ['Mislead'], fim: '.', traducao: 'Informação enganosa pode ser perigosa.' },
+    { contexto: M('Linguagem sensacionalista ganha mais cliques.'), palavras: ['Sensationalist', 'language', 'gets', 'more', 'clicks'], isca: ['get'], fim: '.', traducao: 'Linguagem sensacionalista ganha mais cliques.' },
+    { contexto: M('Quem é a fonte desta notícia?'), palavras: ['Who', 'is', 'the', 'source', 'of', 'this', 'story'], isca: ['does'], fim: '?', traducao: 'Quem é a fonte desta notícia?' },
+    { contexto: M('A conta não tinha foto nem bio.'), palavras: ['The', 'account', 'had', 'no', 'photo', 'and', 'no', 'bio'], isca: ['any'], fim: '.', traducao: 'A conta não tinha foto nem bio.' },
+    { contexto: M('Uma figura pública disse isso numa entrevista.'), palavras: ['A', 'public', 'figure', 'said', 'it', 'in', 'an', 'interview'], isca: ['saying'], fim: '.', traducao: 'Uma figura pública disse isso numa entrevista.' },
+    { contexto: M('Não acredite em tudo que você lê na internet.'), palavras: ["Don't", 'believe', 'everything', 'you', 'read', 'online'], isca: ['believes'], fim: '.', traducao: 'Não acredite em tudo que você lê na internet.' },
+    { contexto: M('Eu dei zoom para ver as placas da rua.'), palavras: ['I', 'zoomed', 'in', 'to', 'check', 'the', 'street', 'signs'], isca: ['zooming'], fim: '.', traducao: 'Eu dei zoom para ver as placas da rua.' },
+    { contexto: M('O nome de usuário tinha muitos números aleatórios.'), palavras: ['The', 'username', 'had', 'lots', 'of', 'random', 'numbers'], isca: ['much'], fim: '.', traducao: 'O nome de usuário tinha muitos números aleatórios.' },
+    { contexto: M('Robôs postam o mesmo conteúdo muitas vezes por dia.'), palavras: ['Bots', 'post', 'the', 'same', 'content', 'many', 'times', 'a', 'day'], isca: ['posts'], fim: '.', traducao: 'Robôs postam o mesmo conteúdo muitas vezes por dia.' },
+    { contexto: M('Esta notícia é falsa.'), palavras: ['This', 'news', 'story', 'is', 'fake'], isca: ['are'], fim: '.', traducao: 'Esta notícia é falsa.' },
+    { contexto: M('Como podemos saber se uma notícia é real?'), palavras: ['How', 'can', 'we', 'know', 'if', 'a', 'story', 'is', 'real'], isca: ['does'], fim: '?', traducao: 'Como podemos saber se uma notícia é real?' },
+    { contexto: M('Eu li a manchete, mas não o artigo inteiro.'), palavras: ['I', 'read', 'the', 'headline', 'but', 'not', 'the', 'whole', 'article'], isca: ['reads'], fim: '.', traducao: 'Eu li a manchete, mas não o artigo inteiro.' },
+    { contexto: M('O vídeo mostrava o México, não o Irã.'), palavras: ['The', 'video', 'showed', 'Mexico', 'not', 'Iran'], isca: ['show'], fim: '.', traducao: 'O vídeo mostrava o México, não o Irã.' },
+    { contexto: M('Verificar informações deveria ser um hábito.'), palavras: ['Checking', 'information', 'should', 'be', 'a', 'habit'], isca: ['Check'], fim: '.', traducao: 'Verificar informações deveria ser um hábito.' }
+  ]
+});
+</script>
+</body>
+</html>
