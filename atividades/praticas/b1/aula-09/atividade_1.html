@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 9 · Review: what does it mean?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 09 · Escuta (Review Classes 1-8)
+   Revisão das aulas 1-8: verbos de sentido (seem/taste/feel/sound), housework, adjetivos -ed/-ing,
+   was going to x going to, pronomes indefinidos, present perfect (ever/never, just/yet),
+   past continuous + when, in/on/at e ordem das palavras em perguntas. Conteúdo NOVO.
+   24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 9, num: 1, tipo: 'imagem',
+  instrucao: 'Listen and choose the best description',
+  itens: [
+    q('My new pillow is very soft.', 'It feels soft.', ['It tastes soft.', 'It sounds soft.'], 'bed'),
+    q('Listen to this song. The singer has a beautiful voice.', 'It sounds beautiful.', ['It tastes beautiful.', 'It feels beautiful.'], 'music_note'),
+    q('This cake has a lot of sugar.', 'It tastes sweet.', ['It sounds sweet.', 'It seems sweetly.'], 'cake'),
+    q('Tom is very quiet today and he is not smiling.', 'He seems sad.', ['He tastes sad.', 'He sounds like sad.'], 'sentiment_dissatisfied'),
+    q('After lunch, all the cups and plates are dirty.', 'do the washing up', ['iron clothes', 'fold blankets'], 'cleaning_services'),
+    q('My shirt is wrinkled and I have a meeting in an hour.', 'iron clothes', ['sweep the floor', 'take out the rubbish'], 'cleaning_services'),
+    q('The bin in the kitchen is full.', 'take out the rubbish', ['vacuum the floor', 'hang clothes'], 'delete'),
+    q('The film was two hours long and nothing happened.', 'It was boring.', ['It was bored.', 'It was exciting.'], 'movie'),
+    q('I opened the door and my friends shouted: Surprise!', 'I was surprised.', ['I was surprising.', 'I was bored.'], 'celebration'),
+    q('I fell in front of the whole class.', 'I felt embarrassed.', ['I felt embarrassing.', 'I felt relaxed.'], 'sentiment_stressed'),
+    q('I lay on the beach all afternoon and listened to the waves.', 'It was relaxing.', ['It was relaxed.', 'It was annoying.'], 'beach_access'),
+    q('I was going to visit my aunt, but my car broke down.', "The plan didn't happen.", ['The plan happened.', 'The plan is for next week.'], 'event_busy'),
+    q("I'm going to visit my aunt next Sunday.", "It's a future plan.", ["It's a plan that didn't happen.", 'It happened last Sunday.'], 'event'),
+    q('I knocked on the door, but no one answered.', 'Nobody opened the door.', ['Somebody opened the door.', 'Nobody knocked on the door.'], 'door_front'),
+    q('I looked in the fridge, but it was completely empty.', 'There was nothing in the fridge.', ['There was something in the fridge.', 'There was somebody in the fridge.'], 'kitchen'),
+    q('I am really hungry. A sandwich, some fruit, a salad... any food is fine.', 'Anything is fine.', ['Nothing is fine.', 'Nowhere is fine.'], 'lunch_dining'),
+    q('I went to Japan in 2019 and again in 2022.', 'I have been to Japan twice.', ['I have never been to Japan.', "I haven't been to Japan yet."], 'flight'),
+    q("Sushi? No, I've never tried it.", 'The speaker has never eaten sushi.', ['The speaker eats sushi every day.', 'The speaker has just eaten sushi.'], 'set_meal'),
+    q('I finished the laundry one minute ago.', 'I have just done the laundry.', ["I haven't done the laundry yet.", 'I am going to do the laundry.'], 'local_laundry_service'),
+    q("The washing up? Not yet. I'm going to do it after the film.", "The speaker hasn't done the washing up yet.", ['The speaker has already done the washing up.', 'The speaker has just done the washing up.'], 'cleaning_services'),
+    q('I was taking a shower when the phone rang.', 'The phone rang during the shower.', ['The phone rang after the shower.', 'The phone rang before the shower.'], 'call'),
+    q('We always travel in December.', 'in December', ['on December', 'at December'], 'calendar_month'),
+    q('Where do you usually study English?', 'Where do you usually study English?', ['Where you do usually study English?', 'Where usually you study English?'], 'help'),
+    q('What were you doing at eight last night?', 'What were you doing at eight last night?', ['What you were doing at eight last night?', 'What were doing you at eight last night?'], 'help')
+  ]
+});
+</script>
+</body>
+</html>

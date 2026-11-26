@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 9 · Back from Lisbon</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 09 · Leitura (Review Classes 1-8)
+   Revisão em diálogo: perguntas, past simple / continuous + when, present perfect (ever, yet,
+   just), verbos de sentido, -ed/-ing, somebody, was going to, in/on/at e housework. Conteúdo
+   NOVO: a Bia conta ao Theo sobre a viagem a Lisboa. 20 questões: 12 de "próxima fala" +
+   8 de compreensão. */
+const D = [
+  ['Theo', 'Hi, Bia! Where were you last week?'],
+  ['Bia', 'I was in Lisbon. I was visiting my cousin.'],
+  ['Theo', 'Lisbon? Have you ever been there before?'],
+  ['Bia', 'No, never. It was my first time.'],
+  ['Theo', 'How was the food?'],
+  ['Bia', 'Amazing! The fish tasted really fresh.'],
+  ['Theo', 'Did you try the famous Portuguese tarts?'],
+  ['Bia', 'Yes! They looked beautiful and smelled delicious.'],
+  ['Theo', 'Did anything funny happen?'],
+  ['Bia', 'Yes. I was walking in the old town when I lost my phone!'],
+  ['Theo', 'Oh no! What happened next?'],
+  ['Bia', 'It was frightening! But somebody found it and gave it back to me.'],
+  ['Theo', 'Lucky you! How long did you stay?'],
+  ['Bia', 'I was going to stay two weeks, but I had to come back for work.'],
+  ['Theo', 'When did you arrive home?'],
+  ['Bia', 'On Sunday, at midnight. I was so tired.'],
+  ['Theo', 'Have you unpacked yet?'],
+  ['Bia', 'Not yet! My clothes are still in my suitcase.'],
+  ['Theo', 'And have you done the laundry?'],
+  ['Bia', "I've just loaded the washing machine."]
+];
+const lado = q => q === 'Theo' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 9, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ['I was in Lisbon. I was visiting my cousin.', 'I were in Lisbon. I were visiting my cousin.', 'I was in Lisbon. I was visit my cousin.'], 0, 'Eu estava em Lisboa. Estava visitando a minha prima.'),
+    prox(2, ['Lisbon? Did you ever been there before?', 'Lisbon? Have you ever been there before?', 'Lisbon? Have you ever went there before?'], 1, 'Lisboa? Você já tinha ido lá antes?'),
+    prox(3, ['Yes, never. It was my first time.', 'No, never. It was my second time.', 'No, never. It was my first time.'], 2, 'Não, nunca. Foi a minha primeira vez.'),
+    prox(5, ['Amazing! The fish tasted really fresh.', 'Amazing! The fish tasted really freshly.', 'Amazing! The fish sounded really fresh.'], 0, 'Incrível! O peixe estava muito fresco.'),
+    prox(7, ['Yes! They looked beautifully and smelled deliciously.', 'Yes! They looked beautiful and smelled delicious.', 'Yes! They looked like beautiful and smelled delicious.'], 1, 'Sim! Estavam lindos e com um cheiro delicioso.'),
+    prox(9, ['Yes. I was walk in the old town when I lost my phone!', 'Yes. I was walking in the old town when I was lose my phone!', 'Yes. I was walking in the old town when I lost my phone!'], 2, 'Sim. Eu estava andando no centro histórico quando perdi o celular!'),
+    prox(11, ['It was frightening! But somebody found it and gave it back to me.', 'It was frightened! But somebody found it and gave it back to me.', 'It was frightening! But nobody found it and gave it back to me.'], 0, 'Foi assustador! Mas alguém achou e me devolveu.'),
+    prox(13, ['I am going to stay two weeks, but I had to come back for work.', 'I was going to stay two weeks, but I had to come back for work.', 'I was going stay two weeks, but I had to come back for work.'], 1, 'Eu ia ficar duas semanas, mas tive que voltar por causa do trabalho.'),
+    prox(15, ['In Sunday, at midnight. I was so tired.', 'On Sunday, in midnight. I was so tiring.', 'On Sunday, at midnight. I was so tired.'], 2, 'No domingo, à meia-noite. Eu estava muito cansada.'),
+    prox(16, ['Have you unpacked yet?', 'Did you unpacked yet?', 'Have you unpacked already yet?'], 0, 'Você já desfez a mala?'),
+    prox(17, ['Already! My clothes are still in my suitcase.', 'Not yet! My clothes are still in my suitcase.', 'Yes, I have! My clothes are still in my suitcase.'], 1, 'Ainda não! As minhas roupas ainda estão na mala.'),
+    prox(19, ["I've just load the washing machine.", "I just have loaded the washing machine.", "I've just loaded the washing machine."], 2, 'Acabei de colocar a roupa na máquina.'),
+    { instrucao: 'Where was Bia last week?', frase: '___', opcoes: ['In Lisbon.', 'In Rome.', 'At home.'], certa: 0, traducao: 'Em Lisboa.' },
+    { instrucao: 'Why was she there?', frase: '___', opcoes: ['She was working.', 'She was visiting her cousin.', 'She was studying.'], certa: 1, traducao: 'Ela estava visitando a prima.' },
+    { instrucao: 'Was it her first time in Lisbon?', frase: '___', opcoes: ['No, it was her second time.', 'No, she goes there every year.', 'Yes, it was her first time.'], certa: 2, traducao: 'Sim, foi a primeira vez.' },
+    { instrucao: 'How did the fish taste?', frase: '___', opcoes: ['Really fresh.', 'Very salty.', 'Cold.'], certa: 0, traducao: 'Muito fresco.' },
+    { instrucao: 'What happened in the old town?', frase: '___', opcoes: ['She met a famous person.', 'She lost her phone.', 'She found a wallet.'], certa: 1, traducao: 'Ela perdeu o celular.' },
+    { instrucao: 'Who gave the phone back to her?', frase: '___', opcoes: ['Nobody. She never found it.', 'The police, at the airport.', 'Somebody who found it.'], certa: 2, traducao: 'Alguém que o encontrou.' },
+    { instrucao: 'How long was Bia going to stay?', frase: '___', opcoes: ['Two weeks.', 'Two days.', 'A month.'], certa: 0, traducao: 'Duas semanas.' },
+    { instrucao: 'What has Bia just done?', frase: '___', opcoes: ['She has ironed her clothes.', 'She has loaded the washing machine.', 'She has unpacked her suitcase.'], certa: 1, traducao: 'Ela colocou a roupa na máquina.' }
+  ]
+});
+</script>
+</body>
+</html>

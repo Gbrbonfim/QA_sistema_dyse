@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 9 · Review: build the sentence</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 09 · Escrita (Review Classes 1-8)
+   Revisão: ordem das palavras em perguntas, in/on/at, past continuous + when/while, verbos de
+   sentido + adjetivo / like, present perfect (ever/never, already/yet), pronomes indefinidos,
+   was going to, adjetivos -ed/-ing. Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 9, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Onde você estudou inglês antes?'), palavras: ['Where', 'did', 'you', 'study', 'English', 'before'], isca: ['studied'], fim: '?', traducao: 'Onde você estudou inglês antes?' },
+    { contexto: M('Você gosta de aprender línguas?'), palavras: ['Do', 'you', 'like', 'learning', 'languages'], isca: ['Does'], fim: '?', traducao: 'Você gosta de aprender línguas?' },
+    { contexto: M('Eu nasci em março.'), palavras: ['I', 'was', 'born', 'in', 'March'], isca: ['on'], fim: '.', traducao: 'Eu nasci em março.' },
+    { contexto: M('A festa é no sábado.'), palavras: ['The', 'party', 'is', 'on', 'Saturday'], isca: ['in'], fim: '.', traducao: 'A festa é no sábado.' },
+    { contexto: M('Eu chego em casa às seis.'), palavras: ['I', 'get', 'home', 'at', 'six'], isca: ['on'], fim: '.', traducao: 'Eu chego em casa às seis.' },
+    { contexto: M('Eu estava dormindo quando o telefone tocou.'), palavras: ['I', 'was', 'sleeping', 'when', 'the', 'phone', 'rang'], isca: ['ringing'], fim: '.', traducao: 'Eu estava dormindo quando o telefone tocou.' },
+    { contexto: M('Eu vi um amigo enquanto estava caminhando para casa.'), palavras: ['I', 'saw', 'a', 'friend', 'while', 'I', 'was', 'walking', 'home'], isca: ['were'], fim: '.', traducao: 'Eu vi um amigo enquanto estava caminhando para casa.' },
+    { contexto: M('Essa sopa tem um cheiro delicioso.'), palavras: ['This', 'soup', 'smells', 'delicious'], isca: ['deliciously'], fim: '.', traducao: 'Essa sopa tem um cheiro delicioso.' },
+    { contexto: M('Você parece cansado.'), palavras: ['You', 'look', 'tired'], isca: ['like'], fim: '.', traducao: 'Você parece cansado.' },
+    { contexto: M('Isso parece um bom plano.'), palavras: ['That', 'sounds', 'like', 'a', 'good', 'plan'], isca: ['tastes'], fim: '.', traducao: 'Isso parece um bom plano.' },
+    { contexto: M('Você já comeu comida tailandesa?'), palavras: ['Have', 'you', 'ever', 'eaten', 'Thai', 'food'], isca: ['ate'], fim: '?', traducao: 'Você já comeu comida tailandesa?' },
+    { contexto: M('Eu nunca experimentei sushi.'), palavras: ['I', 'have', 'never', 'tried', 'sushi'], isca: ['ever'], fim: '.', traducao: 'Eu nunca experimentei sushi.' },
+    { contexto: M('Ela já lavou a roupa.'), palavras: ['She', 'has', 'already', 'done', 'the', 'laundry'], isca: ['yet'], fim: '.', traducao: 'Ela já lavou a roupa.' },
+    { contexto: M('Eu ainda não arrumei o meu quarto.'), palavras: ['I', "haven't", 'tidied', 'my', 'room', 'yet'], isca: ['already'], fim: '.', traducao: 'Eu ainda não arrumei o meu quarto.' },
+    { contexto: M('Tem alguém na porta.'), palavras: ['There', 'is', 'somebody', 'at', 'the', 'door'], isca: ['anybody'], fim: '.', traducao: 'Tem alguém na porta.' },
+    { contexto: M('Não tem nada na geladeira.'), palavras: ['There', 'is', 'nothing', 'in', 'the', 'fridge'], isca: ['anything'], fim: '.', traducao: 'Não tem nada na geladeira.' },
+    { contexto: M('Eu não fui a lugar nenhum no último fim de semana.'), palavras: ['I', "didn't", 'go', 'anywhere', 'last', 'weekend'], isca: ['nowhere'], fim: '.', traducao: 'Eu não fui a lugar nenhum no último fim de semana.' },
+    { contexto: M('Eu ia ligar para você, mas esqueci.'), palavras: ['I', 'was', 'going', 'to', 'call', 'you', 'but', 'I', 'forgot'], isca: ['called'], fim: '.', traducao: 'Eu ia ligar para você, mas esqueci.' },
+    { contexto: M('O filme foi muito chato.'), palavras: ['The', 'film', 'was', 'really', 'boring'], isca: ['bored'], fim: '.', traducao: 'O filme foi muito chato.' },
+    { contexto: M('Eu fiquei muito animado com a viagem.'), palavras: ['I', 'was', 'really', 'excited', 'about', 'the', 'trip'], isca: ['exciting'], fim: '.', traducao: 'Eu fiquei muito animado com a viagem.' }
+  ]
+});
+</script>
+</body>
+</html>

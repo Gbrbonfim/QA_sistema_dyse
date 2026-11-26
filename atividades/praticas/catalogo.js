@@ -1252,6 +1252,17 @@ window.DYSE_PRATICAS = {
           { num: 9, parte: 'Class 08', titulo: 'Feelings and plans', tipo: 'Escute e grave', treina: 'Fala · Adjetivos e planos', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 10, parte: 'Class 08', titulo: '-ed or -ing? Going to', tipo: 'Make a Choice', treina: 'Gramática · Adjetivos -ed/-ing', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 9,
+        titulo: 'Class 09 · Review Classes 1-8',
+        atividades: [
+          { num: 1, titulo: 'Review: what does it mean?', tipo: 'Escute e escolha', treina: 'Escuta · Revisão 1-8', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'Review: build the sentence', tipo: 'Monte a frase', treina: 'Escrita · Revisão 1-8', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: 'Back from Lisbon', tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Review: say it!', tipo: 'Escute e grave', treina: 'Fala · Revisão 1-8', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: 'Review: grammar and vocabulary', tipo: 'Make a Choice', treina: 'Gramática · Revisão 1-8', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }
