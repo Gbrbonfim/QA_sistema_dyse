@@ -1438,6 +1438,17 @@ window.DYSE_PRATICAS = {
           { num: 4, titulo: 'People who make my life work', tipo: 'Escute e grave', treina: 'Fala · Personalidade', minutos: '12 - 15', questoes: 20, microfone: true },
           { num: 5, titulo: 'Who, which or where?', tipo: 'Make a Choice', treina: 'Gramática · Relative clauses', minutos: '10 - 12', questoes: 24 }
         ]
+      },
+      {
+        aula: 27,
+        titulo: 'Class 27 · Then vs. Now',
+        atividades: [
+          { num: 1, titulo: 'Then or now?', tipo: 'Escute e escolha', treina: 'Escuta · Used to e aparência', minutos: '10 - 12', questoes: 24 },
+          { num: 2, titulo: 'I used to have long hair', tipo: 'Monte a frase', treina: 'Escrita · Used to', minutos: '10 - 12', questoes: 20 },
+          { num: 3, titulo: "Grandpa's old photos", tipo: 'Qual é a próxima fala?', treina: 'Leitura · Diálogo', minutos: '10 - 12', questoes: 20 },
+          { num: 4, titulo: 'Growing up in the 90s', tipo: 'Escute e grave', treina: 'Fala · Used to', minutos: '12 - 15', questoes: 20, microfone: true },
+          { num: 5, titulo: "Used to or didn't use to?", tipo: 'Make a Choice', treina: 'Gramática · Used to', minutos: '10 - 12', questoes: 24 }
+        ]
       }
     ]
   }

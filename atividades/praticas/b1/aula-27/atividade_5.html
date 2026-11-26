@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 27 · Used to or didn't use to?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 27 · Gramática (Then vs. Now)
+   Alinhado ao "Grammar Point" (used to / didn't use to / Did ... use to + verbo; hábitos e
+   estados do passado que mudaram; presente para o que é hoje), ao vocabulário do vídeo e
+   ao de estilo e aparência. Conteúdo NOVO. 24 questões. */
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 27, num: 5, tipo: 'escolha',
+  instrucao: 'Choose the right answer',
+  itens: [
+    { frase: 'When I was a kid, I ___ play outside every day.', opcoes: ['used to', 'use to', 'using to'], certa: 0, traducao: 'Quando eu era criança, brincava na rua todos os dias.' },
+    { frase: 'She ___ wear make-up, but now she does.', opcoes: ["didn't used to", "didn't use to", "don't use to"], certa: 1, traducao: 'Ela não usava maquiagem, mas agora usa.' },
+    { frase: '___ you use to have long hair?', opcoes: ['Do', 'Were', 'Did'], certa: 2, traducao: 'Você tinha cabelo comprido?' },
+    { frase: 'My dad used to ___ to call us home.', opcoes: ['whistle', 'whistling', 'whistled'], certa: 0, traducao: 'O meu pai assobiava para nos chamar para casa.' },
+    { frase: 'Kids ___ drink water from the garden hose.', opcoes: ['use to', 'used to', 'were use to'], certa: 1, traducao: 'As crianças bebiam água da mangueira.' },
+    { frase: "Parents didn't use to ___ about safety so much.", opcoes: ['worried', 'worrying', 'worry'], certa: 2, traducao: 'Os pais não se preocupavam tanto com segurança.' },
+    { frase: 'We use "used to" for ___.', opcoes: ['past habits that are different now', 'things happening now', 'future plans'], certa: 0, traducao: 'Usamos used to para hábitos do passado que mudaram.' },
+    { frase: 'We use "used to" for things that ___.', opcoes: ['happened only once', 'were repeated habits or states', 'will happen'], certa: 1, traducao: 'Usamos used to para hábitos repetidos ou estados.' },
+    { instrucao: 'Which sentence is correct?', frase: '___', opcoes: ['Did they used to carry phones?', 'Did they use to carrying phones?', 'Did they use to carry phones?'], certa: 2, traducao: 'Eles costumavam levar celular?' },
+    { instrucao: 'Which sentence talks about a past habit?', frase: '___', opcoes: ['I used to ride my bike to school.', 'I rode my bike yesterday.', 'I ride my bike every day.'], certa: 0, traducao: 'Eu ia de bicicleta para a escola.' },
+    { frase: 'Nowadays, many kids ___ smartwatches to school.', opcoes: ['used to wear', 'wear', "didn't use to"], certa: 1, traducao: 'Hoje em dia, muitas crianças usam relógio inteligente na escola.' },
+    { frase: 'In the nineties, parents ___ track their kids on an app.', opcoes: ['used to', 'use to', "didn't use to"], certa: 2, traducao: 'Nos anos noventa, os pais não acompanhavam os filhos por aplicativo.' },
+    { frase: 'Hair with lots of curls is ___ hair.', opcoes: ['curly', 'straight', 'bald'], certa: 0, traducao: 'Cabelo com muitos cachos é cabelo cacheado.' },
+    { frase: 'Hair that is short at the front and long at the back is a ___.', opcoes: ['ponytail', 'mullet', 'fringe'], certa: 1, traducao: 'Cabelo curto na frente e comprido atrás é um mullet.' },
+    { frase: 'A man with no hair has a ___ head.', opcoes: ['curly', 'wavy', 'bald'], certa: 2, traducao: 'Um homem sem cabelo é careca.' },
+    { frase: 'Very big, loose jeans are ___ jeans.', opcoes: ['baggy', 'tight', 'bald'], certa: 0, traducao: 'Calças jeans grandes e largas são baggy.' },
+    { frase: 'A small bag you wear around your waist is a ___.', opcoes: ['hoodie', 'fanny pack', 'ponytail'], certa: 1, traducao: 'Uma bolsinha usada na cintura é uma pochete.' },
+    { frase: "Hair on a man's face, only above the lips, is a ___.", opcoes: ['beard', 'fringe', 'moustache'], certa: 2, traducao: 'Pelos no rosto, só acima dos lábios, são um bigode.' },
+    { frase: 'Today, many parents give their kids ___ water.', opcoes: ['filtered', 'hose', 'balloon'], certa: 0, traducao: 'Hoje, muitos pais dão água filtrada aos filhos.' },
+    { frase: 'Kids today can play with ___ glasses.', opcoes: ['fluffy', 'VR', 'baggy'], certa: 1, traducao: 'As crianças de hoje podem brincar com óculos de realidade virtual.' },
+    { frase: 'Many parents pack ___ snacks for school.', opcoes: ['stainless', 'baggy', 'gluten-free'], certa: 2, traducao: 'Muitos pais colocam lanches sem glúten na mochila.' },
+    { frase: 'She used to have a fringe, but now she ___.', opcoes: ["doesn't", "didn't", "don't"], certa: 0, traducao: 'Ela tinha franja, mas agora não tem.' },
+    { frase: 'I ___ have a beard, but now I have one.', opcoes: ['used to', "didn't use to", 'use to'], certa: 1, traducao: 'Eu não tinha barba, mas agora tenho.' },
+    { frase: 'Did your parents use to be strict? — Yes, they ___.', opcoes: ['used', 'use', 'did'], certa: 2, traducao: 'Os seus pais eram rígidos? — Sim, eram.' }
+  ]
+});
+</script>
+</body>
+</html>

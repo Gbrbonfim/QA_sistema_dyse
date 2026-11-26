@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 27 · Then or now?</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 27 · Escuta (Then vs. Now)
+   Alinhado ao vídeo (ser pai nos anos 90 x hoje: whistle, shout, mobile app, smartwatch,
+   hose water, filtered water, stainless steel tumbler, VR, gluten-free snacks, water
+   balloons), ao "Grammar Point" (used to / didn't use to / Did ... use to? para hábitos e
+   estados do passado que mudaram) e ao vocabulário de estilo e aparência.
+   Conteúdo NOVO. 24 questões. */
+let n = 0;
+const q = (audioTexto, certa, iscas, icon) => {
+  const pos = n++ % 3;
+  const ns = iscas.slice(0, 2);
+  ns.splice(pos, 0, certa);
+  return { audioTexto, opcoes: ns.map(c => ({ label: c, icon })), certa: pos };
+};
+const PA = 'a past habit', PR = 'a present habit', FU = 'a future plan';
+const M = 'Listen. What does it mean?', L = 'Listen. What is it?', H = 'Listen. Was it a habit or one time?';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 27, num: 1, tipo: 'imagem',
+  instrucao: 'Listen. Is it a past habit, a present habit or a future plan?',
+  itens: [
+    q('My dad used to whistle to call us home.', PA, [PR, FU], 'history'),
+    q('Now I track my kids on a mobile app.', PR, [PA, FU], 'history'),
+    q('We used to drink water from the garden hose.', PA, [FU, PR], 'history'),
+    q('These days, my son takes filtered water in a stainless steel tumbler.', PR, [FU, PA], 'history'),
+    q("I'm going to buy a smartwatch next month.", FU, [PA, PR], 'history'),
+    q("Kids didn't use to have so many films to choose from.", PA, [PR, FU], 'history'),
+    q('My daughter plays with VR glasses every weekend.', PR, [PA, FU], 'history'),
+    { instrucao: M, ...q('I used to have long hair.', "Now my hair isn't long.", ['My hair is long now.', 'I want long hair.'], 'help') },
+    { instrucao: M, ...q("She didn't use to wear make-up.", "In the past, she didn't wear make-up.", ['In the past, she wore make-up every day.', 'She will wear make-up tomorrow.'], 'help') },
+    { instrucao: M, ...q('Did you use to play outside?', 'a question about the past', ['a question about now', 'a question about the future'], 'help') },
+    { instrucao: M, ...q('We used to fill water balloons for hours. Now it takes seconds.', "It's faster now.", ['It was faster before.', "It's the same."], 'help') },
+    { instrucao: M, ...q("Parents didn't use to worry so much about safety.", 'Parents worry more now.', ['Parents worried more before.', 'Parents never worry.'], 'help') },
+    { instrucao: L, ...q('His hair is short at the front and long at the back.', 'a mullet', ['a ponytail', 'a fringe'], 'face') },
+    { instrucao: L, ...q('She ties all her hair together at the back of her head.', 'a ponytail', ['a mullet', 'a bald head'], 'face') },
+    { instrucao: L, ...q('He has no hair at all.', 'a bald head', ['a fringe', 'a ponytail'], 'face') },
+    { instrucao: L, ...q('Her hair has lots of small curls.', 'curly hair', ['straight hair', 'a bowl cut'], 'face') },
+    { instrucao: L, ...q('It is hair cut short above the eyes, at the front.', 'a fringe', ['a beard', 'a mullet'], 'face') },
+    { instrucao: L, ...q('He has hair on his face, but only above his lips.', 'a moustache', ['a beard', 'a fringe'], 'face') },
+    { instrucao: L, ...q('Very big, loose jeans.', 'baggy jeans', ['jellies', 'a hoodie'], 'checkroom') },
+    { instrucao: L, ...q('A small bag that you wear around your waist.', 'a fanny pack', ['a crossbody bag', 'a hoodie'], 'checkroom') },
+    { instrucao: L, ...q('A sweatshirt with a hood.', 'a hoodie', ['sneakers', 'a fanny pack'], 'checkroom') },
+    { instrucao: L, ...q('Comfortable sports shoes.', 'sneakers', ['jellies', 'baggy jeans'], 'checkroom') },
+    { instrucao: H, ...q('When I was a kid, I used to ride my bike every day.', 'a repeated habit', ['one time only', FU], 'history') },
+    { instrucao: H, ...q('Yesterday, I rode my bike to the park.', 'one time only', ['a repeated habit', FU], 'history') }
+  ]
+});
+</script>
+</body>
+</html>

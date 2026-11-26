@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 27 · Grandpa's old photos</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 27 · Leitura (Then vs. Now)
+   Alinhado ao vídeo (anos 90 x hoje: gritar para chamar, app de localização, água da
+   mangueira x filtrada, 3D x VR, balões de água), ao Talking Point (liberdade x proteção,
+   mais opções hoje) e ao "Grammar Point" (used to / didn't use to / Did ... use to?).
+   Conteúdo NOVO: Lily vê fotos antigas com o avô.
+   20 questões: 12 de "próxima fala" + 8 de compreensão. */
+const D = [
+  ['Lily', "Grandpa, who's this boy with the big fluffy hair?"],
+  ['Grandpa', "Ha ha! That's me in 1992. I used to have a lot of hair!"],
+  ['Lily', "No way! And now you're bald!"],
+  ['Grandpa', 'I know. And look at my clothes: I used to wear baggy jeans and colorful pullovers.'],
+  ['Lily', 'They look funny. Did you use to have a phone?'],
+  ['Grandpa', 'Not a mobile phone. My mum used to shout from the window to call me home.'],
+  ['Lily', 'Really? My mum tracks me on an app.'],
+  ['Grandpa', 'Times have changed. We used to play outside until it got dark.'],
+  ['Lily', "Didn't your parents worry about you?"],
+  ['Grandpa', "Not really. Parents didn't use to worry so much about safety."],
+  ['Lily', 'What did you use to drink when you were thirsty?'],
+  ['Grandpa', 'Water from the garden hose, of course!'],
+  ['Lily', 'Ew! I only drink filtered water from my stainless steel tumbler.'],
+  ['Grandpa', 'Ha ha! Did you know that 3D films used to be awesome for us?'],
+  ['Lily', "3D? I play with VR glasses at my friend's house."],
+  ['Grandpa', 'Wow. And what about water balloons? It used to take hours to fill them.'],
+  ['Lily', "Now they're easy and fast to fill up. We fill a hundred in a minute."],
+  ['Grandpa', 'Lucky you! But I think we used to have more freedom.'],
+  ['Lily', 'Maybe. But I have more films to choose from!'],
+  ['Grandpa', "That's true. When I was a kid, we didn't use to have so many options."]
+];
+const lado = q => q === 'Lily' ? 'a' : 'b';
+const prox = (k, opcoes, certa, traducao) => ({
+  chat: D.slice(0, k).map(([quem, texto]) => ({ quem, texto, lado: lado(quem) })),
+  quemProximo: D[k][0], ladoProximo: lado(D[k][0]), opcoes, certa, completa: D[k][1], traducao
+});
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 27, num: 3, tipo: 'escolha',
+  instrucao: 'Read the conversation and choose the next line',
+  itens: [
+    prox(1, ["Ha ha! That's me in 1992. I used to have a lot of hair!", "Ha ha! That's me in 1992. I use to have a lot of hair!", "Ha ha! That's me in 1992. I used to having a lot of hair!"], 0, 'Ha ha! Sou eu em 1992. Eu tinha muito cabelo!'),
+    prox(3, ['I know. And look at my clothes: I used to wearing baggy jeans and colorful pullovers.', 'I know. And look at my clothes: I used to wear baggy jeans and colorful pullovers.', 'I know. And look at my clothes: I use to wore baggy jeans and colorful pullovers.'], 1, 'Eu sei. E olha as minhas roupas: eu usava calça larga e blusas coloridas.'),
+    prox(4, ['They look funny. Did you used to have a phone?', 'They look funny. Do you use to have a phone?', 'They look funny. Did you use to have a phone?'], 2, 'Elas são engraçadas. Você tinha celular?'),
+    prox(5, ['Not a mobile phone. My mum used to shout from the window to call me home.', 'Not a mobile phone. My mum use to shout from the window to call me home.', 'Yes, a smartwatch. My mum used to track me on an app.'], 0, 'Celular, não. A minha mãe gritava da janela para me chamar.'),
+    prox(7, ['Times have changed. We used to play inside on our phones all day.', 'Times have changed. We used to play outside until it got dark.', 'Times have changed. We used to playing outside until it got dark.'], 1, 'Os tempos mudaram. A gente brincava na rua até escurecer.'),
+    prox(8, ["Didn't your parents worried about you?", "Didn't your parents to worry about you?", "Didn't your parents worry about you?"], 2, 'Os seus pais não se preocupavam com você?'),
+    prox(9, ["Not really. Parents didn't use to worry so much about safety.", "Not really. Parents didn't used to worry so much about safety.", "Not really. Parents didn't use to worrying so much about safety."], 0, 'Na verdade, não. Os pais não se preocupavam tanto com segurança.'),
+    prox(11, ['Filtered water in a stainless steel tumbler, of course!', 'Water from the garden hose, of course!', 'We use to drink water from the garden hose.'], 1, 'Água da mangueira, claro!'),
+    prox(13, ['Ha ha! Did you know that 3D films use to be awesome for us?', 'Ha ha! Did you know that 3D films used to being awesome for us?', 'Ha ha! Did you know that 3D films used to be awesome for us?'], 2, 'Ha ha! Sabia que os filmes em 3D eram incríveis para a gente?'),
+    prox(15, ['Wow. And what about water balloons? It used to take hours to fill them.', 'Wow. And what about water balloons? It used to take seconds to fill them.', 'Wow. And what about water balloons? It use to take hours to fill them.'], 0, 'Uau. E os balões de água? Levava horas para encher.'),
+    prox(17, ['Lucky you! But I think we use to have more freedom.', 'Lucky you! But I think we used to have more freedom.', 'Lucky you! But I think we used to have less freedom than you.'], 1, 'Sorte sua! Mas acho que a gente tinha mais liberdade.'),
+    prox(19, ["That's true. When I was a kid, we didn't used to have so many options.", "That's true. When I was a kid, we don't use to have so many options.", "That's true. When I was a kid, we didn't use to have so many options."], 2, 'É verdade. Quando eu era criança, não tínhamos tantas opções.'),
+    { instrucao: 'What did Grandpa use to have?', frase: '___', opcoes: ['A lot of hair.', 'A smartwatch.', 'A beard.'], certa: 0, traducao: 'Muito cabelo.' },
+    { instrucao: 'What clothes did Grandpa use to wear?', frase: '___', opcoes: ['Black hoodies and basic clothes.', 'Baggy jeans and colorful pullovers.', 'Suits and ties.'], certa: 1, traducao: 'Calça larga e blusas coloridas.' },
+    { instrucao: "How did Grandpa's mum use to call him home?", frase: '___', opcoes: ['She sent a text message.', 'She used an app.', 'She shouted from the window.'], certa: 2, traducao: 'Ela gritava da janela.' },
+    { instrucao: "How does Lily's mum know where she is?", frase: '___', opcoes: ['She tracks her on an app.', 'She whistles.', 'She calls the neighbours.'], certa: 0, traducao: 'Ela acompanha pelo aplicativo.' },
+    { instrucao: 'What did kids use to drink when they were thirsty?', frase: '___', opcoes: ['Filtered water.', 'Water from the garden hose.', 'Soda.'], certa: 1, traducao: 'Água da mangueira.' },
+    { instrucao: "What does Lily play with at her friend's house?", frase: '___', opcoes: ['A whistle.', 'A 3D film.', 'VR glasses.'], certa: 2, traducao: 'Óculos de realidade virtual.' },
+    { instrucao: 'What does Grandpa think kids used to have more of?', frase: '___', opcoes: ['Freedom.', 'Films.', 'Technology.'], certa: 0, traducao: 'Liberdade.' },
+    { instrucao: 'What does Lily have more of today?', frase: '___', opcoes: ['Freedom.', 'Films to choose from.', 'Hair.'], certa: 1, traducao: 'Filmes para escolher.' }
+  ]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DYSE · B1 · Aula 27 · I used to have long hair</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/atividades/praticas/praticas.css">
+</head>
+<body>
+<div id="dyseAuthGate"><div class="dyse-spinner"></div><p>dyse</p></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/dyse-auth.js"></script>
+<script src="/atividades/praticas/catalogo.js"></script>
+<script src="/atividades/praticas/praticas.js"></script>
+<script>
+/* B1 · Class 27 · Escrita (Then vs. Now)
+   Alinhado ao "Grammar Point" (used to / didn't use to / Did ... use to + verbo; o
+   presente simples para o que é hoje) e ao vocabulário do vídeo e de estilo e aparência.
+   Conteúdo NOVO. 20 questões. */
+const M = pt => 'Write it in English: "' + pt + '"';
+DysePratica.iniciar({
+  course: 'ativ-b1', aula: 27, num: 2, tipo: 'montar',
+  instrucao: 'Click the words and make the sentence (one word is extra)',
+  itens: [
+    { contexto: M('Eu costumava ter cabelo comprido.'), palavras: ['I', 'used', 'to', 'have', 'long', 'hair'], isca: ['use'], fim: '.', traducao: 'Eu tinha cabelo comprido.' },
+    { contexto: M('Ela não costumava usar maquiagem.'), palavras: ['She', "didn't", 'use', 'to', 'wear', 'make-up'], isca: ['used'], fim: '.', traducao: 'Ela não costumava usar maquiagem.' },
+    { contexto: M('Você costumava brincar na rua?'), palavras: ['Did', 'you', 'use', 'to', 'play', 'outside'], isca: ['used'], fim: '?', traducao: 'Você costumava brincar na rua?' },
+    { contexto: M('Os meus pais costumavam assobiar para nos chamar.'), palavras: ['My', 'parents', 'used', 'to', 'whistle', 'to', 'call', 'us'], isca: ['whistling'], fim: '.', traducao: 'Os meus pais costumavam assobiar para nos chamar.' },
+    { contexto: M('As crianças costumavam beber água da mangueira.'), palavras: ['Kids', 'used', 'to', 'drink', 'water', 'from', 'the', 'hose'], isca: ['drank'], fim: '.', traducao: 'As crianças bebiam água da mangueira.' },
+    { contexto: M('Os pais não costumavam se preocupar tanto com segurança.'), palavras: ['Parents', "didn't", 'use', 'to', 'worry', 'so', 'much', 'about', 'safety'], isca: ['worried'], fim: '.', traducao: 'Os pais não se preocupavam tanto com segurança.' },
+    { contexto: M('Hoje em dia, as crianças usam relógios inteligentes.'), palavras: ['Nowadays,', 'kids', 'wear', 'smartwatches'], isca: ['wears'], fim: '.', traducao: 'Hoje em dia, as crianças usam relógios inteligentes.' },
+    { contexto: M('Agora eu acompanho os meus filhos por um aplicativo.'), palavras: ['Now', 'I', 'track', 'my', 'kids', 'on', 'an', 'app'], isca: ['tracks'], fim: '.', traducao: 'Agora acompanho os meus filhos por um aplicativo.' },
+    { contexto: M('Eu costumava usar calça larga.'), palavras: ['I', 'used', 'to', 'wear', 'baggy', 'jeans'], isca: ['wearing'], fim: '.', traducao: 'Eu usava calça larga.' },
+    { contexto: M('Agora eu uso roupas básicas.'), palavras: ['Now', 'I', 'wear', 'basic', 'clothes'], isca: ['wears'], fim: '.', traducao: 'Agora uso roupas básicas.' },
+    { contexto: M('Ele costumava ter bigode.'), palavras: ['He', 'used', 'to', 'have', 'a', 'moustache'], isca: ['use'], fim: '.', traducao: 'Ele tinha bigode.' },
+    { contexto: M('Ela tem cabelo cacheado.'), palavras: ['She', 'has', 'curly', 'hair'], isca: ['have'], fim: '.', traducao: 'Ela tem cabelo cacheado.' },
+    { contexto: M('Ele não costumava ter barba.'), palavras: ['He', "didn't", 'use', 'to', 'have', 'a', 'beard'], isca: ['used'], fim: '.', traducao: 'Ele não tinha barba.' },
+    { contexto: M('Hoje, as crianças comem lanches sem glúten.'), palavras: ['Today,', 'kids', 'eat', 'gluten-free', 'snacks'], isca: ['eats'], fim: '.', traducao: 'Hoje, as crianças comem lanches sem glúten.' },
+    { contexto: M('A gente costumava encher balões de água por horas.'), palavras: ['We', 'used', 'to', 'fill', 'water', 'balloons', 'for', 'hours'], isca: ['filling'], fim: '.', traducao: 'A gente enchia balões de água por horas.' },
+    { contexto: M('Os seus pais eram rígidos ou tranquilos?'), palavras: ['Were', 'your', 'parents', 'strict', 'or', 'relaxed'], isca: ['Was'], fim: '?', traducao: 'Os seus pais eram rígidos ou tranquilos?' },
+    { contexto: M('As crianças deveriam ter mais liberdade?'), palavras: ['Should', 'kids', 'have', 'more', 'freedom'], isca: ['to'], fim: '?', traducao: 'As crianças deveriam ter mais liberdade?' },
+    { contexto: M('Eu costumava ver outras crianças jogando videogame.'), palavras: ['I', 'used', 'to', 'watch', 'other', 'kids', 'play', 'video', 'games'], isca: ['watched'], fim: '.', traducao: 'Eu ficava vendo outras crianças jogarem videogame.' },
+    { contexto: M('Onde você costumava passar as férias?'), palavras: ['Where', 'did', 'you', 'use', 'to', 'spend', 'your', 'holidays'], isca: ['used'], fim: '?', traducao: 'Onde você costumava passar as férias?' },
+    { contexto: M('Ela tinha franja, mas agora não tem.'), palavras: ['She', 'used', 'to', 'have', 'a', 'fringe,', 'but', 'now', 'she', "doesn't"], isca: ["didn't"], fim: '.', traducao: 'Ela tinha franja, mas agora não tem.' }
+  ]
+});
+</script>
+</body>
+</html>
